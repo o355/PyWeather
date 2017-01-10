@@ -13,4 +13,4 @@ Late 2017. It's another huge step in my Python carrer, and it involves command-l
 
 First off, PyWeather will ask you for a ~~Dark Sky API~~ Wunderground API key if it can't find it. It'll also install necessary libraries. It'll store this API key in a file, so you're not getting prompted to load an API key every time. From here, PyWeather will ask you to input default locations/units, and every time it launches, it'll pull up a nice looking summary.
 
-The summary will contain ~~any alerts~~, current weather, hourly information, and the ~~7~~ 3 day forecast.
+The summary will contain ~~any alerts~~, current weather, ~~hourly information~~, and the ~~7~~ 3 day forecast.
