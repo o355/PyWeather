@@ -1,8 +1,10 @@
 # Welcome to PyWeather (broken)!
-A simple-to-use and advanced weather program for Python. 3.
+A simple-to-use and ~~advanced~~ mildly advanced weather program for Python. 3.
 
 # Explain. More.
-At the basic level, PyWeather uses the ~~Dark Sky API~~ Wunderground API to spit out beautiful looking weather forecasts, and helps you set up an API key. It's really cool stuff.
+At the basic level, PyWeather uses the ~~Dark Sky API~~ Wunderground API to spit out beautiful looking weather forecasts, and helps you set up an API key. It's really cool stuff. Except Wunderground's free API provides about no data whatsoever. Dark Sky provides "JSONs", except it flops out a not JSON file. Whatever.
+
+For the time being, PyWeather will use Wunderground. When I figure out Dark Sky, I'll use Dark Sky. Not using OpenWeatherMap. That just...no.
 
 # When is it coming?
 Late 2017. It's another huge step in my Python carrer, and it involves command-line arguments, colors, learning APIs, and lots of time. However, you can follow the betas that I publish, showing progress.
