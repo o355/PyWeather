@@ -8,6 +8,7 @@ from time import strftime
 from geopy.geocoders import Nominatim
 geolocator = Nominatim()
 from forecastiopy import *
+apikey = ""
 
 # For the alphas, units default to US. Eventually a system will be introduced in which a setup is necessary/not necessary.
 
