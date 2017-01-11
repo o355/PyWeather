@@ -1,16 +1,46 @@
-# Welcome to PyWeather (broken)!
-A simple-to-use and ~~advanced~~ mildly advanced weather program for Python. 3.
+# Welcome to PyWeather
+A simple-to-use and advanced weather program for Python 3. I'm still writing it.
 
-# Explain. More.
-At the basic level, PyWeather uses the ~~Dark Sky API~~ Wunderground API to spit out beautiful looking weather forecasts, and helps you set up an API key. It's really cool stuff. Except Wunderground's free API provides about no data whatsoever. Dark Sky provides "JSONs", except it flops out a not JSON file. Whatever.
-
-For the time being, PyWeather will use Wunderground. When I figure out Dark Sky, I'll use Dark Sky. Not using OpenWeatherMap. That just...no. Reading API documentation kills my brain cells at a rate faster than anything could.
+# Why not use the 20 other programs named PyWeather?
+Because PyWeather is simple. It'll help you set up an API key. It'll install needed libraries. It does EVERYTHING FOR YOU. It'll give you a step by step by step guide in getting an API key. It's ABSOLUTELY AMAZING. It has alerts. It has hourly forecasts. It has an almanac. It has tide data. It has a weather time machine. It has sunrise/sunset/moonrise/moonset data. It has 10 day forecasts. IT'LL EVEN LIST ACTIVE HURRICANES. It has all the weather data that tickles the weather nerd inside of you.
 
 # When is it coming?
-Late 2017. It's another huge step in my Python carrer, and it involves command-line arguments, colors, learning APIs, and lots of time. However, you can follow the betas that I publish, showing progress.
+Late 2017 (maybe even 2018). It's another huge step in my Python carrer, and it involves command-line arguments, colors, learning APIs, parsing JSONs, and lots of time. However, you can follow the betas that I publish, showing progress. (around 10 betas will get published). I'm also working on 2 other Python projects, PyTerm and PIPupdate, and I need to develop for those too!
 
-# How will it eventually work?
+If you want to contribute in any form to PyWeather, submit issues, wiki pages, and pull requests (after 1/15/17).
 
-First off, PyWeather will ask you for a ~~Dark Sky API~~ Wunderground API key if it can't find it. It'll also install necessary libraries. It'll store this API key in a file, so you're not getting prompted to load an API key every time. From here, PyWeather will ask you to input default locations/units, and every time it launches, it'll pull up a nice looking summary.
+# How's it coming along?
 
-The summary will contain ~~any alerts~~, current weather, ~~hourly information~~, and the ~~7~~ 3 day forecast.
+*The summary screen isn't listed here. Why? The summary part for each part is included in it's progress.
+
+[0%] Setup script
+
+[15%] Error handling
+
+[35%] Base script (loading the keys from file, caching, etc.)
+
+[20%] File structure
+
+---------
+
+[40%] Current conditions
+
+[0%] Alerts
+
+[0%] Hourly forecasts
+
+[2%] 10 day forecasts
+
+[0%] Almanac
+
+[0%] Tides
+
+[0%] Weather time machine
+
+[0%] Celestial body rise/set data
+
+[0%] Active hurricanes
+
+---------
+
+[0%] Wiki
