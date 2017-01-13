@@ -21,9 +21,11 @@ If you want to contribute in any form to PyWeather, submit issues, wiki pages, a
 
 [20%] File structure
 
+[0%] External script calls
+
 ---------
 
-[40%] Current conditions
+[30%] Current conditions
 
 [0%] Alerts
 
