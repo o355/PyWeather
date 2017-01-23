@@ -52,8 +52,6 @@ forecast_json = json.load(reader(forecastJSON))
 
 location2 = geocoder.google([latstr, lonstr], method='reverse')
 
-forecast_Day1Temp = forecast_json['forecast']['forecastday'][1]['fahrenheit']
-print(forecast_Day1Temp)
 
 
 # Parsing current weather conditions for the summary. Caching will come so the API is hit once for the summary/detailed info.
