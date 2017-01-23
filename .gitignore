@@ -89,3 +89,4 @@ ENV/
 .ropeproject
 apikey.txt
 *.project
+*.pydevproject

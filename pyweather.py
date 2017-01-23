@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 # PyWeather 0.0 -> 0.1 Beta
+=======
+# I NEED TO PUSH NEW CODE.
+
+# PyWeather Indev
+>>>>>>> origin/master
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 
