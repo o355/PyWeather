@@ -13,6 +13,7 @@
 # necessary modules through PIP.
 # 4. 
 import urllib.request
+import sys
 import json
 from colorama import init, Fore, Style
 import codecs
@@ -32,8 +33,16 @@ print("Sweet! Getting your weather.")
 
 # Error handling will come in the very near future. Because apparently geocoders are blocked in some places *cough* my school *cough*
 location = geolocator.geocode(locinput)
-latstr = str(location.latitude)
-lonstr = str(location.longitude)
+try:
+    latstr = str(location.latitude)
+except AttributeError:
+    print("The location you entered could not be understood properly. Please try again!")
+    sys.exit()
+try:
+    lonstr = str(location.longitude)
+except AttributeError:
+    print("The location you entered could not be understood properly. Please try again!")
+    sys.exit()
 loccoords = [latstr, lonstr]
 
 # Declare the API url, and use the workaround to get the JSON parsed
@@ -80,6 +89,8 @@ windcheck = float(summary_windmph)
 windcheck2 = float(summary_windkph)
 if windcheck == -9999:
     winddata = False
+elif windcheck2 == -9999:
+    winddata = False
 else:
     winddata = True
 summary_heatindexf = current_json['current_observation']['heat_index_f']
@@ -121,6 +132,7 @@ if winddata == True:
     print(Fore.CYAN + "Current wind: " + Fore.YELLOW + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
 else:
     print(Fore.YELLOW + "Wind data is not available for this location.")
+print(Fore.CYAN + "Current humidity: " + Fore.YELLOW + summary_humidity)
 if heatindexdata == True:
     print(Fore.CYAN + "Current heat index: " + Fore.YELLOW + summary_heatindexfstr + "°F (" + summary_heatindexcstr + "°C)")
 if windchilldata == True:
