@@ -1,6 +1,9 @@
 # Welcome to PyWeather
 A simple-to-use and advanced weather program for Python 3. I'm still writing it.
 
+# Where's the development at?
+Somewhere. Can't find it. I'm just really busy (well, I always am), and I haven't gotten around to doing more with this program since.
+
 # Why not use the 20 other programs named PyWeather?
 Because PyWeather is simple. It'll help you set up an API key. It'll install needed libraries. It does EVERYTHING FOR YOU. It'll give you a step by step by step guide in getting an API key. It's ABSOLUTELY AMAZING. It has alerts. It has hourly forecasts. It has an almanac. It has tide data. It has a weather time machine. It has sunrise/sunset/moonrise/moonset data. It has 10 day forecasts. IT'LL EVEN LIST ACTIVE HURRICANES. It has all the weather data that tickles the weather nerd inside of you.
 
