@@ -7,7 +7,7 @@
 # 1. The internal code is not organized, and it's meant to stay that way.
 # I usually design programs with the fact that I'll clean up code, and use
 # proper naming conventions/design conventions once the thing works.
-# So, for now. Lines of code/comments will be 120+ characters long. Sorry. 
+# So, for now. Lines of code/comments will be 79+ characters long. Sorry. 
 # 2. This program is 10% complete, meaning it's FAR from what it can do.
 # 3. There is no setup.py file. Get the API key on your own, and download
 # necessary modules through PIP.
@@ -22,7 +22,7 @@ from datetime import datetime
 from datetime import timedelta
 import geocoder
 geolocator = Nominatim()
-apikey_load = open('apikey.txt')
+apikey_load = open('storage//apikey.txt')
 apikey = apikey_load.read()
 print(datetime.now())
 
@@ -123,7 +123,8 @@ init()
 
 # And the summary gets spitted out here!
 
-print(Style.BRIGHT + Fore.CYAN + "Here's the weather for: " + Fore.YELLOW + location2.city + ", " + location2.state)
+# Entering city names that have odd characters will
+print(Style.BRIGHT + Fore.CYAN + "Here's the weather for: " + Fore.YELLOW + location2.city + ", " + location2.state.encode("utf-8"))
 print(Fore.YELLOW + summary_lastupdated)
 print("")
 print(Fore.YELLOW + "Currently:")
@@ -140,8 +141,10 @@ if heatindexdata == True:
 if windchilldata == True:
     print(Fore.CYAN + "Current wind chill: " + Fore.YELLOW + summary_windchillfstr + "°F (" + summary_windchillcstr + "°C)")
     
-print(Fore.YELLOW + "The next few days:")
+print("")
+print(Fore.YELLOW + "For the next few days:")
 
+# Iterations are what will have to happen for now...
 for day in forecast_json['forecast']['simpleforecast']['forecastday']:
     forecast3_weekday = day['date']['weekday']
     forecast3_month = str(day['date']['month'])
