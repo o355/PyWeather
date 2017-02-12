@@ -47,7 +47,7 @@ loccoords = [latstr, lonstr]
 
 # Declare the API url, and use the workaround to get the JSON parsed
 currenturl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/conditions/q/' + latstr + "," + lonstr + '.json'
-f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast10day/q/' + latstr + "," + lonstr + '.json'
+f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q/' + latstr + "," + lonstr + '.json'
 
 
 # Due to Python, we have to get the UTF-8 reader to properly parse the JSON we got.
@@ -114,6 +114,8 @@ else:
 # -- 10 Day Forecast Data --
 
 
+
+
 # Since normal users have the anvil developer plan, we can actually get a LOT of weather information.
 print("Reading the skies...")
 init()
@@ -137,5 +139,11 @@ if heatindexdata == True:
     print(Fore.CYAN + "Current heat index: " + Fore.YELLOW + summary_heatindexfstr + "°F (" + summary_heatindexcstr + "°C)")
 if windchilldata == True:
     print(Fore.CYAN + "Current wind chill: " + Fore.YELLOW + summary_windchillfstr + "°F (" + summary_windchillcstr + "°C)")
+    
+print(Fore.YELLOW + "Hourly forecast:")
+
+for day in forecast_json['forecast']['simpleforecast']['forecastday']:
+    print(day)
+
 
                             
