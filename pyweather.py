@@ -11,7 +11,7 @@
 # 2. This program is 10% complete, meaning it's FAR from what it can do.
 # 3. There is no setup.py file. Get the API key on your own, and download
 # necessary modules through PIP.
-# 4. 
+# 4. Progress will be slow and steady with PyWeather. Trust me.
 import urllib.request
 import sys
 import json
@@ -47,14 +47,14 @@ loccoords = [latstr, lonstr]
 
 # Declare the API url, and use the workaround to get the JSON parsed
 currenturl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/conditions/q/' + latstr + "," + lonstr + '.json'
-f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q/' + latstr + "," + lonstr + '.json'
+f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q/' + latstr + "," + lonstr + '.json'
 
 
 # Due to Python, we have to get the UTF-8 reader to properly parse the JSON we got.
 reader = codecs.getreader("utf-8")
 # We now fetch the JSON file to be parsed, using urllib.request
 summaryJSON = urllib.request.urlopen(currenturl)
-forecastJSON = urllib.request.urlopen(f10dayurl)
+forecastJSON = urllib.request.urlopen(f3dayurl)
 # And we parse the json using json.load, with the reader option (to use UTF-8)
 current_json = json.load(reader(summaryJSON))
 forecast_json = json.load(reader(forecastJSON))
@@ -140,10 +140,21 @@ if heatindexdata == True:
 if windchilldata == True:
     print(Fore.CYAN + "Current wind chill: " + Fore.YELLOW + summary_windchillfstr + "°F (" + summary_windchillcstr + "°C)")
     
-print(Fore.YELLOW + "Hourly forecast:")
+print(Fore.YELLOW + "The next few days:")
 
 for day in forecast_json['forecast']['simpleforecast']['forecastday']:
-    print(day)
+    forecast3_weekday = day['date']['weekday']
+    forecast3_month = str(day['date']['month'])
+    forecast3_day = str(day['date']['day'])
+    forecast3_highf = str(day['high']['fahrenheit'])
+    forecast3_highc = str(day['high']['celsius'])
+    forecast3_lowf = str(day['low']['fahrenheit'])
+    forecast3_lowc = str(day['low']['celsius'])
+    forecast3_conditions = day['conditions']
+    print(Fore.CYAN + forecast3_weekday + ", " + forecast3_month + "/" + forecast3_day + ": " + Fore.YELLOW 
+          + forecast3_conditions + " with a high of " + forecast3_highf + "°F (" +
+          forecast3_highc + "°C), and a low of " + forecast3_lowf + "°F (" +
+          forecast3_lowc + "°C).")
 
 
                             
