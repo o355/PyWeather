@@ -14,38 +14,4 @@ If you want to contribute in any form to PyWeather, submit issues, wiki pages, a
 
 # How's it coming along?
 
-*The summary screen isn't listed here. Why? The summary part for each part is included in it's progress.
-
-[0%] Setup script
-
-[15%] Error handling
-
-[35%] Base script (loading the keys from file, caching, etc.)
-
-[20%] File structure
-
-[0%] External script calls
-
----------
-
-[30%] Current conditions
-
-[0%] Alerts
-
-[0%] Hourly forecasts
-
-[2%] 10 day forecasts
-
-[0%] Almanac
-
-[0%] Tides
-
-[0%] Weather time machine
-
-[0%] Celestial body rise/set data
-
-[0%] Active hurricanes
-
----------
-
-[0%] Wiki
+As of the moment, it's getting there. I'm working on getting the summary screen down (alerts, current conditions, etc), and then I'll move on to more advanced features, like detailed conditions, forecasts, and all the other information.
