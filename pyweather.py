@@ -12,6 +12,13 @@
 # 3. There is no setup.py file. Get the API key on your own, and download
 # necessary modules through PIP.
 # 4. Progress will be slow and steady with PyWeather. Trust me.
+
+verbosity = False
+if verbosity == True:
+    import logging
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger('pyweather_0.1')
+
 import urllib.request
 import sys
 import json
@@ -21,10 +28,21 @@ from geopy.geocoders import Nominatim
 from datetime import datetime
 from datetime import timedelta
 import geocoder
+from distutils.log import set_verbosity
 geolocator = Nominatim()
+if verbosity == True:
+    logger.info("Begin API keyload...")
 apikey_load = open('storage//apikey.txt')
+if verbosity == True:
+    logger.debug("apikey_load = %s" % apikey_load)
 apikey = apikey_load.read()
+logger.debug("apikey = %s" % apikey)
 print(datetime.now())
+
+# This is the toggle for verbosity. Right now, it is. Also...
+# the current implementation for verbosity sucks. It basically
+# checks if verbosity is toggled, and does if verbosity, do
+# this.
 
 print("Welcome to PyWeather - Powered by Wunderground.")
 print("Please enter a location to get weather information for.")
@@ -32,7 +50,12 @@ locinput = input("Input here: ")
 print("Sweet! Getting your weather.")
 
 # Error handling will come in the very near future. Because apparently geocoders are blocked in some places *cough* my school *cough*
+
+if verbosity == True:
+    logger.info("Start geolocator...")
 location = geolocator.geocode(locinput)
+if verbosity == True:
+    logger.info("location = %s" % location)
 try:
     latstr = str(location.latitude)
 except AttributeError:
@@ -43,11 +66,18 @@ try:
 except AttributeError:
     print("The location you entered could not be understood properly. Please try again!")
     sys.exit()
+if verbosity == True:
+    logger.info("Latstr: %s ; Lonstr: %s" % latstr, lonstr)
 loccoords = [latstr, lonstr]
+if verbosity == True:
+    logger.info("Loccoords: %s" % loccoords)
 
 # Declare the API url, and use the workaround to get the JSON parsed
+if verbosity == True:
+    print("Declaring URLs for API hit...")
 currenturl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/conditions/q/' + latstr + "," + lonstr + '.json'
 f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q/' + latstr + "," + lonstr + '.json'
+hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q' + latstr + "," + lonstr + '.json'
 
 
 # Due to Python, we have to get the UTF-8 reader to properly parse the JSON we got.
@@ -55,6 +85,7 @@ reader = codecs.getreader("utf-8")
 # We now fetch the JSON file to be parsed, using urllib.request
 summaryJSON = urllib.request.urlopen(currenturl)
 forecastJSON = urllib.request.urlopen(f3dayurl)
+hourlyJSON = urllib.request.urlopen(hourlyurl)
 # And we parse the json using json.load, with the reader option (to use UTF-8)
 current_json = json.load(reader(summaryJSON))
 forecast_json = json.load(reader(forecastJSON))
@@ -124,7 +155,7 @@ init()
 # And the summary gets spitted out here!
 
 # Entering city names that have odd characters will
-print(Style.BRIGHT + Fore.CYAN + "Here's the weather for: " + Fore.YELLOW + location2.city + ", " + location2.state.encode("utf-8"))
+print(Style.BRIGHT + Fore.CYAN + "Here's the weather for: " + Fore.YELLOW + location2.city + ", " + location2.state)
 print(Fore.YELLOW + summary_lastupdated)
 print("")
 print(Fore.YELLOW + "Currently:")
@@ -140,6 +171,11 @@ if heatindexdata == True:
     print(Fore.CYAN + "Current heat index: " + Fore.YELLOW + summary_heatindexfstr + "°F (" + summary_heatindexcstr + "°C)")
 if windchilldata == True:
     print(Fore.CYAN + "Current wind chill: " + Fore.YELLOW + summary_windchillfstr + "°F (" + summary_windchillcstr + "°C)")
+
+print("")
+print(Fore.YELLOW + "The hourly forecast:")
+
+for hour in hourly_json['hourly_forecast']['FCTTIME']['hour']:
     
 print("")
 print(Fore.YELLOW + "For the next few days:")
