@@ -17,7 +17,7 @@ verbosity = True
 if verbosity == True:
     import logging
     logger = logging.getLogger('pyweather_0.1')
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)
 
@@ -34,13 +34,13 @@ import geocoder
 from distutils.log import set_verbosity
 geolocator = Nominatim()
 if verbosity == True:
-    logger.info("Begin API keyload...")
+    logger.debug("Begin API keyload...")
 apikey_load = open('storage//apikey.txt')
 if verbosity == True:
-    logger.info("apikey_load = %s" % apikey_load)
+    logger.debug("apikey_load = %s" % apikey_load)
 apikey = apikey_load.read()
 if verbosity == True:
-    logger.info("apikey = %s" % apikey)
+    logger.debug("apikey = %s" % apikey)
 print(datetime.now())
 
 # This is the toggle for verbosity. Right now, it is. Also...
@@ -49,14 +49,14 @@ print(datetime.now())
 # this.
 
 print("Welcome to PyWeather - Powered by Wunderground.")
-print("Please enter a location to get weather information for.")
+print("Please enter a location to get weather debugrmation for.")
 locinput = input("Input here: ")
 print("Sweet! Getting your weather.")
 
 # Error handling will come in the very near future. Because apparently geocoders are blocked in some places *cough* my school *cough*
 
 if verbosity == True:
-    logger.info("Start geolocator...")
+    logger.debug("Start geolocator...")
 try:
     location = geolocator.geocode(locinput)
 except:
@@ -66,7 +66,7 @@ except:
           "have an internet connection, and the geolocator is unblocked.")
     sys.exit()
 if verbosity == True:
-    logger.info("location = %s" % location)
+    logger.debug("location = %s" % location)
 try:
     latstr = str(location.latitude)
 except AttributeError:
@@ -80,34 +80,34 @@ except AttributeError:
     print("The location you entered could not be understood properly. Please try again!")
     sys.exit()
 if verbosity == True:
-    logger.info("Latstr: %s ; Lonstr: %s" % (latstr, lonstr))
+    logger.debug("Latstr: %s ; Lonstr: %s" % (latstr, lonstr))
 loccoords = [latstr, lonstr]
 if verbosity == True:
-    logger.info("Loccoords: %s" % loccoords)
-    logger.info("End geolocator...")
-    logger.info("Start API fetch...")
+    logger.debug("Loccoords: %s" % loccoords)
+    logger.debug("End geolocator...")
+    logger.debug("Start API fetch...")
 # Declare the API url, and use the workaround to get the JSON parsed
 currenturl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/conditions/q/' + latstr + "," + lonstr + '.json'
 f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q/' + latstr + "," + lonstr + '.json'
 hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q' + latstr + "," + lonstr + '.json'
 if verbosity == True:
-    logger.info("currenturl: %s" % currenturl)
-    logger.info("f3dayurl: %s" % currenturl)
-    logger.info("hourlyurl: %s" % currenturl)
-    logger.info("End API fetch...")
-    logger.info("Start initial parse...")
+    logger.debug("currenturl: %s" % currenturl)
+    logger.debug("f3dayurl: %s" % currenturl)
+    logger.debug("hourlyurl: %s" % currenturl)
+    logger.debug("End API fetch...")
+    logger.debug("Start initial parse...")
 
 # Due to Python, we have to get the UTF-8 reader to properly parse the JSON we got.
 reader = codecs.getreader("utf-8")
 if verbosity == True:
-    logger.info("reader: %s" % reader)
+    logger.debug("reader: %s" % reader)
 # We now fetch the JSON file to be parsed, using urllib.request
 try:
     summaryJSON = urllib.request.urlopen(currenturl)
     forecastJSON = urllib.request.urlopen(f3dayurl)
     hourlyJSON = urllib.request.urlopen(hourlyurl)
     if verbosity == True:
-        logger.info("summaryJSON: %s ; forecastJSON: %s ; hourlyJSON: %s" % (summaryJSON, forecastJSON, hourlyJSON))
+        logger.debug("summaryJSON: %s ; forecastJSON: %s ; hourlyJSON: %s" % (summaryJSON, forecastJSON, hourlyJSON))
 except:
     if verbosity == True:
         logger.error("No connection to the API!! Is the connection offline?")
@@ -117,13 +117,13 @@ except:
 # And we parse the json using json.load, with the reader option (to use UTF-8)
 current_json = json.load(reader(summaryJSON))
 if verbosity == True:
-    logger.info("current_json: %s" % current_json)
+    logger.debug("current_json: %s" % current_json)
 forecast3_json = json.load(reader(forecastJSON))
 if verbosity == True:
-    logger.info("forecast3_json: %s" % forecast3_json)
+    logger.debug("forecast3_json: %s" % forecast3_json)
 hourly_json = json.load(reader(hourlyJSON))
 if verbosity == True:
-    logger.info("hourly_json: %s" % hourly_json)
+    logger.debug("hourly_json: %s" % hourly_json)
     logger.info("End initial parse...")
     logger.info("Start 2nd geolocator...")
 try:
@@ -136,71 +136,99 @@ except:
     sys.exit()
         
 if verbosity == True:
-    logger.info("location2: %s ; Location2.city: %s ; Location2.state: %s" % (location2, location2.city, location2.state))
+    logger.debug("location2: %s ; Location2.city: %s ; Location2.state: %s" % (location2, location2.city, location2.state))
     logger.info("End 2nd geolocator...")
+    logger.info("Start parsing...")
 
 
 
-# Parsing current weather conditions for the summary. Caching will come so the API is hit once for the summary/detailed info.
+# Parsing current weather conditions for the summary. Caching will come so the API is hit once for the summary/detailed debug.
 # External parsing may be added once this list gets INSANELY long. Efficiency isn't too much of an issue.
 
-summary_full = current_json['current_observation']['display_location']['full']
 summary_overall = current_json['current_observation']['weather']
 summary_lastupdated = current_json['current_observation']['observation_time']
+if verbosity == True:
+    logger.debug("summary_overall: %s ; summary_lastupdated: %s" % (summary_overall, summary_lastupdated))
+    
 # While made for the US, metric units will also be tagged along.
 summary_tempf = str(current_json['current_observation']['temp_f'])
 summary_tempc = str(current_json['current_observation']['temp_c'])
 # Since parsing the json spits out a float as the summary, a conversion to string is
 # necessary to properly display it in the summary.
-summary_dewpointf = current_json['current_observation']
+# summary_dewpointf = current_json['current_observation']
 summary_humidity = str(current_json['current_observation']['relative_humidity'])
+if verbosity == True:
+    logger.debug("summary_tempf: %s ; summary_tempc: %s ; summary_humidity: %s" % (summary_tempf, summary_tempc, summary_humidity))
 summary_winddir = current_json['current_observation']['wind_dir']
-summary_winddirstr = str(summary_winddir)
 summary_windmph = current_json['current_observation']['wind_mph']
 summary_windmphstr = str(summary_windmph)
+if verbosity == True:
+    logger.debug("summary_winddir: %s ; summary_windmph: %s ; summary_windmphstr: %s" % (summary_winddir, summary_windmph, summary_windmphstr))
 summary_windkph = current_json['current_observation']['wind_kph']
 summary_windkphstr = str(summary_windkph)
+if verbosity == True:
+    logger.debug("summary_windkph: %s ; summary_windkphstr: %s" % (summary_windkph, summary_windkphstr))
 # Since some PWS stations on WU don't have a wind meter, this method will check if we should display wind data.
 # WU lists the MPH at -9999 if there is no wind data.
 # This method is probably reliable, but I need to see if it'll work by testing it work PWS stations around my area.
 windcheck = float(summary_windmph)
 windcheck2 = float(summary_windkph)
+if verbosity == True:
+    logger.debug("windcheck: %s ; windcheck2: %s" % (windcheck, windcheck2))
 if windcheck == -9999:
     winddata = False
+    if verbosity == True:
+        logger.warn("No wind data available!")
 elif windcheck2 == -9999:
     winddata = False
+    if verbosity == True:
+        logger.warn("No wind data available!")
 else:
     winddata = True
+    if verbosity == True:
+        logger.info("Wind data is available.")
 summary_heatindexf = current_json['current_observation']['heat_index_f']
 summary_heatindexfstr = str(summary_heatindexf)
 summary_heatindexc = current_json['current_observation']['heat_index_c']
 summary_heatindexcstr = str(summary_heatindexc)
+if verbosity == True:
+    logger.debug("summary_heatindexf: %s ; summary_heatindexfstr: %s ; summary_heatindexc: %s ; summary_heatindexcstr: %s" % (summary_heatindexf, summary_heatindexfstr, summary_heatindexc, summary_heatindexcstr))
 # Checking for a heat index is easier, Wunderground spits out "NA" if there isn't a head index/wind chill.
 if summary_heatindexf == "NA":
     heatindexdata = False
+    if verbosity == True:
+        logger.warn("No heat index data available!")
 else:
     heatindexdata = True
+    if verbosity == True:
+        logger.info("Heat index data is available.")
 summary_windchillf = current_json['current_observation']['windchill_f']
 summary_windchillfstr = str(summary_windchillf)
 summary_windchillc = current_json['current_observation']['windchill_c']
 summary_windchillcstr = str(summary_windchillc)
+if verbosity == True:
+    logger.debug("summary_windchillf: %s ; summary_windchillfstr: %s ; summary_windchillc: %s ; summary_windchillcstr: %s" % (summary_windchillf, summary_windchillfstr, summary_windchillc, summary_windchillcstr))
 if summary_windchillf == "NA":
     windchilldata = False
+    if verbosity == True:
+        logger.warn("No wind chill data available!")
 else:
     windchilldata = True
-
-# -- 10 Day Forecast Data --
-
-
+    if verbosity == True:
+        logger.info("Wind chill data available.")
 
 
 # Since normal users have the anvil developer plan, we can actually get a LOT of weather information.
 print("Reading the skies...")
+if verbosity == True:
+    logger.info("Initalize color...")
 init()
 # We parse any alerts here.
 
 # And the summary gets spitted out here!
 
+if verbosity == True:
+    logger.info("Printing current conditions...")
 # Entering city names that have odd characters will
 print(Style.BRIGHT + Fore.CYAN + "Here's the weather for: " + Fore.YELLOW + location2.city + ", " + location2.state)
 print(Fore.YELLOW + summary_lastupdated)
