@@ -13,7 +13,7 @@
 # necessary modules through PIP.
 # 4. Progress will be slow and steady with PyWeather. Trust me.
 
-verbosity = False
+verbosity = True
 if verbosity == True:
     import logging
     logging.basicConfig(level=logging.INFO)
@@ -34,9 +34,10 @@ if verbosity == True:
     logger.info("Begin API keyload...")
 apikey_load = open('storage//apikey.txt')
 if verbosity == True:
-    logger.debug("apikey_load = %s" % apikey_load)
+    logger.info("apikey_load = %s" % apikey_load)
 apikey = apikey_load.read()
-logger.debug("apikey = %s" % apikey)
+if verbosity == True:
+    logger.info("apikey = %s" % apikey)
 print(datetime.now())
 
 # This is the toggle for verbosity. Right now, it is. Also...
@@ -67,7 +68,7 @@ except AttributeError:
     print("The location you entered could not be understood properly. Please try again!")
     sys.exit()
 if verbosity == True:
-    logger.info("Latstr: %s ; Lonstr: %s" % latstr, lonstr)
+    logger.info("Latstr: %s ; Lonstr: %s" % (latstr, lonstr))
 loccoords = [latstr, lonstr]
 if verbosity == True:
     logger.info("Loccoords: %s" % loccoords)
@@ -175,9 +176,8 @@ if windchilldata == True:
 print("")
 print(Fore.YELLOW + "The hourly forecast:")
 
-for hour in hourly_json['hourly_forecast']['FCTTIME']['hour']:
-    
-print("")
+# for hour in hourly_json['hourly_forecast']['FCTTIME']['hour']:
+
 print(Fore.YELLOW + "For the next few days:")
 
 # Iterations are what will have to happen for now...
