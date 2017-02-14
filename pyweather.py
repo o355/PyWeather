@@ -1,7 +1,6 @@
 # PyWeather Indev
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
-from test.libregrtest.runtest import FAILED
 
 # ===========================
 #   A few quick notes:
@@ -62,8 +61,9 @@ try:
     location = geolocator.geocode(locinput)
 except:
     if verbosity == True:
-        logger.error("No connection to the geolocator!! Is the internet offline?")
-    print("Can't connect to the geolocator.")
+        logger.error("No connection to the geolocator!! Is the connection offline?")
+    print("Can't connect to the geolocator. Make sure you " +
+          "have an internet connection, and the geolocator is unblocked.")
     sys.exit()
 if verbosity == True:
     logger.info("location = %s" % location)
@@ -102,9 +102,18 @@ reader = codecs.getreader("utf-8")
 if verbosity == True:
     logger.info("reader: %s" % reader)
 # We now fetch the JSON file to be parsed, using urllib.request
-summaryJSON = urllib.request.urlopen(currenturl)
-forecastJSON = urllib.request.urlopen(f3dayurl)
-hourlyJSON = urllib.request.urlopen(hourlyurl)
+try:
+    summaryJSON = urllib.request.urlopen(currenturl)
+    forecastJSON = urllib.request.urlopen(f3dayurl)
+    hourlyJSON = urllib.request.urlopen(hourlyurl)
+    if verbosity == True:
+        logger.info("summaryJSON: %s ; forecastJSON: %s ; hourlyJSON: %s" % (summaryJSON, forecastJSON, hourlyJSON))
+except:
+    if verbosity == True:
+        logger.error("No connection to the API!! Is the connection offline?")
+    print("Can't connect to the API. Make sure that Wunderground's API " +
+          "is unblocked, and the internet is online.")
+    sys.exit()
 # And we parse the json using json.load, with the reader option (to use UTF-8)
 current_json = json.load(reader(summaryJSON))
 if verbosity == True:
@@ -117,11 +126,17 @@ if verbosity == True:
     logger.info("hourly_json: %s" % hourly_json)
     logger.info("End initial parse...")
     logger.info("Start 2nd geolocator...")
-
-location2 = geocoder.google([latstr, lonstr], method='reverse')
+try:
+    location2 = geocoder.google([latstr, lonstr], method='reverse')
+except:
+    if verbosity == True:
+        logger.error("No connection to Google's Geolocator!! Is the connection offline?")
+    print("Can't connect to Google's Geolocator. Make sure that Google's " +
+          "Geolocator is unblocked, and your internet is online.")
+    sys.exit()
+        
 if verbosity == True:
     logger.info("location2: %s ; Location2.city: %s ; Location2.state: %s" % (location2, location2.city, location2.state))
-    
     logger.info("End 2nd geolocator...")
 
 
