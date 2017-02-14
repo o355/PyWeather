@@ -1,6 +1,7 @@
 # PyWeather Indev
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
+from test.libregrtest.runtest import FAILED
 
 # ===========================
 #   A few quick notes:
@@ -16,10 +17,13 @@
 verbosity = True
 if verbosity == True:
     import logging
-    logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger('pyweather_0.1')
+    logger.setLevel(logging.INFO)
+    logformat = '%(asctime)s | %(levelname)s | %(message)s'
+    logging.basicConfig(format=logformat)
 
 import urllib.request
+import socket
 import sys
 import json
 from colorama import init, Fore, Style
@@ -54,17 +58,25 @@ print("Sweet! Getting your weather.")
 
 if verbosity == True:
     logger.info("Start geolocator...")
-location = geolocator.geocode(locinput)
+try:
+    location = geolocator.geocode(locinput)
+except:
+    if verbosity == True:
+        logger.error("No connection to the geolocator!! Is the internet offline?")
+    print("Can't connect to the geolocator.")
+    sys.exit()
 if verbosity == True:
     logger.info("location = %s" % location)
 try:
     latstr = str(location.latitude)
 except AttributeError:
+    logger.error("No lat/long was provided by the geolocator!!!")
     print("The location you entered could not be understood properly. Please try again!")
     sys.exit()
 try:
     lonstr = str(location.longitude)
 except AttributeError:
+    logger.error("No lat/long was provided by the geolocator!!!")
     print("The location you entered could not be understood properly. Please try again!")
     sys.exit()
 if verbosity == True:
@@ -72,26 +84,45 @@ if verbosity == True:
 loccoords = [latstr, lonstr]
 if verbosity == True:
     logger.info("Loccoords: %s" % loccoords)
-
+    logger.info("End geolocator...")
+    logger.info("Start API fetch...")
 # Declare the API url, and use the workaround to get the JSON parsed
-if verbosity == True:
-    print("Declaring URLs for API hit...")
 currenturl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/conditions/q/' + latstr + "," + lonstr + '.json'
 f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q/' + latstr + "," + lonstr + '.json'
 hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q' + latstr + "," + lonstr + '.json'
-
+if verbosity == True:
+    logger.info("currenturl: %s" % currenturl)
+    logger.info("f3dayurl: %s" % currenturl)
+    logger.info("hourlyurl: %s" % currenturl)
+    logger.info("End API fetch...")
+    logger.info("Start initial parse...")
 
 # Due to Python, we have to get the UTF-8 reader to properly parse the JSON we got.
 reader = codecs.getreader("utf-8")
+if verbosity == True:
+    logger.info("reader: %s" % reader)
 # We now fetch the JSON file to be parsed, using urllib.request
 summaryJSON = urllib.request.urlopen(currenturl)
 forecastJSON = urllib.request.urlopen(f3dayurl)
 hourlyJSON = urllib.request.urlopen(hourlyurl)
 # And we parse the json using json.load, with the reader option (to use UTF-8)
 current_json = json.load(reader(summaryJSON))
-forecast_json = json.load(reader(forecastJSON))
+if verbosity == True:
+    logger.info("current_json: %s" % current_json)
+forecast3_json = json.load(reader(forecastJSON))
+if verbosity == True:
+    logger.info("forecast3_json: %s" % forecast3_json)
+hourly_json = json.load(reader(hourlyJSON))
+if verbosity == True:
+    logger.info("hourly_json: %s" % hourly_json)
+    logger.info("End initial parse...")
+    logger.info("Start 2nd geolocator...")
 
 location2 = geocoder.google([latstr, lonstr], method='reverse')
+if verbosity == True:
+    logger.info("location2: %s ; Location2.city: %s ; Location2.state: %s" % (location2, location2.city, location2.state))
+    
+    logger.info("End 2nd geolocator...")
 
 
 
@@ -181,7 +212,7 @@ print(Fore.YELLOW + "The hourly forecast:")
 print(Fore.YELLOW + "For the next few days:")
 
 # Iterations are what will have to happen for now...
-for day in forecast_json['forecast']['simpleforecast']['forecastday']:
+for day in forecast3_json['forecast']['simpleforecast']['forecastday']:
     forecast3_weekday = day['date']['weekday']
     forecast3_month = str(day['date']['month'])
     forecast3_day = str(day['date']['day'])
