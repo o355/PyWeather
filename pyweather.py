@@ -13,7 +13,12 @@
 # necessary modules through PIP.
 # 4. Progress will be slow and steady with PyWeather. Trust me.
 
-verbosity = True
+# Verbosity works like this (for now)
+# Turn on verbosity for, well, verbosity! Double verbosity outputs extra
+# info, but for double verbosity, you need verbosity to be on.
+
+verbosity = False
+doubleverbosity = False
 if verbosity == True:
     import logging
     logger = logging.getLogger('pyweather_0.1')
@@ -22,16 +27,13 @@ if verbosity == True:
     logging.basicConfig(format=logformat)
 
 import urllib.request
-import socket
 import sys
 import json
 from colorama import init, Fore, Style
 import codecs
 from geopy.geocoders import Nominatim
 from datetime import datetime
-from datetime import timedelta
 import geocoder
-from distutils.log import set_verbosity
 geolocator = Nominatim()
 if verbosity == True:
     logger.debug("Begin API keyload...")
@@ -61,7 +63,7 @@ try:
     location = geolocator.geocode(locinput)
 except:
     if verbosity == True:
-        logger.error("No connection to the geolocator!! Is the connection offline?")
+        logger.error("No connection to the geolocator! Is the connection offline?")
     print("Can't connect to the geolocator. Make sure you " +
           "have an internet connection, and the geolocator is unblocked.")
     sys.exit()
@@ -70,13 +72,13 @@ if verbosity == True:
 try:
     latstr = str(location.latitude)
 except AttributeError:
-    logger.error("No lat/long was provided by the geolocator!!!")
+    logger.error("No lat/long was provided by the geolocator! Invalid location?")
     print("The location you entered could not be understood properly. Please try again!")
     sys.exit()
 try:
     lonstr = str(location.longitude)
 except AttributeError:
-    logger.error("No lat/long was provided by the geolocator!!!")
+    logger.error("No lat/long was provided by the geolocator! Invalid location?")
     print("The location you entered could not be understood properly. Please try again!")
     sys.exit()
 if verbosity == True:
@@ -84,8 +86,8 @@ if verbosity == True:
 loccoords = [latstr, lonstr]
 if verbosity == True:
     logger.debug("Loccoords: %s" % loccoords)
-    logger.debug("End geolocator...")
-    logger.debug("Start API fetch...")
+    logger.info("End geolocator...")
+    logger.info("Start API var declare...")
 # Declare the API url, and use the workaround to get the JSON parsed
 currenturl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/conditions/q/' + latstr + "," + lonstr + '.json'
 f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q/' + latstr + "," + lonstr + '.json'
@@ -94,20 +96,27 @@ if verbosity == True:
     logger.debug("currenturl: %s" % currenturl)
     logger.debug("f3dayurl: %s" % currenturl)
     logger.debug("hourlyurl: %s" % currenturl)
-    logger.debug("End API fetch...")
-    logger.debug("Start initial parse...")
+    logger.info("End API var declare...")
+    logger.info("Start codec change...")
 
 # Due to Python, we have to get the UTF-8 reader to properly parse the JSON we got.
 reader = codecs.getreader("utf-8")
 if verbosity == True:
     logger.debug("reader: %s" % reader)
+    logger.info("End codec change...")
+    logger.info("Start API fetch...")
+    
 # We now fetch the JSON file to be parsed, using urllib.request
 try:
     summaryJSON = urllib.request.urlopen(currenturl)
+    if verbosity == True:
+        logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
     forecastJSON = urllib.request.urlopen(f3dayurl)
+    if verbosity == True:
+        logger.debug("Acquired forecast 3day JSON, end result: %s" % forecastJSON)
     hourlyJSON = urllib.request.urlopen(hourlyurl)
     if verbosity == True:
-        logger.debug("summaryJSON: %s ; forecastJSON: %s ; hourlyJSON: %s" % (summaryJSON, forecastJSON, hourlyJSON))
+        logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
 except:
     if verbosity == True:
         logger.error("No connection to the API!! Is the connection offline?")
@@ -115,17 +124,23 @@ except:
           "is unblocked, and the internet is online.")
     sys.exit()
 # And we parse the json using json.load, with the reader option (to use UTF-8)
+if verbosity == True:
+    logger.info("End API fetch...")
+    logger.info("Start JSON load...")
 current_json = json.load(reader(summaryJSON))
-if verbosity == True:
-    logger.debug("current_json: %s" % current_json)
+if doubleverbosity == True:
+    logger.debug("current_json loaded with: %s" % current_json)
 forecast3_json = json.load(reader(forecastJSON))
-if verbosity == True:
-    logger.debug("forecast3_json: %s" % forecast3_json)
+if doubleverbosity == True:
+    logger.debug("forecast3_json loaded with: %s" % forecast3_json)
 hourly_json = json.load(reader(hourlyJSON))
+if doubleverbosity == True:
+    logger.debug("hourly_json loaded with: %s" % hourly_json)
 if verbosity == True:
-    logger.debug("hourly_json: %s" % hourly_json)
-    logger.info("End initial parse...")
-    logger.info("Start 2nd geolocator...")
+    logger.info("3 JSONs loaded...")
+    logger.info("Start 2nd geocoder...")
+
+
 try:
     location2 = geocoder.google([latstr, lonstr], method='reverse')
 except:
@@ -249,6 +264,8 @@ if windchilldata == True:
 
 print("")
 print(Fore.YELLOW + "The hourly forecast:")
+print("Coming soon!")
+print("")
 
 # for hour in hourly_json['hourly_forecast']['FCTTIME']['hour']:
 
