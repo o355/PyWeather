@@ -17,8 +17,8 @@
 # Turn on verbosity for, well, verbosity! Double verbosity outputs extra
 # info, but for double verbosity, you need verbosity to be on.
 
-verbosity = True
-doubleverbosity = True
+verbosity = False
+doubleverbosity = False
 if verbosity == True:
     import logging
     logger = logging.getLogger('pyweather_0.1')
@@ -266,20 +266,18 @@ if windchilldata == True:
 
 print("")
 print(Fore.YELLOW + "The hourly forecast:")
-print("Coming soon!")
-print("")
 
 for hour in hourly_json['hourly_forecast']:
     hourly_time = hour['FCTTIME']['civil']
     hourly_tempf = hour['temp']['english']
     hourly_tempc = hour['temp']['metric']
-    hourly_condition = hour['FCTTIME']['condition']
+    hourly_condition = hour['condition']
     print(Fore.CYAN + hourly_time + ": " + Fore.YELLOW + hourly_condition + " with a temperature of " + hourly_tempf + "°F (" + hourly_tempc + "°C)")
     summaryHourlyIterations = summaryHourlyIterations + 1
     if summaryHourlyIterations == 6:
         break
     
-
+print("")
 print(Fore.YELLOW + "For the next few days:")
 
 # Iterations are what will have to happen for now...
