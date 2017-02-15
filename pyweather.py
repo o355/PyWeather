@@ -17,8 +17,8 @@
 # Turn on verbosity for, well, verbosity! Double verbosity outputs extra
 # info, but for double verbosity, you need verbosity to be on.
 
-verbosity = False
-doubleverbosity = False
+verbosity = True
+doubleverbosity = True
 if verbosity == True:
     import logging
     logger = logging.getLogger('pyweather_0.1')
@@ -44,6 +44,8 @@ apikey = apikey_load.read()
 if verbosity == True:
     logger.debug("apikey = %s" % apikey)
 print(datetime.now())
+
+summaryHourlyIterations = 0
 
 # This is the toggle for verbosity. Right now, it is. Also...
 # the current implementation for verbosity sucks. It basically
@@ -91,7 +93,7 @@ if verbosity == True:
 # Declare the API url, and use the workaround to get the JSON parsed
 currenturl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/conditions/q/' + latstr + "," + lonstr + '.json'
 f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q/' + latstr + "," + lonstr + '.json'
-hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q' + latstr + "," + lonstr + '.json'
+hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/hourly/q/' + latstr + "," + lonstr + '.json'
 if verbosity == True:
     logger.debug("currenturl: %s" % currenturl)
     logger.debug("f3dayurl: %s" % currenturl)
@@ -267,7 +269,16 @@ print(Fore.YELLOW + "The hourly forecast:")
 print("Coming soon!")
 print("")
 
-# for hour in hourly_json['hourly_forecast']['FCTTIME']['hour']:
+for hour in hourly_json['hourly_forecast']:
+    hourly_time = hour['FCTTIME']['civil']
+    hourly_tempf = hour['temp']['english']
+    hourly_tempc = hour['temp']['metric']
+    hourly_condition = hour['FCTTIME']['condition']
+    print(Fore.CYAN + hourly_time + ": " + Fore.YELLOW + hourly_condition + " with a temperature of " + hourly_tempf + "°F (" + hourly_tempc + "°C)")
+    summaryHourlyIterations = summaryHourlyIterations + 1
+    if summaryHourlyIterations == 6:
+        break
+    
 
 print(Fore.YELLOW + "For the next few days:")
 
