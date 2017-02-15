@@ -1,6 +1,7 @@
 # PyWeather Indev
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
+from _ast import Or
 
 # ===========================
 #   A few quick notes:
@@ -305,6 +306,7 @@ while True:
         or moreoptions == "view more current weather"):
         print("Loading...")
         print("")
+        # I forgot to add Pressure and Dewpoints (rip)
         current_windDegrees = str(current_json['current_observation']['wind_degrees'])
         current_feelsLikeF = str(current_json['current_observation']['feelslike_f'])
         current_feelsLikeC = str(current_json['current_observation']['feelslike_c'])
@@ -343,6 +345,43 @@ while True:
               + current_precipTodayIn + " inches (" + current_precipTodayMm
               + " mm)")
         continue
+    elif (moreoptions == "view more hourly data" or
+          moreoptions == "view more hourly" or
+          moreoptions == "view hourly" or
+          moreoptions == "hourly"):
+        print("Loading...")
+        print("")
+        print(Fore.CYAN + "Here's the detailed hourly forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
+        print("")
+        for hour in hourly_json['hourly_forecast']:
+            hourly_month = str(hour['FCTTIME']['mon'])
+            hourly_day = str(hour['FCTTIME']['mday'])
+            hourly_dewpointF = str(hour['dewpoint']['english'])
+            hourly_dewpointC = str(hour['dewpoint']['metric'])
+            hourly_windMPH = str(hour['wspd']['english'])
+            hourly_windKPH = str(hour['wspd']['metric'])
+            hourly_windDir = hour['wdir']['dir']
+            hourly_windDegrees = str(hour['wdir']['degrees'])
+            hourly_UVIndex = str(hour['uvi'])
+            hourly_humidity = str(hour['humidity'])
+            hourly_WCCheck = hour['windchill']['english']
+            hourly_HICheck = hour['heatindex']['english']
+            if hourly_WCCheck == -9998:
+                hourly_WCData = False
+            else:
+                hourly_WCData = True
+            
+            if hourly_HICheck == -9998:
+                hourly_HIData = False
+            else:
+                hourly_HIData = True
+            hourly_windChillF = str(hourly_WCCheck)
+            hourly_windchillC = str(hour['windchill']['metric'])
+            hourly_HeatIndexF = str(hourly_HICheck)
+            hourly_HeatIndexC = str(hour['heatindex']['metric'])
+            hourly_feelsLikeF = str(hour['feelslike']['english'])
+            hourly_feelsLikeC = str(hour['feelslike']['metric'])
+            
     elif (moreoptions == "close pyweather" or moreoptions == "close"):
         sys.exit()
     elif (moreoptions == "different location"
