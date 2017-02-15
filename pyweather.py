@@ -293,54 +293,56 @@ for day in forecast3_json['forecast']['simpleforecast']['forecastday']:
           + forecast3_conditions + " with a high of " + forecast3_highf + "°F (" +
           forecast3_highc + "°C), and a low of " + forecast3_lowf + "°F (" +
           forecast3_lowc + "°C).")
-print("")
 
-# insert loop here
-print("What would you like to do?")
-print("You can view more current data, view more hourly data, " +
-      "or View the 10 day forecast")
-moreoptions = input("Enter here: ").lower()
-if (moreoptions == "view more currently" or moreoptions == "view more current data" 
-    or moreoptions == "view more current weather"):
-    print("Loading...")
+while True:
     print("")
-    current_windDegrees = str(current_json['current_observation']['wind_degrees'])
-    current_feelsLikeF = str(current_json['current_observation']['feelslike_f'])
-    current_feelsLikeC = str(current_json['current_observation']['feelslike_c'])
-    current_visibilityMi = str(current_json['current_observation']['visibility_mi'])
-    current_visibilityKm = str(current_json['current_observation']['visibility_km'])
-    current_UVIndex = str(current_json['current_observation']['UV'])
-    current_precip1HrIn = str(current_json['current_observation']['precip_1hr_in'])
-    current_precip1HrMm = str(current_json['current_observation']['precip_1hr_metric'])
-    current_precipTodayIn = str(current_json['current_observation']['precip_today_in'])
-    current_precipTodayMm = str(current_json['current_observation']['precip_today_metric'])
-    print(Fore.CYAN + "Here's the detailed current weather for:" + Fore.YELLOW + location2.city + ", " + location2.state)
-    print(Fore.CYAN + summary_lastupdated)
-    print("")
-    print(Fore.CYAN + "Current conditions: " + Fore.YELLOW + summary_overall)
-    print(Fore.CYAN + "Current temperature: " + Fore.YELLOW + summary_tempf + "°F (" + summary_tempc + "°C)")
-    print(Fore.CYAN + "And it feels like: " + Fore.YELLOW + current_feelsLikeF
-          + "°F (" + current_feelsLikeC + "°C)")
-    if winddata == True:
-        print(Fore.CYAN + "Current wind: " + Fore.YELLOW + summary_windmphstr + 
-              " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir 
-              + " (" + current_windDegrees + " degrees)")
-    else:
-        print(Fore.YELLOW + "Wind data is not available for this location.")
-    print(Fore.CYAN + "Current humidity: " + Fore.YELLOW + summary_humidity)
-    if heatindexdata == True:
-        print(Fore.CYAN + "Current heat index: " + Fore.YELLOW + summary_heatindexfstr + "°F (" + summary_heatindexcstr + "°C)")
-    if windchilldata == True:
-        print(Fore.CYAN + "Current wind chill: " + Fore.YELLOW + summary_windchillfstr + "°F (" + summary_windchillcstr + "°C)")
-    print(Fore.CYAN + "Current visibility: " + Fore.YELLOW + current_visibilityMi
-          + "miles (" + current_visibilityKm + " km)")
-    print(Fore.CYAN + "UV Index: " + Fore.YELLOW + current_UVIndex)
-    print(Fore.CYAN + "Precipitation in the last hour: " + Fore.YELLOW
-          + current_precip1HrIn + " inches (" + current_precip1HrMm
-          + " mm)")
-    print(Fore.CYAN + "Precipitation so far today: " + Fore.YELLOW
-          + current_precipTodayIn + " inches (" + current_precipTodayMm
-          + " mm)")
+    print("What would you like to do?")
+    print("You can 'view more current data', 'view more hourly data'")
+    print("You can also 'view the 10 day forecast', 'view weather for a different location'")
+    print("Or you can 'close PyWeather'")
+    moreoptions = input("Enter here: ").lower()
+    if (moreoptions == "view more currently" or moreoptions == "view more current data" 
+        or moreoptions == "view more current weather"):
+        print("Loading...")
+        print("")
+        current_windDegrees = str(current_json['current_observation']['wind_degrees'])
+        current_feelsLikeF = str(current_json['current_observation']['feelslike_f'])
+        current_feelsLikeC = str(current_json['current_observation']['feelslike_c'])
+        current_visibilityMi = str(current_json['current_observation']['visibility_mi'])
+        current_visibilityKm = str(current_json['current_observation']['visibility_km'])
+        current_UVIndex = str(current_json['current_observation']['UV'])
+        current_precip1HrIn = str(current_json['current_observation']['precip_1hr_in'])
+        current_precip1HrMm = str(current_json['current_observation']['precip_1hr_metric'])
+        current_precipTodayIn = str(current_json['current_observation']['precip_today_in'])
+        current_precipTodayMm = str(current_json['current_observation']['precip_today_metric'])
+        print(Fore.CYAN + "Here's the detailed current weather for: " + Fore.YELLOW + location2.city + ", " + location2.state)
+        print(Fore.CYAN + summary_lastupdated)
+        print("")
+        print(Fore.CYAN + "Current conditions: " + Fore.YELLOW + summary_overall)
+        print(Fore.CYAN + "Current temperature: " + Fore.YELLOW + summary_tempf + "°F (" + summary_tempc + "°C)")
+        print(Fore.CYAN + "And it feels like: " + Fore.YELLOW + current_feelsLikeF
+              + "°F (" + current_feelsLikeC + "°C)")
+        if winddata == True:
+            print(Fore.CYAN + "Current wind: " + Fore.YELLOW + summary_windmphstr + 
+                  " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir 
+                  + " (" + current_windDegrees + " degrees)")
+        else:
+            print(Fore.YELLOW + "Wind data is not available for this location.")
+        print(Fore.CYAN + "Current humidity: " + Fore.YELLOW + summary_humidity)
+        if heatindexdata == True:
+            print(Fore.CYAN + "Current heat index: " + Fore.YELLOW + summary_heatindexfstr + "°F (" + summary_heatindexcstr + "°C)")
+        if windchilldata == True:
+            print(Fore.CYAN + "Current wind chill: " + Fore.YELLOW + summary_windchillfstr + "°F (" + summary_windchillcstr + "°C)")
+        print(Fore.CYAN + "Current visibility: " + Fore.YELLOW + current_visibilityMi
+              + " miles (" + current_visibilityKm + " km)")
+        print(Fore.CYAN + "UV Index: " + Fore.YELLOW + current_UVIndex)
+        print(Fore.CYAN + "Precipitation in the last hour: " + Fore.YELLOW
+              + current_precip1HrIn + " inches (" + current_precip1HrMm
+              + " mm)")
+        print(Fore.CYAN + "Precipitation so far today: " + Fore.YELLOW
+              + current_precipTodayIn + " inches (" + current_precipTodayMm
+              + " mm)")
+        continue
     
     
     
