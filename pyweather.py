@@ -343,6 +343,10 @@ while True:
               + current_precipTodayIn + " inches (" + current_precipTodayMm
               + " mm)")
         continue
-    
-    
+    elif (moreoptions == "close pyweather" or moreoptions == "close"):
+        sys.exit()
+    elif (moreoptions == "different location"
+          or moreoptions == "view weather for a different location" or
+          moreoptions == "view weather different location"):
+        exec(open("pyweather.py").read())
     
