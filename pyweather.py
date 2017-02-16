@@ -268,7 +268,7 @@ while True:
     print(Fore.GREEN + "What would you like to do?")
     print("You can 'view more current data', 'view more hourly data'")
     print("You can also 'view the 10 day forecast', 'view weather for a different location'")
-    print("Or you can 'close PyWeather'")
+    print("Or you can 'close PyWeather'" + Fore.YELLOW)
     moreoptions = input("Enter here: ").lower()
     if (moreoptions == "view more currently" or moreoptions == "view more current data" 
         or moreoptions == "view more current weather"):
@@ -315,8 +315,8 @@ while True:
           moreoptions == "hourly"):
         print(Fore.RED + "Loading...")
         print("")
+        detailedHourlyIterations = 0
         print(Fore.CYAN + "Here's the detailed hourly forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
-        print("")
         for hour in hourly_json['hourly_forecast']:
             hourly_time = hour['FCTTIME']['civil']
             hourly_month = str(hour['FCTTIME']['month_name'])
@@ -348,7 +348,8 @@ while True:
             hourly_precipChance = str(hour['pop'])
             hourly_pressureInHg = str(hour['mslp']['english'])
             hourly_pressureMb = str(hour['mslp']['metric'])
-            print(Fore.CYAN + hourly_time + " on " + hourly_month + " " + hourly_day + ":")
+            print("")
+            print(Fore.YELLOW + hourly_time + " on " + hourly_month + " " + hourly_day + ":")
             print(Fore.CYAN + "Conditions: " + Fore.YELLOW + hourly_condition)
             print(Fore.CYAN + "Temperature: " + Fore.YELLOW + hourly_tempf 
                   + "°F (" + hourly_tempc + "°C)")
@@ -368,9 +369,17 @@ while True:
             print(Fore.CYAN + "Precipitation chance: " + Fore.YELLOW + 
                   hourly_precipChance + "%")
             print(Fore.CYAN + "Barometric pressure: " + Fore.YELLOW +
-                  hourly_pressureInHg + " inhg (" + hourly_pressureMb
+                  hourly_pressureInHg + " inHg (" + hourly_pressureMb
                   + " mb)")
-            print("")
+            detailedHourlyIterations = detailedHourlyIterations + 1
+            if (detailedHourlyIterations == 12 or detailedHourlyIterations == 24):
+                try:
+                    print("")
+                    print(Fore.RED + "Please press enter to view the next 12 hours of hourly data")
+                    print("You can also press Control + C to head back to the input menu.")
+                    input()
+                except KeyboardInterrupt:
+                    break
             
     elif (moreoptions == "close pyweather" or moreoptions == "close"):
         sys.exit()
