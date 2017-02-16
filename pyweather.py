@@ -91,9 +91,9 @@ if verbosity == True:
     logger.info("End geolocator...")
     logger.info("Start API var declare...")
 # Declare the API url, and use the workaround to get the JSON parsed
-currenturl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/conditions/q/' + latstr + "," + lonstr + '.json'
-f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q/' + latstr + "," + lonstr + '.json'
-hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/hourly/q/' + latstr + "," + lonstr + '.json'
+currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + "," + lonstr + '.json'
+f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast/q/' + latstr + "," + lonstr + '.json'
+hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + "," + lonstr + '.json'
 if verbosity == True:
     logger.debug("currenturl: %s" % currenturl)
     logger.debug("f3dayurl: %s" % currenturl)
@@ -204,35 +204,12 @@ else:
     winddata = True
     if verbosity == True:
         logger.info("Wind data is available.")
-summary_heatindexf = current_json['current_observation']['heat_index_f']
-summary_heatindexfstr = str(summary_heatindexf)
-summary_heatindexc = current_json['current_observation']['heat_index_c']
-summary_heatindexcstr = str(summary_heatindexc)
+
+summary_feelslikef = str(current_json['current_observation']['feelslike_f'])
+summary_feelslikec = str(current_json['current_observation']['feelslike_c'])
 if verbosity == True:
-    logger.debug("summary_heatindexf: %s ; summary_heatindexfstr: %s ; summary_heatindexc: %s ; summary_heatindexcstr: %s" % (summary_heatindexf, summary_heatindexfstr, summary_heatindexc, summary_heatindexcstr))
-# Checking for a heat index is easier, Wunderground spits out "NA" if there isn't a head index/wind chill.
-if summary_heatindexf == "NA":
-    heatindexdata = False
-    if verbosity == True:
-        logger.warn("No heat index data available!")
-else:
-    heatindexdata = True
-    if verbosity == True:
-        logger.info("Heat index data is available.")
-summary_windchillf = current_json['current_observation']['windchill_f']
-summary_windchillfstr = str(summary_windchillf)
-summary_windchillc = current_json['current_observation']['windchill_c']
-summary_windchillcstr = str(summary_windchillc)
-if verbosity == True:
-    logger.debug("summary_windchillf: %s ; summary_windchillfstr: %s ; summary_windchillc: %s ; summary_windchillcstr: %s" % (summary_windchillf, summary_windchillfstr, summary_windchillc, summary_windchillcstr))
-if summary_windchillf == "NA":
-    windchilldata = False
-    if verbosity == True:
-        logger.warn("No wind chill data available!")
-else:
-    windchilldata = True
-    if verbosity == True:
-        logger.info("Wind chill data available.")
+    logger.info("summary_feelslikef: %s ; summary_feelslikec: %s"
+                % (summary_feelslikef, summary_feelslikec))
 
 
 # Since normal users have the anvil developer plan, we can actually get a LOT of weather information.
@@ -248,15 +225,13 @@ print("")
 print(Fore.YELLOW + "Currently:")
 print(Fore.CYAN + "Current conditions: " + Fore.YELLOW + summary_overall)
 print(Fore.CYAN + "Current temperature: " + Fore.YELLOW + summary_tempf + "°F (" + summary_tempc + "°C)")
+print(Fore.CYAN + "And it feels like: " + Fore.YELLOW + summary_feelslikef
+      + "°F (" + summary_tempc + "°C)")
 if winddata == True:
     print(Fore.CYAN + "Current wind: " + Fore.YELLOW + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
 else:
     print(Fore.YELLOW + "Wind data is not available for this location.")
 print(Fore.CYAN + "Current humidity: " + Fore.YELLOW + summary_humidity)
-if heatindexdata == True:
-    print(Fore.CYAN + "Current heat index: " + Fore.YELLOW + summary_heatindexfstr + "°F (" + summary_heatindexcstr + "°C)")
-if windchilldata == True:
-    print(Fore.CYAN + "Current wind chill: " + Fore.YELLOW + summary_windchillfstr + "°F (" + summary_windchillcstr + "°C)")
 print("")
 print(Fore.YELLOW + "The hourly forecast:")
 
@@ -324,10 +299,6 @@ while True:
         else:
             print(Fore.YELLOW + "Wind data is not available for this location.")
         print(Fore.CYAN + "Current humidity: " + Fore.YELLOW + summary_humidity)
-        if heatindexdata == True:
-            print(Fore.CYAN + "Current heat index: " + Fore.YELLOW + summary_heatindexfstr + "°F (" + summary_heatindexcstr + "°C)")
-        if windchilldata == True:
-            print(Fore.CYAN + "Current wind chill: " + Fore.YELLOW + summary_windchillfstr + "°F (" + summary_windchillcstr + "°C)")
         print(Fore.CYAN + "Current visibility: " + Fore.YELLOW + current_visibilityMi
               + " miles (" + current_visibilityKm + " km)")
         print(Fore.CYAN + "UV Index: " + Fore.YELLOW + current_UVIndex)
@@ -358,29 +329,6 @@ while True:
             hourly_windDegrees = str(hour['wdir']['degrees'])
             hourly_UVIndex = str(hour['uvi'])
             hourly_humidity = str(hour['humidity'])
-            hourly_WCCheck = hour['windchill']['english']
-            hourly_HICheck = hour['heatindex']['english']
-            hourly_HIData = True
-            if verbosity == True:
-                logger.debug("hourly_WCCheck: %s" % hourly_WCCheck)
-                logger.debug("hourly_HICheck: %s" % hourly_HICheck)
-            if hourly_WCCheck == -9998:
-                hourly_WCData = False
-            else:
-                hourly_WCData = True
-                
-            logger.debug("hourly_WCData: %s" % hourly_WCData)
-            
-            if hourly_HICheck == -9999:
-                hourly_HIData = False
-            
-            
-            logger.debug("hourly_HIData: %s" % hourly_HIData)
-                
-            hourly_windChillF = str(hourly_WCCheck)
-            hourly_windchillC = str(hour['windchill']['metric'])
-            hourly_HeatIndexF = str(hourly_HICheck)
-            hourly_HeatIndexC = str(hour['heatindex']['metric'])
             hourly_feelsLikeF = str(hour['feelslike']['english'])
             hourly_feelsLikeC = str(hour['feelslike']['metric'])
             hourly_precipCheck = str(hour['qpf']['english'])
@@ -410,18 +358,6 @@ while True:
                   + " mph (" + hourly_windKPH + " kph) blowing to the " +
                   hourly_windDir + " (" + hourly_windDegrees + "°)")
             print(Fore.CYAN + "Humidity: " + hourly_humidity + "%")
-            if hourly_WCData == True:
-                print(Fore.CYAN + "Wind chill: " + hourly_windChillF
-                      + "°F (" + hourly_windchillC + "°C)")
-            if hourly_HIData == False:
-                print(Fore.CYAN + "Wind chill: " + Fore.YELLOW +
-                      "No data available.")
-            if hourly_HIData == True:
-                print(Fore.CYAN + "Heat index: " + hourly_HeatIndexF
-                      + "°F (" + hourly_HeatIndexF + "°C)")
-            if hourly_HIData == False:
-                print(Fore.CYAN + "Heat index: " + Fore.YELLOW + 
-                      "No data available.")
             print(Fore.CYAN + "Feels like: " + Fore.YELLOW + hourly_feelsLikeF
                   + "°F (" + hourly_feelsLikeC + "°C)")
             # I may end up doing a check for precipitation data.
