@@ -93,10 +93,12 @@ if verbosity == True:
 
 currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + "," + lonstr + '.json'
 f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast/q/' + latstr + "," + lonstr + '.json'
+f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast/q/' + latstr + "," + lonstr + '.json'
 hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + "," + lonstr + '.json'
 if verbosity == True:
     logger.debug("currenturl: %s" % currenturl)
     logger.debug("f3dayurl: %s" % currenturl)
+    logger.debug("f10dayurl: %s" % currenturl)
     logger.debug("hourlyurl: %s" % currenturl)
     logger.info("End API var declare...")
     logger.info("Start codec change...")
@@ -116,6 +118,9 @@ try:
     forecastJSON = urllib.request.urlopen(f3dayurl)
     if verbosity == True:
         logger.debug("Acquired forecast 3day JSON, end result: %s" % forecastJSON)
+    forecast10JSON = urllib.request.urlopen(f10dayurl)
+    if verbosity == True:
+        logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
     hourlyJSON = urllib.request.urlopen(hourlyurl)
     if verbosity == True:
         logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
@@ -135,11 +140,14 @@ if doubleverbosity == True:
 forecast3_json = json.load(reader(forecastJSON))
 if doubleverbosity == True:
     logger.debug("forecast3_json loaded with: %s" % forecast3_json)
+forecast10_json = json.load(reader(forecast10JSON))
+if doubleverbosity == True:
+    logger.debug("forecast10_json loaded with: %s" % forecast10_json)
 hourly_json = json.load(reader(hourlyJSON))
 if doubleverbosity == True:
     logger.debug("hourly_json loaded with: %s" % hourly_json)
 if verbosity == True:
-    logger.info("3 JSONs loaded...")
+    logger.info("4 JSONs loaded...")
     logger.info("Start 2nd geocoder...")
 
 # Contact Google's reverse geocoder to give us a proper location
@@ -218,6 +226,9 @@ init()
 
 if verbosity == True:
     logger.info("Printing current conditions...")
+    
+# --------------- This is where we end parsing, and begin printing. ----------
+
 print(Style.BRIGHT + Fore.CYAN + "Here's the weather for: " + Fore.YELLOW + location2.city + ", " + location2.state)
 print(Fore.YELLOW + summary_lastupdated)
 print("")
@@ -380,7 +391,40 @@ while True:
                     input()
                 except KeyboardInterrupt:
                     break
-            
+    elif (moreoptions == "view the 10 day weather forecast" or
+          moreoptions == "view the 10 day" or moreoptions == "view 10 day"
+          or moreoptions == "10 day" or moreoptions == "10 day forecast"
+          or moreoptions == "10 day weather forecast"):
+        print(Fore.RED + "Loading...")
+        print("")
+        for day in forecast10_json['forecast']['simple_forecast']['forecastday']:
+            forecast10_weekday = day['date']['weekday']
+            forecast10_month = str(day['date']['month'])
+            forecast10_day = str(day['date']['day'])
+            forecast10_highf = str(day['high']['fahrenheit'])
+            forecast10_highc = str(day['high']['celsius'])
+            forecast10_lowf = str(day['low']['fahrenheit'])
+            forecast10_lowc = str(day['low']['celsius'])
+            forecast10_conditions = day['conditions']
+            forecast10_precipTotalIn = str(day['qpf_allday']['in'])
+            forecast10_precipTotalMm = str(day['qpf_allday']['mm'])
+            forecast10_precipDayIn = str(day['qpf_day']['in'])
+            forecast10_precipDayMm = str(day['qpf_day']['in'])
+            forecast10_precipNightIn = str(day['qpf_night']['in'])
+            forecast10_precipNightMm = str(day['qpf_night']['mm'])
+            forecast10_snowTotalIn = str(day['snow_allday']['in'])
+            forecast10_snowTotalCm = str(day['snow_allday']['cm'])
+            forecast10_snowDayIn = str(day['snow_day']['in'])
+            forecast10_snowDayCm = str(day['snow_day']['cm'])
+            forecast10_snowNightIn = str(day['snow_night']['in'])
+            forecast10_snowNightCm = str(day['snow_night']['cm'])
+            forecast10_maxWindMPH = str(day['maxwind']['mph'])
+            forecast10_maxWindKPH = str(day['maxwind']['kph'])
+            forecast10_maxWindDir = day['maxwind']['dir']
+            forecast10_maxWindDegrees = str(day['maxwind']['degrees'])
+            forecast10_avgWindMPH = str(day['avewind']['mph'])
+            forecast10_avgWindKPH = str(day['avewind']['kph'])
+            forecast10_avgWindDegrees = day['avewind']['degrees']
     elif (moreoptions == "close pyweather" or moreoptions == "close"):
         sys.exit()
     elif (moreoptions == "different location"
