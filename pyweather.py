@@ -1,4 +1,4 @@
-# PyWeather Indev
+# PyWeather 0.1 if you can call it
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 
@@ -8,7 +8,7 @@
 # I usually design programs with the fact that I'll clean up code, and use
 # proper naming conventions/design conventions once the thing works.
 # So, for now. Lines of code/comments will be 79+ characters long. Sorry. 
-# 2. This program is 10% complete, meaning it's FAR from what it can do.
+# 2. This program is 25% complete, meaning it's FAR from what it can do.
 # 3. There is no setup.py file. Get the API key on your own, and download
 # necessary modules through PIP.
 # 4. Progress will be slow and steady with PyWeather. Trust me.
@@ -47,17 +47,15 @@ print(datetime.now())
 
 summaryHourlyIterations = 0
 
-# This is the toggle for verbosity. Right now, it is. Also...
-# the current implementation for verbosity sucks. It basically
-# checks if verbosity is toggled, and does if verbosity, do
-# this.
-
 print("Welcome to PyWeather - Powered by Wunderground.")
 print("Please enter a location to get weather information for.")
 locinput = input("Input here: ")
 print("Sweet! Getting your weather!")
 
-# Error handling will come in the very near future. Because apparently geocoders are blocked in some places *cough* my school *cough*
+
+# Start the geocoder. If we don't have a connection, exit nicely.
+# After we get location data, store it in latstr and lonstr, and store
+# it in the table called loccords.
 
 if verbosity == True:
     logger.debug("Start geolocator...")
@@ -90,7 +88,9 @@ if verbosity == True:
     logger.debug("Loccoords: %s" % loccoords)
     logger.info("End geolocator...")
     logger.info("Start API var declare...")
-# Declare the API url, and use the workaround to get the JSON parsed
+
+# Declare the API URLs with the API key, and latitude/longitude strings from earlier.
+
 currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + "," + lonstr + '.json'
 f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast/q/' + latstr + "," + lonstr + '.json'
 hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + "," + lonstr + '.json'
@@ -108,7 +108,7 @@ if verbosity == True:
     logger.info("End codec change...")
     logger.info("Start API fetch...")
     
-# We now fetch the JSON file to be parsed, using urllib.request
+# Fetch the JSON file using urllib.request, store it as a temporary file.
 try:
     summaryJSON = urllib.request.urlopen(currenturl)
     if verbosity == True:
@@ -125,7 +125,7 @@ except:
     print("Can't connect to the API. Make sure that Wunderground's API " +
           "is unblocked, and the internet is online.")
     sys.exit()
-# And we parse the json using json.load, with the reader option (to use UTF-8)
+# And we parse the json using json.load.
 if verbosity == True:
     logger.info("End API fetch...")
     logger.info("Start JSON load...")
@@ -142,6 +142,8 @@ if verbosity == True:
     logger.info("3 JSONs loaded...")
     logger.info("Start 2nd geocoder...")
 
+# Contact Google's reverse geocoder to give us a proper location
+# of where we're getting the weather for.
 
 try:
     location2 = geocoder.google([latstr, lonstr], method='reverse')
@@ -159,8 +161,7 @@ if verbosity == True:
 
 
 
-# Parsing current weather conditions for the summary. Caching will come so the API is hit once for the summary/detailed debug.
-# External parsing may be added once this list gets INSANELY long. Efficiency isn't too much of an issue.
+# Parse the current weather!
 
 summary_overall = current_json['current_observation']['weather']
 summary_lastupdated = current_json['current_observation']['observation_time']
@@ -211,8 +212,6 @@ if verbosity == True:
     logger.info("summary_feelslikef: %s ; summary_feelslikec: %s"
                 % (summary_feelslikef, summary_feelslikec))
 
-
-# Since normal users have the anvil developer plan, we can actually get a LOT of weather information.
 if verbosity == True:
     logger.info("Initalize color...")
 init()
@@ -223,6 +222,7 @@ print(Style.BRIGHT + Fore.CYAN + "Here's the weather for: " + Fore.YELLOW + loca
 print(Fore.YELLOW + summary_lastupdated)
 print("")
 print(Fore.YELLOW + "Currently:")
+# Currently should have the dew point (at the very least)
 print(Fore.CYAN + "Current conditions: " + Fore.YELLOW + summary_overall)
 print(Fore.CYAN + "Current temperature: " + Fore.YELLOW + summary_tempf + "°F (" + summary_tempc + "°C)")
 print(Fore.CYAN + "And it feels like: " + Fore.YELLOW + summary_feelslikef
