@@ -354,7 +354,8 @@ while True:
         print(Fore.CYAN + "Here's the detailed hourly forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
         print("")
         for hour in hourly_json['hourly_forecast']:
-            hourly_month = str(hour['FCTTIME']['mon'])
+            hourly_time = hour['FCTTIME']['civil']
+            hourly_month = str(hour['FCTTIME']['month_name'])
             hourly_day = str(hour['FCTTIME']['mday'])
             hourly_dewpointF = str(hour['dewpoint']['english'])
             hourly_dewpointC = str(hour['dewpoint']['metric'])
@@ -381,6 +382,57 @@ while True:
             hourly_HeatIndexC = str(hour['heatindex']['metric'])
             hourly_feelsLikeF = str(hour['feelslike']['english'])
             hourly_feelsLikeC = str(hour['feelslike']['metric'])
+            hourly_precipCheck = str(hour['qpf']['english'])
+            hourly_snowCheck = str(hour['snow']['english'])
+            if hourly_precipCheck == "":
+                hourly_precipIn = "0.0"
+                hourly_precipMm = "0.0"
+            else:
+                hourly_precipIn = str(hour['qpf']['english'])
+                hourly_precipMm = str(hour['qpf']['metric'])
+            if hourly_snowCheck == "":
+                hourly_snowIn = "0.0"
+                hourly_snowMm = "0.0"
+            else:
+                hourly_snowIn = str(hour['snow']['english'])
+                hourly_snowMm = str(hour['snow']['metric'])
+            hourly_precipChance = str(hour['pop'])
+            hourly_pressureInHg = str(hour['mslp']['english'])
+            hourly_pressureMb = str(hour['mslp']['metric'])
+            print(Fore.CYAN + hourly_time + " on " + hourly_month + " " + hourly_day + ":")
+            print(Fore.CYAN + "Conditions: " + Fore.YELLOW + hourly_condition)
+            print(Fore.CYAN + "Temperature: " + Fore.YELLOW + hourly_tempf 
+                  + "°F (" + hourly_tempc + "°C)")
+            print(Fore.CYAN + "Dew Point: " + Fore.YELLOW + hourly_dewpointF
+                  + "°F (" + hourly_dewpointC + "°C)")
+            print(Fore.CYAN + "Wind: " + Fore.YELLOW + hourly_windMPH
+                  + " mph (" + hourly_windKPH + " kph) blowing to the " +
+                  hourly_windDir + " (" + hourly_windDegrees + "°)")
+            print(Fore.CYAN + "Humidity: " + hourly_humidity + "%")
+            if hourly_WCData == True:
+                print(Fore.CYAN + "Wind chill: " + hourly_windChillF
+                      + "°F (" + hourly_windchillC + "°C)")
+            if hourly_HIData == False:
+                print(Fore.CYAN + "Wind chill: " + Fore.YELLOW +
+                      "No data available.")
+            if hourly_HIData == True:
+                print(Fore.CYAN + "Heat index: " + hourly_HeatIndexF
+                      + "°F (" + hourly_HeatIndexF + "°C)")
+            if hourly_HIData == False:
+                print(Fore.CYAN + "Heat index: " + Fore.YELLOW + 
+                      "No data available.")
+            print(Fore.CYAN + "Feels like: " + Fore.YELLOW + hourly_feelsLikeF
+                  + "°F (" + hourly_feelsLikeC + "°C)")
+            # I may end up doing a check for precipitation data.
+            print(Fore.CYAN + "Precipiation for the hour: " + Fore.YELLOW +
+                  hourly_precipIn + " in (" + hourly_precipMm + " mm)")
+            print(Fore.CYAN + "Snow for the next hour: " + Fore.YELLOW +
+                  hourly_snowIn + " in (" + hourly_snowMm + " mm)")
+            print(Fore.CYAN + "Precipitation chance: " + Fore.YELLOW + 
+                  hourly_precipChance + "%")
+            print(Fore.CYAN + "Barometric pressure: " + Fore.YELLOW +
+                  hourly_pressureInHg + " inhg (" + hourly_pressureMb
+                  + " mb)")
             
     elif (moreoptions == "close pyweather" or moreoptions == "close"):
         sys.exit()
