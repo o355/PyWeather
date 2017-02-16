@@ -17,7 +17,7 @@
 # Turn on verbosity for, well, verbosity! Double verbosity outputs extra
 # info, but for double verbosity, you need verbosity to be on.
 
-verbosity = True
+verbosity = False
 doubleverbosity = False
 if verbosity == True:
     import logging
@@ -265,14 +265,14 @@ for day in forecast3_json['forecast']['simpleforecast']['forecastday']:
 
 while True:
     print("")
-    print("What would you like to do?")
+    print(Fore.GREEN + "What would you like to do?")
     print("You can 'view more current data', 'view more hourly data'")
     print("You can also 'view the 10 day forecast', 'view weather for a different location'")
     print("Or you can 'close PyWeather'")
     moreoptions = input("Enter here: ").lower()
     if (moreoptions == "view more currently" or moreoptions == "view more current data" 
         or moreoptions == "view more current weather"):
-        print("Loading...")
+        print(Fore.RED + "Loading...")
         print("")
         # I forgot to add Pressure and Dewpoints (rip)
         current_windDegrees = str(current_json['current_observation']['wind_degrees'])
@@ -313,7 +313,7 @@ while True:
           moreoptions == "view more hourly" or
           moreoptions == "view hourly" or
           moreoptions == "hourly"):
-        print("Loading...")
+        print(Fore.RED + "Loading...")
         print("")
         print(Fore.CYAN + "Here's the detailed hourly forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
         print("")
@@ -370,6 +370,7 @@ while True:
             print(Fore.CYAN + "Barometric pressure: " + Fore.YELLOW +
                   hourly_pressureInHg + " inhg (" + hourly_pressureMb
                   + " mb)")
+            print("")
             
     elif (moreoptions == "close pyweather" or moreoptions == "close"):
         sys.exit()
