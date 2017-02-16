@@ -387,4 +387,7 @@ while True:
           or moreoptions == "view weather for a different location" or
           moreoptions == "view weather different location"):
         print("This feature has been temporarily removed.")
+    else:
+        print(Fore.RED + "Not a valid option.")
+        print("")
     
