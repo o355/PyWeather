@@ -1,7 +1,6 @@
 # PyWeather Indev
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
-from _ast import Or
 
 # ===========================
 #   A few quick notes:
@@ -18,7 +17,7 @@ from _ast import Or
 # Turn on verbosity for, well, verbosity! Double verbosity outputs extra
 # info, but for double verbosity, you need verbosity to be on.
 
-verbosity = False
+verbosity = True
 doubleverbosity = False
 if verbosity == True:
     import logging
@@ -54,9 +53,9 @@ summaryHourlyIterations = 0
 # this.
 
 print("Welcome to PyWeather - Powered by Wunderground.")
-print("Please enter a location to get weather debugrmation for.")
+print("Please enter a location to get weather information for.")
 locinput = input("Input here: ")
-print("Sweet! Getting your weather.")
+print("Sweet! Getting your weather!")
 
 # Error handling will come in the very near future. Because apparently geocoders are blocked in some places *cough* my school *cough*
 
@@ -92,9 +91,9 @@ if verbosity == True:
     logger.info("End geolocator...")
     logger.info("Start API var declare...")
 # Declare the API url, and use the workaround to get the JSON parsed
-currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + "," + lonstr + '.json'
-f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast/q/' + latstr + "," + lonstr + '.json'
-hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + "," + lonstr + '.json'
+currenturl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/conditions/q/' + latstr + "," + lonstr + '.json'
+f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/forecast/q/' + latstr + "," + lonstr + '.json'
+hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/hourly/q/' + latstr + "," + lonstr + '.json'
 if verbosity == True:
     logger.debug("currenturl: %s" % currenturl)
     logger.debug("f3dayurl: %s" % currenturl)
@@ -237,24 +236,18 @@ else:
 
 
 # Since normal users have the anvil developer plan, we can actually get a LOT of weather information.
-print("Reading the skies...")
 if verbosity == True:
     logger.info("Initalize color...")
 init()
-# We parse any alerts here.
-
-# And the summary gets spitted out here!
 
 if verbosity == True:
     logger.info("Printing current conditions...")
-# Entering city names that have odd characters will
 print(Style.BRIGHT + Fore.CYAN + "Here's the weather for: " + Fore.YELLOW + location2.city + ", " + location2.state)
 print(Fore.YELLOW + summary_lastupdated)
 print("")
 print(Fore.YELLOW + "Currently:")
 print(Fore.CYAN + "Current conditions: " + Fore.YELLOW + summary_overall)
 print(Fore.CYAN + "Current temperature: " + Fore.YELLOW + summary_tempf + "°F (" + summary_tempc + "°C)")
-# We're using the winddata variable to check if we should give an error for wind data, or not at all print heat index/wind chill data.
 if winddata == True:
     print(Fore.CYAN + "Current wind: " + Fore.YELLOW + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
 else:
@@ -367,15 +360,23 @@ while True:
             hourly_humidity = str(hour['humidity'])
             hourly_WCCheck = hour['windchill']['english']
             hourly_HICheck = hour['heatindex']['english']
+            hourly_HIData = True
+            if verbosity == True:
+                logger.debug("hourly_WCCheck: %s" % hourly_WCCheck)
+                logger.debug("hourly_HICheck: %s" % hourly_HICheck)
             if hourly_WCCheck == -9998:
                 hourly_WCData = False
             else:
                 hourly_WCData = True
+                
+            logger.debug("hourly_WCData: %s" % hourly_WCData)
             
-            if hourly_HICheck == -9998:
+            if hourly_HICheck == -9999:
                 hourly_HIData = False
-            else:
-                hourly_HIData = True
+            
+            
+            logger.debug("hourly_HIData: %s" % hourly_HIData)
+                
             hourly_windChillF = str(hourly_WCCheck)
             hourly_windchillC = str(hour['windchill']['metric'])
             hourly_HeatIndexF = str(hourly_HICheck)
@@ -439,5 +440,5 @@ while True:
     elif (moreoptions == "different location"
           or moreoptions == "view weather for a different location" or
           moreoptions == "view weather different location"):
-        exec(open("pyweather.py").read())
+        print("This feature has been temporarily removed.")
     
