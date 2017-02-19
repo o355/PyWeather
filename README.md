@@ -2,23 +2,31 @@
 A simple-to-use and advanced weather program for Python 3. I'm still writing it.
 
 ## USAGE DISCLAIMER:
-PyWeather is presently in development, and I'm pushing new development changes to GitHub, as the master. Some of these commits will contain unfinished/rough parts, so please take heed when using PyWeather.
+PyWeather is presently in development, and I'm pushing new development changes to GitHub, to the master branch. Some of these commits will contain unfinished/rough parts, may randomly add/take away verbosity, and/or reduce stability. Please take heed when using PyWeather and the fact that it's in development.
 
-There is no setup script, so if you plan to use PyWeather, you'll be setting up PyWeather (and getting your own API key) on your own. A manual setup guide is in the Wiki.
+## Setup
+I won't make you read the entire readme, so here's how to download PyWeather.
 
-## Where's the development at?
-I found the development! My top priority is completing PyWeather, and PyTerm (for now) has been put on the back burner.
+**These instructions will apply to code I publish soon. This banner will go away when I finish the setup script.**
 
-## Why not use the 20 other programs named PyWeather?
-Because PyWeather is simple. It'll help you set up an API key. It'll install needed libraries. It does EVERYTHING FOR YOU. It'll give you a step by step by step guide in getting an API key. It's ABSOLUTELY AMAZING. It has alerts. It has hourly forecasts. It has an almanac. It has tide data. It has a weather time machine. It has sunrise/sunset/moonrise/moonset data. It has 10 day forecasts. IT'LL EVEN LIST ACTIVE HURRICANES. It has all the weather data that tickles the weather nerd inside of you.
+Simple. Download a release from the releases tab, unzip it, and run setup.py. The script will walk you through installing necessary libraries, instructions for retrieving an API key, and making sure things run smooth.
 
-And it's fast! PyWeather can load forecasts in >5 seconds, without ads, versus visiting the website, in which that takes 3-4x longer.
+After that, double click pyweather.py, input a location, and that's it! No, really. That's actually it. No completed config files, none of that. setup.py, pyweather.py. Welcome to the world of simplicity!
 
-## When is it coming?
-Late 2017 (maybe even 2018). It's another huge step in my Python carrer, and it involves command-line arguments, colors, learning APIs, parsing JSONs, and lots of time. However, you can follow the betas that I publish, showing progress. (around 10 betas will get published). I'm also working on 2 other Python projects, PyTerm and PIPupdate, and I need to develop for those too!
+***For users using a command-line only OS, make sure you're in the directory you want PyWeather to be stored in, and then run `git clone https://github.com/o355/pyweather.git`. Run the scripts using `python3 setup.py / python3 pyweather.py`.***
 
-If you want to contribute in any form to PyWeather, submit issues, wiki pages, and pull requests (after 1/15/17).
+## What's PyWeather?
+PyWeather is a script that, as it says, shows the weather. In addition, PyWeather is pretty, includes a setup script for guidance on setting up PyWeather, and PyWeather provides detailed weather information, along with the short and simple version.
 
-## How's it coming along?
+PyWeather can show you the conditions outside your window, how things may look outside your window in a few hours (and with detail!), and how things may look outside your window in a few days (with detail, of course!). PyWeather will soon be able to show alerts information, almanac data, and loads of other data from Wunderground.
 
-As of the moment, it's getting there. I'm working on getting the summary screen down (alerts, current conditions, etc), and then I'll move on to more advanced features, like detailed conditions, forecasts, and all the other information.
+## Why not use the dozens of other programs named PyWeather, etc?
+Great question! What I generally found after scanning GitHub was that those programs showed data through command prompts, didn't contain stupidly easy-to-follow instructions on retrieving an API key, but they weren't a script. You had to have knowledge over how to set up Python libraries, bleh. PyWeather was aimed for people who just wanted the weather, but through Python. 
+
+And for those users using a command prompt as their OS, PyWeather is simply perfect for viewing the weather in a terminal.
+
+## Are there any TRUE advantages over PyWeather than going to Google/Wunderground?
+Sure! PyWeather is about 3-4x faster than pulling up a web browser, and going to Wunderground. It's a little slower when it compares to going to Google (or your preferred search engine), but fetches more data. Best of all, PyWeather is ad-free, and doesn't track you. PyWeather just wants to serve you the weather.
+
+## What's still coming?
+Lots! I'm still developing the base version of PyWeather, so more data will be fetched, and along the way, I may make some other changes.
