@@ -369,7 +369,7 @@ while True:
             print(Fore.CYAN + "Wind: " + Fore.YELLOW + hourly_windMPH
                   + " mph (" + hourly_windKPH + " kph) blowing to the " +
                   hourly_windDir + " (" + hourly_windDegrees + "°)")
-            print(Fore.CYAN + "Humidity: " + hourly_humidity + "%")
+            print(Fore.CYAN + "Humidity: " + Fore.YELLOW + hourly_humidity + "%")
             print(Fore.CYAN + "Feels like: " + Fore.YELLOW + hourly_feelsLikeF
                   + "°F (" + hourly_feelsLikeC + "°C)")
             # I may end up doing a check for precipitation data.
@@ -383,10 +383,11 @@ while True:
                   hourly_pressureInHg + " inHg (" + hourly_pressureMb
                   + " mb)")
             detailedHourlyIterations = detailedHourlyIterations + 1
-            if (detailedHourlyIterations == 12 or detailedHourlyIterations == 24):
+            if (detailedHourlyIterations == 6 or detailedHourlyIterations == 12
+                or detailedHourlyIterations == 18 or detailedHourlyIterations == 24):
                 try:
                     print("")
-                    print(Fore.RED + "Please press enter to view the next 12 hours of hourly data")
+                    print(Fore.RED + "Please press enter to view the next 6 hours of hourly data.")
                     print("You can also press Control + C to head back to the input menu.")
                     input()
                 except KeyboardInterrupt:
