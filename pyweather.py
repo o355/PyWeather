@@ -438,21 +438,17 @@ while True:
             forecast10_snowNightCm = str(day['snow_night']['cm'])
             forecast10_maxWindMPH = str(day['maxwind']['mph'])
             forecast10_maxWindKPH = str(day['maxwind']['kph'])
-            forecast10_maxWindDir = day['maxwind']['dir']
-            forecast10_maxWindDegrees = str(day['maxwind']['degrees'])
             forecast10_avgWindMPH = str(day['avewind']['mph'])
             forecast10_avgWindKPH = str(day['avewind']['kph'])
             forecast10_avgWindDir = day['avewind']['dir']
             forecast10_avgWindDegrees = str(day['avewind']['degrees'])
             forecast10_avgHumidity = str(day['avehumidity'])
-            forecast10_minHumidity = str(day['minhumidity'])
-            forecast10_maxHumidity = str(day['maxhumidity'])
             print("")
             print(Fore.YELLOW + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ":")
-            print(Fore.CYAN + forecast10_conditions + Fore.YELLOW + " with a high of "
-                  + Fore.CYAN + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
-                  Fore.YELLOW + " and a low of " + Fore.CYAN + forecast10_lowf + "°F (" +
-                  forecast10_lowc + "°C)" + Fore.YELLOW + ".")
+            print(Fore.YELLOW + forecast10_conditions + Fore.CYAN + " with a high of "
+                  + Fore.YELLOW + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
+                  Fore.CYAN + " and a low of " + Fore.YELLOW + forecast10_lowf + "°F (" +
+                  forecast10_lowc + "°C)" + ".")
             print(Fore.CYAN + "Total Precip: " + Fore.YELLOW +
                   forecast10_precipTotalIn + " in (" + forecast10_precipTotalMm
                   + " mm)")
@@ -473,15 +469,20 @@ while True:
                   + " cm)")
             print(Fore.CYAN + "Winds: " + Fore.YELLOW +
                   forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
-                  + " kph), blowing " + forecast10_avgWindDir + " ("
-                  + forecast10_avgWindDegrees + "°)")
-            print(Fore.CYAN + "Wind gusts: " + Fore.YELLOW +
-                  forecast10_maxWindMPH + " mph (" + forecast10_maxWindKPH
-                  + " kph), blowing " + forecast10_maxWindDir + " ("
-                  + forecast10_maxWindDegrees + "°)")
+                  + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
+                  + forecast10_maxWindKPH + " kph), "
+                  + "and blowing " + forecast10_avgWindDir +
+                  " (" + forecast10_avgWindDegrees + "°)")
             print(Fore.CYAN + "Humidity: " + Fore.YELLOW +
-                  forecast10_avgHumidity + "% (minimum " + forecast10_minHumidity
-                  + "%, maximum " + forecast10_maxHumidity + "%)")
+                  forecast10_avgHumidity + "%")
+            detailedForecastIterations = detailedForecastIterations + 1
+            if detailedForecastIterations == 5:
+                try:
+                    print(Fore.RED + "Press enter to view the next 5 days of weather data.")
+                    print("You can also press Control + C to return to the input menu.")
+                    input()
+                except KeyboardInterrupt:
+                    break
     elif (moreoptions == "close pyweather" or moreoptions == "close"):
         sys.exit()
     elif (moreoptions == "different location"
