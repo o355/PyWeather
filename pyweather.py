@@ -14,11 +14,12 @@
 # 4. Progress will be slow and steady with PyWeather. Trust me.
 
 # Verbosity works like this (for now)
-# Turn on verbosity for, well, verbosity! Double verbosity outputs extra
-# info, but for double verbosity, you need verbosity to be on.
+# Turn on verbosity for, well, verbosity! jsonVerbosity outputs
+# the full JSON acquired (aka spams 50 lines of console), so it's
+# a separate, and now, more obvious switch.
 
 verbosity = True
-jsonVerbosity = False
+jsonVerbosity = True
 if verbosity == True:
     import logging
     logger = logging.getLogger('pyweather_0.2beta')
@@ -485,24 +486,58 @@ while True:
         detailedForecastIterations = 0
         print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
         for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
+            logger.info("We're on iteration: %s" % detailedForecastIterations)
             forecast10_weekday = day['date']['weekday']
             forecast10_month = str(day['date']['month'])
             forecast10_day = str(day['date']['day'])
             forecast10_highf = str(day['high']['fahrenheit'])
+            if verbosity == True:
+                logger.debug("forecast10_weekday: %s ; forecast10_month: %s"
+                             % (forecast10_weekday, forecast10_month))
+                logger.debug("forecast10_day: %s ; forecast10_highf: %s"
+                             % (forecast10_day, forecast10_highf))
             forecast10_highc = str(day['high']['celsius'])
             forecast10_lowf = str(day['low']['fahrenheit'])
             forecast10_lowc = str(day['low']['celsius'])
             forecast10_conditions = day['conditions']
+            if verbosity == True:
+                logger.deug("forecast10_highc: %s ; forecast10_lowf: %s"
+                            % (forecast10_highc, forecast10_lowf))
+                logger.debug("forecast10_lowc: %s ; forecast10_conditions: %s"
+                             % (forecast10_lowc, forecast10_conditions))
             forecast10_precipTotalIn = str(day['qpf_allday']['in'])
             forecast10_precipTotalMm = str(day['qpf_allday']['mm'])
             forecast10_precipDayIn = str(day['qpf_day']['in'])
             forecast10_precipDayMm = str(day['qpf_day']['mm'])
+            if verbosity == True:
+                logger.debug("forecast10_precipTotalIn: %s ; forecast10_precipTotalMm: %s"
+                             % (forecast10_precipTotalIn, forecast10_precipTotalMm))
+                logger.debug("forecast10_precipDayIn: %s ; forecast10_precipDayMm: %s"
+                             % (forecast10_precipDayIn, forecast10_precipDayMm))
             forecast10_precipNightIn = str(day['qpf_night']['in'])
             forecast10_precipNightMm = str(day['qpf_night']['mm'])
-            forecast10_snowTotalIn = str(day['snow_allday']['in'])
+            if verbosity == True:
+                logger.debug("forecast10_precipNightIn: %s ; forecast10_precipNightMm: %s"
+                             % (forecast10_precipNightIn, forecast10_precipNightMm))
+            forecast10_snowTotalCheck = day['snow_allday']['in']
+            if forecast10_snowTotalCheck == "0.0":
+                forecast_snowTotalData = False
+            else:
+                forecast_snowTotalData = True
+            forecast10_snowTotalIn = str(forecast10_snowTotalCheck)
             forecast10_snowTotalCm = str(day['snow_allday']['cm'])
-            forecast10_snowDayIn = str(day['snow_day']['in'])
+            forecast10_snowDayCheck = day['snow_day']['in']
+            if forecast10_snowDayCheck == "0.0":
+                forecast_snowDayData = False
+            else:
+                forecast_snowDayData = True
+            forecast10_snowDayIn = str(forecast10_snowDayCheck)
             forecast10_snowDayCm = str(day['snow_day']['cm'])
+            forecast10_snowNightCheck = day['snow_night']['in']
+            if forecast10_snowNightCheck == "0.0":
+                forecast_snowNightData = False
+            else:
+                forecast_snowNightData = True
             forecast10_snowNightIn = str(day['snow_night']['in'])
             forecast10_snowNightCm = str(day['snow_night']['cm'])
             forecast10_maxWindMPH = str(day['maxwind']['mph'])
