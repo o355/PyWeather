@@ -96,7 +96,7 @@ if verbosity == True:
 
 currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + "," + lonstr + '.json'
 f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast/q/' + latstr + "," + lonstr + '.json'
-f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast/q/' + latstr + "," + lonstr + '.json'
+f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + "," + lonstr + '.json'
 hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + "," + lonstr + '.json'
 print("[##--------] | 14% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 if verbosity == True:
@@ -270,7 +270,6 @@ for hour in hourly_json['hourly_forecast']:
     summaryHourlyIterations = summaryHourlyIterations + 1
     if summaryHourlyIterations == 6:
         break
-print(Fore.YELLOW + "Input " + Fore.CYAN + "View more hourly " + Fore.YELLOW + "for more hourly weather info.")    
 print("")
 print(Fore.YELLOW + "For the next few days:")
 
@@ -416,7 +415,7 @@ while True:
         print("")
         detailedForecastIterations = 0
         print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
-        for day in forecast10_json['forecast']['simple_forecast']['forecastday']:
+        for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
             forecast10_weekday = day['date']['weekday']
             forecast10_month = str(day['date']['month'])
             forecast10_day = str(day['date']['day'])
@@ -428,7 +427,7 @@ while True:
             forecast10_precipTotalIn = str(day['qpf_allday']['in'])
             forecast10_precipTotalMm = str(day['qpf_allday']['mm'])
             forecast10_precipDayIn = str(day['qpf_day']['in'])
-            forecast10_precipDayMm = str(day['qpf_day']['in'])
+            forecast10_precipDayMm = str(day['qpf_day']['mm'])
             forecast10_precipNightIn = str(day['qpf_night']['in'])
             forecast10_precipNightMm = str(day['qpf_night']['mm'])
             forecast10_snowTotalIn = str(day['snow_allday']['in'])
@@ -443,12 +442,46 @@ while True:
             forecast10_maxWindDegrees = str(day['maxwind']['degrees'])
             forecast10_avgWindMPH = str(day['avewind']['mph'])
             forecast10_avgWindKPH = str(day['avewind']['kph'])
-            forecast10_avgWindDegrees = day['avewind']['degrees']
+            forecast10_avgWindDir = day['avewind']['dir']
+            forecast10_avgWindDegrees = str(day['avewind']['degrees'])
             forecast10_avgHumidity = str(day['avehumidity'])
             forecast10_minHumidity = str(day['minhumidity'])
             forecast10_maxHumidity = str(day['maxhumidity'])
-            print(Fore.YELLOW + forecast10_weekday + ", " + forecast10_month + " " + forecast10_day + ":")
-            # print(Fore.YELLOW + "High temperature: " + )
+            print("")
+            print(Fore.YELLOW + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ":")
+            print(Fore.CYAN + forecast10_conditions + Fore.YELLOW + " with a high of "
+                  + Fore.CYAN + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
+                  Fore.YELLOW + " and a low of " + Fore.CYAN + forecast10_lowf + "°F (" +
+                  forecast10_lowc + "°C)" + Fore.YELLOW + ".")
+            print(Fore.CYAN + "Total Precip: " + Fore.YELLOW +
+                  forecast10_precipTotalIn + " in (" + forecast10_precipTotalMm
+                  + " mm)")
+            print(Fore.CYAN + "Precip during the day: " + Fore.YELLOW +
+                  forecast10_precipDayIn + " in (" + forecast10_precipDayMm
+                  + " mm)")
+            print(Fore.CYAN + "Precip during the night: " + Fore.YELLOW +
+                  forecast10_precipNightIn + " in (" + forecast10_precipNightMm
+                  + " mm)")
+            print(Fore.CYAN + "Total snow: " + Fore.YELLOW +
+                  forecast10_snowTotalIn + " in (" + forecast10_snowTotalCm
+                  + " cm)")
+            print(Fore.CYAN + "Snow during the day: " + Fore.YELLOW + 
+                  forecast10_snowDayIn + " in (" + forecast10_snowDayCm
+                  + " cm)")
+            print(Fore.CYAN + "Snow during the night: " + Fore.YELLOW +
+                  forecast10_snowNightIn + " in (" + forecast10_snowNightCm
+                  + " cm)")
+            print(Fore.CYAN + "Winds: " + Fore.YELLOW +
+                  forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
+                  + " kph), blowing " + forecast10_avgWindDir + " ("
+                  + forecast10_avgWindDegrees + "°)")
+            print(Fore.CYAN + "Wind gusts: " + Fore.YELLOW +
+                  forecast10_maxWindMPH + " mph (" + forecast10_maxWindKPH
+                  + " kph), blowing " + forecast10_maxWindDir + " ("
+                  + forecast10_maxWindDegrees + "°)")
+            print(Fore.CYAN + "Humidity: " + Fore.YELLOW +
+                  forecast10_avgHumidity + "% (minimum " + forecast10_minHumidity
+                  + "%, maximum " + forecast10_maxHumidity + "%)")
     elif (moreoptions == "close pyweather" or moreoptions == "close"):
         sys.exit()
     elif (moreoptions == "different location"
