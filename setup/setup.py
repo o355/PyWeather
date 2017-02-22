@@ -1,4 +1,4 @@
-# PyWeather Setup
+# PyWeather Setup (NOT DONE)
 # (c) 2017
 
 # Exe version coming (eventually)

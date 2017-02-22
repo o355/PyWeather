@@ -1,4 +1,4 @@
-# PyWeather 0.1 if you can call it
+# PyWeather 0.2 beta
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 
@@ -21,7 +21,7 @@ verbosity = False
 doubleverbosity = False
 if verbosity == True:
     import logging
-    logger = logging.getLogger('pyweather_0.1')
+    logger = logging.getLogger('pyweather_0.2beta')
     logger.setLevel(logging.DEBUG)
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)
@@ -46,7 +46,6 @@ if verbosity == True:
     logger.debug("apikey = %s" % apikey)
 print(datetime.now())
 
-summaryHourlyIterations = 0
 
 print("Welcome to PyWeather - Powered by Wunderground.")
 print("Please enter a location to get weather information for.")
@@ -243,6 +242,8 @@ if verbosity == True:
     logger.info("Printing current conditions...")
     
 # --------------- This is where we end parsing, and begin printing. ----------
+
+summaryHourlyIterations = 0
 
 print(Style.BRIGHT + Fore.CYAN + "Here's the weather for: " + Fore.YELLOW + location2.city + ", " + location2.state)
 print(Fore.YELLOW + summary_lastupdated)
