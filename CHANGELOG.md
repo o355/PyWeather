@@ -1,0 +1,3 @@
+# PyWeather changelog
+
+That thing...
