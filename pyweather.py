@@ -17,7 +17,7 @@
 # Turn on verbosity for, well, verbosity! Double verbosity outputs extra
 # info, but for double verbosity, you need verbosity to be on.
 
-verbosity = False
+verbosity = True
 doubleverbosity = False
 if verbosity == True:
     import logging
@@ -360,7 +360,14 @@ while True:
             hourly_feelsLikeC = str(hour['feelslike']['metric'])
             hourly_precipIn = str(hour['qpf']['english'])
             hourly_precipMm = str(hour['qpf']['metric'])
-            hourly_snowIn = str(hour['snow']['english'])
+            hourly_snowCheck = hour['snow']['english']
+            logger.debug("hourly_snowCheck: %s" % hourly_snowCheck)
+            if hourly_snowCheck == "0.0":
+                hourly_snowData = False
+            else:
+                hourly_snowData = True
+            logger.debug("hourly_snowData: %s" % hourly_snowData)
+            hourly_snowIn = str(hourly_snowCheck)
             hourly_snowMm = str(hour['snow']['metric'])
             hourly_precipChance = str(hour['pop'])
             hourly_pressureInHg = str(hour['mslp']['english'])
@@ -381,8 +388,9 @@ while True:
             # I may end up doing a check for precipitation data.
             print(Fore.CYAN + "Precipiation for the hour: " + Fore.YELLOW +
                   hourly_precipIn + " in (" + hourly_precipMm + " mm)")
-            print(Fore.CYAN + "Snow for the next hour: " + Fore.YELLOW +
-                  hourly_snowIn + " in (" + hourly_snowMm + " mm)")
+            if hourly_snowData == True:
+                print(Fore.CYAN + "Snow for the next hour: " + Fore.YELLOW +
+                      hourly_snowIn + " in (" + hourly_snowMm + " mm)")
             print(Fore.CYAN + "Precipitation chance: " + Fore.YELLOW + 
                   hourly_precipChance + "%")
             print(Fore.CYAN + "Barometric pressure: " + Fore.YELLOW +
