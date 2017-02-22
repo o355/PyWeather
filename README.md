@@ -1,8 +1,10 @@
-## Welcome to PyWeather
-A simple-to-use and advanced weather program for Python 3. I'm still writing it.
+## Welcome to PyWeather (0.2 beta)
+A simple-to-use and advanced weather program for Python 3, now in Beta!
 
-## USAGE DISCLAIMER:
-PyWeather is presently in development, and I'm pushing new development changes to GitHub, to the master branch. Some of these commits will contain unfinished/rough parts, may randomly add/take away verbosity, and/or reduce stability. Please take heed when using PyWeather and the fact that it's in development.
+## BETA DISCLAIMER:
+Even though PyWeather is in beta, it's still in active development. While releases are more stable milestones of PyWeather, there will certainly be unfinished/rough parts of PyWeather, even in releases. Make sure you check for the latest releases, since as the betas go on, PyWeather will be less unfinished/rough.
+
+For those updating from GitHub directly, I may push a stable/unstable/broken build of PyWeather, so take heed.
 
 ## Setup
 I won't make you read the entire readme, so here's how to download PyWeather.
@@ -29,4 +31,4 @@ And for those users using a command prompt as their OS, PyWeather is simply perf
 Sure! PyWeather is about 3-4x faster than pulling up a web browser, and going to Wunderground. It's a little slower when it compares to going to Google (or your preferred search engine), but fetches more data. Best of all, PyWeather is ad-free, and doesn't track you. PyWeather just wants to serve you the weather.
 
 ## What's still coming?
-Lots! I'm still developing the base version of PyWeather, so more data will be fetched, and along the way, I may make some other changes.
+Lots! While I'm grabbing the most important of data, there's still a lot of features coming, as seen on the To-Do list page.
