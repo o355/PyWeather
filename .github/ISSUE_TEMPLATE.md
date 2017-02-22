@@ -1,4 +1,4 @@
-Hi! Thanks for your interest in contributing to PyWeather.
+Hi! Thanks for your interest in contributing to PyWeather, by reporting an issue.
 
 It's simply impossible for me to catch every bug in PyWeather, so you can help! Just follow these simple instructions.
 
@@ -10,4 +10,4 @@ It's simply impossible for me to catch every bug in PyWeather, so you can help! 
 
 If you are truly uncertain if you meet these requirements, just post the issue. I generally worry more about the bug than how you post it.
 
-*delete this, and type your issue!*
+Thanks! Delete this, and report that issue!
