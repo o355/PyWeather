@@ -2,5 +2,13 @@
 
 Quick note: While in beta, commits are not counted as versions. When I decide to push a release, I push a release.
 
-# version 0.2 beta (released February 22, 2016)
+## version 0.2.1 beta (The Verbosity Update) - Released 2/22/2017
+* Adds verbosity to newer functions of PyWeather. PyWeather loves verbosity.
+* Replaces double verbosity with jsonVerbosity, as to not confuse people.
+* Adds a check for snow data. We made sure people living near the equator don't feel sad when "Snow data" is always 0.0 inches.
+* The loading bars are now turned off when verbosity is enabled.
+* PyWeather can now accept numbers as inputs for different functions, to make life a little easier.
+* Fixes some other issues.
+
+## version 0.2 beta (The Initial Update) - Released 2/22/2017
 * Initial build
