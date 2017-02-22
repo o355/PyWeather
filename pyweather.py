@@ -1,4 +1,4 @@
-# PyWeather 0.2 beta
+# PyWeather 0.2 -> 0.2.1
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 
@@ -292,9 +292,9 @@ for day in forecast3_json['forecast']['simpleforecast']['forecastday']:
 while True:
     print("")
     print(Fore.GREEN + "What would you like to do?")
-    print("You can 'view more current data', 'view more hourly data'")
-    print("You can also 'view the 10 day forecast', 'view weather for a different location'")
-    print("Or you can 'close PyWeather'" + Fore.YELLOW)
+    print("You can 'view more current data' [0], 'view more hourly data' [1]")
+    print("You can also 'view the 10 day forecast' [2], 'view weather for a different location' [3]")
+    print("Or you can 'close PyWeather' [4]" + Fore.YELLOW)
     moreoptions = input("Enter here: ").lower()
     if (moreoptions == "view more current" or moreoptions == "view more current data" 
         or moreoptions == "view currently" or moreoptions == "view more currently"
@@ -358,20 +358,10 @@ while True:
             hourly_humidity = str(hour['humidity'])
             hourly_feelsLikeF = str(hour['feelslike']['english'])
             hourly_feelsLikeC = str(hour['feelslike']['metric'])
-            hourly_precipCheck = str(hour['qpf']['english'])
-            hourly_snowCheck = str(hour['snow']['english'])
-            if hourly_precipCheck == "":
-                hourly_precipIn = "0.0"
-                hourly_precipMm = "0.0"
-            else:
-                hourly_precipIn = str(hour['qpf']['english'])
-                hourly_precipMm = str(hour['qpf']['metric'])
-            if hourly_snowCheck == "":
-                hourly_snowIn = "0.0"
-                hourly_snowMm = "0.0"
-            else:
-                hourly_snowIn = str(hour['snow']['english'])
-                hourly_snowMm = str(hour['snow']['metric'])
+            hourly_precipIn = str(hour['qpf']['english'])
+            hourly_precipMm = str(hour['qpf']['metric'])
+            hourly_snowIn = str(hour['snow']['english'])
+            hourly_snowMm = str(hour['snow']['metric'])
             hourly_precipChance = str(hour['pop'])
             hourly_pressureInHg = str(hour['mslp']['english'])
             hourly_pressureMb = str(hour['mslp']['metric'])
@@ -410,6 +400,7 @@ while True:
                     break
     elif (moreoptions == "view the 10 day weather forecast" or
           moreoptions == "view the 10 day" or moreoptions == "view 10 day"
+          or moreoptions == "view the 10 day"
           or moreoptions == "10 day" or moreoptions == "10 day forecast"
           or moreoptions == "10 day weather forecast"):
         print(Fore.RED + "Loading...")
