@@ -372,10 +372,10 @@ while True:
           moreoptions == "view hourly" or
           moreoptions == "hourly"):
         print(Fore.RED + "Loading...")
-        print("")
         detailedHourlyIterations = 0
         print(Fore.CYAN + "Here's the detailed hourly forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
         for hour in hourly_json['hourly_forecast']:
+            print("")
             logger.info("We're on iteration: %s" % detailedHourlyIterations)
             hourly_time = hour['FCTTIME']['civil']
             hourly_month = str(hour['FCTTIME']['month_name'])
@@ -428,7 +428,17 @@ while True:
             hourly_precipChance = str(hour['pop'])
             hourly_pressureInHg = str(hour['mslp']['english'])
             hourly_pressureMb = str(hour['mslp']['metric'])
+            if verbosity == True:
+                logger.debug("hourly_snowIn: %s ; hourly_snowMm: %s"
+                             % (hourly_snowIn, hourly_snowMm))
+                logger.debug("hourly_precipChance: %s ; hourly_pressureInHg: %s"
+                             % (hourly_precipChance, hourly_pressureInHg))
+                logger.debug("hourly_pressureMb: %s" % hourly_pressureMb)
+                logger.info("Now printing weather data...")
             print("")
+            # If you have verbosity on, there's a chance that the next
+            # hourly iteration will start BEFORE the previous iteration
+            # prints out. This is normal, and no issues are caused by such.
             print(Fore.YELLOW + hourly_time + " on " + hourly_month + " " + hourly_day + ":")
             print(Fore.CYAN + "Conditions: " + Fore.YELLOW + hourly_condition)
             print(Fore.CYAN + "Temperature: " + Fore.YELLOW + hourly_tempf 
@@ -441,7 +451,6 @@ while True:
             print(Fore.CYAN + "Humidity: " + Fore.YELLOW + hourly_humidity + "%")
             print(Fore.CYAN + "Feels like: " + Fore.YELLOW + hourly_feelsLikeF
                   + "°F (" + hourly_feelsLikeC + "°C)")
-            # I may end up doing a check for precipitation data.
             print(Fore.CYAN + "Precipiation for the hour: " + Fore.YELLOW +
                   hourly_precipIn + " in (" + hourly_precipMm + " mm)")
             if hourly_snowData == True:
@@ -455,12 +464,16 @@ while True:
             detailedHourlyIterations = detailedHourlyIterations + 1
             if (detailedHourlyIterations == 6 or detailedHourlyIterations == 12
                 or detailedHourlyIterations == 18 or detailedHourlyIterations == 24):
+                logger.debug("detailedHourlyIterations: %s" % detailedHourlyIterations)
+                logger.debug("Asking user for continuation...")
                 try:
                     print("")
                     print(Fore.RED + "Please press enter to view the next 6 hours of hourly data.")
                     print("You can also press Control + C to head back to the input menu.")
                     input()
+                    logger.debug("Iterating 6 more times...")
                 except KeyboardInterrupt:
+                    logger.debug("Exiting to main menu...")
                     break
     elif (moreoptions == "view the 10 day weather forecast" or
           moreoptions == "view the 10 day" or moreoptions == "view 10 day"
