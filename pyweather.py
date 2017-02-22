@@ -312,6 +312,8 @@ while True:
     print("You can also 'view the 10 day forecast' [2], 'view weather for a different location' [3]")
     print("Or you can 'close PyWeather' [4]" + Fore.YELLOW)
     moreoptions = input("Enter here: ").lower()
+    if verbosity == True:
+        logger.debug("moreoptions: %s" % moreoptions)
     if (moreoptions == "view more current" or moreoptions == "view more current data" 
         or moreoptions == "view currently" or moreoptions == "view more currently"
         or moreoptions == "currently" or moreoptions == "current"):
@@ -324,10 +326,23 @@ while True:
         current_visibilityMi = str(current_json['current_observation']['visibility_mi'])
         current_visibilityKm = str(current_json['current_observation']['visibility_km'])
         current_UVIndex = str(current_json['current_observation']['UV'])
+        if verbosity == True:
+            logger.debug("current_windDegrees: %s ; current_feelsLikeF: %s" 
+                         % (current_windDegrees, current_feelsLikeF))
+            logger.debug("current_feelsLikeC: %s ; current_visibilityMi: %s"
+                         % (current_feelsLikeC, current_visibilityMi))
+            logger.debug("current_visibilityKm: %s ; current_UVIndex: %s"
+                         % (current_visibilityKm, current_UVIndex))
         current_precip1HrIn = str(current_json['current_observation']['precip_1hr_in'])
         current_precip1HrMm = str(current_json['current_observation']['precip_1hr_metric'])
         current_precipTodayIn = str(current_json['current_observation']['precip_today_in'])
         current_precipTodayMm = str(current_json['current_observation']['precip_today_metric'])
+        if verbosity == True:
+            logger.debug("current_precip1HrIn: %s ; current_precip1HrMm: %s"
+                         % (current_precip1HrIn, current_precip1HrMm))
+        if verbosity == True:
+            logger.debug("current_precipTodayIn: %s ; current_precipTodayMm: %s"
+                         % (current_precipTodayIn, current_precipTodayMm))
         print(Fore.CYAN + "Here's the detailed current weather for: " + Fore.YELLOW + location2.city + ", " + location2.state)
         print(Fore.CYAN + summary_lastupdated)
         print("")
@@ -361,28 +376,53 @@ while True:
         detailedHourlyIterations = 0
         print(Fore.CYAN + "Here's the detailed hourly forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
         for hour in hourly_json['hourly_forecast']:
+            logger.info("We're on iteration: %s" % detailedHourlyIterations)
             hourly_time = hour['FCTTIME']['civil']
             hourly_month = str(hour['FCTTIME']['month_name'])
             hourly_day = str(hour['FCTTIME']['mday'])
             hourly_dewpointF = str(hour['dewpoint']['english'])
+            if verbosity == True:
+                logger.debug("hourly_time: %s ; hourly_month: %s"
+                             % (hourly_time, hourly_month))
+                logger.debug("hourly_day: %s ; hourly_dewpointF: %s"
+                             % (hourly_day, hourly_dewpointF))
             hourly_dewpointC = str(hour['dewpoint']['metric'])
             hourly_windMPH = str(hour['wspd']['english'])
             hourly_windKPH = str(hour['wspd']['metric'])
             hourly_windDir = hour['wdir']['dir']
+            if verbosity == True:
+                logger.debug("hourly_dewpointC: %s ; hourly_windMPH: %s"
+                             % (hourly_dewpointC, hourly_windMPH))
+                logger.debug("hourly_windKPH: %s ; hourly_windDir: %s"
+                             % (hourly_windKPH, hourly_windDir))
             hourly_windDegrees = str(hour['wdir']['degrees'])
             hourly_UVIndex = str(hour['uvi'])
             hourly_humidity = str(hour['humidity'])
             hourly_feelsLikeF = str(hour['feelslike']['english'])
+            if verbosity == True:
+                logger.debug("hourly_windDegrees: %s ; hourly_UVIndex: %s"
+                             % (hourly_windDegrees, hourly_UVIndex))
+                logger.debug("hourly_humidity: %s ; hourly_feelsLikeF: %s"
+                             % (hourly_humidity, hourly_feelsLikeF))
             hourly_feelsLikeC = str(hour['feelslike']['metric'])
             hourly_precipIn = str(hour['qpf']['english'])
             hourly_precipMm = str(hour['qpf']['metric'])
             hourly_snowCheck = hour['snow']['english']
-            logger.debug("hourly_snowCheck: %s" % hourly_snowCheck)
+            if verbosity == True:
+                logger.debug("hourly_feelsLikeC: %s ; hourly_precipIn: %s"
+                             % (hourly_feelsLikeC, hourly_precipIn))
+                logger.debug("hourly_precipMm: %s ; hourly_snowCheck: %s"
+                             % (hourly_precipMm, hourly_snowCheck))
+                logger.info("Starting snow check...")
             if hourly_snowCheck == "0.0":
                 hourly_snowData = False
+                if verbosity == True:
+                    logger.warn("No snow data! Maybe it's summer?")
             else:
                 hourly_snowData = True
-            logger.debug("hourly_snowData: %s" % hourly_snowData)
+                if verbosity == True:
+                    logger.info("Lucky duck getting some snow.")
+            
             hourly_snowIn = str(hourly_snowCheck)
             hourly_snowMm = str(hour['snow']['metric'])
             hourly_precipChance = str(hour['pop'])
