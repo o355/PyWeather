@@ -1,4 +1,4 @@
-# PyWeather 0.2 -> 0.2.1
+# PyWeather 0.2.1
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 
@@ -18,8 +18,8 @@
 # the full JSON acquired (aka spams 50 lines of console), so it's
 # a separate, and now, more obvious switch.
 
-verbosity = True
-jsonVerbosity = True
+verbosity = False
+jsonVerbosity = False
 if verbosity == True:
     import logging
     logger = logging.getLogger('pyweather_0.2beta')
@@ -317,8 +317,10 @@ while True:
         logger.debug("moreoptions: %s" % moreoptions)
     if (moreoptions == "view more current" or moreoptions == "view more current data" 
         or moreoptions == "view currently" or moreoptions == "view more currently"
-        or moreoptions == "currently" or moreoptions == "current"):
+        or moreoptions == "currently" or moreoptions == "current" or moreoptions == '0'):
         print(Fore.RED + "Loading...")
+        if verbosity == True:
+            logger.info("Selected view more currently...")
         print("")
         # I forgot to add Pressure and Dewpoints (rip)
         current_windDegrees = str(current_json['current_observation']['wind_degrees'])
@@ -371,13 +373,17 @@ while True:
     elif (moreoptions == "view more hourly data" or
           moreoptions == "view more hourly" or
           moreoptions == "view hourly" or
-          moreoptions == "hourly"):
+          moreoptions == "hourly" or
+          moreoptions == "1"):
         print(Fore.RED + "Loading...")
+        if verbosity == True:
+            logger.info("Selected view more hourly...")
         detailedHourlyIterations = 0
         print(Fore.CYAN + "Here's the detailed hourly forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
         for hour in hourly_json['hourly_forecast']:
             print("")
-            logger.info("We're on iteration: %s" % detailedHourlyIterations)
+            if verbosity == True:
+                logger.info("We're on iteration: %s" % detailedHourlyIterations)
             hourly_time = hour['FCTTIME']['civil']
             hourly_month = str(hour['FCTTIME']['month_name'])
             hourly_day = str(hour['FCTTIME']['mday'])
@@ -480,13 +486,17 @@ while True:
           moreoptions == "view the 10 day" or moreoptions == "view 10 day"
           or moreoptions == "view the 10 day"
           or moreoptions == "10 day" or moreoptions == "10 day forecast"
-          or moreoptions == "10 day weather forecast"):
+          or moreoptions == "10 day weather forecast"
+          or moreoptions == "2"):
         print(Fore.RED + "Loading...")
+        if verbosity == True:
+            logger.info("Selected view more 10 day...")
         print("")
         detailedForecastIterations = 0
         print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
         for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
-            logger.info("We're on iteration: %s" % detailedForecastIterations)
+            if verbosity == True:
+                logger.info("We're on iteration: %s" % detailedForecastIterations)
             forecast10_weekday = day['date']['weekday']
             forecast10_month = str(day['date']['month'])
             forecast10_day = str(day['date']['day'])
@@ -501,7 +511,7 @@ while True:
             forecast10_lowc = str(day['low']['celsius'])
             forecast10_conditions = day['conditions']
             if verbosity == True:
-                logger.deug("forecast10_highc: %s ; forecast10_lowf: %s"
+                logger.debug("forecast10_highc: %s ; forecast10_lowf: %s"
                             % (forecast10_highc, forecast10_lowf))
                 logger.debug("forecast10_lowc: %s ; forecast10_conditions: %s"
                              % (forecast10_lowc, forecast10_conditions))
@@ -520,33 +530,67 @@ while True:
                 logger.debug("forecast10_precipNightIn: %s ; forecast10_precipNightMm: %s"
                              % (forecast10_precipNightIn, forecast10_precipNightMm))
             forecast10_snowTotalCheck = day['snow_allday']['in']
-            if forecast10_snowTotalCheck == "0.0":
-                forecast_snowTotalData = False
+            if verbosity == True:
+                logger.debug("forecast10_snowTotalCheck: %s" % forecast10_snowTotalCheck)
+            if forecast10_snowTotalCheck == 0.0:
+                forecast10_snowTotalData = False
+                if verbosity == True:
+                    logger.warn("Oh no! No snow data for the day. Is it too warm?")
             else:
-                forecast_snowTotalData = True
+                forecast10_snowTotalData = True
+                if verbosity == True:
+                    logger.info("Snow data for the day. Snow. I love snow.")
             forecast10_snowTotalIn = str(forecast10_snowTotalCheck)
             forecast10_snowTotalCm = str(day['snow_allday']['cm'])
             forecast10_snowDayCheck = day['snow_day']['in']
-            if forecast10_snowDayCheck == "0.0":
-                forecast_snowDayData = False
+            if verbosity == True:
+                logger.debug("forecast10_snowTotalIn: %s ; forecast10_snowTotalCm: %s"
+                             % (forecast10_snowTotalIn, forecast10_snowTotalCm))
+                logger.debug("forecast10_snowDayCheck: %s" % forecast10_snowDayCheck)
+            if forecast10_snowDayCheck == 0.0:
+                forecast10_snowDayData = False
+                if verbosity == True:
+                    logger.warn("Oh no! No snow data for the day. Is it too warm?")
             else:
-                forecast_snowDayData = True
+                forecast10_snowDayData = True
+                if verbosity == True:
+                    logger.info("Snow data for the day is available.")
             forecast10_snowDayIn = str(forecast10_snowDayCheck)
             forecast10_snowDayCm = str(day['snow_day']['cm'])
             forecast10_snowNightCheck = day['snow_night']['in']
-            if forecast10_snowNightCheck == "0.0":
-                forecast_snowNightData = False
+            if verbosity == True:
+                logger.debug("forecast10_snowDayIn: %s ; forecast10_snowDayCm: %s"
+                             % (forecast10_snowDayIn, forecast10_snowDayCm))
+                logger.debug("forecast10_snowNightCheck: %s" % forecast10_snowNightCheck)
+            if forecast10_snowNightCheck == 0.0:
+                forecast10_snowNightData = False
+                if verbosity == True:
+                    logger.warn("Oh no! No snow data for the night. Is it too warm?")
             else:
-                forecast_snowNightData = True
-            forecast10_snowNightIn = str(day['snow_night']['in'])
+                forecast10_snowNightData = True
+                if verbosity == True:
+                    logger.info("Snow data for the night is available. Snow day?")
+            forecast10_snowNightIn = str(forecast10_snowNightCheck)
             forecast10_snowNightCm = str(day['snow_night']['cm'])
             forecast10_maxWindMPH = str(day['maxwind']['mph'])
             forecast10_maxWindKPH = str(day['maxwind']['kph'])
+            if verbosity == True:
+                logger.debug("forecast10_snowNightIn: %s ; forecast10_snowNightCm: %s"
+                             % (forecast10_snowNightIn, forecast10_snowNightCm))
+                logger.debug("forecast10_maxWindMPH: %s ; forecast10_maxWindKPH: %s"
+                             % (forecast10_maxWindMPH, forecast10_maxWindKPH))
             forecast10_avgWindMPH = str(day['avewind']['mph'])
             forecast10_avgWindKPH = str(day['avewind']['kph'])
             forecast10_avgWindDir = day['avewind']['dir']
             forecast10_avgWindDegrees = str(day['avewind']['degrees'])
             forecast10_avgHumidity = str(day['avehumidity'])
+            if verbosity == True:
+                logger.debug("forecast10_avgWindMPH: %s ; forecast10_avgWindKPH: %s"
+                             % (forecast10_avgWindMPH, forecast10_avgWindKPH))
+                logger.debug("forecast10_avgWindDir: %s ; forecast10_avgWindDegrees: %s"
+                             % (forecast10_avgWindDir, forecast10_avgWindDegrees))
+                logger.debug("forecast10_avgHumidity: %s" % forecast10_avgHumidity)
+                logger.info("Printing weather data...")
             print("")
             print(Fore.YELLOW + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ":")
             print(Fore.YELLOW + forecast10_conditions + Fore.CYAN + " with a high of "
@@ -562,15 +606,18 @@ while True:
             print(Fore.CYAN + "Precip during the night: " + Fore.YELLOW +
                   forecast10_precipNightIn + " in (" + forecast10_precipNightMm
                   + " mm)")
-            print(Fore.CYAN + "Total snow: " + Fore.YELLOW +
-                  forecast10_snowTotalIn + " in (" + forecast10_snowTotalCm
-                  + " cm)")
-            print(Fore.CYAN + "Snow during the day: " + Fore.YELLOW + 
-                  forecast10_snowDayIn + " in (" + forecast10_snowDayCm
-                  + " cm)")
-            print(Fore.CYAN + "Snow during the night: " + Fore.YELLOW +
-                  forecast10_snowNightIn + " in (" + forecast10_snowNightCm
-                  + " cm)")
+            if forecast10_snowTotalData == True:
+                print(Fore.CYAN + "Total snow: " + Fore.YELLOW +
+                      forecast10_snowTotalIn + " in (" + forecast10_snowTotalCm
+                      + " cm)")
+            if forecast10_snowDayData == True:
+                print(Fore.CYAN + "Snow during the day: " + Fore.YELLOW + 
+                      forecast10_snowDayIn + " in (" + forecast10_snowDayCm
+                      + " cm)")
+            if forecast10_snowNightData == True:
+                print(Fore.CYAN + "Snow during the night: " + Fore.YELLOW +
+                      forecast10_snowNightIn + " in (" + forecast10_snowNightCm
+                      + " cm)")
             print(Fore.CYAN + "Winds: " + Fore.YELLOW +
                   forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
                   + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
@@ -581,17 +628,25 @@ while True:
                   forecast10_avgHumidity + "%")
             detailedForecastIterations = detailedForecastIterations + 1
             if detailedForecastIterations == 5:
+                if verbosity == True:
+                    logger.debug("detailedForecastIterations: %s" % detailedForecastIterations)
                 try:
                     print(Fore.RED + "Press enter to view the next 5 days of weather data.")
                     print("You can also press Control + C to return to the input menu.")
                     input()
+                    if verbosity == True:
+                        logger.info("Iterating 5 more times...")
                 except KeyboardInterrupt:
                     break
-    elif (moreoptions == "close pyweather" or moreoptions == "close"):
+                    if verbosity == True:
+                        logger.info("Exiting to the main menu.")
+    elif (moreoptions == "close pyweather" or moreoptions == "close"
+          or moreoptions == "4"):
         sys.exit()
     elif (moreoptions == "different location"
           or moreoptions == "view weather for a different location" or
-          moreoptions == "view weather different location"):
+          moreoptions == "view weather different location"
+          or moreoptions == "3"):
         print("This feature has been temporarily removed.")
     else:
         print(Fore.RED + "Not a valid option.")
