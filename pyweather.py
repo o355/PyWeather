@@ -18,7 +18,7 @@
 # info, but for double verbosity, you need verbosity to be on.
 
 verbosity = True
-doubleverbosity = False
+jsonVerbosity = False
 if verbosity == True:
     import logging
     logger = logging.getLogger('pyweather_0.2beta')
@@ -62,7 +62,10 @@ if verbosity == True:
     logger.debug("Start geolocator...")
 try:
     location = geolocator.geocode(locinput)
-    print("[#---------] | 5% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    # Since the loading bars interfere with true verbosity logging, we turn
+    # them off if verbosity is enabled (it isn't needed)
+    if verbosity == False:
+        print("[#---------] | 5% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 except:
     if verbosity == True:
         logger.error("No connection to the geolocator! Is the connection offline?")
@@ -97,7 +100,8 @@ currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + la
 f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast/q/' + latstr + "," + lonstr + '.json'
 f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + "," + lonstr + '.json'
 hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + "," + lonstr + '.json'
-print("[##--------] | 14% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+if verbosity == False:
+    print("[##--------] | 14% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 if verbosity == True:
     logger.debug("currenturl: %s" % currenturl)
     logger.debug("f3dayurl: %s" % currenturl)
@@ -108,7 +112,8 @@ if verbosity == True:
 
 # Due to Python, we have to get the UTF-8 reader to properly parse the JSON we got.
 reader = codecs.getreader("utf-8")
-print("[##--------] | 19% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+if verbosity == False:
+    print("[##--------] | 19% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 if verbosity == True:
     logger.debug("reader: %s" % reader)
     logger.info("End codec change...")
@@ -117,19 +122,23 @@ if verbosity == True:
 # Fetch the JSON file using urllib.request, store it as a temporary file.
 try:
     summaryJSON = urllib.request.urlopen(currenturl)
-    print("[###-------] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    if verbosity == False:
+        print("[###-------] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
     forecastJSON = urllib.request.urlopen(f3dayurl)
-    print("[####------] | 48% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    if verbosity == False:
+        print("[####------] | 48% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired forecast 3day JSON, end result: %s" % forecastJSON)
     forecast10JSON = urllib.request.urlopen(f10dayurl)
-    print("[#####-----] | 58% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    if verbosity == False:
+        print("[#####-----] | 58% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
     hourlyJSON = urllib.request.urlopen(hourlyurl)
-    print("[#######---] | 72% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    if verbosity == False:
+        print("[#######---] | 72% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
 except:
@@ -142,21 +151,25 @@ except:
 if verbosity == True:
     logger.info("End API fetch...")
     logger.info("Start JSON load...")
-print("[#######---] | 74% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+if verbosity == False:
+    print("[#######---] | 74% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 current_json = json.load(reader(summaryJSON))
-if doubleverbosity == True:
+if jsonVerbosity == True:
     logger.debug("current_json loaded with: %s" % current_json)
-print("[#######---] | 77% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+if verbosity == False:
+    print("[#######---] | 77% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 forecast3_json = json.load(reader(forecastJSON))
-if doubleverbosity == True:
+if jsonVerbosity == True:
     logger.debug("forecast3_json loaded with: %s" % forecast3_json)
-print("[########--] | 81% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+if verbosity == False:
+    print("[########--] | 81% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 forecast10_json = json.load(reader(forecast10JSON))
-if doubleverbosity == True:
+if jsonVerbosity == True:
     logger.debug("forecast10_json loaded with: %s" % forecast10_json)
-print("[########--] | 85% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+if verbosity == False:
+    print("[########--] | 85% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 hourly_json = json.load(reader(hourlyJSON))
-if doubleverbosity == True:
+if jsonVerbosity == True:
     logger.debug("hourly_json loaded with: %s" % hourly_json)
 if verbosity == True:
     logger.info("4 JSONs loaded...")
@@ -167,7 +180,8 @@ if verbosity == True:
 
 try:
     location2 = geocoder.google([latstr, lonstr], method='reverse')
-    print("[#########-] | 91% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    if verbosity == False:
+        print("[#########-] | 91% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 except:
     if verbosity == True:
         logger.error("No connection to Google's Geolocator!! Is the connection offline?")
@@ -205,7 +219,8 @@ if verbosity == True:
     logger.debug("summary_winddir: %s ; summary_windmph: %s ; summary_windmphstr: %s" % (summary_winddir, summary_windmph, summary_windmphstr))
 summary_windkph = current_json['current_observation']['wind_kph']
 summary_windkphstr = str(summary_windkph)
-print("[##########] | 97% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+if verbosity == False:
+    print("[##########] | 97% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 if verbosity == True:
     logger.debug("summary_windkph: %s ; summary_windkphstr: %s" % (summary_windkph, summary_windkphstr))
 # Since some PWS stations on WU don't have a wind meter, this method will check if we should display wind data.
@@ -237,7 +252,8 @@ if verbosity == True:
 if verbosity == True:
     logger.info("Initalize color...")
 init()
-print("[##########] | 100% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+if verbosity == False:
+    print("[##########] | 100% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 if verbosity == True:
     logger.info("Printing current conditions...")
     
