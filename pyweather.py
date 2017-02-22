@@ -281,8 +281,9 @@ while True:
     print("You can also 'view the 10 day forecast', 'view weather for a different location'")
     print("Or you can 'close PyWeather'" + Fore.YELLOW)
     moreoptions = input("Enter here: ").lower()
-    if (moreoptions == "view more currently" or moreoptions == "view more current data" 
-        or moreoptions == "view more current weather"):
+    if (moreoptions == "view more current" or moreoptions == "view more current data" 
+        or moreoptions == "view currently" or moreoptions == "view more currently"
+        or moreoptions == "currently" or moreoptions == "current"):
         print(Fore.RED + "Loading...")
         print("")
         # I forgot to add Pressure and Dewpoints (rip)
