@@ -23,9 +23,15 @@ PyWeather is a script that, as it says, shows the weather. In addition, PyWeathe
 PyWeather can show you the conditions outside your window, how things may look outside your window in a few hours (and with detail!), and how things may look outside your window in a few days (with detail, of course!). PyWeather will soon be able to show alerts information, almanac data, and loads of other data from Wunderground.
 
 ## Why not use the dozens of other programs named PyWeather, etc?
-Great question! What I generally found after scanning GitHub was that those programs showed data through command prompts, didn't contain stupidly easy-to-follow instructions on retrieving an API key, but they weren't a script. You had to have knowledge over how to set up Python libraries, bleh. PyWeather was aimed for people who just wanted the weather, but through Python. 
+Great question! What I generally found after scanning GitHub was three things.
 
-And for those users using a command prompt as their OS, PyWeather is simply perfect for viewing the weather in a terminal.
+One, most weather programs were an "API", and not a script. Those programs had you issuing commands (e.g. pyweather -f NYC -d 3, etc), with arguments, and could get confusing fast.
+
+Two, some weather programs used the infamously unreliable OpenWeatherMap. While a great service, when I used it, it provided somewhat inaccurate forecasts, for few locations.
+
+Three, most, if not all these programs did not have simple instructions on installing necessary libraries (or the library itself), obtaining an API key, you get the point.
+
+I set out to solve these issues by doing things a little differently. I'm using Wunderground, but it's a script, and PyWeather has a simple solution to getting itself set up.
 
 ## Are there any TRUE advantages over PyWeather than going to Google/Wunderground?
 Sure! PyWeather is about 3-4x faster than pulling up a web browser, and going to Wunderground. It's a little slower when it compares to going to Google (or your preferred search engine), but fetches more data. Best of all, PyWeather is ad-free, and doesn't track you. PyWeather just wants to serve you the weather.
