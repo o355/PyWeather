@@ -1,4 +1,4 @@
-# PyWeather 0.2.1
+# PyWeather 0.2.2 beta
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 
@@ -18,7 +18,7 @@
 # the full JSON acquired (aka spams 50 lines of console), so it's
 # a separate, and now, more obvious switch.
 
-verbosity = False
+verbosity = True
 jsonVerbosity = False
 if verbosity == True:
     import logging
@@ -47,6 +47,15 @@ if verbosity == True:
     logger.debug("apikey = %s" % apikey)
 print(datetime.now())
 
+# I understand that this slightly goes against Wunderground's ToS
+# for logo layout, but, seriously. This is a terminal. It's this
+# or terminal logos.
+
+# I think they more specifically target apps with the logo ToS,
+# and not terminal scripts that a user needs to obtain an API
+# key to use.
+
+# Sorry WU. I still love you.
 
 print("Welcome to PyWeather - Powered by Wunderground.")
 print("Please enter a location to get weather information for.")
@@ -322,7 +331,27 @@ while True:
         if verbosity == True:
             logger.info("Selected view more currently...")
         print("")
-        # I forgot to add Pressure and Dewpoints (rip)
+        current_dewPointF = str(current_json['current_observation']['dewpoint_f'])
+        current_dewPointC = str(current_json['current_observation']['dewpoint_c'])
+        current_pressureInHg = str(current_json['current_observation']['pressure_in'])
+        current_pressureMb = str(current_json['current_observation']['pressure_mb'])
+        if verbosity == True:
+            logger.debug("current_dewPointF: %s ; current_dewPointC: %s"
+                         % (current_dewPointF, current_dewPointC))
+            logger.debug("current_pressureInHg: %s ; current_pressureMb: %s"
+                         % (current_pressureInHg, current_pressureMb))
+        current_pressureTrend = current_json['current_observation']['pressure_trend']
+        if current_pressureTrend == "+":
+            current_pressureTrend2 = "and rising."
+        elif current_pressureTrend == "0":
+            current_pressureTrend2 = "and staying level."
+        elif current_pressureTrend == "-":
+            current_pressureTrend2 = "and dropping."
+        else:
+            current_pressureTrend2 = "with no trend available."
+        if verbosity == True:
+            logger.debug("current_pressureTrend: %s ; current_pressureTrend2: %s"
+                         % (current_pressureTrend, current_pressureTrend2))
         current_windDegrees = str(current_json['current_observation']['wind_degrees'])
         current_feelsLikeF = str(current_json['current_observation']['feelslike_f'])
         current_feelsLikeC = str(current_json['current_observation']['feelslike_c'])
@@ -338,6 +367,9 @@ while True:
                          % (current_visibilityKm, current_UVIndex))
         current_precip1HrIn = str(current_json['current_observation']['precip_1hr_in'])
         current_precip1HrMm = str(current_json['current_observation']['precip_1hr_metric'])
+        if current_precip1HrMm == "--":
+            current_precip1HrMm = "0.0"
+            current_precip1HrIn = "0.0"
         current_precipTodayIn = str(current_json['current_observation']['precip_today_in'])
         current_precipTodayMm = str(current_json['current_observation']['precip_today_metric'])
         if verbosity == True:
@@ -360,6 +392,10 @@ while True:
         else:
             print(Fore.YELLOW + "Wind data is not available for this location.")
         print(Fore.CYAN + "Current humidity: " + Fore.YELLOW + summary_humidity)
+        print(Fore.CYAN + "Current dew point: " + Fore.YELLOW + current_dewPointF
+              + "°F (" + current_dewPointC + "°C)")
+        print(Fore.CYAN + "Current pressure: " + Fore.YELLOW + current_pressureInHg
+              + " inHg (" + current_pressureMb + " mb), " + current_pressureTrend2)
         print(Fore.CYAN + "Current visibility: " + Fore.YELLOW + current_visibilityMi
               + " miles (" + current_visibilityKm + " km)")
         print(Fore.CYAN + "UV Index: " + Fore.YELLOW + current_UVIndex)
