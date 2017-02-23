@@ -18,7 +18,7 @@ if sys.version_info[0] < 3:
 
 print("Before we get started, I want to confirm some permissions from you.")
 print("Is it okay if I use 1-5 MB of data (downloading libraries)" +
-      ", save a small text file called apikey.txt (> 2 KB)," +
+      ", save a small text file called apikey.txt (> 2 KB)" +
       ", and automatically install Python libraries?")
 print("Please input yes or no below:")
 confirmPermissions = input("Input here: ").lower()
