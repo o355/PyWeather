@@ -1,4 +1,4 @@
-# PyWeather 0.2.2 beta
+# PyWeather 0.2.2 -> 0.3
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 
@@ -42,7 +42,11 @@ if verbosity == True:
 apikey_load = open('storage//apikey.txt')
 if verbosity == True:
     logger.debug("apikey_load = %s" % apikey_load)
-apikey = apikey_load.read()
+try:
+    apikey = apikey_load.read()
+except FileNotFoundError:
+    print("The API key wasn't found. (Error 38, pyweather.py)")
+    sys.exit()
 if verbosity == True:
     logger.debug("apikey = %s" % apikey)
 print(datetime.now())
