@@ -18,11 +18,11 @@
 # the full JSON acquired (aka spams 50 lines of console), so it's
 # a separate, and now, more obvious switch.
 
-verbosity = True
+verbosity = False
 jsonVerbosity = False
 if verbosity == True:
     import logging
-    logger = logging.getLogger('pyweather_0.2beta')
+    logger = logging.getLogger('pyweather_0.2.2beta')
     logger.setLevel(logging.DEBUG)
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)
