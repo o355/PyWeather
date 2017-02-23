@@ -1,4 +1,4 @@
-## Welcome to PyWeather (0.2.1 beta)
+## Welcome to PyWeather (0.2.2 beta)
 A simple-to-use and advanced weather program for Python 3, now in Beta!
 
 ## BETA DISCLAIMER:
