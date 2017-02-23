@@ -1,5 +1,5 @@
-## Welcome to PyWeather (0.2.2 beta)
-A simple-to-use and advanced weather program for Python 3, now in Beta!
+## Welcome to PyWeather (0.2.2 beta)!
+A simple-to-use, but advanced way to view the weather with Python, in a terminal. And it's now in beta!
 
 ## BETA DISCLAIMER:
 Even though PyWeather is in beta, it's still in active development. While releases are more stable milestones of PyWeather, there will certainly be unfinished/rough parts of PyWeather, even in releases. Make sure you check for the latest releases, since as the betas go on, PyWeather will be less unfinished/rough.
