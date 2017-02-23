@@ -25,13 +25,19 @@ PyWeather can show you the conditions outside your window, how things may look o
 ## Why not use the dozens of other programs named PyWeather, etc?
 Great question! What I generally found after scanning GitHub was three things.
 
-One, most weather programs were an "API", and not a script. Those programs had you issuing commands (e.g. pyweather -f NYC -d 3, etc), with arguments, and could get confusing fast.
+One, most weather programs were a moduble, and not a script. Those programs had you issuing commands (e.g. pyweather -f NYC -d 3, etc), with arguments, and could get confusing fast.
 
-Two, some weather programs used the infamously unreliable OpenWeatherMap. While a great service, when I used it, it provided somewhat inaccurate forecasts, for few locations.
+Two, some weather programs used the infamously unreliable OpenWeatherMap. While a great service, when I used it, it provided somewhat inaccurate forecasts, for few locations in the US.
 
-Three, most, if not all these programs did not have simple instructions on installing necessary libraries (or the library itself), obtaining an API key, you get the point.
+Three, most, if not all these programs did not have simple instructions on installing necessary libraries (or the module itself), obtaining an API key, you get the point. As an example, you have a PyPI module, in which it gives you instructions to install through PIP. However, the module's documentation doesn't reference how you install PIP.
 
-I set out to solve these issues by doing things a little differently. I'm using Wunderground, but it's a script, and PyWeather has a simple solution to getting itself set up.
+Lastly, I found some programs that were outdated, hardly worked, and weren't maintained.
+
+(but I did find some other cool programs)
+
+I set out to solve these issues by doing things a little differently. I'm using Wunderground, but it's a script, and PyWeather has a simple solution to getting itself set up. There isn't a pip install -r requirements.txt, or "go install xyz with pip". No. None of that. Those days are over.
+
+I tried to design PyWeather (with my A+ not art skills) to focus on serving you what's important quickly, but still easily letting you dig into whatever data I could get from Wunderground, for more advanced users.
 
 ## Are there any TRUE advantages over PyWeather than going to Google/Wunderground?
 Sure! PyWeather is about 3-4x faster than pulling up a web browser, and going to Wunderground. It's a little slower when it compares to going to Google (or your preferred search engine), but fetches more data. Best of all, PyWeather is ad-free, and doesn't track you. PyWeather just wants to serve you the weather.
