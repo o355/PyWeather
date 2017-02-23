@@ -44,3 +44,10 @@ Sure! PyWeather is about 3-4x faster than pulling up a web browser, and going to
 
 ## What's still coming?
 Lots! While I'm grabbing the most important of data, there's still a lot of features coming, as seen on the To-Do list page.
+
+## Contributing
+Since I'm a solo developer, in which I'm forced to devote 33% of my life to school, 30% of my life to sleeping, and 10-15% of my life to doing other things (like homework, etc), that leaves about ~15-20% of my time to freely develop (akin to 2-3 hours). If you want to lend a helping hand to PyWeather, I encourage you to take on something from the todo list (preferrably, not the first thing on the list), and submit a pull request. You will be eternally thanked for your contribution.
+
+If you don't know how to code Python, bug test the program! Test every aspect of the program, and report issues if you find something. Doing such will also get yourself eternally thanked for your contribution. 
+
+I'll soon open the door to Wiki contributing/translations, but not yet. I still need to figure out the logistics of that.
