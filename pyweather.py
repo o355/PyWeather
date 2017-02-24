@@ -323,8 +323,8 @@ while True:
     print("")
     print(Fore.GREEN + "What would you like to do?")
     print("You can 'view more current data' [0], 'view more hourly data' [1]")
-    print("You can also 'view the 10 day forecast' [2], 'view weather for a different location' [3]")
-    print("Or you can 'close PyWeather' [4]" + Fore.YELLOW)
+    print("You can also 'view the 10 day forecast' [2]")
+    print("Or, you could 'close PyWeather' [3]")
     moreoptions = input("Enter here: ").lower()
     if verbosity == True:
         logger.debug("moreoptions: %s" % moreoptions)
@@ -687,12 +687,8 @@ while True:
                     if verbosity == True:
                         logger.info("Exiting to the main menu.")
     elif (moreoptions == "close pyweather" or moreoptions == "close"
-          or moreoptions == "4"):
-        sys.exit()
-    elif (moreoptions == "different location"
-          or moreoptions == "view weather for a different location" or
-          moreoptions == "view weather different location"
           or moreoptions == "3"):
+        sys.exit()
         print("This feature has been temporarily removed.")
     else:
         print(Fore.RED + "Not a valid option.")
