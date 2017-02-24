@@ -2,6 +2,12 @@
 
 Quick note: While in beta, commits are not counted as versions. When I decide to push a release, I push a release.
 
+## version 0.2.3 beta (The Bug Snatching Update) - Released 2/24/2017
+* Fixes a bug in which detailed hourly data wouldn't show without turning verbosity on
+* Fixes a bug in which the temp in detailed hourly data wouldn't iterate properly
+* Fixes a bug in which PyWeather didn't stop at 30 iterations of detailed hourly data
+* Fixes a semi-bug in which PyWeather wouldn't properly handle a missing API key
+
 ## version 0.2.2 beta (The Pressure Update) - Released 2/22/2017
 * Adds current/pressure data to the current screen
 * Fixes a bug in which users in the UK would see their 1 hour precip as -9999 in/-- cm (now corrects to 0.0 in/cm)
