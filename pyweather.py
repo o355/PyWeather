@@ -511,8 +511,9 @@ while True:
             detailedHourlyIterations = detailedHourlyIterations + 1
             if (detailedHourlyIterations == 6 or detailedHourlyIterations == 12
                 or detailedHourlyIterations == 18 or detailedHourlyIterations == 24):
-                logger.debug("detailedHourlyIterations: %s" % detailedHourlyIterations)
-                logger.debug("Asking user for continuation...")
+                if verbosity == True:
+                    logger.debug("detailedHourlyIterations: %s" % detailedHourlyIterations)
+                    logger.debug("Asking user for continuation...")
                 try:
                     print("")
                     print(Fore.RED + "Please press enter to view the next 6 hours of hourly data.")
