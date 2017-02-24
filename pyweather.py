@@ -1,4 +1,4 @@
-# PyWeather 0.2.2 -> 0.3
+# PyWeather 0.2.3
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 
@@ -416,12 +416,12 @@ while True:
           moreoptions == "hourly" or
           moreoptions == "1"):
         print(Fore.RED + "Loading...")
+        print("")
         if verbosity == True:
             logger.info("Selected view more hourly...")
         detailedHourlyIterations = 0
         print(Fore.CYAN + "Here's the detailed hourly forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
         for hour in hourly_json['hourly_forecast']:
-            print("")
             if verbosity == True:
                 logger.info("We're on iteration: %s" % detailedHourlyIterations)
             hourly_time = hour['FCTTIME']['civil']
