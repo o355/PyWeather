@@ -1,5 +1,6 @@
 # PyWeather Setup 0.3 beta
 # (c) 2017, o355, licensed under GNU GPL v3
+from pyweather import apikey
 
 
 print("Welcome to PyWeather setup.")
@@ -222,5 +223,42 @@ print("Please input your API key below.")
 apikey_input = input("Input here: ")
 print("Just to confirm, the API key you gave me was: " + apikey_input
       + ".")
-print("Please double check this, an confirm below (yes/no)")
-apikey_confirm = input("Did you input the right key? ").lower()
+print("Please double check your input, and confirm in the dialogue below.")
+apikey_confirm = input("Is the API key right? Yes or no: ").lower()
+if apikey_confirm == "no":
+    print("Please input your API key below.")
+    apikey_input = input("Input here: ")
+    print("Just to confirm, the API key you gave me was: " + apikey_input
+      + ".")
+    print("If you got the API key wrong, please close out of setup, and try again. ")
+
+print("Now saving your API key...")
+with open("storage//apikey.txt", 'a') as out:
+    out.write(apikey_input)
+    out.close()
+    
+# once a config file is properly added, options for configuring the config will go here
+
+print("We're wrapping up, and performing a few tests.")
+
+print("Checking for parsing libraries...")
+try:
+    import json
+except:
+    print("json is not available. This is odd, it's a default library.")
+    print("Try installing a usual Python install.")
+try:
+    import codecs
+except:
+    print("codecs is not available. This is odd, it's a default library.")
+    print("Try installing a usual Python install.")
+
+print("Testing the API connection, and seeing if the API key is valid.")
+apitest_URL = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/NY/New_York.json'
+testreader = codecs.getreader("utf-8")
+
+try:
+    testJSON = urllib.request.urlopen(apitest_URL)
+except:
+    print("We ran into an error. Make sure Wunderground's API is unblocked, "
+          + "and you have an internet connection.")
