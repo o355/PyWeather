@@ -425,6 +425,8 @@ while True:
             if verbosity == True:
                 logger.info("We're on iteration: %s" % detailedHourlyIterations)
             hourly_time = hour['FCTTIME']['civil']
+            hourly_tempf = hour['temp']['english']
+            hourly_tempc = hour['temp']['metric']
             hourly_month = str(hour['FCTTIME']['month_name'])
             hourly_day = str(hour['FCTTIME']['mday'])
             hourly_dewpointF = str(hour['dewpoint']['english'])
@@ -510,7 +512,8 @@ while True:
                   + " mb)")
             detailedHourlyIterations = detailedHourlyIterations + 1
             if (detailedHourlyIterations == 6 or detailedHourlyIterations == 12
-                or detailedHourlyIterations == 18 or detailedHourlyIterations == 24):
+                or detailedHourlyIterations == 18 or detailedHourlyIterations == 24
+                or detailedHourlyIterations == 30):
                 if verbosity == True:
                     logger.debug("detailedHourlyIterations: %s" % detailedHourlyIterations)
                     logger.debug("Asking user for continuation...")
@@ -519,9 +522,11 @@ while True:
                     print(Fore.RED + "Please press enter to view the next 6 hours of hourly data.")
                     print("You can also press Control + C to head back to the input menu.")
                     input()
-                    logger.debug("Iterating 6 more times...")
+                    if verbosity == True:
+                        logger.debug("Iterating 6 more times...")
                 except KeyboardInterrupt:
-                    logger.debug("Exiting to main menu...")
+                    if verbosity == True:
+                        logger.debug("Exiting to main menu...")
                     break
     elif (moreoptions == "view the 10 day weather forecast" or
           moreoptions == "view the 10 day" or moreoptions == "view 10 day"
