@@ -1,6 +1,10 @@
 # PyWeather changelog
 
-Quick note: While in beta, commits are not counted as versions. When I decide to push a release, I push a release.
+Quick note: While in beta, commits are not counted as versions. When I decide to push a release, I push a release. Also, for changelogs of larger releases (0.3, 0.4, etc), I'll usually have a running changelog in this file, so I don't have to remember what I changed.
+
+## version 0.3.0 beta (The Setup Update) - To be released
+* Adds a setup script that guides new users through the setup process
+* Switches the geolocator from Nominatim to Google's geolocator (experimental)
 
 ## version 0.2.3 beta (The Bug Snatching Update) - Released 2/24/2017
 * Fixes a bug in which detailed hourly data wouldn't show without turning verbosity on
