@@ -9,13 +9,11 @@ For those updating from GitHub directly, I may push a stable/unstable/broken bui
 ## Setup
 I won't make you read the entire readme, so here's how to download PyWeather.
 
-**These instructions will apply to code I publish soon. This banner will go away when I finish the setup script.**
-
 Simple. Download a release from the releases tab, unzip it, and run setup.py. The script will walk you through installing necessary libraries, instructions for retrieving an API key, and making sure things run smooth.
 
 After that, double click pyweather.py, input a location, and that's it! No, really. That's actually it. No completed config files, none of that. setup.py, pyweather.py. Welcome to the world of simplicity!
 
-***For users using a command-line only OS, make sure you're in the directory you want PyWeather to be stored in, and then run `git clone https://github.com/o355/pyweather.git`. Run the scripts using `python3 setup.py / python3 pyweather.py`.***
+***For users using a command-line only OS, make sure you're in the directory you want PyWeather to be stored in, and then run `git clone https://github.com/o355/pyweather.git`. Run the scripts using `python3 setup.py / python3 pyweather.py`. Simple. Effortless.***
 
 ## What's PyWeather?
 PyWeather is a script that, as it says, shows the weather. In addition, PyWeather is pretty, includes a setup script for guidance on setting up PyWeather, and PyWeather provides detailed weather information, along with the short and simple version.
@@ -44,6 +42,11 @@ Sure! PyWeather is about 3-4x faster than pulling up a web browser, and going to
 
 ## What's still coming?
 Lots! While I'm grabbing the most important of data, there's still a lot of features coming, as seen on the To-Do list page.
+
+## I'm having errors! Please help!
+**It's important to note that errors are not fully implemented into PyWeather.**
+
+Please refer to the Errors part of the Wiki.
 
 ## Contributing
 Since I'm a solo developer, in which I'm forced to devote 33% of my life to school, 30% of my life to sleeping, and 10-15% of my life to doing other things (like homework, etc), that leaves about ~15-20% of my time to freely develop (akin to 2-3 hours). If you want to lend a helping hand to PyWeather, I encourage you to take on something from the todo list (preferrably, not the first thing on the list), and submit a pull request. You will be eternally thanked for your contribution.
