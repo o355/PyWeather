@@ -61,18 +61,21 @@ except ImportError:
 
 try:
     import colorama
+    coloramaInstalled = True
 except ImportError:
     coloramaInstalled = False
     neededLibraries = neededLibraries + 1
     
 try:
     import geopy
+    geopyInstalled = True
 except ImportError:
     geopyInstalled = False
     neededLibraries = neededLibraries + 1
     
 try:
     import geocoder
+    geocoderInstalled = True
 except ImportError:
     geocoderInstalled = False
     neededLibraries = neededLibraries + 1
