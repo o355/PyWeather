@@ -33,10 +33,10 @@ import json
 import time
 from colorama import init, Fore, Style
 import codecs
-from geopy.geocoders import Nominatim
+from geopy.geocoders import GoogleV3
 from datetime import datetime
 import geocoder
-geolocator = Nominatim()
+geolocator = GoogleV3()
 if verbosity == True:
     logger.debug("Begin API keyload...")
 apikey_load = open('storage//apikey.txt')
@@ -75,7 +75,7 @@ firstfetch = time.time()
 if verbosity == True:
     logger.debug("Start geolocator...")
 try:
-    location = geolocator.geocode(locinput)
+    location = geolocator.geocode(locinput, language="en")
     # Since the loading bars interfere with true verbosity logging, we turn
     # them off if verbosity is enabled (it isn't needed)
     if verbosity == False:
@@ -687,7 +687,7 @@ while True:
                     if verbosity == True:
                         logger.info("Exiting to the main menu.")
     elif (moreoptions == "close pyweather" or moreoptions == "close"
-          or moreoptions == "3"):
+          or moreoptions == "3" or moreoptions == "close pw"):
         sys.exit()
         print("This feature has been temporarily removed.")
     else:

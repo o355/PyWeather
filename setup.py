@@ -1,6 +1,5 @@
 # PyWeather Setup 0.3 beta
 # (c) 2017, o355, licensed under GNU GPL v3
-from pyweather import apikey
 
 
 print("Welcome to PyWeather setup.")
@@ -247,14 +246,16 @@ try:
 except:
     print("json is not available. This is odd, it's a default library.")
     print("Try installing a usual Python install.")
+    sys.exit()
 try:
     import codecs
 except:
     print("codecs is not available. This is odd, it's a default library.")
     print("Try installing a usual Python install.")
+    sys.exit()
 
-print("Testing the API connection, and seeing if the API key is valid.")
-apitest_URL = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/NY/New_York.json'
+print("Testing the API connection, and seeing if the API key is valid...")
+apitest_URL = 'http://api.wunderground.com/api/' + apikey_input + '/conditions/q/NY/New_York.json'
 testreader = codecs.getreader("utf-8")
 
 try:
@@ -262,3 +263,41 @@ try:
 except:
     print("We ran into an error. Make sure Wunderground's API is unblocked, "
           + "and you have an internet connection.")
+    sys.exit()
+    
+test_json = json.load(testreader(testJSON))
+
+try:
+    test_conditions = str(test_json['current_observation']['temp_f'])
+except:
+    print("We ran into an error. Make sure your API key is valid.")
+    sys.exit()
+    
+print("Testing the geocoder connection...")
+
+from geopy import GoogleV3
+
+geolocator = GoogleV3()
+try:
+    testlocation = geolocator.geocode("New York, NY", language="en")
+    print("Yay! The geocoder works.")
+except:
+    print("We ran into an error. Make sure Google's Geocoder is unblocked, " +
+          "and you have an internet connection.")
+    sys.exit()
+    
+print("Testing the geolocator connection...")
+
+try:
+    testlocation2 = geocoder.google([testlocation.latitude, testlocation.longitude], method='reverse')
+    print("Yay! The geolocator works.")
+except:
+    print("We ran into an error. Make sure Google's Geolocator is unblocked, " +
+          "and you have an internet connection.")
+
+print("")
+print("Everything is set up and ready to rumble!")
+print("Enjoy using PyWeather! If you have any issues, please report them on GitHub!")
+sys.exit()
+
+
