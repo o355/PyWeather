@@ -4,6 +4,11 @@ Quick note: While in beta, commits are not counted as versions. When I decide to
 
 
 ## version 0.3.1 beta (The Updater Update) - To be released
+* Adds an updater to PyWeather to check for the latest updates, and download them
+* Revamps the extra options selection screen
+* The dew point is now shown on the summary screen
+* PyWeather has a double redundancy geolocator situation, Google first, Nominatim second, then a fail if nothing returns.
+* Setup script checks for a connection to Google/Nominatim, and for the shutil library
 
 ## version 0.3.0 beta (The Setup Update) - Released 2/26/2017
 * Adds a setup script that guides new users through the setup process
