@@ -1,4 +1,4 @@
-# PyWeather 0.3 beta
+# PyWeather 0.3 -> 0.3.1 beta
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 
@@ -27,10 +27,12 @@ if verbosity == True:
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)
 
+
 import urllib.request
 import sys
 import json
 import time
+import shutil
 from colorama import init, Fore, Style
 import codecs
 from geopy.geocoders import GoogleV3
@@ -263,6 +265,11 @@ if verbosity == True:
     logger.info("summary_feelslikef: %s ; summary_feelslikec: %s"
                 % (summary_feelslikef, summary_feelslikec))
 
+summary_dewPointF = str(current_json['current_observation']['dewpoint_f'])
+summary_dewPointC = str(current_json['current_observation']['dewpoint_c'])
+if verbosity == True:
+    logger.info("summary_dewPointF: %s ; summary_dewpointS: %s"
+                % summary_dewPointF, summary_dewPointC)
 if verbosity == True:
     logger.info("Initalize color...")
 init()
@@ -319,15 +326,23 @@ for day in forecast3_json['forecast']['simpleforecast']['forecastday']:
           forecast3_highc + "°C), and a low of " + forecast3_lowf + "°F (" +
           forecast3_lowc + "°C).")
 
+# In this part of PyWeather, you'll find comments indicating where things end/begin.
+# This is to help when coding, and knowing where things are.
+
 while True:
     print("")
-    print(Fore.GREEN + "What would you like to do?")
-    print("You can 'view more current data' [0], 'view more hourly data' [1]")
-    print("You can also 'view the 10 day forecast' [2]")
-    print("Or, you could 'close PyWeather' [3]")
+    print(Fore.YELLOW + "What would you like to do now?")
+    print("- View more current data (or press " + Fore.CYAN + "0" 
+          + Fore.YELLOW + ")")
+    print("- View more hourly data (or press " + Fore.CYAN + "1"
+          + Fore.YELLOW + ")")
+    print("- View more forecast data (or press " + Fore.CYAN + "2"
+          + Fore.YELLOW + ")")
     moreoptions = input("Enter here: ").lower()
     if verbosity == True:
         logger.debug("moreoptions: %s" % moreoptions)
+        
+        
     if (moreoptions == "view more current" or moreoptions == "view more current data" 
         or moreoptions == "view currently" or moreoptions == "view more currently"
         or moreoptions == "currently" or moreoptions == "current" or moreoptions == '0'):
@@ -410,6 +425,9 @@ while True:
               + current_precipTodayIn + " inches (" + current_precipTodayMm
               + " mm)")
         continue
+    
+# <----------- Detailed Currently is above, Detailed Hourly is below -------->
+    
     elif (moreoptions == "view more hourly data" or
           moreoptions == "view more hourly" or
           moreoptions == "view hourly" or
@@ -529,6 +547,7 @@ while True:
                         logger.debug("Exiting to main menu...")
                     break
     elif (moreoptions == "view the 10 day weather forecast" or
+          moreoptions == "view more forecast data" or
           moreoptions == "view the 10 day" or moreoptions == "view 10 day"
           or moreoptions == "view the 10 day"
           or moreoptions == "10 day" or moreoptions == "10 day forecast"
@@ -689,7 +708,61 @@ while True:
     elif (moreoptions == "close pyweather" or moreoptions == "close"
           or moreoptions == "3" or moreoptions == "close pw"):
         sys.exit()
-        print("This feature has been temporarily removed.")
+    elif (moreoptions == "update pyweather" or moreoptions == "update"
+          or moreoptions == "update pw" or moreoptions == "4"):
+        buildnumber = 31
+        buildversion = "0.3.1 beta"
+        print("Checking for updates. This shouldn't take that long.")
+        try:
+            versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
+        except:
+            print(Fore.RED + "Couldn't check for updates.")
+            print("Make sure GitHub user content is unblocked, and you have an internet connection.")
+            print("Error 54, pyweather.py")
+            continue
+        versionJSON = json.load(reader(versioncheck))
+        version_buildNumber = float(versionJSON['updater']['latestbuild'])
+        version_latestVersion = versionJSON['updater']['latestversion']
+        version_latestURL = versionJSON['updater']['latesturl']
+        version_latestFileName = versionJSON['updater']['latestfilename']
+        if buildnumber >= version_buildNumber:
+            print(Fore.GREEN + "PyWeather is up to date!")
+            print(Fore.GREEN + "The updater reports the latest version is "
+                  + Fore.CYAN + version_latestVersion + Fore.GREEN + ", and you have version "
+                  + Fore.CYAN + buildversion + Fore.GREEN + ".")
+        elif buildnumber < version_buildNumber:
+            print(Fore.RED + "PyWeather is not up to date!")
+            print(Fore.RED + "The update reports the latest version is " +
+                  Fore.CYAN + version_latestVersion + Fore.RED + ", while you have version "
+                  + Fore.CYAN + buildversion + Fore.RED + ".")
+            print(Fore.RED + "Would you like to download the latest version?" + Fore.GREEN)
+            downloadLatest = input("Yes or No: ").lower()
+            if downloadLatest == "yes":
+                print("Downloading the latest version of PyWeather...")
+                try:
+                    with urllib.request.urlopen(version_latestURL) as update_response, open(version_latestFileName, 'wb') as update_out_file:
+                        shutil.copyfileobj(update_response, update_out_file)
+                except:
+                    print(Fore.RED + "Couldn't download the latest version.")
+                    print("Make sure GitHub user content is unblocked, "
+                          + "and you have an internet connection.")
+                    print("Error 55, pyweather.py")
+                    continue
+                print("The latest version of PyWeather was downloaded " +
+                      "to the base directory of PyWeather.")
+                continue
+            elif downloadLatest == "no":
+                print(Fore.YELLOW + "Not downloading the latest version of PyWeather.")
+                print("For reference, you can download the latest version of PyWeather at:")
+                print(Fore.CYAN + version_latestURL)
+                continue
+            else:
+                print(Fore.GREEN + "Could not understand what you said.")
+                continue
+        else:
+            print(Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
+            print(Fore.RED + "Error 53, pyweather.py")
+            continue
     else:
         print(Fore.RED + "Not a valid option.")
         print("")
