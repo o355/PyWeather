@@ -1,4 +1,4 @@
-# PyWeather 0.2.3
+# PyWeather 0.3 beta
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 
