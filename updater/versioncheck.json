@@ -1,8 +1,8 @@
 {
 	"updater": {
-		"latestbuild": "30",
-		"latestversion": "0.3 beta",
-		"latesturl": "https://github.com/o355/pyweather/releases/download/0.3-beta/pyweather-0.3beta.zip",
-		"latestfilename": "pyweather-0.3beta.zip"
+		"latestbuild": "31",
+		"latestversion": "0.3.1 beta",
+		"latesturl": "https://github.com/o355/pyweather/releases/download/0.3.1-beta/pyweather-0.3.1beta.zip",
+		"latestfilename": "pyweather-0.3.1beta.zip"
 	}
 }
