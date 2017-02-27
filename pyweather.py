@@ -295,7 +295,7 @@ if winddata == True:
 else:
     print(Fore.YELLOW + "Wind data is not available for this location.")
 print(Fore.CYAN + "Current dew point: " + Fore.YELLOW + summary_dewPointF
-      + "°F (" + sumary_dewPointC + "°C)")
+      + "°F (" + summary_dewPointC + "°C)")
 print(Fore.CYAN + "Current humidity: " + Fore.YELLOW + summary_humidity)
 print("")
 print(Fore.YELLOW + "The hourly forecast:")
