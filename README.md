@@ -8,60 +8,58 @@ a) There are no other programs named TermWeather
 
 b) I'm putting an emphasis on this being a terminal weather program, and less that it's in Python.
 
-You'll see the name change in 0.3.1 beta. Don't worry. Same developer, same humor.
+You'll see the name change in 0.3.1 beta. Don't worry. Same developer, same humor. Actually, more humor.
 
 ## BETA DISCLAIMER:
-Even though PyWeather is in beta, it's still in active development. While releases are more stable milestones of PyWeather, there will certainly be unfinished/rough parts of PyWeather, even in releases. Make sure you check for the latest releases, since as the betas go on, PyWeather will be less unfinished/rough.
-
-For those updating from GitHub directly, I may push a stable/unstable/broken build of PyWeather, so take heed.
+Even though TermWeather is in beta, it's still in active development. While releases are somewhat stable milestones of TermWeather (*cough* *cough* 0.3 beta didn't include the updater *cough* *cough*), things may or may not work. If you update from GitHub, I may push updates that entirely break PyWeather, so please, take caution!
 
 ## Why?
 Because I'd rather check my weather in a terminal. Unlike 99.98% of humans.
 
 ## Setup
-I won't make you read the entire readme, so here's how to download PyWeather.
+I won't make you read the entire readme, so here's how to download TermWeather.
 
 Simple. Download a release from the releases tab, unzip it, and run setup.py. The script will walk you through installing necessary libraries, instructions for retrieving an API key, and making sure things run smooth.
 
-After that, double click pyweather.py, input a location, and that's it! No, really. That's actually it. No completed config files, none of that. setup.py, pyweather.py. Welcome to the world of simplicity! \ (•◡•) /
+After that, double click termweather.py, input a location, and that's it! No, really. That's actually it. No completed config files, none of that. setup.py, termweather.py. Welcome to the world of simplicity! \ (•◡•) /
 
-***For users using a command-line only OS, make sure you're in the directory you want PyWeather to be stored in, and then run `git clone https://github.com/o355/pyweather.git`. Run the scripts using `python3 setup.py / python3 pyweather.py`. Simple. Effortless.***
+***For users using a command-line only OS, make sure you're in the directory you want PyWeather to be stored in, and then run `git clone https://github.com/o355/termweather.git`. Run the scripts using `python3 setup.py / python3 pyweather.py`. Simple. Effortless.***
 
-## What's PyWeather?
-PyWeather is a script that, as it says, shows the weather. In addition, PyWeather is pretty, includes a setup script for guidance on setting up PyWeather, and PyWeather provides detailed weather information, along with the short and simple version.
+## What's TermWeather?
+Originally known as PyWeather, TermWeather solves the endless pain of not having a good script for fetching weather in that Fedora 25 terminal.
 
-PyWeather can show you the conditions outside your window, how things may look outside your window in a few hours (and with detail!), and how things may look outside your window in a few days (with detail, of course!). PyWeather will soon be able to show alerts information, almanac data, and loads of other data from Wunderground, and all of this in a terminal. (~˘▾˘)~
+Gone are the days of trying to figure out how to install PIP to your Debian 7 setup, or figuring what libraries a module/script needs. Gone are the days of poor documentation. Gone are the days of having to input a stupidly large amount of arguments to get the weather. Gone are the days of inaccurate weather.
 
-## Why not use the dozens of other programs named PyWeather, etc?
-Great question! What I generally found after scanning GitHub was three things.
+Meet TermWeather. Here to solve all your issues.
 
-One, most weather programs were a moduble, and not a script. Those programs had you issuing commands (e.g. pyweather -f NYC -d 3, etc), with arguments, and could get confusing fast.
+TermWeather will help you get accurate weather from Wunderground in that Ubuntu Server 16.04.2 LTS terminal, with the magic of Python 3. TermWeather offers an easy setup script, so you don't have to use Lynx to try and fetch an API key (well, you still need an API key...and you still need to fetch it from the internet...use your phone...oh...if you have a basic phone...get a GUI?), and try and browse Google for hours on how to install that random library. TermWeather can be set up and ready to execute in minutes. setup.py, termweather.py. Shabang. Done.
 
-Two, some weather programs used the infamously unreliable OpenWeatherMap. While a great service, when I used it, it provided somewhat inaccurate forecasts, for few locations in the US. 
+TermWeather works on any OS that has Python 3. OS X, Windows, Linux, you name it, if it has Python 3, and can install PIP libraries, it works.
 
-Three, most, if not all these programs did not have simple instructions on installing necessary libraries (or the module itself), obtaining an API key, you get the point. As an example, you have a PyPI module, in which it gives you instructions to install through PIP. However, the module's documentation doesn't reference how you install PIP.
+## No, seriously. What truly is TermWeather?
+It's a Python 3 script that shows you the weather in a terminal. It's easy to set up, provides lots of accurate weather data, and let's you go in depth with such weather data, along with getting the basic overview of the weather. 
 
-Lastly, I found some programs that were outdated, hardly worked, and weren't maintained.
+TermWeather can show current data, hourly data, forecast data, and...well...that's it. But, given some time, TermWeather will soon be able to do the following:
+* 10-day hourly forecasts
+* Almanacs
+* Sun/moon rise and set data
+* Historical data
+* Alerts
+* Radar/satellite images
+* Specific PWS information
+* Tide data
 
-(but I did find some other cool programs)
+By time, I mean hundreds of hours of coding. Coding takes time. But coding is also the most productive time killer ever.
 
-I set out to solve these issues by doing things a little differently. I'm using Wunderground, but it's a script, and PyWeather has a simple solution to getting itself set up. There isn't a pip install -r requirements.txt, or "go install xyz with pip". No. None of that. Those days are over.
-
-I tried to design PyWeather (with my A+ not art skills) to focus on serving you what's important quickly, but still easily letting you dig into whatever data I could get from Wunderground, for more advanced users.
-
-## Are there any TRUE advantages over PyWeather than going to Google/Wunderground?
-Sure! PyWeather is about 3-4x faster than pulling up a web browser, and going to Wunderground. It's a little slower when it compares to going to Google (or your preferred search engine), but fetches more data. Best of all, PyWeather is ad-free, and doesn't track you. PyWeather just wants to serve you the weather.
-
-## What's still coming?
-Lots! While I'm grabbing the most important of data, there's still a lot of features coming, as seen on the To-Do list page.
+Oh, and TermWeather is faster than going to Wunderground, by about 4x. It's a little slower versus going to Google, but it gives you more data!
 
 ## I'm having errors! Please help!
-**It's important to note that errors are not fully implemented into PyWeather.**
+GitHub issues exists. Post your errors there!
 
-Please refer to the Errors part of the Wiki.
+(if you open TermWeather by double clicking the script, the window auto-closes when an error occurs. be sure to run TermWeather in a command prompt to view the error!)
 
 ## Contributing
-Since I'm a solo developer, in which I'm forced to devote 33% of my life to school, 30% of my life to sleeping, and 10-15% of my life to doing other things (like homework, etc), that leaves about ~15-20% of my time to freely develop (akin to 2-3 hours). If you want to lend a helping hand to PyWeather, I encourage you to take on something from the todo list (preferrably, not the first thing on the list), and submit a pull request. ( ﾟヮﾟ)
+Since I'm a solo developer, in which I'm forced to devote 33% of my life to school, 25-30% of my life to sleeping (and dreaming about coding), that leaves me with about 40% of my life (akin to 8-10 hours) of "free time". However, in said free time, I can't always work on TermWeather, as I have other projects to work on, and homework/other non-tech stuff to do. If you'd like to contribute, get something off of the to-do list (not the first item, please!), develop it, submit a pull request, and you'll be eternally thanked! ( ﾟヮﾟ)
 
 If you don't know how to code Python, bug test the program! Test every aspect of the program, and report issues if you find something. Doing such will also get yourself eternally thanked for your contribution. 
 
