@@ -1,5 +1,14 @@
-## Welcome to PyWeather (0.3 beta)!
-A simple-to-use, but advanced way to view the weather with Python, in a terminal. And it's now in beta!
+## Welcome to TermWeather (0.3 beta)!
+Viewing the weather in a terminal has never been so much fun.
+
+## About the rename to TermWeather
+While PyWeather was originally a great name for this project...
+
+a) There are no other programs named TermWeather
+
+b) I'm putting an emphasis on this being a terminal weather program, and less that it's in Python.
+
+You'll see the name change in 0.3.1 beta. Don't worry. Same developer, same humor.
 
 ## BETA DISCLAIMER:
 Even though PyWeather is in beta, it's still in active development. While releases are more stable milestones of PyWeather, there will certainly be unfinished/rough parts of PyWeather, even in releases. Make sure you check for the latest releases, since as the betas go on, PyWeather will be less unfinished/rough.
