@@ -1,9 +1,9 @@
-# This is the configuration file for TermWeather.
+# This is the configuration file for PyWeather.
 # The config uses True/False for mostly everything. Heads up.
 # Oh, and this file is invalid until 0.4.2.
 
 verbosity:
-	# Verbosity will output detailed debug information about TermWeather.
+	# Verbosity will output detailed debug information about PyWeather.
 	# Useful for when things are failing for no reason.
 	# Default = False
 	verbosity: False
@@ -14,7 +14,7 @@ verbosity:
 	
 rootwarning:
 	# The warning saying "Please don't run as root"
-	# If you hate the warning, and you absolutely HAVE to use TermWeather as root, turn it off here.
+	# If you hate the warning, and you absolutely HAVE to use PyWeather as root, turn it off here.
 	# Default = True
 	rootwarning: True
 	
@@ -23,7 +23,7 @@ updater:
 	# Useful for systems that have git installed for easy updating.
 	# Default = zip
 	updatemethod: zip
-	# You can force TermWeather to run the updater as a certain build/version.
+	# You can force PyWeather to run the updater as a certain build/version.
 	# I don't know why you'd want to do that. Flip the switch here, and define below.
 	# Default = False
 	forceversion: False
@@ -33,26 +33,26 @@ updater:
 	forcedbuildnum:
 
 mode:
-	# You can force TermWeather to use a PWS mode.
+	# You can force PyWeather to use a PWS mode.
 	# This will have you enter in a PWS name instead of a location.
 	# To enter this mode, mode should be pws.
 	# Default = location
 	mode: location
 	
 summaryscreen:
-	# You can tell TermWeather if you want the sunrise/sunset showing on the summary screen.
+	# You can tell PyWeather if you want the sunrise/sunset showing on the summary screen.
 	# Default = True
 	sundata: True
-	# You can tell TermWeather if you want moonrise/moonset data on the summary screen.
+	# You can tell PyWeather if you want moonrise/moonset data on the summary screen.
 	# Default = False
 	moondata: False
-	# You can tell TermWeather if you want almanac data on the summary screen.
+	# You can tell PyWeather if you want almanac data on the summary screen.
 	# Default = False
 	almanacdata: False
 
 quickweather:
-	# For quick weather, you need to define a location for TermWeather to get the quick weather.
-	# The location should be what you would enter into TermWeather.
+	# For quick weather, you need to define a location for PyWeather to get the quick weather.
+	# The location should be what you would enter into PyWeather.
 	quickweatherloc: 
 	# If you'd like quick weather to use a PWS, turn pwsmode on, and input the PWS to get the weather from.
 	pwsmode: False

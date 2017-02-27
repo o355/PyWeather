@@ -1,4 +1,4 @@
-# TermWeather 0.3 -> 0.3.1 beta
+# PyWeather 0.3 -> 0.3.1 beta
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 
@@ -22,17 +22,13 @@ verbosity = False
 jsonVerbosity = False
 if verbosity == True:
     import logging
-    logger = logging.getLogger('termweather_0.3.1beta')
+    logger = logging.getLogger('pyweather_0.3.1beta')
     logger.setLevel(logging.DEBUG)
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)
 
-# Turning this off is not recommended.
-rootwarning = True
-
 import urllib.request
 import sys
-import os
 import json
 import time
 import shutil
@@ -42,9 +38,6 @@ from geopy.geocoders import GoogleV3
 from datetime import datetime
 import geocoder
 geolocator = GoogleV3()
-
-if (os.getenv("USER") == "root" and rootwarning == True):
-    print("Please don't run this as root. If this is annoying, turn it off in the config.")
 
 if verbosity == True:
     logger.debug("Begin API keyload...")
@@ -346,9 +339,9 @@ while True:
           + Fore.YELLOW + ")")
     print("- View more forecast data (or press " + Fore.CYAN + "2"
           + Fore.YELLOW + ")")
-    print("- Check for TermWeather updates (or press " + Fore.CYAN + "3"
+    print("- Check for PyWeather updates (or press " + Fore.CYAN + "3"
           + Fore.YELLOW + ")")
-    print("- Close TermWeather (or press " + Fore.CYAN + "4" + Fore.YELLOW
+    print("- Close PyWeather (or press " + Fore.CYAN + "4" + Fore.YELLOW
           + ")")
     moreoptions = input("Enter here: ").lower()
     if verbosity == True:
@@ -723,11 +716,11 @@ while True:
         buildversion = "0.3.1 beta"
         print("Checking for updates. This shouldn't take that long.")
         try:
-            versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/termweather/master/updater/versioncheck.json")
+            versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
         except:
             print(Fore.RED + "Couldn't check for updates.")
             print("Make sure GitHub user content is unblocked, and you have an internet connection.")
-            print("Error 54, termweather.py")
+            print("Error 54, pyweather.py")
             continue
         versionJSON = json.load(reader(versioncheck))
         version_buildNumber = float(versionJSON['updater']['latestbuild'])
@@ -735,7 +728,7 @@ while True:
         version_latestURL = versionJSON['updater']['latesturl']
         version_latestFileName = versionJSON['updater']['latestfilename']
         if buildnumber >= version_buildNumber:
-            print(Fore.GREEN + "TermWeather is up to date!")
+            print(Fore.GREEN + "PyWeather is up to date!")
             print(Fore.GREEN + "The updater reports the latest version is "
                   + Fore.CYAN + version_latestVersion + Fore.GREEN + ", and you have version "
                   + Fore.CYAN + buildversion + Fore.GREEN + ".")
@@ -747,7 +740,7 @@ while True:
             print(Fore.RED + "Would you like to download the latest version?" + Fore.GREEN)
             downloadLatest = input("Yes or No: ").lower()
             if downloadLatest == "yes":
-                print("Downloading the latest version of TermWeather...")
+                print("Downloading the latest version of PyWeather...")
                 try:
                     with urllib.request.urlopen(version_latestURL) as update_response, open(version_latestFileName, 'wb') as update_out_file:
                         shutil.copyfileobj(update_response, update_out_file)
@@ -755,7 +748,7 @@ while True:
                     print(Fore.RED + "Couldn't download the latest version.")
                     print("Make sure GitHub user content is unblocked, "
                           + "and you have an internet connection.")
-                    print("Error 55, termweather.py")
+                    print("Error 55, pyweather.py")
                     continue
                 print("The latest version of TermWeather was downloaded " +
                       "to the base directory of TermWeather.")
@@ -769,8 +762,8 @@ while True:
                 print(Fore.GREEN + "Could not understand what you said.")
                 continue
         else:
-            print(Fore.RED + "TermWeather Updater ran into an error, and couldn't compare versions.")
-            print(Fore.RED + "Error 53, termweather.py")
+            print(Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
+            print(Fore.RED + "Error 53, pyweather.py")
             continue
     else:
         print(Fore.RED + "Not a valid option.")
