@@ -36,7 +36,7 @@ Lastly, I found some programs that were outdated, hardly worked, and weren't mai
 
 (but I did find some other cool programs)
 
-I set out to solve these issues by doing things a little differently. I'm using Wunderground, but it's a script, and PyWeather has a simple solution to getting itself set up. There isn't a pip install -r requirements.txt, or "go install xyz with pip". No. None of that. Those days are over. ヽ༼ຈل͜ຈ༽ﾉ
+I set out to solve these issues by doing things a little differently. I'm using Wunderground, but it's a script, and PyWeather has a simple solution to getting itself set up. There isn't a pip install -r requirements.txt, or "go install xyz with pip". No. None of that. Those days are over. (▰˘◡˘▰)
 
 I tried to design PyWeather (with my A+ not art skills) to focus on serving you what's important quickly, but still easily letting you dig into whatever data I could get from Wunderground, for more advanced users.
 
@@ -52,7 +52,7 @@ Lots! While I'm grabbing the most important of data, there's still a lot of feat
 Please refer to the Errors part of the Wiki.
 
 ## Contributing
-Since I'm a solo developer, in which I'm forced to devote 33% of my life to school, 30% of my life to sleeping, and 10-15% of my life to doing other things (like homework, etc), that leaves about ~15-20% of my time to freely develop (akin to 2-3 hours). If you want to lend a helping hand to PyWeather, I encourage you to take on something from the todo list (preferrably, not the first thing on the list), and submit a pull request. You will be eternally thanked for your contribution. ƪ(˘⌣˘)ʃ
+Since I'm a solo developer, in which I'm forced to devote 33% of my life to school, 30% of my life to sleeping, and 10-15% of my life to doing other things (like homework, etc), that leaves about ~15-20% of my time to freely develop (akin to 2-3 hours). If you want to lend a helping hand to PyWeather, I encourage you to take on something from the todo list (preferrably, not the first thing on the list), and submit a pull request. You will be eternally thanked for your contribution. ( ﾟヮﾟ)
 
 If you don't know how to code Python, bug test the program! Test every aspect of the program, and report issues if you find something. Doing such will also get yourself eternally thanked for your contribution. 
 
