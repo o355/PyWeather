@@ -35,9 +35,11 @@ import shutil
 from colorama import init, Fore, Style
 import codecs
 from geopy.geocoders import GoogleV3
+from geopy.geocoders import Nominatim
 from datetime import datetime
 import geocoder
 geolocator = GoogleV3()
+geolocator2 = Nominatim()
 
 if verbosity == True:
     logger.debug("Begin API keyload...")
@@ -84,24 +86,36 @@ try:
         print("[#---------] | 5% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 except:
     if verbosity == True:
-        logger.error("No connection to the geolocator! Is the connection offline?")
-    print("Can't connect to the geolocator. Make sure you " +
-          "have an internet connection, and the geolocator is unblocked.")
-    sys.exit()
+        logger.error("No connection to google's geocoder! Trying Nominatim...")
+    try:
+        location = geolocator2.geocode(locinput)
+    except:
+        if verbosity == True:
+            logger.error("No connection to Nominatim's geocoder!")
+            logger.error("Is the internet online?")
+        print("Can't connect to Google or Nominatim's geocoder.")
+        print("Ensure you have an internet connection.")
+        sys.exit()
 if verbosity == True:
     logger.debug("location = %s" % location)
+
 try:
     latstr = str(location.latitude)
-except AttributeError:
-    logger.error("No lat/long was provided by the geolocator! Invalid location?")
-    print("The location you entered could not be understood properly. Please try again!")
-    sys.exit()
-try:
     lonstr = str(location.longitude)
 except AttributeError:
-    logger.error("No lat/long was provided by the geolocator! Invalid location?")
-    print("The location you entered could not be understood properly. Please try again!")
-    sys.exit()
+    if verbosity == True:
+        logger.error("No lat/long was provided by Google! Trying Nominatim...")
+    try:
+        location = geolocator2.geocode(locinput)
+        latstr = str(location.latitude)
+        lonstr = str(location.longitude)
+    except AttributeError:
+        if verbosity == True:
+            logger.error("No lat/long provided by Google or Nominatim!")
+            logger.error("Invalid location?")
+        print("The location you entered is invalid. Please try again!")
+        sys.exit()
+        
 if verbosity == True:
     logger.debug("Latstr: %s ; Lonstr: %s" % (latstr, lonstr))
 loccoords = [latstr, lonstr]
