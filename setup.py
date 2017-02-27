@@ -202,7 +202,7 @@ print("For the contact name/email, it's recommended you use your real name (firs
 print("It's also recommended that you use your real email.")
 print("For the project name, put in something generic, like 'to use a script that uses WU's API', or 'PyWeather user'")
 print("For the project website, put in something generic, like 'google.com', or the homepage of PyWeather.")
-print("Hint: The homepage of PyWeather is github.com/o355/pyweather")
+print("Hint: The homepage of PyWeather is github.com/o355/py")
 print("For the question 'Where will the API be used', answer Other.")
 print("For the question 'Will the API be used for commercial use?', answer No.")
 print("For the question 'Will the API be used for manufacturing mobile chip processing?', answer No.")
