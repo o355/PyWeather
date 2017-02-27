@@ -1,11 +1,6 @@
 ## Welcome to PyWeather (0.3 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
-## About the temporary rename
-TermWeather sounded like a cool name, no one was using it.
-
-After 20 minutes, I wanted to change it back. So, I will. When I wake up.
-
 ## BETA DISCLAIMER:
 Even though PyWeather is in beta, it's still in active development. While releases are somewhat stable milestones of TermWeather (*cough* *cough* 0.3 beta didn't include the updater *cough* *cough*), things may or may not work. If you update from GitHub, I may push updates that entirely break PyWeather, so please, take caution!
 
