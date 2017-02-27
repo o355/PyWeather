@@ -419,6 +419,8 @@ while True:
         print(Fore.CYAN + "Current temperature: " + Fore.YELLOW + summary_tempf + "°F (" + summary_tempc + "°C)")
         print(Fore.CYAN + "And it feels like: " + Fore.YELLOW + current_feelsLikeF
               + "°F (" + current_feelsLikeC + "°C)")
+        print(Fore.CYAN + "Current dew point: " + Fore.YELLOW + summary_dewPointF
+              + "°F (" + summary_dewPointC + "°C)")
         if winddata == True:
             print(Fore.CYAN + "Current wind: " + Fore.YELLOW + summary_windmphstr + 
                   " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir 
@@ -426,8 +428,6 @@ while True:
         else:
             print(Fore.YELLOW + "Wind data is not available for this location.")
         print(Fore.CYAN + "Current humidity: " + Fore.YELLOW + summary_humidity)
-        print(Fore.CYAN + "Current dew point: " + Fore.YELLOW + summary_dewPointF
-              + "°F (" + summary_dewPointC + "°C)")
         print(Fore.CYAN + "Current pressure: " + Fore.YELLOW + current_pressureInHg
               + " inHg (" + current_pressureMb + " mb), " + current_pressureTrend2)
         print(Fore.CYAN + "Current visibility: " + Fore.YELLOW + current_visibilityMi
