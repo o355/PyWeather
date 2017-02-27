@@ -339,6 +339,10 @@ while True:
           + Fore.YELLOW + ")")
     print("- View more forecast data (or press " + Fore.CYAN + "2"
           + Fore.YELLOW + ")")
+    print("- Check for PyWeather updates (or press " + Fore.CYAN + "3"
+          + Fore.YELLOW + ")")
+    print("- Close PyWeather (or press " + Fore.CYAN + "4" + Fore.YELLOW
+          + ")")
     moreoptions = input("Enter here: ").lower()
     if verbosity == True:
         logger.debug("moreoptions: %s" % moreoptions)
@@ -703,10 +707,11 @@ while True:
                     if verbosity == True:
                         logger.info("Exiting to the main menu.")
     elif (moreoptions == "close pyweather" or moreoptions == "close"
-          or moreoptions == "3" or moreoptions == "close pw"):
+          or moreoptions == "4" or moreoptions == "close pw"):
         sys.exit()
     elif (moreoptions == "update pyweather" or moreoptions == "update"
-          or moreoptions == "update pw" or moreoptions == "4"):
+          or moreoptions == "update pw" or moreoptions == "3"
+          or moreoptions == "check for pyweather updates"):
         buildnumber = 31
         buildversion = "0.3.1 beta"
         print("Checking for updates. This shouldn't take that long.")
