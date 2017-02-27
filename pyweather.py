@@ -268,7 +268,7 @@ if verbosity == True:
 summary_dewPointF = str(current_json['current_observation']['dewpoint_f'])
 summary_dewPointC = str(current_json['current_observation']['dewpoint_c'])
 if verbosity == True:
-    logger.info("summary_dewPointF: %s ; summary_dewpointS: %s"
+    logger.info("summary_dewPointF: %s ; summary_dewpointC: %s"
                 % summary_dewPointF, summary_dewPointC)
 if verbosity == True:
     logger.info("Initalize color...")
@@ -278,7 +278,7 @@ if verbosity == False:
 if verbosity == True:
     logger.info("Printing current conditions...")
     
-# --------------- This is where we end parsing, and begin printing. ----------
+# <--------------- This is where we end parsing, and begin printing. ---------->
 
 summaryHourlyIterations = 0
 
@@ -286,7 +286,6 @@ print(Style.BRIGHT + Fore.CYAN + "Here's the weather for: " + Fore.YELLOW + loca
 print(Fore.YELLOW + summary_lastupdated)
 print("")
 print(Fore.YELLOW + "Currently:")
-# Currently should have the dew point (at the very least)
 print(Fore.CYAN + "Current conditions: " + Fore.YELLOW + summary_overall)
 print(Fore.CYAN + "Current temperature: " + Fore.YELLOW + summary_tempf + "°F (" + summary_tempc + "°C)")
 print(Fore.CYAN + "And it feels like: " + Fore.YELLOW + summary_feelslikef
@@ -295,6 +294,8 @@ if winddata == True:
     print(Fore.CYAN + "Current wind: " + Fore.YELLOW + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
 else:
     print(Fore.YELLOW + "Wind data is not available for this location.")
+print(Fore.CYAN + "Current dew point: " + Fore.YELLOW + summary_dewPointF
+      + "°F (" + sumary_dewPointC + "°C)")
 print(Fore.CYAN + "Current humidity: " + Fore.YELLOW + summary_humidity)
 print("")
 print(Fore.YELLOW + "The hourly forecast:")
@@ -350,13 +351,9 @@ while True:
         if verbosity == True:
             logger.info("Selected view more currently...")
         print("")
-        current_dewPointF = str(current_json['current_observation']['dewpoint_f'])
-        current_dewPointC = str(current_json['current_observation']['dewpoint_c'])
         current_pressureInHg = str(current_json['current_observation']['pressure_in'])
         current_pressureMb = str(current_json['current_observation']['pressure_mb'])
         if verbosity == True:
-            logger.debug("current_dewPointF: %s ; current_dewPointC: %s"
-                         % (current_dewPointF, current_dewPointC))
             logger.debug("current_pressureInHg: %s ; current_pressureMb: %s"
                          % (current_pressureInHg, current_pressureMb))
         current_pressureTrend = current_json['current_observation']['pressure_trend']
@@ -411,8 +408,8 @@ while True:
         else:
             print(Fore.YELLOW + "Wind data is not available for this location.")
         print(Fore.CYAN + "Current humidity: " + Fore.YELLOW + summary_humidity)
-        print(Fore.CYAN + "Current dew point: " + Fore.YELLOW + current_dewPointF
-              + "°F (" + current_dewPointC + "°C)")
+        print(Fore.CYAN + "Current dew point: " + Fore.YELLOW + summary_dewPointF
+              + "°F (" + summary_dewPointC + "°C)")
         print(Fore.CYAN + "Current pressure: " + Fore.YELLOW + current_pressureInHg
               + " inHg (" + current_pressureMb + " mb), " + current_pressureTrend2)
         print(Fore.CYAN + "Current visibility: " + Fore.YELLOW + current_visibilityMi

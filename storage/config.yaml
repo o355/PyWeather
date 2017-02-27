@@ -1,5 +1,5 @@
 # This is the configuration file for PyWeather.
-# The config uses True/False for everything. Heads up.
+# The config uses True/False for mostly everything. Heads up.
 
 verbosity:
 	# Verbosity will output detailed debug information about PyWeather.
