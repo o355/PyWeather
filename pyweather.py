@@ -1,4 +1,4 @@
-# PyWeather 0.3 -> 0.3.1 beta
+# PyWeather 0.3.1 beta
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 
@@ -53,7 +53,6 @@ except FileNotFoundError:
     sys.exit()
 if verbosity == True:
     logger.debug("apikey = %s" % apikey)
-print(datetime.now())
 
 # I understand that this slightly goes against Wunderground's ToS
 # for logo layout, but, seriously. This is a terminal. It's this
