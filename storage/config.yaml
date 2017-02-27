@@ -1,0 +1,52 @@
+# This is the configuration file for PyWeather.
+# The config uses True/False for everything. Heads up.
+
+verbosity:
+	# Verbosity will output detailed debug information about PyWeather.
+	# Useful for when things are failing for no reason.
+	# Default = False
+	verbosity: False
+	# JSON Verbosity enables printing of the entire .json files when fetched.
+	# Take note, it'll spam 300+ lines of your console. ;)
+	# Default = False
+	jsonverbosity: False
+	
+updater:
+	# You can switch the update method from .zip to git.
+	# Useful for systems that have git installed for easy updating.
+	# Default = zip
+	updatemethod: zip
+	# You can force PyWeather to run the updater as a certain build/version.
+	# I don't know why you'd want to do that. Flip the switch here, and define below.
+	# Default = False
+	forceversion: False
+	# Define the forced version/build number below.
+	# To undo changes, turn off forceversion.
+	forcedversion:
+	forcedbuildnum:
+
+mode:
+	# You can force PyWeather to use a PWS mode.
+	# This will have you enter in a PWS name instead of a location.
+	# To enter this mode, mode should be pws.
+	# Default = location
+	mode: location
+	
+summaryscreen:
+	# You can tell PyWeather if you want the sunrise/sunset showing on the summary screen.
+	# Default = True
+	sundata: True
+	# You can tell PyWeather if you want moonrise/moonset data on the summary screen.
+	# Default = False
+	moondata: False
+	# You can tell PyWeather if you want almanac data on the summary screen.
+	# Default = False
+	almanacdata: False
+
+quickweather:
+	# For quick weather, you need to define a location for PyWeather to get the quick weather.
+	# The location should be what you would enter into PyWeather.
+	quickweatherloc: 
+	# If you'd like quick weather to use a PWS, turn pwsmode on, and input the PWS to get the weather from.
+	pwsmode: False
+	defaultpws: 
