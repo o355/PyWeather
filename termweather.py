@@ -27,6 +27,8 @@ if verbosity == True:
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)
 
+# Turning this off is not recommended.
+rootwarning = True
 
 import urllib.request
 import sys
@@ -41,12 +43,8 @@ from datetime import datetime
 import geocoder
 geolocator = GoogleV3()
 
-if os.getenv("USER") == "root":
-    print("Do you even know what security is?")
-    print("Don't run this as root. You don't need root to run this.")
-    print("Learn the super basics of Linux security.")
-    print("Want to learn more about why running as root is bad? http://bfy.tw/AKAU.")
-    sys.exit()
+if (os.getenv("USER") == "root" and rootwarning == True):
+    print("Please don't run this as root. If this is annoying, turn it off in the config.")
 
 if verbosity == True:
     logger.debug("Begin API keyload...")
