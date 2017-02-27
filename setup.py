@@ -276,23 +276,35 @@ except:
     print("We ran into an error. Make sure your API key is valid.")
     sys.exit()
     
-print("Testing the geocoder connection...")
+print("Testing the Google geocoder connection...")
 
 from geopy import GoogleV3
+from geopy import Nominatim
 
 geolocator = GoogleV3()
+geolocator2 = Nominatim()
+
 try:
     testlocation = geolocator.geocode("New York, NY", language="en")
-    print("Yay! The geocoder works.")
+    print("Yay! Google's geocoder works.")
 except:
-    print("We ran into an error. Make sure Google's Geocoder is unblocked, " +
+    print("We ran into an error. Make sure Google's geocoder is unblocked, " +
           "and you have an internet connection.")
     sys.exit()
     
-print("Testing the geolocator connection...")
+print("Testing the Nominatim geocoder connection...")
 
 try:
-    testlocation2 = geocoder.google([testlocation.latitude, testlocation.longitude], method='reverse')
+    testlocation2 = geolocator2.geocode("New York, NY")
+    print("Yay! Nominatim's geocoder works.")
+except:
+    print("We ran into an error. Make sure Nominatim's geocoder is unblocked, " +
+          "and you have an internet connection.")
+    
+print("Testing the reverse geocoder connection...")
+
+try:
+    testlocation3 = geocoder.google([testlocation.latitude, testlocation.longitude], method='reverse')
     print("Yay! The geolocator works.")
 except:
     print("We ran into an error. Make sure Google's Geolocator is unblocked, " +

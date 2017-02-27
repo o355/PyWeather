@@ -742,12 +742,14 @@ while True:
         version_latestURL = versionJSON['updater']['latesturl']
         version_latestFileName = versionJSON['updater']['latestfilename']
         if buildnumber >= version_buildNumber:
+            print("")
             print(Fore.GREEN + "PyWeather is up to date!")
             print(Fore.GREEN + "The updater reports the latest version is "
                   + Fore.CYAN + version_latestVersion + Fore.GREEN + ", and you have version "
                   + Fore.CYAN + buildversion + Fore.GREEN + ".")
         elif buildnumber < version_buildNumber:
-            print(Fore.RED + "TermWeather is not up to date!")
+            print("")
+            print(Fore.RED + "PyWeather is not up to date!")
             print(Fore.RED + "The update reports the latest version is " +
                   Fore.CYAN + version_latestVersion + Fore.RED + ", while you have version "
                   + Fore.CYAN + buildversion + Fore.RED + ".")
