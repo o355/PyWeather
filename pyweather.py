@@ -85,16 +85,11 @@ try:
         print("[#---------] | 5% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 except:
     if verbosity == True:
-        logger.error("No connection to google's geocoder! Trying Nominatim...")
-    try:
-        location = geolocator2.geocode(locinput)
-    except:
-        if verbosity == True:
-            logger.error("No connection to Nominatim's geocoder!")
-            logger.error("Is the internet online?")
-        print("Can't connect to Google or Nominatim's geocoder.")
-        print("Ensure you have an internet connection.")
-        sys.exit()
+        logger.error("No connection to Google's geocoder!")
+    print("Could not connect to Google's geocoder.")
+    print("Ensure you have an internet connection, and that Google's geocoder " +
+          "is unblocked.")
+    sys.exit()
 if verbosity == True:
     logger.debug("location = %s" % location)
 
@@ -103,17 +98,10 @@ try:
     lonstr = str(location.longitude)
 except AttributeError:
     if verbosity == True:
-        logger.error("No lat/long was provided by Google! Trying Nominatim...")
-    try:
-        location = geolocator2.geocode(locinput)
-        latstr = str(location.latitude)
-        lonstr = str(location.longitude)
-    except AttributeError:
-        if verbosity == True:
-            logger.error("No lat/long provided by Google or Nominatim!")
-            logger.error("Invalid location?")
-        print("The location you entered is invalid. Please try again!")
-        sys.exit()
+        logger.error("No lat/long was provided by Google! Bad location?")
+    print("The location you inputted could not be understood.")
+    print("Please try again.")
+    sys.exit()
         
 if verbosity == True:
     logger.debug("Latstr: %s ; Lonstr: %s" % (latstr, lonstr))
@@ -740,22 +728,24 @@ while True:
         version_latestVersion = versionJSON['updater']['latestversion']
         version_latestURL = versionJSON['updater']['latesturl']
         version_latestFileName = versionJSON['updater']['latestfilename']
+        version_latestReleaseDate = versionJSON['updater']['releasedate']
         if buildnumber >= version_buildNumber:
             print("")
             print(Fore.GREEN + "PyWeather is up to date!")
-            print(Fore.GREEN + "The updater reports the latest version is "
-                  + Fore.CYAN + version_latestVersion + Fore.GREEN + ", and you have version "
-                  + Fore.CYAN + buildversion + Fore.GREEN + ".")
+            print("You have version: " + Fore.CYAN + buildversion)
+            print(Fore.GREEN + "The latest version is: " + Fore.CYAN + version_latestVersion)
         elif buildnumber < version_buildNumber:
             print("")
-            print(Fore.RED + "PyWeather is not up to date!")
-            print(Fore.RED + "The update reports the latest version is " +
-                  Fore.CYAN + version_latestVersion + Fore.RED + ", while you have version "
-                  + Fore.CYAN + buildversion + Fore.RED + ".")
-            print(Fore.RED + "Would you like to download the latest version?" + Fore.GREEN)
+            print(Fore.RED + "PyWeather is not up to date! :(")
+            print(Fore.RED + "You have version: " + Fore.CYAN + buildversion)
+            print(Fore.RED + "The latest version is: " + Fore.CYAN + version_latestVersion)
+            print(Fore.RED + "And it was released on: " + Fore.CYAN + version_latestReleaseDate)
+            print("")
+            print(Fore.RED + "Would you like to download the latest version?" + Fore.YELLOW)
             downloadLatest = input("Yes or No: ").lower()
             if downloadLatest == "yes":
-                print("Downloading the latest version of PyWeather...")
+                print("")
+                print(Fore.YELLOW + "Downloading the latest version of PyWeather...")
                 try:
                     with urllib.request.urlopen(version_latestURL) as update_response, open(version_latestFileName, 'wb') as update_out_file:
                         shutil.copyfileobj(update_response, update_out_file)
@@ -765,8 +755,8 @@ while True:
                           + "and you have an internet connection.")
                     print("Error 55, pyweather.py")
                     continue
-                print("The latest version of TermWeather was downloaded " +
-                      "to the base directory of TermWeather.")
+                print(Fore.YELLOW + "The latest version of PyWeather was downloaded " +
+                      "to the base directory of PyWeather.")
                 continue
             elif downloadLatest == "no":
                 print(Fore.YELLOW + "Not downloading the latest version of PyWeather.")
