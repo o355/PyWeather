@@ -2,6 +2,11 @@
 
 Quick note: While in beta, commits are not counted as versions. When I decide to push a release, I push a release. There will also be a running changelog for the in-development version, so I'm not remembering every single change I made in the version.
 
+## version 0.3.2 beta (The More Verbosity Update) - To be released
+* Adds verbosity
+* Adds verbosity to setup.py
+* Improves the updater a bit
+* Minor UI improvements
 
 ## version 0.3.1 beta (The Updater Update) - Released 2/27/2016
 * Adds an updater to PyWeather to check for the latest updates, and download them
