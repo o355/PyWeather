@@ -122,6 +122,8 @@ except ImportError:
 try:
     import geopy
     geopyInstalled = True
+    if verbosity == True:
+        logger.info("geopy is installed.")
 except ImportError:
     geopyInstalled = False
     neededLibraries = neededLibraries + 1
