@@ -3,6 +3,8 @@
 # Powered by Wunderground
 # If there any random imports below here, blame Eclipse.
 
+# This is a first commit from Kubuntu 16.10. Switched!
+
 # ===========================
 #   A few quick notes:
 # 1. The internal code is not organized, and it's meant to stay that way.
@@ -13,6 +15,7 @@
 # 3. There is no setup.py file. Get the API key on your own, and download
 # necessary modules through PIP.
 # 4. Progress will be slow and steady with TermWeather. Trust me.
+
 
 # Verbosity works like this (for now)
 # Turn on verbosity for, well, verbosity! jsonVerbosity outputs
