@@ -2,8 +2,7 @@
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 # If there any random imports below here, blame Eclipse.
-
-# This is a first commit from Kubuntu 16.10. Switched!
+# Testing git within Eclipse.
 
 # ===========================
 #   A few quick notes:
