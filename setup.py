@@ -116,7 +116,11 @@ else:
     print("If you want me to, I can automatically install these libraries.")
     print("Would you like me to do such? Yes or No.")
     neededLibrariesConfirm = input("Input here: ").lower()
+    if verbosity == True:
+        logger.debug("neededLibrariesConfirm: %s" % neededLibrariesConfirm)
     if neededLibrariesConfirm == "no":
+        if verbosity == True:
+            logger.warn("Not installing necessary libraries. Now exiting...")
         print("Okay. I needed to install necessary libraries to continue.")
         print("Now quitting...")
         sys.exit()
