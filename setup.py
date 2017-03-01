@@ -124,16 +124,28 @@ try:
     geopyInstalled = True
     if verbosity == True:
         logger.info("geopy is installed.")
+        logger.debug("geopyInstalled: %s" % geopyInstalled)
 except ImportError:
     geopyInstalled = False
     neededLibraries = neededLibraries + 1
+    if verbosity == True:
+        logger.warn("geopy is NOT installed.")
+        logger.debug("geopyInstalled: %s ; neededLibraries: %s"
+                     % (geopyInstalled, neededLibraries))
     
 try:
     import geocoder
     geocoderInstalled = True
+    if verbosity == True:
+        logger.info("geocoder is installed.")
+        logger.debug("geocoderInstalled: %s" % geocoderInstalled)
 except ImportError:
     geocoderInstalled = False
     neededLibraries = neededLibraries + 1
+    if verbosity == True:
+        logger.info("geocoder is NOT installed.")
+        logger.debug("geocoderInstalled: %s ; neededLibraries: %s"
+                     % (geocoderInstalled, neededLibraries))
     
 print("All done!")
 if neededLibraries == 0:

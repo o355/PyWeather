@@ -194,8 +194,10 @@ if verbosity == True:
     logger.info("4 JSONs loaded...")
     logger.info("Start 2nd geocoder...")
 
-# Contact Google's reverse geocoder to give us a proper location
-# of where we're getting the weather for.
+# The 2nd geocoder hit will get removed in future versions, I believe geopy
+# can do reverse.
+
+# And how about asynchronius fetches? Coming soon.
 
 try:
     location2 = geocoder.google([latstr, lonstr], method='reverse', timeout=20)
