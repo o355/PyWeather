@@ -720,7 +720,7 @@ while True:
         buildnumber = 31
         buildversion = "0.3.1 beta"
         if verbosity == True:
-            logger.debug("buildnumber: %s ; buildversion" %
+            logger.debug("buildnumber: %s ; buildversion: %s" %
                          (buildnumber, buildversion))
         print("Checking for updates. This shouldn't take that long.")
         try:
