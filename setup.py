@@ -34,6 +34,9 @@ except:
           + "with your installation of Python.")
 neededLibraries = 0
 if sys.version_info[0] < 3:
+    if verbosity == True:
+        logger.error("Python 3 is needed to run. You're using version: %s"
+                     % sys.version_info)
     print("Shucks! I can't proceed any further.")
     print("You'll need to install Python 3 to use PyWeather/PW Setup.")
     sys.exit()
@@ -44,10 +47,16 @@ print("Is it okay if I use 1-5 MB of data (downloading libraries)" +
       ", and automatically install Python libraries?")
 print("Please input yes or no below:")
 confirmPermissions = input("Input here: ").lower()
+if verbosity == True:
+    logger.debug("confirmPermissions: %s" % confirmPermissions)
 if confirmPermissions == "no":
+    if verbosity == True:
+        logger.debug("User denied permissions. Closing...")
     print("Okay! Closing now.")
     sys.exit()
 elif confirmPermissions != "yes":
+    if verbosity == True:
+        logger.debug("Couldn't understand. Closing...")
     print("I couldn't understand what you said.")
     print("As a precaution, I won't proceed any further.")
     sys.exit()
@@ -59,13 +68,21 @@ print("This can take a moment, so please hold tight while I check!")
 try:
     import pip
 except ImportError:
+    if verbosity == True:
+        logger.warn("pip is NOT installed! Asking user for automated install...")
     print("Shucks! I need PIP to check for/install libraries.")
     print("Can I install PIP for you? Yes or No.")
     pipConfirm = input("Input here: ").lower()
+    if verbosity == True:
+        logger.debug("pipConfirm: %s" % pipConfirm)
     if pipConfirm == "no":
+        if verbosity == True:
+            logger.info("User denied PIP install, closing...")
         print("Okay! I'm closing setup, as I need PIP to continue.")
         sys.exit()
     elif pipConfirm == "yes":
+        if verbosity == True:
+            logger.info("User allowed PIP install. Starting...")
         print("Okay!")
         print("I'll download PIP's installer, and run it.")
         print("Doing such uses about 2-4 MB of data, and will quit PW setup.")
@@ -74,19 +91,33 @@ except ImportError:
         time.sleep(3)
         print("Downloading the installer...")
         with urllib.request.urlopen('https://bootstrap.pypa.io/get-pip.py') as update_response, open('get-pip.py', 'wb') as update_out_file:
+            if verbosity == True:
+                logger.debug("update_response: %s ; update_out_file: %s"
+                             % (update_response, update_out_file))
             shutil.copyfileobj(update_response, update_out_file)
         print("Running the installer...")
+        if verbosity == True:
+            logger.debug("Executing get-pip.py...")
         exec(open("get-pip.py").read())
     else:
+        if verbosity == True:
+            logger.warn("Couldn't understand the input. Closing...")
         print("I didn't understand what you said.")
         print("As a precaution, I'm closing setup, as I need PIP to continue.")
 
 try:
     import colorama
     coloramaInstalled = True
+    if verbosity == True:
+        logger.info("Colorama is installed.")
+        logger.debug("coloramaInstalled: %s" % coloramaInstalled)
 except ImportError:
     coloramaInstalled = False
     neededLibraries = neededLibraries + 1
+    if verbosity == True:
+        logger.warn("Colorama is not installed.")
+        logger.debug("coloramaInstalled: %s ; neededLibraries: %s"
+                     % (coloramaInstalled, neededLibraries))
     
 try:
     import geopy
