@@ -149,8 +149,12 @@ except ImportError:
     
 print("All done!")
 if neededLibraries == 0:
+    if verbosity == True:
+        logger.debug("All libraries are installed.")
     print("You must be magic. All necessary libraries are installed! Let's move on.")
 else:
+    if verbosity == True:
+        logger.debug("Libraries need to be installed.")
     print("Shucks. Not all libraries are installed. Here's what needs to be installed:")
     if coloramaInstalled == False:
         print("- Colorama")
@@ -209,6 +213,7 @@ else:
         print("As a precaution, I'm now closing.")
         sys.exit()
 
+# Verbosity is not needed here.
 print("I'm now going to guide you through obtaining an API key.")
 print("Please carefully read my detailed instructions, so you don't mess anything up.")
 
