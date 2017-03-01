@@ -1,6 +1,7 @@
-# PyWeather 0.3.1 beta
+# PyWeather 0.3.1 -> 0.3.2 beta
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
+# If there any random imports below here, blame Eclipse.
 
 # ===========================
 #   A few quick notes:
@@ -18,11 +19,11 @@
 # the full JSON acquired (aka spams 50 lines of console), so it's
 # a separate, and now, more obvious switch.
 
-verbosity = False
-jsonVerbosity = False
+verbosity = True
+jsonVerbosity = True
 if verbosity == True:
     import logging
-    logger = logging.getLogger('pyweather_0.3.1beta')
+    logger = logging.getLogger('pyweather_0.3.2beta')
     logger.setLevel(logging.DEBUG)
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)
@@ -78,7 +79,7 @@ firstfetch = time.time()
 if verbosity == True:
     logger.debug("Start geolocator...")
 try:
-    location = geolocator.geocode(locinput, language="en")
+    location = geolocator.geocode(locinput, language="en", timeout=20)
     # Since the loading bars interfere with true verbosity logging, we turn
     # them off if verbosity is enabled (it isn't needed)
     if verbosity == False:
@@ -196,7 +197,7 @@ if verbosity == True:
 # of where we're getting the weather for.
 
 try:
-    location2 = geocoder.google([latstr, lonstr], method='reverse')
+    location2 = geocoder.google([latstr, lonstr], method='reverse', timeout=20)
     if verbosity == False:
         print("[#########-] | 91% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 except:
@@ -270,7 +271,7 @@ summary_dewPointF = str(current_json['current_observation']['dewpoint_f'])
 summary_dewPointC = str(current_json['current_observation']['dewpoint_c'])
 if verbosity == True:
     logger.info("summary_dewPointF: %s ; summary_dewpointC: %s"
-                % summary_dewPointF, summary_dewPointC)
+                % (summary_dewPointF, summary_dewPointC))
 if verbosity == True:
     logger.info("Initalize color...")
 init()
@@ -291,12 +292,12 @@ print(Fore.CYAN + "Current conditions: " + Fore.YELLOW + summary_overall)
 print(Fore.CYAN + "Current temperature: " + Fore.YELLOW + summary_tempf + "°F (" + summary_tempc + "°C)")
 print(Fore.CYAN + "And it feels like: " + Fore.YELLOW + summary_feelslikef
       + "°F (" + summary_tempc + "°C)")
+print(Fore.CYAN + "Current dew point: " + Fore.YELLOW + summary_dewPointF
+      + "°F (" + summary_dewPointC + "°C)")
 if winddata == True:
     print(Fore.CYAN + "Current wind: " + Fore.YELLOW + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
 else:
     print(Fore.YELLOW + "Wind data is not available for this location.")
-print(Fore.CYAN + "Current dew point: " + Fore.YELLOW + summary_dewPointF
-      + "°F (" + summary_dewPointC + "°C)")
 print(Fore.CYAN + "Current humidity: " + Fore.YELLOW + summary_humidity)
 print("")
 print(Fore.YELLOW + "The hourly forecast:")
@@ -713,29 +714,57 @@ while True:
     elif (moreoptions == "update pyweather" or moreoptions == "update"
           or moreoptions == "update pw" or moreoptions == "3"
           or moreoptions == "check for pyweather updates"):
+        if verbosity == True:
+            logger.info("Selected update.")
         buildnumber = 31
         buildversion = "0.3.1 beta"
+        if verbosity == True:
+            logger.debug("buildnumber: %s ; buildversion" %
+                         (buildnumber, buildversion))
         print("Checking for updates. This shouldn't take that long.")
         try:
             versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
+            if verbosity == True:
+                logger.debug("versioncheck: %s" % versioncheck)
         except:
+            if verbosity == True:
+                logger.warn("Couldn't check for updates! Is there an internet connection?")
             print(Fore.RED + "Couldn't check for updates.")
             print("Make sure GitHub user content is unblocked, and you have an internet connection.")
             print("Error 54, pyweather.py")
             continue
         versionJSON = json.load(reader(versioncheck))
+        if jsonVerbosity == True:
+            logger.debug("versionJSON: %s" % versionJSON)
+        if verbosity == True:
+            logger.debug("Loaded versionJSON with reader %s" % reader)
         version_buildNumber = float(versionJSON['updater']['latestbuild'])
         version_latestVersion = versionJSON['updater']['latestversion']
         version_latestURL = versionJSON['updater']['latesturl']
         version_latestFileName = versionJSON['updater']['latestfilename']
+        if verbosity == True:
+            logger.debug("version_buildNumber: %s ; version_latestVersion: %s"
+                         % (version_buildNumber, version_latestVersion))
+            logger.debug("version_latestURL: %s ; verion_latestFileName: %s"
+                         % (version_latestURL, version_latestFileName))
         version_latestReleaseDate = versionJSON['updater']['releasedate']
+        if verbosity == True:
+            logger.debug("version_latestReleaseDate: %s" % version_latestReleaseDate)
         if buildnumber >= version_buildNumber:
+            if verbosity == True:
+                logger.info("PyWeather is up to date.")
+                logger.info("local build (%s) >= latest build (%s)"
+                            % (buildnumber, version_buildNumber))
             print("")
             print(Fore.GREEN + "PyWeather is up to date!")
             print("You have version: " + Fore.CYAN + buildversion)
             print(Fore.GREEN + "The latest version is: " + Fore.CYAN + version_latestVersion)
         elif buildnumber < version_buildNumber:
             print("")
+            if verbosity == True:
+                logger.warn("PyWeather is NOT up to date.")
+                logger.warn("local build (%s) < latest build (%s)"
+                            % (buildnumber, version_buildNumber))
             print(Fore.RED + "PyWeather is not up to date! :(")
             print(Fore.RED + "You have version: " + Fore.CYAN + buildversion)
             print(Fore.RED + "The latest version is: " + Fore.CYAN + version_latestVersion)
@@ -743,34 +772,65 @@ while True:
             print("")
             print(Fore.RED + "Would you like to download the latest version?" + Fore.YELLOW)
             downloadLatest = input("Yes or No: ").lower()
+            if verbosity == True:
+                logger.debug("downloadLatest: %s" % downloadLatest)
             if downloadLatest == "yes":
                 print("")
+                if verbosity == True:
+                    logger.debug("Downloading latest version...")
                 print(Fore.YELLOW + "Downloading the latest version of PyWeather...")
                 try:
                     with urllib.request.urlopen(version_latestURL) as update_response, open(version_latestFileName, 'wb') as update_out_file:
+                        if verbosity == True:
+                            logger.debug("update_response: %s ; update_out_file: %s" %
+                                         (update_response, update_out_file))
                         shutil.copyfileobj(update_response, update_out_file)
                 except:
+                    if verbosity == True:
+                        logger.warn("Couldn't download the latest version!")
+                        logger.warn("Is the internet online?")
                     print(Fore.RED + "Couldn't download the latest version.")
                     print("Make sure GitHub user content is unblocked, "
                           + "and you have an internet connection.")
                     print("Error 55, pyweather.py")
                     continue
+                if verbosity == True:
+                    logger.debug("Latest version was saved, filename: %s"
+                                 % version_latestFileName)
                 print(Fore.YELLOW + "The latest version of PyWeather was downloaded " +
-                      "to the base directory of PyWeather.")
+                      "to the base directory of PyWeather, and saved as " +
+                      Fore.CYAN + version_latestFileName + Fore.YELLOW + ".")
                 continue
             elif downloadLatest == "no":
+                if verbosity == True:
+                    logger.debug("Not downloading the latest version.")
                 print(Fore.YELLOW + "Not downloading the latest version of PyWeather.")
                 print("For reference, you can download the latest version of PyWeather at:")
                 print(Fore.CYAN + version_latestURL)
                 continue
             else:
+                if verbosity == True:
+                    logger.warn("Input could not be understood!")
                 print(Fore.GREEN + "Could not understand what you said.")
                 continue
         else:
+            if verbosity == True:
+                logger.error("PW updater failed. Build comparison below.")
+                try:
+                    logger.error("local build: %s ; updater build: %s"
+                                % (buildnumber, version_buildNumber))
+                except:
+                    logger.error("Variables are corrupted, or a typo was made.")
+                    logger.error("Trying to list variables 1 more time...")
+                    try:
+                        logger.error("buildnumber: %s" % buildnumber)
+                    except:
+                        logger.error("Variable buildnumber is corrupt.")
             print(Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
             print(Fore.RED + "Error 53, pyweather.py")
             continue
     else:
+        if verbosity == True:
+            logger.warn("Input could not be understood!")
         print(Fore.RED + "Not a valid option.")
         print("")
-    

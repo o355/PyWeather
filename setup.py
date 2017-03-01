@@ -1,15 +1,37 @@
-# PyWeather Setup 0.3 beta
+# PyWeather Setup 0.3.2 beta
 # (c) 2017, o355, licensed under GNU GPL v3
+# If any random imports show beneath here, blame Eclipse.
 
+# Same deal as the main script.
+# Verbosity turns on verbosity, jsonVerbosity outputs full JSONs.
+# Because I'm cool, you can have verbosity off, but JSON verbosity on.
+verbosity = False
+jsonVerbosity = False
+
+if (verbosity == True or jsonVerbosity == True):
+    import logging
+    logger = logging.getLogger('pyweather_0.3.2beta')
+    logger.setLevel(logging.DEBUG)
+    logformat = '%(asctime)s | %(levelname)s | %(message)s'
+    logging.basicConfig(format=logformat)
 
 print("Welcome to PyWeather setup.")
 print("This is meant to run as a one-time program, when you first get PyWeather.")
 print("Running preflight...")
 
-import sys
-import urllib.request
-import shutil
-import time
+if verbosity == True:
+    logger.info("Starting, importing 4 default libraries...")
+try:
+    import sys
+    import urllib.request
+    import shutil
+    import time
+except:
+    if verbosity == True:
+        logger.error("Odd, 4 default libraries are not available...")
+    print("Hmm...I tried to import default libraries, but ran into an error.")
+    print("Make sure that sys, urllib.request, shutil, and time are available "
+          + "with your installation of Python.")
 neededLibraries = 0
 if sys.version_info[0] < 3:
     print("Shucks! I can't proceed any further.")
