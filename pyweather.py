@@ -2,7 +2,6 @@
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 # If there any random imports below here, blame Eclipse.
-# Testing git within Eclipse. Yay!
 
 # ===========================
 #   A few quick notes:
