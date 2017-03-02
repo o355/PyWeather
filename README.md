@@ -1,8 +1,10 @@
-## Welcome to PyWeather (0.3.2 beta)!
+## Welcome to PyWeather (0.3.3 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
 ## BETA DISCLAIMER:
 Even though PyWeather is in beta, it's still in active development. While releases are somewhat stable milestones of PyWeather, things may or may not work. If you update from GitHub, I may push updates that entirely break PyWeather, so please, take caution!
+
+(aka see the wiki for bad releases)
 
 ## Why?
 Because I'd rather check my weather in a terminal. Unlike 99.98% of humans.
