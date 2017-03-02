@@ -174,41 +174,65 @@ else:
         print("Now quitting...")
         sys.exit()
     elif neededLibrariesConfirm == "yes":
+        if verbosity == True:
+            logger.info("Installing necessary libraries...")
         print("Sweet! I'm now installing necessary libraries.")
         if coloramaInstalled == False:
+            if verbosity == True:
+                logger.debug("Installing colorama...")
             print("Installing Colorama...")
             pip.main(['install', 'colorama'])
         if geopyInstalled == False:
+            if verbosity == True:
+                logger.debug("Installing geopy...")
             print("Installing geopy...")
             pip.main(['install', 'geopy'])
         if geocoderInstalled == False:
+            if verbosity == True:
+                logger.debug("Installing geocoder...")
             print("Installing geocoder...")
             pip.main(['install', 'geocoder'])
+        if verbosity == True:
+            logger.info("Running the double check on libraries...")
         print("Sweet! All libraries should be installed.")
         print("Just to confirm, I'm double checking if needed libraries are installed.")
         try:
             import colorama
+            if verbosity == True:
+                logger.info("Colorama installed successfully.")
         except ImportError:
+            if verbosity == True:
+                logger.error("Colorama was not installed successfully.")
             print("Hmm...Colorama didn't install properly.")
             print("Try executing 'pip install colorama' in a command shell.")
             print("As a precaution, I'm now exiting. (Error 52, setup.py)")
             sys.exit()
         try:
             import geopy
+            if verbosity == True:
+                logger.info("geopy installed successfully.")
         except ImportError:
+            if verbosity == True:
+                logger.error("geopy was not installed successfully.")
             print("Hmm...geopy didn't install properly.")
             print("Try executing 'pip install geopy' in a command shell.")
             print("As a precaution, I'm now exiting. (Error 52, setup.py)")
             sys.exit()
         try:
             import geocoder
+            if verbosity == True:
+                logger.info("geocoder installed successfully.")
         except ImportError:
+            if verbosity == True:
+                logger.error("geocoder was not installed successfully.")
             print("Hmm...geocoder didn't install properly.")
             print("Try executing 'pip install geocoder' in a command shell.")
             print("As a precaution, I'm now exiting. (Error 52, setup.py)")
             sys.exit()
         print("All libraries are good to go! Let's move on.")
     else:
+        if verbosity == True:
+            logger.error("Input was not understood. Closing...")
         print("I'm not sure what you said.")
         print("As a precaution, I'm now closing.")
         sys.exit()
@@ -299,21 +323,33 @@ print("Press any key when you are done and ready.")
 input()
 print("Please input your API key below.")
 apikey_input = input("Input here: ")
+if verbosity == True:
+    logger.debug("apikey_input: %s" % apikey_input)
 print("Just to confirm, the API key you gave me was: " + apikey_input
       + ".")
 print("Please double check your input, and confirm in the dialogue below.")
 apikey_confirm = input("Is the API key right? Yes or no: ").lower()
+if verbosity == True:
+    logger.debug("apikey_confirm: %s" % apikey_confirm)
 if apikey_confirm == "no":
+    if verbosity == True:
+        logger.debug("User now re-entering key...")
     print("Please input your API key below.")
     apikey_input = input("Input here: ")
+    if verbosity == True:
+        logger.debug("apikey_input: %s" % apikey_input)
     print("Just to confirm, the API key you gave me was: " + apikey_input
       + ".")
     print("If you got the API key wrong, please close out of setup, and try again. ")
 
 print("Now saving your API key...")
 with open("storage//apikey.txt", 'a') as out:
+    if verbosity == True:
+        logger.debug("out: %s" % out)
     out.write(apikey_input)
     out.close()
+    if verbosity == True:
+        logger.debug("Performed ops: out.write(apikey_input), out.close()")
     
 # once a config file is properly added, options for configuring the config will go here
 
@@ -322,13 +358,21 @@ print("We're wrapping up, and performing a few tests.")
 print("Checking for parsing libraries...")
 try:
     import json
+    if verbosity == True:
+        logger.debug("json is available.")
 except:
+    if verbosity == True:
+        logger.error("json isn't available...very odd...")
     print("json is not available. This is odd, it's a default library.")
     print("Try installing a usual Python install.")
     sys.exit()
 try:
     import codecs
+    if verbosity == True:
+        logger.debug("codecs is available.")
 except:
+    if verbosity == True:
+        logger.warn("codecs isn't available...very odd...")
     print("codecs is not available. This is odd, it's a default library.")
     print("Try installing a usual Python install.")
     sys.exit()
