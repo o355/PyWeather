@@ -20,8 +20,8 @@
 # the full JSON acquired (aka spams 50 lines of console), so it's
 # a separate, and now, more obvious switch.
 
-verbosity = True
-jsonVerbosity = True
+verbosity = False
+jsonVerbosity = False
 if verbosity == True:
     import logging
     logger = logging.getLogger('pyweather_0.3.2beta')
@@ -44,7 +44,7 @@ geolocator = GoogleV3()
 geolocator2 = Nominatim()
 
 if verbosity == True:
-    logger.debug("Begin API keyload...")
+    logger.debug(Fore.RED + "Begin API keyload...")
 apikey_load = open('storage//apikey.txt')
 if verbosity == True:
     logger.debug("apikey_load = %s" % apikey_load)
@@ -66,7 +66,7 @@ if verbosity == True:
 
 # Sorry WU. I still love you.
 
-print("Welcome to PyWeather - Powered by Wunderground.")
+print(Fore.RESET + "Welcome to PyWeather - Powered by Wunderground.")
 print("Please enter a location to get weather information for.")
 locinput = input("Input here: ")
 print("Sweet! Getting your weather!")
@@ -78,7 +78,7 @@ print("Sweet! Getting your weather!")
 
 firstfetch = time.time()
 if verbosity == True:
-    logger.debug("Start geolocator...")
+    logger.debug(Fore.RED + "Start geolocator...")
 try:
     location = geolocator.geocode(locinput, language="en", timeout=20)
     # Since the loading bars interfere with true verbosity logging, we turn
