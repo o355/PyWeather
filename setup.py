@@ -380,59 +380,75 @@ except:
 print("Testing the API connection, and seeing if the API key is valid...")
 apitest_URL = 'http://api.wunderground.com/api/' + apikey_input + '/conditions/q/NY/New_York.json'
 testreader = codecs.getreader("utf-8")
+if verbosity == True:
+    logger.debug("apitest_URL: %s ; testreader: %s" %
+                 (apitest_URL, testreader))
 
 try:
     testJSON = urllib.request.urlopen(apitest_URL)
+    if verbosity == True:
+        logger.debug("testJSON: %s" % testJSON)
 except:
+    if verbosity == True:
+        logger.error("Couldn't connect to Wunderground's API! No internet?")
     print("We ran into an error. Make sure Wunderground's API is unblocked, "
           + "and you have an internet connection.")
     sys.exit()
     
 test_json = json.load(testreader(testJSON))
+if jsonVerbosity == True:
+    logger.debug("test_json: %s" % test_json)
 
 try:
     test_conditions = str(test_json['current_observation']['temp_f'])
+    if verbosity == True:
+        logger.debug("test_conditions: %s" % test_conditions)
 except:
+    if verbosity == True:
+        logger.error("Error! Is the API key invalid?")
     print("We ran into an error. Make sure your API key is valid.")
     sys.exit()
     
 print("Testing the Google geocoder connection...")
 
 from geopy import GoogleV3
-from geopy import Nominatim
 
 geolocator = GoogleV3()
-geolocator2 = Nominatim()
+if verbosity == True:
+    logger.debug("geolocator: %s" % geolocator)
 
 try:
     testlocation = geolocator.geocode("New York, NY", language="en")
+    if verbosity == True:
+        logger.debug("testlocation: %s" % testlocation)
+        logger.debug("testlocation.latitude: %s ; testlocation.longitude: %s" %
+                     (testlocation.latitude, testlocation.longitude))
     print("Yay! Google's geocoder works.")
 except:
+    if verbosity == True:
+        logger.error("Couldn't connect to Google's geocoder. No internet?")
     print("We ran into an error. Make sure Google's geocoder is unblocked, " +
           "and you have an internet connection.")
     sys.exit()
     
-print("Testing the Nominatim geocoder connection...")
-
-try:
-    testlocation2 = geolocator2.geocode("New York, NY")
-    print("Yay! Nominatim's geocoder works.")
-except:
-    print("We ran into an error. Make sure Nominatim's geocoder is unblocked, " +
-          "and you have an internet connection.")
     
 print("Testing the reverse geocoder connection...")
 
 try:
     testlocation3 = geocoder.google([testlocation.latitude, testlocation.longitude], method='reverse')
+    if verbosity == True:
+        logger.debug("testlocation3: %s" % testlocation3)
+        logger.debug("testlocation3.city: %s ; testlocation3.state: %s" %
+                     (testlocation3.city, testlocation3.state))
     print("Yay! The geolocator works.")
 except:
+    if verbosity == True:
+        logger.error("Couldn't connect to Google's geocoder. No internet?")
     print("We ran into an error. Make sure Google's Geolocator is unblocked, " +
           "and you have an internet connection.")
+    sys.exit()
 
 print("")
 print("Everything is set up and ready to rumble!")
 print("Enjoy using PyWeather! If you have any issues, please report them on GitHub!")
 sys.exit()
-
-
