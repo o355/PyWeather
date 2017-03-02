@@ -344,9 +344,11 @@ while True:
           + Fore.YELLOW + ")")
     print("- View more forecast data (or press " + Fore.CYAN + "2"
           + Fore.YELLOW + ")")
-    print("- Check for PyWeather updates (or press " + Fore.CYAN + "3"
+    print("- View the almanac for today (or press " + Fore.CYAN + "3"
           + Fore.YELLOW + ")")
-    print("- Close PyWeather (or press " + Fore.CYAN + "4" + Fore.YELLOW
+    print("- Check for PyWeather updates (or press " + Fore.CYAN + "4"
+          + Fore.YELLOW + ")")
+    print("- Close PyWeather (or press " + Fore.CYAN + "5" + Fore.YELLOW
           + ")")
     moreoptions = input("Enter here: ").lower()
     if verbosity == True:
@@ -712,10 +714,10 @@ while True:
                     if verbosity == True:
                         logger.info("Exiting to the main menu.")
     elif (moreoptions == "close pyweather" or moreoptions == "close"
-          or moreoptions == "4" or moreoptions == "close pw"):
+          or moreoptions == "5" or moreoptions == "close pw"):
         sys.exit()
     elif (moreoptions == "update pyweather" or moreoptions == "update"
-          or moreoptions == "update pw" or moreoptions == "3"
+          or moreoptions == "update pw" or moreoptions == "4"
           or moreoptions == "check for pyweather updates"):
         if verbosity == True:
             logger.info("Selected update.")
@@ -832,6 +834,10 @@ while True:
             print(Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
             print(Fore.RED + "Error 53, pyweather.py")
             continue
+    elif (moreoptions == "4" or moreoptions == "view almanac"
+          or moreoptions == "almanac" or moreoptions == "view almanac for today"
+          or moreoptions == "view the almanac"):
+        print("I wish instant coding was a thing.")
     else:
         if verbosity == True:
             logger.warn("Input could not be understood!")
