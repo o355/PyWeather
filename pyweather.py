@@ -721,8 +721,8 @@ while True:
           or moreoptions == "check for pyweather updates"):
         if verbosity == True:
             logger.info("Selected update.")
-        buildnumber = 31
-        buildversion = "0.3.1 beta"
+        buildnumber = 33
+        buildversion = "0.3.3 beta"
         if verbosity == True:
             logger.debug("buildnumber: %s ; buildversion: %s" %
                          (buildnumber, buildversion))
@@ -834,7 +834,7 @@ while True:
             print(Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
             print(Fore.RED + "Error 53, pyweather.py")
             continue
-    elif (moreoptions == "4" or moreoptions == "view almanac"
+    elif (moreoptions == "3" or moreoptions == "view almanac"
           or moreoptions == "almanac" or moreoptions == "view almanac for today"
           or moreoptions == "view the almanac"):
         print("I wish instant coding was a thing.")
