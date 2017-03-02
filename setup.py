@@ -403,6 +403,7 @@ try:
     test_conditions = str(test_json['current_observation']['temp_f'])
     if verbosity == True:
         logger.debug("test_conditions: %s" % test_conditions)
+    print("Yay! Your API key is valid and works.")
 except:
     if verbosity == True:
         logger.error("Error! Is the API key invalid?")
