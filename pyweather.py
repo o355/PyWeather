@@ -12,7 +12,7 @@
 # 2. This program is 25% complete, meaning it's FAR from what it can do.
 # 3. There is no setup.py file. Get the API key on your own, and download
 # necessary modules through PIP.
-# 4. Progress will be slow and steady with TermWeather. Trust me.
+# 4. Progress will be slow and steady with PyWeather. Trust me.
 
 
 # Verbosity works like this (for now)
@@ -518,14 +518,14 @@ while True:
             print(Fore.CYAN + "Conditions: " + Fore.YELLOW + hourly_condition)
             print(Fore.CYAN + "Temperature: " + Fore.YELLOW + hourly_tempf 
                   + "°F (" + hourly_tempc + "°C)")
+            print(Fore.CYAN + "Feels like: " + Fore.YELLOW + hourly_feelsLikeF
+                  + "°F (" + hourly_feelsLikeC + "°C)")
             print(Fore.CYAN + "Dew Point: " + Fore.YELLOW + hourly_dewpointF
                   + "°F (" + hourly_dewpointC + "°C)")
             print(Fore.CYAN + "Wind: " + Fore.YELLOW + hourly_windMPH
                   + " mph (" + hourly_windKPH + " kph) blowing to the " +
                   hourly_windDir + " (" + hourly_windDegrees + "°)")
             print(Fore.CYAN + "Humidity: " + Fore.YELLOW + hourly_humidity + "%")
-            print(Fore.CYAN + "Feels like: " + Fore.YELLOW + hourly_feelsLikeF
-                  + "°F (" + hourly_feelsLikeC + "°C)")
             print(Fore.CYAN + "Precipiation for the hour: " + Fore.YELLOW +
                   hourly_precipIn + " in (" + hourly_precipMm + " mm)")
             if hourly_snowData == True:
