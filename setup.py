@@ -343,13 +343,15 @@ if apikey_confirm == "no":
     print("If you got the API key wrong, please close out of setup, and try again. ")
 
 print("Now saving your API key...")
+open('storage//apikey.txt', 'w').close()
+
 with open("storage//apikey.txt", 'a') as out:
     if verbosity == True:
         logger.debug("out: %s" % out)
     out.write(apikey_input)
     out.close()
     if verbosity == True:
-        logger.debug("Performed ops: out.write(apikey_input), out.close()")
+        logger.debug("Performed ops: overwrite apikey.txt, out.write(apikey_input), out.close()")
     
 # once a config file is properly added, options for configuring the config will go here
 
