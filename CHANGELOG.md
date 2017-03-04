@@ -2,6 +2,14 @@
 
 Quick note: While in beta, commits are not counted as versions. When I decide to push a release, I push a release. There will also be a running changelog for the in-development version, so I'm not remembering every single change I made in the version.
 
+## version 0.4 beta (The Almanac Update) - To be released
+* Adds the almanac to PyWeather
+* Fixes a bug in which setup would screw with the API key when entering nothing on the second run
+
+## version 0.3.3 beta (The "Relapse of 0.2.3" Update) - Released 3/2/2017
+* Updater fixed
+* Minor UI changes
+
 ## version 0.3.2 beta (The More Verbosity Update) - Released 3/1/2017
 * Adds verbosity to the updater
 * Adds verbosity to setup
