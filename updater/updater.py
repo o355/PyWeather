@@ -38,8 +38,11 @@ except:
         logger.warn("Couldn't check for updates! Is there an internet connection?")
     print(Style.BRIGHT + Fore.RED + "Couldn't check for updates.")
     print("Make sure GitHub user content is unblocked, and you have an internet connection.")
-    print("Error 54, pyweather.py")
+    print("Error 54, updater.py")
+    print("Press enter to exit.")
+    input()
     sys.exit()
+    
 versionJSON = json.load(reader(versioncheck))
 if jsonVerbosity == True:
     logger.debug("versionJSON: %s" % versionJSON)
@@ -66,7 +69,10 @@ if buildnumber >= version_buildNumber:
     print(Style.BRIGHT + Fore.GREEN + "PyWeather is up to date!")
     print("You have version: " + Fore.CYAN + buildversion)
     print(Fore.GREEN + "The latest version is: " + Fore.CYAN + version_latestVersion)
+    print(Fore.GREEN + "Press enter to exit.")
+    input()
     sys.exit()
+
 elif buildnumber < version_buildNumber:
     print("")
     if verbosity == True:
@@ -100,7 +106,9 @@ elif buildnumber < version_buildNumber:
             print(Fore.RED + "Couldn't download the latest version.")
             print("Make sure GitHub user content is unblocked, "
                     + "and you have an internet connection.")
-            print("Error 55, pyweather.py")
+            print("Error 55, updater.py")
+            print("Press enter to exit.")
+            input()
             sys.exit()
             
         if verbosity == True:
@@ -109,18 +117,25 @@ elif buildnumber < version_buildNumber:
         print(Fore.YELLOW + "The latest version of PyWeather was downloaded " +
                     "to the base directory of PyWeather, and saved as " +
                     Fore.CYAN + version_latestFileName + Fore.YELLOW + ".")
+        print("Press enter to exit.")
+        input()
         sys.exit()
+        
     elif downloadLatest == "no":
         if verbosity == True:
             logger.debug("Not downloading the latest version.")
         print(Fore.YELLOW + "Not downloading the latest version of PyWeather.")
         print("For reference, you can download the latest version of PyWeather at:")
         print(Fore.CYAN + version_latestURL)
+        print(Fore.YELLOW + "Press enter to exit.")
+        input()
         sys.exit()
     else:
         if verbosity == True:
             logger.warn("Input could not be understood!")
         print(Fore.GREEN + "Could not understand what you said.")
+        print(Fore.GREEN + "Press enter to exit.")
+        input()
         sys.exit()
 else:
     if verbosity == True:
@@ -136,4 +151,7 @@ else:
             except:
                 logger.error("Variable buildnumber is corrupt.")
     print(Style.BRIGHT + Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
-    print(Fore.RED + "Error 53, pyweather.py")
+    print(Fore.RED + "Error 53, updater.py")
+    print("Press enter to exit.")
+    input()
+    sys.exit()
