@@ -1,4 +1,4 @@
-# PyWeather 0.4 beta
+# PyWeather 0.4.1 beta
 # (c) 2017 o355, GNU GPL 3.0.
 # If there any random imports below here, blame Eclipse.
 
@@ -36,7 +36,7 @@ except:
 
 if verbosity == True:
     import logging
-    logger = logging.getLogger('pyweather_0.4beta')
+    logger = logging.getLogger('pyweather_0.4.1beta')
     logger.setLevel(logging.DEBUG)
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)
@@ -356,17 +356,17 @@ print(Style.BRIGHT + Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + loca
 print(Fore.YELLOW + summary_lastupdated)
 print("")
 print(Fore.YELLOW + "Currently:")
-print(Fore.YELLOW + "Current conditions: " + Fore.YELLOW + summary_overall)
-print(Fore.YELLOW + "Current temperature: " + Fore.YELLOW + summary_tempf + "°F (" + summary_tempc + "°C)")
-print(Fore.YELLOW + "And it feels like: " + Fore.YELLOW + summary_feelslikef
+print(Fore.YELLOW + "Current conditions: " + Fore.CYAN + summary_overall)
+print(Fore.YELLOW + "Current temperature: " + Fore.CYAN + summary_tempf + "°F (" + summary_tempc + "°C)")
+print(Fore.YELLOW + "And it feels like: " + Fore.CYAN + summary_feelslikef
       + "°F (" + summary_tempc + "°C)")
-print(Fore.YELLOW + "Current dew point: " + Fore.YELLOW + summary_dewPointF
+print(Fore.YELLOW + "Current dew point: " + Fore.CYAN + summary_dewPointF
       + "°F (" + summary_dewPointC + "°C)")
 if winddata == True:
-    print(Fore.YELLOW + "Current wind: " + Fore.YELLOW + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
+    print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
 else:
     print(Fore.YELLOW + "Wind data is not available for this location.")
-print(Fore.YELLOW + "Current humidity: " + Fore.YELLOW + summary_humidity)
+print(Fore.YELLOW + "Current humidity: " + Fore.CYAN + summary_humidity)
 print("")
 if sundata_summary == True:
     print(Fore.YELLOW + "The sunrise and sunset:")
@@ -794,8 +794,8 @@ while True:
           or moreoptions == "check for pyweather updates"):
         if verbosity == True:
             logger.info("Selected update.")
-        buildnumber = 40
-        buildversion = "0.4 beta"
+        buildnumber = 41
+        buildversion = "0.4.1 beta"
         if verbosity == True:
             logger.debug("buildnumber: %s ; buildversion: %s" %
                          (buildnumber, buildversion))
