@@ -1,6 +1,5 @@
 # PyWeather 0.4 beta
 # (c) 2017 o355, GNU GPL 3.0.
-# Powered by Wunderground
 # If there any random imports below here, blame Eclipse.
 
 # ===========================
@@ -14,14 +13,27 @@
 # necessary modules through PIP.
 # 4. Progress will be slow and steady with PyWeather. Trust me.
 
+import configparser
 
-# Verbosity works like this (for now)
-# Turn on verbosity for, well, verbosity! jsonVerbosity outputs
-# the full JSON acquired (aka spams 50 lines of console), so it's
-# a separate, and now, more obvious switch.
+config = configparser.ConfigParser()
+config.read('storage//config.ini')
+try:
+    sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
+    # almanac data on the summary screen isn't working. in 0.4.1 it will!
+    almanac_summary = config.getboolean('SUMMARY', 'almanac_summary')
+    verbosity = config.getboolean('VERBOSITY', 'verbosity')
+    jsonVerbosity = config.getboolean('VERBOSITY', 'json_verbosity')
+except:
+    print("Couldn't load your config file. Make sure your spelling is correct.")
+    print("Setting variables to default...")
+    print("")
+    sundata_summary = True
+    almanac_summary = False
+    verbosity = False
+    jsonVerbosity = False
+# Where'd the verbosity switches go?
+# storage/config.ini. Have a lovely day!
 
-verbosity = False
-jsonVerbosity = False
 if verbosity == True:
     import logging
     logger = logging.getLogger('pyweather_0.4beta')
@@ -34,7 +46,6 @@ import sys
 import json
 import time
 import shutil
-import configparser
 from colorama import init, Fore, Style
 import codecs
 from geopy.geocoders import GoogleV3
@@ -43,10 +54,6 @@ import geocoder
 geolocator = GoogleV3()
 geolocator2 = Nominatim()
 
-config = configparser.ConfigParser()
-config.read('storage//config.ini')
-sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
-almanac_summary = config['SUMMARY']['almanac_summary']
 
 if verbosity == True:
     logger.debug(Fore.RED + "Begin API keyload...")

@@ -1,4 +1,4 @@
-# PyWeather Setup 0.3.3 beta
+# PyWeather Setup 0.4 beta
 # (c) 2017, o355, licensed under GNU GPL v3
 # If any random imports show beneath here, blame Eclipse.
 
@@ -26,11 +26,12 @@ try:
     import urllib.request
     import shutil
     import time
+    import configparser
 except:
     if verbosity == True:
-        logger.error("Odd, 4 default libraries are not available...")
+        logger.error("Odd, 5 default libraries are not available...")
     print("Hmm...I tried to import default libraries, but ran into an error.")
-    print("Make sure that sys, urllib.request, shutil, and time are available "
+    print("Make sure that sys, urllib.request, shutil, time, and configparser are available "
           + "with your installation of Python.")
 neededLibraries = 0
 if sys.version_info[0] < 3:
