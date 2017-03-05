@@ -1,12 +1,17 @@
+# PyWeather Updater - 0.4 beta
+# (c) 2017, o355, GNU GPL 3.0
+
 
 import sys
 import json
 import urllib.request
 import codecs
+import shutil
 reader = codecs.getreader("utf-8")
 from colorama import Fore, Style, init
 init()
 
+# For now, it's a variable.
 verbosity = False
 jsonVerbosity = False
 
@@ -85,49 +90,50 @@ elif buildnumber < version_buildNumber:
         try:
             with urllib.request.urlopen(version_latestURL) as update_response, open(version_latestFileName, 'wb') as update_out_file:
                 if verbosity == True:
-                            logger.debug("update_response: %s ; update_out_file: %s" %
-                                         (update_response, update_out_file))
-                        shutil.copyfileobj(update_response, update_out_file)
-                except:
-                    if verbosity == True:
-                        logger.warn("Couldn't download the latest version!")
-                        logger.warn("Is the internet online?")
-                    print(Fore.RED + "Couldn't download the latest version.")
-                    print("Make sure GitHub user content is unblocked, "
-                          + "and you have an internet connection.")
-                    print("Error 55, pyweather.py")
-                    continue
-                if verbosity == True:
-                    logger.debug("Latest version was saved, filename: %s"
-                                 % version_latestFileName)
-                print(Fore.YELLOW + "The latest version of PyWeather was downloaded " +
-                      "to the base directory of PyWeather, and saved as " +
-                      Fore.CYAN + version_latestFileName + Fore.YELLOW + ".")
-                continue
-            elif downloadLatest == "no":
-                if verbosity == True:
-                    logger.debug("Not downloading the latest version.")
-                print(Fore.YELLOW + "Not downloading the latest version of PyWeather.")
-                print("For reference, you can download the latest version of PyWeather at:")
-                print(Fore.CYAN + version_latestURL)
-                continue
-            else:
-                if verbosity == True:
-                    logger.warn("Input could not be understood!")
-                print(Fore.GREEN + "Could not understand what you said.")
-                continue
-        else:
+                    logger.debug("update_response: %s ; update_out_file: %s" %
+                                 (update_response, update_out_file))
+                shutil.copyfileobj(update_response, update_out_file)
+        except:
             if verbosity == True:
-                logger.error("PW updater failed. Build comparison below.")
-                try:
-                    logger.error("local build: %s ; updater build: %s"
-                                % (buildnumber, version_buildNumber))
-                except:
-                    logger.error("Variables are corrupted, or a typo was made.")
-                    logger.error("Trying to list variables 1 more time...")
-                    try:
-                        logger.error("buildnumber: %s" % buildnumber)
-                    except:
-                        logger.error("Variable buildnumber is corrupt.")
-            print(Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
-            print(Fore.RED + "Error 53, pyweather.py")
+                logger.warn("Couldn't download the latest version!")
+                logger.warn("Is the internet online?")
+            print(Fore.RED + "Couldn't download the latest version.")
+            print("Make sure GitHub user content is unblocked, "
+                    + "and you have an internet connection.")
+            print("Error 55, pyweather.py")
+            sys.exit()
+            
+        if verbosity == True:
+            logger.debug("Latest version was saved, filename: %s"
+                        % version_latestFileName)
+        print(Fore.YELLOW + "The latest version of PyWeather was downloaded " +
+                    "to the base directory of PyWeather, and saved as " +
+                    Fore.CYAN + version_latestFileName + Fore.YELLOW + ".")
+        sys.exit()
+    elif downloadLatest == "no":
+        if verbosity == True:
+            logger.debug("Not downloading the latest version.")
+        print(Fore.YELLOW + "Not downloading the latest version of PyWeather.")
+        print("For reference, you can download the latest version of PyWeather at:")
+        print(Fore.CYAN + version_latestURL)
+        sys.exit()
+    else:
+        if verbosity == True:
+            logger.warn("Input could not be understood!")
+        print(Fore.GREEN + "Could not understand what you said.")
+        sys.exit()
+else:
+    if verbosity == True:
+        logger.error("PW updater failed. Build comparison below.")
+        try:
+            logger.error("local build: %s ; updater build: %s"
+                        % (buildnumber, version_buildNumber))
+        except:
+            logger.error("Variables are corrupted, or a typo was made.")
+            logger.error("Trying to list variables 1 more time...")
+            try:
+                logger.error("buildnumber: %s" % buildnumber)
+            except:
+                logger.error("Variable buildnumber is corrupt.")
+    print(Style.BRIGHT + Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
+    print(Fore.RED + "Error 53, pyweather.py")
