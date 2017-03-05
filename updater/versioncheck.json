@@ -1,10 +1,10 @@
 {
 	"updater": {
 		"apiversion": "1.1",
-		"latestbuild": "33",
-		"latestversion": "0.3.3 beta",
-		"latesturl": "https://github.com/o355/pyweather/releases/download/0.3.3-beta/pyweather-0.3.3beta.zip",
-		"latestfilename": "pyweather-0.3.3beta.zip",
-		"releasedate": "3/2/2017"
+		"latestbuild": "40",
+		"latestversion": "0.4 beta",
+		"latesturl": "https://github.com/o355/pyweather/releases/download/0.4-beta/pyweather-0.4beta.zip",
+		"latestfilename": "pyweather-0.4beta.zip",
+		"releasedate": "3/4/2017"
 	}
 }
