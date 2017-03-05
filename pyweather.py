@@ -1,4 +1,4 @@
-# PyWeather 0.3.3 beta
+# PyWeather 0.4 beta
 # (c) 2017 o355, GNU GPL 3.0.
 # Powered by Wunderground
 # If there any random imports below here, blame Eclipse.
@@ -24,7 +24,7 @@ verbosity = False
 jsonVerbosity = False
 if verbosity == True:
     import logging
-    logger = logging.getLogger('pyweather_0.3.2beta')
+    logger = logging.getLogger('pyweather_0.4beta')
     logger.setLevel(logging.DEBUG)
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)
@@ -60,13 +60,14 @@ if verbosity == True:
 # for logo layout, but, seriously. This is a terminal. It's this
 # or terminal logos.
 
+
 # I think they more specifically target apps with the logo ToS,
 # and not terminal scripts that a user needs to obtain an API
 # key to use.
 
 # Sorry WU. I still love you.
 
-print(Fore.RESET + "Welcome to PyWeather - Powered by Wunderground.")
+print("Welcome to PyWeather - Powered by Wunderground.")
 print("Please enter a location to get weather information for.")
 locinput = input("Input here: ")
 print("Sweet! Getting your weather!")
@@ -721,8 +722,8 @@ while True:
           or moreoptions == "check for pyweather updates"):
         if verbosity == True:
             logger.info("Selected update.")
-        buildnumber = 33
-        buildversion = "0.3.3 beta"
+        buildnumber = 40
+        buildversion = "0.4 beta"
         if verbosity == True:
             logger.debug("buildnumber: %s ; buildversion: %s" %
                          (buildnumber, buildversion))
@@ -837,7 +838,41 @@ while True:
     elif (moreoptions == "3" or moreoptions == "view almanac"
           or moreoptions == "almanac" or moreoptions == "view almanac for today"
           or moreoptions == "view the almanac"):
-        print("I wish instant coding was a thing.")
+        print(Fore.RED + "Loading...")
+        print("")
+        print(almanacurl)
+        almanacJSON = urllib.request.urlopen(almanacurl)
+        almanac_json = json.load(reader(almanacJSON))
+        almanac_airportCode = almanac_json['almanac']['airport_code']
+        almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
+        almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
+        almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
+        almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
+        almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
+        almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
+        almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
+        almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
+        almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
+        almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
+        
+        print(Fore.YELLOW + "Here's the almanac for: " + Fore.CYAN +
+              almanac_airportCode + Fore.YELLOW + " (the nearest airport to you)")
+        print("")
+        print(Fore.YELLOW + "Record High: " + Fore.CYAN + almanac_recordHighF + "°F ("
+              + almanac_recordHighC + "°C)")
+        print(Fore.YELLOW + "With the record being set in: " + Fore.CYAN
+              + almanac_recordHighYear)
+        print(Fore.YELLOW + "Normal High: " + Fore.CYAN + almanac_normalHighF
+              + "°F (" + almanac_normalHighC + "°C)")
+        print("")
+        print(Fore.YELLOW + "Record Low: " + Fore.CYAN + almanac_recordLowF + "°F ("
+              + almanac_recordLowC + "°C)")
+        print(Fore.YELLOW + "With the record being set in: " + Fore.CYAN
+              + almanac_recordLowYear)
+        print(Fore.YELLOW + "Normal Low: " + Fore.CYAN + almanac_normalLowF + "°F ("
+              + almanac_normalLowC + "°C)")
+        print("")
+     
     else:
         if verbosity == True:
             logger.warn("Input could not be understood!")
