@@ -34,14 +34,19 @@ import sys
 import json
 import time
 import shutil
+import configparser
 from colorama import init, Fore, Style
 import codecs
 from geopy.geocoders import GoogleV3
 from geopy.geocoders import Nominatim
-from datetime import datetime
 import geocoder
 geolocator = GoogleV3()
 geolocator2 = Nominatim()
+
+config = configparser.ConfigParser()
+config.read('storage//config.ini')
+sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
+almanac_summary = config['SUMMARY']['almanac_summary']
 
 if verbosity == True:
     logger.debug(Fore.RED + "Begin API keyload...")
@@ -120,6 +125,8 @@ currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + la
 f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast/q/' + latstr + "," + lonstr + '.json'
 f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + "," + lonstr + '.json'
 hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + "," + lonstr + '.json'
+astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + "," + lonstr + '.json'
+
 if verbosity == False:
     print("[##--------] | 14% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 if verbosity == True:
@@ -127,6 +134,7 @@ if verbosity == True:
     logger.debug("f3dayurl: %s" % currenturl)
     logger.debug("f10dayurl: %s" % currenturl)
     logger.debug("hourlyurl: %s" % currenturl)
+    logger.debug("astronomyurl: %s" % astronomyurl)
     logger.info("End API var declare...")
     logger.info("Start codec change...")
 
@@ -143,22 +151,28 @@ if verbosity == True:
 try:
     summaryJSON = urllib.request.urlopen(currenturl)
     if verbosity == False:
-        print("[###-------] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[###-------] | 28% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
     forecastJSON = urllib.request.urlopen(f3dayurl)
     if verbosity == False:
-        print("[####------] | 48% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired forecast 3day JSON, end result: %s" % forecastJSON)
     forecast10JSON = urllib.request.urlopen(f10dayurl)
     if verbosity == False:
-        print("[#####-----] | 58% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[#####-----] | 52% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
+    if sundata_summary == True:
+        sundataJSON = urllib.request.urlopen(astronomyurl)
+        if verbosity == False:
+            print("[######----] | 61% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        if verbosity == True:
+            logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
     hourlyJSON = urllib.request.urlopen(hourlyurl)
     if verbosity == False:
-        print("[#######---] | 72% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[#######---] | 68% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
 except:
@@ -191,8 +205,14 @@ if verbosity == False:
 hourly_json = json.load(reader(hourlyJSON))
 if jsonVerbosity == True:
     logger.debug("hourly_json loaded with: %s" % hourly_json)
+if sundata_summary == True:
+    astronomy_json = json.load(reader(sundataJSON))
+    if verbosity == False:
+        print("[#########-] | 88% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    if jsonVerbosity == True:
+        logger.debug("astronomy_json loaded with: %s" % astronomy_json)
 if verbosity == True:
-    logger.info("4 JSONs loaded...")
+    logger.info("4-5 JSONs loaded...")
     logger.info("Start 2nd geocoder...")
 
 # The 2nd geocoder hit will get removed in future versions, I believe geopy
@@ -276,6 +296,43 @@ summary_dewPointC = str(current_json['current_observation']['dewpoint_c'])
 if verbosity == True:
     logger.info("summary_dewPointF: %s ; summary_dewpointC: %s"
                 % (summary_dewPointF, summary_dewPointC))
+    
+if sundata_summary == True:
+    SR_minute = int(astronomy_json['moon_phase']['sunrise']['minute'])
+    SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
+    if verbosity == True:
+        logger.debug("SR_minute: %s ; SR_hour: %s" %
+                     (SR_minute, SR_hour))
+    if SR_hour > 12:
+        SR_hour = SR_hour - 12
+        SR_hour = str(SR_hour)
+        SR_minute = str(SR_minute)
+        sunrise_time = SR_hour + ":" + SR_minute + " PM"
+    elif SR_hour == 12:
+        SR_hour = str(SR_hour)
+        SR_minute = str(SR_minute)
+        sunrise_time = SR_hour + ":" + SR_minute + " PM"
+    else:
+        SR_hour = str(SR_hour)
+        SR_minute = str(SR_minute)
+        sunrise_time = SR_hour + ":" + SR_minute + " AM"
+
+    SS_minute = int(astronomy_json['moon_phase']['sunset']['minute'])
+    SS_hour = int(astronomy_json['moon_phase']['sunset']['hour'])
+    if SS_hour > 12:
+        SS_hour = SS_hour - 12
+        SS_hour = str(SS_hour)
+        SS_minute = str(SS_minute)
+        sunset_time = SS_hour + ":" + SS_minute + " PM"
+    elif SS_hour == 12:
+        SS_hour = str(SS_hour)
+        SS_minute = str(SS_minute)
+        sunset_time = SS_hour + ":" + SS_minute + " PM"
+    else:
+        SS_hour = str(SS_hour)
+        SS_minute = str(SS_minute)
+        sunset_time = SS_hour + ":" + SS_minute + " AM"
+
 if verbosity == True:
     logger.info("Initalize color...")
 init()
@@ -288,21 +345,26 @@ if verbosity == True:
 
 summaryHourlyIterations = 0
 
-print(Style.BRIGHT + Fore.CYAN + "Here's the weather for: " + Fore.YELLOW + location2.city + ", " + location2.state)
+print(Style.BRIGHT + Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + location2.city + ", " + location2.state)
 print(Fore.YELLOW + summary_lastupdated)
 print("")
 print(Fore.YELLOW + "Currently:")
-print(Fore.CYAN + "Current conditions: " + Fore.YELLOW + summary_overall)
-print(Fore.CYAN + "Current temperature: " + Fore.YELLOW + summary_tempf + "°F (" + summary_tempc + "°C)")
-print(Fore.CYAN + "And it feels like: " + Fore.YELLOW + summary_feelslikef
+print(Fore.YELLOW + "Current conditions: " + Fore.YELLOW + summary_overall)
+print(Fore.YELLOW + "Current temperature: " + Fore.YELLOW + summary_tempf + "°F (" + summary_tempc + "°C)")
+print(Fore.YELLOW + "And it feels like: " + Fore.YELLOW + summary_feelslikef
       + "°F (" + summary_tempc + "°C)")
-print(Fore.CYAN + "Current dew point: " + Fore.YELLOW + summary_dewPointF
+print(Fore.YELLOW + "Current dew point: " + Fore.YELLOW + summary_dewPointF
       + "°F (" + summary_dewPointC + "°C)")
 if winddata == True:
-    print(Fore.CYAN + "Current wind: " + Fore.YELLOW + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
+    print(Fore.YELLOW + "Current wind: " + Fore.YELLOW + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
 else:
     print(Fore.YELLOW + "Wind data is not available for this location.")
-print(Fore.CYAN + "Current humidity: " + Fore.YELLOW + summary_humidity)
+print(Fore.YELLOW + "Current humidity: " + Fore.YELLOW + summary_humidity)
+print("")
+if sundata_summary == True:
+    print(Fore.YELLOW + "The sunrise and sunset:")
+    print(Fore.YELLOW + "Sunrise: " + Fore.CYAN + sunrise_time)
+    print(Fore.YELLOW + "Sunset: " + Fore.CYAN + sunset_time)
 print("")
 print(Fore.YELLOW + "The hourly forecast:")
 
@@ -311,7 +373,7 @@ for hour in hourly_json['hourly_forecast']:
     hourly_tempf = hour['temp']['english']
     hourly_tempc = hour['temp']['metric']
     hourly_condition = hour['condition']
-    print(Fore.CYAN + hourly_time + ": " + Fore.YELLOW + hourly_condition + " with a temperature of " + hourly_tempf + "°F (" + hourly_tempc + "°C)")
+    print(Fore.YELLOW + hourly_time + ": " + Fore.CYAN + hourly_condition + " with a temperature of " + hourly_tempf + "°F (" + hourly_tempc + "°C)")
     summaryHourlyIterations = summaryHourlyIterations + 1
     if summaryHourlyIterations == 6:
         break
@@ -328,10 +390,11 @@ for day in forecast3_json['forecast']['simpleforecast']['forecastday']:
     forecast3_lowf = str(day['low']['fahrenheit'])
     forecast3_lowc = str(day['low']['celsius'])
     forecast3_conditions = day['conditions']
-    print(Fore.CYAN + forecast3_weekday + ", " + forecast3_month + "/" + forecast3_day + ": " + Fore.YELLOW 
+    print(Fore.YELLOW + forecast3_weekday + ", " + forecast3_month + "/" + forecast3_day + ": " + Fore.CYAN
           + forecast3_conditions + " with a high of " + forecast3_highf + "°F (" +
           forecast3_highc + "°C), and a low of " + forecast3_lowf + "°F (" +
           forecast3_lowc + "°C).")
+    
 
 # In this part of PyWeather, you'll find comments indicating where things end/begin.
 # This is to help when coding, and knowing where things are.
@@ -347,9 +410,11 @@ while True:
           + Fore.YELLOW + ")")
     print("- View the almanac for today (or press " + Fore.CYAN + "3"
           + Fore.YELLOW + ")")
-    print("- Check for PyWeather updates (or press " + Fore.CYAN + "4"
+    print("- View detailed sun/moon rise/set data (or press " + Fore.CYAN +
+          "4" + Fore.YELLOW + ")")
+    print("- Check for PyWeather updates (or press " + Fore.CYAN + "5"
           + Fore.YELLOW + ")")
-    print("- Close PyWeather (or press " + Fore.CYAN + "5" + Fore.YELLOW
+    print("- Close PyWeather (or press " + Fore.CYAN + "6" + Fore.YELLOW
           + ")")
     moreoptions = input("Enter here: ").lower()
     if verbosity == True:
@@ -406,31 +471,31 @@ while True:
         if verbosity == True:
             logger.debug("current_precipTodayIn: %s ; current_precipTodayMm: %s"
                          % (current_precipTodayIn, current_precipTodayMm))
-        print(Fore.CYAN + "Here's the detailed current weather for: " + Fore.YELLOW + location2.city + ", " + location2.state)
-        print(Fore.CYAN + summary_lastupdated)
+        print(Fore.YELLOW + "Here's the detailed current weather for: " + Fore.CYAN + location2.city + ", " + location2.state)
+        print(Fore.YELLOW + summary_lastupdated)
         print("")
-        print(Fore.CYAN + "Current conditions: " + Fore.YELLOW + summary_overall)
-        print(Fore.CYAN + "Current temperature: " + Fore.YELLOW + summary_tempf + "°F (" + summary_tempc + "°C)")
-        print(Fore.CYAN + "And it feels like: " + Fore.YELLOW + current_feelsLikeF
+        print(Fore.YELLOW + "Current conditions: " + Fore.CYAN + summary_overall)
+        print(Fore.YELLOW + "Current temperature: " + Fore.CYAN + summary_tempf + "°F (" + summary_tempc + "°C)")
+        print(Fore.YELLOW + "And it feels like: " + Fore.CYAN + current_feelsLikeF
               + "°F (" + current_feelsLikeC + "°C)")
-        print(Fore.CYAN + "Current dew point: " + Fore.YELLOW + summary_dewPointF
+        print(Fore.YELLOW + "Current dew point: " + Fore.CYAN + summary_dewPointF
               + "°F (" + summary_dewPointC + "°C)")
         if winddata == True:
-            print(Fore.CYAN + "Current wind: " + Fore.YELLOW + summary_windmphstr + 
+            print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + 
                   " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir 
                   + " (" + current_windDegrees + " degrees)")
         else:
             print(Fore.YELLOW + "Wind data is not available for this location.")
-        print(Fore.CYAN + "Current humidity: " + Fore.YELLOW + summary_humidity)
-        print(Fore.CYAN + "Current pressure: " + Fore.YELLOW + current_pressureInHg
+        print(Fore.YELLOW + "Current humidity: " + Fore.CYAN + summary_humidity)
+        print(Fore.YELLOW + "Current pressure: " + Fore.CYAN + current_pressureInHg
               + " inHg (" + current_pressureMb + " mb), " + current_pressureTrend2)
-        print(Fore.CYAN + "Current visibility: " + Fore.YELLOW + current_visibilityMi
+        print(Fore.YELLOW + "Current visibility: " + Fore.CYAN + current_visibilityMi
               + " miles (" + current_visibilityKm + " km)")
-        print(Fore.CYAN + "UV Index: " + Fore.YELLOW + current_UVIndex)
-        print(Fore.CYAN + "Precipitation in the last hour: " + Fore.YELLOW
+        print(Fore.YELLOW + "UV Index: " + Fore.CYAN + current_UVIndex)
+        print(Fore.YELLOW + "Precipitation in the last hour: " + Fore.CYAN
               + current_precip1HrIn + " inches (" + current_precip1HrMm
               + " mm)")
-        print(Fore.CYAN + "Precipitation so far today: " + Fore.YELLOW
+        print(Fore.YELLOW + "Precipitation so far today: " + Fore.CYAN
               + current_precipTodayIn + " inches (" + current_precipTodayMm
               + " mm)")
         continue
@@ -447,7 +512,7 @@ while True:
         if verbosity == True:
             logger.info("Selected view more hourly...")
         detailedHourlyIterations = 0
-        print(Fore.CYAN + "Here's the detailed hourly forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
+        print(Fore.YELLOW + "Here's the detailed hourly forecast for: " + Fore.CYAN + location2.city + ", " + location2.state)
         for hour in hourly_json['hourly_forecast']:
             if verbosity == True:
                 logger.info("We're on iteration: %s" % detailedHourlyIterations)
@@ -516,25 +581,25 @@ while True:
             # hourly iteration will start BEFORE the previous iteration
             # prints out. This is normal, and no issues are caused by such.
             print(Fore.YELLOW + hourly_time + " on " + hourly_month + " " + hourly_day + ":")
-            print(Fore.CYAN + "Conditions: " + Fore.YELLOW + hourly_condition)
-            print(Fore.CYAN + "Temperature: " + Fore.YELLOW + hourly_tempf 
+            print(Fore.YELLOW + "Conditions: " + Fore.CYAN + hourly_condition)
+            print(Fore.YELLOW + "Temperature: " + Fore.CYAN + hourly_tempf 
                   + "°F (" + hourly_tempc + "°C)")
-            print(Fore.CYAN + "Feels like: " + Fore.YELLOW + hourly_feelsLikeF
+            print(Fore.YELLOW + "Feels like: " + Fore.CYAN + hourly_feelsLikeF
                   + "°F (" + hourly_feelsLikeC + "°C)")
-            print(Fore.CYAN + "Dew Point: " + Fore.YELLOW + hourly_dewpointF
+            print(Fore.YELLOW + "Dew Point: " + Fore.CYAN + hourly_dewpointF
                   + "°F (" + hourly_dewpointC + "°C)")
-            print(Fore.CYAN + "Wind: " + Fore.YELLOW + hourly_windMPH
+            print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly_windMPH
                   + " mph (" + hourly_windKPH + " kph) blowing to the " +
                   hourly_windDir + " (" + hourly_windDegrees + "°)")
-            print(Fore.CYAN + "Humidity: " + Fore.YELLOW + hourly_humidity + "%")
-            print(Fore.CYAN + "Precipiation for the hour: " + Fore.YELLOW +
+            print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly_humidity + "%")
+            print(Fore.YELLOW + "Precipiation for the hour: " + Fore.CYAN +
                   hourly_precipIn + " in (" + hourly_precipMm + " mm)")
             if hourly_snowData == True:
-                print(Fore.CYAN + "Snow for the next hour: " + Fore.YELLOW +
+                print(Fore.YELLOW + "Snow for the next hour: " + Fore.CYAN +
                       hourly_snowIn + " in (" + hourly_snowMm + " mm)")
-            print(Fore.CYAN + "Precipitation chance: " + Fore.YELLOW + 
+            print(Fore.YELLOW + "Precipitation chance: " + Fore.CYAN + 
                   hourly_precipChance + "%")
-            print(Fore.CYAN + "Barometric pressure: " + Fore.YELLOW +
+            print(Fore.YELLOW + "Barometric pressure: " + Fore.CYAN +
                   hourly_pressureInHg + " inHg (" + hourly_pressureMb
                   + " mb)")
             detailedHourlyIterations = detailedHourlyIterations + 1
@@ -667,38 +732,38 @@ while True:
                 logger.info("Printing weather data...")
             print("")
             print(Fore.YELLOW + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ":")
-            print(Fore.YELLOW + forecast10_conditions + Fore.CYAN + " with a high of "
-                  + Fore.YELLOW + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
-                  Fore.CYAN + " and a low of " + Fore.YELLOW + forecast10_lowf + "°F (" +
+            print(Fore.CYAN + forecast10_conditions + Fore.YELLOW + " with a high of "
+                  + Fore.CYAN + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
+                  Fore.YELLOW + " and a low of " + Fore.CYAN + forecast10_lowf + "°F (" +
                   forecast10_lowc + "°C)" + ".")
-            print(Fore.CYAN + "Total Precip: " + Fore.YELLOW +
+            print(Fore.YELLOW + "Total Precip: " + Fore.CYAN +
                   forecast10_precipTotalIn + " in (" + forecast10_precipTotalMm
                   + " mm)")
-            print(Fore.CYAN + "Precip during the day: " + Fore.YELLOW +
+            print(Fore.YELLOW + "Precip during the day: " + Fore.CYAN +
                   forecast10_precipDayIn + " in (" + forecast10_precipDayMm
                   + " mm)")
-            print(Fore.CYAN + "Precip during the night: " + Fore.YELLOW +
+            print(Fore.YELLOW + "Precip during the night: " + Fore.CYAN +
                   forecast10_precipNightIn + " in (" + forecast10_precipNightMm
                   + " mm)")
             if forecast10_snowTotalData == True:
-                print(Fore.CYAN + "Total snow: " + Fore.YELLOW +
+                print(Fore.YELLOW + "Total snow: " + Fore.CYAN +
                       forecast10_snowTotalIn + " in (" + forecast10_snowTotalCm
                       + " cm)")
             if forecast10_snowDayData == True:
-                print(Fore.CYAN + "Snow during the day: " + Fore.YELLOW + 
+                print(Fore.YELLOW + "Snow during the day: " + Fore.CYAN + 
                       forecast10_snowDayIn + " in (" + forecast10_snowDayCm
                       + " cm)")
             if forecast10_snowNightData == True:
-                print(Fore.CYAN + "Snow during the night: " + Fore.YELLOW +
+                print(Fore.YELLOW + "Snow during the night: " + Fore.CYAN +
                       forecast10_snowNightIn + " in (" + forecast10_snowNightCm
                       + " cm)")
-            print(Fore.CYAN + "Winds: " + Fore.YELLOW +
+            print(Fore.YELLOW + "Winds: " + Fore.CYAN +
                   forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
                   + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
                   + forecast10_maxWindKPH + " kph), "
                   + "and blowing " + forecast10_avgWindDir +
                   " (" + forecast10_avgWindDegrees + "°)")
-            print(Fore.CYAN + "Humidity: " + Fore.YELLOW +
+            print(Fore.YELLOW + "Humidity: " + Fore.CYAN +
                   forecast10_avgHumidity + "%")
             detailedForecastIterations = detailedForecastIterations + 1
             if detailedForecastIterations == 5:
@@ -715,10 +780,10 @@ while True:
                     if verbosity == True:
                         logger.info("Exiting to the main menu.")
     elif (moreoptions == "close pyweather" or moreoptions == "close"
-          or moreoptions == "5" or moreoptions == "close pw"):
+          or moreoptions == "6" or moreoptions == "close pw"):
         sys.exit()
     elif (moreoptions == "update pyweather" or moreoptions == "update"
-          or moreoptions == "update pw" or moreoptions == "4"
+          or moreoptions == "update pw" or moreoptions == "5"
           or moreoptions == "check for pyweather updates"):
         if verbosity == True:
             logger.info("Selected update.")
@@ -840,7 +905,7 @@ while True:
           or moreoptions == "view the almanac"):
         print(Fore.RED + "Loading...")
         print("")
-        print(almanacurl)
+        almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
         almanacJSON = urllib.request.urlopen(almanacurl)
         almanac_json = json.load(reader(almanacJSON))
         almanac_airportCode = almanac_json['almanac']['airport_code']
@@ -872,6 +937,112 @@ while True:
         print(Fore.YELLOW + "Normal Low: " + Fore.CYAN + almanac_normalLowF + "°F ("
               + almanac_normalLowC + "°C)")
         print("")
+    elif (moreoptions == "4" or moreoptions == "view sunrise"
+          or moreoptions == "view sunset" or moreoptions == "view moonrise"
+          or moreoptions == "view moonset"):
+        print(Fore.RED + "Loading...")
+        print("")
+        if sundata_summary == False:
+            try:
+                sundataJSON = urllib.request.urlopen(astronomyurl)
+            except:
+                print("Couldn't connect to Wunderground's API. "
+                      + "Make sure you have an internet connection.")
+            astronomy_json = json.load(reader(sundataJSON))
+            SR_minute = int(astronomy_json['moon_phase']['sunrise']['minute'])
+            SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
+            if verbosity == True:
+                logger.debug("SR_minute: %s ; SR_hour: %s" %
+                             (SR_minute, SR_hour))
+            if SR_hour > 12:
+                SR_hour = SR_hour - 12
+                SR_hour = str(SR_hour)
+                SR_minute = str(SR_minute)
+                sunrise_time = SR_hour + ":" + SR_minute + " PM"
+            elif SR_hour == 12:
+                SR_hour = str(SR_hour)
+                SR_minute = str(SR_minute)
+                sunrise_time = SR_hour + ":" + SR_minute + " PM"
+            else:
+                SR_hour = str(SR_hour)
+                SR_minute = str(SR_minute)
+                sunrise_time = SR_hour + ":" + SR_minute + " AM"
+
+            SS_minute = int(astronomy_json['moon_phase']['sunset']['minute'])
+            SS_hour = int(astronomy_json['moon_phase']['sunset']['hour'])
+            if SS_hour > 12:
+                SS_hour = SS_hour - 12
+                SS_hour = str(SS_hour)
+                SS_minute = str(SS_minute)
+                sunset_time = SS_hour + ":" + SS_minute + " PM"
+            elif SS_hour == 12:
+                SS_hour = str(SS_hour)
+                SS_minute = str(SS_minute)
+                sunset_time = SS_hour + ":" + SS_minute + " PM"
+            else:
+                SS_hour = str(SS_hour)
+                SS_minute = str(SS_minute)
+                sunset_time = SS_hour + ":" + SS_minute + " AM"
+                
+        moon_percentIlluminated = str(astronomy_json['moon_phase']['percentIlluminated'])
+        moon_age = str(astronomy_json['moon_phase']['ageOfMoon'])
+        moon_phase = astronomy_json['moon_phase']['phaseofMoon']
+        MR_minute = int(astronomy_json['moon_phase']['moonrise']['minute'])
+        MR_hour = int(astronomy_json['moon_phase']['moonrise']['hour'])
+            
+        if MR_hour > 12:
+            MR_hour = MR_hour - 12
+            MR_hour = str(MR_hour)
+            MR_minute = str(MR_minute)
+            moonrise_time = MR_hour + ":" + MR_minute + " PM"
+        elif MR_hour == 12:
+            MR_hour = str(MR_hour)
+            MR_minute = str(MR_minute)
+            moonrise_time = MR_hour + ":" + MR_minute + " PM"
+        else:
+            MR_hour = str(MR_hour)
+            MR_minute = str(MR_minute)
+            moonrise_time = MR_hour + ":" + MR_minute + " AM"
+        
+        try:    
+            MS_minute = int(astronomy_json['moon_phase']['moonset']['minute'])
+            MS_hour = int(astronomy_json['moon_phase']['moonset']['hour'])
+        except:
+            MS_data = False
+            moonset_time = "Unavailable"
+        
+        if MS_data == True:
+            if MS_hour > 12 and MS_data == True:
+                MS_hour = MS_hour - 12
+                MS_hour = str(MS_hour)
+                MS_minute = str(MS_minute)
+                moonset_time = MS_hour + ":" + MS_minute + " PM"
+            elif MS_hour == 12 and MS_data == True:
+                MS_hour = str(MS_hour)
+                MS_minute = str(MS_minute)
+                moonset_time = MS_hour + ":" + MS_minute + " PM"
+            elif MS_hour < 12 and MS_data == True:
+                MS_hour = str(MS_hour)
+                MS_minute = str(MS_minute)
+                moonset_time = MS_hour + ":" + MS_minute + " AM"
+            else:
+                MS_data = False
+                moonset_time = "Unavailable"
+        
+        print(Fore.YELLOW + "Here's the detailed sun/moon data for: " +
+              Fore.CYAN + location2.city + ", " + location2.state)
+        print("")
+        print(Fore.YELLOW + "Sunrise time: " + Fore.CYAN + sunrise_time)
+        print(Fore.YELLOW + "Sunset time: " + Fore.CYAN + sunset_time)
+        print(Fore.YELLOW + "Moonrise time: " + Fore.CYAN + moonrise_time)
+        print(Fore.YELLOW + "Moonset time: " + Fore.CYAN + moonset_time)
+        print("")
+        print(Fore.YELLOW + "Percent of the moon illuminated: "
+              + Fore.CYAN + moon_percentIlluminated + "%")
+        print(Fore.YELLOW + "Age of the moon: " + Fore.CYAN +
+              moon_age + " days")
+        print(Fore.YELLOW + "Phase of the moon: " + Fore.CYAN +
+              moon_phase)
      
     else:
         if verbosity == True:
