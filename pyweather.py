@@ -97,7 +97,7 @@ try:
     # Since the loading bars interfere with true verbosity logging, we turn
     # them off if verbosity is enabled (it isn't needed)
     if verbosity == False:
-        print("[#---------] | 5% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[#---------] | 3% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 except:
     if verbosity == True:
         logger.error("No connection to Google's geocoder!")
@@ -130,25 +130,26 @@ if verbosity == True:
 
 currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + "," + lonstr + '.json'
 f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast/q/' + latstr + "," + lonstr + '.json'
-f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + "," + lonstr + '.json'
 hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + "," + lonstr + '.json'
 astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + "," + lonstr + '.json'
+almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
 
 if verbosity == False:
-    print("[##--------] | 14% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    print("[##--------] | 9% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 if verbosity == True:
     logger.debug("currenturl: %s" % currenturl)
     logger.debug("f3dayurl: %s" % currenturl)
     logger.debug("f10dayurl: %s" % currenturl)
     logger.debug("hourlyurl: %s" % currenturl)
     logger.debug("astronomyurl: %s" % astronomyurl)
+    logger.debug("almanacurl: %s" % almanacurl)
     logger.info("End API var declare...")
     logger.info("Start codec change...")
 
 # Due to Python, we have to get the UTF-8 reader to properly parse the JSON we got.
 reader = codecs.getreader("utf-8")
 if verbosity == False:
-    print("[##--------] | 19% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    print("[##--------] | 12% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 if verbosity == True:
     logger.debug("reader: %s" % reader)
     logger.info("End codec change...")
@@ -158,25 +159,29 @@ if verbosity == True:
 try:
     summaryJSON = urllib.request.urlopen(currenturl)
     if verbosity == False:
-        print("[###-------] | 28% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[##--------] | 15% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
     forecast10JSON = urllib.request.urlopen(f10dayurl)
     if verbosity == False:
-        print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[###-------] | 24% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
     if sundata_summary == True:
         sundataJSON = urllib.request.urlopen(astronomyurl)
         if verbosity == False:
-            print("[#####-----] | 54% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+            print("[###-----] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         if verbosity == True:
             logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
     hourlyJSON = urllib.request.urlopen(hourlyurl)
     if verbosity == False:
-        print("[######----] | 64% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[####----] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
+    if almanac_summary == True:
+        almanacJSON = urllib.request.urlopen(almanacurl)
+        if verbosity == False:
+            print("[#####-----] | 49% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 except:
     if verbosity == True:
         logger.error("No connection to the API!! Is the connection offline?")
@@ -188,28 +193,32 @@ if verbosity == True:
     logger.info("End API fetch...")
     logger.info("Start JSON load...")
 if verbosity == False:
-    print("[#######---] | 70% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    print("[#####-----] | 55% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 current_json = json.load(reader(summaryJSON))
 if jsonVerbosity == True:
     logger.debug("current_json loaded with: %s" % current_json)
 if verbosity == False:
-    print("[#######---] | 74% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    print("[######----] | 63% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 forecast10_json = json.load(reader(forecast10JSON))
 if jsonVerbosity == True:
     logger.debug("forecast10_json loaded with: %s" % forecast10_json)
 if verbosity == False:
-    print("[########--] | 80% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    print("[#######---] | 71% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 hourly_json = json.load(reader(hourlyJSON))
 if jsonVerbosity == True:
     logger.debug("hourly_json loaded with: %s" % hourly_json)
 if sundata_summary == True:
     astronomy_json = json.load(reader(sundataJSON))
     if verbosity == False:
-        print("[#########-] | 86% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[########--] | 81% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("astronomy_json loaded with: %s" % astronomy_json)
+if almanac_summary == True:
+    almanac_json = json.load(reader(almanacJSON))
+    if verbosity == False:
+        print("[#########-] | 87% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 if verbosity == True:
-    logger.info("4-5 JSONs loaded...")
+    logger.info("3-5 JSONs loaded...")
     logger.info("Start 2nd geocoder...")
 
 # The 2nd geocoder hit will get removed in future versions, I believe geopy
