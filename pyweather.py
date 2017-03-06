@@ -388,8 +388,8 @@ for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
     forecast10_lowf = str(day['low']['fahrenheit'])
     forecast10_lowc = str(day['low']['celsius'])
     forecast10_conditions = day['conditions']
-    print(Fore.YELLOW + forecast3_weekday + ", " + forecast10_month + "/" + forecast10_day + ": " + Fore.CYAN
-          + forecast3_conditions + " with a high of " + forecast10_highf + "°F (" +
+    print(Fore.YELLOW + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ": " + Fore.CYAN
+          + forecast10_conditions + " with a high of " + forecast10_highf + "°F (" +
           forecast10_highc + "°C), and a low of " + forecast10_lowf + "°F (" +
           forecast10_lowc + "°C).")
     summary_forecastIterations = summary_forecastIterations + 1
