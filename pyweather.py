@@ -1014,6 +1014,7 @@ while True:
         try:    
             MS_minute = int(astronomy_json['moon_phase']['moonset']['minute'])
             MS_hour = int(astronomy_json['moon_phase']['moonset']['hour'])
+            MS_data = True
         except:
             MS_data = False
             moonset_time = "Unavailable"
