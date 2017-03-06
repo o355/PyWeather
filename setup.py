@@ -5,6 +5,7 @@
 # Same deal as the main script.
 # Verbosity turns on verbosity, jsonVerbosity outputs full JSONs.
 # Because I'm cool, you can have verbosity off, but JSON verbosity on.
+
 verbosity = False
 jsonVerbosity = False
 
