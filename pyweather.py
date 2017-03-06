@@ -18,7 +18,7 @@ import configparser
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
 try:
-    sundata_summary = config.getboolean('SUMMARY', 'sundaWta_summary')
+    sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
     # almanac data on the summary screen isn't working. in 0.4.1 it will!
     almanac_summary = config.getboolean('SUMMARY', 'almanac_summary')
     verbosity = config.getboolean('VERBOSITY', 'verbosity')
@@ -129,7 +129,7 @@ if verbosity == True:
 # Declare the API URLs with the API key, and latitude/longitude strings from earlier.
 
 currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + "," + lonstr + '.json'
-f3dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast/q/' + latstr + "," + lonstr + '.json'
+f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + "," + lonstr + '.json'
 hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + "," + lonstr + '.json'
 astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + "," + lonstr + '.json'
 almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
@@ -138,9 +138,8 @@ if verbosity == False:
     print("[##--------] | 9% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 if verbosity == True:
     logger.debug("currenturl: %s" % currenturl)
-    logger.debug("f3dayurl: %s" % currenturl)
-    logger.debug("f10dayurl: %s" % currenturl)
-    logger.debug("hourlyurl: %s" % currenturl)
+    logger.debug("f10dayurl: %s" % f10dayurl)
+    logger.debug("hourlyurl: %s" % hourlyurl)
     logger.debug("astronomyurl: %s" % astronomyurl)
     logger.debug("almanacurl: %s" % almanacurl)
     logger.info("End API var declare...")
@@ -170,12 +169,12 @@ try:
     if sundata_summary == True:
         sundataJSON = urllib.request.urlopen(astronomyurl)
         if verbosity == False:
-            print("[###-----] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+            print("[###-------] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         if verbosity == True:
             logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
     hourlyJSON = urllib.request.urlopen(hourlyurl)
     if verbosity == False:
-        print("[####----] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
     if almanac_summary == True:
@@ -423,11 +422,11 @@ for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
     summary_forecastIterations = summary_forecastIterations + 1
     if summary_forecastIterations == 4:
         break
-    
+print("")
 if almanac_summary == True:
     print(Fore.YELLOW + "The almanac:")
     print(Fore.YELLOW + "Data from: " + Fore.CYAN + almanac_airportCode
-          + Fore.YELLOW + " (the nearest airport to the location)")
+          + Fore.YELLOW + " (the nearest airport)")
     print(Fore.YELLOW + "Record high for today: " + Fore.CYAN + almanac_recordHighF
           + "°F (" + almanac_recordHighC + "°C)")
     print(Fore.YELLOW + "It was set in: " + Fore.CYAN + almanac_recordHighYear)
