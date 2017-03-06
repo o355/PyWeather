@@ -41,6 +41,8 @@ if sys.version_info[0] < 3:
                      % sys.version_info)
     print("Shucks! I can't proceed any further.")
     print("You'll need to install Python 3 to use PyWeather/PW Setup.")
+    print("Press enter to continue.")
+    input()
     sys.exit()
 
 print("Before we get started, I want to confirm some permissions from you.")
@@ -55,12 +57,16 @@ if confirmPermissions == "no":
     if verbosity == True:
         logger.debug("User denied permissions. Closing...")
     print("Okay! Closing now.")
+    print("Press enter to continue.")
+    input()
     sys.exit()
 elif confirmPermissions != "yes":
     if verbosity == True:
         logger.debug("Couldn't understand. Closing...")
     print("I couldn't understand what you said.")
     print("As a precaution, I won't proceed any further.")
+    print("Press enter to continue.")
+    input()
     sys.exit()
     
 print("Cool! Let's start.")
@@ -81,6 +87,8 @@ except ImportError:
         if verbosity == True:
             logger.info("User denied PIP install, closing...")
         print("Okay! I'm closing setup, as I need PIP to continue.")
+        print("Press enter to continue.")
+        input()
         sys.exit()
     elif pipConfirm == "yes":
         if verbosity == True:
@@ -106,6 +114,9 @@ except ImportError:
             logger.warn("Couldn't understand the input. Closing...")
         print("I didn't understand what you said.")
         print("As a precaution, I'm closing setup, as I need PIP to continue.")
+        print("Press enter to continue.")
+        input()
+        sys.exit()
 
 try:
     import colorama
@@ -174,6 +185,8 @@ else:
             logger.warn("Not installing necessary libraries. Now exiting...")
         print("Okay. I needed to install necessary libraries to continue.")
         print("Now quitting...")
+        print("Press enter to continue.")
+        input()
         sys.exit()
     elif neededLibrariesConfirm == "yes":
         if verbosity == True:
