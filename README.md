@@ -27,7 +27,7 @@ I couldn't find any of this. None. Alas, PyWeather was born.
 
 PyWeather is simple, it'll read you the forecast, and the current weather, but it's also easy to set up. Really easy. Yet, it contains lots of data for reading the almanac, previous weather, whatever. Plus, if you have a PWS from Wunderground, PyWeather (not presently) will let you view the weather for your PWS. Easy style.
 
-Oh, and PyWeather is faster than opening up a web browser, going to the website, and letting it load. There's no ads on PyWeather, none of that.
+Oh, and PyWeather is faster than opening up a web browser, going to the website, and letting it load. Seriously. I check my weather in PyWeather now. 
 
 ## Contributing
-I need to figure out how to implement contributing. But, you can still report issues!
+**I need to rewrite this**
