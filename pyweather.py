@@ -64,6 +64,8 @@ try:
     apikey = apikey_load.read()
 except FileNotFoundError:
     print("The API key wasn't found. (Error 38, pyweather.py)")
+    print("Press enter to continue.")
+    input()
     sys.exit()
 if verbosity == True:
     logger.debug("apikey = %s" % apikey)
@@ -104,6 +106,8 @@ except:
     print("Could not connect to Google's geocoder.")
     print("Ensure you have an internet connection, and that Google's geocoder " +
           "is unblocked.")
+    print("Press enter to continue.")
+    input()
     sys.exit()
 if verbosity == True:
     logger.debug("location = %s" % location)
@@ -116,6 +120,8 @@ except AttributeError:
         logger.error("No lat/long was provided by Google! Bad location?")
     print("The location you inputted could not be understood.")
     print("Please try again.")
+    print("Press enter to continue.")
+    input()
     sys.exit()
         
 if verbosity == True:
@@ -186,6 +192,9 @@ except:
         logger.error("No connection to the API!! Is the connection offline?")
     print("Can't connect to the API. Make sure that Wunderground's API " +
           "is unblocked, and the internet is online.")
+    print("Also check if your API key is valid.")
+    print("Press enter to continue.")
+    input()
     sys.exit()
 # And we parse the json using json.load.
 if verbosity == True:
@@ -234,6 +243,8 @@ except:
         logger.error("No connection to Google's Geolocator!! Is the connection offline?")
     print("Can't connect to Google's Geolocator. Make sure that Google's " +
           "Geolocator is unblocked, and your internet is online.")
+    print("Press enter to continue.")
+    input()
     sys.exit()
         
 if verbosity == True:
@@ -959,7 +970,7 @@ while True:
             almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
         
         print(Fore.YELLOW + "Here's the almanac for: " + Fore.CYAN +
-              almanac_airportCode + Fore.YELLOW + " (the nearest airport to you)")
+              almanac_airportCode + Fore.YELLOW + " (the nearest airport)")
         print("")
         print(Fore.YELLOW + "Record High: " + Fore.CYAN + almanac_recordHighF + "°F ("
               + almanac_recordHighC + "°C)")
