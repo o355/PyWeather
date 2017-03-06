@@ -1,5 +1,7 @@
 # Contributing to PyWeather
 
+This document isn't done. Sorry.
+
 When contributing to PyWeather, please follow the Code of Conduct, and how you can contribute in a meaningful way to PyWeather.
 
 Please read through this document carefully. If you have any questions, please open an issue with your question.
