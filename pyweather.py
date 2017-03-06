@@ -428,6 +428,12 @@ if almanac_summary == True:
     print(Fore.YELLOW + "The almanac:")
     print(Fore.YELLOW + "Data from: " + Fore.CYAN + almanac_airportCode
           + Fore.YELLOW + " (the nearest airport to the location)")
+    print(Fore.YELLOW + "Record high for today: " + Fore.CYAN + almanac_recordHighF
+          + "°F (" + almanac_recordHighC + "°C)")
+    print(Fore.YELLOW + "It was set in: " + Fore.CYAN + almanac_recordHighYear)
+    print(Fore.YELLOW + "Record low for today: " + Fore.CYAN + almanac_recordLowF
+          + "°F (" + almanac_recordLowC + "°C)")
+    print(Fore.YELLOW + "It was set in: " + Fore.CYAN + almanac_recordLowYear)
 # In this part of PyWeather, you'll find comments indicating where things end/begin.
 # This is to help when coding, and knowing where things are.
 
