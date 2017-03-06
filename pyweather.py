@@ -161,25 +161,20 @@ try:
         print("[###-------] | 28% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
-    forecastJSON = urllib.request.urlopen(f3dayurl)
-    if verbosity == False:
-        print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    if verbosity == True:
-        logger.debug("Acquired forecast 3day JSON, end result: %s" % forecastJSON)
     forecast10JSON = urllib.request.urlopen(f10dayurl)
     if verbosity == False:
-        print("[#####-----] | 52% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
     if sundata_summary == True:
         sundataJSON = urllib.request.urlopen(astronomyurl)
         if verbosity == False:
-            print("[######----] | 61% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+            print("[#####-----] | 54% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         if verbosity == True:
             logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
     hourlyJSON = urllib.request.urlopen(hourlyurl)
     if verbosity == False:
-        print("[#######---] | 68% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[######----] | 64% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
         logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
 except:
@@ -193,29 +188,24 @@ if verbosity == True:
     logger.info("End API fetch...")
     logger.info("Start JSON load...")
 if verbosity == False:
-    print("[#######---] | 74% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    print("[#######---] | 70% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 current_json = json.load(reader(summaryJSON))
 if jsonVerbosity == True:
     logger.debug("current_json loaded with: %s" % current_json)
 if verbosity == False:
-    print("[#######---] | 77% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-forecast3_json = json.load(reader(forecastJSON))
-if jsonVerbosity == True:
-    logger.debug("forecast3_json loaded with: %s" % forecast3_json)
-if verbosity == False:
-    print("[########--] | 81% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    print("[#######---] | 74% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 forecast10_json = json.load(reader(forecast10JSON))
 if jsonVerbosity == True:
     logger.debug("forecast10_json loaded with: %s" % forecast10_json)
 if verbosity == False:
-    print("[########--] | 85% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    print("[########--] | 80% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 hourly_json = json.load(reader(hourlyJSON))
 if jsonVerbosity == True:
     logger.debug("hourly_json loaded with: %s" % hourly_json)
 if sundata_summary == True:
     astronomy_json = json.load(reader(sundataJSON))
     if verbosity == False:
-        print("[#########-] | 88% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[#########-] | 86% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("astronomy_json loaded with: %s" % astronomy_json)
 if verbosity == True:
@@ -387,20 +377,24 @@ for hour in hourly_json['hourly_forecast']:
 print("")
 print(Fore.YELLOW + "For the next few days:")
 
+summary_forecastIterations = 0
 # Iterations are what will have to happen for now...
-for day in forecast3_json['forecast']['simpleforecast']['forecastday']:
-    forecast3_weekday = day['date']['weekday']
-    forecast3_month = str(day['date']['month'])
-    forecast3_day = str(day['date']['day'])
-    forecast3_highf = str(day['high']['fahrenheit'])
-    forecast3_highc = str(day['high']['celsius'])
-    forecast3_lowf = str(day['low']['fahrenheit'])
-    forecast3_lowc = str(day['low']['celsius'])
-    forecast3_conditions = day['conditions']
-    print(Fore.YELLOW + forecast3_weekday + ", " + forecast3_month + "/" + forecast3_day + ": " + Fore.CYAN
-          + forecast3_conditions + " with a high of " + forecast3_highf + "°F (" +
-          forecast3_highc + "°C), and a low of " + forecast3_lowf + "°F (" +
-          forecast3_lowc + "°C).")
+for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
+    forecast10_weekday = day['date']['weekday']
+    forecast10_month = str(day['date']['month'])
+    forecast10_day = str(day['date']['day'])
+    forecast10_highf = str(day['high']['fahrenheit'])
+    forecast10_highc = str(day['high']['celsius'])
+    forecast10_lowf = str(day['low']['fahrenheit'])
+    forecast10_lowc = str(day['low']['celsius'])
+    forecast10_conditions = day['conditions']
+    print(Fore.YELLOW + forecast3_weekday + ", " + forecast10_month + "/" + forecast10_day + ": " + Fore.CYAN
+          + forecast3_conditions + " with a high of " + forecast10_highf + "°F (" +
+          forecast10_highc + "°C), and a low of " + forecast10_lowf + "°F (" +
+          forecast10_lowc + "°C).")
+    summary_forecastIterations = summary_forecastIterations + 1
+    if summary_forecastIterations == 4:
+        break
     
 
 # In this part of PyWeather, you'll find comments indicating where things end/begin.
