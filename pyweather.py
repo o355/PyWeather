@@ -18,7 +18,7 @@ import configparser
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
 try:
-    sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
+    sundata_summary = config.getboolean('SUMMARY', 'sundaWta_summary')
     # almanac data on the summary screen isn't working. in 0.4.1 it will!
     almanac_summary = config.getboolean('SUMMARY', 'almanac_summary')
     verbosity = config.getboolean('VERBOSITY', 'verbosity')
@@ -303,6 +303,9 @@ if verbosity == True:
     logger.info("summary_dewPointF: %s ; summary_dewpointC: %s"
                 % (summary_dewPointF, summary_dewPointC))
     
+# <--- Sun data gets parsed here, if the option for showing it in the summary
+# is enabled in the config. --->
+
 if sundata_summary == True:
     SR_minute = int(astronomy_json['moon_phase']['sunrise']['minute'])
     SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
@@ -338,6 +341,22 @@ if sundata_summary == True:
         SS_hour = str(SS_hour)
         SS_minute = str(SS_minute)
         sunset_time = SS_hour + ":" + SS_minute + " AM"
+
+# <--- Almanac data gets parsed here, if showing almanac data is
+# enabled in the config. --->
+
+if almanac_summary == True:
+    almanac_airportCode = almanac_json['almanac']['airport_code']
+    almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
+    almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
+    almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
+    almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
+    almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
+    almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
+    almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
+    almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
+    almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
+    almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
 
 if verbosity == True:
     logger.info("Initalize color...")
@@ -405,7 +424,10 @@ for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
     if summary_forecastIterations == 4:
         break
     
-
+if almanac_summary == True:
+    print(Fore.YELLOW + "The almanac:")
+    print(Fore.YELLOW + "Data from: " + Fore.CYAN + almanac_airportCode
+          + Fore.YELLOW + " (the nearest airport to the location)")
 # In this part of PyWeather, you'll find comments indicating where things end/begin.
 # This is to help when coding, and knowing where things are.
 
@@ -915,20 +937,21 @@ while True:
           or moreoptions == "view the almanac"):
         print(Fore.RED + "Loading...")
         print("")
-        almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
-        almanacJSON = urllib.request.urlopen(almanacurl)
-        almanac_json = json.load(reader(almanacJSON))
-        almanac_airportCode = almanac_json['almanac']['airport_code']
-        almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
-        almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
-        almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
-        almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
-        almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
-        almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
-        almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
-        almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
-        almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
-        almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
+        if almanac_summary == False:
+            almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
+            almanacJSON = urllib.request.urlopen(almanacurl)
+            almanac_json = json.load(reader(almanacJSON))
+            almanac_airportCode = almanac_json['almanac']['airport_code']
+            almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
+            almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
+            almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
+            almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
+            almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
+            almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
+            almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
+            almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
+            almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
+            almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
         
         print(Fore.YELLOW + "Here's the almanac for: " + Fore.CYAN +
               almanac_airportCode + Fore.YELLOW + " (the nearest airport to you)")
