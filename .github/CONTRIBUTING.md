@@ -16,4 +16,4 @@ Rules? Respect everyone. Everyone. There will be no discrimination on who you ar
 
 Got it? Cool. Now, if you won't mind me...
 
-**IMMA FIRIN MEH CONTRIBUTION LAZER**
+**IMMA FIRIN MAH CONTRIBUTION LAZER**
