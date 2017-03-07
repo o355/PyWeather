@@ -468,6 +468,7 @@ except:
     
 print("Testing the reverse geocoder connection...")
 
+
 try:
     testlocation3 = geocoder.google([testlocation.latitude, testlocation.longitude], method='reverse')
     if verbosity == True:
