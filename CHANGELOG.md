@@ -2,7 +2,17 @@
 
 Quick note: While in beta, commits are not counted as versions. When I decide to push a release, I push a release. There will also be a running changelog for the in-development version, so I'm not remembering every single change I made in the version.
 
-## version 0.4 beta (The Astronomy Update) - To be released
+## version 0.4.2 beta - To be released
+
+## version 0.4.1 beta - To be released
+* Fixes a bug in which detailed sun/moon data wouldn't get shown
+* API calls are more efficient
+* Adds a "Press enter to continue" across PyWeather for users who view PW by double-clicking.
+* Fully implements almanac on the summary screen
+* Fully implements the config
+* Fixes a variety of smaller bugs
+
+## version 0.4 beta (The Astronomy Update) - Released 3/4/2017
 * Adds the almanac to PyWeather
 * Adds sunrise/sunset data to PyWeather
 * Mostly adds a config file to PyWeather
