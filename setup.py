@@ -57,7 +57,7 @@ if confirmPermissions == "no":
     if verbosity == True:
         logger.debug("User denied permissions. Closing...")
     print("Okay! Closing now.")
-    print("Press enter to continue.")
+    print("Press enter to exit.")
     input()
     sys.exit()
 elif confirmPermissions != "yes":
@@ -65,7 +65,7 @@ elif confirmPermissions != "yes":
         logger.debug("Couldn't understand. Closing...")
     print("I couldn't understand what you said.")
     print("As a precaution, I won't proceed any further.")
-    print("Press enter to continue.")
+    print("Press enter to exit.")
     input()
     sys.exit()
     
@@ -87,7 +87,7 @@ except ImportError:
         if verbosity == True:
             logger.info("User denied PIP install, closing...")
         print("Okay! I'm closing setup, as I need PIP to continue.")
-        print("Press enter to continue.")
+        print("Press enter to exit.")
         input()
         sys.exit()
     elif pipConfirm == "yes":
@@ -114,7 +114,7 @@ except ImportError:
             logger.warn("Couldn't understand the input. Closing...")
         print("I didn't understand what you said.")
         print("As a precaution, I'm closing setup, as I need PIP to continue.")
-        print("Press enter to continue.")
+        print("Press enter to exit.")
         input()
         sys.exit()
 
@@ -185,7 +185,7 @@ else:
             logger.warn("Not installing necessary libraries. Now exiting...")
         print("Okay. I needed to install necessary libraries to continue.")
         print("Now quitting...")
-        print("Press enter to continue.")
+        print("Press enter to exit.")
         input()
         sys.exit()
     elif neededLibrariesConfirm == "yes":
@@ -221,7 +221,7 @@ else:
             print("Hmm...Colorama didn't install properly.")
             print("Try executing 'pip install colorama' in a command shell.")
             print("As a precaution, I'm now exiting. (Error 52, setup.py)")
-            print("Press enter to continue.")
+            print("Press enter to exit.")
             input()
             sys.exit()
         try:
@@ -234,7 +234,7 @@ else:
             print("Hmm...geopy didn't install properly.")
             print("Try executing 'pip install geopy' in a command shell.")
             print("As a precaution, I'm now exiting. (Error 52, setup.py)")
-            print("Press enter to continue.")
+            print("Press enter to exit..")
             input()
             sys.exit()
         try:
@@ -247,7 +247,7 @@ else:
             print("Hmm...geocoder didn't install properly.")
             print("Try executing 'pip install geocoder' in a command shell.")
             print("As a precaution, I'm now exiting. (Error 52, setup.py)")
-            print("Press enter to continue.")
+            print("Press enter to exit.")
             input()
             sys.exit()
         print("All libraries are good to go! Let's move on.")
@@ -388,7 +388,7 @@ except:
         logger.error("json isn't available...very odd...")
     print("json is not available. This is odd, it's a default library.")
     print("Try installing a usual Python install.")
-    print("Press enter to continue.")
+    print("Press enter to exit.")
     input()
     sys.exit()
 try:
@@ -400,7 +400,7 @@ except:
         logger.warn("codecs isn't available...very odd...")
     print("codecs is not available. This is odd, it's a default library.")
     print("Try installing a usual Python install.")
-    print("Press enter to continue.")
+    print("Press enter to exit.")
     input()
     sys.exit()
 
@@ -420,7 +420,7 @@ except:
         logger.error("Couldn't connect to Wunderground's API! No internet?")
     print("We ran into an error. Make sure Wunderground's API is unblocked, "
           + "and you have an internet connection.")
-    print("Press enter to continue.")
+    print("Press enter to exit.")
     input()
     sys.exit()
     
@@ -437,7 +437,7 @@ except:
     if verbosity == True:
         logger.error("Error! Is the API key invalid?")
     print("We ran into an error. Make sure your API key is valid.")
-    print("Press enter to continue.")
+    print("Press enter to exit.")
     input()
     sys.exit()
     
@@ -461,7 +461,7 @@ except:
         logger.error("Couldn't connect to Google's geocoder. No internet?")
     print("We ran into an error. Make sure Google's geocoder is unblocked, " +
           "and you have an internet connection.")
-    print("Press enter to continue.")
+    print("Press enter to exit.")
     input()
     sys.exit()
     
@@ -481,7 +481,7 @@ except:
         logger.error("Couldn't connect to Google's geocoder. No internet?")
     print("We ran into an error. Make sure Google's Geolocator is unblocked, " +
           "and you have an internet connection.")
-    print("Press enter to continue.")
+    print("Press enter to exit.")
     input()
     sys.exit()
 
