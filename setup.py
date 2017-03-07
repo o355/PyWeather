@@ -221,6 +221,8 @@ else:
             print("Hmm...Colorama didn't install properly.")
             print("Try executing 'pip install colorama' in a command shell.")
             print("As a precaution, I'm now exiting. (Error 52, setup.py)")
+            print("Press enter to continue.")
+            input()
             sys.exit()
         try:
             import geopy
@@ -232,6 +234,8 @@ else:
             print("Hmm...geopy didn't install properly.")
             print("Try executing 'pip install geopy' in a command shell.")
             print("As a precaution, I'm now exiting. (Error 52, setup.py)")
+            print("Press enter to continue.")
+            input()
             sys.exit()
         try:
             import geocoder
@@ -243,6 +247,8 @@ else:
             print("Hmm...geocoder didn't install properly.")
             print("Try executing 'pip install geocoder' in a command shell.")
             print("As a precaution, I'm now exiting. (Error 52, setup.py)")
+            print("Press enter to continue.")
+            input()
             sys.exit()
         print("All libraries are good to go! Let's move on.")
     else:
@@ -382,6 +388,8 @@ except:
         logger.error("json isn't available...very odd...")
     print("json is not available. This is odd, it's a default library.")
     print("Try installing a usual Python install.")
+    print("Press enter to continue.")
+    input()
     sys.exit()
 try:
     import codecs
@@ -392,6 +400,8 @@ except:
         logger.warn("codecs isn't available...very odd...")
     print("codecs is not available. This is odd, it's a default library.")
     print("Try installing a usual Python install.")
+    print("Press enter to continue.")
+    input()
     sys.exit()
 
 print("Testing the API connection, and seeing if the API key is valid...")
@@ -410,6 +420,8 @@ except:
         logger.error("Couldn't connect to Wunderground's API! No internet?")
     print("We ran into an error. Make sure Wunderground's API is unblocked, "
           + "and you have an internet connection.")
+    print("Press enter to continue.")
+    input()
     sys.exit()
     
 test_json = json.load(testreader(testJSON))
@@ -425,6 +437,8 @@ except:
     if verbosity == True:
         logger.error("Error! Is the API key invalid?")
     print("We ran into an error. Make sure your API key is valid.")
+    print("Press enter to continue.")
+    input()
     sys.exit()
     
 print("Testing the Google geocoder connection...")
@@ -447,6 +461,8 @@ except:
         logger.error("Couldn't connect to Google's geocoder. No internet?")
     print("We ran into an error. Make sure Google's geocoder is unblocked, " +
           "and you have an internet connection.")
+    print("Press enter to continue.")
+    input()
     sys.exit()
     
     
@@ -464,6 +480,8 @@ except:
         logger.error("Couldn't connect to Google's geocoder. No internet?")
     print("We ran into an error. Make sure Google's Geolocator is unblocked, " +
           "and you have an internet connection.")
+    print("Press enter to continue.")
+    input()
     sys.exit()
 
 print("")
