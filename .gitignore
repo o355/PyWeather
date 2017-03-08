@@ -91,3 +91,4 @@ apikey.txt
 *.project
 *.pydevproject
 .settings/org.eclipse.ltk.core.refactoring.prefs
+storage/apikey2.txt
