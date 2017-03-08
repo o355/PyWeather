@@ -1,4 +1,4 @@
-## Welcome to PyWeather (0.4 beta)!
+## Welcome to PyWeather (0.4.1 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
 ## BETA DISCLAIMER:
