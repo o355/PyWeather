@@ -2,6 +2,13 @@
 
 Quick note: While in beta, commits are not counted as versions. When I decide to push a release, I push a release. There will also be a running changelog for the in-development version, so I'm not remembering every single change I made in the version.
 
+## version 0.4.2 beta - To be released
+* Adds an autoupdater to PyWeather
+* Adds the ability to configure the config file in the setup script
+* Adds forced versions to the separate updater
+* Adds verbosity (of course it did) to all scripts (yay)
+* The build number for this version of PyWeather is 42.
+
 ## version 0.4.1 beta - Released 3/8/2017
 * Fixes a bug in which detailed sun/moon data wouldn't get shown
 * API calls are more efficient

@@ -379,19 +379,20 @@ with open("storage//apikey.txt", 'a') as out:
 print("Let's configure a few options for PyWeather.")
 import configparser
 config = configparser.ConfigParser()
+config.read('storage//config.ini')
 
 print("On the summary screen, would you like to show sunrise/sunset times?")
 print("By default, this is disabled.")
 print("Yes or No.")
 sundata_Summary = input("Input here: ").lower()
 if sundata_Summary == "yes":
-    config['SUMMARY']['sundata_summary'] = True
+    config['SUMMARY']['sundata_summary'] = 'True'
 elif sundata_Summary == "no":
-    config['SUMMARY']['sundata_summary'] = False
+    config['SUMMARY']['sundata_summary'] = 'False'
 else:
     print("Could not understand what you said.")
     print("Defaulting to the default value 'False'")
-    config['SUMMARY']['sundata_summary'] = False
+    config['SUMMARY']['sundata_summary'] = 'False'
    
 print("")  
 print("On the summary screen, would you like to show almanac data?")
