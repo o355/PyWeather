@@ -21,6 +21,7 @@ try:
     sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
     # almanac data on the summary screen isn't working. in 0.4.1 it will!
     almanac_summary = config.getboolean('SUMMARY', 'almanac_summary')
+    checkforUpdates = config.getboolean('UPDATER', 'autocheckforupdates')
     verbosity = config.getboolean('VERBOSITY', 'verbosity')
     jsonVerbosity = config.getboolean('VERBOSITY', 'json_verbosity')
 except:
@@ -69,6 +70,23 @@ except FileNotFoundError:
     sys.exit()
 if verbosity == True:
     logger.debug("apikey = %s" % apikey)
+ 
+buildnumber = 42
+buildversion = '0.4.2 beta'    
+
+if checkforUpdates == True:
+    reader2 = codecs.getreader("utf-8")
+    versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
+    versionJSON = json.load(reader2(versioncheck))
+    version_buildNumber = float(versionJSON['updater']['latestbuild'])
+    version_latestVersion = versionJSON['updater']['latestversion']
+    version_latestURL = versionJSON['updater']['latesturl']
+    version_latestFileName = versionJSON['updater']['latestfilename']
+    version_latestReleaseDate = versionJSON['updater']['releasedate']
+    if buildnumber < version_buildNumber:
+        print("PyWeather is not up to date. You have version " + buildnumber +
+              + ", and the latest version is " + version_latestVersion)
+
 
 # I understand that this slightly goes against Wunderground's ToS
 # for logo layout, but, seriously. This is a terminal. It's this
@@ -835,8 +853,6 @@ while True:
           or moreoptions == "check for pyweather updates"):
         if verbosity == True:
             logger.info("Selected update.")
-        buildnumber = 41
-        buildversion = "0.4.1 beta"
         if verbosity == True:
             logger.debug("buildnumber: %s ; buildversion: %s" %
                          (buildnumber, buildversion))

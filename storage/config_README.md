@@ -49,4 +49,20 @@ If PyWeather is not up-to-date, and this option is enabled, something like this 
 
 `PyWeather is not up to date! You have version x.xx, but the latest version is x.xx`
 
-However, if you 
+However, if you enable this, PyWeather can take upwards of 5 seconds to launch. So, take caution.
+
+**Default setting: False**
+
+### updater_verbosity
+This controls if the external updater has verbosity. 
+
+Useful for if things go wrong. For some reason.
+
+**Default setting: False**
+
+### updater_jsonverbosity
+This controls is full .json files should be printed.
+
+I mean, it's probably a line or two in the console.
+
+**Default setting: False**
