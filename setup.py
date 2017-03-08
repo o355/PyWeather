@@ -400,13 +400,13 @@ print("By default, this is disabled.")
 print("Yes or No.")
 almanacdata_Summary = input("Input here: ").lower()
 if almanacdata_Summary == "yes":
-    config['SUMMARY']['almanac_summary'] = True
+    config['SUMMARY']['almanac_summary'] = 'True'
 elif almanacdata_Summary == "no":
-    config['SUMMARY']['almanac_summary'] = False
+    config['SUMMARY']['almanac_summary'] = 'False'
 else:
     print("Could not understand what you said.")
     print("Defaulting to the default value 'False'")
-    config['SUMMARY']['almanac_summary'] = False
+    config['SUMMARY']['almanac_summary'] = 'False'
 
 print("") 
 print("On boot, would you like PyWeather to check for updates?")
@@ -414,13 +414,13 @@ print("By default, this is disabled, due to a load time increase of ~2-5 seconds
 print("Yes or No.")
 checkForUpdates = input("Input here: ").lower()
 if checkForUpdates == "yes":
-    config['UPDATER']['autoCheckForUpdates'] = True
+    config['UPDATER']['autoCheckForUpdates'] = 'True'
 elif checkForUpdates == "no":
-    config['UPDATER']['autoCheckForUpdates'] = False
+    config['UPDATER']['autoCheckForUpdates'] = 'False'
 else:
     print("Could not understand what you said.")
     print("Defaulting to the default value 'False'")
-    config['UPDATER']['autoCheckForUpdates'] = False
+    config['UPDATER']['autoCheckForUpdates'] = 'False'
     
 print("That's it! Now commiting config changes...")
 with open('storage//config.ini', 'w') as configfile:
