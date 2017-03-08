@@ -23,8 +23,8 @@ if verbosity == True:
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)
 
-buildnumber = 40
-buildversion = "0.4 beta"
+buildnumber = 41
+buildversion = "0.4.1 beta"
 if verbosity == True:
     logger.debug("buildnumber: %s ; buildversion: %s" %
                 (buildnumber, buildversion))
