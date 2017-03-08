@@ -376,6 +376,55 @@ with open("storage//apikey.txt", 'a') as out:
     
 # once a config file is properly added, options for configuring the config will go here
 
+print("Let's configure a few options for PyWeather.")
+import configparser
+config = configparser.ConfigParser()
+
+print("On the summary screen, would you like to show sunrise/sunset times?")
+print("By default, this is disabled.")
+print("Yes or No.")
+sundata_Summary = input("Input here: ").lower()
+if sundata_Summary == "yes":
+    config['SUMMARY']['sundata_summary'] = True
+elif sundata_Summary == "no":
+    config['SUMMARY']['sundata_summary'] = False
+else:
+    print("Could not understand what you said.")
+    print("Defaulting to the default value 'False'")
+    config['SUMMARY']['sundata_summary'] = False
+   
+print("")  
+print("On the summary screen, would you like to show almanac data?")
+print("By default, this is disabled.")
+print("Yes or No.")
+almanacdata_Summary = input("Input here: ").lower()
+if almanacdata_Summary == "yes":
+    config['SUMMARY']['almanac_summary'] = True
+elif almanacdata_Summary == "no":
+    config['SUMMARY']['almanac_summary'] = False
+else:
+    print("Could not understand what you said.")
+    print("Defaulting to the default value 'False'")
+    config['SUMMARY']['almanac_summary'] = False
+
+print("") 
+print("On boot, would you like PyWeather to check for updates?")
+print("By default, this is disabled, due to a load time increase of ~2-5 seconds.")
+print("Yes or No.")
+checkForUpdates = input("Input here: ").lower()
+if checkForUpdates == "yes":
+    config['UPDATER']['autoCheckForUpdates'] = True
+elif checkForUpdates == "no":
+    config['UPDATER']['autoCheckForUpdates'] = False
+else:
+    print("Could not understand what you said.")
+    print("Defaulting to the default value 'False'")
+    config['UPDATER']['autoCheckForUpdates'] = False
+    
+print("That's it! Now commiting config changes...")
+with open('storage//config.ini', 'w') as configfile:
+    config.write(configfile)
+
 print("We're wrapping up, and performing a few tests.")
 
 print("Checking for parsing libraries...")
