@@ -404,7 +404,8 @@ backup_APIkey = input("Input here: ").lower()
 if backup_APIkey == "yes":
     print("Creating a backup...")
     open("backup//backkey.txt", 'w').close()
-    open("storage//apikey.txt", )    
+    open("backup//backkey.txt", 'a').write(apikey_input)
+    open("backup//backkey.txt").close()    
 # once a config file is properly added, options for configuring the config will go here
 
 print("Let's configure a few options for PyWeather.")

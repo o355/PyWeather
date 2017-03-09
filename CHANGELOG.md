@@ -6,6 +6,7 @@ Quick note: While in beta, commits are not counted as versions. When I decide to
 * Adds an autoupdater to PyWeather
 * Adds the ability to configure the config file in the setup script
 * Adds verbosity (of course it did) to all scripts (yay)
+* Adds the ability to "back up" your API key, and a script to do it (it's very simple...)
 * The build number for this version of PyWeather is 42.
 
 ## version 0.4.1 beta - Released 3/8/2017
