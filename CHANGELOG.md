@@ -5,7 +5,6 @@ Quick note: While in beta, commits are not counted as versions. When I decide to
 ## version 0.4.2 beta - To be released
 * Adds an autoupdater to PyWeather
 * Adds the ability to configure the config file in the setup script
-* Adds forced versions to the separate updater
 * Adds verbosity (of course it did) to all scripts (yay)
 * The build number for this version of PyWeather is 42.
 
