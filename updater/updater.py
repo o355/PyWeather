@@ -7,24 +7,34 @@ import json
 import urllib.request
 import codecs
 import shutil
+import configparser
 reader = codecs.getreader("utf-8")
 from colorama import Fore, Style, init
 init()
 
-# For now, it's a variable.
-verbosity = False
-jsonVerbosity = False
+config = configparser.ConfigParser()
+config.read('storage//config.ini')
 
-
-if verbosity == True:
+try:
+    verbosity = config.getboolean('UPDATER', 'updater_verbosity')
+    jsonVerbosity = config.getboolean('UPDATER', 'updater_jsonverbosity')
+except:
+    print("Couldn't load your config file. Make sure your spelling is correct.")
+    print("Setting variables to default...")
+    print("")
+    verbosity = False
+    jsonVerbosity = False
+    
+    
+if (verbosity == True or jsonVerbosity == True):
     import logging
-    logger = logging.getLogger('pyweather_0.4beta')
+    logger = logging.getLogger('pyweather_updater_0.4.2beta')
     logger.setLevel(logging.DEBUG)
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)
 
-buildnumber = 41
-buildversion = "0.4.1 beta"
+buildnumber = 42
+buildversion = "0.4.2 beta"
 if verbosity == True:
     logger.debug("buildnumber: %s ; buildversion: %s" %
                 (buildnumber, buildversion))

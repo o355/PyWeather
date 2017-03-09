@@ -31,9 +31,9 @@ except:
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
-if verbosity == True:
+if (verbosity == True or jsonVerbosity == True):
     import logging
-    logger = logging.getLogger('pyweather_0.4.1beta')
+    logger = logging.getLogger('pyweather_0.4.2beta')
     logger.setLevel(logging.DEBUG)
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)

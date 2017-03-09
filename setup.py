@@ -6,12 +6,35 @@
 # Verbosity turns on verbosity, jsonVerbosity outputs full JSONs.
 # Because I'm cool, you can have verbosity off, but JSON verbosity on.
 
-verbosity = False
-jsonVerbosity = False
+
 
 if (verbosity == True or jsonVerbosity == True):
     import logging
     logger = logging.getLogger('pyweather_0.3.2beta')
+    logger.setLevel(logging.DEBUG)
+    logformat = '%(asctime)s | %(levelname)s | %(message)s'
+    logging.basicConfig(format=logformat)
+
+import configparser
+config = configparser.ConfigParser()
+config.read('storage//config.ini')
+
+if verbosity == True:
+    logger.debug("config: %s" % config)
+    
+try:
+    verbosity = config.getboolean('SETUP', 'setup_verbosity')
+    jsonVerbosity = config.getboolean('SETUP', 'setup_jsonverbosity')
+except:
+    print("Couldn't load your config file. Make sure your spelling is correct.")
+    print("Setting variables to default...")
+    print("")
+    verbosity = False
+    jsonVerbosity = False
+    
+if (verbosity == True or jsonVerbosity == True):
+    import logging
+    logger = logging.getLogger('pyweather_setup_0.4.2beta')
     logger.setLevel(logging.DEBUG)
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)
@@ -373,58 +396,94 @@ with open("storage//apikey.txt", 'a') as out:
     out.close()
     if verbosity == True:
         logger.debug("Performed ops: overwrite apikey.txt, out.write(apikey_input), out.close()")
-    
+   
+print("I can also back up your API key, in case you do something wrong.")
+print("The backup text file would be stored at backup/backkey.txt.")
+print("Would you like me to save a backup? Yes or no.")
+backup_APIkey = input("Input here: ").lower()
+if backup_APIkey == "yes":
+    print("Creating a backup...")
+    open("backup//backkey.txt", 'w').close()
+    open("storage//apikey.txt", )    
 # once a config file is properly added, options for configuring the config will go here
 
 print("Let's configure a few options for PyWeather.")
-import configparser
-config = configparser.ConfigParser()
-config.read('storage//config.ini')
+
+if verbosity == True:
+    logger.debug("config: %s" % config)
 
 print("On the summary screen, would you like to show sunrise/sunset times?")
 print("By default, this is disabled.")
 print("Yes or No.")
 sundata_Summary = input("Input here: ").lower()
+if verbosity == True:
+    logger.debug("sundata_Summary: %s" % sundata_Summary)
 if sundata_Summary == "yes":
     config['SUMMARY']['sundata_summary'] = 'True'
+    if verbosity == True:
+        logger.debug("Sundata on the summary is now ENABLED.")
 elif sundata_Summary == "no":
     config['SUMMARY']['sundata_summary'] = 'False'
+    if verbosity == True:
+        logger.debug("Sundata on the summary is now DISABLED.")
 else:
     print("Could not understand what you said.")
     print("Defaulting to the default value 'False'")
     config['SUMMARY']['sundata_summary'] = 'False'
+    if verbosity == True:
+        logger.debug("Could not recognize input. Defaulting to DISABLED.")
    
 print("")  
 print("On the summary screen, would you like to show almanac data?")
 print("By default, this is disabled.")
 print("Yes or No.")
 almanacdata_Summary = input("Input here: ").lower()
+if verbosity == True:
+    logger.debug("almanacdata_Summary: %s" % almanacdata_Summary)
 if almanacdata_Summary == "yes":
     config['SUMMARY']['almanac_summary'] = 'True'
+    if verbosity == True:
+        logger.debug("Almanac on the summary is now ENABLED.")
 elif almanacdata_Summary == "no":
     config['SUMMARY']['almanac_summary'] = 'False'
+    if verbosity == True:
+        logger.debug("Almanac on the summary is now DISABLED.")
 else:
     print("Could not understand what you said.")
     print("Defaulting to the default value 'False'")
     config['SUMMARY']['almanac_summary'] = 'False'
+    if verbosity == True:
+        logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
 print("") 
 print("On boot, would you like PyWeather to check for updates?")
 print("By default, this is disabled, due to a load time increase of ~2-5 seconds.")
 print("Yes or No.")
 checkForUpdates = input("Input here: ").lower()
+if verbosity == True:
+    logger.debug("checkForUpdates: %s" % checkForUpdates)
 if checkForUpdates == "yes":
     config['UPDATER']['autoCheckForUpdates'] = 'True'
+    if verbosity == True:
+        logger.debug("Checking for updates on startup is ENABLED.")
 elif checkForUpdates == "no":
     config['UPDATER']['autoCheckForUpdates'] = 'False'
+    if verbosity == True:
+        logger.debug("Checking for updates on startup is DISABLED.")
 else:
     print("Could not understand what you said.")
     print("Defaulting to the default value 'False'")
     config['UPDATER']['autoCheckForUpdates'] = 'False'
+    if verbosity == True:
+        logger.debug("Could not recognize input. Defaulting to DISABLED.")
     
 print("That's it! Now commiting config changes...")
 with open('storage//config.ini', 'w') as configfile:
+    if verbosity == True:
+        logger.debug("configfile: %s" % configfile)
     config.write(configfile)
+    if verbosity == True:
+        logger.info("Performed operation: config.write(configfile)")
 
 print("We're wrapping up, and performing a few tests.")
 
