@@ -1,17 +1,13 @@
-# PyWeather 0.4.1 beta
+# PyWeather 0.4.2 beta
 # (c) 2017 o355, GNU GPL 3.0.
 # If there any random imports below here, blame Eclipse.
 
-# ===========================
-#   A few quick notes:
-# 1. The internal code is not organized, and it's meant to stay that way.
-# I usually design programs with the fact that I'll clean up code, and use
-# proper naming conventions/design conventions once the thing works.
-# So, for now. Lines of code/comments will be 79+ characters long. Sorry. 
-# 2. This program is 25% complete, meaning it's FAR from what it can do.
-# 3. There is no setup.py file. Get the API key on your own, and download
-# necessary modules through PIP.
-# 4. Progress will be slow and steady with PyWeather. Trust me.
+# ==============
+# This is beta code. It's not pretty, and I'm not using proper naving conventions.
+# That will get cleaned up in later betas. I think it will. I hope it will.
+# Also, this is beta code. Bugs are bound to occur. Report issues on GitHub.
+# (if you find any of those small bugs)
+# (but don't report the intentionally hidden bugs)
 
 import configparser
 
@@ -57,7 +53,7 @@ geolocator2 = Nominatim()
 
 
 if verbosity == True:
-    logger.debug(Fore.RED + "Begin API keyload...")
+    logger.debug("Begin API keyload...")
 apikey_load = open('storage//apikey.txt')
 if verbosity == True:
     logger.debug("apikey_load = %s" % apikey_load)
@@ -84,8 +80,9 @@ if checkforUpdates == True:
     version_latestFileName = versionJSON['updater']['latestfilename']
     version_latestReleaseDate = versionJSON['updater']['releasedate']
     if buildnumber < version_buildNumber:
-        print("PyWeather is not up to date. You have version " + buildnumber +
-              + ", and the latest version is " + version_latestVersion)
+        print("PyWeather is not up to date. You have version " + buildversion +
+              ", and the latest version is " + version_latestVersion + ".")
+        print("")
 
 
 # I understand that this slightly goes against Wunderground's ToS
@@ -200,6 +197,7 @@ try:
     if verbosity == False:
         print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if verbosity == True:
+        # * <-- that's a bug :o
         logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
     if almanac_summary == True:
         almanacJSON = urllib.request.urlopen(almanacurl)
@@ -344,6 +342,7 @@ if sundata_summary == True:
         SR_hour = SR_hour - 12
         SR_hour = str(SR_hour)
         SR_minute = str(SR_minute)
+        # see that? what is that? a bug? ---> * 
         sunrise_time = SR_hour + ":" + SR_minute + " PM"
     elif SR_hour == 12:
         SR_hour = str(SR_hour)
@@ -458,6 +457,8 @@ if almanac_summary == True:
           + Fore.YELLOW + " (the nearest airport)")
     print(Fore.YELLOW + "Record high for today: " + Fore.CYAN + almanac_recordHighF
           + "°F (" + almanac_recordHighC + "°C)")
+    # * 0
+    #   |  I brought the bug swatter.
     print(Fore.YELLOW + "It was set in: " + Fore.CYAN + almanac_recordHighYear)
     print(Fore.YELLOW + "Record low for today: " + Fore.CYAN + almanac_recordLowF
           + "°F (" + almanac_recordLowC + "°C)")
@@ -574,6 +575,9 @@ while True:
           moreoptions == "hourly" or
           moreoptions == "1"):
         print(Fore.RED + "Loading...")
+        # *
+        #
+        # 0---  Damn it, bug!
         print("")
         if verbosity == True:
             logger.info("Selected view more hourly...")
@@ -658,10 +662,11 @@ while True:
                   + " mph (" + hourly_windKPH + " kph) blowing to the " +
                   hourly_windDir + " (" + hourly_windDegrees + "°)")
             print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly_humidity + "%")
-            print(Fore.YELLOW + "Precipiation for the hour: " + Fore.CYAN +
-                  hourly_precipIn + " in (" + hourly_precipMm + " mm)")
+            if hourly_snowData == False:
+                print(Fore.YELLOW + "Rain for the hour: " + Fore.CYAN +
+                      hourly_precipIn + " in (" + hourly_precipMm + " mm)")
             if hourly_snowData == True:
-                print(Fore.YELLOW + "Snow for the next hour: " + Fore.CYAN +
+                print(Fore.YELLOW + "Snow for the hour: " + Fore.CYAN +
                       hourly_snowIn + " in (" + hourly_snowMm + " mm)")
             print(Fore.YELLOW + "Precipitation chance: " + Fore.CYAN + 
                   hourly_precipChance + "%")
@@ -706,6 +711,9 @@ while True:
             forecast10_month = str(day['date']['month'])
             forecast10_day = str(day['date']['day'])
             forecast10_highf = str(day['high']['fahrenheit'])
+            #
+            # * <buzz buzz>
+            #                                   what's that i hear?
             if verbosity == True:
                 logger.debug("forecast10_weekday: %s ; forecast10_month: %s"
                              % (forecast10_weekday, forecast10_month))
@@ -802,13 +810,13 @@ while True:
                   + Fore.CYAN + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
                   Fore.YELLOW + " and a low of " + Fore.CYAN + forecast10_lowf + "°F (" +
                   forecast10_lowc + "°C)" + ".")
-            print(Fore.YELLOW + "Total Precip: " + Fore.CYAN +
+            print(Fore.YELLOW + "Total Rain: " + Fore.CYAN +
                   forecast10_precipTotalIn + " in (" + forecast10_precipTotalMm
                   + " mm)")
-            print(Fore.YELLOW + "Precip during the day: " + Fore.CYAN +
+            print(Fore.YELLOW + "Rain during the day: " + Fore.CYAN +
                   forecast10_precipDayIn + " in (" + forecast10_precipDayMm
                   + " mm)")
-            print(Fore.YELLOW + "Precip during the night: " + Fore.CYAN +
+            print(Fore.YELLOW + "Rain during the night: " + Fore.CYAN +
                   forecast10_precipNightIn + " in (" + forecast10_precipNightMm
                   + " mm)")
             if forecast10_snowTotalData == True:
@@ -1109,7 +1117,8 @@ while True:
               moon_age + " days")
         print(Fore.YELLOW + "Phase of the moon: " + Fore.CYAN +
               moon_phase)
-     
+    elif moreoptions == "tell me a joke":
+        print("I'm not Siri.")
     else:
         if verbosity == True:
             logger.warn("Input could not be understood!")
