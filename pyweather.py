@@ -241,6 +241,8 @@ if almanac_summary == True:
     almanac_json = json.load(reader(almanacJSON))
     if verbosity == False:
         print("[#########-] | 87% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    if jsonVerbosity == True:
+        logger.debug("almanac_json loaded with: %s" % almanac_json)
 if verbosity == True:
     logger.info("3-5 JSONs loaded...")
     logger.info("Start 2nd geocoder...")
@@ -333,21 +335,35 @@ if verbosity == True:
 # is enabled in the config. --->
 
 if sundata_summary == True:
+    if verbosity == True:
+        logger.info("Parsing sun information...")
     SR_minute = int(astronomy_json['moon_phase']['sunrise']['minute'])
     SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
     if verbosity == True:
         logger.debug("SR_minute: %s ; SR_hour: %s" %
                      (SR_minute, SR_hour))
     if SR_hour > 12:
+        if verbosity == True:
+            logger.info("Sunrise time > 12. Starting 12hr time conversion...")
         SR_hour = SR_hour - 12
         SR_hour = str(SR_hour)
         SR_minute = str(SR_minute)
         # see that? what is that? a bug? ---> * 
         sunrise_time = SR_hour + ":" + SR_minute + " PM"
+        if verbosity == True:
+            logger.debug("SR_hour: %s ; SR_minute: %s"
+                         % (SR_hour, SR_minute))
+            logger.debug("sunrise_time: %s" % sunrise_time)
     elif SR_hour == 12:
+        if verbosity == True:
+            logger.info("Sunrise time = 12. Prefixing PM...")
         SR_hour = str(SR_hour)
         SR_minute = str(SR_minute)
         sunrise_time = SR_hour + ":" + SR_minute + " PM"
+        if verbosity == True:
+            logger.debug("SR_hour: %s ; SR_minute: %s" %
+                         (SR_hour, SR_minute))
+            logger.debug("sunrise_time: %s" % sunrise_time)
     else:
         SR_hour = str(SR_hour)
         SR_minute = str(SR_minute)
