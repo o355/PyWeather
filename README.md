@@ -1,4 +1,4 @@
-## Welcome to PyWeather (0.4.1 beta)!
+## Welcome to PyWeather (0.4.2 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
 ## BETA DISCLAIMER:
@@ -27,7 +27,11 @@ I couldn't find any of this. None. Alas, PyWeather was born.
 
 PyWeather is simple, it'll read you the forecast, and the current weather, but it's also easy to set up. Really easy. Yet, it contains lots of data for reading the almanac, previous weather, whatever. Plus, if you have a PWS from Wunderground, PyWeather (not presently) will let you view the weather for your PWS. Easy style.
 
-Oh, and PyWeather is faster than opening up a web browser, going to the website, and letting it load. Seriously. I check my weather in PyWeather now. 
+### What kind of data does PyWeather show?
+
+Oh, and PyWeather is faster than opening up a web browser, going to the website, and letting it load. Seriously. I check my weather in PyWeather now.
+
+Pro tip: If you're on mobile, and have a Linux box with SSH, get the Termius app (iPhone/Android). A) It's the best SSH/Telnet app for mobile, B) It's fast at launching/connecting, so you can check weather on your phone in more-or-less the same amount of time. A full guide to configuring SSH (for Ubuntu/Debian because I've only used those OSes) is in the Wiki.
 
 ## Contributing
 **I need to rewrite this**

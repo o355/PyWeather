@@ -27,9 +27,32 @@ confirmation = input("Input here: ").lower()
 if verbosity == True:
     logger.debug("confirmation: %s" % confirmation)
 if confirmation == "yes":
+    if verbosity == True:
+        logger.info("Selected yes - Backup key")
     print("Backing up your key...")
-    apikey = open("storage//apikey.txt", 'r').close()
-    open("backup//backkey.txt", 'w').close()
-    open("backup//backkey.txt").write(apikey)
-    open("backup//backkey.txt").close()
+    apikey = open('storage//apikey.txt').close()
+    if verbosity == True:
+        logger.debug("apikey: %s" % apikey)
+    with open("backup//backkey.txt", 'a') as out:
+        out.write(apikey.read())
+        out.close()
+        if verbosity == True:
+            logger.debug("Performed ops: out.write(apikey.read()), out.close()")
     print("Done!")
+    print("Press enter to exit.")
+    input()
+    sys.exit()
+elif confirmation == "no":
+    if verbosity == True:
+        logger.info("Selected no - do not back up API key.")
+    print("No changes will be made. Now closing.")
+    print("Press enter to exit.")
+    input()
+    sys.exit()
+else:
+    if verbosity == True:
+        logger.info("Couldn't understand input.")
+    print("Couldn't understand your input. Closing as a precaution...")
+    print("Press enter to exit.")
+    input()
+    sys.exit()
