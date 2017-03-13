@@ -9,6 +9,9 @@
 # (if you find any of those small bugs)
 # (but don't report the intentionally hidden bugs)
 
+# A cleanup of the if verbosity == True is coming. I just need to turn it off.
+# the json verbosity will stay...for now.
+
 import configparser
 
 config = configparser.ConfigParser()
@@ -31,13 +34,17 @@ except:
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
-if (verbosity == True or jsonVerbosity == True):
-    import logging
-    logger = logging.getLogger('pyweather_0.4.2beta')
-    logger.setLevel(logging.DEBUG)
-    logformat = '%(asctime)s | %(levelname)s | %(message)s'
-    logging.basicConfig(format=logformat)
+import logging
+logger = logging.getLogger('pyweather_0.4.2beta')
+logger.setLevel(logging.DEBUG)
+logformat = '%(asctime)s | %(levelname)s | %(message)s'
+logging.basicConfig(format=logformat)
 
+# There are no criticial messages in PyWeather, so this works by design.
+if verbosity == True:
+    logger.setLevel(logging.DEBUG)
+else:
+    logger.setLevel(logging.CRITICAL)
 import urllib.request
 import sys
 import json
@@ -51,12 +58,9 @@ import geocoder
 geolocator = GoogleV3()
 geolocator2 = Nominatim()
 
-
-if verbosity == True:
-    logger.debug("Begin API keyload...")
+logger.debug("Begin API keyload...")
 apikey_load = open('storage//apikey.txt')
-if verbosity == True:
-    logger.debug("apikey_load = %s" % apikey_load)
+logger.debug("apikey_load = %s" % apikey_load)
 try:
     apikey = apikey_load.read()
 except FileNotFoundError:
@@ -64,8 +68,7 @@ except FileNotFoundError:
     print("Press enter to continue.")
     input()
     sys.exit()
-if verbosity == True:
-    logger.debug("apikey = %s" % apikey)
+logger.debug("apikey = %s" % apikey)
  
 buildnumber = 42
 buildversion = '0.4.2 beta'    
@@ -75,26 +78,28 @@ if checkforUpdates == True:
     versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
     versionJSON = json.load(reader2(versioncheck))
     version_buildNumber = float(versionJSON['updater']['latestbuild'])
+    logger.debug("reader2: %s ; versioncheck: %s" %
+                 (reader2, versioncheck))
+    if jsonVerbosity == True:
+        logger.debug("versionJSON: %s" % versionJSON)
+    logger.debug("version_buildNumber: %s" % version_buildNumber)
     version_latestVersion = versionJSON['updater']['latestversion']
     version_latestURL = versionJSON['updater']['latesturl']
     version_latestFileName = versionJSON['updater']['latestfilename']
     version_latestReleaseDate = versionJSON['updater']['releasedate']
+    logger.debug("version_latestVersion: %s ; version_latestURL: %s"
+                 % (version_latestVersion, version_latestURL))
+    logger.debug("version_latestFileName: %s ; version_latestReleaseDate: %s"
+                 % (version_latestFileName, version_latestReleaseDate))
     if buildnumber < version_buildNumber:
+        logger.info("PyWeather is not up to date.")
         print("PyWeather is not up to date. You have version " + buildversion +
               ", and the latest version is " + version_latestVersion + ".")
         print("")
 
 
-# I understand that this slightly goes against Wunderground's ToS
-# for logo layout, but, seriously. This is a terminal. It's this
-# or terminal logos.
-
-
-# I think they more specifically target apps with the logo ToS,
-# and not terminal scripts that a user needs to obtain an API
-# key to use.
-
-# Sorry WU. I still love you.
+# I understand this goes against Wunderground's ToS for logo usage.
+# Can't do much in a terminal.
 
 print("Welcome to PyWeather - Powered by Wunderground.")
 print("Please enter a location to get weather information for.")
@@ -107,45 +112,39 @@ print("Sweet! Getting your weather!")
 # it in the table called loccords.
 
 firstfetch = time.time()
-if verbosity == True:
-    logger.debug(Fore.RED + "Start geolocator...")
+logger.info("Start geolocator...")
 try:
     location = geolocator.geocode(locinput, language="en", timeout=20)
     # Since the loading bars interfere with true verbosity logging, we turn
     # them off if verbosity is enabled (it isn't needed)
+    # :/
     if verbosity == False:
         print("[#---------] | 3% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 except:
-    if verbosity == True:
-        logger.error("No connection to Google's geocoder!")
+    logger.error("No connection to Google's geocoder!")
     print("Could not connect to Google's geocoder.")
     print("Ensure you have an internet connection, and that Google's geocoder " +
           "is unblocked.")
     print("Press enter to continue.")
     input()
     sys.exit()
-if verbosity == True:
-    logger.debug("location = %s" % location)
+logger.debug("location = %s" % location)
 
 try:
     latstr = str(location.latitude)
     lonstr = str(location.longitude)
 except AttributeError:
-    if verbosity == True:
-        logger.error("No lat/long was provided by Google! Bad location?")
+    logger.error("No lat/long was provided by Google! Bad location?")
     print("The location you inputted could not be understood.")
     print("Please try again.")
     print("Press enter to continue.")
     input()
     sys.exit()
-        
-if verbosity == True:
-    logger.debug("Latstr: %s ; Lonstr: %s" % (latstr, lonstr))
+logger.debug("Latstr: %s ; Lonstr: %s" % (latstr, lonstr))
 loccoords = [latstr, lonstr]
-if verbosity == True:
-    logger.debug("Loccoords: %s" % loccoords)
-    logger.info("End geolocator...")
-    logger.info("Start API var declare...")
+logger.debug("Loccoords: %s" % loccoords)
+logger.info("End geolocator...")
+logger.info("Start API var declare...")
 
 # Declare the API URLs with the API key, and latitude/longitude strings from earlier.
 
@@ -157,55 +156,48 @@ almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latst
 
 if verbosity == False:
     print("[##--------] | 9% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-if verbosity == True:
-    logger.debug("currenturl: %s" % currenturl)
-    logger.debug("f10dayurl: %s" % f10dayurl)
-    logger.debug("hourlyurl: %s" % hourlyurl)
-    logger.debug("astronomyurl: %s" % astronomyurl)
-    logger.debug("almanacurl: %s" % almanacurl)
-    logger.info("End API var declare...")
-    logger.info("Start codec change...")
+logger.debug("currenturl: %s" % currenturl)
+logger.debug("f10dayurl: %s" % f10dayurl)
+logger.debug("hourlyurl: %s" % hourlyurl)
+logger.debug("astronomyurl: %s" % astronomyurl)
+logger.debug("almanacurl: %s" % almanacurl)
+logger.info("End API var declare...")
+logger.info("Start codec change...")
 
 # Due to Python, we have to get the UTF-8 reader to properly parse the JSON we got.
 reader = codecs.getreader("utf-8")
 if verbosity == False:
     print("[##--------] | 12% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-if verbosity == True:
-    logger.debug("reader: %s" % reader)
-    logger.info("End codec change...")
-    logger.info("Start API fetch...")
+logger.debug("reader: %s" % reader)
+logger.info("End codec change...")
+logger.info("Start API fetch...")
     
 # Fetch the JSON file using urllib.request, store it as a temporary file.
 try:
     summaryJSON = urllib.request.urlopen(currenturl)
     if verbosity == False:
         print("[##--------] | 15% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    if verbosity == True:
-        logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
+    logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
     forecast10JSON = urllib.request.urlopen(f10dayurl)
     if verbosity == False:
         print("[###-------] | 24% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    if verbosity == True:
-        logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
+    logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
     if sundata_summary == True:
         sundataJSON = urllib.request.urlopen(astronomyurl)
         if verbosity == False:
             print("[###-------] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-        if verbosity == True:
-            logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
+        logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
     hourlyJSON = urllib.request.urlopen(hourlyurl)
     if verbosity == False:
         print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    if verbosity == True:
-        # * <-- that's a bug :o
-        logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
+    logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
     if almanac_summary == True:
         almanacJSON = urllib.request.urlopen(almanacurl)
         if verbosity == False:
             print("[#####-----] | 49% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
 except:
-    if verbosity == True:
-        logger.error("No connection to the API!! Is the connection offline?")
+    logger.error("No connection to the API!! Is the connection offline?")
     print("Can't connect to the API. Make sure that Wunderground's API " +
           "is unblocked, and the internet is online.")
     print("Also check if your API key is valid.")
@@ -213,9 +205,8 @@ except:
     input()
     sys.exit()
 # And we parse the json using json.load.
-if verbosity == True:
-    logger.info("End API fetch...")
-    logger.info("Start JSON load...")
+logger.info("End API fetch...")
+logger.info("Start JSON load...")
 if verbosity == False:
     print("[#####-----] | 55% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 current_json = json.load(reader(summaryJSON))
@@ -243,32 +234,29 @@ if almanac_summary == True:
         print("[#########-] | 87% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("almanac_json loaded with: %s" % almanac_json)
-if verbosity == True:
-    logger.info("3-5 JSONs loaded...")
-    logger.info("Start 2nd geocoder...")
+logger.info("3-5 JSONs loaded...")
+logger.info("Start 2nd geocoder...")
 
 # The 2nd geocoder hit will get removed in future versions, I believe geopy
 # can do reverse.
 
-# And how about asynchronius fetches? Coming soon.
+# And how about asynchronius fetches? Coming soon, I mean, maybe?
 
 try:
     location2 = geocoder.google([latstr, lonstr], method='reverse', timeout=20)
     if verbosity == False:
         print("[#########-] | 91% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 except:
-    if verbosity == True:
-        logger.error("No connection to Google's Geolocator!! Is the connection offline?")
+    logger.error("No connection to Google's Geolocator!! Is the connection offline?")
     print("Can't connect to Google's Geolocator. Make sure that Google's " +
           "Geolocator is unblocked, and your internet is online.")
     print("Press enter to continue.")
     input()
     sys.exit()
         
-if verbosity == True:
-    logger.debug("location2: %s ; Location2.city: %s ; Location2.state: %s" % (location2, location2.city, location2.state))
-    logger.info("End 2nd geolocator...")
-    logger.info("Start parsing...")
+logger.debug("location2: %s ; Location2.city: %s ; Location2.state: %s" % (location2, location2.city, location2.state))
+logger.info("End 2nd geolocator...")
+logger.info("Start parsing...")
 
 
 
@@ -276,8 +264,6 @@ if verbosity == True:
 
 summary_overall = current_json['current_observation']['weather']
 summary_lastupdated = current_json['current_observation']['observation_time']
-if verbosity == True:
-    logger.debug("summary_overall: %s ; summary_lastupdated: %s" % (summary_overall, summary_lastupdated))
     
 # While made for the US, metric units will also be tagged along.
 summary_tempf = str(current_json['current_observation']['temp_f'])
@@ -286,128 +272,144 @@ summary_tempc = str(current_json['current_observation']['temp_c'])
 # necessary to properly display it in the summary.
 # summary_dewpointf = current_json['current_observation']
 summary_humidity = str(current_json['current_observation']['relative_humidity'])
-if verbosity == True:
-    logger.debug("summary_tempf: %s ; summary_tempc: %s ; summary_humidity: %s" % (summary_tempf, summary_tempc, summary_humidity))
+logger.debug("summary_overall: %s ; summary_lastupdated: %s"
+             % (summary_overall, summary_lastupdated))
+logger.debug("summary_tempf: %s ; summary_tempc: %s"
+             % (summary_tempf, summary_tempc))
 summary_winddir = current_json['current_observation']['wind_dir']
 summary_windmph = current_json['current_observation']['wind_mph']
 summary_windmphstr = str(summary_windmph)
-if verbosity == True:
-    logger.debug("summary_winddir: %s ; summary_windmph: %s ; summary_windmphstr: %s" % (summary_winddir, summary_windmph, summary_windmphstr))
 summary_windkph = current_json['current_observation']['wind_kph']
+logger.debug("summary_winddir: %s ; summary_windmph: %s"
+             % (summary_winddir, summary_windmph))
+logger.debug("summary_windmphstr: %s ; summary_windkph: %s"
+             % (sumary_windmphstr, summary_windkph))
 summary_windkphstr = str(summary_windkph)
+logger.debug("summary_windkphstr: %s" % summary_windkphstr)
 if verbosity == False:
     print("[##########] | 97% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-if verbosity == True:
-    logger.debug("summary_windkph: %s ; summary_windkphstr: %s" % (summary_windkph, summary_windkphstr))
 # Since some PWS stations on WU don't have a wind meter, this method will check if we should display wind data.
 # WU lists the MPH at -9999 if there is no wind data.
 # This method is probably reliable, but I need to see if it'll work by testing it work PWS stations around my area.
 windcheck = float(summary_windmph)
 windcheck2 = float(summary_windkph)
-if verbosity == True:
-    logger.debug("windcheck: %s ; windcheck2: %s" % (windcheck, windcheck2))
+logger.debug("windcheck: %s ; windcheck2: %s" 
+             % (windcheck, windcheck2))
 if windcheck == -9999:
     winddata = False
-    if verbosity == True:
-        logger.warn("No wind data available!")
+    logger.warn("No wind data available!")
 elif windcheck2 == -9999:
     winddata = False
-    if verbosity == True:
-        logger.warn("No wind data available!")
+    logger.warn("No wind data available!")
 else:
     winddata = True
-    if verbosity == True:
-        logger.info("Wind data is available.")
+    logger.info("Wind data is available.")
 
 summary_feelslikef = str(current_json['current_observation']['feelslike_f'])
 summary_feelslikec = str(current_json['current_observation']['feelslike_c'])
-if verbosity == True:
-    logger.info("summary_feelslikef: %s ; summary_feelslikec: %s"
-                % (summary_feelslikef, summary_feelslikec))
-
 summary_dewPointF = str(current_json['current_observation']['dewpoint_f'])
 summary_dewPointC = str(current_json['current_observation']['dewpoint_c'])
-if verbosity == True:
-    logger.info("summary_dewPointF: %s ; summary_dewpointC: %s"
-                % (summary_dewPointF, summary_dewPointC))
+logger.debug("summary_feelslikef: %s ; summary_feelslikec: %s"
+             % (summary_feelslikef, summary_feelslikec))
+logger.debug("summary_dewPointF: %s ; summary_dewPointC: %s"
+             % (summary_dewPointF, summary_dewPointC))
     
 # <--- Sun data gets parsed here, if the option for showing it in the summary
 # is enabled in the config. --->
 
 if sundata_summary == True:
-    if verbosity == True:
-        logger.info("Parsing sun information...")
+    logger.info("Parsing sun information...")
     SR_minute = int(astronomy_json['moon_phase']['sunrise']['minute'])
     SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
-    if verbosity == True:
-        logger.debug("SR_minute: %s ; SR_hour: %s" %
-                     (SR_minute, SR_hour))
+    logger.debug("SR_minute: %s ; SR_hour: %s" %
+                (SR_minute, SR_hour))
     if SR_hour > 12:
-        if verbosity == True:
-            logger.info("Sunrise time > 12. Starting 12hr time conversion...")
+        logger.info("Sunrise time > 12. Starting 12hr time conversion...")
         SR_hour = SR_hour - 12
         SR_hour = str(SR_hour)
-        SR_minute = str(SR_minute)
-        # see that? what is that? a bug? ---> * 
+        SR_minute = str(SR_minute) 
         sunrise_time = SR_hour + ":" + SR_minute + " PM"
-        if verbosity == True:
-            logger.debug("SR_hour: %s ; SR_minute: %s"
-                         % (SR_hour, SR_minute))
-            logger.debug("sunrise_time: %s" % sunrise_time)
+        logger.debug("SR_hour: %s ; SR_minute: %s"
+                    % (SR_hour, SR_minute))
+        logger.debug("sunrise_time: %s" % sunrise_time)
     elif SR_hour == 12:
-        if verbosity == True:
-            logger.info("Sunrise time = 12. Prefixing PM...")
+        logger.info("Sunrise time = 12. Prefixing PM...")
         SR_hour = str(SR_hour)
         SR_minute = str(SR_minute)
         sunrise_time = SR_hour + ":" + SR_minute + " PM"
-        if verbosity == True:
-            logger.debug("SR_hour: %s ; SR_minute: %s" %
-                         (SR_hour, SR_minute))
-            logger.debug("sunrise_time: %s" % sunrise_time)
+        logger.debug("SR_hour: %s ; SR_minute: %s" %
+                    (SR_hour, SR_minute))
+        logger.debug("sunrise_time: %s" % sunrise_time)
     else:
+        logger.info("Sunrise time < 12. Prefixing AM...")
         SR_hour = str(SR_hour)
         SR_minute = str(SR_minute)
         sunrise_time = SR_hour + ":" + SR_minute + " AM"
+        logger.debug("SR_hour: %s ; SR_minute: %s" %
+                    (SR_hour, SR_minute))
+        logger.debug("sunrise_time: %s" % sunrise_time)
+            
 
     SS_minute = int(astronomy_json['moon_phase']['sunset']['minute'])
     SS_hour = int(astronomy_json['moon_phase']['sunset']['hour'])
+    logger.debug("SS_minute: %s ; SS_hour: %s" %
+                 (SS_minute, SS_hour))
     if SS_hour > 12:
+        logger.info("Sunset time > 12. Starting 12hr time conversion...")
         SS_hour = SS_hour - 12
         SS_hour = str(SS_hour)
         SS_minute = str(SS_minute)
         sunset_time = SS_hour + ":" + SS_minute + " PM"
+        logger.debug("SS_hour: %s ; SS_minute: %s"
+                     % (SS_hour, SS_minute))
+        logger.debug("sunset_time: %s" % sunset_time)
     elif SS_hour == 12:
+        logger.info("Sunset time = 12. Prefixing PM...")
         SS_hour = str(SS_hour)
         SS_minute = str(SS_minute)
         sunset_time = SS_hour + ":" + SS_minute + " PM"
+        logger.debug("SS_hour: %s ; SS_minute: %s"
+                    % (SS_hour, SS_minute))
+        logger.debug("sunset_time: %s" % sunset_time)
     else:
+        logger.info("Sunset time < 12. Prefixing AM...")
         SS_hour = str(SS_hour)
         SS_minute = str(SS_minute)
         sunset_time = SS_hour + ":" + SS_minute + " AM"
+        logger.debug("SS_hour: %s ; SS_minute: %s" %
+                     (SS_hour, SS_minute))
+        logger.debug("sunset_time: %s" % sunset_time)
 
 # <--- Almanac data gets parsed here, if showing almanac data is
 # enabled in the config. --->
 
 if almanac_summary == True:
+    logger.debug("Parsing almanac data...")
     almanac_airportCode = almanac_json['almanac']['airport_code']
     almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
     almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
     almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
+    logger.debug("almanac_airportCode: %s ; almanac_normalHighF: %s"
+                 % (almanac_airportCode, almanac_normalHighF))
+    logger.debug("almanac_normalHighC: %s ; almanac_recordHighF: %s"
+                 % (almanac_normalHighC, almanac_recordHighF))
     almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
     almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
     almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
     almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
+    logger.debug("almanac_recordHighC: %s ; almanac_recordHighYear: %s"
+                 % (almanac_recordHighC, almanac_recordHighYear))
+    logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s"
+                 % (almanac_normalLowF, almanac_normalLowC))
     almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
     almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
     almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
 
-if verbosity == True:
-    logger.info("Initalize color...")
+logger.info("Initalize color...")
 init()
 if verbosity == False:
     print("[##########] | 100% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-if verbosity == True:
-    logger.info("Printing current conditions...")
+logger.info("Printing current conditions...")
     
 # <--------------- This is where we end parsing, and begin printing. ---------->
 
@@ -473,8 +475,6 @@ if almanac_summary == True:
           + Fore.YELLOW + " (the nearest airport)")
     print(Fore.YELLOW + "Record high for today: " + Fore.CYAN + almanac_recordHighF
           + "°F (" + almanac_recordHighC + "°C)")
-    # * 0
-    #   |  I brought the bug swatter.
     print(Fore.YELLOW + "It was set in: " + Fore.CYAN + almanac_recordHighYear)
     print(Fore.YELLOW + "Record low for today: " + Fore.CYAN + almanac_recordLowF
           + "°F (" + almanac_recordLowC + "°C)")

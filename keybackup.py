@@ -30,11 +30,12 @@ if confirmation == "yes":
     if verbosity == True:
         logger.info("Selected yes - Backup key")
     print("Backing up your key...")
-    apikey = open('storage//apikey.txt').close()
+    apikey = open('storage//apikey.txt')
+    apikey2 = apikey.read()
     if verbosity == True:
         logger.debug("apikey: %s" % apikey)
     with open("backup//backkey.txt", 'a') as out:
-        out.write(apikey.read())
+        out.write(apikey2)
         out.close()
         if verbosity == True:
             logger.debug("Performed ops: out.write(apikey.read()), out.close()")

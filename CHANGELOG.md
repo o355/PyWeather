@@ -4,23 +4,28 @@ Quick note: While in beta, commits are not counted as versions. When I decide to
 
 And for some reason, I like typing up 2-3 future versions in detail, because I found out that Eclipse supports markdown files.
 
-## version 0.5 beta (The Back to the Future Update) - To be released between 3/15-3/21
+## version 0.5.1 beta - To be released early April
+* Removes if verbosity == True in the separate updater, and keybackup scripts.
+* Adds verbosity.
+
+## version 0.5 beta (The Back to the Future Update) - To be released early April
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.
-* Adds historical weather information to PyWeather
-* Adds 10-day hourly weather to PyWeather (you'll hit enter 40 times!...by default)
+* Adds historical weather information to PyWeather.
+* Adds 10-day hourly weather to PyWeather (you'll hit enter 40 times!...by default).
+* Adds a method in which PyWeather will display rain data for the day/night if the temperature is above 32F.
 * Adds a separate config.py program, so you can configure every option in PyWeather (including verbosity!)
 * Adds the ability to turn off the "enter to continue" things in the 10-day/hourly forecasts
 * Adds the ability to set the interval in which the "enter to continue" will appear
 * Reworks the config file some, sections are now where they need to be (aka verbosity has it's own section)
-* Adds 0 easter eggs.
+* Removes the if verbosity == True garbage in the setup file.
 
-## version 0.4.2 beta - To be released 3/9/2017
+## version 0.4.2 beta - To be released 3/14/2017
 * Adds an autoupdater to PyWeather
 * Adds the ability to configure the config file in the setup script
-* Adds verbosity (of course it did) to all scripts (yay)
+* Adds verbosity (of course it did) to almost all scripts (yay)
 * Adds the ability to "back up" your API key, and a script to do it (it's very simple...)
-* The build number for this version of PyWeather is 42.
-* Adds 0 easter eggs.
+* No more if verbosity == True in the main PyWeather script.
+* Cleans up some legacy code.
 
 ## version 0.4.1 beta - Released 3/8/2017
 * Fixes a bug in which detailed sun/moon data wouldn't get shown
