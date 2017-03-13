@@ -283,7 +283,7 @@ summary_windkph = current_json['current_observation']['wind_kph']
 logger.debug("summary_winddir: %s ; summary_windmph: %s"
              % (summary_winddir, summary_windmph))
 logger.debug("summary_windmphstr: %s ; summary_windkph: %s"
-             % (sumary_windmphstr, summary_windkph))
+             % (summary_windmphstr, summary_windkph))
 summary_windkphstr = str(summary_windkph)
 logger.debug("summary_windkphstr: %s" % summary_windkphstr)
 if verbosity == False:
@@ -327,7 +327,9 @@ if sundata_summary == True:
         logger.info("Sunrise time > 12. Starting 12hr time conversion...")
         SR_hour = SR_hour - 12
         SR_hour = str(SR_hour)
-        SR_minute = str(SR_minute) 
+        # For filling in extra zeros (when the minute is >10), I prefer using .zfill.
+        # The code looks much nicer and more readable versus the %02d method.
+        SR_minute = str(SR_minute).zfill(2)
         sunrise_time = SR_hour + ":" + SR_minute + " PM"
         logger.debug("SR_hour: %s ; SR_minute: %s"
                     % (SR_hour, SR_minute))
@@ -335,7 +337,7 @@ if sundata_summary == True:
     elif SR_hour == 12:
         logger.info("Sunrise time = 12. Prefixing PM...")
         SR_hour = str(SR_hour)
-        SR_minute = str(SR_minute)
+        SR_minute = str(SR_minute).zfill(2)
         sunrise_time = SR_hour + ":" + SR_minute + " PM"
         logger.debug("SR_hour: %s ; SR_minute: %s" %
                     (SR_hour, SR_minute))
@@ -343,7 +345,7 @@ if sundata_summary == True:
     else:
         logger.info("Sunrise time < 12. Prefixing AM...")
         SR_hour = str(SR_hour)
-        SR_minute = str(SR_minute)
+        SR_minute = str(SR_minute).zfill(2)
         sunrise_time = SR_hour + ":" + SR_minute + " AM"
         logger.debug("SR_hour: %s ; SR_minute: %s" %
                     (SR_hour, SR_minute))
@@ -358,7 +360,7 @@ if sundata_summary == True:
         logger.info("Sunset time > 12. Starting 12hr time conversion...")
         SS_hour = SS_hour - 12
         SS_hour = str(SS_hour)
-        SS_minute = str(SS_minute)
+        SS_minute = str(SS_minute).zfill(2)
         sunset_time = SS_hour + ":" + SS_minute + " PM"
         logger.debug("SS_hour: %s ; SS_minute: %s"
                      % (SS_hour, SS_minute))
@@ -366,7 +368,7 @@ if sundata_summary == True:
     elif SS_hour == 12:
         logger.info("Sunset time = 12. Prefixing PM...")
         SS_hour = str(SS_hour)
-        SS_minute = str(SS_minute)
+        SS_minute = str(SS_minute).zfill(2)
         sunset_time = SS_hour + ":" + SS_minute + " PM"
         logger.debug("SS_hour: %s ; SS_minute: %s"
                     % (SS_hour, SS_minute))
@@ -374,7 +376,7 @@ if sundata_summary == True:
     else:
         logger.info("Sunset time < 12. Prefixing AM...")
         SS_hour = str(SS_hour)
-        SS_minute = str(SS_minute)
+        SS_minute = str(SS_minute).zfill(2)
         sunset_time = SS_hour + ":" + SS_minute + " AM"
         logger.debug("SS_hour: %s ; SS_minute: %s" %
                      (SS_hour, SS_minute))
@@ -500,22 +502,19 @@ while True:
     print("- Close PyWeather (or press " + Fore.CYAN + "6" + Fore.YELLOW
           + ")")
     moreoptions = input("Enter here: ").lower()
-    if verbosity == True:
-        logger.debug("moreoptions: %s" % moreoptions)
+    logger.debug("moreoptions: %s" % moreoptions)
         
         
     if (moreoptions == "view more current" or moreoptions == "view more current data" 
         or moreoptions == "view currently" or moreoptions == "view more currently"
         or moreoptions == "currently" or moreoptions == "current" or moreoptions == '0'):
         print(Fore.RED + "Loading...")
-        if verbosity == True:
-            logger.info("Selected view more currently...")
+        logger.info("Selected view more currently...")
         print("")
         current_pressureInHg = str(current_json['current_observation']['pressure_in'])
         current_pressureMb = str(current_json['current_observation']['pressure_mb'])
-        if verbosity == True:
-            logger.debug("current_pressureInHg: %s ; current_pressureMb: %s"
-                         % (current_pressureInHg, current_pressureMb))
+        logger.debug("current_pressureInHg: %s ; current_pressureMb: %s"
+                    % (current_pressureInHg, current_pressureMb))
         current_pressureTrend = current_json['current_observation']['pressure_trend']
         if current_pressureTrend == "+":
             current_pressureTrend2 = "and rising."
@@ -525,22 +524,20 @@ while True:
             current_pressureTrend2 = "and dropping."
         else:
             current_pressureTrend2 = "with no trend available."
-        if verbosity == True:
-            logger.debug("current_pressureTrend: %s ; current_pressureTrend2: %s"
-                         % (current_pressureTrend, current_pressureTrend2))
+        logger.debug("current_pressureTrend: %s ; current_pressureTrend2: %s"
+                    % (current_pressureTrend, current_pressureTrend2))
         current_windDegrees = str(current_json['current_observation']['wind_degrees'])
         current_feelsLikeF = str(current_json['current_observation']['feelslike_f'])
         current_feelsLikeC = str(current_json['current_observation']['feelslike_c'])
         current_visibilityMi = str(current_json['current_observation']['visibility_mi'])
         current_visibilityKm = str(current_json['current_observation']['visibility_km'])
         current_UVIndex = str(current_json['current_observation']['UV'])
-        if verbosity == True:
-            logger.debug("current_windDegrees: %s ; current_feelsLikeF: %s" 
-                         % (current_windDegrees, current_feelsLikeF))
-            logger.debug("current_feelsLikeC: %s ; current_visibilityMi: %s"
-                         % (current_feelsLikeC, current_visibilityMi))
-            logger.debug("current_visibilityKm: %s ; current_UVIndex: %s"
-                         % (current_visibilityKm, current_UVIndex))
+        logger.debug("current_windDegrees: %s ; current_feelsLikeF: %s" 
+                    % (current_windDegrees, current_feelsLikeF))
+        logger.debug("current_feelsLikeC: %s ; current_visibilityMi: %s"
+                    % (current_feelsLikeC, current_visibilityMi))
+        logger.debug("current_visibilityKm: %s ; current_UVIndex: %s"
+                    % (current_visibilityKm, current_UVIndex))
         current_precip1HrIn = str(current_json['current_observation']['precip_1hr_in'])
         current_precip1HrMm = str(current_json['current_observation']['precip_1hr_metric'])
         if current_precip1HrMm == "--":
@@ -548,12 +545,10 @@ while True:
             current_precip1HrIn = "0.0"
         current_precipTodayIn = str(current_json['current_observation']['precip_today_in'])
         current_precipTodayMm = str(current_json['current_observation']['precip_today_metric'])
-        if verbosity == True:
-            logger.debug("current_precip1HrIn: %s ; current_precip1HrMm: %s"
-                         % (current_precip1HrIn, current_precip1HrMm))
-        if verbosity == True:
-            logger.debug("current_precipTodayIn: %s ; current_precipTodayMm: %s"
-                         % (current_precipTodayIn, current_precipTodayMm))
+        logger.debug("current_precip1HrIn: %s ; current_precip1HrMm: %s"
+                    % (current_precip1HrIn, current_precip1HrMm))
+        logger.debug("current_precipTodayIn: %s ; current_precipTodayMm: %s"
+                     % (current_precipTodayIn, current_precipTodayMm))
         print(Fore.YELLOW + "Here's the detailed current weather for: " + Fore.CYAN + location2.city + ", " + location2.state)
         print(Fore.YELLOW + summary_lastupdated)
         print("")
@@ -591,28 +586,22 @@ while True:
           moreoptions == "hourly" or
           moreoptions == "1"):
         print(Fore.RED + "Loading...")
-        # *
-        #
-        # 0---  Damn it, bug!
         print("")
-        if verbosity == True:
-            logger.info("Selected view more hourly...")
+        logger.info("Selected view more hourly...")
         detailedHourlyIterations = 0
         print(Fore.YELLOW + "Here's the detailed hourly forecast for: " + Fore.CYAN + location2.city + ", " + location2.state)
         for hour in hourly_json['hourly_forecast']:
-            if verbosity == True:
-                logger.info("We're on iteration: %s" % detailedHourlyIterations)
+            logger.info("We're on iteration: %s" % detailedHourlyIterations)
             hourly_time = hour['FCTTIME']['civil']
             hourly_tempf = hour['temp']['english']
             hourly_tempc = hour['temp']['metric']
             hourly_month = str(hour['FCTTIME']['month_name'])
             hourly_day = str(hour['FCTTIME']['mday'])
             hourly_dewpointF = str(hour['dewpoint']['english'])
-            if verbosity == True:
-                logger.debug("hourly_time: %s ; hourly_month: %s"
-                             % (hourly_time, hourly_month))
-                logger.debug("hourly_day: %s ; hourly_dewpointF: %s"
-                             % (hourly_day, hourly_dewpointF))
+            logger.debug("hourly_time: %s ; hourly_month: %s"
+                        % (hourly_time, hourly_month))
+            logger.debug("hourly_day: %s ; hourly_dewpointF: %s"
+                        % (hourly_day, hourly_dewpointF))
             hourly_dewpointC = str(hour['dewpoint']['metric'])
             hourly_windMPH = str(hour['wspd']['english'])
             hourly_windKPH = str(hour['wspd']['metric'])
@@ -626,42 +615,37 @@ while True:
             hourly_UVIndex = str(hour['uvi'])
             hourly_humidity = str(hour['humidity'])
             hourly_feelsLikeF = str(hour['feelslike']['english'])
-            if verbosity == True:
-                logger.debug("hourly_windDegrees: %s ; hourly_UVIndex: %s"
-                             % (hourly_windDegrees, hourly_UVIndex))
-                logger.debug("hourly_humidity: %s ; hourly_feelsLikeF: %s"
-                             % (hourly_humidity, hourly_feelsLikeF))
+            logger.debug("hourly_windDegrees: %s ; hourly_UVIndex: %s"
+                        % (hourly_windDegrees, hourly_UVIndex))
+            logger.debug("hourly_humidity: %s ; hourly_feelsLikeF: %s"
+                        % (hourly_humidity, hourly_feelsLikeF))
             hourly_feelsLikeC = str(hour['feelslike']['metric'])
             hourly_precipIn = str(hour['qpf']['english'])
             hourly_precipMm = str(hour['qpf']['metric'])
             hourly_snowCheck = hour['snow']['english']
-            if verbosity == True:
-                logger.debug("hourly_feelsLikeC: %s ; hourly_precipIn: %s"
-                             % (hourly_feelsLikeC, hourly_precipIn))
-                logger.debug("hourly_precipMm: %s ; hourly_snowCheck: %s"
-                             % (hourly_precipMm, hourly_snowCheck))
-                logger.info("Starting snow check...")
+            logger.debug("hourly_feelsLikeC: %s ; hourly_precipIn: %s"
+                        % (hourly_feelsLikeC, hourly_precipIn))
+            logger.debug("hourly_precipMm: %s ; hourly_snowCheck: %s"
+                        % (hourly_precipMm, hourly_snowCheck))
+            logger.info("Starting snow check...")
             if hourly_snowCheck == "0.0":
                 hourly_snowData = False
-                if verbosity == True:
-                    logger.warn("No snow data! Maybe it's summer?")
+                logger.warn("No snow data! Maybe it's summer?")
             else:
                 hourly_snowData = True
-                if verbosity == True:
-                    logger.info("Lucky duck getting some snow.")
+                logger.info("Lucky duck getting some snow.")
             
             hourly_snowIn = str(hourly_snowCheck)
             hourly_snowMm = str(hour['snow']['metric'])
             hourly_precipChance = str(hour['pop'])
             hourly_pressureInHg = str(hour['mslp']['english'])
             hourly_pressureMb = str(hour['mslp']['metric'])
-            if verbosity == True:
-                logger.debug("hourly_snowIn: %s ; hourly_snowMm: %s"
-                             % (hourly_snowIn, hourly_snowMm))
-                logger.debug("hourly_precipChance: %s ; hourly_pressureInHg: %s"
-                             % (hourly_precipChance, hourly_pressureInHg))
-                logger.debug("hourly_pressureMb: %s" % hourly_pressureMb)
-                logger.info("Now printing weather data...")
+            logger.debug("hourly_snowIn: %s ; hourly_snowMm: %s"
+                        % (hourly_snowIn, hourly_snowMm))
+            logger.debug("hourly_precipChance: %s ; hourly_pressureInHg: %s"
+                        % (hourly_precipChance, hourly_pressureInHg))
+            logger.debug("hourly_pressureMb: %s" % hourly_pressureMb)
+            logger.info("Now printing weather data...")
             print("")
             # If you have verbosity on, there's a chance that the next
             # hourly iteration will start BEFORE the previous iteration
@@ -693,19 +677,16 @@ while True:
             if (detailedHourlyIterations == 6 or detailedHourlyIterations == 12
                 or detailedHourlyIterations == 18 or detailedHourlyIterations == 24
                 or detailedHourlyIterations == 30):
-                if verbosity == True:
-                    logger.debug("detailedHourlyIterations: %s" % detailedHourlyIterations)
-                    logger.debug("Asking user for continuation...")
+                logger.debug("detailedHourlyIterations: %s" % detailedHourlyIterations)
+                logger.debug("Asking user for continuation...")
                 try:
                     print("")
                     print(Fore.RED + "Please press enter to view the next 6 hours of hourly data.")
                     print("You can also press Control + C to head back to the input menu.")
                     input()
-                    if verbosity == True:
-                        logger.debug("Iterating 6 more times...")
+                    logger.debug("Iterating 6 more times...")
                 except KeyboardInterrupt:
-                    if verbosity == True:
-                        logger.debug("Exiting to main menu...")
+                    logger.debug("Exiting to main menu...")
                     break
     elif (moreoptions == "view the 10 day weather forecast" or
           moreoptions == "view more forecast data" or
@@ -715,111 +696,91 @@ while True:
           or moreoptions == "10 day weather forecast"
           or moreoptions == "2"):
         print(Fore.RED + "Loading...")
-        if verbosity == True:
-            logger.info("Selected view more 10 day...")
+        logger.info("Selected view more 10 day...")
         print("")
         detailedForecastIterations = 0
         print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
         for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
-            if verbosity == True:
-                logger.info("We're on iteration: %s" % detailedForecastIterations)
+            logger.info("We're on iteration: %s" % detailedForecastIterations)
             forecast10_weekday = day['date']['weekday']
             forecast10_month = str(day['date']['month'])
             forecast10_day = str(day['date']['day'])
             forecast10_highf = str(day['high']['fahrenheit'])
-            #
-            # * <buzz buzz>
-            #                                   what's that i hear?
-            if verbosity == True:
-                logger.debug("forecast10_weekday: %s ; forecast10_month: %s"
-                             % (forecast10_weekday, forecast10_month))
-                logger.debug("forecast10_day: %s ; forecast10_highf: %s"
-                             % (forecast10_day, forecast10_highf))
+            logger.debug("forecast10_weekday: %s ; forecast10_month: %s"
+                         % (forecast10_weekday, forecast10_month))
+            logger.debug("forecast10_day: %s ; forecast10_highf: %s"
+                        % (forecast10_day, forecast10_highf))
             forecast10_highc = str(day['high']['celsius'])
             forecast10_lowf = str(day['low']['fahrenheit'])
             forecast10_lowc = str(day['low']['celsius'])
             forecast10_conditions = day['conditions']
-            if verbosity == True:
-                logger.debug("forecast10_highc: %s ; forecast10_lowf: %s"
-                            % (forecast10_highc, forecast10_lowf))
-                logger.debug("forecast10_lowc: %s ; forecast10_conditions: %s"
-                             % (forecast10_lowc, forecast10_conditions))
+            logger.debug("forecast10_highc: %s ; forecast10_lowf: %s"
+                        % (forecast10_highc, forecast10_lowf))
+            logger.debug("forecast10_lowc: %s ; forecast10_conditions: %s"
+                        % (forecast10_lowc, forecast10_conditions))
             forecast10_precipTotalIn = str(day['qpf_allday']['in'])
             forecast10_precipTotalMm = str(day['qpf_allday']['mm'])
             forecast10_precipDayIn = str(day['qpf_day']['in'])
             forecast10_precipDayMm = str(day['qpf_day']['mm'])
-            if verbosity == True:
-                logger.debug("forecast10_precipTotalIn: %s ; forecast10_precipTotalMm: %s"
-                             % (forecast10_precipTotalIn, forecast10_precipTotalMm))
-                logger.debug("forecast10_precipDayIn: %s ; forecast10_precipDayMm: %s"
-                             % (forecast10_precipDayIn, forecast10_precipDayMm))
+            logger.debug("forecast10_precipTotalIn: %s ; forecast10_precipTotalMm: %s"
+                        % (forecast10_precipTotalIn, forecast10_precipTotalMm))
+            logger.debug("forecast10_precipDayIn: %s ; forecast10_precipDayMm: %s"
+                        % (forecast10_precipDayIn, forecast10_precipDayMm))
             forecast10_precipNightIn = str(day['qpf_night']['in'])
             forecast10_precipNightMm = str(day['qpf_night']['mm'])
-            if verbosity == True:
-                logger.debug("forecast10_precipNightIn: %s ; forecast10_precipNightMm: %s"
-                             % (forecast10_precipNightIn, forecast10_precipNightMm))
+            logger.debug("forecast10_precipNightIn: %s ; forecast10_precipNightMm: %s"
+                        % (forecast10_precipNightIn, forecast10_precipNightMm))
             forecast10_snowTotalCheck = day['snow_allday']['in']
-            if verbosity == True:
-                logger.debug("forecast10_snowTotalCheck: %s" % forecast10_snowTotalCheck)
+            logger.debug("forecast10_snowTotalCheck: %s" % forecast10_snowTotalCheck)
             if forecast10_snowTotalCheck == 0.0:
                 forecast10_snowTotalData = False
-                if verbosity == True:
-                    logger.warn("Oh no! No snow data for the day. Is it too warm?")
+                logger.warn("Oh no! No snow data for the day. Is it too warm?")
             else:
                 forecast10_snowTotalData = True
-                if verbosity == True:
-                    logger.info("Snow data for the day. Snow. I love snow.")
+                logger.info("Snow data for the day. Snow. I love snow.")
             forecast10_snowTotalIn = str(forecast10_snowTotalCheck)
             forecast10_snowTotalCm = str(day['snow_allday']['cm'])
             forecast10_snowDayCheck = day['snow_day']['in']
-            if verbosity == True:
-                logger.debug("forecast10_snowTotalIn: %s ; forecast10_snowTotalCm: %s"
-                             % (forecast10_snowTotalIn, forecast10_snowTotalCm))
-                logger.debug("forecast10_snowDayCheck: %s" % forecast10_snowDayCheck)
+            logger.debug("forecast10_snowTotalIn: %s ; forecast10_snowTotalCm: %s"
+                        % (forecast10_snowTotalIn, forecast10_snowTotalCm))
+            logger.debug("forecast10_snowDayCheck: %s" % forecast10_snowDayCheck)
             if forecast10_snowDayCheck == 0.0:
                 forecast10_snowDayData = False
-                if verbosity == True:
-                    logger.warn("Oh no! No snow data for the day. Is it too warm?")
+                logger.warn("Oh no! No snow data for the day. Is it too warm?")
             else:
                 forecast10_snowDayData = True
-                if verbosity == True:
-                    logger.info("Snow data for the day is available.")
+                logger.info("Snow data for the day is available.")
             forecast10_snowDayIn = str(forecast10_snowDayCheck)
             forecast10_snowDayCm = str(day['snow_day']['cm'])
             forecast10_snowNightCheck = day['snow_night']['in']
-            if verbosity == True:
-                logger.debug("forecast10_snowDayIn: %s ; forecast10_snowDayCm: %s"
-                             % (forecast10_snowDayIn, forecast10_snowDayCm))
-                logger.debug("forecast10_snowNightCheck: %s" % forecast10_snowNightCheck)
+            logger.debug("forecast10_snowDayIn: %s ; forecast10_snowDayCm: %s"
+                         % (forecast10_snowDayIn, forecast10_snowDayCm))
+            logger.debug("forecast10_snowNightCheck: %s" % forecast10_snowNightCheck)
             if forecast10_snowNightCheck == 0.0:
                 forecast10_snowNightData = False
-                if verbosity == True:
-                    logger.warn("Oh no! No snow data for the night. Is it too warm?")
+                logger.warn("Oh no! No snow data for the night. Is it too warm?")
             else:
                 forecast10_snowNightData = True
-                if verbosity == True:
-                    logger.info("Snow data for the night is available. Snow day?")
+                logger.info("Snow data for the night is available. Snow day?")
             forecast10_snowNightIn = str(forecast10_snowNightCheck)
             forecast10_snowNightCm = str(day['snow_night']['cm'])
             forecast10_maxWindMPH = str(day['maxwind']['mph'])
             forecast10_maxWindKPH = str(day['maxwind']['kph'])
-            if verbosity == True:
-                logger.debug("forecast10_snowNightIn: %s ; forecast10_snowNightCm: %s"
-                             % (forecast10_snowNightIn, forecast10_snowNightCm))
-                logger.debug("forecast10_maxWindMPH: %s ; forecast10_maxWindKPH: %s"
-                             % (forecast10_maxWindMPH, forecast10_maxWindKPH))
+            logger.debug("forecast10_snowNightIn: %s ; forecast10_snowNightCm: %s"
+                        % (forecast10_snowNightIn, forecast10_snowNightCm))
+            logger.debug("forecast10_maxWindMPH: %s ; forecast10_maxWindKPH: %s"
+                        % (forecast10_maxWindMPH, forecast10_maxWindKPH))
             forecast10_avgWindMPH = str(day['avewind']['mph'])
             forecast10_avgWindKPH = str(day['avewind']['kph'])
             forecast10_avgWindDir = day['avewind']['dir']
             forecast10_avgWindDegrees = str(day['avewind']['degrees'])
             forecast10_avgHumidity = str(day['avehumidity'])
-            if verbosity == True:
-                logger.debug("forecast10_avgWindMPH: %s ; forecast10_avgWindKPH: %s"
-                             % (forecast10_avgWindMPH, forecast10_avgWindKPH))
-                logger.debug("forecast10_avgWindDir: %s ; forecast10_avgWindDegrees: %s"
-                             % (forecast10_avgWindDir, forecast10_avgWindDegrees))
-                logger.debug("forecast10_avgHumidity: %s" % forecast10_avgHumidity)
-                logger.info("Printing weather data...")
+            logger.debug("forecast10_avgWindMPH: %s ; forecast10_avgWindKPH: %s"
+                        % (forecast10_avgWindMPH, forecast10_avgWindKPH))
+            logger.debug("forecast10_avgWindDir: %s ; forecast10_avgWindDegrees: %s"
+                        % (forecast10_avgWindDir, forecast10_avgWindDegrees))
+            logger.debug("forecast10_avgHumidity: %s" % forecast10_avgHumidity)
+            logger.info("Printing weather data...")
             print("")
             print(Fore.YELLOW + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ":")
             print(Fore.CYAN + forecast10_conditions + Fore.YELLOW + " with a high of "
@@ -857,29 +818,24 @@ while True:
                   forecast10_avgHumidity + "%")
             detailedForecastIterations = detailedForecastIterations + 1
             if detailedForecastIterations == 5:
-                if verbosity == True:
-                    logger.debug("detailedForecastIterations: %s" % detailedForecastIterations)
+                logger.debug("detailedForecastIterations: %s" % detailedForecastIterations)
                 try:
                     print(Fore.RED + "Press enter to view the next 5 days of weather data.")
                     print("You can also press Control + C to return to the input menu.")
                     input()
-                    if verbosity == True:
-                        logger.info("Iterating 5 more times...")
+                    logger.info("Iterating 5 more times...")
                 except KeyboardInterrupt:
                     break
-                    if verbosity == True:
-                        logger.info("Exiting to the main menu.")
+                    logger.info("Exiting to the main menu.")
     elif (moreoptions == "close pyweather" or moreoptions == "close"
           or moreoptions == "6" or moreoptions == "close pw"):
         sys.exit()
     elif (moreoptions == "update pyweather" or moreoptions == "update"
           or moreoptions == "update pw" or moreoptions == "5"
           or moreoptions == "check for pyweather updates"):
-        if verbosity == True:
-            logger.info("Selected update.")
-        if verbosity == True:
-            logger.debug("buildnumber: %s ; buildversion: %s" %
-                         (buildnumber, buildversion))
+        logger.info("Selected update.")
+        logger.debug("buildnumber: %s ; buildversion: %s" %
+                    (buildnumber, buildversion))
         print("Checking for updates. This shouldn't take that long.")
         try:
             versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
@@ -1046,15 +1002,15 @@ while True:
             if SR_hour > 12:
                 SR_hour = SR_hour - 12
                 SR_hour = str(SR_hour)
-                SR_minute = str(SR_minute)
+                SR_minute = str(SR_minute).zfill(2)
                 sunrise_time = SR_hour + ":" + SR_minute + " PM"
             elif SR_hour == 12:
                 SR_hour = str(SR_hour)
-                SR_minute = str(SR_minute)
+                SR_minute = str(SR_minute).zfill(2)
                 sunrise_time = SR_hour + ":" + SR_minute + " PM"
             else:
                 SR_hour = str(SR_hour)
-                SR_minute = str(SR_minute)
+                SR_minute = str(SR_minute).zfill(2)
                 sunrise_time = SR_hour + ":" + SR_minute + " AM"
 
             SS_minute = int(astronomy_json['moon_phase']['sunset']['minute'])
@@ -1062,15 +1018,15 @@ while True:
             if SS_hour > 12:
                 SS_hour = SS_hour - 12
                 SS_hour = str(SS_hour)
-                SS_minute = str(SS_minute)
+                SS_minute = str(SS_minute).zfill(2)
                 sunset_time = SS_hour + ":" + SS_minute + " PM"
             elif SS_hour == 12:
                 SS_hour = str(SS_hour)
-                SS_minute = str(SS_minute)
+                SS_minute = str(SS_minute).zfill(2)
                 sunset_time = SS_hour + ":" + SS_minute + " PM"
             else:
                 SS_hour = str(SS_hour)
-                SS_minute = str(SS_minute)
+                SS_minute = str(SS_minute).zfill(2)
                 sunset_time = SS_hour + ":" + SS_minute + " AM"
                 
         moon_percentIlluminated = str(astronomy_json['moon_phase']['percentIlluminated'])
@@ -1082,15 +1038,15 @@ while True:
         if MR_hour > 12:
             MR_hour = MR_hour - 12
             MR_hour = str(MR_hour)
-            MR_minute = str(MR_minute)
+            MR_minute = str(MR_minute).zfill(2)
             moonrise_time = MR_hour + ":" + MR_minute + " PM"
         elif MR_hour == 12:
             MR_hour = str(MR_hour)
-            MR_minute = str(MR_minute)
+            MR_minute = str(MR_minute).zfill(2)
             moonrise_time = MR_hour + ":" + MR_minute + " PM"
         else:
             MR_hour = str(MR_hour)
-            MR_minute = str(MR_minute)
+            MR_minute = str(MR_minute).zfill(2)
             moonrise_time = MR_hour + ":" + MR_minute + " AM"
         
         try:    
@@ -1105,15 +1061,15 @@ while True:
             if MS_hour > 12 and MS_data == True:
                 MS_hour = MS_hour - 12
                 MS_hour = str(MS_hour)
-                MS_minute = str(MS_minute)
+                MS_minute = str(MS_minute).zfill(2)
                 moonset_time = MS_hour + ":" + MS_minute + " PM"
             elif MS_hour == 12 and MS_data == True:
                 MS_hour = str(MS_hour)
-                MS_minute = str(MS_minute)
+                MS_minute = str(MS_minute).zfill(2)
                 moonset_time = MS_hour + ":" + MS_minute + " PM"
             elif MS_hour < 12 and MS_data == True:
                 MS_hour = str(MS_hour)
-                MS_minute = str(MS_minute)
+                MS_minute = str(MS_minute).zfill(2)
                 moonset_time = MS_hour + ":" + MS_minute + " AM"
             else:
                 MS_data = False

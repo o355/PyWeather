@@ -10,6 +10,7 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 
 ## version 0.5 beta (The Back to the Future Update) - To be released early April
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.
+* Adds alerts to PyWeather for US/EU users. Canada, I love you, blame Wunderground.
 * Adds historical weather information to PyWeather.
 * Adds 10-day hourly weather to PyWeather (you'll hit enter 40 times!...by default).
 * Adds a method in which PyWeather will display rain data for the day/night if the temperature is above 32F.
@@ -25,6 +26,7 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 * Adds verbosity (of course it did) to almost all scripts (yay)
 * Adds the ability to "back up" your API key, and a script to do it (it's very simple...)
 * No more if verbosity == True in the main PyWeather script.
+* Fixes a bug in which sunset/sunrise times would show 6:0, when it was really 6:00, etc.
 * Cleans up some legacy code.
 
 ## version 0.4.1 beta - Released 3/8/2017
