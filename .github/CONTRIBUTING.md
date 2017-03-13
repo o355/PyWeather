@@ -18,3 +18,10 @@ Documentation? I'll set up read the docs when I feel like it. The wiki will do f
 Rules? Respect everyone. Everyone. There will be no discrimination on who you are. None of the bad stuff, only positive stuff around here. I'm a positive guy. Respect the rules, respect each other, and I won't have an issue.
 
 Questions? Report an issue, and I'll do my best to answer them in a reasonable time!
+
+**When you contribute, you'll get thanked in a release. Here's how a thank you in a changelog will probably look.**
+
+- Bug Fix: Fixed a random bug (thanks to @yourusername for reporting)
+- Pull Request: Added xyz (thanks to @yourusername), etc.
+- Translations: Translated pyweather.py to Spanish (thanks to @tuelnombredeusuario for translating)
+- Enhancements: Added xyz (thanks to @yourusername for suggesting)
