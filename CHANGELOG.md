@@ -6,6 +6,7 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 
 ## version 0.5.1 beta - To be released early April
 * Removes if verbosity == True in the separate updater, and keybackup scripts.
+* Removes config.ini from GitHub, and the setup/config scripts will booth check for a config file before starting. If none is present, it's made on the spot. This is to help with users doing `git fetch` for PyWeather updates.
 * Adds verbosity.
 
 ## version 0.5 beta (The Back to the Future Update) - To be released early April
