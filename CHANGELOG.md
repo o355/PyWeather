@@ -20,13 +20,14 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 * Reworks the config file some, sections are now where they need to be (aka verbosity has it's own section)
 * Removes the if verbosity == True garbage in the setup file.
 
-## version 0.4.2 beta - To be released 3/14/2017
+## version 0.4.2 beta - Released 3/14/2017
 * Adds an autoupdater to PyWeather
 * Adds the ability to configure the config file in the setup script
 * Adds verbosity (of course it did) to almost all scripts (yay)
 * Adds the ability to "back up" your API key, and a script to do it (it's very simple...)
 * No more if verbosity == True in the main PyWeather script.
 * Fixes a bug in which sunset/sunrise times would show 6:0, when it was really 6:00, etc.
+* Fixes a bug in which if the sun/moon data or almanac data wasn't prefetched on summary, in the detailed view, every time a user viewed the data, a new API call was made.
 * Cleans up some legacy code.
 
 ## version 0.4.1 beta - Released 3/8/2017
