@@ -314,6 +314,10 @@ logger.debug("summary_feelslikef: %s ; summary_feelslikec: %s"
 logger.debug("summary_dewPointF: %s ; summary_dewPointC: %s"
              % (summary_dewPointF, summary_dewPointC))
     
+sundata_prefetched = False
+almanac_prefetched = False
+logger.debug("sundata_prefetched: %s ; almanac_prefetched: %s"
+             % (sundata_prefetched, almanac_prefetched))
 # <--- Sun data gets parsed here, if the option for showing it in the summary
 # is enabled in the config. --->
 
@@ -381,6 +385,8 @@ if sundata_summary == True:
         logger.debug("SS_hour: %s ; SS_minute: %s" %
                      (SS_hour, SS_minute))
         logger.debug("sunset_time: %s" % sunset_time)
+    sundata_prefetched = True
+    logger.debug("sundata_prefetched: %s" % sundata_prefetched)
 
 # <--- Almanac data gets parsed here, if showing almanac data is
 # enabled in the config. --->
@@ -406,6 +412,11 @@ if almanac_summary == True:
     almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
     almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
     almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
+    almanac_prefetched = True
+    logger.debug("almanac_recordLowF: %s ; almanac_recordLowC: %s"
+                 % (almanac_recordLowF, almanac_recordLowC))
+    logger.debug("almanac_recordLowYear: %s ; almanac_prefetched: %s"
+                 % (almanac_recordLowYear, almanac_prefetched))
 
 logger.info("Initalize color...")
 init()
@@ -839,11 +850,9 @@ while True:
         print("Checking for updates. This shouldn't take that long.")
         try:
             versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
-            if verbosity == True:
-                logger.debug("versioncheck: %s" % versioncheck)
+            logger.debug("versioncheck: %s" % versioncheck)
         except:
-            if verbosity == True:
-                logger.warn("Couldn't check for updates! Is there an internet connection?")
+            logger.warn("Couldn't check for updates! Is there an internet connection?")
             print(Fore.RED + "Couldn't check for updates.")
             print("Make sure GitHub user content is unblocked, and you have an internet connection.")
             print("Error 54, pyweather.py")
@@ -851,35 +860,30 @@ while True:
         versionJSON = json.load(reader(versioncheck))
         if jsonVerbosity == True:
             logger.debug("versionJSON: %s" % versionJSON)
-        if verbosity == True:
-            logger.debug("Loaded versionJSON with reader %s" % reader)
+        logger.debug("Loaded versionJSON with reader %s" % reader)
         version_buildNumber = float(versionJSON['updater']['latestbuild'])
         version_latestVersion = versionJSON['updater']['latestversion']
         version_latestURL = versionJSON['updater']['latesturl']
         version_latestFileName = versionJSON['updater']['latestfilename']
-        if verbosity == True:
-            logger.debug("version_buildNumber: %s ; version_latestVersion: %s"
-                         % (version_buildNumber, version_latestVersion))
-            logger.debug("version_latestURL: %s ; verion_latestFileName: %s"
-                         % (version_latestURL, version_latestFileName))
+        logger.debug("version_buildNumber: %s ; version_latestVersion: %s"
+                    % (version_buildNumber, version_latestVersion))
+        logger.debug("version_latestURL: %s ; verion_latestFileName: %s"
+                    % (version_latestURL, version_latestFileName))
         version_latestReleaseDate = versionJSON['updater']['releasedate']
-        if verbosity == True:
-            logger.debug("version_latestReleaseDate: %s" % version_latestReleaseDate)
+        logger.debug("version_latestReleaseDate: %s" % version_latestReleaseDate)
         if buildnumber >= version_buildNumber:
-            if verbosity == True:
-                logger.info("PyWeather is up to date.")
-                logger.info("local build (%s) >= latest build (%s)"
-                            % (buildnumber, version_buildNumber))
+            logger.info("PyWeather is up to date.")
+            logger.info("local build (%s) >= latest build (%s)"
+                        % (buildnumber, version_buildNumber))
             print("")
             print(Fore.GREEN + "PyWeather is up to date!")
             print("You have version: " + Fore.CYAN + buildversion)
             print(Fore.GREEN + "The latest version is: " + Fore.CYAN + version_latestVersion)
         elif buildnumber < version_buildNumber:
             print("")
-            if verbosity == True:
-                logger.warn("PyWeather is NOT up to date.")
-                logger.warn("local build (%s) < latest build (%s)"
-                            % (buildnumber, version_buildNumber))
+            logger.warn("PyWeather is NOT up to date.")
+            logger.warn("local build (%s) < latest build (%s)"
+                        % (buildnumber, version_buildNumber))
             print(Fore.RED + "PyWeather is not up to date! :(")
             print(Fore.RED + "You have version: " + Fore.CYAN + buildversion)
             print(Fore.RED + "The latest version is: " + Fore.CYAN + version_latestVersion)
@@ -887,83 +891,89 @@ while True:
             print("")
             print(Fore.RED + "Would you like to download the latest version?" + Fore.YELLOW)
             downloadLatest = input("Yes or No: ").lower()
-            if verbosity == True:
-                logger.debug("downloadLatest: %s" % downloadLatest)
+            logger.debug("downloadLatest: %s" % downloadLatest)
             if downloadLatest == "yes":
                 print("")
-                if verbosity == True:
-                    logger.debug("Downloading latest version...")
+                logger.debug("Downloading latest version...")
                 print(Fore.YELLOW + "Downloading the latest version of PyWeather...")
                 try:
                     with urllib.request.urlopen(version_latestURL) as update_response, open(version_latestFileName, 'wb') as update_out_file:
-                        if verbosity == True:
-                            logger.debug("update_response: %s ; update_out_file: %s" %
-                                         (update_response, update_out_file))
+                        logger.debug("update_response: %s ; update_out_file: %s" %
+                                    (update_response, update_out_file))
                         shutil.copyfileobj(update_response, update_out_file)
                 except:
-                    if verbosity == True:
-                        logger.warn("Couldn't download the latest version!")
-                        logger.warn("Is the internet online?")
+                    logger.warn("Couldn't download the latest version!")
+                    logger.warn("Is the internet online?")
                     print(Fore.RED + "Couldn't download the latest version.")
                     print("Make sure GitHub user content is unblocked, "
                           + "and you have an internet connection.")
                     print("Error 55, pyweather.py")
                     continue
-                if verbosity == True:
-                    logger.debug("Latest version was saved, filename: %s"
-                                 % version_latestFileName)
+                logger.debug("Latest version was saved, filename: %s"
+                            % version_latestFileName)
                 print(Fore.YELLOW + "The latest version of PyWeather was downloaded " +
                       "to the base directory of PyWeather, and saved as " +
                       Fore.CYAN + version_latestFileName + Fore.YELLOW + ".")
                 continue
             elif downloadLatest == "no":
-                if verbosity == True:
-                    logger.debug("Not downloading the latest version.")
+                logger.debug("Not downloading the latest version.")
                 print(Fore.YELLOW + "Not downloading the latest version of PyWeather.")
                 print("For reference, you can download the latest version of PyWeather at:")
                 print(Fore.CYAN + version_latestURL)
                 continue
             else:
-                if verbosity == True:
-                    logger.warn("Input could not be understood!")
+                logger.warn("Input could not be understood!")
                 print(Fore.GREEN + "Could not understand what you said.")
                 continue
         else:
-            if verbosity == True:
-                logger.error("PW updater failed. Build comparison below.")
-                try:
-                    logger.error("local build: %s ; updater build: %s"
-                                % (buildnumber, version_buildNumber))
-                except:
-                    logger.error("Variables are corrupted, or a typo was made.")
-                    logger.error("Trying to list variables 1 more time...")
-                    try:
-                        logger.error("buildnumber: %s" % buildnumber)
-                    except:
-                        logger.error("Variable buildnumber is corrupt.")
+            logger.error("PW updater failed. Variables corrupt, maybe?")
             print(Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
             print(Fore.RED + "Error 53, pyweather.py")
             continue
     elif (moreoptions == "3" or moreoptions == "view almanac"
           or moreoptions == "almanac" or moreoptions == "view almanac for today"
           or moreoptions == "view the almanac"):
+        logger.info("Selected option: almanac")
         print(Fore.RED + "Loading...")
         print("")
-        if almanac_summary == False:
-            almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
+        if almanac_summary == False and almanac_prefetched == False:
+            logger.info("Almanac data NOT fetched at start. Fetching now...")
+            try:
+                almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
+            except:
+                logger.warn("Couldn't contact Wunderground's API! Is the internet offline?")
+                print("Couldn't contact Wunderground's API. Make sure it's unblocked, and you have internet access.")
+            logger.debug("almanacurl: %s" % almanacurl)
             almanacJSON = urllib.request.urlopen(almanacurl)
+            logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
             almanac_json = json.load(reader(almanacJSON))
+            if jsonVerbosity == True:
+                logger.debug("almanac_json: %s" % almanac_json)
+            logger.debug("1 JSON loaded successfully.")
             almanac_airportCode = almanac_json['almanac']['airport_code']
             almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
             almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
             almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
+            logger.debug("almanac_airportCode: %s ; almanac_normalHighF: %s"
+                         % (almanac_airportCode, almanac_normalHighF))
+            logger.debug("almanac_normalHighC: %s ; almanac_recordHighF: %s"
+                         % (almanac_normalHighC, almanac_recordHighF))
             almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
             almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
             almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
             almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
+            logger.debug("almanac_recordHighC: %s ; almanac_recordHighYear: %s"
+                         % (almanac_recordHighC, almanac_recordHighYear))
+            logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s"
+                         % (almanac_normalLowF, almanac_normalLowC))
             almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
             almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
             almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
+            logger.debug("alamanac_recordLowF: %s ; almanac_recordLowC: %s"
+                         % (almanac_recordLowF, almanac_recordLowC))
+            logger.debug("almanac_recordLowYear: %s" % almanac_recordLowYear)
+            almanac_prefetched = True
+            logger.debug("almanac_prefetched: %s" % almanac_prefetched)
         
         print(Fore.YELLOW + "Here's the almanac for: " + Fore.CYAN +
               almanac_airportCode + Fore.YELLOW + " (the nearest airport)")
@@ -987,94 +997,169 @@ while True:
           or moreoptions == "view moonset"):
         print(Fore.RED + "Loading...")
         print("")
-        if sundata_summary == False:
+        logger.info("Selected option - Sun/moon data")
+        if sundata_summary == False and sundata_prefetched == False:
+            logger.info("Fetching sundata, was not prefetched.")
             try:
                 sundataJSON = urllib.request.urlopen(astronomyurl)
+                logger.debug("Retrieved sundata JSON with response: %s" % sundataJSON)
             except:
                 print("Couldn't connect to Wunderground's API. "
                       + "Make sure you have an internet connection.")
+                print("Press enter to continue.")
+                input()
+                sys.exit()
+            
             astronomy_json = json.load(reader(sundataJSON))
+            if jsonVerbosity == True:
+                logger.debug("astronomy_json: %s" % astronomy_json)
             SR_minute = int(astronomy_json['moon_phase']['sunrise']['minute'])
             SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
-            if verbosity == True:
-                logger.debug("SR_minute: %s ; SR_hour: %s" %
-                             (SR_minute, SR_hour))
+            logger.debug("SR_minute: %s ; SR_hour: %s" %
+                        (SR_minute, SR_hour))
             if SR_hour > 12:
+                logger.debug("Sunrise Hour > 12. Prefixing PM, 12-hr correction...")
                 SR_hour = SR_hour - 12
                 SR_hour = str(SR_hour)
                 SR_minute = str(SR_minute).zfill(2)
                 sunrise_time = SR_hour + ":" + SR_minute + " PM"
+                logger.debug("SR_hour: %s ; SR_minute: %s" %
+                             (SR_hour, SR_minute))
+                logger.debug("sunrise_time: %s" % sunrise_time)
             elif SR_hour == 12:
+                logger.debug("Sunrise Hour = 12. Prefixing PM.")
                 SR_hour = str(SR_hour)
                 SR_minute = str(SR_minute).zfill(2)
                 sunrise_time = SR_hour + ":" + SR_minute + " PM"
+                logger.debug("SR_hour: %s ; SR_minute: %s" %
+                             (SR_hour, SR_minute))
+                logger.debug("SR_minute: %s" % SR_minute)
             else:
+                logger.debug("Sunrise Hour < 12. Prefixing AM.")
                 SR_hour = str(SR_hour)
                 SR_minute = str(SR_minute).zfill(2)
                 sunrise_time = SR_hour + ":" + SR_minute + " AM"
+                logger.debug("SR_hour: %s ; SR_minute: %s" %
+                             (SR_hour, SR_minute))
+                logger.debug("sunrise_time: %s" % sunrise_time)
 
             SS_minute = int(astronomy_json['moon_phase']['sunset']['minute'])
             SS_hour = int(astronomy_json['moon_phase']['sunset']['hour'])
+            logger.debug("SS_minute: %s ; SS_hour: %s" %
+                         (SS_minute, SS_hour))
             if SS_hour > 12:
+                logger.debug("Sunset hour > 12. Prefixing PM, 12-hr correction...")
                 SS_hour = SS_hour - 12
                 SS_hour = str(SS_hour)
                 SS_minute = str(SS_minute).zfill(2)
                 sunset_time = SS_hour + ":" + SS_minute + " PM"
+                logger.debug("SS_hour: %s ; SS_minute: %s"
+                             % (SS_hour, SS_minute))
+                logger.debug("sunset_time: %s" % sunset_time)
             elif SS_hour == 12:
+                logger.debug("Sunset hour = 12. Prefixing PM...")
                 SS_hour = str(SS_hour)
                 SS_minute = str(SS_minute).zfill(2)
                 sunset_time = SS_hour + ":" + SS_minute + " PM"
+                logger.debug("SS_hour: %s ; SS_minute: %s"
+                             % (SS_hour, SS_minute))
+                logger.debug("sunset_time: %s" % sunset_time)
             else:
+                logger.debug("Sunset hour < 12. Prefixing AM...")
                 SS_hour = str(SS_hour)
                 SS_minute = str(SS_minute).zfill(2)
                 sunset_time = SS_hour + ":" + SS_minute + " AM"
+                logger.debug("SS_hour: %s ; SS_minute: %s"
+                             % (SS_hour, SS_minute))
+                logger.debug("sunset_time: %s" % sunset_time)
+            sundata_prefetched = True
+            logger.debug("sundata_prefetched: %s" % sundata_prefetched)
                 
         moon_percentIlluminated = str(astronomy_json['moon_phase']['percentIlluminated'])
         moon_age = str(astronomy_json['moon_phase']['ageOfMoon'])
         moon_phase = astronomy_json['moon_phase']['phaseofMoon']
         MR_minute = int(astronomy_json['moon_phase']['moonrise']['minute'])
+        logger.debug("moon_percentIlluminated: %s ; moon_age: %s"
+                     % (moon_percentIlluminated, moon_age))
+        logger.debug("moon_phase: %s ; MR_minute: %s" %
+                     (moon_phase, MR_minute))
         MR_hour = int(astronomy_json['moon_phase']['moonrise']['hour'])
+        logger.debug("MR_minute: %s" % MR_minute)
             
         if MR_hour > 12:
+            logger.debug("Moonrise hour > 12. Prefixing PM, 12-hr correction...")
             MR_hour = MR_hour - 12
             MR_hour = str(MR_hour)
             MR_minute = str(MR_minute).zfill(2)
             moonrise_time = MR_hour + ":" + MR_minute + " PM"
+            logger.debug("MR_hour: %s ; MR_minute: %s"
+                         % (MR_hour, MR_minute))
+            logger.debug("moonrise_time: %s" % moonrise_time)
         elif MR_hour == 12:
+            logger.debug("Moonrise hour = 12. Prefixing PM...")
             MR_hour = str(MR_hour)
             MR_minute = str(MR_minute).zfill(2)
             moonrise_time = MR_hour + ":" + MR_minute + " PM"
+            logger.debug("MR_hour: %s ; MR_minute: %s" %
+                         (MR_hour, MR_minute))
+            logger.debug("moonrise_time: %s" % moonrise_time)
         else:
+            logger.debug("Moonrise hour < 12. Prefixing AM...")
             MR_hour = str(MR_hour)
             MR_minute = str(MR_minute).zfill(2)
             moonrise_time = MR_hour + ":" + MR_minute + " AM"
+            logger.debug("MR_hour: %s ; MR_minute: %s" %
+                         (MR_hour, MR_minute))
+            logger.debug("moonrise_time: %s" % moonrise_time)
         
         try:    
             MS_minute = int(astronomy_json['moon_phase']['moonset']['minute'])
             MS_hour = int(astronomy_json['moon_phase']['moonset']['hour'])
             MS_data = True
+            logger.debug("MS_minute: %s ; MS_hour: %s" %
+                         (MS_minute, MS_hour))
+            logger.debug("MS_data: %s" % MS_data)
         except:
+            logger.warn("Moonset data is not available!")
             MS_data = False
             moonset_time = "Unavailable"
+            logger.debug("MS_data: %s ; moonset_time: %s"
+                         % (MS_data, moonset_time))
         
         if MS_data == True:
+            logger.debug("Moonset data is available. Preceding with checks...")
             if MS_hour > 12 and MS_data == True:
+                logger.debug("Moonset hour > 12. Prefixing PM, 12-hr correction...")
                 MS_hour = MS_hour - 12
                 MS_hour = str(MS_hour)
                 MS_minute = str(MS_minute).zfill(2)
                 moonset_time = MS_hour + ":" + MS_minute + " PM"
+                logger.debug("MS_hour: %s ; MS_minute: %s"
+                             % (MS_hour, MS_minute))
+                logger.debug("moonset_time: %s" % moonset_time)
             elif MS_hour == 12 and MS_data == True:
+                logger.debug("Moonset hour = 12. Prefixing PM...")
                 MS_hour = str(MS_hour)
                 MS_minute = str(MS_minute).zfill(2)
                 moonset_time = MS_hour + ":" + MS_minute + " PM"
+                logger.debug("MS_hour: %s ; MS_minute: %s"
+                             % (MS_hour, MS_minute))
+                logger.debug("moonset_time: %s" % moonset_time)
             elif MS_hour < 12 and MS_data == True:
+                logger.debug("Moonset hour < 12. Prefixing AM...")
                 MS_hour = str(MS_hour)
                 MS_minute = str(MS_minute).zfill(2)
                 moonset_time = MS_hour + ":" + MS_minute + " AM"
+                logger.debug("MS_hour: %s ; MS_minute: %s"
+                             % (MS_hour, MS_minute))
+                logger.debug("moonset_time: %s")
             else:
                 MS_data = False
                 moonset_time = "Unavailable"
+                logger.debug("MS_data: %s ; moonset_time: %s" %
+                             (MS_data, moonset_time))
         
+        logger.info("Printing data...")
         print(Fore.YELLOW + "Here's the detailed sun/moon data for: " +
               Fore.CYAN + location2.city + ", " + location2.state)
         print("")
@@ -1092,7 +1177,6 @@ while True:
     elif moreoptions == "tell me a joke":
         print("I'm not Siri.")
     else:
-        if verbosity == True:
-            logger.warn("Input could not be understood!")
+        logger.warn("Input could not be understood!")
         print(Fore.RED + "Not a valid option.")
         print("")

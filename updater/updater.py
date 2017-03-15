@@ -1,4 +1,4 @@
-# PyWeather Updater - 0.4 beta
+# PyWeather Updater - 0.4.2 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 

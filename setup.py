@@ -1,4 +1,4 @@
-# PyWeather Setup 0.4.1 beta
+# PyWeather Setup 0.4.2 beta
 # (c) 2017, o355, licensed under GNU GPL v3
 # If any random imports show beneath here, blame Eclipse.
 
@@ -10,7 +10,7 @@
 
 if (verbosity == True or jsonVerbosity == True):
     import logging
-    logger = logging.getLogger('pyweather_0.3.2beta')
+    logger = logging.getLogger('pyweather_setup_0.4.2beta')
     logger.setLevel(logging.DEBUG)
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)

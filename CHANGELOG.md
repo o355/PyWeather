@@ -11,7 +11,6 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 
 ## version 0.5 beta (The Back to the Future Update) - To be released early April
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.
-* Adds alerts to PyWeather for US/EU users. Canada, I love you, blame Wunderground.
 * Adds historical weather information to PyWeather.
 * Adds 10-day hourly weather to PyWeather (you'll hit enter 40 times!...by default).
 * Adds a method in which PyWeather will display rain data for the day/night if the temperature is above 32F.
