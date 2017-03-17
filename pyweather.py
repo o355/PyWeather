@@ -1190,10 +1190,10 @@ while True:
         historicalJSON = urllib.request.urlopen(historicalurl)
         historical_json = json.load(reader(historicalJSON))
         historical_date = historical_json['history']['date']['pretty']
-        for data in historical_json['history']['dailysummary']:
-            historical_highF = data['maxtempi']
-        print(historical_highF)
-        print(historical_highF)     
+        for data in historical_json['history']['observations']:
+            print(data['tempm'])
+            print(data['tempi'])
+            
     elif moreoptions == "tell me a joke":
         print("I'm not Siri.")
     else:
