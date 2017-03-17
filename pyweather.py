@@ -1,4 +1,4 @@
-# PyWeather 0.4.2 beta
+# PyWeather 0.5 beta
 # (c) 2017 o355, GNU GPL 3.0.
 # If there any random imports below here, blame Eclipse.
 
@@ -502,15 +502,19 @@ while True:
           + Fore.YELLOW + ")")
     print("- View more hourly data (or press " + Fore.CYAN + "1"
           + Fore.YELLOW + ")")
-    print("- View more forecast data (or press " + Fore.CYAN + "2"
+    print("- View the 10 day hourly forecast (or press " + Fore.CYAN + "2"
           + Fore.YELLOW + ")")
-    print("- View the almanac for today (or press " + Fore.CYAN + "3"
+    print("- View more forecast data (or press " + Fore.CYAN + "3"
+          + Fore.YELLOW + ")")
+    print("- View the almanac for today (or press " + Fore.CYAN + "4"
+          + Fore.YELLOW + ")")
+    print("- View historical weather data (or press " + Fore.CYAN + "5"
           + Fore.YELLOW + ")")
     print("- View detailed sun/moon rise/set data (or press " + Fore.CYAN +
-          "4" + Fore.YELLOW + ")")
-    print("- Check for PyWeather updates (or press " + Fore.CYAN + "5"
+          "6" + Fore.YELLOW + ")")
+    print("- Check for PyWeather updates (or press " + Fore.CYAN + "7"
           + Fore.YELLOW + ")")
-    print("- Close PyWeather (or press " + Fore.CYAN + "6" + Fore.YELLOW
+    print("- Close PyWeather (or press " + Fore.CYAN + "8" + Fore.YELLOW
           + ")")
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
@@ -705,7 +709,7 @@ while True:
           or moreoptions == "view the 10 day"
           or moreoptions == "10 day" or moreoptions == "10 day forecast"
           or moreoptions == "10 day weather forecast"
-          or moreoptions == "2"):
+          or moreoptions == "3"):
         print(Fore.RED + "Loading...")
         logger.info("Selected view more 10 day...")
         print("")
@@ -839,10 +843,10 @@ while True:
                     break
                     logger.info("Exiting to the main menu.")
     elif (moreoptions == "close pyweather" or moreoptions == "close"
-          or moreoptions == "6" or moreoptions == "close pw"):
+          or moreoptions == "8" or moreoptions == "close pw"):
         sys.exit()
     elif (moreoptions == "update pyweather" or moreoptions == "update"
-          or moreoptions == "update pw" or moreoptions == "5"
+          or moreoptions == "update pw" or moreoptions == "7"
           or moreoptions == "check for pyweather updates"):
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
@@ -930,7 +934,7 @@ while True:
             print(Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
             print(Fore.RED + "Error 53, pyweather.py")
             continue
-    elif (moreoptions == "3" or moreoptions == "view almanac"
+    elif (moreoptions == "4" or moreoptions == "view almanac"
           or moreoptions == "almanac" or moreoptions == "view almanac for today"
           or moreoptions == "view the almanac"):
         logger.info("Selected option: almanac")
@@ -992,7 +996,7 @@ while True:
         print(Fore.YELLOW + "Normal Low: " + Fore.CYAN + almanac_normalLowF + "°F ("
               + almanac_normalLowC + "°C)")
         print("")
-    elif (moreoptions == "4" or moreoptions == "view sunrise"
+    elif (moreoptions == "6" or moreoptions == "view sunrise"
           or moreoptions == "view sunset" or moreoptions == "view moonrise"
           or moreoptions == "view moonset"):
         print(Fore.RED + "Loading...")
@@ -1174,6 +1178,21 @@ while True:
               moon_age + " days")
         print(Fore.YELLOW + "Phase of the moon: " + Fore.CYAN +
               moon_phase)
+    elif (moreoptions == "5"):
+        print("To show historical data for this location, please enter a date to show the data.")
+        print("The date must be in the format YYYYMMDD.")
+        print("E.g: If I wanted to see the weather for February 15, 2013, you'd enter 20130215.")
+        print("Input the desired date below.")
+        historicaldate = input("Input here: ").lower()
+        print(Fore.RED + "Loading...")
+        print("")
+        historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historicaldate +  '/q/' + latstr + "," + lonstr + '.json'
+        historicalJSON = urllib.request.urlopen(historicalurl)
+        historical_json = json.load(reader(historicalJSON))
+        historical_date = historical_json['history']['date']['pretty']
+        historical_highF = historical_json['history']['dailysummary']['maxtempi']
+        historical_highC = historical_json['history']['dailysummary']['maxtempm']
+        print(historical_highF)     
     elif moreoptions == "tell me a joke":
         print("I'm not Siri.")
     else:
