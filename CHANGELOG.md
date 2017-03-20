@@ -6,8 +6,9 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 
 ## version 0.5.1 beta - To be released early April
 * Removes if verbosity == True in the separate updater, and keybackup scripts.
-* Removes config.ini from GitHub, and the setup/config scripts will booth check for a config file before starting. If none is present, it's made on the spot. This is to help with users doing `git fetch` for PyWeather updates.
+* Removes config.ini from GitHub, and the setup/config scripts will both check for a config file before starting. If none is present, it's made on the spot. This is to help with users doing `git fetch` for PyWeather updates.
 * Adds verbosity.
+* Adds the ability to load your backup key if PyWeather can't access your primary key.
 
 ## version 0.5 beta (The Back to the Future Update) - To be released early April
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.

@@ -1,4 +1,4 @@
-# PyWeather Updater - 0.4.2 beta
+# PyWeather Updater - 0.5 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 
@@ -33,8 +33,8 @@ if (verbosity == True or jsonVerbosity == True):
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)
 
-buildnumber = 42
-buildversion = "0.4.2 beta"
+buildnumber = 50
+buildversion = "0.5 beta"
 if verbosity == True:
     logger.debug("buildnumber: %s ; buildversion: %s" %
                 (buildnumber, buildversion))

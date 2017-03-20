@@ -73,8 +73,8 @@ except FileNotFoundError:
     sys.exit()
 logger.debug("apikey = %s" % apikey)
  
-buildnumber = 42
-buildversion = '0.4.2 beta'    
+buildnumber = 50
+buildversion = '0.5 beta'    
 
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")

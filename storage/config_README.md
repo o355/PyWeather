@@ -1,4 +1,4 @@
-# Config file readme
+# Config file readme - For 0.5 beta
 Because when commiting changes through ConfigParser, it hates comments.
 
 But Eclipse supports nice formatting for markdown. Thanks Eclipse.
@@ -37,6 +37,39 @@ This controls if .json verbosity is enabled for PyWeather.
 
 All this does is print out full .json files that PyWeather fetches. And it'll spam your console with 50+ lines of pure .json. Unless you're using tri-4K monitors, font size 3, and the window spread across all monitors.
 
+### updater_verbosity
+This controls if the external updater has verbosity. 
+
+Useful for if things go wrong. For some reason.
+
+**Default setting: False**
+
+### updater_jsonverbosity
+This controls if full .json files should be printed.
+
+I mean, it's probably a line or two in the console.
+
+**Default setting: False**
+
+### setup_verbosity
+This controls if the setup script has verbosity.
+
+Useful for if things go wrong. For some reason.
+
+**Default setting: False**
+
+### setup_jsonverbosity
+This controls if full .json files should be printed.
+
+It's A LOT of lines of .json. However, it's useful to see if your key is invalid.
+
+**Default setting: False**
+
+### keybackup_verbosity
+This controls if the setup script has verbosity.
+
+Useful for seeing if things go wrong. For some reason.
+
 **Default setting: False**
 
 ## UPDATER section
@@ -53,16 +86,12 @@ However, if you enable this, PyWeather can take upwards of 5 seconds to launch. 
 
 **Default setting: False**
 
-### updater_verbosity
-This controls if the external updater has verbosity. 
+## KEYBACKUP section
+This section controls the key backup script for PyWeather.
 
-Useful for if things go wrong. For some reason.
+### outputlocation
+This controls where the key backup will...backup a file to.
 
-**Default setting: False**
+The key must be backed up to a .txt file.
 
-### updater_jsonverbosity
-This controls is full .json files should be printed.
-
-I mean, it's probably a line or two in the console.
-
-**Default setting: False**
+**Default setting: backup//backkey.txt**
