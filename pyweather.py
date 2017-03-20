@@ -1195,6 +1195,7 @@ while True:
         historical_json = json.load(reader(historicalJSON))
         historical_date = historical_json['history']['date']['pretty']
         for data in historical_json['history']['observations']:
+            print("")
             historical_time = data['date']['pretty']
             historical_tempF = str(data['tempi'])
             historical_tempC = str(data['tempm'])
@@ -1229,10 +1230,20 @@ while True:
                 historical_heatindexdata = True
                 historical_heatindexC = str(data['heatindexm'])
                 historical_heatindexF = str(data['heatindexi'])
-            historical_precipMM = str(data['precipm'])
-            historical_precipIN = str(data['precipi'])
+            historical_precipMM = float(data['precipm'])
+            historical_precipIN = float(data['precipi'])
+            if historical_precipMM == -9999:
+                historical_precipMM = "0.0"
+            else:
+                historical_precipMM = str(historical_precipMM)
+            
+            if historical_precipIN == -9999:
+                historical_precipIN = "0.0"
+            else:
+                historical_precipIN = str(historical_precipIN)
+            
             historical_condition = str(data['conds'])
-            print(Fore.YELLOW + historical_time)
+            print(Fore.YELLOW + historical_time + ":")
             print(Fore.YELLOW + "Conditions: " + Fore.CYAN + historical_condition)
             print(Fore.YELLOW + "Temperature: " + Fore.CYAN + historical_tempF
                   + " °F (" + historical_tempC + " °C)")
