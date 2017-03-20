@@ -1205,6 +1205,22 @@ while True:
             logger.debug("Loaded 1 JSON.")
         historical_date = historical_json['history']['date']['pretty']
         logger.debug("historical_date: %s" % historical_date)
+        for data in historical_json['history']['dailysummary']:
+            print("")
+            # historicals: historical Summary
+            #                         ^
+            historicals_snowfallCM = str(data['snowfallm'])
+            historicals_snowfallIN = str(data['snowfalli'])
+            historicals_avgTempF = str(data['meantempi'])
+            historicals_avgTempC = str(data['meantempm'])
+            historicals_avgDewpointF = str(data['meandewpti'])
+            historicals_avgDewpointC = str(data['meandewptm'])
+            historicals_avgPressureMB = str(data['meanpressurem'])
+            historicals_avgPressureInHg = str(data['meanpressurei'])
+            historicals_avgWindSpeedMPH = str(data['meanwindspdi'])
+            historicals_avgWindSpeedKPH = str(data['meanwindspdm'])
+            historicals_avgWindDegrees = str(data['meanwinddird'])
+            historicals_avgWindDirection = data['meanwinddire']
         for data in historical_json['history']['observations']:
             print("")
             logger.info("We're on iteration %s/24. User iteration limit: %s."
