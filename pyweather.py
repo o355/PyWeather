@@ -12,6 +12,9 @@
 # A cleanup of the if verbosity == True is coming. I just need to turn it off.
 # the json verbosity will stay...for now.
 
+# Temporary until I get the config file set up to read this.
+user_loopIterations = 6
+
 import configparser
 
 config = configparser.ConfigParser()
@@ -1186,13 +1189,69 @@ while True:
         historicaldate = input("Input here: ").lower()
         print(Fore.RED + "Loading...")
         print("")
+        historical_loops = 0
         historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historicaldate +  '/q/' + latstr + "," + lonstr + '.json'
         historicalJSON = urllib.request.urlopen(historicalurl)
         historical_json = json.load(reader(historicalJSON))
         historical_date = historical_json['history']['date']['pretty']
         for data in historical_json['history']['observations']:
-            print(data['tempm'])
-            print(data['tempi'])
+            historical_time = data['date']['pretty']
+            historical_tempF = str(data['tempi'])
+            historical_tempC = str(data['tempm'])
+            historical_dewpointF = str(data['dewpti'])
+            historical_dewpointC = str(data['dewptm'])
+            historical_windspeedKPH = str(data['wspdm'])
+            historical_windspeedMPH = str(data['wspdi'])
+            historical_gustcheck = float(data['wgustm'])
+            if historical_gustcheck == -9999:
+                historical_windgustdata = False
+            else:
+                historical_windgustdata = True
+                historical_windgustKPH = str(data['wgustm'])
+                historical_windgustMPH = str(data['wgusti'])
+            historical_windDegrees = str(data['wdird'])
+            historical_windDirection = data['wdire']
+            historical_visibilityKM = str(data['vism'])
+            historical_visibilityMI = str(data['visi'])
+            historical_pressureMB = str(data['pressurem'])
+            historical_pressureInHg = str(data['pressurei'])
+            historical_windchillcheck = float(data['windchillm'])
+            if historical_windchillcheck == -999:
+                historical_windchilldata = False
+            else:
+                historical_windchilldata = True
+                historical_windchillC = str(data['windchillm'])
+                historical_windchillF = str(data['windchilli'])
+            historical_heatindexcheck = float(data['heatindexm'])
+            if historical_heatindexcheck == -9999:
+                historical_heatindexdata = False
+            else:
+                historical_heatindexdata = True
+                historical_heatindexC = str(data['heatindexm'])
+                historical_heatindexF = str(data['heatindexi'])
+            historical_precipMM = str(data['precipm'])
+            historical_precipIN = str(data['precipi'])
+            historical_condition = str(data['conds'])
+            print(Fore.YELLOW + historical_time)
+            print(Fore.YELLOW + "Conditions: " + Fore.CYAN + historical_condition)
+            print(Fore.YELLOW + "Temperature: " + Fore.CYAN + historical_tempF
+                  + " °F (" + historical_tempC + " °C)")
+            print(Fore.YELLOW + "Dew point: " + Fore.CYAN + historical_dewpointF
+                  + " °F (" + historical_dewpointC + " °C)")
+            print(Fore.YELLOW + "Wind speed: " + Fore.CYAN + historical_windspeedMPH
+                  + " mph (" + historical_windspeedKPH + " kph)") 
+            if historical_windgustdata == True:
+                print(Fore.YELLOW + "Wind gusts: " + Fore.CYAN + historical_windgustMPH
+                      + " mph (" + historical_windgustKPH + " kph)")
+            if historical_windchilldata == True:
+                print(Fore.YELLOW + "Wind chill: " + Fore.CYAN + historical_windchillF
+                      + " °F (" + historical_windchillC + " kph)")
+            if historical_heatindexdata == True:
+                print(Fore.YELLOW + "Heat index: " + Fore.CYAN + historical_heatindexF
+                      + " °F (" + historical_heatindexC + " °C)")
+            print(Fore.YELLOW + "Precipitation: " + Fore.CYAN + historical_precipIN
+                  + " in (" + historical_precipMM + " mm)")
+            historical_loops = historical_loops + 1         
             
     elif moreoptions == "tell me a joke":
         print("I'm not Siri.")
