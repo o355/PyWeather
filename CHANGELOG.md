@@ -7,19 +7,19 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 ## version 0.5.1 beta - To be released early April
 * Removes if verbosity == True in the separate updater, and keybackup scripts.
 * Removes config.ini from GitHub, and the setup/config scripts will both check for a config file before starting. If none is present, it's made on the spot. This is to help with users doing `git fetch` for PyWeather updates.
-* Adds verbosity.
 * Adds the ability to load your backup key if PyWeather can't access your primary key.
 
-## version 0.5 beta (The Back to the Future Update) - To be released early April
+## version 0.5 beta (The Back to the Future Update) - To be released early-mid April
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.
 * Adds historical weather information to PyWeather.
 * Adds 10-day hourly weather to PyWeather (you'll hit enter 40 times!...by default).
-* Adds a method in which PyWeather will display rain data for the day/night if the temperature is above 32F.
+* Adds a method in which PyWeather will display rain data for the day/night if the temperature is above 32F. Otherwise, it'll just show snow data. Fixes the bug in which the detailed forecast showed both rain/snow data.
 * Adds a separate config.py program, so you can configure every option in PyWeather (including verbosity!)
 * Adds the ability to turn off the "enter to continue" things in the 10-day/hourly forecasts
 * Adds the ability to set the interval in which the "enter to continue" will appear
 * Reworks the config file some, sections are now where they need to be (aka verbosity has it's own section)
 * Removes the if verbosity == True garbage in the setup file.
+* Adds verbosity for all new functions added. This will now be standard!
 
 ## version 0.4.2 beta - Released 3/14/2017
 * Adds an autoupdater to PyWeather

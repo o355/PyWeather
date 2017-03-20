@@ -1187,62 +1187,118 @@ while True:
         print("E.g: If I wanted to see the weather for February 15, 2013, you'd enter 20130215.")
         print("Input the desired date below.")
         historicaldate = input("Input here: ").lower()
+        logger.debug("historicaldate: %s" % historicaldate)
         print(Fore.RED + "Loading...")
         print("")
         historical_loops = 0
+        historical_totalloops = 0
+        logger.debug("historical_loops: %s ; historical_totalloops: %s"
+                     % (historical_loops, historical_totalloops))
         historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historicaldate +  '/q/' + latstr + "," + lonstr + '.json'
+        logger.debug("historicalurl: %s" % historicalurl)
         historicalJSON = urllib.request.urlopen(historicalurl)
+        logger.debug("historicalJSON loaded with: %s" % historicalJSON)
         historical_json = json.load(reader(historicalJSON))
+        if jsonVerbosity == True:
+            logger.debug("historical_json: %s" % historical_json)
+        else:
+            logger.debug("Loaded 1 JSON.")
         historical_date = historical_json['history']['date']['pretty']
+        logger.debug("historical_date: %s" % historical_date)
         for data in historical_json['history']['observations']:
             print("")
+            logger.info("We're on iteration %s/24. User iteration limit: %s."
+                        % (historical_totalloops, user_loopIterations))
             historical_time = data['date']['pretty']
             historical_tempF = str(data['tempi'])
             historical_tempC = str(data['tempm'])
             historical_dewpointF = str(data['dewpti'])
+            logger.debug("historical_time: %s ; historical_tempF: %s"
+                         % (historical_time, historical_tempF))
+            logger.debug("historical_tempC: %s ; historical_dewpointF: %s"
+                         % (historical_tempC, historical_dewpointF))
             historical_dewpointC = str(data['dewptm'])
             historical_windspeedKPH = str(data['wspdm'])
             historical_windspeedMPH = str(data['wspdi'])
             historical_gustcheck = float(data['wgustm'])
+            logger.debug("historical_dewpointC: %s ; historical_windspeedKPH: %s"
+                         % (historical_dewpointC, historical_windspeedKPH))
+            logger.debug("historical_windspeedMPH: %s ; historical_gustcheck: %s"
+                         % (historical_windspeedMPH, historical_gustcheck))
             if historical_gustcheck == -9999:
                 historical_windgustdata = False
+                logger.warn("Wind gust data is not present! historical_windgustdata: %s"
+                            % historical_windgustdata)
             else:
                 historical_windgustdata = True
                 historical_windgustKPH = str(data['wgustm'])
                 historical_windgustMPH = str(data['wgusti'])
+                logger.info("Wind gust data is present.")
+                logger.debug("historical_windgustKPH: %s ; historical_windgustMPH: %s"
+                             % (historical_windgustKPH, historical_windgustMPH))
             historical_windDegrees = str(data['wdird'])
             historical_windDirection = data['wdire']
             historical_visibilityKM = str(data['vism'])
             historical_visibilityMI = str(data['visi'])
+            logger.debug("historical_windDegrees: %s ; historical_windDirection: %s"
+                         % (historical_windDegrees, historical_windDirection))
+            logger.debug("historical_visibilityKM: %s ; historical_visibilityMI: %s"
+                         % (historical_visibilityKM, historical_visibilityMI))
             historical_pressureMB = str(data['pressurem'])
             historical_pressureInHg = str(data['pressurei'])
             historical_windchillcheck = float(data['windchillm'])
+            logger.debug("historical_pressureMB: %s ; historical_pressureInHg: %s"
+                         % (historical_pressureMB, historical_pressureInHg))
+            logger.debug("historical_windchillcheck: %s" % historical_windchillcheck)
             if historical_windchillcheck == -999:
                 historical_windchilldata = False
+                logger.warn("Wind chill data is not present! historical_windchilldata: %s"
+                            % historical_windchilldata)
             else:
                 historical_windchilldata = True
                 historical_windchillC = str(data['windchillm'])
                 historical_windchillF = str(data['windchilli'])
+                logger.info("Wind chill data is present.")
+                logger.debug("historical_windchillC: %s ; historical_windchillF: %s"
+                             % (historical_windchillC, historical_windchillF))
             historical_heatindexcheck = float(data['heatindexm'])
+            logger.debug("historical_heatindexcheck: %s" % historical_heatindexcheck)
             if historical_heatindexcheck == -9999:
                 historical_heatindexdata = False
+                logger.warn("Heat index data is not present! historical_heatindexdata: %s"
+                            % historical_heatindexdata)
             else:
                 historical_heatindexdata = True
                 historical_heatindexC = str(data['heatindexm'])
                 historical_heatindexF = str(data['heatindexi'])
+                logger.info("Heat index data is present.")
+                logger.debug("historical_heatindexC: %s ; historical_heatindexF: %s"
+                             % (historical_heatindexC, historical_heatindexF))
             historical_precipMM = float(data['precipm'])
             historical_precipIN = float(data['precipi'])
+            logger.debug("historical_precipMM: %s ; historical_precipIN: %s"
+                         % (historical_precipMM, historical_precipIN))
             if historical_precipMM == -9999:
                 historical_precipMM = "0.0"
+                logger.warn("historical_precipMM was -9999. It's now: %s"
+                            % historical_precipMM)
             else:
                 historical_precipMM = str(historical_precipMM)
+                logger.info("historical_precipMM converted to str. It's now: %s"
+                            % historical_precipMM)
             
             if historical_precipIN == -9999:
                 historical_precipIN = "0.0"
+                logger.warn("historical_precipIN was -9999. It's now: %s"
+                            % historical_precipIN)
             else:
                 historical_precipIN = str(historical_precipIN)
+                logger.info("historical_precipIN converted to str. It's now: %s"
+                            % historical_precipIN)
             
             historical_condition = str(data['conds'])
+            logger.debug("historical_condition: %s" % historical_condition)
+            logger.info("Now printing weather data...")
             print(Fore.YELLOW + historical_time + ":")
             print(Fore.YELLOW + "Conditions: " + Fore.CYAN + historical_condition)
             print(Fore.YELLOW + "Temperature: " + Fore.CYAN + historical_tempF
@@ -1262,7 +1318,27 @@ while True:
                       + " °F (" + historical_heatindexC + " °C)")
             print(Fore.YELLOW + "Precipitation: " + Fore.CYAN + historical_precipIN
                   + " in (" + historical_precipMM + " mm)")
-            historical_loops = historical_loops + 1         
+            historical_loops = historical_loops + 1
+            historical_totalloops = historical_totalloops + 1
+            logger.debug("historical_loops: %s ; historical_totalloops: %s"
+                         % (historical_loops, historical_totalloops))
+            if historical_totalloops == 24:
+                logger.info("historical_totalloops = 24. Breaking the loop...")
+                break
+            if historical_loops == user_loopIterations:
+                logger.info("Asking user to continue.")
+                try:
+                    print("")
+                    print(Fore.RED + "Press enter to view the next", user_loopIterations
+                          , "hours of historical weather information.")
+                    print("Otherwise, press Control + C to get back to the main menu.")
+                    input()
+                    historical_loops = 0
+                    logger.info("Printing more weather data. historical_loops is now: %s"
+                                % historical_loops)
+                except KeyboardInterrupt:
+                    logger.info("Breaking to main menu, user issued KeyboardInterrupt")
+                    break         
             
     elif moreoptions == "tell me a joke":
         print("I'm not Siri.")
