@@ -1,6 +1,9 @@
 ## Welcome to PyWeather (0.4.2 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
+## Hiatus Notice:
+I'm out of my hiatus, and PyWeather is back in full development. I'll be striving to get around 75-90 minutes of coding time a day, as that amount of time generally allows for implementing a feature. Of course, more complex features take longer.
+
 ## BETA DISCLAIMER:
 Even though PyWeather is in beta, it's still in active development. While releases are somewhat stable milestones of PyWeather, things may or may not work. If you update from GitHub, I may push updates that entirely break PyWeather, so please, take caution!
 
