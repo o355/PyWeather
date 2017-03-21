@@ -16,6 +16,7 @@
 user_loopIterations = 6
 
 import configparser
+import traceback
 
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
@@ -29,11 +30,13 @@ try:
 except:
     print("Couldn't load your config file. Make sure your spelling is correct.")
     print("Setting variables to default...")
-    print("")
+    print("In case you need it, here's the traceback.")
+    traceback.print_exc()
     sundata_summary = True
     almanac_summary = False
     verbosity = False
     jsonVerbosity = False
+    checkforUpdates = False
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
@@ -68,6 +71,8 @@ try:
     apikey = apikey_load.read()
 except FileNotFoundError:
     print("The API key wasn't found. (Error 38, pyweather.py)")
+    print("Here's the full traceback:")
+    traceback.print_exc()
     print("Press enter to continue.")
     input()
     sys.exit()
@@ -128,6 +133,8 @@ except:
     print("Could not connect to Google's geocoder.")
     print("Ensure you have an internet connection, and that Google's geocoder " +
           "is unblocked.")
+    print("Here's the full traceback:")
+    traceback.print_exc()
     print("Press enter to continue.")
     input()
     sys.exit()
@@ -140,6 +147,8 @@ except AttributeError:
     logger.error("No lat/long was provided by Google! Bad location?")
     print("The location you inputted could not be understood.")
     print("Please try again.")
+    print("Here's the full traceback:")
+    traceback.print_exc()
     print("Press enter to continue.")
     input()
     sys.exit()
@@ -204,6 +213,8 @@ except:
     print("Can't connect to the API. Make sure that Wunderground's API " +
           "is unblocked, and the internet is online.")
     print("Also check if your API key is valid.")
+    print("Here's the full traceback (for debugging):")
+    traceback.print_exc()
     print("Press enter to continue.")
     input()
     sys.exit()
@@ -1221,6 +1232,17 @@ while True:
             historicals_avgWindSpeedKPH = str(data['meanwindspdm'])
             historicals_avgWindDegrees = str(data['meanwinddird'])
             historicals_avgWindDirection = data['meanwinddire']
+            historicals_avgVisibilityMI = str(data['meanvisi'])
+            historicals_avgVisibilityKM = str(data['meanvisim'])
+            historicals_avgHumidity = str(data['humidity'])
+            historicals_maxTempF = str(data['maxtempi'])
+            historicals_maxTempC = str(data['maxtempm'])
+            historicals_minTempF = str(data['mintempi'])
+            historicals_minTempC = str(data['mintempm'])
+            historicals_maxHumidity = str(data['maxhumidity'])
+            historicals_minHumidity = str(data['minhumidity'])
+            historicals_maxDewpointF = str(data['maxdewpti'])
+            historicals_maxDewpointC = str(data['maxdewptm'])
         for data in historical_json['history']['observations']:
             print("")
             logger.info("We're on iteration %s/24. User iteration limit: %s."
