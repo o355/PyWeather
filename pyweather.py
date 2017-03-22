@@ -42,7 +42,6 @@ except:
 
 import logging
 logger = logging.getLogger('pyweather_0.4.2beta')
-logger.setLevel(logging.DEBUG)
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
@@ -1215,6 +1214,9 @@ while True:
         else:
             logger.debug("Loaded 1 JSON.")
         historical_date = historical_json['history']['date']['pretty']
+        print(Fore.YELLOW + "Here's the historical weather for " + Fore.CYAN + 
+              location2.city + ", " + location2.state + Fore.YELLOW + " on "
+              + Fore.CYAN + historical_date)
         logger.debug("historical_date: %s" % historical_date)
         for data in historical_json['history']['dailysummary']:
             print("")
@@ -1243,6 +1245,49 @@ while True:
             historicals_minHumidity = str(data['minhumidity'])
             historicals_maxDewpointF = str(data['maxdewpti'])
             historicals_maxDewpointC = str(data['maxdewptm'])
+            historicals_minDewpointF = str(data['mindewpti'])
+            historicals_minDewpointC = str(data['mindewptm'])
+            historicals_maxPressureInHg = str(data['maxpressurei'])
+            historicals_maxPressureMB = str(data['maxpressurem'])
+            historicals_minPressureInHg = str(data['minpressurei'])
+            historicals_minPressureMB = str(data['minpressurem'])
+            historicals_maxWindMPH = str(data['maxwspdi'])
+            historicals_maxWindKPH = str(data['maxwspdm'])
+            historicals_minWindMPH = str(data['minwspdi'])
+            historicals_minWindKPH = str(data['minwspdm'])
+            historicals_maxVisibilityMI = str(data['maxvisi'])
+            historicals_maxVisibilityKM = str(data['maxvism'])
+            historicals_minVisibilityMI = str(data['minvisi'])
+            historicals_minVisibilityKM = str(data['minvism'])
+            historicals_precipMM = str(data['precipm'])
+            historicals_precipIN = str(data['precipi'])
+            print(Fore.YELLOW + "Here's the summary for the day.")
+            print(Fore.YELLOW + "Minimum Temperature: " + Fore.CYAN + historicals_minTempF
+                  + "°F (" + historicals_minTempC + " °C)")
+            print(Fore.YELLOW + "Average Temperature: " + Fore.CYAN + historicals_avgTempF
+                  + "°F (" + historicals_avgTempC + " °C)")
+            print(Fore.YELLOW + "Maxmimum Temperature: " + Fore.CYAN + historicals_maxTempF
+                  + "°F (" + historicals_maxTempC + " °C)")
+            print(Fore.YELLOW + "Minimum Dew Point: " + Fore.CYAN + historicals_minDewpointF
+                  + "°F (" + historicals_minDewpointC + " °C)")
+            print(Fore.YELLOW + "Average Dew Point: " + Fore.CYAN + historicals_avgDewpointF
+                  + "°F (" + historiclas_avgDewpointC + " °C)")
+            print(Fore.YELLOW + "Maximum Dew Point: " + Fore.CYAN + historicals_maxDewpointF
+                  + "°F (" + historicals_maxDewpointC + " °C)")
+            print(Fore.YELLOW + "Minimum Humidity: " + Fore.CYAN + historicals_minHumidity
+                  + "%")
+            print(Fore.YELLOW + "Average Humidity: " + Fore.CYAN + historicals_avgHumidity
+                  + "%")
+            print(Fore.YELLOW + "Maximum Humidity: " + Fore.CYAN + historicals_maxHumidity
+                  + "%")
+            print(Fore.YELLOW + "Minimum Wind Speed: " + Fore.CYAN + historicals_minWindMPH
+                  + " mph (" + historicals_minWindKPH + " kph)")
+            print(Fore.YELLOW + "Average Wind Speed: " + Fore.CYAN + historicals_avgWindSpeedMPH
+                  + " mph (" + historicals_avgWindSpeedKPH + " kph)")
+            print(Fore.YELLOW + "Maximum Wind Speed: " + Fore.CYAN + historicals_maxWindMPH
+                  + " mph (" + historicals_maxWindKPH + " kph)")
+            print(Fore.YELLOW + "Minimum Visibility: ")
+            print(Fore.YELLOW + "Minimum Pressure: ")
         for data in historical_json['history']['observations']:
             print("")
             logger.info("We're on iteration %s/24. User iteration limit: %s."
