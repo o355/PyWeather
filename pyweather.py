@@ -1232,17 +1232,21 @@ while True:
             historicals_avgPressureInHg = str(data['meanpressurei'])
             historicals_avgWindSpeedMPH = str(data['meanwindspdi'])
             historicals_avgWindSpeedKPH = str(data['meanwindspdm'])
-            historicals_avgWindDegrees = str(data['meanwinddird'])
-            historicals_avgWindDirection = data['meanwinddire']
+            historicals_avgWindDegrees = str(data['meanwdird'])
+            historicals_avgWindDirection = data['meanwdire']
             historicals_avgVisibilityMI = str(data['meanvisi'])
-            historicals_avgVisibilityKM = str(data['meanvisim'])
-            historicals_avgHumidity = str(data['humidity'])
+            historicals_avgVisibilityKM = str(data['meanvism'])
+            historicals_maxHumidity = int(data['maxhumidity'])
+            historicals_minHumidity = int(data['minhumidity'])
+            historicals_avgHumidity = (historicals_maxHumidity + 
+                                       historicals_minHumidity / 2)
+            historicals_maxHumidity = str(data['maxhumidity'])
+            historicals_minHumidity = str(data['minhumidity'])
+            historicals_avgHumidity = str(historicals_avgHumidity)
             historicals_maxTempF = str(data['maxtempi'])
             historicals_maxTempC = str(data['maxtempm'])
             historicals_minTempF = str(data['mintempi'])
             historicals_minTempC = str(data['mintempm'])
-            historicals_maxHumidity = str(data['maxhumidity'])
-            historicals_minHumidity = str(data['minhumidity'])
             historicals_maxDewpointF = str(data['maxdewpti'])
             historicals_maxDewpointC = str(data['maxdewptm'])
             historicals_minDewpointF = str(data['mindewpti'])
@@ -1271,7 +1275,7 @@ while True:
             print(Fore.YELLOW + "Minimum Dew Point: " + Fore.CYAN + historicals_minDewpointF
                   + "°F (" + historicals_minDewpointC + " °C)")
             print(Fore.YELLOW + "Average Dew Point: " + Fore.CYAN + historicals_avgDewpointF
-                  + "°F (" + historiclas_avgDewpointC + " °C)")
+                  + "°F (" + historicals_avgDewpointC + " °C)")
             print(Fore.YELLOW + "Maximum Dew Point: " + Fore.CYAN + historicals_maxDewpointF
                   + "°F (" + historicals_maxDewpointC + " °C)")
             print(Fore.YELLOW + "Minimum Humidity: " + Fore.CYAN + historicals_minHumidity
@@ -1286,8 +1290,18 @@ while True:
                   + " mph (" + historicals_avgWindSpeedKPH + " kph)")
             print(Fore.YELLOW + "Maximum Wind Speed: " + Fore.CYAN + historicals_maxWindMPH
                   + " mph (" + historicals_maxWindKPH + " kph)")
-            print(Fore.YELLOW + "Minimum Visibility: ")
-            print(Fore.YELLOW + "Minimum Pressure: ")
+            print(Fore.YELLOW + "Minimum Visibility: " + Fore.CYAN + historicals_minVisibilityMI
+                  + " mi (" + historicals_minVisibilityKM + " kph)")
+            print(Fore.YELLOW + "Average Visibility: " + Fore.CYAN + historicals_avgVisibilityMI
+                  + " mi (" + historicals_avgVisibilityKM + " kph)")
+            print(Fore.YELLOW + "Maximum Visibility: " + Fore.CYAN + historicals_maxVisibilityMI
+                  + " mi (" + historicals_maxVisibilityKM + " kph)")
+            print(Fore.YELLOW + "Minimum Pressure: " + Fore.CYAN + historicals_minPressureInHg
+                  + " inHg (" + historicals_minPressureMB + " mb)")
+            print(Fore.YELLOW + "Average Pressure: " + Fore.CYAN + historicals_avgPressureInHg
+                  + " inHg (" + historicals_avgPressureMB + " mb)")
+            print(Fore.YELLOW + "Maximum Pressure: " + Fore.CYAN + historicals_maxPressureInHg
+                  + " inHg (" + historicals_maxPressureMB + " mb)")
         for data in historical_json['history']['observations']:
             print("")
             logger.info("We're on iteration %s/24. User iteration limit: %s."
