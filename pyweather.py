@@ -1222,49 +1222,88 @@ while True:
             print("")
             # historicals: historical Summary
             #                         ^
-            historicals_snowfallCM = str(data['snowfallm'])
-            historicals_snowfallIN = str(data['snowfalli'])
             historicals_avgTempF = str(data['meantempi'])
             historicals_avgTempC = str(data['meantempm'])
             historicals_avgDewpointF = str(data['meandewpti'])
             historicals_avgDewpointC = str(data['meandewptm'])
+            logger.debug("historicals_avgTempF: %s ; historicals_avgTempC: %s" %
+                         (historicals_avgTempF, historicals_avgTempC))
+            logger.debug("historicals_avgDewpointF: %s ; historicals_avgDewpointC: %s" %
+                         (historicals_avgDewpointF, historicals_avgDewpointC))
             historicals_avgPressureMB = str(data['meanpressurem'])
             historicals_avgPressureInHg = str(data['meanpressurei'])
             historicals_avgWindSpeedMPH = str(data['meanwindspdi'])
             historicals_avgWindSpeedKPH = str(data['meanwindspdm'])
+            logger.debug("historicals_avgPressureMB: %s ; historicals_avgPressureInHg: %s" %
+                         (historicals_avgPressureMB, historicals_avgPressureInHg))
+            logger.debug("historicals_avgWindSpeedMPH: %s ; historicals_avgWindSpeedKPH: %s" %
+                         (historicals_avgWindSpeedMPH, historicals_avgWindSpeedKPH))
             historicals_avgWindDegrees = str(data['meanwdird'])
             historicals_avgWindDirection = data['meanwdire']
             historicals_avgVisibilityMI = str(data['meanvisi'])
             historicals_avgVisibilityKM = str(data['meanvism'])
+            logger.debug("historicals_avgWindDegrees: %s ; historicals_avgWindDirection: %s" % 
+                         (historicals_avgWindDegrees, historicals_avgWindDirection))
+            logger.debug("historicals_avgVisibilityMI: %s ; historicals_avgVisibilityKM: %s" %
+                         (historicals_avgVisibilityMI, historicals_avgVisibilityKM))
             historicals_maxHumidity = int(data['maxhumidity'])
             historicals_minHumidity = int(data['minhumidity'])
+            logger.debug("historicals_maxHumidity: %s ; historicals_minHumidity: %s" %
+                         (historicals_maxHumidity, historicals_minHumidity))
+            # This is a really nieve way of calculating the average humidity. Sue me.
+            # In reality, WU spits out nothing for average humidity.
             historicals_avgHumidity = (historicals_maxHumidity + 
-                                       historicals_minHumidity / 2)
+                                       historicals_minHumidity)
+            historicals_avgHumidity = (historicals_avgHumidity / 2)
+            logger.debug("historicals_avgHumidity: %s" % historicals_avgHumidity)
             historicals_maxHumidity = str(data['maxhumidity'])
             historicals_minHumidity = str(data['minhumidity'])
             historicals_avgHumidity = str(historicals_avgHumidity)
+            logger.info("Converted 3 vars to str.")
             historicals_maxTempF = str(data['maxtempi'])
             historicals_maxTempC = str(data['maxtempm'])
             historicals_minTempF = str(data['mintempi'])
             historicals_minTempC = str(data['mintempm'])
+            logger.debug("historicals_maxTempF: %s ; historicals_maxTempC: %s" %
+                         (historicals_maxTempF, historicals_maxTempC))
+            logger.debug("historicals_minTempF: %s ; historicals_minTempC: %s" %
+                         (historicals_minTempF, historicals_minTempC))
             historicals_maxDewpointF = str(data['maxdewpti'])
             historicals_maxDewpointC = str(data['maxdewptm'])
             historicals_minDewpointF = str(data['mindewpti'])
             historicals_minDewpointC = str(data['mindewptm'])
+            logger.debug("historicals_maxDewpointF: %s ; historicals_maxDewpointC: %s" %
+                         (historicals_maxDewpointF, historicals_maxDewpointC))
+            logger.debug("historicals_minDewpointF: %s ; historicals_minDewpointC: %s" %
+                         (historicals_minDewpointF, historicals_minDewpointC))
             historicals_maxPressureInHg = str(data['maxpressurei'])
             historicals_maxPressureMB = str(data['maxpressurem'])
             historicals_minPressureInHg = str(data['minpressurei'])
             historicals_minPressureMB = str(data['minpressurem'])
+            logger.debug("historicals_maxPressureInHg: %s ; historicals_maxPressureMB: %s" %
+                         (historicals_maxPressureInHg, historicals_maxPressureMB))
+            logger.debug("historicals_minPressureInHg: %s ; historicals_minPressureMB: %s" %
+                         (historicals_minPressureInHg, historicals_minPressureMB))
             historicals_maxWindMPH = str(data['maxwspdi'])
             historicals_maxWindKPH = str(data['maxwspdm'])
             historicals_minWindMPH = str(data['minwspdi'])
             historicals_minWindKPH = str(data['minwspdm'])
+            logger.debug("historicals_maxWindMPH: %s ; historicals_maxWindKPH: %s" %
+                         (historicals_maxWindMPH, historicals_maxWindMPH))
+            logger.debug("historicals_minWindMPH: %s ; historicals_minWindKPH: %s" %
+                         (historicals_minWindMPH, historicals_minWindKPH))
             historicals_maxVisibilityMI = str(data['maxvisi'])
             historicals_maxVisibilityKM = str(data['maxvism'])
             historicals_minVisibilityMI = str(data['minvisi'])
             historicals_minVisibilityKM = str(data['minvism'])
+            logger.debug("historicals_maxVisibilityMI: %s ; historicals_maxVisibilityKM: %s" %
+                         (historicals_maxVisibilityMI, historicals_maxVisibilityKM))
+            logger.debug("historicals_minVisibilityMI: %s ; historicals_minVisibilityKM: %s" %
+                         (historicals_minVisibilityMI, historicals_minVisibilityKM))
             historicals_precipMM = str(data['precipm'])
             historicals_precipIN = str(data['precipi'])
+            logger.debug("historicals_precipMM: %s ; historicals_precipIN: %s" %
+                         (historicals_precipMM, historicals_precipIN))
             print(Fore.YELLOW + "Here's the summary for the day.")
             print(Fore.YELLOW + "Minimum Temperature: " + Fore.CYAN + historicals_minTempF
                   + "°F (" + historicals_minTempC + " °C)")
@@ -1302,6 +1341,15 @@ while True:
                   + " inHg (" + historicals_avgPressureMB + " mb)")
             print(Fore.YELLOW + "Maximum Pressure: " + Fore.CYAN + historicals_maxPressureInHg
                   + " inHg (" + historicals_maxPressureMB + " mb)")
+            print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + historicals_precipIN
+                  + " in (" + historicals_precipMM + "mb)")
+            print("")
+            try:
+                print(Fore.RED + "To view hourly historical data, please press enter.")
+                print(Fore.RED + "If you want to return to the main menu, press Control + C.")
+                input()
+            except KeyboardInterrupt:
+                break
         for data in historical_json['history']['observations']:
             print("")
             logger.info("We're on iteration %s/24. User iteration limit: %s."
