@@ -79,6 +79,12 @@ except FileNotFoundError:
     input()
     sys.exit()
 logger.debug("apikey = %s" % apikey)
+
+def printException():
+    if tracebacksEnabled == True:
+        traceback.print_exc()
+        
+
  
 buildnumber = 50
 buildversion = '0.5 beta'    
@@ -1398,7 +1404,12 @@ while True:
             historical_dewpointC = str(data['dewptm'])
             historical_windspeedKPH = str(data['wspdm'])
             historical_windspeedMPH = str(data['wspdi'])
-            historical_gustcheck = float(data['wgustm'])
+            try:
+                historical_gustcheck = float(data['wgustm'])
+            except ValueError:
+                logger.info("We hit a snag. Here's the traceback.")
+                logger.info(traceback.print_exc())
+                historical_gustcheck = -9999
             logger.debug("historical_dewpointC: %s ; historical_windspeedKPH: %s"
                          % (historical_dewpointC, historical_windspeedKPH))
             logger.debug("historical_windspeedMPH: %s ; historical_gustcheck: %s"
@@ -1452,8 +1463,14 @@ while True:
                 logger.info("Heat index data is present.")
                 logger.debug("historical_heatindexC: %s ; historical_heatindexF: %s"
                              % (historical_heatindexC, historical_heatindexF))
-            historical_precipMM = float(data['precipm'])
-            historical_precipIN = float(data['precipi'])
+            try:
+                historical_precipMM = float(data['precipm'])
+                historical_precipIN = float(data['precipi'])
+            except ValueError:
+                logger.info("We hit a snag. Here's the traceback.")
+                logger.info(traceback.print_exc())
+                historical_precipMM = -9999
+                historical_precipIN = -9999
             logger.debug("historical_precipMM: %s ; historical_precipIN: %s"
                          % (historical_precipMM, historical_precipIN))
             if historical_precipMM == -9999:
