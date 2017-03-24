@@ -82,7 +82,11 @@ logger.debug("apikey = %s" % apikey)
 
 def printException():
     if tracebacksEnabled == True:
-        traceback.print_exc()
+        logger.error(traceback.print_exc())
+        
+def printException_loginfo():
+    if verbosity == True:
+        logger.info(traceback.print_exc())
         
 
  
@@ -151,7 +155,7 @@ except:
     print("Ensure you have an internet connection, and that Google's geocoder " +
           "is unblocked.")
     logger.error("Here's the full traceback (for bug reports):")
-    logger.error(traceback.print_exc())
+    printException()
     print("Press enter to continue.")
     input()
     sys.exit()
