@@ -14,7 +14,7 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 * Adds the ability to load your backup key if PyWeather can't access your primary key.
 * Adds the raw traceback output in updater.py/setup.py
 
-## version 0.5 beta (The Back to the Future Update) - To be released 4/4/2017
+## version 0.5 beta (The Back to the Future Update) - To be released 4/4/2017 (probably)
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.
 * Adds historical weather information to PyWeather. - Done, just needs more testing.
 * Adds output of the raw traceback in PyWeather errors (pyweather.py ONLY, on by default.) - Should by finished by 3/24
