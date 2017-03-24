@@ -27,6 +27,7 @@ try:
     checkforUpdates = config.getboolean('UPDATER', 'autocheckforupdates')
     verbosity = config.getboolean('VERBOSITY', 'verbosity')
     jsonVerbosity = config.getboolean('VERBOSITY', 'json_verbosity')
+    tracebacksEnabled = config.getboolean('TRACEBACK', 'tracebacks')
 except:
     print("Couldn't load your config file. Make sure your spelling is correct.")
     print("Setting variables to default...")
@@ -48,6 +49,8 @@ logging.basicConfig(format=logformat)
 # There are no criticial messages in PyWeather, so this works by design.
 if verbosity == True:
     logger.setLevel(logging.DEBUG)
+elif tracebacksEnabled == True:
+    logger.setLevel(logging.ERROR)
 else:
     logger.setLevel(logging.CRITICAL)
 import urllib.request
@@ -70,8 +73,8 @@ try:
     apikey = apikey_load.read()
 except FileNotFoundError:
     print("The API key wasn't found. (Error 38, pyweather.py)")
-    print("Here's the full traceback:")
-    traceback.print_exc()
+    logger.error("Full traceback:")
+    logger.error(traceback.print_exc())
     print("Press enter to continue.")
     input()
     sys.exit()
@@ -82,7 +85,16 @@ buildversion = '0.5 beta'
 
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")
-    versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
+    try:
+        versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
+    except:
+        print("Can't connect to GitHub to check for updates. Make sure you have an internet connection, " + 
+              "and GitHub is unblocked.")
+        logger.error("Here's the full traceback (for bug reports):")
+        logger.error(traceback.print_exc())
+        print("Press enter to continue.")
+        input()
+        sys.exit()
     versionJSON = json.load(reader2(versioncheck))
     version_buildNumber = float(versionJSON['updater']['latestbuild'])
     logger.debug("reader2: %s ; versioncheck: %s" %
@@ -128,12 +140,12 @@ try:
     if verbosity == False:
         print("[#---------] | 3% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 except:
-    logger.error("No connection to Google's geocoder!")
+    logger.warn("No connection to Google's geocoder!")
     print("Could not connect to Google's geocoder.")
     print("Ensure you have an internet connection, and that Google's geocoder " +
           "is unblocked.")
-    print("Here's the full traceback:")
-    traceback.print_exc()
+    logger.error("Here's the full traceback (for bug reports):")
+    logger.error(traceback.print_exc())
     print("Press enter to continue.")
     input()
     sys.exit()
@@ -143,11 +155,11 @@ try:
     latstr = str(location.latitude)
     lonstr = str(location.longitude)
 except AttributeError:
-    logger.error("No lat/long was provided by Google! Bad location?")
+    logger.warn("No lat/long was provided by Google! Bad location?")
     print("The location you inputted could not be understood.")
     print("Please try again.")
-    print("Here's the full traceback:")
-    traceback.print_exc()
+    logger.error("Here's the full traceback (for bug reports):")
+    logger.error(traceback.print_exc())
     print("Press enter to continue.")
     input()
     sys.exit()
@@ -208,12 +220,12 @@ try:
             print("[#####-----] | 49% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
 except:
-    logger.error("No connection to the API!! Is the connection offline?")
+    logger.warn("No connection to the API!! Is the connection offline?")
     print("Can't connect to the API. Make sure that Wunderground's API " +
           "is unblocked, and the internet is online.")
     print("Also check if your API key is valid.")
-    print("Here's the full traceback (for debugging):")
-    traceback.print_exc()
+    logger.error("Here's the full traceback (for bug reports):")
+    logger.error(traceback.print_exc())
     print("Press enter to continue.")
     input()
     sys.exit()
@@ -260,9 +272,11 @@ try:
     if verbosity == False:
         print("[#########-] | 91% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 except:
-    logger.error("No connection to Google's Geolocator!! Is the connection offline?")
+    logger.warn("No connection to Google's Geolocator!! Is the connection offline?")
     print("Can't connect to Google's Geolocator. Make sure that Google's " +
           "Geolocator is unblocked, and your internet is online.")
+    logger.error("Here's the full traceback (for bug reports):")
+    logger.error(traceback.print_exc())
     print("Press enter to continue.")
     input()
     sys.exit()
@@ -873,6 +887,8 @@ while True:
             print(Fore.RED + "Couldn't check for updates.")
             print("Make sure GitHub user content is unblocked, and you have an internet connection.")
             print("Error 54, pyweather.py")
+            logger.error("Here's the full traceback (for bug reports):")
+            logger.error(traceback.print_exc())
             continue
         versionJSON = json.load(reader(versioncheck))
         if jsonVerbosity == True:
@@ -925,6 +941,8 @@ while True:
                     print("Make sure GitHub user content is unblocked, "
                           + "and you have an internet connection.")
                     print("Error 55, pyweather.py")
+                    logger.error("Here's the full traceback (for bug reports):")
+                    logger.error(traceback.print_exc())
                     continue
                 logger.debug("Latest version was saved, filename: %s"
                             % version_latestFileName)
@@ -943,7 +961,7 @@ while True:
                 print(Fore.GREEN + "Could not understand what you said.")
                 continue
         else:
-            logger.error("PW updater failed. Variables corrupt, maybe?")
+            logger.warn("PW updater failed. Variables corrupt, maybe?")
             print(Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
             print(Fore.RED + "Error 53, pyweather.py")
             continue
@@ -960,6 +978,9 @@ while True:
             except:
                 logger.warn("Couldn't contact Wunderground's API! Is the internet offline?")
                 print("Couldn't contact Wunderground's API. Make sure it's unblocked, and you have internet access.")
+                logger.error("Here's the full traceback (for bug reports):")
+                logger.error(traceback.print_exc())
+                continue
             logger.debug("almanacurl: %s" % almanacurl)
             almanacJSON = urllib.request.urlopen(almanacurl)
             logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
@@ -1023,9 +1044,11 @@ while True:
             except:
                 print("Couldn't connect to Wunderground's API. "
                       + "Make sure you have an internet connection.")
+                logger.error("Here's the full traceback (for bug reports):")
+                logger.error(traceback.print_exc())
                 print("Press enter to continue.")
                 input()
-                sys.exit()
+                continue
             
             astronomy_json = json.load(reader(sundataJSON))
             if jsonVerbosity == True:
@@ -1206,7 +1229,17 @@ while True:
                      % (historical_loops, historical_totalloops))
         historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historicaldate +  '/q/' + latstr + "," + lonstr + '.json'
         logger.debug("historicalurl: %s" % historicalurl)
-        historicalJSON = urllib.request.urlopen(historicalurl)
+        try:
+            historicalJSON = urllib.request.urlopen(historicalurl)
+        except:
+            print("Can't connect to Wunderground's API.")
+            print("Make sure you have an internet connection, and WU's API is unblocked.")
+            logger.error("Here's the full traceback (for bug reports):")
+            logger.error(traceback.print_exc())
+            print("Press enter to continue.")
+            input()
+            continue
+        
         logger.debug("historicalJSON loaded with: %s" % historicalJSON)
         historical_json = json.load(reader(historicalJSON))
         if jsonVerbosity == True:

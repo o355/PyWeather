@@ -16,18 +16,27 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 
 ## version 0.5 beta (The Back to the Future Update) - To be released 4/4/2017 (probably)
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.
+* This release is so big, I've had to separate new features from bug fixes.
+
+**NEW FEATURES/REMOVALS:**
 * Adds historical weather information to PyWeather. - Done, just needs more testing.
 * Adds output of the raw traceback in PyWeather errors (pyweather.py ONLY, on by default.) - Should by finished by 3/24
 * Adds 10-day hourly weather to PyWeather (you'll hit enter 40 times!...by default). - Should by finished by 3/24
 * Adds a method in which PyWeather will display rain data for the day/night if the temperature is above 32F. Otherwise, it'll just show snow data. Fixes the bug in which the detailed forecast showed both rain/snow data. - Should be finished by 3/25
 * Adds a config option I can't really describe here (fetching the 10 day JSON at boot, or the 3 day JSON at boot/10day when needed) - Should be finished by 3/27
-* Reworks the config file some, sections are now where they need to be (aka verbosity has it's own section) - Should be finished by 3/27
+* Reworks the config file some, sections are now where they need to be (aka verbosity has it's own section) - Done (for some reason)
 * Adds the ability to turn off the "enter to continue" things in the 10-day/hourly forecasts - Should be finished by 3/28
 * Adds the ability to set the interval in which the "enter to continue" will appear - Should be finished by 3/28
 * Adds a separate config.py program, so you can configure every option in PyWeather (including verbosity!) - Should by finished by 3/29
 * Removes the if verbosity == True garbage in the setup file. - Should be finished by 3/31
 * Adds verbosity for all new functions added. This will now be standard! - Rolling, should be finished by 4/3
-* Fixes a bug in which if the config file wouldn't load, the program won't load (checkforupdates wasn't defined.) - Fixed!
+
+**BUG FIXES:**
+* Fixes a bug in which if the config file wouldn't load, the program won't load (checkforupdates wasn't defined.)
+* Fixes a bug in which if the autoupdater couldn't contact GitHub, it would try to parse the auto-updater information.
+* Fixes a bug in which if exceptions occurred when fetching the almanac .json, the exception wouldn't get caught.
+* Fixes a bug in which if astronomy data couldn't be fetched (in more details), PyWeather would completely exit.
+
 
 ## version 0.4.2 beta - Released 3/14/2017
 * Adds an autoupdater to PyWeather
