@@ -126,7 +126,8 @@ if checkforUpdates == True:
               ", and the latest version is " + version_latestVersion + ".")
         print("")
 
-prefetch10day_atStart = False
+prefetch10Day_atStart = False
+tenday_prefetched = False
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
@@ -691,11 +692,13 @@ while True:
             hourly_precipChance = str(hour['pop'])
             hourly_pressureInHg = str(hour['mslp']['english'])
             hourly_pressureMb = str(hour['mslp']['metric'])
+            hourly_condition = hour['condition']
             logger.debug("hourly_snowIn: %s ; hourly_snowMm: %s"
                         % (hourly_snowIn, hourly_snowMm))
             logger.debug("hourly_precipChance: %s ; hourly_pressureInHg: %s"
                         % (hourly_precipChance, hourly_pressureInHg))
-            logger.debug("hourly_pressureMb: %s" % hourly_pressureMb)
+            logger.debug("hourly_pressureMb: %s ; hourly_condition: %s" 
+                         % (hourly_pressureMb, hourly_condition))
             logger.info("Now printing weather data...")
             print("")
             # If you have verbosity on, there's a chance that the next
@@ -742,7 +745,7 @@ while True:
     elif (moreoptions == "view the 10 day hourly" or
           moreoptions == "view 10 day hourly" or
           moreoptions == "10 day hourly" or
-          moreoptions == "1"):
+          moreoptions == "2"):
         print(Fore.RED + "Loading...")
         print("")
         logger.info("Selected view more 10 day hourly...")
@@ -751,7 +754,7 @@ while True:
         print(Fore.YELLOW + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + location2.city + ", " + location2.state)
         if prefetch10Day_atStart == False and tenday_prefetched == False:
             logger.info("Fetching 10 day JSON...not previously fetched")
-            tendayurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
+            tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + "," + lonstr + '.json'
             try:
                 tendayJSON = urllib.request.urlopen(tendayurl)
                 logger.debug("Retrieved ten day hourly JSON with response: %s" % tendayJSON)
@@ -796,10 +799,10 @@ while True:
             hourly10_UVIndex = str(hour['uvi'])
             hourly10_humidity = str(hour['humidity'])
             hourly10_feelsLikeF = str(hour['feelslike']['english'])
-            logger.debug("hourly10_windDegrees: %s ; hourly_UVIndex: %s"
-                        % (hourly10_windDegrees, hourly_UVIndex))
-            logger.debug("hourly_humidity: %s ; hourly_feelsLikeF: %s"
-                        % (hourly_humidity, hourly_feelsLikeF))
+            logger.debug("hourly10_windDegrees: %s ; hourly10_UVIndex: %s"
+                        % (hourly10_windDegrees, hourly10_UVIndex))
+            logger.debug("hourly10_humidity: %s ; hourly10_feelsLikeF: %s"
+                        % (hourly10_humidity, hourly10_feelsLikeF))
             hourly10_feelsLikeC = str(hour['feelslike']['metric'])
             hourly10_precipIn = str(hour['qpf']['english'])
             hourly10_precipMm = str(hour['qpf']['metric'])
@@ -816,16 +819,18 @@ while True:
                 hourly10_snowData = True
                 logger.info("Lucky duck getting some snow.")
             
-            hourly10_snowIn = str(hourly_snowCheck)
+            hourly10_snowIn = str(hourly10_snowCheck)
             hourly10_snowMm = str(hour['snow']['metric'])
             hourly10_precipChance = str(hour['pop'])
             hourly10_pressureInHg = str(hour['mslp']['english'])
             hourly10_pressureMb = str(hour['mslp']['metric'])
+            hourly10_condition = hour['condition']
             logger.debug("hourly10_snowIn: %s ; hourly10_snowMm: %s"
                         % (hourly10_snowIn, hourly10_snowMm))
             logger.debug("hourly10_precipChance: %s ; hourly10_pressureInHg: %s"
                         % (hourly10_precipChance, hourly10_pressureInHg))
-            logger.debug("hourly10_pressureMb: %s" % hourly10_pressureMb)
+            logger.debug("hourly10_pressureMb: %s ; hourly10_condition: %s" 
+                         % (hourly10_pressureMb, hourly10_condition))
             logger.info("Now printing weather data...")
             print("")
             # If you have verbosity on, there's a chance that the next
@@ -847,7 +852,7 @@ while True:
             print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly10_humidity + "%")
             if hourly10_snowData == False:
                 print(Fore.YELLOW + "Rain for the hour: " + Fore.CYAN +
-                      hourly_precipIn + " in (" + hourly10_precipMm + " mm)")
+                      hourly10_precipIn + " in (" + hourly10_precipMm + " mm)")
             if hourly10_snowData == True:
                 print(Fore.YELLOW + "Snow for the hour: " + Fore.CYAN +
                       hourly10_snowIn + " in (" + hourly10_snowMm + " mm)")
