@@ -6,6 +6,7 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 
 ## version 0.5.2 beta - To be released late April
 * Adds the raw traceback output in keybackup.py
+* Adds the library check script, which checks for libraries PyWeather needs.
 
 ## version 0.5.1 beta - To be released mid April
 * Removes if verbosity == True in the separate updater, and keybackup scripts.

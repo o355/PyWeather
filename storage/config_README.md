@@ -1,97 +1,63 @@
-# Config file readme - For 0.5 beta
-Because when commiting changes through ConfigParser, it hates comments.
-
-But Eclipse supports nice formatting for markdown. Thanks Eclipse.
-
-Please read through this carefully before you make changes, because you can seriously screw up PyWeather if you don't know what you're doing.
+## PyWeather Configuration Readme
+Since configparser hates comments, this will do for now.
 
 ## SUMMARY section
-This section controls options for the summary part of PyWeather.
-
 ### sundata_summary
-This controls if sunrise/sunset data on the summary screen.
+This option will let you turn on/off PyWeather showing sunrise/sunset data on startup.
 
-Turning this on will use 1 more API call every time you launch PyWeather, but will put sunrise/sunset data on the summary screen.
+If this option is enabled, PyWeather may take a bit longer to start up, and will use 1 more API call at start.
 
-**Default setting: False**
+**Default option: False**
 
-### almanac_summary
-This controls if almanac data on the summary screen.
+###almanac_summary
+This option will let you turn on/off PyWeather showing almanac data on startup.
 
-Turning this on will use 1 more API call every time you launch PyWeather, but will put the record high/low, and the year that it was set in at the closest airport to you.
+If this option is enabled, PyWeather may take a bit longer to start up, and will use 1 more API call at start.
 
-**Default setting: False**
+**Default option: False**
 
 ## VERBOSITY section
-This section controls options for verbosity in PyWeather (pyweather.py)
-
 ### verbosity
-This controls if verbosity is enabled for PyWeather.
+This option will let you turn on/off PyWeather showing logging information.
 
-Verbosity will let you see if things are going wrong in PyWeather. It's useful for those who know what's going on behind the scenes.
+Useful for troubleshooting, and seeing if something is abnormal.
 
-**Default setting: False**
+**Default option: False**
 
 ### json_verbosity
-This controls if .json verbosity is enabled for PyWeather.
+This option will let you turn on/off PyWeather printing out full .json files that it fetches.
 
-All this does is print out full .json files that PyWeather fetches. And it'll spam your console with 50+ lines of pure .json. Unless you're using tri-4K monitors, font size 3, and the window spread across all monitors.
+Useful for troubleshooting, but it'll spam your console. Use wisely.
 
-### updater_verbosity
-This controls if the external updater has verbosity. 
-
-Useful for if things go wrong. For some reason.
-
-**Default setting: False**
-
-### updater_jsonverbosity
-This controls if full .json files should be printed.
-
-I mean, it's probably a line or two in the console.
-
-**Default setting: False**
+**Default option: False**
 
 ### setup_verbosity
-This controls if the setup script has verbosity.
+This option will let you turn on/off PyWeather Setup showing logging information.
 
-Useful for if things go wrong. For some reason.
+Useful for troubleshooting, and seeing if something is abnormal.
 
-**Default setting: False**
+**Default option: False**
 
 ### setup_jsonverbosity
-This controls if full .json files should be printed.
+This option will let you turn on/off PyWeather Setup printing out .json files that it fetches.
 
-It's A LOT of lines of .json. However, it's useful to see if your key is invalid.
+Useful for troubleshooting, but it'll spam your console. Use wisely.
 
-**Default setting: False**
+**Default option: False**
 
-### keybackup_verbosity
-This controls if the setup script has verbosity.
+### updater_verbosity
+This option will let you turn on/off PyWeather Updater showing logging information.
 
-Useful for seeing if things go wrong. For some reason.
+Useful for troubleshooting, and seeing if something is abnormal.
 
-**Default setting: False**
+**Default option: False**
 
-## UPDATER section
-This section controls the integrated/separate updater for PyWeather.
+### updater_jsonverbosity
+This option will let you turn on/off PyWeather Updater printing out .json files that it fetches.
 
-### autocheckforupdates
-This controls if PyWeather will automatically check for updates when it starts up.
+Useful for troubleshooting, and it doesn't spam your console as much.
 
-If PyWeather is not up-to-date, and this option is enabled, something like this will pop up at the top of the console:
+**Default option: False**
 
-`PyWeather is not up to date! You have version x.xx, but the latest version is x.xx`
-
-However, if you enable this, PyWeather can take upwards of 5 seconds to launch. So, take caution.
-
-**Default setting: False**
-
-## KEYBACKUP section
-This section controls the key backup script for PyWeather.
-
-### outputlocation
-This controls where the key backup will...backup a file to.
-
-The key must be backed up to a .txt file.
-
-**Default setting: backup//backkey.txt**
+## TRACEBACK section
+ 
