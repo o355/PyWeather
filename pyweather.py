@@ -658,11 +658,10 @@ while True:
             hourly_windMPH = str(hour['wspd']['english'])
             hourly_windKPH = str(hour['wspd']['metric'])
             hourly_windDir = hour['wdir']['dir']
-            if verbosity == True:
-                logger.debug("hourly_dewpointC: %s ; hourly_windMPH: %s"
-                             % (hourly_dewpointC, hourly_windMPH))
-                logger.debug("hourly_windKPH: %s ; hourly_windDir: %s"
-                             % (hourly_windKPH, hourly_windDir))
+            logger.debug("hourly_dewpointC: %s ; hourly_windMPH: %s"
+                        % (hourly_dewpointC, hourly_windMPH))
+            logger.debug("hourly_windKPH: %s ; hourly_windDir: %s"
+                        % (hourly_windKPH, hourly_windDir))
             hourly_windDegrees = str(hour['wdir']['degrees'])
             hourly_UVIndex = str(hour['uvi'])
             hourly_humidity = str(hour['humidity'])
@@ -778,14 +777,16 @@ while True:
             hourly10_month = str(hour['FCTTIME']['month_name'])
             hourly10_day = str(hour['FCTTIME']['mday'])
             hourly10_dewpointF = str(hour['dewpoint']['english'])
-            logger.debug("hourly_time: %s ; hourly_month: %s"
-                        % (hourly_time, hourly_month))
-            logger.debug("hourly_day: %s ; hourly_dewpointF: %s"
-                        % (hourly_day, hourly_dewpointF))
+            logger.debug("hourly10_time: %s ; hourly10_month: %s"
+                        % (hourly10_time, hourly10_month))
+            logger.debug("hourly10_day: %s ; hourly10_dewpointF: %s"
+                        % (hourly10_day, hourly10_dewpointF))
             hourly10_dewpointC = str(hour['dewpoint']['metric'])
             hourly10_windMPH = str(hour['wspd']['english'])
             hourly10_windKPH = str(hour['wspd']['metric'])
             hourly10_windDir = hour['wdir']['dir']
+            # the if verbosity == True will be left here
+            # as a memorial. :)
             if verbosity == True:
                 logger.debug("hourly10_dewpointC: %s ; hourly10_windMPH: %s"
                              % (hourly10_dewpointC, hourly10_windMPH))
@@ -803,16 +804,16 @@ while True:
             hourly10_precipIn = str(hour['qpf']['english'])
             hourly10_precipMm = str(hour['qpf']['metric'])
             hourly10_snowCheck = hour['snow']['english']
-            logger.debug("hourly_feelsLikeC: %s ; hourly_precipIn: %s"
-                        % (hourly_feelsLikeC, hourly_precipIn))
-            logger.debug("hourly_precipMm: %s ; hourly_snowCheck: %s"
-                        % (hourly_precipMm, hourly_snowCheck))
+            logger.debug("hourly10_feelsLikeC: %s ; hourly10_precipIn: %s"
+                        % (hourly10_feelsLikeC, hourly10_precipIn))
+            logger.debug("hourly10_precipMm: %s ; hourly10_snowCheck: %s"
+                        % (hourly10_precipMm, hourly10_snowCheck))
             logger.info("Starting snow check...")
-            if hourly_snowCheck == "0.0":
-                hourly_snowData = False
+            if hourly10_snowCheck == "0.0":
+                hourly10_snowData = False
                 logger.warn("No snow data! Maybe it's summer?")
             else:
-                hourly_snowData = True
+                hourly10_snowData = True
                 logger.info("Lucky duck getting some snow.")
             
             hourly10_snowIn = str(hourly_snowCheck)
@@ -820,38 +821,40 @@ while True:
             hourly10_precipChance = str(hour['pop'])
             hourly10_pressureInHg = str(hour['mslp']['english'])
             hourly10_pressureMb = str(hour['mslp']['metric'])
-            logger.debug("hourly_snowIn: %s ; hourly_snowMm: %s"
-                        % (hourly_snowIn, hourly_snowMm))
-            logger.debug("hourly_precipChance: %s ; hourly_pressureInHg: %s"
-                        % (hourly_precipChance, hourly_pressureInHg))
-            logger.debug("hourly_pressureMb: %s" % hourly_pressureMb)
+            logger.debug("hourly10_snowIn: %s ; hourly10_snowMm: %s"
+                        % (hourly10_snowIn, hourly10_snowMm))
+            logger.debug("hourly10_precipChance: %s ; hourly10_pressureInHg: %s"
+                        % (hourly10_precipChance, hourly10_pressureInHg))
+            logger.debug("hourly10_pressureMb: %s" % hourly10_pressureMb)
             logger.info("Now printing weather data...")
             print("")
             # If you have verbosity on, there's a chance that the next
             # hourly iteration will start BEFORE the previous iteration
             # prints out. This is normal, and no issues are caused by such.
-            print(Fore.YELLOW + hourly_time + " on " + hourly_month + " " + hourly_day + ":")
-            print(Fore.YELLOW + "Conditions: " + Fore.CYAN + hourly_condition)
-            print(Fore.YELLOW + "Temperature: " + Fore.CYAN + hourly_tempf 
-                  + "°F (" + hourly_tempc + "°C)")
-            print(Fore.YELLOW + "Feels like: " + Fore.CYAN + hourly_feelsLikeF
-                  + "°F (" + hourly_feelsLikeC + "°C)")
-            print(Fore.YELLOW + "Dew Point: " + Fore.CYAN + hourly_dewpointF
-                  + "°F (" + hourly_dewpointC + "°C)")
-            print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly_windMPH
-                  + " mph (" + hourly_windKPH + " kph) blowing to the " +
-                  hourly_windDir + " (" + hourly_windDegrees + "°)")
-            print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly_humidity + "%")
-            if hourly_snowData == False:
+            print(Fore.YELLOW + hourly10_time + " on " + hourly10_month + " " 
+                  + hourly10_day + ":")
+            print(Fore.YELLOW + "Conditions: " + Fore.CYAN 
+                  + hourly10_condition)
+            print(Fore.YELLOW + "Temperature: " + Fore.CYAN + hourly10_tempf 
+                  + "°F (" + hourly10_tempc + "°C)")
+            print(Fore.YELLOW + "Feels like: " + Fore.CYAN + hourly10_feelsLikeF
+                  + "°F (" + hourly10_feelsLikeC + "°C)")
+            print(Fore.YELLOW + "Dew Point: " + Fore.CYAN + hourly10_dewpointF
+                  + "°F (" + hourly10_dewpointC + "°C)")
+            print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly10_windMPH
+                  + " mph (" + hourly10_windKPH + " kph) blowing to the " +
+                  hourly10_windDir + " (" + hourly10_windDegrees + "°)")
+            print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly10_humidity + "%")
+            if hourly10_snowData == False:
                 print(Fore.YELLOW + "Rain for the hour: " + Fore.CYAN +
-                      hourly_precipIn + " in (" + hourly_precipMm + " mm)")
-            if hourly_snowData == True:
+                      hourly_precipIn + " in (" + hourly10_precipMm + " mm)")
+            if hourly10_snowData == True:
                 print(Fore.YELLOW + "Snow for the hour: " + Fore.CYAN +
-                      hourly_snowIn + " in (" + hourly_snowMm + " mm)")
+                      hourly10_snowIn + " in (" + hourly10_snowMm + " mm)")
             print(Fore.YELLOW + "Precipitation chance: " + Fore.CYAN + 
-                  hourly_precipChance + "%")
+                  hourly10_precipChance + "%")
             print(Fore.YELLOW + "Barometric pressure: " + Fore.CYAN +
-                  hourly_pressureInHg + " inHg (" + hourly_pressureMb
+                  hourly10_pressureInHg + " inHg (" + hourly10_pressureMb
                   + " mb)")
             detailedHourly10Iterations = detailedHourly10Iterations + 1
             totaldetailedHourly10Iterations = totaldetailedHourly10Iterations + 1
