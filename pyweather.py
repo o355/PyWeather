@@ -863,6 +863,9 @@ while True:
                   + " mb)")
             detailedHourly10Iterations = detailedHourly10Iterations + 1
             totaldetailedHourly10Iterations = totaldetailedHourly10Iterations + 1
+            if totaldetailedHourly10Iterations == 240:
+                logger.info("detailedHourly10Iterations is 240. Breaking...")
+                break
             if (detailedHourly10Iterations == user_loopIterations):
                 logger.debug("detailedHourly10Iterations: %s" % detailedHourly10Iterations)
                 logger.debug("Asking user for continuation...")
@@ -895,13 +898,24 @@ while True:
             forecast10_month = str(day['date']['month'])
             forecast10_day = str(day['date']['day'])
             forecast10_highf = str(day['high']['fahrenheit'])
+            forecast10_highfcheck = int(day['high']['fahrenheit'])
             logger.debug("forecast10_weekday: %s ; forecast10_month: %s"
                          % (forecast10_weekday, forecast10_month))
             logger.debug("forecast10_day: %s ; forecast10_highf: %s"
                         % (forecast10_day, forecast10_highf))
             forecast10_highc = str(day['high']['celsius'])
             forecast10_lowf = str(day['low']['fahrenheit'])
+            forecast10_lowfcheck = int(day['low']['fahrenheit'])
             forecast10_lowc = str(day['low']['celsius'])
+            if forecast10_highfcheck > 32:
+                forecast10_showsnowdataday = False
+            else:
+                forecast10_showsnowdataday = True
+                
+            if forecast10_lowfcheck > 32:
+                forecat10_showsnowdatanight = False
+            else:
+                forecast10_showsnowdatanight = True
             forecast10_conditions = day['conditions']
             logger.debug("forecast10_highc: %s ; forecast10_lowf: %s"
                         % (forecast10_highc, forecast10_lowf))
@@ -921,24 +935,12 @@ while True:
                         % (forecast10_precipNightIn, forecast10_precipNightMm))
             forecast10_snowTotalCheck = day['snow_allday']['in']
             logger.debug("forecast10_snowTotalCheck: %s" % forecast10_snowTotalCheck)
-            if forecast10_snowTotalCheck == 0.0:
-                forecast10_snowTotalData = False
-                logger.warn("Oh no! No snow data for the day. Is it too warm?")
-            else:
-                forecast10_snowTotalData = True
-                logger.info("Snow data for the day. Snow. I love snow.")
             forecast10_snowTotalIn = str(forecast10_snowTotalCheck)
             forecast10_snowTotalCm = str(day['snow_allday']['cm'])
             forecast10_snowDayCheck = day['snow_day']['in']
             logger.debug("forecast10_snowTotalIn: %s ; forecast10_snowTotalCm: %s"
                         % (forecast10_snowTotalIn, forecast10_snowTotalCm))
             logger.debug("forecast10_snowDayCheck: %s" % forecast10_snowDayCheck)
-            if forecast10_snowDayCheck == 0.0:
-                forecast10_snowDayData = False
-                logger.warn("Oh no! No snow data for the day. Is it too warm?")
-            else:
-                forecast10_snowDayData = True
-                logger.info("Snow data for the day is available.")
             forecast10_snowDayIn = str(forecast10_snowDayCheck)
             forecast10_snowDayCm = str(day['snow_day']['cm'])
             forecast10_snowNightCheck = day['snow_night']['in']
@@ -976,28 +978,27 @@ while True:
                   + Fore.CYAN + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
                   Fore.YELLOW + " and a low of " + Fore.CYAN + forecast10_lowf + "°F (" +
                   forecast10_lowc + "°C)" + ".")
-            print(Fore.YELLOW + "Total Rain: " + Fore.CYAN +
-                  forecast10_precipTotalIn + " in (" + forecast10_precipTotalMm
-                  + " mm)")
-            print(Fore.YELLOW + "Rain during the day: " + Fore.CYAN +
-                  forecast10_precipDayIn + " in (" + forecast10_precipDayMm
-                  + " mm)")
-            print(Fore.YELLOW + "Rain during the night: " + Fore.CYAN +
-                  forecast10_precipNightIn + " in (" + forecast10_precipNightMm
-                  + " mm)")
-            if forecast10_snowTotalData == True:
-                print(Fore.YELLOW + "Total snow: " + Fore.CYAN +
-                      forecast10_snowTotalIn + " in (" + forecast10_snowTotalCm
-                      + " cm)")
-            if forecast10_snowDayData == True:
-                print(Fore.YELLOW + "Snow during the day: " + Fore.CYAN + 
-                      forecast10_snowDayIn + " in (" + forecast10_snowDayCm
-                      + " cm)")
-            if forecast10_snowNightData == True:
-                print(Fore.YELLOW + "Snow during the night: " + Fore.CYAN +
-                      forecast10_snowNightIn + " in (" + forecast10_snowNightCm
-                      + " cm)")
-            print(Fore.YELLOW + "Winds: " + Fore.CYAN +
+            if forecast10_showsnowdataday == False:
+                print(Fore.YELLOW + "Rain for the day: " + forecast10_precipDayIn
+                      + " in (" + forecast10_precipDayMm + " mm)")
+            elif forecast10_showsnowdataday == True:
+                print(Fore.YELLOW + "Snow for the day: " + forecast10_snowDayIn
+                      + " in (" + forecast10_snowDayCm + " cm)")
+            else:
+                print(Fore.YELLOW + "Rain for the day: " + forecast10_precipDayIn
+                      + " in (" + forecast10_precipDayMm + " mm)")
+            
+            if forecast10_showsnowdatanight == False:
+                print(Fore.YELLOW + "Rain for the night: " + forecast10_precipNightIn
+                      + " in (" + forecast10_precipNightMm + " mm)")
+            elif forecast10_showsnowdatanight == True:
+                print(Fore.YELLOW + "Snow for the night: " + forecast10_snowNightIn
+                      + " in (" + forecat10_snowNightCm + " cm)")
+            else:
+                print(Fore.YELLOW + "Rain for the night: " + forecast10_precipNightIn
+                      + " in (" + forecast10_precipNightMm + " mm)")
+                
+            print(Fore.YELLOW + "Winds: " + Fore.CYAN + 
                   forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
                   + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
                   + forecast10_maxWindKPH + " kph), "
