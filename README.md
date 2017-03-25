@@ -1,8 +1,14 @@
 ## Welcome to PyWeather (0.4.2 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
-## Hiatus Notice:
-I'm out of my hiatus, and PyWeather is back in full development. I'll be striving to get around 75-90 minutes of coding time a day, as that amount of time generally allows for implementing a feature. Of course, more complex features take longer.
+## Update on 0.5 beta:
+0.5 beta is coming along nicely! If you've looked at the changelog, it's one of the biggest releases in history, so coding it will certainly take some time. However, everything is mostly on schedule.
+
+0.5 beta brings a whole plethora of changes and improvements, and 0.5.1 beta/0.5.2 beta will spread out the huge amount of new features in these versions. So, of course, development will take a while.
+
+The ETA for 0.5 beta is still somewhere around 4/4, in which 0.5.1/0.5.2 beta will get released in mid-late April 2017.
+
+Oh, and if you're wondering when PyWeather 1.0 will drop...likely Summer 2017, but don't be suprised if it releases in Fall 2017.
 
 ## BETA DISCLAIMER:
 Even though PyWeather is in beta, it's still in active development. While releases are somewhat stable milestones of PyWeather, things may or may not work. If you update from GitHub, I may push updates that entirely break PyWeather, so please, take caution!

@@ -74,7 +74,7 @@ try:
 except FileNotFoundError:
     print("The API key wasn't found. (Error 38, pyweather.py)")
     logger.error("Full traceback:")
-    logger.error(traceback.print_exc())
+    printException()
     print("Press enter to continue.")
     input()
     sys.exit()
@@ -82,7 +82,7 @@ logger.debug("apikey = %s" % apikey)
 
 def printException():
     if tracebacksEnabled == True:
-        logger.error(traceback.print_exc())
+        printException()
         
 def printException_loginfo():
     if verbosity == True:
@@ -101,7 +101,7 @@ if checkforUpdates == True:
         print("Can't connect to GitHub to check for updates. Make sure you have an internet connection, " + 
               "and GitHub is unblocked.")
         logger.error("Here's the full traceback (for bug reports):")
-        logger.error(traceback.print_exc())
+        printException()
         print("Press enter to continue.")
         input()
         sys.exit()
@@ -169,7 +169,7 @@ except AttributeError:
     print("The location you inputted could not be understood.")
     print("Please try again.")
     logger.error("Here's the full traceback (for bug reports):")
-    logger.error(traceback.print_exc())
+    printException()
     print("Press enter to continue.")
     input()
     sys.exit()
@@ -235,7 +235,7 @@ except:
           "is unblocked, and the internet is online.")
     print("Also check if your API key is valid.")
     logger.error("Here's the full traceback (for bug reports):")
-    logger.error(traceback.print_exc())
+    printException()
     print("Press enter to continue.")
     input()
     sys.exit()
@@ -286,7 +286,7 @@ except:
     print("Can't connect to Google's Geolocator. Make sure that Google's " +
           "Geolocator is unblocked, and your internet is online.")
     logger.error("Here's the full traceback (for bug reports):")
-    logger.error(traceback.print_exc())
+    printException()
     print("Press enter to continue.")
     input()
     sys.exit()
@@ -898,7 +898,7 @@ while True:
             print("Make sure GitHub user content is unblocked, and you have an internet connection.")
             print("Error 54, pyweather.py")
             logger.error("Here's the full traceback (for bug reports):")
-            logger.error(traceback.print_exc())
+            printException()
             continue
         versionJSON = json.load(reader(versioncheck))
         if jsonVerbosity == True:
@@ -952,7 +952,7 @@ while True:
                           + "and you have an internet connection.")
                     print("Error 55, pyweather.py")
                     logger.error("Here's the full traceback (for bug reports):")
-                    logger.error(traceback.print_exc())
+                    printException()
                     continue
                 logger.debug("Latest version was saved, filename: %s"
                             % version_latestFileName)
@@ -989,7 +989,7 @@ while True:
                 logger.warn("Couldn't contact Wunderground's API! Is the internet offline?")
                 print("Couldn't contact Wunderground's API. Make sure it's unblocked, and you have internet access.")
                 logger.error("Here's the full traceback (for bug reports):")
-                logger.error(traceback.print_exc())
+                printException()
                 continue
             logger.debug("almanacurl: %s" % almanacurl)
             almanacJSON = urllib.request.urlopen(almanacurl)
@@ -1055,7 +1055,7 @@ while True:
                 print("Couldn't connect to Wunderground's API. "
                       + "Make sure you have an internet connection.")
                 logger.error("Here's the full traceback (for bug reports):")
-                logger.error(traceback.print_exc())
+                printException()
                 print("Press enter to continue.")
                 input()
                 continue
@@ -1245,7 +1245,7 @@ while True:
             print("Can't connect to Wunderground's API.")
             print("Make sure you have an internet connection, and WU's API is unblocked.")
             logger.error("Here's the full traceback (for bug reports):")
-            logger.error(traceback.print_exc())
+            printException()
             print("Press enter to continue.")
             input()
             continue
