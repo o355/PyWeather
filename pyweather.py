@@ -993,7 +993,7 @@ while True:
                       + " in (" + forecast10_precipNightMm + " mm)")
             elif forecast10_showsnowdatanight == True:
                 print(Fore.YELLOW + "Snow for the night: " + forecast10_snowNightIn
-                      + " in (" + forecat10_snowNightCm + " cm)")
+                      + " in (" + forecast10_snowNightCm + " cm)")
             else:
                 print(Fore.YELLOW + "Rain for the night: " + forecast10_precipNightIn
                       + " in (" + forecast10_precipNightMm + " mm)")
