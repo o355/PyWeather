@@ -863,7 +863,7 @@ while True:
                   + " mb)")
             detailedHourly10Iterations = detailedHourly10Iterations + 1
             totaldetailedHourly10Iterations = totaldetailedHourly10Iterations + 1
-            if (detailedHourlyIterations == user_loopIterations):
+            if (detailedHourly10Iterations == user_loopIterations):
                 logger.debug("detailedHourly10Iterations: %s" % detailedHourly10Iterations)
                 logger.debug("Asking user for continuation...")
                 try:
