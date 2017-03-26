@@ -754,8 +754,8 @@ while True:
             logger.info("Fetching 10 day JSON...not previously fetched")
             tendayurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
             try:
-                tendayJSON = urllib.request.urlopen(astronomyurl)
-                logger.debug("Retrieved sundata JSON with response: %s" % sundataJSON)
+                tendayJSON = urllib.request.urlopen(tendayurl)
+                logger.debug("Retrieved ten day hourly JSON with response: %s" % tendayJSON)
                 tenday_prefetched = True
             except:
                 print("Couldn't connect to Wunderground's API. "
@@ -785,24 +785,24 @@ while True:
             hourly10_dewpointC = str(hour['dewpoint']['metric'])
             hourly10_windMPH = str(hour['wspd']['english'])
             hourly10_windKPH = str(hour['wspd']['metric'])
-            hourly_windDir = hour['wdir']['dir']
+            hourly10_windDir = hour['wdir']['dir']
             if verbosity == True:
-                logger.debug("hourly_dewpointC: %s ; hourly_windMPH: %s"
-                             % (hourly_dewpointC, hourly_windMPH))
-                logger.debug("hourly_windKPH: %s ; hourly_windDir: %s"
-                             % (hourly_windKPH, hourly_windDir))
-            hourly_windDegrees = str(hour['wdir']['degrees'])
-            hourly_UVIndex = str(hour['uvi'])
-            hourly_humidity = str(hour['humidity'])
-            hourly_feelsLikeF = str(hour['feelslike']['english'])
-            logger.debug("hourly_windDegrees: %s ; hourly_UVIndex: %s"
-                        % (hourly_windDegrees, hourly_UVIndex))
+                logger.debug("hourly10_dewpointC: %s ; hourly10_windMPH: %s"
+                             % (hourly10_dewpointC, hourly10_windMPH))
+                logger.debug("hourly_windKPH: %s ; hourly10_windDir: %s"
+                             % (hourly10_windKPH, hourly10_windDir))
+            hourly10_windDegrees = str(hour['wdir']['degrees'])
+            hourly10_UVIndex = str(hour['uvi'])
+            hourly10_humidity = str(hour['humidity'])
+            hourly10_feelsLikeF = str(hour['feelslike']['english'])
+            logger.debug("hourly10_windDegrees: %s ; hourly_UVIndex: %s"
+                        % (hourly10_windDegrees, hourly_UVIndex))
             logger.debug("hourly_humidity: %s ; hourly_feelsLikeF: %s"
                         % (hourly_humidity, hourly_feelsLikeF))
-            hourly_feelsLikeC = str(hour['feelslike']['metric'])
-            hourly_precipIn = str(hour['qpf']['english'])
-            hourly_precipMm = str(hour['qpf']['metric'])
-            hourly_snowCheck = hour['snow']['english']
+            hourly10_feelsLikeC = str(hour['feelslike']['metric'])
+            hourly10_precipIn = str(hour['qpf']['english'])
+            hourly10_precipMm = str(hour['qpf']['metric'])
+            hourly10_snowCheck = hour['snow']['english']
             logger.debug("hourly_feelsLikeC: %s ; hourly_precipIn: %s"
                         % (hourly_feelsLikeC, hourly_precipIn))
             logger.debug("hourly_precipMm: %s ; hourly_snowCheck: %s"
@@ -815,11 +815,11 @@ while True:
                 hourly_snowData = True
                 logger.info("Lucky duck getting some snow.")
             
-            hourly_snowIn = str(hourly_snowCheck)
-            hourly_snowMm = str(hour['snow']['metric'])
-            hourly_precipChance = str(hour['pop'])
-            hourly_pressureInHg = str(hour['mslp']['english'])
-            hourly_pressureMb = str(hour['mslp']['metric'])
+            hourly10_snowIn = str(hourly_snowCheck)
+            hourly10_snowMm = str(hour['snow']['metric'])
+            hourly10_precipChance = str(hour['pop'])
+            hourly10_pressureInHg = str(hour['mslp']['english'])
+            hourly10_pressureMb = str(hour['mslp']['metric'])
             logger.debug("hourly_snowIn: %s ; hourly_snowMm: %s"
                         % (hourly_snowIn, hourly_snowMm))
             logger.debug("hourly_precipChance: %s ; hourly_pressureInHg: %s"
@@ -856,14 +856,16 @@ while True:
             detailedHourly10Iterations = detailedHourly10Iterations + 1
             totaldetailedHourly10Iterations = totaldetailedHourly10Iterations + 1
             if (detailedHourlyIterations == user_loopIterations):
-                logger.debug("detailedHourlyIterations: %s" % detailedHourlyIterations)
+                logger.debug("detailedHourly10Iterations: %s" % detailedHourly10Iterations)
                 logger.debug("Asking user for continuation...")
                 try:
                     print("")
-                    print(Fore.RED + "Please press enter to view the next 6 hours of hourly data.")
+                    print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
+                          % user_loopIterations)
                     print("You can also press Control + C to head back to the input menu.")
                     input()
-                    logger.debug("Iterating 6 more times...")
+                    logger.debug("Iterating %s more times...")
+                    detailedHourly10Iterations = 0
                 except KeyboardInterrupt:
                     logger.debug("Exiting to main menu...")
                     break
