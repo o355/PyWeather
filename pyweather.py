@@ -82,7 +82,7 @@ logger.debug("apikey = %s" % apikey)
 
 def printException():
     if tracebacksEnabled == True:
-        printException()
+        traceback.print_exc()
         
 def printException_loginfo():
     if verbosity == True:
@@ -126,7 +126,7 @@ if checkforUpdates == True:
               ", and the latest version is " + version_latestVersion + ".")
         print("")
 
-
+prefetch10day_atStart = False
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
@@ -740,6 +740,133 @@ while True:
                 except KeyboardInterrupt:
                     logger.debug("Exiting to main menu...")
                     break
+    elif (moreoptions == "view the 10 day hourly" or
+          moreoptions == "view 10 day hourly" or
+          moreoptions == "10 day hourly" or
+          moreoptions == "1"):
+        print(Fore.RED + "Loading...")
+        print("")
+        logger.info("Selected view more 10 day hourly...")
+        detailedHourly10Iterations = 0
+        totaldetailedHourly10Iterations = 0
+        print(Fore.YELLOW + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + location2.city + ", " + location2.state)
+        if prefetch10Day_atStart == False and tenday_prefetched == False:
+            logger.info("Fetching 10 day JSON...not previously fetched")
+            tendayurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
+            try:
+                tendayJSON = urllib.request.urlopen(astronomyurl)
+                logger.debug("Retrieved sundata JSON with response: %s" % sundataJSON)
+                tenday_prefetched = True
+            except:
+                print("Couldn't connect to Wunderground's API. "
+                      + "Make sure you have an internet connection.")
+                tenday_prefetched = False
+                logger.error("Here's the full traceback (for bug reports):")
+                printException()
+                print("Press enter to continue.")
+                input()
+                continue
+            
+            tenday_json = json.load(reader(tendayJSON))
+            
+        for hour in tenday_json['hourly_forecast']:
+            logger.info("We're on iteration: %s/24. User iterations: %s." %
+                        (detailedHourly10Iterations, user_loopIterations))
+            hourly10_time = hour['FCTTIME']['civil']
+            hourly10_tempf = hour['temp']['english']
+            hourly10_tempc = hour['temp']['metric']
+            hourly10_month = str(hour['FCTTIME']['month_name'])
+            hourly10_day = str(hour['FCTTIME']['mday'])
+            hourly10_dewpointF = str(hour['dewpoint']['english'])
+            logger.debug("hourly_time: %s ; hourly_month: %s"
+                        % (hourly_time, hourly_month))
+            logger.debug("hourly_day: %s ; hourly_dewpointF: %s"
+                        % (hourly_day, hourly_dewpointF))
+            hourly10_dewpointC = str(hour['dewpoint']['metric'])
+            hourly10_windMPH = str(hour['wspd']['english'])
+            hourly10_windKPH = str(hour['wspd']['metric'])
+            hourly_windDir = hour['wdir']['dir']
+            if verbosity == True:
+                logger.debug("hourly_dewpointC: %s ; hourly_windMPH: %s"
+                             % (hourly_dewpointC, hourly_windMPH))
+                logger.debug("hourly_windKPH: %s ; hourly_windDir: %s"
+                             % (hourly_windKPH, hourly_windDir))
+            hourly_windDegrees = str(hour['wdir']['degrees'])
+            hourly_UVIndex = str(hour['uvi'])
+            hourly_humidity = str(hour['humidity'])
+            hourly_feelsLikeF = str(hour['feelslike']['english'])
+            logger.debug("hourly_windDegrees: %s ; hourly_UVIndex: %s"
+                        % (hourly_windDegrees, hourly_UVIndex))
+            logger.debug("hourly_humidity: %s ; hourly_feelsLikeF: %s"
+                        % (hourly_humidity, hourly_feelsLikeF))
+            hourly_feelsLikeC = str(hour['feelslike']['metric'])
+            hourly_precipIn = str(hour['qpf']['english'])
+            hourly_precipMm = str(hour['qpf']['metric'])
+            hourly_snowCheck = hour['snow']['english']
+            logger.debug("hourly_feelsLikeC: %s ; hourly_precipIn: %s"
+                        % (hourly_feelsLikeC, hourly_precipIn))
+            logger.debug("hourly_precipMm: %s ; hourly_snowCheck: %s"
+                        % (hourly_precipMm, hourly_snowCheck))
+            logger.info("Starting snow check...")
+            if hourly_snowCheck == "0.0":
+                hourly_snowData = False
+                logger.warn("No snow data! Maybe it's summer?")
+            else:
+                hourly_snowData = True
+                logger.info("Lucky duck getting some snow.")
+            
+            hourly_snowIn = str(hourly_snowCheck)
+            hourly_snowMm = str(hour['snow']['metric'])
+            hourly_precipChance = str(hour['pop'])
+            hourly_pressureInHg = str(hour['mslp']['english'])
+            hourly_pressureMb = str(hour['mslp']['metric'])
+            logger.debug("hourly_snowIn: %s ; hourly_snowMm: %s"
+                        % (hourly_snowIn, hourly_snowMm))
+            logger.debug("hourly_precipChance: %s ; hourly_pressureInHg: %s"
+                        % (hourly_precipChance, hourly_pressureInHg))
+            logger.debug("hourly_pressureMb: %s" % hourly_pressureMb)
+            logger.info("Now printing weather data...")
+            print("")
+            # If you have verbosity on, there's a chance that the next
+            # hourly iteration will start BEFORE the previous iteration
+            # prints out. This is normal, and no issues are caused by such.
+            print(Fore.YELLOW + hourly_time + " on " + hourly_month + " " + hourly_day + ":")
+            print(Fore.YELLOW + "Conditions: " + Fore.CYAN + hourly_condition)
+            print(Fore.YELLOW + "Temperature: " + Fore.CYAN + hourly_tempf 
+                  + "°F (" + hourly_tempc + "°C)")
+            print(Fore.YELLOW + "Feels like: " + Fore.CYAN + hourly_feelsLikeF
+                  + "°F (" + hourly_feelsLikeC + "°C)")
+            print(Fore.YELLOW + "Dew Point: " + Fore.CYAN + hourly_dewpointF
+                  + "°F (" + hourly_dewpointC + "°C)")
+            print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly_windMPH
+                  + " mph (" + hourly_windKPH + " kph) blowing to the " +
+                  hourly_windDir + " (" + hourly_windDegrees + "°)")
+            print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly_humidity + "%")
+            if hourly_snowData == False:
+                print(Fore.YELLOW + "Rain for the hour: " + Fore.CYAN +
+                      hourly_precipIn + " in (" + hourly_precipMm + " mm)")
+            if hourly_snowData == True:
+                print(Fore.YELLOW + "Snow for the hour: " + Fore.CYAN +
+                      hourly_snowIn + " in (" + hourly_snowMm + " mm)")
+            print(Fore.YELLOW + "Precipitation chance: " + Fore.CYAN + 
+                  hourly_precipChance + "%")
+            print(Fore.YELLOW + "Barometric pressure: " + Fore.CYAN +
+                  hourly_pressureInHg + " inHg (" + hourly_pressureMb
+                  + " mb)")
+            detailedHourly10Iterations = detailedHourly10Iterations + 1
+            totaldetailedHourly10Iterations = totaldetailedHourly10Iterations + 1
+            if (detailedHourlyIterations == user_loopIterations):
+                logger.debug("detailedHourlyIterations: %s" % detailedHourlyIterations)
+                logger.debug("Asking user for continuation...")
+                try:
+                    print("")
+                    print(Fore.RED + "Please press enter to view the next 6 hours of hourly data.")
+                    print("You can also press Control + C to head back to the input menu.")
+                    input()
+                    logger.debug("Iterating 6 more times...")
+                except KeyboardInterrupt:
+                    logger.debug("Exiting to main menu...")
+                    break
     elif (moreoptions == "view the 10 day weather forecast" or
           moreoptions == "view more forecast data" or
           moreoptions == "view the 10 day" or moreoptions == "view 10 day"
@@ -985,15 +1112,15 @@ while True:
             logger.info("Almanac data NOT fetched at start. Fetching now...")
             try:
                 almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
+                logger.debug("almanacurl: %s" % almanacurl)
+                almanacJSON = urllib.request.urlopen(almanacurl)
+                logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
             except:
                 logger.warn("Couldn't contact Wunderground's API! Is the internet offline?")
                 print("Couldn't contact Wunderground's API. Make sure it's unblocked, and you have internet access.")
                 logger.error("Here's the full traceback (for bug reports):")
                 printException()
                 continue
-            logger.debug("almanacurl: %s" % almanacurl)
-            almanacJSON = urllib.request.urlopen(almanacurl)
-            logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
             almanac_json = json.load(reader(almanacJSON))
             if jsonVerbosity == True:
                 logger.debug("almanac_json: %s" % almanac_json)
