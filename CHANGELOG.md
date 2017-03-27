@@ -10,7 +10,7 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 
 ## version 0.5.1 beta - To be released mid April
 * Removes if verbosity == True in the separate updater, and keybackup scripts.
-* Removes config.ini from GitHub, and the setup/config scripts will both check for a config file before starting. If none is present, it's made on the spot. This is to help with users doing `git fetch` for PyWeather updates.
+* Removes config.ini from GitHub, and all scripts will check for a config file before starting. If none is present, it's made on the spot, according to defaults present in all programs. This is to help with users doing `git pull/fetch` for PyWeather updates.
 * Adds the ability to load your backup key if PyWeather can't access your primary key.
 * Adds the raw traceback output in updater.py/setup.py
 
@@ -22,7 +22,7 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 * Adds historical weather information to PyWeather. - Done!
 * Adds output of the raw traceback in PyWeather errors (pyweather.py ONLY, on by default.) - Done!
 * Adds 10-day hourly weather to PyWeather (you'll hit enter 40 times!...by default). - Done!
-* Adds a method in which PyWeather will display rain data for the day/night if the temperature is above 32F. Otherwise, it'll just show snow data. Fixes the bug in which the detailed forecast showed both rain/snow data. - "Done", still needs testing.
+* Adds a method in which PyWeather will display rain data for the day/night if the temperature is above 32F. Otherwise, it'll just show snow data. Fixes the bug in which the detailed forecast showed both rain/snow data. - 75% implemented, still needs testing.
 * Adds a config option I can't really describe here (fetching the 10 day JSON at boot, or the 3 day JSON at boot/10day when needed) - Should be finished by 3/27
 * Reworks the config file some, sections are now where they need to be (aka verbosity has it's own section) - Should be finished by 3/27 (adding compatibility for other scripts)
 * Adds the ability to turn off the "enter to continue" things in the 10-day/hourly forecasts - Should be finished by 3/28
