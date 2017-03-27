@@ -14,22 +14,23 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 * Adds the ability to load your backup key if PyWeather can't access your primary key.
 * Adds the raw traceback output in updater.py/setup.py
 
-## version 0.5 beta (The Back to the Future Update) - To be released 4/4/2017 (probably)
+## version 0.5 beta (The Back to the Future Update) - To be released 4/7/2017 (probably)
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.
 * This release is so big, I've had to separate new features from bug fixes.
 
 **NEW FEATURES/REMOVALS:**
-* Adds historical weather information to PyWeather. - Done!
-* Adds output of the raw traceback in PyWeather errors (pyweather.py ONLY, on by default.) - Done!
-* Adds 10-day hourly weather to PyWeather (you'll hit enter 40 times!...by default). - Done!
-* Adds a method in which PyWeather will display rain data for the day/night if the temperature is above 32F. Otherwise, it'll just show snow data. Fixes the bug in which the detailed forecast showed both rain/snow data. - 75% implemented, still needs testing.
-* Adds a config option I can't really describe here (fetching the 10 day JSON at boot, or the 3 day JSON at boot/10day when needed) - Should be finished by 3/27
-* Reworks the config file some, sections are now where they need to be (aka verbosity has it's own section) - Should be finished by 3/27 (adding compatibility for other scripts)
-* Adds the ability to turn off the "enter to continue" things in the 10-day/hourly forecasts - Should be finished by 3/28
-* Adds the ability to set the interval in which the "enter to continue" will appear - Should be finished by 3/28
-* Adds a separate config.py program, so you can configure every option in PyWeather (including verbosity!) - Should by finished by 3/29
-* Removes the if verbosity == True garbage in the setup file. - Should be finished by 3/31
-* Adds verbosity for all new functions added. This will now be standard! - Rolling, should be finished by 4/3
+* Adds historical weather information to PyWeather. - Done, and tested!
+* Adds output of the raw traceback in PyWeather errors (pyweather.py ONLY, on by default.) - Done, and tested!
+* Adds 10-day hourly weather to PyWeather (you'll hit enter 40 times!...by default). - Done, needs testing (should be finished by 3/27)
+* Adds a method in which PyWeather will display rain data for the day/night if the temperature is above 32F. Otherwise, it'll just show snow data. Fixes the bug in which the detailed forecast showed both rain/snow data. - 75% implemented, still needs testing. (should be finished by 3/28)
+* Adds a config option I can't really describe here (fetching the 10 day JSON at boot, or the 3 day JSON at boot/10day when needed) - Should be finished by 3/28
+* Reworks the config file some, sections are now where they need to be (aka verbosity has it's own section) - Done, need to add compatibility to other scripts (should be finished by 3/29)
+* Adds the ability to turn off the "enter to continue" things in the 10-day/hourly forecasts - Should be finished by 3/29
+* Adds the ability to set the interval in which the "enter to continue" will appear - Should be finished by 3/31
+* Adds the ability to show how many iterations are left in the enter to continue thing (if it's on) - Should be finished by 3/31
+* Adds a separate config.py program, so you can configure every option in PyWeather (including verbosity!) - Should by finished by 4/3
+* Removes the if verbosity == True garbage in the setup file. - Should be finished by 4/4
+* Adds verbosity for all new functions added. This will now be standard! - Rolling, should be finished by 4/5
 
 **BUG FIXES:**
 * Fixes a bug in which if the config file wouldn't load, the program won't load (checkforupdates wasn't defined.)

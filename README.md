@@ -2,13 +2,9 @@
 Viewing the weather in a terminal has never been so much fun.
 
 ## Update on 0.5 beta:
-0.5 beta is coming along nicely! If you've looked at the changelog, it's one of the biggest releases in history, so coding it will certainly take some time. However, everything is mostly on schedule.
+0.5 beta is coming along nicely, albeit a little slowly. The release date has been pushed back to 4/7, and that's for quality assurance testing. I want to make sure everything is tested, and everything works without error.
 
-0.5 beta brings a whole plethora of changes and improvements, and 0.5.1 beta/0.5.2 beta will spread out the huge amount of new features in these versions. So, of course, development will take a while.
-
-The ETA for 0.5 beta is still somewhere around 4/4, in which 0.5.1/0.5.2 beta will get released in mid-late April 2017.
-
-Oh, and if you're wondering when PyWeather 1.0 will drop...likely Summer 2017, but don't be suprised if it releases in Fall 2017.
+As such, the release date has been slightly pushed back, thanks to the above mentioned testing, and limited time.
 
 ## BETA DISCLAIMER:
 Even though PyWeather is in beta, it's still in active development. While releases are somewhat stable milestones of PyWeather, things may or may not work. If you update from GitHub, I may push updates that entirely break PyWeather, so please, take caution!
@@ -23,7 +19,18 @@ Simple. Download a release from the releases tab, unzip it, and run setup.py. Th
 
 After that, double click termweather.py, input a location, and that's it! No, really. That's actually it. No completed config files, none of that. setup.py, termweather.py. Welcome to the world of simplicity! \ (•◡•) /
 
-***For users using a command-line only OS, make sure you're in the directory you want PyWeather to be stored in, and then run `git clone https://github.com/o355/pyweather.git`. Run the scripts using `python3 setup.py / python3 pyweather.py`. Simple. Effortless.***
+
+If you have Git, and you'd prefer to clone over PyWeather from Git, you've got your options.
+
+Doing `git clone https://github.com/o355/pyweather.git` will clone PyWeather into your current folder. Add `--depth=1` to the end if you want Git to create a folder in which PyWeather is stored in.
+
+If you want to have the latest stable version (0.4.2), you can checkout to the release branch, by doing `git checkout v0.4.2-beta`.
+
+If you want to live on the bleeding edge, nothing is required on your part, you'll have the latest updates as I code them (at the risk of things breaking). I don't do betas/RCs, as that's just a huge waste of time on my end. Doing `git pull` will let you get the latest updates, and I push updates Monday-Saturday, for the most part.
+
+The only thing that will probably annoy you when doing `git pull` to check for new updates, you'll likely need to stash your config.ini file, if you made changes. This will get solved in 0.5.1 beta, when I pull config.ini from the master branch.
+
+If PyWeather shows that a new update is available, starting with 0.5.1 beta, PyWeather will show you the branch tag in the updater, and you can just as well do `git pull`, and `git checkout`, and add the branch tag that was shown.
 
 ## What's PyWeather?
 PyWeather is a script I made to accomplish a few things.
@@ -31,10 +38,13 @@ PyWeather is a script I made to accomplish a few things.
 1. Make it easy for people to view the weather in Python.
 2. Make a fast way for people to view the weather, instead of having to wait for apps on their phone launch.
 3. Make a weather script that combines simplicity, and advanced features.
+4. Have a mostly modular weather script, that'll easily let you turn on/off features.
 
 I couldn't find any of this. None. Alas, PyWeather was born.
 
 PyWeather is simple, it'll read you the forecast, and the current weather, but it's also easy to set up. Really easy. Yet, it contains lots of data for reading the almanac, previous weather, whatever. Plus, if you have a PWS from Wunderground, PyWeather (not presently) will let you view the weather for your PWS. Easy style.
+
+PyWeather is pretty modular, and has some advanced configuration options. Using the config file, you can turn on/off options easily, and make PyWeather your own. It isn't completely modular, but maybe that'll come.
 
 ### What kind of data does PyWeather show?
 

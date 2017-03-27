@@ -84,7 +84,7 @@ def printException():
     if tracebacksEnabled == True:
         traceback.print_exc()
         
-def printException_loginfo():
+def printException_loggerinfo():
     if verbosity == True:
         logger.info(traceback.print_exc())
         
@@ -751,7 +751,6 @@ while True:
         logger.info("Selected view more 10 day hourly...")
         detailedHourly10Iterations = 0
         totaldetailedHourly10Iterations = 0
-        print(Fore.YELLOW + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + location2.city + ", " + location2.state)
         if prefetch10Day_atStart == False and tenday_prefetched == False:
             logger.info("Fetching 10 day JSON...not previously fetched")
             tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + "," + lonstr + '.json'
@@ -770,6 +769,8 @@ while True:
                 continue
             
             tenday_json = json.load(reader(tendayJSON))
+        print(Fore.YELLOW + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + location2.city + ", " + location2.state)
+        
             
         for hour in tenday_json['hourly_forecast']:
             logger.info("We're on iteration: %s/24. User iterations: %s." %
@@ -916,11 +917,15 @@ while True:
                 forecat10_showsnowdatanight = False
             else:
                 forecast10_showsnowdatanight = True
+                
+            if forecast10_highfcheck < 32 and forecast10_lowfcheck < 32:
+                freasfd = True
             forecast10_conditions = day['conditions']
             logger.debug("forecast10_highc: %s ; forecast10_lowf: %s"
                         % (forecast10_highc, forecast10_lowf))
             logger.debug("forecast10_lowc: %s ; forecast10_conditions: %s"
                         % (forecast10_lowc, forecast10_conditions))
+            logger.debug("")
             forecast10_precipTotalIn = str(day['qpf_allday']['in'])
             forecast10_precipTotalMm = str(day['qpf_allday']['mm'])
             forecast10_precipDayIn = str(day['qpf_day']['in'])
@@ -1550,7 +1555,7 @@ while True:
                 historical_gustcheck = float(data['wgustm'])
             except ValueError:
                 logger.info("We hit a snag. Here's the traceback.")
-                logger.info(traceback.print_exc())
+                printException_loggerinfo()
                 historical_gustcheck = -9999
             logger.debug("historical_dewpointC: %s ; historical_windspeedKPH: %s"
                          % (historical_dewpointC, historical_windspeedKPH))
@@ -1610,7 +1615,7 @@ while True:
                 historical_precipIN = float(data['precipi'])
             except ValueError:
                 logger.info("We hit a snag. Here's the traceback.")
-                logger.info(traceback.print_exc())
+                printException_loggerinfo()
                 historical_precipMM = -9999
                 historical_precipIN = -9999
             logger.debug("historical_precipMM: %s ; historical_precipIN: %s"
