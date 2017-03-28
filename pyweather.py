@@ -13,7 +13,6 @@
 # the json verbosity will stay...for now.
 
 # Temporary until I get the config file set up to read this.
-user_loopIterations = 6
 
 import configparser
 import traceback
@@ -22,23 +21,28 @@ config = configparser.ConfigParser()
 config.read('storage//config.ini')
 try:
     sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
-    # almanac data on the summary screen isn't working. in 0.4.1 it will!
     almanac_summary = config.getboolean('SUMMARY', 'almanac_summary')
     checkforUpdates = config.getboolean('UPDATER', 'autocheckforupdates')
     verbosity = config.getboolean('VERBOSITY', 'verbosity')
     jsonVerbosity = config.getboolean('VERBOSITY', 'json_verbosity')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'tracebacks')
     prefetch10Day_atStart = config.getboolean('HOURLY', '10dayfetch_atboot')
+    user_loopIterations = config.getint('UI', 'detailedinfoloops')
+    user_enterToContinue = config.getboolean('UI', 'entertocontinue')
 except:
     print("Couldn't load your config file. Make sure your spelling is correct.")
     print("Setting variables to default...")
     print("In case you need it, here's the traceback.")
     traceback.print_exc()
-    sundata_summary = True
+    sundata_summary = False
     almanac_summary = False
     verbosity = False
     jsonVerbosity = False
     checkforUpdates = False
+    tracebacksEnabled = False
+    prefetch10Day_atStart = False
+    user_loopIterations = 6
+    user_enterToContinue = False
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
@@ -54,6 +58,19 @@ elif tracebacksEnabled == True:
     logger.setLevel(logging.ERROR)
 else:
     logger.setLevel(logging.CRITICAL)
+    
+logger.info("Configuration options are as follows: ")
+logger.debug("sundata_summary: %s ; almanac_summary: %s" %
+             (sundata_summary, almanac_summary))
+logger.debug("checkforUpdates: %s ; verbosity: %s" %
+             (checkforUpdates, verbosity))
+logger.debug("jsonVerbosity: %s ; tracebacksEnabled: %s" %
+             (jsonVerbosity, tracebacksEnabled))
+logger.debug("prefetch10Day_atStart: %s ; user_loopIterations: %s" 
+             % (prefetch10Day_atStart, user_loopIterations))
+logger.debug("user_enterToContinue: %s"
+             % (user_enterToContinue))
+
 import urllib.request
 import sys
 import json
@@ -745,22 +762,26 @@ while True:
                   + " mb)")
             detailedHourlyIterations = detailedHourlyIterations + 1
             totaldetailedHourlyIterations = totaldetailedHourlyIterations + 1
-            if totaldetailedHourlyIterations == 36:
-                logger.debug("Total iterations is 36. Breaking...")
-                break
-            if (detailedHourlyIterations == user_loopIterations):
-                logger.debug("detailedHourlyIterations: %s" % detailedHourlyIterations)
-                logger.debug("Asking user for continuation...")
-                try:
-                    print("")
-                    print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
-                          % user_loopIterations)
-                    print("You can also press Control + C to head back to the input menu.")
-                    input()
-                    logger.debug("Iterating %s more times..." % user_loopIterations)
-                    detailedHourlyIterations = 0
-                except KeyboardInterrupt:
-                    logger.debug("Exiting to main menu...")
+            if user_enterToContinue == True:
+                if totaldetailedHourlyIterations == 36:
+                    logger.debug("Total iterations is 36. Breaking...")
+                    break
+                if (detailedHourlyIterations == user_loopIterations):
+                    logger.debug("detailedHourlyIterations: %s" % detailedHourlyIterations)
+                    logger.debug("Asking user for continuation...")
+                    try:
+                        print("")
+                        print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
+                              % user_loopIterations)
+                        print("You can also press Control + C to head back to the input menu.")
+                        input()
+                        logger.debug("Iterating %s more times..." % user_loopIterations)
+                        detailedHourlyIterations = 0
+                    except KeyboardInterrupt:
+                        logger.debug("Exiting to main menu...")
+                        break
+            elif user_enterToContinue == False:
+                if totaldetailedHourlyIterations == 36:
                     break
     elif (moreoptions == "view the 10 day hourly" or
           moreoptions == "view 10 day hourly" or
@@ -771,7 +792,7 @@ while True:
         logger.info("Selected view more 10 day hourly...")
         detailedHourly10Iterations = 0
         totaldetailedHourly10Iterations = 0
-        if prefetch10Day_atStart == False and tenday_prefetched == False:
+        if tenday_prefetched == False:
             logger.info("Fetching 10 day JSON...not previously fetched")
             tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + "," + lonstr + '.json'
             try:

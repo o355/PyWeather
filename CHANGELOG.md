@@ -23,10 +23,10 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 * Adds output of the raw traceback in PyWeather errors (pyweather.py ONLY, on by default.) - Done, and tested!
 * Adds 10-day hourly weather to PyWeather (you'll hit enter 40 times!...by default). - Done, and tested!
 * Adds a method in which PyWeather will display rain data for the day/night if the temperature is above 32F. Otherwise, it'll just show snow data. Fixes the bug in which the detailed forecast showed both rain/snow data. - Done, and tested!
-* Adds a config option I can't really describe here (fetching the 10 day JSON at boot, or the 3 day JSON at boot/10day when needed) - Should be finished by 3/28
+* Adds a config option I can't really describe here (fetching the 10 day JSON at boot, or the 3 day JSON at boot/10day when needed) - Done!
 * Reworks the config file some, sections are now where they need to be (aka verbosity has it's own section) - Done, need to add compatibility to other scripts (should be finished by 3/29)
 * Adds the ability to turn off the "enter to continue" things in the 10-day/hourly forecasts - Should be finished by 3/29
-* Adds the ability to set the interval in which the "enter to continue" will appear - Should be finished by 3/31
+* Adds the ability to set the interval in which the "enter to continue" will appear - Done, and tested!
 * Adds the ability to show how many iterations are left in the enter to continue thing (if it's on) - Should be finished by 3/31
 * Adds a separate config.py program, so you can configure every option in PyWeather (including verbosity!) - Should by finished by 4/3
 * Removes the if verbosity == True garbage in the setup file. - Should be finished by 4/4
@@ -38,7 +38,7 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 * Fixes a bug in which if exceptions occurred when fetching the almanac .json, the exception wouldn't get caught.
 * Fixes a bug in which if astronomy data couldn't be fetched (in more details), PyWeather would completely exit.
 * Fixes a bug in which the setup script wouldn't start, because copy and pasting is a thing.
-
+* Fixes a bug in which if the config file wouldn't load, the sunrise/sunset data would show up on the summary screen
 
 ## version 0.4.2 beta - Released 3/14/2017
 * Adds an autoupdater to PyWeather

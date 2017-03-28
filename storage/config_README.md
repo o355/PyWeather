@@ -59,6 +59,9 @@ Useful for troubleshooting, and it doesn't spam your console as much.
 
 **Default option: False**
 
+### keybackup_verbosity
+This option will let you turn on/off 
+
 ## TRACEBACK section
 
 ## HOURLY section
