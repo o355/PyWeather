@@ -908,6 +908,8 @@ while True:
             forecast10_lowf = str(day['low']['fahrenheit'])
             forecast10_lowfcheck = int(day['low']['fahrenheit'])
             forecast10_lowc = str(day['low']['celsius'])
+            forecast10_showsnowdatanight = False
+            forecast10_showsnowdataday = False
             logger.debug("forecast10_highfcheck: %s ; forecast10_lowfcheck: %s" %
                          (forecast10_highfcheck, forecast10_lowfcheck))
             if forecast10_highfcheck > 32:
@@ -1002,6 +1004,15 @@ while True:
             elif forecast10_showsnowdatatotal == False and forecast10_showraindatatotal == True:
                 print(Fore.YELLOW + "Rain in total: " + forecast10_precipTotalIn
                       + " in (" + forecast10_precipTotalMm + " mm)")
+            elif forecast10_showsnowdatatotal == True and forecast10_showraindatatotal == True:
+                print(Fore.YELLOW + "Snow in total: " + forecast10_snowTotalIn
+                      + " in (" + forecast10_snowTotalCm + " cm)")
+                print(Fore.YELLOW + "Rain in total: " + forecast10_precipTotalIn
+                      + " in (" + forecast10_precipTotalMm + " mm)")
+            else:
+                print(Fore.YELLOW + "Rain in total: " + forecast10_precipTotalIn
+                      + " in (" + forecast10_precipTotalMm + " mm)")
+                
             if forecast10_showsnowdataday == False:
                 print(Fore.YELLOW + "Rain for the day: " + forecast10_precipDayIn
                       + " in (" + forecast10_precipDayMm + " mm)")

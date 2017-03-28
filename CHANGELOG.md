@@ -21,8 +21,8 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 **NEW FEATURES/REMOVALS:**
 * Adds historical weather information to PyWeather. - Done, and tested!
 * Adds output of the raw traceback in PyWeather errors (pyweather.py ONLY, on by default.) - Done, and tested!
-* Adds 10-day hourly weather to PyWeather (you'll hit enter 40 times!...by default). - Done, needs testing (should be finished by 3/27)
-* Adds a method in which PyWeather will display rain data for the day/night if the temperature is above 32F. Otherwise, it'll just show snow data. Fixes the bug in which the detailed forecast showed both rain/snow data. - 75% implemented, still needs testing. (should be finished by 3/28)
+* Adds 10-day hourly weather to PyWeather (you'll hit enter 40 times!...by default). - Done, and tested!
+* Adds a method in which PyWeather will display rain data for the day/night if the temperature is above 32F. Otherwise, it'll just show snow data. Fixes the bug in which the detailed forecast showed both rain/snow data. - Done, and tested!
 * Adds a config option I can't really describe here (fetching the 10 day JSON at boot, or the 3 day JSON at boot/10day when needed) - Should be finished by 3/28
 * Reworks the config file some, sections are now where they need to be (aka verbosity has it's own section) - Done, need to add compatibility to other scripts (should be finished by 3/29)
 * Adds the ability to turn off the "enter to continue" things in the 10-day/hourly forecasts - Should be finished by 3/29
