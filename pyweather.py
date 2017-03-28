@@ -28,6 +28,7 @@ try:
     verbosity = config.getboolean('VERBOSITY', 'verbosity')
     jsonVerbosity = config.getboolean('VERBOSITY', 'json_verbosity')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'tracebacks')
+    prefetch10Day_atStart = config.getboolean('HOURLY', '10dayfetch_atboot')
 except:
     print("Couldn't load your config file. Make sure your spelling is correct.")
     print("Setting variables to default...")
@@ -126,8 +127,6 @@ if checkforUpdates == True:
               ", and the latest version is " + version_latestVersion + ".")
         print("")
 
-prefetch10Day_atStart = False
-tenday_prefetched = False
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
@@ -185,6 +184,7 @@ logger.info("Start API var declare...")
 currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + "," + lonstr + '.json'
 f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + "," + lonstr + '.json'
 hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + "," + lonstr + '.json'
+tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + "," + lonstr + '.json'
 astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + "," + lonstr + '.json'
 almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
 
@@ -193,6 +193,7 @@ if verbosity == False:
 logger.debug("currenturl: %s" % currenturl)
 logger.debug("f10dayurl: %s" % f10dayurl)
 logger.debug("hourlyurl: %s" % hourlyurl)
+logger.debug("tendayurl: %s" % tendayurl)
 logger.debug("astronomyurl: %s" % astronomyurl)
 logger.debug("almanacurl: %s" % almanacurl)
 logger.info("End API var declare...")
@@ -221,7 +222,13 @@ try:
         if verbosity == False:
             print("[###-------] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
-    hourlyJSON = urllib.request.urlopen(hourlyurl)
+    if prefetch10Day_atStart == True:
+        # Masking the JSON as hourlyJSON makes life a LOT easier.
+        hourlyJSON = urllib.request.urlopen(tendayurl)
+        logger.info("Acquiring the 10 day hourly JSON, instead of the 3 day.")
+        tenday_prefetched = True
+    else:
+        hourlyJSON = urllib.request.urlopen(hourlyurl)
     if verbosity == False:
         print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
@@ -255,9 +262,17 @@ if jsonVerbosity == True:
     logger.debug("forecast10_json loaded with: %s" % forecast10_json)
 if verbosity == False:
     print("[#######---] | 71% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-hourly_json = json.load(reader(hourlyJSON))
-if jsonVerbosity == True:
-    logger.debug("hourly_json loaded with: %s" % hourly_json)
+    
+if prefetch10Day_atStart == True: 
+    hourly_json = json.load(reader(hourlyJSON))
+    tenday_json = hourly_json
+    if jsonVerbosity == True:
+        logger.debug("hourly_json loaded with: %s" % hourly_json)
+        logger.debug("tenday_json loaded with: %s" % tenday_json)
+else:
+    hourly_json = json.load(reader(hourlyJSON))
+    if jsonVerbosity == True:
+        logger.debug("hourly_json loaded with: %s" % hourly_json)
 if sundata_summary == True:
     astronomy_json = json.load(reader(sundataJSON))
     if verbosity == False:
@@ -270,7 +285,7 @@ if almanac_summary == True:
         print("[#########-] | 87% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("almanac_json loaded with: %s" % almanac_json)
-logger.info("3-5 JSONs loaded...")
+logger.info("Some amount of JSONs loaded...")
 logger.info("Start 2nd geocoder...")
 
 # The 2nd geocoder hit will get removed in future versions, I believe geopy
@@ -642,6 +657,7 @@ while True:
         print("")
         logger.info("Selected view more hourly...")
         detailedHourlyIterations = 0
+        totaldetailedHourlyIterations = 0
         print(Fore.YELLOW + "Here's the detailed hourly forecast for: " + Fore.CYAN + location2.city + ", " + location2.state)
         for hour in hourly_json['hourly_forecast']:
             logger.info("We're on iteration: %s" % detailedHourlyIterations)
@@ -728,17 +744,21 @@ while True:
                   hourly_pressureInHg + " inHg (" + hourly_pressureMb
                   + " mb)")
             detailedHourlyIterations = detailedHourlyIterations + 1
-            if (detailedHourlyIterations == 6 or detailedHourlyIterations == 12
-                or detailedHourlyIterations == 18 or detailedHourlyIterations == 24
-                or detailedHourlyIterations == 30):
+            totaldetailedHourlyIterations = totaldetailedHourlyIterations + 1
+            if totaldetailedHourlyIterations == 36:
+                logger.debug("Total iterations is 36. Breaking...")
+                break
+            if (detailedHourlyIterations == user_loopIterations):
                 logger.debug("detailedHourlyIterations: %s" % detailedHourlyIterations)
                 logger.debug("Asking user for continuation...")
                 try:
                     print("")
-                    print(Fore.RED + "Please press enter to view the next 6 hours of hourly data.")
+                    print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
+                          % user_loopIterations)
                     print("You can also press Control + C to head back to the input menu.")
                     input()
-                    logger.debug("Iterating 6 more times...")
+                    logger.debug("Iterating %s more times..." % user_loopIterations)
+                    detailedHourlyIterations = 0
                 except KeyboardInterrupt:
                     logger.debug("Exiting to main menu...")
                     break

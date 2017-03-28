@@ -60,4 +60,18 @@ Useful for troubleshooting, and it doesn't spam your console as much.
 **Default option: False**
 
 ## TRACEBACK section
- 
+
+## HOURLY section
+
+### 10dayfetch_atboot
+This option controls if PyWeather should fetch the 10 day hourly forecast JSON at boot. Here's how it works.
+
+By default, PyWeather fetches a 3 day hourly JSON at boot. When you go into the 10 day hourly menu, it'll fetch the 10 day hourly JSON. This method is less call-efficient, but doing this makes PyWeather load faster.
+
+When enabled, PyWeather will only fetch the 10 day hourly JSON at boot. A downside to this is that loading will take longer, as it has more to download. However, you won't need to wait for PyWeather to fetch the 10 day JSON when you want to view 10 day hourly, and saves on calls.
+
+This isn't a default in the code due to the pros/cons of using each method.
+
+(and implementing this was a complete pain in the NECK.)
+
+**Default option: False**
