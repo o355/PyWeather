@@ -37,6 +37,7 @@ And for some reason, I like typing up 2-3 future versions in detail, because I f
 * Fixes a bug in which if the autoupdater couldn't contact GitHub, it would try to parse the auto-updater information.
 * Fixes a bug in which if exceptions occurred when fetching the almanac .json, the exception wouldn't get caught.
 * Fixes a bug in which if astronomy data couldn't be fetched (in more details), PyWeather would completely exit.
+* Fixes a bug in which the setup script wouldn't start, because copy and pasting is a thing.
 
 
 ## version 0.4.2 beta - Released 3/14/2017

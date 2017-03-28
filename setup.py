@@ -7,14 +7,6 @@
 # Because I'm cool, you can have verbosity off, but JSON verbosity on.
 
 
-
-if (verbosity == True or jsonVerbosity == True):
-    import logging
-    logger = logging.getLogger('pyweather_setup_0.4.2beta')
-    logger.setLevel(logging.DEBUG)
-    logformat = '%(asctime)s | %(levelname)s | %(message)s'
-    logging.basicConfig(format=logformat)
-
 import configparser
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
@@ -23,8 +15,8 @@ if verbosity == True:
     logger.debug("config: %s" % config)
     
 try:
-    verbosity = config.getboolean('SETUP', 'setup_verbosity')
-    jsonVerbosity = config.getboolean('SETUP', 'setup_jsonverbosity')
+    verbosity = config.getboolean('VERBOSITY', 'setup_verbosity')
+    jsonVerbosity = config.getboolean('VERBOSITY', 'setup_jsonverbosity')
 except:
     print("Couldn't load your config file. Make sure your spelling is correct.")
     print("Setting variables to default...")

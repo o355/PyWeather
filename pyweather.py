@@ -908,6 +908,8 @@ while True:
             forecast10_lowf = str(day['low']['fahrenheit'])
             forecast10_lowfcheck = int(day['low']['fahrenheit'])
             forecast10_lowc = str(day['low']['celsius'])
+            logger.debug("forecast10_highfcheck: %s ; forecast10_lowfcheck: %s" %
+                         (forecast10_highfcheck, forecast10_lowfcheck))
             if forecast10_highfcheck > 32:
                 forecast10_showsnowdataday = False
             else:
@@ -918,14 +920,31 @@ while True:
             else:
                 forecast10_showsnowdatanight = True
                 
+            logger.debug("forecast10_showsnowdataday: %s ; forecast10_showsnowdatanight: %s"
+                         % (forecast10_showsnowdataday, forecast10_showsnowdatanight)) 
+               
             if forecast10_highfcheck < 32 and forecast10_lowfcheck < 32:
-                freasfd = True
+                forecast10_showsnowdatatotal = True
+                forecast10_showraindatatotal = False
+            # It could happen!
+            elif (forecast10_highfcheck > 32 and forecast10_lowfcheck < 32 or
+                  forecast10_highfcheck < 32 and forecast10_lowfcheck > 32):
+                forecast10_showsnowdatatotal = True
+                forecast10_showraindatatotal = True
+            elif forecast10_highfcheck > 32 and forecast10_lowfcheck > 32:
+                forecast10_showsnowdatatotal = False
+                forecast10_showraindatatotal = True
+            else:
+                forecast10_showsnowdatatotal = False
+                forecast10_showraindatatotal = True
+                
+            logger.debug("forecast10_showsnowdatatotal: %s ; forecast10_showraindatatotal: %s" %
+                         (forecast10_showsnowdatatotal, forecast10_showraindatatotal))
             forecast10_conditions = day['conditions']
             logger.debug("forecast10_highc: %s ; forecast10_lowf: %s"
                         % (forecast10_highc, forecast10_lowf))
             logger.debug("forecast10_lowc: %s ; forecast10_conditions: %s"
                         % (forecast10_lowc, forecast10_conditions))
-            logger.debug("")
             forecast10_precipTotalIn = str(day['qpf_allday']['in'])
             forecast10_precipTotalMm = str(day['qpf_allday']['mm'])
             forecast10_precipDayIn = str(day['qpf_day']['in'])
@@ -952,12 +971,6 @@ while True:
             logger.debug("forecast10_snowDayIn: %s ; forecast10_snowDayCm: %s"
                          % (forecast10_snowDayIn, forecast10_snowDayCm))
             logger.debug("forecast10_snowNightCheck: %s" % forecast10_snowNightCheck)
-            if forecast10_snowNightCheck == 0.0:
-                forecast10_snowNightData = False
-                logger.warn("Oh no! No snow data for the night. Is it too warm?")
-            else:
-                forecast10_snowNightData = True
-                logger.info("Snow data for the night is available. Snow day?")
             forecast10_snowNightIn = str(forecast10_snowNightCheck)
             forecast10_snowNightCm = str(day['snow_night']['cm'])
             forecast10_maxWindMPH = str(day['maxwind']['mph'])
@@ -983,6 +996,12 @@ while True:
                   + Fore.CYAN + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
                   Fore.YELLOW + " and a low of " + Fore.CYAN + forecast10_lowf + "°F (" +
                   forecast10_lowc + "°C)" + ".")
+            if forecast10_showsnowdatatotal == True and forecast10_showraindatatotal == False:
+                print(Fore.YELLOW + "Snow in total: " + forecast10_snowTotalIn
+                      + " in (" + forecast10_snowTotalCm + " cm)")
+            elif forecast10_showsnowdatatotal == False and forecast10_showraindatatotal == True:
+                print(Fore.YELLOW + "Rain in total: " + forecast10_precipTotalIn
+                      + " in (" + forecast10_precipTotalMm + " mm)")
             if forecast10_showsnowdataday == False:
                 print(Fore.YELLOW + "Rain for the day: " + forecast10_precipDayIn
                       + " in (" + forecast10_precipDayMm + " mm)")
