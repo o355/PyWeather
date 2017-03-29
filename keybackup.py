@@ -15,6 +15,7 @@ except:
     print("Setting variables to defaults...")
     print("")
     verbosity = False
+    saveLocation = 'backup//backkey.txt'
 
 if verbosity == True:
     import logging
