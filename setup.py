@@ -8,28 +8,43 @@
 
 
 import configparser
+import traceback
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
-
-if verbosity == True:
-    logger.debug("config: %s" % config)
     
 try:
     verbosity = config.getboolean('VERBOSITY', 'setup_verbosity')
     jsonVerbosity = config.getboolean('VERBOSITY', 'setup_jsonverbosity')
+    tracebacksEnabled = config.getboolean('TRACEBACK', 'setup_tracebacks')
 except:
     print("Couldn't load your config file. Make sure your spelling is correct.")
     print("Setting variables to default...")
     print("")
     verbosity = False
     jsonVerbosity = False
+    tracebacksEnabled = False
     
-if (verbosity == True or jsonVerbosity == True):
-    import logging
-    logger = logging.getLogger('pyweather_setup_0.4.2beta')
+def printException():
+    if tracebacksEnabled == True:
+        traceback.print_exc()
+        
+def printException_loggerinfo():
+    if verbosity == True:
+        logger.info(traceback.print_exc())
+        
+    
+import logging
+logger = logging.getLogger('pyweather_setup_0.4.2beta')
+logger.setLevel(logging.DEBUG)
+logformat = '%(asctime)s | %(levelname)s | %(message)s'
+logging.basicConfig(format=logformat)
+
+if verbosity == True:
     logger.setLevel(logging.DEBUG)
-    logformat = '%(asctime)s | %(levelname)s | %(message)s'
-    logging.basicConfig(format=logformat)
+elif tracebacksEnabled == True:
+    logger.setLevel(logging.ERROR)
+else:
+    logger.setLevel(logging.CRITICAL)
 
 print("Welcome to PyWeather setup.")
 print("This is meant to run as a one-time program, when you first get PyWeather.")
@@ -42,12 +57,11 @@ try:
     import urllib.request
     import shutil
     import time
-    import configparser
 except:
     if verbosity == True:
-        logger.error("Odd, 5 default libraries are not available...")
+        logger.error("Odd, 4 default libraries are not available...")
     print("Hmm...I tried to import default libraries, but ran into an error.")
-    print("Make sure that sys, urllib.request, shutil, time, and configparser are available "
+    print("Make sure that sys, urllib.request, shutil, and are available "
           + "with your installation of Python.")
 neededLibraries = 0
 if sys.version_info[0] < 3:

@@ -84,6 +84,14 @@ import geocoder
 geolocator = GoogleV3()
 geolocator2 = Nominatim()
 
+def printException():
+    if tracebacksEnabled == True:
+        traceback.print_exc()
+        
+def printException_loggerinfo():
+    if verbosity == True:
+        logger.info(traceback.print_exc())
+
 logger.debug("Begin API keyload...")
 apikey_load = open('storage//apikey.txt')
 logger.debug("apikey_load = %s" % apikey_load)
@@ -97,14 +105,6 @@ except FileNotFoundError:
     input()
     sys.exit()
 logger.debug("apikey = %s" % apikey)
-
-def printException():
-    if tracebacksEnabled == True:
-        traceback.print_exc()
-        
-def printException_loggerinfo():
-    if verbosity == True:
-        logger.info(traceback.print_exc())
         
 
  
