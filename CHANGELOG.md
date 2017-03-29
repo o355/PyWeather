@@ -1,24 +1,21 @@
 # PyWeather changelog
 
-Quick note: While in beta, commits are not counted as versions. When I decide to push a release, I push a release. There will also be a running changelog for the in-development version, so I'm not remembering every single change I made in the version.
+Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
 
-And for some reason, I like typing up 2-3 future versions in detail, because I found out that Eclipse supports markdown files.
 
 ## version 0.5.2 beta - To be released late April
 * Adds the raw traceback output in keybackup.py
 * Adds the library check script, which checks for libraries PyWeather needs.
 * Adds a separate config.py script, to configure all available options.
 
-## version 0.5.1 beta - To be released mid April
-* Removes if verbosity == True in the separate updater, and keybackup scripts.
-* Removes config.ini from GitHub, and all scripts will check for a config file before starting. If none is present, it's made on the spot, according to defaults present in all programs. This is to help with users doing `git pull/fetch` for PyWeather updates.
-* Adds the ability to load your backup key if PyWeather can't access your primary key.
-* Adds the raw traceback output in updater.py/setup.py
-* Adds the logger displaying configuration options at the start of each script.
-* Catches up the setup file with the new configuration options added in 0.5 beta.
+## version 0.5.1 beta - Should be released on 4/14/2017
+* Removes if verbosity == True in the separate updater, and keybackup scripts. - Should be finished by 4/7
+* Adds the ability to load your backup key if PyWeather can't access your primary key. - Should be finished by 4/10
+* Adds the raw traceback output in updater.py/setup.py - Should be finished by 4/11
+* Adds the logger displaying configuration options at the start of each script (rolls with every new release) - Should be finished by 4/11
+* Catches up the setup file with the new configuration options added in 0.5 beta. - Should be finished by 4/13
 
-
-## version 0.5 beta (The Back to the Future Update) - To be released 4/7/2017 (probably)
+## version 0.5 beta (The Back to the Future Update) - Should be released on 4/5/2017 (probably)
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.
 * This release is so big, I've had to separate new features from bug fixes.
 
