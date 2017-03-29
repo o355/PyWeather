@@ -782,6 +782,7 @@ while True:
                         break
             elif user_enterToContinue == False:
                 if totaldetailedHourlyIterations == 36:
+                    logger.debug("totalDetailedHourlyIterations is 36. Breaking...")
                     break
     elif (moreoptions == "view the 10 day hourly" or
           moreoptions == "view 10 day hourly" or
@@ -905,22 +906,27 @@ while True:
                   + " mb)")
             detailedHourly10Iterations = detailedHourly10Iterations + 1
             totaldetailedHourly10Iterations = totaldetailedHourly10Iterations + 1
-            if totaldetailedHourly10Iterations == 240:
-                logger.info("detailedHourly10Iterations is 240. Breaking...")
-                break
-            if (detailedHourly10Iterations == user_loopIterations):
-                logger.debug("detailedHourly10Iterations: %s" % detailedHourly10Iterations)
-                logger.debug("Asking user for continuation...")
-                try:
-                    print("")
-                    print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
-                          % user_loopIterations)
-                    print("You can also press Control + C to head back to the input menu.")
-                    input()
-                    logger.debug("Iterating %s more times...")
-                    detailedHourly10Iterations = 0
-                except KeyboardInterrupt:
-                    logger.debug("Exiting to main menu...")
+            if user_enterToContinue == True:
+                if totaldetailedHourly10Iterations == 240:
+                    logger.info("detailedHourly10Iterations is 240. Breaking...")
+                    break
+                if (detailedHourly10Iterations == user_loopIterations):
+                    logger.debug("detailedHourly10Iterations: %s" % detailedHourly10Iterations)
+                    logger.debug("Asking user for continuation...")
+                    try:
+                        print("")
+                        print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
+                              % user_loopIterations)
+                        print("You can also press Control + C to head back to the input menu.")
+                        input()
+                        logger.debug("Iterating %s more times...")
+                        detailedHourly10Iterations = 0
+                    except KeyboardInterrupt:
+                        logger.debug("Exiting to main menu...")
+                        break
+            elif user_enterToContinue == False:
+                if totaldetailedHourly10Iterations == 240:
+                    logger.info("detailedhourly10Iterations is 240. Breaking...")
                     break
     elif (moreoptions == "view the 10 day weather forecast" or
           moreoptions == "view more forecast data" or
@@ -1083,16 +1089,19 @@ while True:
             print(Fore.YELLOW + "Humidity: " + Fore.CYAN +
                   forecast10_avgHumidity + "%")
             detailedForecastIterations = detailedForecastIterations + 1
-            if detailedForecastIterations == 5:
-                logger.debug("detailedForecastIterations: %s" % detailedForecastIterations)
-                try:
-                    print(Fore.RED + "Press enter to view the next 5 days of weather data.")
-                    print("You can also press Control + C to return to the input menu.")
-                    input()
-                    logger.info("Iterating 5 more times...")
-                except KeyboardInterrupt:
-                    break
-                    logger.info("Exiting to the main menu.")
+            if user_enterToContinue == True:
+                if detailedForecastIterations == 5:
+                    logger.debug("detailedForecastIterations: %s" % detailedForecastIterations)
+                    try:
+                        print(Fore.RED + "Press enter to view the next 5 days of weather data.")
+                        print("You can also press Control + C to return to the input menu.")
+                        input()
+                        logger.info("Iterating 5 more times...")
+                    except KeyboardInterrupt:
+                        break
+                        logger.info("Exiting to the main menu.")
+            # No need for an elif here, ., my mgic keybord is bck
+            # My laptop is breaking.
     elif (moreoptions == "close pyweather" or moreoptions == "close"
           or moreoptions == "8" or moreoptions == "close pw"):
         sys.exit()

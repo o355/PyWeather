@@ -16,8 +16,8 @@ config = configparser.ConfigParser()
 config.read('storage//config.ini')
 
 try:
-    verbosity = config.getboolean('UPDATER', 'updater_verbosity')
-    jsonVerbosity = config.getboolean('UPDATER', 'updater_jsonverbosity')
+    verbosity = config.getboolean('VERBOSITY', 'updater_verbosity')
+    jsonVerbosity = config.getboolean('VERBOSITY', 'updater_jsonverbosity')
 except:
     print("Couldn't load your config file. Make sure your spelling is correct.")
     print("Setting variables to default...")

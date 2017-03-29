@@ -8,7 +8,8 @@ config = configparser.ConfigParser()
 config.read('storage//config.ini')
 
 try:
-    verbosity = config.getboolean('KEYBACKUP', 'keybackup_verbosity')
+    verbosity = config.getboolean('VERBOSITY', 'keybackup_verbosity')
+    saveLocation = config.get('KEYBACKUP', 'savelocation')
 except:
     print("Could not load your config. Make sure your spelling is correct.")
     print("Setting variables to defaults...")
@@ -32,9 +33,10 @@ if confirmation == "yes":
     print("Backing up your key...")
     apikey = open('storage//apikey.txt')
     apikey2 = apikey.read()
+    open(saveLocation, 'w').close()
     if verbosity == True:
         logger.debug("apikey: %s" % apikey)
-    with open("backup//backkey.txt", 'a') as out:
+    with open(saveLocation, 'a') as out:
         out.write(apikey2)
         out.close()
         if verbosity == True:
