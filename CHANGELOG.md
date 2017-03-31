@@ -12,7 +12,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 ## version 0.5.1 beta - Should be released on 4/7/2017
 
 **NEW FEATURES/REMOVALS:**
-* Removes if verbosity == True in the separate updater, and keybackup scripts. - 50% finished.
+* Removes if verbosity == True in the separate updater, and keybackup scripts. - Done, and tested!
 * Adds the ability to load your backup key if PyWeather can't access your primary key. - Should be finished by 4/1
 * Adds the raw traceback output in updater.py/setup.py - Should be finished by 4/1
 * Adds the logger displaying configuration options at the start of every script - Should be finished by 4/3
