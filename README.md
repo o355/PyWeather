@@ -17,7 +17,7 @@ After that, double click termweather.py, input a location, and that's it! No, re
 
 If you have Git, and you'd prefer to clone over PyWeather from Git, you've got your options.
 
-Doing `git clone https://github.com/o355/pyweather.git` will clone PyWeather into your current folder. Add `--depth=1` to the end if you want Git to create a folder in which PyWeather is stored in.
+Doing `git clone https://github.com/o355/pyweather.git` will clone PyWeather into your current folder. From testing, doing this should put PyWeather into a folder called "pyweather", but I'm not 100% sure. Use the option `--depth=1` as a precaution.
 
 If you want to have the latest stable version (0.5), you can checkout to the release branch, by doing `git checkout v0.5-beta`.
 
