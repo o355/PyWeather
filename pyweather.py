@@ -1060,38 +1060,38 @@ while True:
                   Fore.YELLOW + " and a low of " + Fore.CYAN + forecast10_lowf + "°F (" +
                   forecast10_lowc + "°C)" + ".")
             if forecast10_showsnowdatatotal == True and forecast10_showraindatatotal == False:
-                print(Fore.YELLOW + "Snow in total: " + forecast10_snowTotalIn
+                print(Fore.YELLOW + "Snow in total: " + Fore.CYAN + forecast10_snowTotalIn
                       + " in (" + forecast10_snowTotalCm + " cm)")
             elif forecast10_showsnowdatatotal == False and forecast10_showraindatatotal == True:
-                print(Fore.YELLOW + "Rain in total: " + forecast10_precipTotalIn
+                print(Fore.YELLOW + "Rain in total: " + Fore.CYAN + forecast10_precipTotalIn
                       + " in (" + forecast10_precipTotalMm + " mm)")
             elif forecast10_showsnowdatatotal == True and forecast10_showraindatatotal == True:
-                print(Fore.YELLOW + "Snow in total: " + forecast10_snowTotalIn
+                print(Fore.YELLOW + "Snow in total: " + Fore.CYAN + forecast10_snowTotalIn
                       + " in (" + forecast10_snowTotalCm + " cm)")
-                print(Fore.YELLOW + "Rain in total: " + forecast10_precipTotalIn
+                print(Fore.YELLOW + "Rain in total: " + Fore.CYAN + forecast10_precipTotalIn
                       + " in (" + forecast10_precipTotalMm + " mm)")
             else:
-                print(Fore.YELLOW + "Rain in total: " + forecast10_precipTotalIn
+                print(Fore.YELLOW + "Rain in total: " + Fore.CYAN + forecast10_precipTotalIn
                       + " in (" + forecast10_precipTotalMm + " mm)")
                 
             if forecast10_showsnowdataday == False:
-                print(Fore.YELLOW + "Rain for the day: " + forecast10_precipDayIn
+                print(Fore.YELLOW + "Rain for the day: " + Fore.CYAN + forecast10_precipDayIn
                       + " in (" + forecast10_precipDayMm + " mm)")
             elif forecast10_showsnowdataday == True:
-                print(Fore.YELLOW + "Snow for the day: " + forecast10_snowDayIn
+                print(Fore.YELLOW + "Snow for the day: " + Fore.CYAN + forecast10_snowDayIn
                       + " in (" + forecast10_snowDayCm + " cm)")
             else:
-                print(Fore.YELLOW + "Rain for the day: " + forecast10_precipDayIn
+                print(Fore.YELLOW + "Rain for the day: " + Fore.CYAN + forecast10_precipDayIn
                       + " in (" + forecast10_precipDayMm + " mm)")
             
             if forecast10_showsnowdatanight == False:
-                print(Fore.YELLOW + "Rain for the night: " + forecast10_precipNightIn
+                print(Fore.YELLOW + "Rain for the night: " + Fore.CYAN + forecast10_precipNightIn
                       + " in (" + forecast10_precipNightMm + " mm)")
             elif forecast10_showsnowdatanight == True:
-                print(Fore.YELLOW + "Snow for the night: " + forecast10_snowNightIn
+                print(Fore.YELLOW + "Snow for the night: " + Fore.CYAN + forecast10_snowNightIn
                       + " in (" + forecast10_snowNightCm + " cm)")
             else:
-                print(Fore.YELLOW + "Rain for the night: " + forecast10_precipNightIn
+                print(Fore.YELLOW + "Rain for the night: " + Fore.CYAN + forecast10_precipNightIn
                       + " in (" + forecast10_precipNightMm + " mm)")
                 
             print(Fore.YELLOW + "Winds: " + Fore.CYAN + 
@@ -1115,6 +1115,7 @@ while True:
                 if detailedForecastIterations == user_forecastLoopIterations:
                     logger.debug("detailedForecastIterations: %s" % detailedForecastIterations)
                     try:
+                        print("")
                         print(Fore.RED + "Press enter to view the next %s days of weather data."
                               % user_forecastLoopIterations)
                         print("You can also press Control + C to return to the input menu.")

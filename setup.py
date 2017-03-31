@@ -537,4 +537,6 @@ except:
 print("")
 print("Everything is set up and ready to rumble!")
 print("Enjoy using PyWeather! If you have any issues, please report them on GitHub!")
+print("Press enter to continue.")
+input()
 sys.exit()
