@@ -252,6 +252,7 @@ try:
         tenday_prefetched = True
     else:
         hourlyJSON = urllib.request.urlopen(hourlyurl)
+        tenday_prefetched = False
     if verbosity == False:
         print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
@@ -821,9 +822,7 @@ while True:
                 continue
             
             tenday_json = json.load(reader(tendayJSON))
-        print(Fore.YELLOW + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + location2.city + ", " + location2.state)
-        
-            
+        print(Fore.YELLOW + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + location2.city + ", " + location2.state)  
         for hour in tenday_json['hourly_forecast']:
             logger.info("We're on iteration: %s/24. User iterations: %s." %
                         (detailedHourly10Iterations, user_loopIterations))
@@ -885,7 +884,6 @@ while True:
             logger.debug("hourly10_pressureMb: %s ; hourly10_condition: %s" 
                          % (hourly10_pressureMb, hourly10_condition))
             logger.info("Now printing weather data...")
-            print("")
             # If you have verbosity on, there's a chance that the next
             # hourly iteration will start BEFORE the previous iteration
             # prints out. This is normal, and no issues are caused by such.
@@ -928,7 +926,6 @@ while True:
                     logger.debug("detailedHourly10Iterations: %s" % detailedHourly10Iterations)
                     logger.debug("Asking user for continuation...")
                     try:
-                        print("")
                         print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
                               % user_loopIterations)
                         print("You can also press Control + C to head back to the input menu.")
@@ -1054,7 +1051,6 @@ while True:
                         % (forecast10_avgWindDir, forecast10_avgWindDegrees))
             logger.debug("forecast10_avgHumidity: %s" % forecast10_avgHumidity)
             logger.info("Printing weather data...")
-            print("")
             print(Fore.YELLOW + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ":")
             print(Fore.CYAN + forecast10_conditions + Fore.YELLOW + " with a high of "
                   + Fore.CYAN + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
@@ -1640,7 +1636,6 @@ while True:
             except KeyboardInterrupt:
                 break
         for data in historical_json['history']['observations']:
-            print("")
             logger.info("We're on iteration %s/24. User iteration limit: %s."
                         % (historical_totalloops, user_loopIterations))
             historical_time = data['date']['pretty']

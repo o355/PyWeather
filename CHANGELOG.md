@@ -31,6 +31,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the ability to show how many iterations are left in the enter to continue thing (if it's on) - Should be finished by 3/31
 * Removes the if verbosity == True garbage in the setup file. - Should be finished by 4/4
 * Adds verbosity for all new functions added. This will now be standard!
+* Minor UI changes.
 
 **BUG FIXES:**
 * Fixes a bug in which if the config file wouldn't load, the program won't load (checkforupdates wasn't defined.)
