@@ -25,14 +25,14 @@ except:
     print("")
     verbosity = False
     jsonVerbosity = False
+    showReleaseTag = False
     
     
-if (verbosity == True or jsonVerbosity == True):
-    import logging
-    logger = logging.getLogger('pyweather_updater_0.5beta')
-    logger.setLevel(logging.DEBUG)
-    logformat = '%(asctime)s | %(levelname)s | %(message)s'
-    logging.basicConfig(format=logformat)
+import logging
+logger = logging.getLogger('pyweather_updater_0.5beta')
+logger.setLevel(logging.DEBUG)
+logformat = '%(asctime)s | %(levelname)s | %(message)s'
+logging.basicConfig(format=logformat)
 
 buildnumber = 50
 buildversion = "0.5 beta"

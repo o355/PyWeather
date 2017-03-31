@@ -9,12 +9,17 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds a separate config.py script, to configure all available options.
 * Adds the ability to control where the backup API key will be stored in the setup script.
 
-## version 0.5.1 beta - Should be released on 4/14/2017
-* Removes if verbosity == True in the separate updater, and keybackup scripts. - Should be finished by 4/7
-* Adds the ability to load your backup key if PyWeather can't access your primary key. - Should be finished by 4/10
-* Adds the raw traceback output in updater.py/setup.py - Should be finished by 4/11
-* Adds the logger displaying configuration options at the start of each script (rolls with every new release) - Should be finished by 4/11
-* Catches up the setup file with the new configuration options added in 0.5 beta. - Should be finished by 4/13
+## version 0.5.1 beta - Should be released on 4/7/2017
+
+**NEW FEATURES/REMOVALS:**
+* Removes if verbosity == True in the separate updater, and keybackup scripts. - Should be finished by 3/31
+* Adds the ability to load your backup key if PyWeather can't access your primary key. - Should be finished by 4/1
+* Adds the raw traceback output in updater.py/setup.py - Should be finished by 4/1
+* Adds the logger displaying configuration options at the start of every script - Should be finished by 4/3
+* Catches up the setup file with the new configuration options added in 0.5 beta. - Should be finished by 4/6
+
+**BUG FIXES:**
+* Eventually fixes a bug in which if the config file wouldn't load in the updater, the variable showReleaseTag wouldn't get defined, and it would presumably crash.
 
 ## version 0.5 beta (The Back to the Future Update) - Released on 3/31/2017
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.
