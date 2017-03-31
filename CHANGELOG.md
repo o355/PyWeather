@@ -28,7 +28,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Reworks the config file some, sections are now where they need to be (aka verbosity has it's own section) - Done, and tested!
 * Adds the ability to turn off the "enter to continue" things in the 10-day/hourly forecasts - Done, and tested!
 * Adds the ability to set the interval in which the "enter to continue" will appear - Done, and tested!
-* Adds the ability to show how many iterations are left in the enter to continue thing (if it's on) - Should be finished by 3/31
+* Adds the ability to show how many iterations are left in the enter to continue thing (if it's on) - Done, and tested!
 * Removes the if verbosity == True garbage in the setup file. - Should be finished by 4/4
 * Adds verbosity for all new functions added. This will now be standard!
 * Minor UI changes.
