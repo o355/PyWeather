@@ -1,4 +1,4 @@
-# PyWeather Setup 0.5 beta
+# PyWeather Setup - version 0.5 beta
 # (c) 2017, o355, licensed under GNU GPL v3
 # If any random imports show beneath here, blame Eclipse.
 
@@ -454,11 +454,9 @@ except:
     sys.exit()
 try:
     import codecs
-    if verbosity == True:
-        logger.debug("codecs is available.")
+    logger.debug("codecs is available.")
 except:
-    if verbosity == True:
-        logger.warn("codecs isn't available...very odd...")
+    logger.warn("codecs isn't available...very odd...")
     print("codecs is not available. This is odd, it's a default library.")
     print("Try installing a usual Python install.")
     print("Press enter to exit.")
@@ -468,17 +466,14 @@ except:
 print("Testing the API connection, and seeing if the API key is valid...")
 apitest_URL = 'http://api.wunderground.com/api/' + apikey_input + '/conditions/q/NY/New_York.json'
 testreader = codecs.getreader("utf-8")
-if verbosity == True:
-    logger.debug("apitest_URL: %s ; testreader: %s" %
-                 (apitest_URL, testreader))
+logger.debug("apitest_URL: %s ; testreader: %s" %
+             (apitest_URL, testreader))
 
 try:
     testJSON = urllib.request.urlopen(apitest_URL)
-    if verbosity == True:
-        logger.debug("testJSON: %s" % testJSON)
+    logger.debug("testJSON: %s" % testJSON)
 except:
-    if verbosity == True:
-        logger.error("Couldn't connect to Wunderground's API! No internet?")
+    logger.warn("Couldn't connect to Wunderground's API! No internet?")
     print("We ran into an error. Make sure Wunderground's API is unblocked, "
           + "and you have an internet connection.")
     print("Press enter to exit.")
@@ -491,12 +486,10 @@ if jsonVerbosity == True:
 
 try:
     test_conditions = str(test_json['current_observation']['temp_f'])
-    if verbosity == True:
-        logger.debug("test_conditions: %s" % test_conditions)
+    logger.debug("test_conditions: %s" % test_conditions)
     print("Yay! Your API key is valid and works.")
 except:
-    if verbosity == True:
-        logger.error("Error! Is the API key invalid?")
+    logger.warn("Error! Is the API key invalid?")
     print("We ran into an error. Make sure your API key is valid.")
     print("Press enter to exit.")
     input()
@@ -507,19 +500,16 @@ print("Testing the Google geocoder connection...")
 from geopy import GoogleV3
 
 geolocator = GoogleV3()
-if verbosity == True:
-    logger.debug("geolocator: %s" % geolocator)
+logger.debug("geolocator: %s" % geolocator)
 
 try:
     testlocation = geolocator.geocode("New York, NY", language="en")
-    if verbosity == True:
-        logger.debug("testlocation: %s" % testlocation)
-        logger.debug("testlocation.latitude: %s ; testlocation.longitude: %s" %
-                     (testlocation.latitude, testlocation.longitude))
+    logger.debug("testlocation: %s" % testlocation)
+    logger.debug("testlocation.latitude: %s ; testlocation.longitude: %s" %
+                 (testlocation.latitude, testlocation.longitude))
     print("Yay! Google's geocoder works.")
 except:
-    if verbosity == True:
-        logger.error("Couldn't connect to Google's geocoder. No internet?")
+    logger.warn("Couldn't connect to Google's geocoder. No internet?")
     print("We ran into an error. Make sure Google's geocoder is unblocked, " +
           "and you have an internet connection.")
     print("Press enter to exit.")
@@ -532,14 +522,12 @@ print("Testing the reverse geocoder connection...")
 
 try:
     testlocation3 = geocoder.google([testlocation.latitude, testlocation.longitude], method='reverse')
-    if verbosity == True:
-        logger.debug("testlocation3: %s" % testlocation3)
-        logger.debug("testlocation3.city: %s ; testlocation3.state: %s" %
-                     (testlocation3.city, testlocation3.state))
+    logger.debug("testlocation3: %s" % testlocation3)
+    logger.debug("testlocation3.city: %s ; testlocation3.state: %s" %
+                 (testlocation3.city, testlocation3.state))
     print("Yay! The geolocator works.")
 except:
-    if verbosity == True:
-        logger.error("Couldn't connect to Google's geocoder. No internet?")
+    logger.warn("Couldn't connect to Google's geocoder. No internet?")
     print("We ran into an error. Make sure Google's Geolocator is unblocked, " +
           "and you have an internet connection.")
     print("Press enter to exit.")

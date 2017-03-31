@@ -1,4 +1,4 @@
-# PyWeather Updater - 0.5 beta
+# PyWeather Updater - version 0.5 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 
@@ -28,7 +28,7 @@ except:
     
 if (verbosity == True or jsonVerbosity == True):
     import logging
-    logger = logging.getLogger('pyweather_updater_0.4.2beta')
+    logger = logging.getLogger('pyweather_updater_0.5beta')
     logger.setLevel(logging.DEBUG)
     logformat = '%(asctime)s | %(levelname)s | %(message)s'
     logging.basicConfig(format=logformat)

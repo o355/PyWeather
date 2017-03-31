@@ -1,4 +1,4 @@
-# PyWeather 0.5 beta
+# PyWeather - version 0.5 beta
 # (c) 2017 o355, GNU GPL 3.0.
 # If there any random imports below here, blame Eclipse.
 
@@ -51,7 +51,7 @@ except:
 # storage/config.ini. Have a lovely day!
 
 import logging
-logger = logging.getLogger('pyweather_0.4.2beta')
+logger = logging.getLogger('pyweather_0.5beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
