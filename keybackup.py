@@ -17,12 +17,11 @@ except:
     verbosity = False
     saveLocation = 'backup//backkey.txt'
 
-if verbosity == True:
-    import logging
-    logger = logging.getLogger('pyweather_keybackup_0.4.2beta')
-    logger.setLevel(logging.DEBUG)
-    logformat = '%(asctime)s | %(levelname)s | %(message)s'
-    logging.basicConfig(format=logformat)
+import logging
+logger = logging.getLogger('pyweather_keybackup_0.5.1beta')
+logger.setLevel(logging.DEBUG)
+logformat = '%(asctime)s | %(levelname)s | %(message)s'
+logging.basicConfig(format=logformat)
     
 print("Would you like to back up your API key?") 
 confirmation = input("Input here: ").lower()
