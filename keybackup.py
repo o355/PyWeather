@@ -1,4 +1,4 @@
-# PyWeather API Key Backup - version 0.5 beta
+# PyWeather API Key Backup - version 0.5.1 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 import configparser
