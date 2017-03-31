@@ -27,8 +27,10 @@ try:
     jsonVerbosity = config.getboolean('VERBOSITY', 'json_verbosity')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'tracebacks')
     prefetch10Day_atStart = config.getboolean('HOURLY', '10dayfetch_atboot')
-    user_loopIterations = config.getint('UI', 'detailedinfoloops')
-    user_enterToContinue = config.getboolean('UI', 'entertocontinue')
+    user_loopIterations = config.getint('UI', 'detailedInfoLoops')
+    user_enterToContinue = config.getboolean('UI', 'show_enterToContinue')
+    user_showCompletedIterations = config.getboolean('UI', 'show_completedIterations')
+    user_forecastLoopIterations = config.getint('UI', 'forecast_detailedInfoLoops')
 except:
     print("Couldn't load your config file. Make sure your spelling is correct.")
     print("Setting variables to default...")
@@ -43,6 +45,8 @@ except:
     prefetch10Day_atStart = False
     user_loopIterations = 6
     user_enterToContinue = False
+    user_showCompletedIterations = False
+    user_forecastLoopIterations = 5
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
@@ -68,8 +72,10 @@ logger.debug("jsonVerbosity: %s ; tracebacksEnabled: %s" %
              (jsonVerbosity, tracebacksEnabled))
 logger.debug("prefetch10Day_atStart: %s ; user_loopIterations: %s" 
              % (prefetch10Day_atStart, user_loopIterations))
-logger.debug("user_enterToContinue: %s"
-             % (user_enterToContinue))
+logger.debug("user_enterToContinue: %s ; user_showCompletedIterations: %s"
+             % (user_enterToContinue, user_showCompletedIterations))
+logger.debug("user_forecastLoopIterations: %s"
+             % (user_forecastLoopIterations))
 
 import urllib.request
 import sys
@@ -762,6 +768,10 @@ while True:
                   + " mb)")
             detailedHourlyIterations = detailedHourlyIterations + 1
             totaldetailedHourlyIterations = totaldetailedHourlyIterations + 1
+            if user_showCompletedIterations == True:
+                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/36"
+                      % totaldetailedHourlyIterations)
+                print(Fore.RESET)
             if user_enterToContinue == True:
                 if totaldetailedHourlyIterations == 36:
                     logger.debug("Total iterations is 36. Breaking...")
@@ -906,6 +916,10 @@ while True:
                   + " mb)")
             detailedHourly10Iterations = detailedHourly10Iterations + 1
             totaldetailedHourly10Iterations = totaldetailedHourly10Iterations + 1
+            if user_showCompletedIterations == True:
+                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/240"
+                      % totaldetailedHourly10Iterations)
+                print(Fore.RESET)
             if user_enterToContinue == True:
                 if totaldetailedHourly10Iterations == 240:
                     logger.info("detailedHourly10Iterations is 240. Breaking...")
@@ -939,6 +953,7 @@ while True:
         logger.info("Selected view more 10 day...")
         print("")
         detailedForecastIterations = 0
+        totaldetailedForecastIterations = 0
         print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
         for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
             logger.info("We're on iteration: %s" % detailedForecastIterations)
@@ -1089,19 +1104,27 @@ while True:
             print(Fore.YELLOW + "Humidity: " + Fore.CYAN +
                   forecast10_avgHumidity + "%")
             detailedForecastIterations = detailedForecastIterations + 1
+            totaldetailedForecastIterations = totaldetailedForecastIterations + 1
+            if user_showCompletedIterations == True:
+                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/10"
+                      % totaldetailedForecastIterations)
+                print(Fore.RESET)
             if user_enterToContinue == True:
-                if detailedForecastIterations == 5:
+                if totaldetailedForecastIterations == 10:
+                    logger.debug("Total iterations is 10...breaking...")
+                    break
+                if detailedForecastIterations == user_forecastLoopIterations:
                     logger.debug("detailedForecastIterations: %s" % detailedForecastIterations)
                     try:
-                        print(Fore.RED + "Press enter to view the next 5 days of weather data.")
+                        print(Fore.RED + "Press enter to view the next %s days of weather data."
+                              % user_forecastLoopIterations)
                         print("You can also press Control + C to return to the input menu.")
                         input()
-                        logger.info("Iterating 5 more times...")
+                        logger.info("Iterating %s more times..." 
+                                    % user_forecastLoopIterations)
                     except KeyboardInterrupt:
                         break
                         logger.info("Exiting to the main menu.")
-            # No need for an elif here, ., my mgic keybord is bck
-            # My laptop is breaking.
     elif (moreoptions == "close pyweather" or moreoptions == "close"
           or moreoptions == "8" or moreoptions == "close pw"):
         sys.exit()
@@ -1744,23 +1767,28 @@ while True:
             historical_totalloops = historical_totalloops + 1
             logger.debug("historical_loops: %s ; historical_totalloops: %s"
                          % (historical_loops, historical_totalloops))
-            if historical_totalloops == 24:
-                logger.info("historical_totalloops = 24. Breaking the loop...")
-                break
-            if historical_loops == user_loopIterations:
-                logger.info("Asking user to continue.")
-                try:
-                    print("")
-                    print(Fore.RED + "Press enter to view the next", user_loopIterations
-                          , "hours of historical weather information.")
-                    print("Otherwise, press Control + C to get back to the main menu.")
-                    input()
-                    historical_loops = 0
-                    logger.info("Printing more weather data. historical_loops is now: %s"
-                                % historical_loops)
-                except KeyboardInterrupt:
-                    logger.info("Breaking to main menu, user issued KeyboardInterrupt")
-                    break         
+            if user_showCompletedIterations == True:
+                print(Fore.RED + "Completed iterations: " + Fore.CYAN + "%s/24"
+                      % historical_totalloops)
+                print(Fore.RESET)
+            if user_enterToContinue == True:
+                if historical_totalloops == 24:
+                    logger.info("historical_totalloops = 24. Breaking the loop...")
+                    break
+                if historical_loops == user_loopIterations:
+                    logger.info("Asking user to continue.")
+                    try:
+                        print("")
+                        print(Fore.RED + "Press enter to view the next", user_loopIterations
+                              , "hours of historical weather information.")
+                        print("Otherwise, press Control + C to get back to the main menu.")
+                        input()
+                        historical_loops = 0
+                        logger.info("Printing more weather data. historical_loops is now: %s"
+                                    % historical_loops)
+                    except KeyboardInterrupt:
+                        logger.info("Breaking to main menu, user issued KeyboardInterrupt")
+                        break         
             
     elif moreoptions == "tell me a joke":
         print("I'm not Siri.")
