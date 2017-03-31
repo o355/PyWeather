@@ -2,9 +2,11 @@
 Viewing the weather in a terminal has never been so much fun.
 
 ## Update on 0.5 beta:
-0.5 beta is coming along nicely, albeit a little slowly. The release date has been pushed back to 4/7, and that's for quality assurance testing. I want to make sure everything is tested, and everything works without error.
+0.5 beta is almost here! I've put a few features on the list for 0.5.1 beta, but there's still tons in this release, with a scheduled release on April 1.
 
-As such, the release date has been slightly pushed back, thanks to the above mentioned testing, and limited time.
+And no, it's not an April Fool. Check the code. 
+
+I may push back the release date if testing goes wrong, but things look good.
 
 ## BETA DISCLAIMER:
 Even though PyWeather is in beta, it's still in active development. While releases are somewhat stable milestones of PyWeather, things may or may not work. If you update from GitHub, I may push updates that entirely break PyWeather, so please, take caution!

@@ -7,6 +7,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the raw traceback output in keybackup.py
 * Adds the library check script, which checks for libraries PyWeather needs.
 * Adds a separate config.py script, to configure all available options.
+* Adds the ability to control where the backup API key will be stored in the setup script.
 
 ## version 0.5.1 beta - Should be released on 4/14/2017
 * Removes if verbosity == True in the separate updater, and keybackup scripts. - Should be finished by 4/7
@@ -29,7 +30,9 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the ability to turn off the "enter to continue" things in the 10-day/hourly forecasts - Done, and tested!
 * Adds the ability to set the interval in which the "enter to continue" will appear - Done, and tested!
 * Adds the ability to show how many iterations are left in the enter to continue thing (if it's on) - Done, and tested!
-* Removes the if verbosity == True garbage in the setup file. - Should be finished by 4/4
+* Removes the if verbosity == True garbage in the setup file. - Should be finished by 3/31
+* Adds the option to view the release tag in the updater - Should be finished by 3/31
+(updates the config readme for all the new options) - Should be finished by 4/1
 * Adds verbosity for all new functions added. This will now be standard!
 * Minor UI changes.
 

@@ -155,33 +155,28 @@ try:
 except ImportError:
     geopyInstalled = False
     neededLibraries = neededLibraries + 1
-    if verbosity == True:
-        logger.warn("geopy is NOT installed.")
-        logger.debug("geopyInstalled: %s ; neededLibraries: %s"
-                     % (geopyInstalled, neededLibraries))
+    logger.warn("geopy is NOT installed.")
+    logger.debug("geopyInstalled: %s ; neededLibraries: %s"
+                % (geopyInstalled, neededLibraries))
     
 try:
     import geocoder
     geocoderInstalled = True
-    if verbosity == True:
-        logger.info("geocoder is installed.")
-        logger.debug("geocoderInstalled: %s" % geocoderInstalled)
+    logger.info("geocoder is installed.")
+    logger.debug("geocoderInstalled: %s" % geocoderInstalled)
 except ImportError:
     geocoderInstalled = False
     neededLibraries = neededLibraries + 1
-    if verbosity == True:
-        logger.info("geocoder is NOT installed.")
-        logger.debug("geocoderInstalled: %s ; neededLibraries: %s"
-                     % (geocoderInstalled, neededLibraries))
+    logger.info("geocoder is NOT installed.")
+    logger.debug("geocoderInstalled: %s ; neededLibraries: %s"
+                 % (geocoderInstalled, neededLibraries))
     
 print("All done!")
 if neededLibraries == 0:
-    if verbosity == True:
-        logger.debug("All libraries are installed.")
+    logger.debug("All libraries are installed.")
     print("You must be magic. All necessary libraries are installed! Let's move on.")
 else:
-    if verbosity == True:
-        logger.debug("Libraries need to be installed.")
+    logger.debug("Libraries need to be installed.")
     print("Shucks. Not all libraries are installed. Here's what needs to be installed:")
     if coloramaInstalled == False:
         print("- Colorama")
@@ -192,46 +187,37 @@ else:
     print("If you want me to, I can automatically install these libraries.")
     print("Would you like me to do such? Yes or No.")
     neededLibrariesConfirm = input("Input here: ").lower()
-    if verbosity == True:
-        logger.debug("neededLibrariesConfirm: %s" % neededLibrariesConfirm)
+    logger.debug("neededLibrariesConfirm: %s" % neededLibrariesConfirm)
     if neededLibrariesConfirm == "no":
-        if verbosity == True:
-            logger.warn("Not installing necessary libraries. Now exiting...")
+        logger.warn("Not installing necessary libraries. Now exiting...")
         print("Okay. I needed to install necessary libraries to continue.")
         print("Now quitting...")
         print("Press enter to exit.")
         input()
         sys.exit()
     elif neededLibrariesConfirm == "yes":
-        if verbosity == True:
-            logger.info("Installing necessary libraries...")
+        logger.info("Installing necessary libraries...")
         print("Sweet! I'm now installing necessary libraries.")
         if coloramaInstalled == False:
-            if verbosity == True:
-                logger.debug("Installing colorama...")
+            logger.debug("Installing colorama...")
             print("Installing Colorama...")
             pip.main(['install', 'colorama'])
         if geopyInstalled == False:
-            if verbosity == True:
-                logger.debug("Installing geopy...")
+            logger.debug("Installing geopy...")
             print("Installing geopy...")
             pip.main(['install', 'geopy'])
         if geocoderInstalled == False:
-            if verbosity == True:
-                logger.debug("Installing geocoder...")
+            logger.debug("Installing geocoder...")
             print("Installing geocoder...")
             pip.main(['install', 'geocoder'])
-        if verbosity == True:
             logger.info("Running the double check on libraries...")
         print("Sweet! All libraries should be installed.")
         print("Just to confirm, I'm double checking if needed libraries are installed.")
         try:
             import colorama
-            if verbosity == True:
-                logger.info("Colorama installed successfully.")
+            logger.info("Colorama installed successfully.")
         except ImportError:
-            if verbosity == True:
-                logger.error("Colorama was not installed successfully.")
+            logger.warn("Colorama was not installed successfully.")
             print("Hmm...Colorama didn't install properly.")
             print("Try executing 'pip install colorama' in a command shell.")
             print("As a precaution, I'm now exiting. (Error 52, setup.py)")
@@ -240,11 +226,9 @@ else:
             sys.exit()
         try:
             import geopy
-            if verbosity == True:
-                logger.info("geopy installed successfully.")
+            logger.info("geopy installed successfully.")
         except ImportError:
-            if verbosity == True:
-                logger.error("geopy was not installed successfully.")
+            logger.warn("geopy was not installed successfully.")
             print("Hmm...geopy didn't install properly.")
             print("Try executing 'pip install geopy' in a command shell.")
             print("As a precaution, I'm now exiting. (Error 52, setup.py)")
@@ -253,11 +237,9 @@ else:
             sys.exit()
         try:
             import geocoder
-            if verbosity == True:
-                logger.info("geocoder installed successfully.")
+            logger.info("geocoder installed successfully.")
         except ImportError:
-            if verbosity == True:
-                logger.error("geocoder was not installed successfully.")
+            logger.warn("geocoder was not installed successfully.")
             print("Hmm...geocoder didn't install properly.")
             print("Try executing 'pip install geocoder' in a command shell.")
             print("As a precaution, I'm now exiting. (Error 52, setup.py)")
@@ -266,8 +248,7 @@ else:
             sys.exit()
         print("All libraries are good to go! Let's move on.")
     else:
-        if verbosity == True:
-            logger.error("Input was not understood. Closing...")
+        logger.warn("Input was not understood. Closing...")
         print("I'm not sure what you said.")
         print("As a precaution, I'm now closing.")
         sys.exit()
@@ -358,21 +339,17 @@ print("Press any key when you are done and ready.")
 input()
 print("Please input your API key below.")
 apikey_input = input("Input here: ")
-if verbosity == True:
-    logger.debug("apikey_input: %s" % apikey_input)
+logger.debug("apikey_input: %s" % apikey_input)
 print("Just to confirm, the API key you gave me was: " + apikey_input
       + ".")
 print("Please double check your input, and confirm in the dialogue below.")
 apikey_confirm = input("Is the API key right? Yes or no: ").lower()
-if verbosity == True:
-    logger.debug("apikey_confirm: %s" % apikey_confirm)
+logger.debug("apikey_confirm: %s" % apikey_confirm)
 if apikey_confirm == "no":
-    if verbosity == True:
-        logger.debug("User now re-entering key...")
+    logger.debug("User now re-entering key...")
     print("Please input your API key below.")
     apikey_input = input("Input here: ")
-    if verbosity == True:
-        logger.debug("apikey_input: %s" % apikey_input)
+    logger.debug("apikey_input: %s" % apikey_input)
     print("Just to confirm, the API key you gave me was: " + apikey_input
       + ".")
     print("If you got the API key wrong, please close out of setup, and try again. ")
@@ -381,14 +358,13 @@ print("Now saving your API key...")
 open('storage//apikey.txt', 'w').close()
 
 with open("storage//apikey.txt", 'a') as out:
-    if verbosity == True:
-        logger.debug("out: %s" % out)
+    logger.debug("out: %s" % out)
     out.write(apikey_input)
     out.close()
-    if verbosity == True:
-        logger.debug("Performed ops: overwrite apikey.txt, out.write(apikey_input), out.close()")
+    logger.debug("Performed ops: overwrite apikey.txt, out.write(apikey_input), out.close()")
    
 print("I can also back up your API key, in case you do something wrong.")
+# A future release should bring customization as to the storage location.
 print("The backup text file would be stored at backup/backkey.txt.")
 print("Would you like me to save a backup? Yes or no.")
 backup_APIkey = input("Input here: ").lower()
@@ -396,97 +372,81 @@ if backup_APIkey == "yes":
     print("Creating a backup...")
     open("backup//backkey.txt", 'w').close()
     open("backup//backkey.txt", 'a').write(apikey_input)
-    open("backup//backkey.txt").close()    
+    open("backup//backkey.txt").close()
+    logger.debug("Performed 3 ops. Overwrite backup//backkey.txt, write to backkey.txt" + 
+                 ", and close backkey.txt.")    
 # once a config file is properly added, options for configuring the config will go here
 
 print("Let's configure a few options for PyWeather.")
-
-if verbosity == True:
-    logger.debug("config: %s" % config)
+logger.debug("config: %s" % config)
 
 print("On the summary screen, would you like to show sunrise/sunset times?")
 print("By default, this is disabled.")
 print("Yes or No.")
 sundata_Summary = input("Input here: ").lower()
-if verbosity == True:
-    logger.debug("sundata_Summary: %s" % sundata_Summary)
+logger.debug("sundata_Summary: %s" % sundata_Summary)
 if sundata_Summary == "yes":
     config['SUMMARY']['sundata_summary'] = 'True'
-    if verbosity == True:
-        logger.debug("Sundata on the summary is now ENABLED.")
+    logger.debug("Sundata on the summary is now ENABLED.")
 elif sundata_Summary == "no":
     config['SUMMARY']['sundata_summary'] = 'False'
-    if verbosity == True:
-        logger.debug("Sundata on the summary is now DISABLED.")
+    logger.debug("Sundata on the summary is now DISABLED.")
 else:
     print("Could not understand what you said.")
     print("Defaulting to the default value 'False'")
     config['SUMMARY']['sundata_summary'] = 'False'
-    if verbosity == True:
-        logger.debug("Could not recognize input. Defaulting to DISABLED.")
+    logger.debug("Could not recognize input. Defaulting to DISABLED.")
    
 print("")  
 print("On the summary screen, would you like to show almanac data?")
 print("By default, this is disabled.")
 print("Yes or No.")
 almanacdata_Summary = input("Input here: ").lower()
-if verbosity == True:
-    logger.debug("almanacdata_Summary: %s" % almanacdata_Summary)
+logger.debug("almanacdata_Summary: %s" % almanacdata_Summary)
 if almanacdata_Summary == "yes":
     config['SUMMARY']['almanac_summary'] = 'True'
-    if verbosity == True:
-        logger.debug("Almanac on the summary is now ENABLED.")
+    logger.debug("Almanac on the summary is now ENABLED.")
 elif almanacdata_Summary == "no":
     config['SUMMARY']['almanac_summary'] = 'False'
-    if verbosity == True:
-        logger.debug("Almanac on the summary is now DISABLED.")
+    logger.debug("Almanac on the summary is now DISABLED.")
 else:
     print("Could not understand what you said.")
     print("Defaulting to the default value 'False'")
     config['SUMMARY']['almanac_summary'] = 'False'
-    if verbosity == True:
-        logger.debug("Could not recognize input. Defaulting to DISABLED.")
+    logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
 print("") 
 print("On boot, would you like PyWeather to check for updates?")
 print("By default, this is disabled, due to a load time increase of ~2-5 seconds.")
 print("Yes or No.")
 checkForUpdates = input("Input here: ").lower()
-if verbosity == True:
-    logger.debug("checkForUpdates: %s" % checkForUpdates)
+logger.debug("checkForUpdates: %s" % checkForUpdates)
 if checkForUpdates == "yes":
     config['UPDATER']['autoCheckForUpdates'] = 'True'
-    if verbosity == True:
-        logger.debug("Checking for updates on startup is ENABLED.")
+    logger.debug("Checking for updates on startup is ENABLED.")
 elif checkForUpdates == "no":
     config['UPDATER']['autoCheckForUpdates'] = 'False'
-    if verbosity == True:
-        logger.debug("Checking for updates on startup is DISABLED.")
+    logger.debug("Checking for updates on startup is DISABLED.")
 else:
     print("Could not understand what you said.")
     print("Defaulting to the default value 'False'")
     config['UPDATER']['autoCheckForUpdates'] = 'False'
-    if verbosity == True:
-        logger.debug("Could not recognize input. Defaulting to DISABLED.")
+    logger.debug("Could not recognize input. Defaulting to DISABLED.")
     
 print("That's it! Now commiting config changes...")
 with open('storage//config.ini', 'w') as configfile:
-    if verbosity == True:
-        logger.debug("configfile: %s" % configfile)
+    logger.debug("configfile: %s" % configfile)
     config.write(configfile)
-    if verbosity == True:
-        logger.info("Performed operation: config.write(configfile)")
+    logger.info("Performed operation: config.write(configfile)")
 
 print("We're wrapping up, and performing a few tests.")
 
 print("Checking for parsing libraries...")
 try:
     import json
-    if verbosity == True:
-        logger.debug("json is available.")
+    logger.debug("json is available.")
 except:
-    if verbosity == True:
-        logger.error("json isn't available...very odd...")
+    logger.warn("json isn't available...very odd...")
     print("json is not available. This is odd, it's a default library.")
     print("Try installing a usual Python install.")
     print("Press enter to exit.")
