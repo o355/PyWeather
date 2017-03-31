@@ -955,6 +955,7 @@ while True:
         totaldetailedForecastIterations = 0
         print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
         for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
+            print("")
             logger.info("We're on iteration: %s" % detailedForecastIterations)
             forecast10_weekday = day['date']['weekday']
             forecast10_month = str(day['date']['month'])
@@ -1107,10 +1108,10 @@ while True:
                 print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/10"
                       % totaldetailedForecastIterations)
                 print(Fore.RESET)
+            if totaldetailedForecastIterations == 10:
+                logger.debug("Total iterations is 10. Breaking...")
+                break
             if user_enterToContinue == True:
-                if totaldetailedForecastIterations == 10:
-                    logger.debug("Total iterations is 10...breaking...")
-                    break
                 if detailedForecastIterations == user_forecastLoopIterations:
                     logger.debug("detailedForecastIterations: %s" % detailedForecastIterations)
                     try:

@@ -1,12 +1,5 @@
-## Welcome to PyWeather (0.4.2 beta)!
+## Welcome to PyWeather (0.5 beta)!
 Viewing the weather in a terminal has never been so much fun.
-
-## Update on 0.5 beta:
-0.5 beta is almost here! I've put a few features on the list for 0.5.1 beta, but there's still tons in this release, with a scheduled release on April 1.
-
-And no, it's not an April Fool. Check the code. 
-
-I may push back the release date if testing goes wrong, but things look good.
 
 ## BETA DISCLAIMER:
 Even though PyWeather is in beta, it's still in active development. While releases are somewhat stable milestones of PyWeather, things may or may not work. If you update from GitHub, I may push updates that entirely break PyWeather, so please, take caution!
@@ -26,7 +19,7 @@ If you have Git, and you'd prefer to clone over PyWeather from Git, you've got y
 
 Doing `git clone https://github.com/o355/pyweather.git` will clone PyWeather into your current folder. Add `--depth=1` to the end if you want Git to create a folder in which PyWeather is stored in.
 
-If you want to have the latest stable version (0.4.2), you can checkout to the release branch, by doing `git checkout v0.4.2-beta`.
+If you want to have the latest stable version (0.5), you can checkout to the release branch, by doing `git checkout v0.5-beta`.
 
 If you want to live on the bleeding edge, nothing is required on your part, you'll have the latest updates as I code them (at the risk of things breaking). I don't do betas/RCs, as that's just a huge waste of time on my end. Doing `git pull` will let you get the latest updates, and I push updates Monday-Saturday, for the most part.
 
