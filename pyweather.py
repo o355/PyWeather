@@ -31,6 +31,7 @@ try:
     user_enterToContinue = config.getboolean('UI', 'show_enterToContinue')
     user_showCompletedIterations = config.getboolean('UI', 'show_completedIterations')
     user_forecastLoopIterations = config.getint('UI', 'forecast_detailedInfoLoops')
+    user_showUpdaterReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
 except:
     print("Couldn't load your config file. Make sure your spelling is correct.")
     print("Setting variables to default...")
@@ -47,6 +48,7 @@ except:
     user_enterToContinue = False
     user_showCompletedIterations = False
     user_forecastLoopIterations = 5
+    user_showUpdaterReleaseTag = False
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
@@ -55,7 +57,7 @@ logger = logging.getLogger('pyweather_0.5beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
-# There are no criticial messages in PyWeather, so this works by design.
+# There are no critical messages in PyWeather, so this works by design.
 if verbosity == True:
     logger.setLevel(logging.DEBUG)
 elif tracebacksEnabled == True:
@@ -74,8 +76,8 @@ logger.debug("prefetch10Day_atStart: %s ; user_loopIterations: %s"
              % (prefetch10Day_atStart, user_loopIterations))
 logger.debug("user_enterToContinue: %s ; user_showCompletedIterations: %s"
              % (user_enterToContinue, user_showCompletedIterations))
-logger.debug("user_forecastLoopIterations: %s"
-             % (user_forecastLoopIterations))
+logger.debug("user_forecastLoopIterations: %s ; user_showUpdaterReleaseTag: %s"
+             % (user_forecastLoopIterations, user_showUpdaterReleaseTag))
 
 import urllib.request
 import sys
@@ -1150,10 +1152,12 @@ while True:
         version_latestVersion = versionJSON['updater']['latestversion']
         version_latestURL = versionJSON['updater']['latesturl']
         version_latestFileName = versionJSON['updater']['latestfilename']
+        version_latestReleaseTag = versionJSON['updater']['latestversiontag']
         logger.debug("version_buildNumber: %s ; version_latestVersion: %s"
                     % (version_buildNumber, version_latestVersion))
         logger.debug("version_latestURL: %s ; verion_latestFileName: %s"
                     % (version_latestURL, version_latestFileName))
+        logger.debug("version_latestReleaseTag: %s" % version_latestReleaseTag)
         version_latestReleaseDate = versionJSON['updater']['releasedate']
         logger.debug("version_latestReleaseDate: %s" % version_latestReleaseDate)
         if buildnumber >= version_buildNumber:
@@ -1173,6 +1177,8 @@ while True:
             print(Fore.RED + "You have version: " + Fore.CYAN + buildversion)
             print(Fore.RED + "The latest version is: " + Fore.CYAN + version_latestVersion)
             print(Fore.RED + "And it was released on: " + Fore.CYAN + version_latestReleaseDate)
+            if user_showUpdaterReleaseTag == True:
+                print(Fore.RED + "The latest release tag is: " + Fore.CYAN + version_latestReleaseTag)
             print("")
             print(Fore.RED + "Would you like to download the latest version?" + Fore.YELLOW)
             downloadLatest = input("Yes or No: ").lower()

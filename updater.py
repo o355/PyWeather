@@ -18,6 +18,7 @@ config.read('storage//config.ini')
 try:
     verbosity = config.getboolean('VERBOSITY', 'updater_verbosity')
     jsonVerbosity = config.getboolean('VERBOSITY', 'updater_jsonverbosity')
+    showReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
 except:
     print("Couldn't load your config file. Make sure your spelling is correct.")
     print("Setting variables to default...")
@@ -62,11 +63,13 @@ version_buildNumber = float(versionJSON['updater']['latestbuild'])
 version_latestVersion = versionJSON['updater']['latestversion']
 version_latestURL = versionJSON['updater']['latesturl']
 version_latestFileName = versionJSON['updater']['latestfilename']
+version_latestReleaseTag = versionJSON['updater']['latestversiontag']
 if verbosity == True:
     logger.debug("version_buildNumber: %s ; version_latestVersion: %s"
                 % (version_buildNumber, version_latestVersion))
     logger.debug("version_latestURL: %s ; verion_latestFileName: %s"
                 % (version_latestURL, version_latestFileName))
+    logger.debug("version_latestReleaseTag: %s" % version_latestReleaseTag)
 version_latestReleaseDate = versionJSON['updater']['releasedate']
 if verbosity == True:
     logger.debug("version_latestReleaseDate: %s" % version_latestReleaseDate)
@@ -93,6 +96,9 @@ elif buildnumber < version_buildNumber:
     print(Fore.RED + "You have version: " + Fore.CYAN + buildversion)
     print(Fore.RED + "The latest version is: " + Fore.CYAN + version_latestVersion)
     print(Fore.RED + "And it was released on: " + Fore.CYAN + version_latestReleaseDate)
+    if showReleaseTag == True:
+        print(Fore.RED + "The latest release tag is: " + Fore.CYAN +
+              version_latestReleaseTag)
     print("")
     print(Fore.RED + "Would you like to download the latest version?" + Fore.YELLOW)
     downloadLatest = input("Yes or No: ").lower()
