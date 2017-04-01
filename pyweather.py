@@ -32,6 +32,7 @@ try:
     user_showCompletedIterations = config.getboolean('UI', 'show_completedIterations')
     user_forecastLoopIterations = config.getint('UI', 'forecast_detailedInfoLoops')
     user_showUpdaterReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
+    backupKeyLocation = config.get('KEYBACKUP', 'SAVELOCATION')
 except:
     print("Couldn't load your config file. Make sure your spelling is correct.")
     print("Setting variables to default...")
@@ -49,11 +50,12 @@ except:
     user_showCompletedIterations = False
     user_forecastLoopIterations = 5
     user_showUpdaterReleaseTag = False
+    backupKeyLocation = 'backup//backkey.txt'
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
 import logging
-logger = logging.getLogger('pyweather_0.5beta')
+logger = logging.getLogger('pyweather_0.5.1beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
@@ -78,6 +80,8 @@ logger.debug("user_enterToContinue: %s ; user_showCompletedIterations: %s"
              % (user_enterToContinue, user_showCompletedIterations))
 logger.debug("user_forecastLoopIterations: %s ; user_showUpdaterReleaseTag: %s"
              % (user_forecastLoopIterations, user_showUpdaterReleaseTag))
+logger.debug("backupKeyLocation: %s"
+             % (backupKeyLocation))
 
 import urllib.request
 import sys
@@ -101,21 +105,25 @@ def printException_loggerinfo():
         logger.info(traceback.print_exc())
 
 logger.debug("Begin API keyload...")
-apikey_load = open('storage//apikey.txt')
-logger.debug("apikey_load = %s" % apikey_load)
 try:
+    apikey_load = open('storage//apiky.txt')
+    logger.debug("apikey_load = %s" % apikey_load)
     apikey = apikey_load.read()
 except FileNotFoundError:
-    print("The API key wasn't found. (Error 38, pyweather.py)")
-    logger.error("Full traceback:")
-    printException()
-    print("Press enter to continue.")
-    input()
-    sys.exit()
-logger.debug("apikey = %s" % apikey)
-        
+    print("The API key wasn't found. Attempting to load your backup key...")
+    try:
+        apikey2_load = open(backupKeyLocation)
+        logger.debug("apikey2_load: %s" % apikey2_load)
+        apikey = apikey2_load.read()
+        print("Loaded your backup key successfully!")
+    except FileNotFoundError:
+        print("Your API key couldn't be loaded.")
+        logger.warn("Couldn't load the primary or backup key text file! Does it exist?")
+        print("Press enter to continue.")
+        input()
+        sys.exit()
 
- 
+logger.debug("apikey = %s" % apikey)
 buildnumber = 50
 buildversion = '0.5 beta'    
 
