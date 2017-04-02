@@ -17,8 +17,8 @@ try:
     jsonVerbosity = config.getboolean('VERBOSITY', 'setup_jsonverbosity')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'setup_tracebacks')
 except:
-    print("Couldn't load your config file. Make sure your spelling is correct.
-    \n Setting variables to default...\n ")
+    print("""Couldn't load your config file. Make sure your spelling is correct.
+    \n Setting variables to default...\n """)
     
     verbosity = False
     jsonVerbosity = False
@@ -46,9 +46,9 @@ elif tracebacksEnabled == True:
 else:
     logger.setLevel(logging.CRITICAL)
 
-print("Welcome to PyWeather setup.
+print("""Welcome to PyWeather setup.
 \n This is meant to run as a one-time program, when you first get PyWeather.
-\n Running preflight...")
+\n Running preflight...""")
 
 if verbosity == True:
     logger.info("Starting, importing 4 default libraries...")
@@ -59,50 +59,50 @@ try:
     import time
 except:
     logger.warn("Odd, 4 default libraries are not available...")
-    print("Hmm...I tried to import default libraries, but ran into an error.
+    print("""Hmm...I tried to import default libraries, but ran into an error.
     \n Make sure that sys, urllib.request, shutil, and are available with your 
-    installation of Python.")
+    installation of Python.""")
 neededLibraries = 0
 if sys.version_info[0] < 3:
     logger.error("Python 3 is needed to run. You're using version: %s"
                 % sys.version_info)
-    print("Shucks! I can't proceed any further.
+    print("""Shucks! I can't proceed any further.
     \n You'll need to install Python 3 to use PyWeather/PW Setup.
-    \n Press enter to continue.")
+    \n Press enter to continue.""")
     input()
     sys.exit()
 
-print("Before we get started, I want to confirm some permissions from you.
+print("""Before we get started, I want to confirm some permissions from you.
 \n Is it okay if I use 1-5 MB of data (downloading libraries), save a small 
 text file called apikey.txt (> 2 KB), and automatically install Python 
 libraries?
-\n Please input yes or no below:")
+\n Please input yes or no below:""")
 confirmPermissions = input("Input here: ").lower()
 logger.debug("confirmPermissions: %s" % confirmPermissions)
 if confirmPermissions == "no":
     logger.debug("User denied permissions. Closing...")
-    print("Okay! Closing now.
-    \n Press enter to exit.")
+    print("""Okay! Closing now.
+    \n Press enter to exit.""")
     input()
     sys.exit()
 elif confirmPermissions != "yes":
     logger.debug("Couldn't understand. Closing...")
-    print("I couldn't understand what you said.
+    print("""I couldn't understand what you said.
     \n As a precaution, I won't proceed any further.
-    \n Press enter to exit.")
+    \n Press enter to exit.""")
     input()
     sys.exit()
     
-print("Cool! Let's start.
+print("""Cool! Let's start.
 \n I'm going to start by checking for necessary libraries (to run PyWeather).
-\n This can take a moment, so please hold tight while I check!")
+\n This can take a moment, so please hold tight while I check!""")
 
 try:
     import pip
 except ImportError:
     logger.warn("pip is NOT installed! Asking user for automated install...")
-    print("Shucks! I need PIP to check for/install libraries.
-    \n Can I install PIP for you? Yes or No.")
+    print("""Shucks! I need PIP to check for/install libraries.
+    \n Can I install PIP for you? Yes or No.""")
     pipConfirm = input("Input here: ").lower()
     logger.debug("pipConfirm: %s" % pipConfirm)
     if pipConfirm == "no":
@@ -113,11 +113,11 @@ except ImportError:
         sys.exit()
     elif pipConfirm == "yes":
         logger.info("User allowed PIP install. Starting...")
-        print("Okay!
+        print("""Okay!
         \n I'll download PIP's installer, and run it.
         \n Doing such uses about 2-4 MB of data, and will quit PW setup.
         \n When the setup script finishes, you'll need to run the setup script again.
-        \n I'll start in a few seconds.")
+        \n I'll start in a few seconds.""")
         time.sleep(3)
         print("Downloading the installer...")
         with urllib.request.urlopen('https://bootstrap.pypa.io/get-pip.py') as update_response, open('get-pip.py', 'wb') as update_out_file:
@@ -129,9 +129,9 @@ except ImportError:
         exec(open("get-pip.py").read())
     else:
         logger.warn("Couldn't understand the input. Closing...")
-        print("I didn't understand what you said.
+        print("""I didn't understand what you said.
         \n As a precaution, I'm closing setup, as I need PIP to continue.
-        \n Press enter to exit.")
+        \n Press enter to exit.""")
         input()
         sys.exit()
 
@@ -218,10 +218,10 @@ else:
             logger.info("Colorama installed successfully.")
         except ImportError:
             logger.warn("Colorama was not installed successfully.")
-            print("Hmm...Colorama didn't install properly.
+            print("""Hmm...Colorama didn't install properly.
             \n Try executing 'pip install colorama' in a command shell.
             \n As a precaution, I'm now exiting. (Error 52, setup.py)
-            \n Press enter to exit.")
+            \n Press enter to exit.""")
             input()
             sys.exit()
         try:
@@ -229,10 +229,10 @@ else:
             logger.info("geopy installed successfully.")
         except ImportError:
             logger.warn("geopy was not installed successfully.")
-            print("Hmm...geopy didn't install properly.
+            print("""Hmm...geopy didn't install properly.
             \n Try executing 'pip install geopy' in a command shell.
             \n As a precaution, I'm now exiting. (Error 52, setup.py)
-            \n Press enter to exit..")
+            \n Press enter to exit..""")
             input()
             sys.exit()
         try:
@@ -240,85 +240,85 @@ else:
             logger.info("geocoder installed successfully.")
         except ImportError:
             logger.warn("geocoder was not installed successfully.")
-            print("Hmm...geocoder didn't install properly.
+            print("""Hmm...geocoder didn't install properly.
             \n Try executing 'pip install geocoder' in a command shell.
             \n As a precaution, I'm now exiting. (Error 52, setup.py)
-            \n Press enter to exit.")
+            \n Press enter to exit.""")
             input()
             sys.exit()
         print("All libraries are good to go! Let's move on.")
     else:
         logger.warn("Input was not understood. Closing...")
-        print("I'm not sure what you said.
-        \n As a precaution, I'm now closing."
+        print("""I'm not sure what you said.
+        \n As a precaution, I'm now closing.""")
         sys.exit()
 
 # Verbosity is not needed here.
-print("I'm now going to guide you through obtaining an API key.
-\n Please carefully read my detailed instructions, so you don't mess anything up.")
+print("""I'm now going to guide you through obtaining an API key.
+\n Please carefully read my detailed instructions, so you don't mess anything up.""")
 
-print("Let's begin.
+print("""Let's begin.
 \n 
 Start by opening a web browser, and going to https://www.wunderground.com/weather/api/.
-Press any key when you are done.")
+Press any key when you are done.""")
 input()
-print("\n
+print("""\n
 Next, click the 'Explore my options' button.
-Press any key when you are done.")
+Press any key when you are done.""")
 input()
-print("\n
+print("""\n
 Next, click the small button next to 'ANVIL PLAN'.
 After that, confirm that the total underneath the 'Purchase Key' button says 
 '$0 USD per month'. If the total underneath the 'Purchase Key' button doesn't 
 say '$0 USD per month, please ensure that the small button next to 'Developer' 
 on the table in the middle of the screen is selected, and the total 
 says '$0 USD per month'
-\n Press any key when you are done.")
+\n Press any key when you are done.""")
 input()
-print("\n Next, click the 'Purchase Key' button. \n Press any key when you are 
-    done.")
+print("""\n Next, click the 'Purchase Key' button. \n Press any key when you are 
+    done.""")
 input()
-print("Next, input your email, and a password to sign up for a Weather 
+print("""Next, input your email, and a password to sign up for a Weather 
 Underground account.
 \n Be sure to select the checkbox next to 'I agree to the Terms of Service'
 \n It's best if you leave the checkbox next to 'I would like to receive WU 
 updates via email' unchecked.
-\n Press any key when you are done and ready.")
+\n Press any key when you are done and ready.""")
 input()
-print("Next, press the 'Sign up for free' button.
+print("""Next, press the 'Sign up for free' button.
 \n When the welcome window pops up, be sure to click the X button at the top right of the popup.
 \n When clicking the X, you should be redirected to wunderground.com.
-\n Press any key when you are done and ready.")
+\n Press any key when you are done and ready.""")
 input()
-print("Next, click 'My Profile' at the top right corner of the homepage.
+print("""Next, click 'My Profile' at the top right corner of the homepage.
 \n In the dropdown, click 'My Email & Text Alerts'
-\n Press any key when you are done and ready.")
+\n Press any key when you are done and ready.""")
 input()
-print("Next, next to your email listed on the page, click the 'Edit / Verify' button.
+print("""Next, next to your email listed on the page, click the 'Edit / Verify' button.
 \n After you click the button, click the 'Verify Email' button.
-\n Press any key when you are done and ready.")
+\n Press any key when you are done and ready.""")
 input()
-print("Next, check your email in which you signed up with.
+print("""Next, check your email in which you signed up with.
 \n If you got a letter from Weather Underground, titled 'Daily Forecast 
 Email Verification', open that letter, and click the link.
 \n If you didn't get the letter, wait a few minutes, and be sure to check your spam folder.
 \n Hint: If you followed this guide exactly, WU will not be sending you daily forecasts to your email.
-\n Press any key when you are done and ready.")
+\n Press any key when you are done and ready.""")
 input()
-print("Your email should be verified.
+print("""Your email should be verified.
 \n Next, in your web browser, head back to https://www.wunderground.com/weather/api/.
 \n Then, click the 'Explore my Options' button, again.
-\n Press any key when you are done and ready.")
+\n Press any key when you are done and ready.""")
 input()
-print("Next, at the top of the page, make sure the button next to 'ANVIL PLAN' 
+print("""Next, at the top of the page, make sure the button next to 'ANVIL PLAN' 
 is selected.
 \n After that, confirm that the total underneath the 'Purchase Key' button says 
 '$0 USD per month'
 \n If the total doesn't say that, in the pricing table, make sure the button 
 next to 'Developer' is selected.
-\n Press any key when you are done and ready.")
+\n Press any key when you are done and ready.""")
 input()
-print("Next, click the 'Purchase Key' button, on top of your total (which 
+print("""Next, click the 'Purchase Key' button, on top of your total (which 
 should be $0 USD per month)
 \n Next, fill out the form, considering these tips:
 \n For the contact name/email, it's recommended you use your real name 
@@ -337,22 +337,22 @@ processing?', answer No.
 you are, however.
 \n For the country that you are based in, put your location.
 \n Before we move on, fill out these forms, and press any key when you are done 
-and ready.")
+and ready.""")
 input()
-print("Next, for the brief description, put something like 'using an API key 
+print("""Next, for the brief description, put something like 'using an API key 
 to use a script using Wunderground'.
 \n After that, check both boxes at the bottom of the page. Read the ToS if you 
 feel like it.
 \n Finally, click 'Purchase Key'.
 \n You should land on a page that says 'Edit API Key'.
-\n Press any key when you are done and ready.")
+\n Press any key when you are done and ready.""")
 input()
-print("In the table to the left of the page, copy the text that's under Key ID. 
+print("""In the table to the left of the page, copy the text that's under Key ID. 
 (Ctrl+C, right click)
 \n I'm now going to ask you to input the API key into the text entry below.
 \n The API key will be saved to storage/apikey.txt, so PyWeather can easily 
 pull it up.
-\n Press any key when you are done and ready.")
+\n Press any key when you are done and ready.""")
 input()
 print("Please input your API key below.")
 apikey_input = input("Input here: ")
@@ -397,9 +397,9 @@ if backup_APIkey == "yes":
 print("Let's configure a few options for PyWeather.")
 logger.debug("config: %s" % config)
 
-print("On the summary screen, would you like to show sunrise/sunset times?
+print("""On the summary screen, would you like to show sunrise/sunset times?
 \n By default, this is disabled.
-\n Yes or No.")
+\n Yes or No.""")
 sundata_Summary = input("Input here: ").lower()
 logger.debug("sundata_Summary: %s" % sundata_Summary)
 if sundata_Summary == "yes":
@@ -414,9 +414,9 @@ else:
     config['SUMMARY']['sundata_summary'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
    
-print("\n On the summary screen, would you like to show almanac data?
+print("""\n On the summary screen, would you like to show almanac data?
 \n By default, this is disabled.
-\n Yes or No.")
+\n Yes or No.""")
 almanacdata_Summary = input("Input here: ").lower()
 logger.debug("almanacdata_Summary: %s" % almanacdata_Summary)
 if almanacdata_Summary == "yes":
@@ -431,9 +431,9 @@ else:
     config['SUMMARY']['almanac_summary'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print(\n "On boot, would you like PyWeather to check for updates?
+print("""On boot, would you like PyWeather to check for updates?
 \n By default, this is disabled, due to a load time increase of ~2-5 seconds.
-\n Yes or No.")
+\n Yes or No.""")
 checkForUpdates = input("Input here: ").lower()
 logger.debug("checkForUpdates: %s" % checkForUpdates)
 if checkForUpdates == "yes":
@@ -462,9 +462,9 @@ try:
     logger.debug("json is available.")
 except:
     logger.warn("json isn't available...very odd...")
-    print("json is not available. This is odd, it's a default library.
+    print("""json is not available. This is odd, it's a default library.
     \n Try installing a usual Python install.
-    \n Press enter to exit.")
+    \n Press enter to exit.""")
     input()
     sys.exit()
 try:
@@ -472,9 +472,9 @@ try:
     logger.debug("codecs is available.")
 except:
     logger.warn("codecs isn't available...very odd...")
-    print("codecs is not available. This is odd, it's a default library.
+    print("""codecs is not available. This is odd, it's a default library.
     \n Try installing a usual Python install.
-    \n Press enter to exit.")
+    \n Press enter to exit.""")
     input()
     sys.exit()
 
@@ -489,9 +489,9 @@ try:
     logger.debug("testJSON: %s" % testJSON)
 except:
     logger.warn("Couldn't connect to Wunderground's API! No internet?")
-    print("We ran into an error. Make sure Wunderground's API is unblocked,and 
+    print("""We ran into an error. Make sure Wunderground's API is unblocked, and 
             you have an internet connection.
-    \n Press enter to exit.")
+    \n Press enter to exit.""")
     input()
     sys.exit()
     
@@ -549,9 +549,9 @@ except:
     input()
     sys.exit()
 
-print("\n
+print("""\n
 \n Everything is set up and ready to rumble!
 \n Enjoy using PyWeather! If you have any issues, please report them on GitHub!
-\n Press enter to continue.")
+\n Press enter to continue.""")
 input()
 sys.exit()
