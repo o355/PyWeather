@@ -55,3 +55,5 @@ Need mobile support? You could get Termux, but that doesn't work (tested it). Th
 I'm not a full time Python developer, and I'm not about to skip school because I want to work on Python projects. Between school, and the other projects I work on (and gaming, too!), I try my best to get in Python coding time, but it's not enough. Coding all of 0.5 beta's new features took 3 weeks, because of the limited time I had. So, I'm open to contributions.
 
 Read over contributing.md in the .github folder to get a general rundown of how things work. After that, do your thing! Bug test, translate, submit some pull requests, you get the idea. Every contribution, bug report, etc, will get thanked in a release changelog!
+
+If you have something to give constructive criticism about, please tell me! I'm all for constructive criticism, and learning through criticism.
