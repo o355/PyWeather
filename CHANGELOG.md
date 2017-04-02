@@ -9,7 +9,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds a separate config.py script, to configure all available options.
 * Adds the ability to control where the backup API key will be stored in the setup script.
 
-## version 0.5.1 beta - Should be released on 4/7/2017
+## version 0.5.1 beta - Should be released on 4/10/2017
 
 **NEW FEATURES/REMOVALS:**
 * Removes if verbosity == True in the separate updater, and keybackup scripts. - Done, and tested!
@@ -17,6 +17,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the raw traceback output in updater.py/setup.py - Should be finished by 4/1
 * Adds the logger displaying configuration options at the start of every script - Should be finished by 4/3
 * Catches up the setup file with the new configuration options added in 0.5 beta. - Should be finished by 4/6
+* Rewrites multiline prints (thanks to @gsilvapt for the PR/notifing me of the issue) - Should be finished by 4/10
 
 **BUG FIXES:**
 * Fixes a bug in which if the config file wouldn't load in the updater, the variable showReleaseTag wouldn't get defined, and it would presumably crash.
