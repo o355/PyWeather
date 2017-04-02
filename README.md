@@ -26,6 +26,10 @@ PyWeather was a script I made, because I couldn't find anything that I wanted (f
 Alas, PyWeather was born. It's a Python script that let's you view weather data (lots of it), is easy to set up, and it actually works.
 
 ## What kind of features are in PyWeather?
+Want screenshots? https://imgur.com/a/n7L8B
+
+(the almanac wasn't included, as I actually found a bug when taking the screenshots)
+
 Even though PyWeather is in beta, it can presently do a lot. Here's what you can easily see in PyWeather.
 * A nice "summary" screen for a location
 * Detailed current information
