@@ -2,52 +2,56 @@
 Viewing the weather in a terminal has never been so much fun.
 
 ## BETA DISCLAIMER:
-Even though PyWeather is in beta, it's still in active development. While releases are somewhat stable milestones of PyWeather, things may or may not work. If you update from GitHub, I may push updates that entirely break PyWeather, so please, take caution!
+Even though PyWeather is in beta, it's still in active development. While releases are somewhat stable milestones of PyWeather, and while I do a quick QA pass (doing a full QA would take HOURS to complete) for each release, 99% of the time, something will break. So, there's your warning. Of course, if something breaks, you should report the issue. That's a good idea.
 
-## Why?
-Because I'd rather check my weather in a terminal. Unlike 99.98% of humans.
+## Why? Why should I check my weather in a terminal?
+It's cooler. I think.
 
 ## Setup
 I won't make you read the entire readme, so here's how to download PyWeather.
 
-Simple. Download a release from the releases tab, unzip it, and run setup.py. The script will walk you through installing necessary libraries, instructions for retrieving an API key, and making sure things run smooth.
+Download a release from the releases tab, unzip it, and run setup.py. The script will walk you through installing necessary libraries, instructions for retrieving an API key, letting you configure stuff, and making sure things work.
 
-After that, double click termweather.py, input a location, and that's it! No, really. That's actually it. No completed config files, none of that. setup.py, termweather.py. Welcome to the world of simplicity! \ (•◡•) /
+After that, double click pyweather.py, input a location, and that's it! No, really. That's actually it. No completed config files, none of that. setup.py, pyweather.py. Welcome to the world of simplicity! \ (•◡•) /
 
-
-If you have Git, and you'd prefer to clone over PyWeather from Git, you've got your options.
-
-Doing `git clone https://github.com/o355/pyweather.git` will clone PyWeather into your current folder. From testing, doing this should put PyWeather into a folder called "pyweather", but I'm not 100% sure. Use the option `--depth=1` as a precaution.
-
-If you want to have the latest stable version (0.5), you can checkout to the release branch, by doing `git checkout v0.5-beta`.
-
-If you want to live on the bleeding edge, nothing is required on your part, you'll have the latest updates as I code them (at the risk of things breaking). I don't do betas/RCs, as that's just a huge waste of time on my end. Doing `git pull` will let you get the latest updates, and I push updates Monday-Saturday, for the most part.
-
-The only thing that will probably annoy you when doing `git pull` to check for new updates, you'll likely need to stash your config.ini file, if you made changes. This will get solved in 0.5.1 beta, when I pull config.ini from the master branch.
-
-If PyWeather shows that a new update is available, starting with 0.5.1 beta, PyWeather will show you the branch tag in the updater, and you can just as well do `git pull`, and `git checkout`, and add the branch tag that was shown.
+If you have Git, and you'd prefer to clone over PyWeather from Git, please read the page on "Installing from Git" in the Wiki.
 
 ## What's PyWeather?
-PyWeather is a script I made to accomplish a few things.
+PyWeather was a script I made, because I couldn't find anything that I wanted (from a terminal-based weather machine)
 
-1. Make it easy for people to view the weather in Python.
-2. Make a fast way for people to view the weather, instead of having to wait for apps on their phone launch.
-3. Make a weather script that combines simplicity, and advanced features.
-4. Have a mostly modular weather script, that'll easily let you turn on/off features.
+1. Not have a library (because arguments suck)
+2. Have a simple way to set up the script/library (instead of browsing through about no setup documentation)
+3. Have something that actually works!
 
-I couldn't find any of this. None. Alas, PyWeather was born.
+Alas, PyWeather was born. It's a Python script that let's you view weather data (lots of it), is easy to set up, and it actually works.
 
-PyWeather is simple, it'll read you the forecast, and the current weather, but it's also easy to set up. Really easy. Yet, it contains lots of data for reading the almanac, previous weather, whatever. Plus, if you have a PWS from Wunderground, PyWeather (not presently) will let you view the weather for your PWS. Easy style.
+## What kind of features are in PyWeather?
+Even though PyWeather is in beta, it can presently do a lot. Here's what you can easily see in PyWeather.
+* A nice "summary" screen for a location
+* Detailed current information
+* The 36-hour hourly forecast
+* The 10 day hourly forecast
+* The 10 day forecast
+* The almanac
+* Sunrise/sunset/moonrise/moonset/moon data
+* Historical data
 
-PyWeather is pretty modular, and has some advanced configuration options. Using the config file, you can turn on/off options easily, and make PyWeather your own. It isn't completely modular, but maybe that'll come.
+But that's just half the story. I've also baked in loads of other features, too!
+* Color! Lots of color!
+* The setup script!
+* Verbosity for debugging!
+* An updater (it's basic. Quite basic)
+* Support for traceback printing!
+* A super-configurable config file!
+* No arguments!
+* API key backups!
+* A pretty simple to use UI!
 
-### What kind of data does PyWeather show?
+Oh, I should mention that PyWeather is faster than going to Wunderground, is ad-free (duh), and gets loads more data (that's pretty easy to view), and does it all without confusing you.
 
-Oh, and PyWeather is faster than opening up a web browser, going to the website, and letting it load. Seriously. I check my weather in PyWeather now.
-
-Pro tip: If you're on mobile, and have a Linux box with SSH, get the Termius app (iPhone/Android). A) It's the best SSH/Telnet app for mobile, B) It's fast at launching/connecting, so you can check weather on your phone in more-or-less the same amount of time. A full guide to configuring SSH (for Ubuntu/Debian because I've only used those OSes) is in the Wiki.
+Need mobile support? You could get Termux, but that doesn't work (tested it). The best option right now is to spin up a Linux box with SSH and PyWeather, and log into it using Termius (iPhone/Android).
 
 ## Contributing
-I'm not a full time Python developer, and I can't skip school (I need to learn). Between school, my other life projects (e.g. administering web servers, and creating other servers), and gaming on the weekends, and sleeping (I wish I didn't have to sleep), I don't have tons of Python development time. While during the week, I try to squeeze in 30-60 minutes of coding time a day, it isn't enough. That's why you can go ahead, and contribute to PyWeather.
+I'm not a full time Python developer, and I'm not about to skip school because I want to work on Python projects. Between school, and the other projects I work on (and gaming, too!), I try my best to get in Python coding time, but it's not enough. Coding all of 0.5 beta's new features took 3 weeks, because of the limited time I had. So, I'm open to contributions.
 
 Read over contributing.md in the .github folder to get a general rundown of how things work. After that, do your thing! Bug test, translate, submit some pull requests, you get the idea. Every contribution, bug report, etc, will get thanked in a release changelog!
