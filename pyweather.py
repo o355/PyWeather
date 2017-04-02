@@ -34,9 +34,9 @@ try:
     user_showUpdaterReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
     backupKeyLocation = config.get('KEYBACKUP', 'SAVELOCATION')
 except:
-    print("Couldn't load your config file. Make sure your spelling is correct.")
-    print("Setting variables to default...")
-    print("In case you need it, here's the traceback.")
+    print("""Couldn't load your config file. Make sure your spelling is correct.
+    \nSetting variables to default...
+    \nIn case you need it, here's the traceback.""")
     traceback.print_exc()
     sundata_summary = False
     almanac_summary = False
@@ -273,9 +273,9 @@ try:
         logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
 except:
     logger.warn("No connection to the API!! Is the connection offline?")
-    print("Can't connect to the API. Make sure that Wunderground's API " +
-          "is unblocked, and the internet is online.")
-    print("Also check if your API key is valid.")
+    print("""Can't connect to the API. Make sure that Wunderground's API is 
+            unblocked, and the internet is online.
+    \nAlso check if your API key is valid.""")
     logger.error("Here's the full traceback (for bug reports):")
     printException()
     print("Press enter to continue.")

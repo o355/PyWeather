@@ -17,9 +17,9 @@ try:
     jsonVerbosity = config.getboolean('VERBOSITY', 'setup_jsonverbosity')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'setup_tracebacks')
 except:
-    print("Couldn't load your config file. Make sure your spelling is correct.")
-    print("Setting variables to default...")
-    print("")
+    print("""Couldn't load your config file. Make sure your spelling is correct.
+    \nSetting variables to default...""")
+    
     verbosity = False
     jsonVerbosity = False
     tracebacksEnabled = False
@@ -46,9 +46,9 @@ elif tracebacksEnabled == True:
 else:
     logger.setLevel(logging.CRITICAL)
 
-print("Welcome to PyWeather setup.")
-print("This is meant to run as a one-time program, when you first get PyWeather.")
-print("Running preflight...")
+print("""Welcome to PyWeather setup.
+\nThis is meant to run as a one-time program, when you first get PyWeather.
+\nRunning preflight...""")
 
 if verbosity == True:
     logger.info("Starting, importing 4 default libraries...")
@@ -59,50 +59,50 @@ try:
     import time
 except:
     logger.warn("Odd, 4 default libraries are not available...")
-    print("Hmm...I tried to import default libraries, but ran into an error.")
-    print("Make sure that sys, urllib.request, shutil, and are available "
-          + "with your installation of Python.")
+    print("""Hmm...I tried to import default libraries, but ran into an error.
+    \nMake sure that sys, urllib.request, shutil, and are available with your 
+    installation of Python.""")
 neededLibraries = 0
 if sys.version_info[0] < 3:
     logger.error("Python 3 is needed to run. You're using version: %s"
                 % sys.version_info)
-    print("Shucks! I can't proceed any further.")
-    print("You'll need to install Python 3 to use PyWeather/PW Setup.")
-    print("Press enter to continue.")
+    print("""Shucks! I can't proceed any further.
+    \nYou'll need to install Python 3 to use PyWeather/PW Setup.
+    \nPress enter to continue.""")
     input()
     sys.exit()
 
-print("Before we get started, I want to confirm some permissions from you.")
-print("Is it okay if I use 1-5 MB of data (downloading libraries)" +
-      ", save a small text file called apikey.txt (> 2 KB)" +
-      ", and automatically install Python libraries?")
-print("Please input yes or no below:")
+print("""Before we get started, I want to confirm some permissions from you.
+\nIs it okay if I use 1-5 MB of data (downloading libraries), save a small 
+text file called apikey.txt (> 2 KB), and automatically install Python 
+libraries?
+\nPlease input yes or no below:""")
 confirmPermissions = input("Input here: ").lower()
 logger.debug("confirmPermissions: %s" % confirmPermissions)
 if confirmPermissions == "no":
     logger.debug("User denied permissions. Closing...")
-    print("Okay! Closing now.")
-    print("Press enter to exit.")
+    print("""Okay! Closing now.
+    \nPress enter to exit.""")
     input()
     sys.exit()
 elif confirmPermissions != "yes":
     logger.debug("Couldn't understand. Closing...")
-    print("I couldn't understand what you said.")
-    print("As a precaution, I won't proceed any further.")
-    print("Press enter to exit.")
+    print("""I couldn't understand what you said.
+    \nAs a precaution, I won't proceed any further.
+    \nPress enter to exit.""")
     input()
     sys.exit()
     
-print("Cool! Let's start.")
-print("I'm going to start by checking for necessary libraries (to run PyWeather).")
-print("This can take a moment, so please hold tight while I check!")
+print("""Cool! Let's start.
+\nI'm going to start by checking for necessary libraries (to run PyWeather).
+\nThis can take a moment, so please hold tight while I check!""")
 
 try:
     import pip
 except ImportError:
     logger.warn("pip is NOT installed! Asking user for automated install...")
-    print("Shucks! I need PIP to check for/install libraries.")
-    print("Can I install PIP for you? Yes or No.")
+    print("""Shucks! I need PIP to check for/install libraries.
+    \nCan I install PIP for you? Yes or No.""")
     pipConfirm = input("Input here: ").lower()
     logger.debug("pipConfirm: %s" % pipConfirm)
     if pipConfirm == "no":
@@ -113,11 +113,11 @@ except ImportError:
         sys.exit()
     elif pipConfirm == "yes":
         logger.info("User allowed PIP install. Starting...")
-        print("Okay!")
-        print("I'll download PIP's installer, and run it.")
-        print("Doing such uses about 2-4 MB of data, and will quit PW setup.")
-        print("When the setup script finishes, you'll need to run the setup script again.")
-        print("I'll start in a few seconds.")
+        print("""Okay!
+        \nI'll download PIP's installer, and run it.
+        \nDoing such uses about 2-4 MB of data, and will quit PW setup.
+        \nWhen the setup script finishes, you'll need to run the setup script again.
+        \nI'll start in a few seconds.""")
         time.sleep(3)
         print("Downloading the installer...")
         with urllib.request.urlopen('https://bootstrap.pypa.io/get-pip.py') as update_response, open('get-pip.py', 'wb') as update_out_file:
@@ -129,9 +129,9 @@ except ImportError:
         exec(open("get-pip.py").read())
     else:
         logger.warn("Couldn't understand the input. Closing...")
-        print("I didn't understand what you said.")
-        print("As a precaution, I'm closing setup, as I need PIP to continue.")
-        print("Press enter to exit.")
+        print("""I didn't understand what you said.
+        \nAs a precaution, I'm closing setup, as I need PIP to continue.
+        \nPress enter to exit.""")
         input()
         sys.exit()
 
@@ -218,10 +218,10 @@ else:
             logger.info("Colorama installed successfully.")
         except ImportError:
             logger.warn("Colorama was not installed successfully.")
-            print("Hmm...Colorama didn't install properly.")
-            print("Try executing 'pip install colorama' in a command shell.")
-            print("As a precaution, I'm now exiting. (Error 52, setup.py)")
-            print("Press enter to exit.")
+            print("""Hmm...Colorama didn't install properly.
+            \nTry executing 'pip install colorama' in a command shell.
+            \nAs a precaution, I'm now exiting. (Error 52, setup.py)
+            \nPress enter to exit.""")
             input()
             sys.exit()
         try:
@@ -229,10 +229,10 @@ else:
             logger.info("geopy installed successfully.")
         except ImportError:
             logger.warn("geopy was not installed successfully.")
-            print("Hmm...geopy didn't install properly.")
-            print("Try executing 'pip install geopy' in a command shell.")
-            print("As a precaution, I'm now exiting. (Error 52, setup.py)")
-            print("Press enter to exit..")
+            print("""Hmm...geopy didn't install properly.
+            \nTry executing 'pip install geopy' in a command shell.
+            \nAs a precaution, I'm now exiting. (Error 52, setup.py)
+            \nPress enter to exit..""")
             input()
             sys.exit()
         try:
@@ -240,102 +240,117 @@ else:
             logger.info("geocoder installed successfully.")
         except ImportError:
             logger.warn("geocoder was not installed successfully.")
-            print("Hmm...geocoder didn't install properly.")
-            print("Try executing 'pip install geocoder' in a command shell.")
-            print("As a precaution, I'm now exiting. (Error 52, setup.py)")
-            print("Press enter to exit.")
+            print("""Hmm...geocoder didn't install properly.
+            \nTry executing 'pip install geocoder' in a command shell.
+            \nAs a precaution, I'm now exiting. (Error 52, setup.py)
+            \nPress enter to exit.""")
             input()
             sys.exit()
         print("All libraries are good to go! Let's move on.")
     else:
         logger.warn("Input was not understood. Closing...")
-        print("I'm not sure what you said.")
-        print("As a precaution, I'm now closing.")
+        print("""I'm not sure what you said.
+        \nAs a precaution, I'm now closing.""")
         sys.exit()
 
 # Verbosity is not needed here.
-print("I'm now going to guide you through obtaining an API key.")
-print("Please carefully read my detailed instructions, so you don't mess anything up.")
+print("""\nI'm now going to guide you through obtaining an API key.
+Please carefully read my detailed instructions, so you don't mess anything up.""")
 
-print("Let's begin.")
-print("")
-print("Start by opening a web browser, and going to https://www.wunderground.com/weather/api/.")
-print("Press any key when you are done.")
+print("""\nLet's begin.
+Start by opening a web browser, and going to https://www.wunderground.com/weather/api/.
+Press any key when you are done.""")
 input()
-print("")
-print("Next, click the 'Explore my options' button.")
-print("Press any key when you are done.")
+print("""Next, click the 'Explore my options' button.
+Press any key when you are done.""")
 input()
-print("")
-print("Next, click the small button next to 'ANVIL PLAN'.")
-print("After that, confirm that the total underneath the 'Purchase Key' button says '$0 USD per month'")
-print("If the total underneath the 'Purchase Key' button doesn't say '$0 USD per month, " +
-      "please ensure that the small button next to 'Developer' on the table in the middle of the screen " +
-      "is selected, and the total says '$0 USD per month'")
-print("Press any key when you are done.")
+print("""Next, click the small button next to 'ANVIL PLAN'.
+After that, confirm that the total underneath the 'Purchase Key' button says 
+'$0 USD per month'. 
+If the total underneath the 'Purchase Key' button doesn't 
+say '$0 USD per month, please ensure that the small button next to 'Developer' 
+on the table in the middle of the screen is selected, and the total 
+says '$0 USD per month'
+Press any key when you are done.""")
 input()
-print("Next, click the 'Purchase Key' button.")
-print("Press any key when you are done.")
+print("""Next, click the 'Purchase Key' button. 
+Press any key when you are done.""")
 input()
-print("Next, input your email, and a password to sign up for a Weather Underground account.")
-print("Be sure to select the checkbox next to 'I agree to the Terms of Service'")
-print("It's best if you leave the checkbox next to 'I would like to receive WU updates via email' unchecked.")
-print("Press any key when you are done and ready.")
+print("""Next, input your email, and a password to sign up for a Weather 
+Underground account.
+Be sure to select the checkbox next to 'I agree to the Terms of Service'
+It's best if you leave the checkbox next to 'I would like to receive WU 
+updates via email' unchecked.
+Press any key when you are done and ready.""")
 input()
-print("Next, press the 'Sign up for free' button.")
-print("When the welcome window pops up, be sure to click the X button at the top right of the popup.")
-print("When clicking the X, you should be redirected to wunderground.com.")
-print("Press any key when you are done and ready.")
+print("""Next, press the 'Sign up for free' button.
+When the welcome window pops up, be sure to click the X button at the top right of the popup.
+When clicking the X, you should be redirected to wunderground.com.
+Press any key when you are done and ready.""")
 input()
-print("Next, click 'My Profile' at the top right corner of the homepage.")
-print("In the dropdown, click 'My Email & Text Alerts'")
-print("Press any key when you are done and ready.")
+print("""Next, click 'My Profile' at the top right corner of the homepage.
+In the dropdown, click 'My Email & Text Alerts'
+Press any key when you are done and ready.""")
 input()
-print("Next, next to your email listed on the page, click the 'Edit / Verify' button.")
-print("After you click the button, click the 'Verify Email' button.")
-print("Press any key when you are done and ready.")
+print("""Next, next to your email listed on the page, click the 'Edit / Verify' button.
+After you click the button, click the 'Verify Email' button.
+Press any key when you are done and ready.""")
 input()
-print("Next, check your email in which you signed up with.")
-print("If you got a letter from Weather Underground, titled 'Daily Forecast Email Verification'" +
-      ", open that letter, and click the link.")
-print("If you didn't get the letter, wait a few minutes, and be sure to check your spam folder.")
-print("Hint: If you followed this guide exactly, WU will not be sending you daily forecasts to your email.")
-print("Press any key when you are done and ready.")
+print("""Next, check your email in which you signed up with.
+If you got a letter from Weather Underground, titled 'Daily Forecast 
+Email Verification', open that letter, and click the link.
+If you didn't get the letter, wait a few minutes, and be sure to check your spam folder.
+Hint: If you followed this guide exactly, WU will not be sending you daily forecasts to your email.
+Press any key when you are done and ready.""")
 input()
-print("Your email should be verified.")
-print("Next, in your web browser, head back to https://www.wunderground.com/weather/api/.")
-print("Then, click the 'Explore my Options' button, again.")
-print("Press any key when you are done and ready.")
+print("""Your email should be verified.
+Next, in your web browser, head back to https://www.wunderground.com/weather/api/.
+Then, click the 'Explore my Options' button, again.
+Press any key when you are done and ready.""")
 input()
-print("Next, at the top of the page, make sure the button next to 'ANVIL PLAN' is selected.")
-print("After that, confirm that the total underneath the 'Purchase Key' button says '$0 USD per month'")
-print("If the total doesn't say that, in the pricing table, make sure the button next to 'Developer' is selected.")
-print("Press any key when you are done and ready.")
+print("""Next, at the top of the page, make sure the button next to 'ANVIL PLAN' 
+is selected.
+After that, confirm that the total underneath the 'Purchase Key' button says 
+'$0 USD per month'
+If the total doesn't say that, in the pricing table, make sure the button 
+next to 'Developer' is selected.
+Press any key when you are done and ready.""")
 input()
-print("Next, click the 'Purchase Key' button, on top of your total (which should be $0 USD per month)")
-print("Next, fill out the form, considering these tips:")
-print("For the contact name/email, it's recommended you use your real name (first name last initial is fine).")
-print("It's also recommended that you use your real email.")
-print("For the project name, put in something generic, like 'to use a script that uses WU's API', or 'PyWeather user'")
-print("For the project website, put in something generic, like 'google.com', or the homepage of PyWeather.")
-print("Hint: The homepage of PyWeather is github.com/o355/py")
-print("For the question 'Where will the API be used', answer Other.")
-print("For the question 'Will the API be used for commercial use?', answer No.")
-print("For the question 'Will the API be used for manufacturing mobile chip processing?', answer No.")
-print("Answer yes if you somehow are manufacturing mobile chip processing. I doubt you are, however.")
-print("For the country that you are based in, put your location.")
-print("Before we move on, fill out these forms, and press any key when you are done and ready.")
+print("""Next, click the 'Purchase Key' button, on top of your total (which 
+should be $0 USD per month)
+Next, fill out the form, considering these tips:
+For the contact name/email, it's recommended you use your real name 
+(first name last initial is fine).
+It's also recommended that you use your real email.
+For the project name, put in something generic, like 'to use a script that 
+uses WU's API', or 'PyWeather user'
+For the project website, put in something generic, like 'google.com', or 
+the homepage of PyWeather.
+Hint: The homepage of PyWeather is github.com/o355/py
+For the question 'Where will the API be used', answer Other.
+For the question 'Will the API be used for commercial use?', answer No.
+For the question 'Will the API be used for manufacturing mobile chip 
+processing?', answer No.
+Answer yes if you somehow are manufacturing mobile chip processing. I doubt 
+you are, however.
+For the country that you are based in, put your location.
+Before we move on, fill out these forms, and press any key when you are done 
+and ready.""")
 input()
-print("Next, for the brief description, put something like 'using an API key to use a script using Wunderground'.")
-print("After that, check both boxes at the bottom of the page. Read the ToS if you feel like it.")
-print("Finally, click 'Purchase Key'.")
-print("You should land on a page that says 'Edit API Key'.")
-print("Press any key when you are done and ready.")
+print("""Next, for the brief description, put something like 'using an API key 
+to use a script using Wunderground'.
+After that, check both boxes at the bottom of the page. Read the ToS if you 
+feel like it.
+Finally, click 'Purchase Key'.
+You should land on a page that says 'Edit API Key'.
+Press any key when you are done and ready.""")
 input()
-print("In the table to the left of the page, copy the text that's under Key ID. (Ctrl+C, right click)")
-print("I'm now going to ask you to input the API key into the text entry below.")
-print("The API key will be saved to storage/apikey.txt, so PyWeather can easily pull it up.")
-print("Press any key when you are done and ready.")
+print("""In the table to the left of the page, copy the text that's under Key ID. 
+(Ctrl+C, right click)
+I'm now going to ask you to input the API key into the text entry below.
+The API key will be saved to storage/apikey.txt, so PyWeather can easily 
+pull it up.
+Press any key when you are done and ready.""")
 input()
 print("Please input your API key below.")
 apikey_input = input("Input here: ")
@@ -380,9 +395,9 @@ if backup_APIkey == "yes":
 print("Let's configure a few options for PyWeather.")
 logger.debug("config: %s" % config)
 
-print("On the summary screen, would you like to show sunrise/sunset times?")
-print("By default, this is disabled.")
-print("Yes or No.")
+print("""\nOn the summary screen, would you like to show sunrise/sunset times?
+By default, this is disabled.
+Yes or No.""")
 sundata_Summary = input("Input here: ").lower()
 logger.debug("sundata_Summary: %s" % sundata_Summary)
 if sundata_Summary == "yes":
@@ -397,10 +412,9 @@ else:
     config['SUMMARY']['sundata_summary'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
    
-print("")  
-print("On the summary screen, would you like to show almanac data?")
-print("By default, this is disabled.")
-print("Yes or No.")
+print("""\nOn the summary screen, would you like to show almanac data?
+By default, this is disabled.
+Yes or No.""")
 almanacdata_Summary = input("Input here: ").lower()
 logger.debug("almanacdata_Summary: %s" % almanacdata_Summary)
 if almanacdata_Summary == "yes":
@@ -415,10 +429,9 @@ else:
     config['SUMMARY']['almanac_summary'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("") 
-print("On boot, would you like PyWeather to check for updates?")
-print("By default, this is disabled, due to a load time increase of ~2-5 seconds.")
-print("Yes or No.")
+print("""\nOn boot, would you like PyWeather to check for updates?
+By default, this is disabled, due to a load time increase of ~2-5 seconds.
+Yes or No.""")
 checkForUpdates = input("Input here: ").lower()
 logger.debug("checkForUpdates: %s" % checkForUpdates)
 if checkForUpdates == "yes":
@@ -447,9 +460,9 @@ try:
     logger.debug("json is available.")
 except:
     logger.warn("json isn't available...very odd...")
-    print("json is not available. This is odd, it's a default library.")
-    print("Try installing a usual Python install.")
-    print("Press enter to exit.")
+    print("""json is not available. This is odd, it's a default library.
+    Try installing a usual Python install.
+    Press enter to exit.""")
     input()
     sys.exit()
 try:
@@ -457,9 +470,9 @@ try:
     logger.debug("codecs is available.")
 except:
     logger.warn("codecs isn't available...very odd...")
-    print("codecs is not available. This is odd, it's a default library.")
-    print("Try installing a usual Python install.")
-    print("Press enter to exit.")
+    print("""codecs is not available. This is odd, it's a default library.
+    Try installing a usual Python install.
+    Press enter to exit.""")
     input()
     sys.exit()
 
@@ -474,9 +487,9 @@ try:
     logger.debug("testJSON: %s" % testJSON)
 except:
     logger.warn("Couldn't connect to Wunderground's API! No internet?")
-    print("We ran into an error. Make sure Wunderground's API is unblocked, "
-          + "and you have an internet connection.")
-    print("Press enter to exit.")
+    print("""We ran into an error. Make sure Wunderground's API is unblocked, and 
+            you have an internet connection.
+    Press enter to exit.""")
     input()
     sys.exit()
     
@@ -534,9 +547,8 @@ except:
     input()
     sys.exit()
 
-print("")
-print("Everything is set up and ready to rumble!")
-print("Enjoy using PyWeather! If you have any issues, please report them on GitHub!")
-print("Press enter to continue.")
+print("""\nEverything is set up and ready to rumble!
+Enjoy using PyWeather! If you have any issues, please report them on GitHub!
+Press enter to continue.""")
 input()
 sys.exit()
