@@ -9,7 +9,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds a separate config.py script, to configure all available options.
 * Adds the ability to control where the backup API key will be stored in the setup script.
 
-## version 0.5.1 beta - Should be released on 4/10/2017
+## version 0.5.1 beta - Should be released on 4/15/2017
 
 **NEW FEATURES/REMOVALS:**
 * Removes if verbosity == True in the separate updater, and keybackup scripts. - Done, and tested!
@@ -18,10 +18,12 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the logger displaying configuration options at the start of every script - Should be finished by 4/3
 * Catches up the setup file with the new configuration options added in 0.5 beta. - Should be finished by 4/6
 * Rewrites multiline prints (thanks to @gsilvapt for the PR/notifing me of the issue) - Should be finished by 4/10
+* Fixes up the UI for historical hourly information, and changes it to correspond with a bug found - Should be finished by 4/15
 
 **BUG FIXES:**
 * Fixes a bug in which if the config file wouldn't load in the updater, the variable showReleaseTag wouldn't get defined, and it would presumably crash.
 * Fixes a bug in which in the keybackup script, the logger name was not `pyweather_keybackup_0.5beta` (it was instead `pyweather_keybackup_0.4.2beta`.
+* Will fix a bug in which if Wunderground gave >60 minute intervals for historical hourly information, PyWeather would only display 24 iterations. With this, the iteration counting is gone, as that isn't reliable any more.
 
 ## version 0.5 beta (The Back to the Future Update) - Released on 3/31/2017
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.
