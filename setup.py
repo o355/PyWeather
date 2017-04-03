@@ -60,64 +60,70 @@ try:
 except:
     logger.warn("Odd, 4 default libraries are not available...")
     print("""Hmm...I tried to import default libraries, but ran into an error.
-    \nMake sure that sys, urllib.request, shutil, and are available with your 
+    Make sure that sys, urllib.request, shutil, and are available with your 
     installation of Python.""")
+    logger.error("Here's the full traceback:")
+    printException()
 neededLibraries = 0
 if sys.version_info[0] < 3:
     logger.error("Python 3 is needed to run. You're using version: %s"
                 % sys.version_info)
     print("""Shucks! I can't proceed any further.
-    \nYou'll need to install Python 3 to use PyWeather/PW Setup.
-    \nPress enter to continue.""")
+    You'll need to install Python 3 to use PyWeather/PW Setup.""")
+    logger.error("Here's the full traceback:")
+    printException()
+    print("Press enter to continue.")
     input()
     sys.exit()
 
 print("""Before we get started, I want to confirm some permissions from you.
-\nIs it okay if I use 1-5 MB of data (downloading libraries), save a small 
+Is it okay if I use 1-5 MB of data (downloading libraries), save a small 
 text file called apikey.txt (> 2 KB), and automatically install Python 
 libraries?
-\nPlease input yes or no below:""")
+Please input yes or no below:""")
 confirmPermissions = input("Input here: ").lower()
 logger.debug("confirmPermissions: %s" % confirmPermissions)
 if confirmPermissions == "no":
     logger.debug("User denied permissions. Closing...")
     print("""Okay! Closing now.
-    \nPress enter to exit.""")
+    Press enter to exit.""")
     input()
     sys.exit()
 elif confirmPermissions != "yes":
     logger.debug("Couldn't understand. Closing...")
     print("""I couldn't understand what you said.
-    \nAs a precaution, I won't proceed any further.
-    \nPress enter to exit.""")
+    As a precaution, I won't proceed any further.
+    Press enter to exit.""")
     input()
     sys.exit()
     
 print("""Cool! Let's start.
-\nI'm going to start by checking for necessary libraries (to run PyWeather).
-\nThis can take a moment, so please hold tight while I check!""")
+I'm going to start by checking for necessary libraries (to run PyWeather).
+This can take a moment, so please hold tight while I check!""")
 
 try:
     import pip
 except ImportError:
     logger.warn("pip is NOT installed! Asking user for automated install...")
+    logger.warn("Here's the traceback:")
+    printException_loggerinfo()
     print("""Shucks! I need PIP to check for/install libraries.
-    \nCan I install PIP for you? Yes or No.""")
+    Can I install PIP for you? Yes or No.""")
     pipConfirm = input("Input here: ").lower()
     logger.debug("pipConfirm: %s" % pipConfirm)
     if pipConfirm == "no":
         logger.info("User denied PIP install, closing...")
-        print("Okay! I'm closing setup, as I need PIP to continue.")
-        print("Press enter to exit.")
+        print("""Okay! I'm closing setup, as I need PIP to continue.
+        Press enter to continue.""")
         input()
         sys.exit()
     elif pipConfirm == "yes":
         logger.info("User allowed PIP install. Starting...")
         print("""Okay!
-        \nI'll download PIP's installer, and run it.
-        \nDoing such uses about 2-4 MB of data, and will quit PW setup.
-        \nWhen the setup script finishes, you'll need to run the setup script again.
-        \nI'll start in a few seconds.""")
+        I'll download PIP's installer, and run it.
+        Doing such uses about 2-4 MB of data, and will quit PW setup.
+        When the setup script finishes, you'll need to run the setup script again.
+        I'll start in a few seconds.""")
         time.sleep(3)
         print("Downloading the installer...")
         with urllib.request.urlopen('https://bootstrap.pypa.io/get-pip.py') as update_response, open('get-pip.py', 'wb') as update_out_file:
@@ -130,8 +136,8 @@ except ImportError:
     else:
         logger.warn("Couldn't understand the input. Closing...")
         print("""I didn't understand what you said.
-        \nAs a precaution, I'm closing setup, as I need PIP to continue.
-        \nPress enter to exit.""")
+        As a precaution, I'm closing setup, as I need PIP to continue.
+        Press enter to exit.""")
         input()
         sys.exit()
 
@@ -143,7 +149,8 @@ try:
 except ImportError:
     coloramaInstalled = False
     neededLibraries = neededLibraries + 1
-    logger.warn("Colorama is not installed.")
+    logger.warn("Colorama is not installed. Here's the traceback:")
+    printException_loggerinfo()
     logger.debug("coloramaInstalled: %s ; neededLibraries: %s"
                 % (coloramaInstalled, neededLibraries))
     
@@ -155,7 +162,8 @@ try:
 except ImportError:
     geopyInstalled = False
     neededLibraries = neededLibraries + 1
-    logger.warn("geopy is NOT installed.")
+    logger.warn("geopy is NOT installed. Here's the traceback:")
+    printException_loggerinfo()
     logger.debug("geopyInstalled: %s ; neededLibraries: %s"
                 % (geopyInstalled, neededLibraries))
     
@@ -167,7 +175,8 @@ try:
 except ImportError:
     geocoderInstalled = False
     neededLibraries = neededLibraries + 1
-    logger.info("geocoder is NOT installed.")
+    logger.info("geocoder is NOT installed. Here's the traceback:")
+    printException_loggerinfo()
     logger.debug("geocoderInstalled: %s ; neededLibraries: %s"
                  % (geocoderInstalled, neededLibraries))
     
@@ -218,10 +227,12 @@ else:
             logger.info("Colorama installed successfully.")
         except ImportError:
             logger.warn("Colorama was not installed successfully.")
+            logger.error("Here's the traceback:")
+            printException()
             print("""Hmm...Colorama didn't install properly.
-            \nTry executing 'pip install colorama' in a command shell.
-            \nAs a precaution, I'm now exiting. (Error 52, setup.py)
-            \nPress enter to exit.""")
+            Try executing 'pip install colorama' in a command shell.
+            As a precaution, I'm now exiting. (Error 52, setup.py)
+            Press enter to exit.""")
             input()
             sys.exit()
         try:
@@ -229,10 +240,12 @@ else:
             logger.info("geopy installed successfully.")
         except ImportError:
             logger.warn("geopy was not installed successfully.")
+            logger.error("Here's the traceback:")
+            printException()
             print("""Hmm...geopy didn't install properly.
-            \nTry executing 'pip install geopy' in a command shell.
-            \nAs a precaution, I'm now exiting. (Error 52, setup.py)
-            \nPress enter to exit..""")
+            Try executing 'pip install geopy' in a command shell.
+            As a precaution, I'm now exiting. (Error 52, setup.py)
+            Press enter to exit..""")
             input()
             sys.exit()
         try:
@@ -240,24 +253,26 @@ else:
             logger.info("geocoder installed successfully.")
         except ImportError:
             logger.warn("geocoder was not installed successfully.")
+            logger.error("Here's the traceback:")
+            printException()
             print("""Hmm...geocoder didn't install properly.
-            \nTry executing 'pip install geocoder' in a command shell.
-            \nAs a precaution, I'm now exiting. (Error 52, setup.py)
-            \nPress enter to exit.""")
+            Try executing 'pip install geocoder' in a command shell.
+            As a precaution, I'm now exiting. (Error 52, setup.py)
+            Press enter to exit.""")
             input()
             sys.exit()
         print("All libraries are good to go! Let's move on.")
     else:
         logger.warn("Input was not understood. Closing...")
         print("""I'm not sure what you said.
-        \nAs a precaution, I'm now closing.""")
+        As a precaution, I'm now closing.""")
         sys.exit()
 
 # Verbosity is not needed here.
-print("""\nI'm now going to guide you through obtaining an API key.
+print("""I'm now going to guide you through obtaining an API key.
 Please carefully read my detailed instructions, so you don't mess anything up.""")
 
-print("""\nLet's begin.
+print("""Let's begin.
 Start by opening a web browser, and going to https://www.wunderground.com/weather/api/.
 Press any key when you are done.""")
 input()
@@ -459,7 +474,8 @@ try:
     import json
     logger.debug("json is available.")
 except:
-    logger.warn("json isn't available...very odd...")
+    logger.warn("json isn't available...that's odd.")
+    
     print("""json is not available. This is odd, it's a default library.
     Try installing a usual Python install.
     Press enter to exit.""")
@@ -469,7 +485,8 @@ try:
     import codecs
     logger.debug("codecs is available.")
 except:
-    logger.warn("codecs isn't available...very odd...")
+    logger.warn("codecs isn't available. Here's the traceback:")
+    printException_loggerinfo()
     print("""codecs is not available. This is odd, it's a default library.
     Try installing a usual Python install.
     Press enter to exit.""")
