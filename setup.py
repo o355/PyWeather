@@ -243,9 +243,9 @@ else:
             logger.error("Here's the traceback:")
             printException()
             print("""Hmm...geopy didn't install properly.
-            Try executing 'pip install geopy' in a command shell.
-            As a precaution, I'm now exiting. (Error 52, setup.py)
-            Press enter to exit..""")
+Try executing 'pip install geopy' in a command shell.
+As a precaution, I'm now exiting. (Error 52, setup.py)
+Press enter to exit..""")
             input()
             sys.exit()
         try:
