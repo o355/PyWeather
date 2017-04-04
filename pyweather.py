@@ -106,7 +106,7 @@ def printException_loggerinfo():
 
 logger.debug("Begin API keyload...")
 try:
-    apikey_load = open('storage//apiky.txt')
+    apikey_load = open('storage//apikey.txt')
     logger.debug("apikey_load = %s" % apikey_load)
     apikey = apikey_load.read()
 except FileNotFoundError:
