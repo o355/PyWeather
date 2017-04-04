@@ -17,8 +17,8 @@ try:
     jsonVerbosity = config.getboolean('VERBOSITY', 'setup_jsonverbosity')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'setup_tracebacks')
 except:
-    print("""Couldn't load your config file. Make sure your spelling is correct.
-    \nSetting variables to default...""")
+    print("Couldn't load your config file. Make sure your spelling is correct.",
+          "Setting variables to default...", sep="\n")
     
     verbosity = False
     jsonVerbosity = False
@@ -34,7 +34,7 @@ def printException_loggerinfo():
         
     
 import logging
-logger = logging.getLogger('pyweather_setup_0.5beta')
+logger = logging.getLogger('pyweather_setup_0.5.1beta')
 logger.setLevel(logging.DEBUG)
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
@@ -46,9 +46,9 @@ elif tracebacksEnabled == True:
 else:
     logger.setLevel(logging.CRITICAL)
 
-print("""Welcome to PyWeather setup.
-\nThis is meant to run as a one-time program, when you first get PyWeather.
-\nRunning preflight...""")
+print("Welcome to PyWeather setup.",
+      "This is meant to run as a one-time program, when you first get PyWeather.",
+      "Running preflight...", sep="\n")
 
 if verbosity == True:
     logger.info("Starting, importing 4 default libraries...")
@@ -59,47 +59,47 @@ try:
     import time
 except:
     logger.warn("Odd, 4 default libraries are not available...")
-    print("""Hmm...I tried to import default libraries, but ran into an error.
-    Make sure that sys, urllib.request, shutil, and are available with your 
-    installation of Python.""")
+    print("Hmm...I tried to import default libraries, but ran into an error.",
+          "Make sure that sys, urllib.request, shutil, and are available with your",
+          "installation of Python.", sep="\n")
     logger.error("Here's the full traceback:")
     printException()
 neededLibraries = 0
 if sys.version_info[0] < 3:
     logger.error("Python 3 is needed to run. You're using version: %s"
                 % sys.version_info)
-    print("""Shucks! I can't proceed any further.
-    You'll need to install Python 3 to use PyWeather/PW Setup.""")
+    print("Shucks! I can't proceed any further.",
+          "You'll need to install Python 3 to use PyWeather/PW Setup.", sep="\n")
     logger.error("Here's the full traceback:")
     printException()
     print("Press enter to continue.")
     input()
     sys.exit()
-
-print("""Before we get started, I want to confirm some permissions from you.
-Is it okay if I use 1-5 MB of data (downloading libraries), save a small 
-text file called apikey.txt (> 2 KB), and automatically install Python 
-libraries?
-Please input yes or no below:""")
+# How to create a new line in 3 characters.
+print("","Before we get started, I want to confirm some permissions from you.",
+      "Is it okay if I use 1-5 MB of data (downloading libraries), save a small",
+      "text file called apikey.txt (> 2 KB), and automatically install Python", 
+      "libraries?","",
+      "Please input yes or no below:", sep="\n")
 confirmPermissions = input("Input here: ").lower()
 logger.debug("confirmPermissions: %s" % confirmPermissions)
 if confirmPermissions == "no":
     logger.debug("User denied permissions. Closing...")
-    print("""Okay! Closing now.
-    Press enter to exit.""")
+    print("Okay! Closing now.",
+          "Press enter to exit.", sep="\n")
     input()
     sys.exit()
 elif confirmPermissions != "yes":
     logger.debug("Couldn't understand. Closing...")
-    print("""I couldn't understand what you said.
-    As a precaution, I won't proceed any further.
-    Press enter to exit.""")
+    print("I couldn't understand what you said.",
+          "As a precaution, I won't proceed any further.",
+          "Press enter to exit.", sep="\n")
     input()
     sys.exit()
     
-print("""Cool! Let's start.
-I'm going to start by checking for necessary libraries (to run PyWeather).
-This can take a moment, so please hold tight while I check!""")
+print("","Cool! Let's start.",
+      "I'm going to start by checking for necessary libraries (to run PyWeather)."
+      "This can take a moment, so please hold tight while I check!", sep="\n")
 
 try:
     import pip
@@ -107,23 +107,23 @@ except ImportError:
     logger.warn("pip is NOT installed! Asking user for automated install...")
     logger.warn("Here's the traceback:")
     printException_loggerinfo()
-    print("""Shucks! I need PIP to check for/install libraries.
-    Can I install PIP for you? Yes or No.""")
+    print("","Shucks! I need PIP to check for/install libraries.",
+    "Can I install PIP for you? Yes or No.", sep="\n")
     pipConfirm = input("Input here: ").lower()
     logger.debug("pipConfirm: %s" % pipConfirm)
     if pipConfirm == "no":
         logger.info("User denied PIP install, closing...")
-        print("""Okay! I'm closing setup, as I need PIP to continue.
-        Press enter to continue.""")
+        print("","Okay! I'm closing setup, as I need PIP to continue.",
+        "Press enter to continue.", sep="\n")
         input()
         sys.exit()
     elif pipConfirm == "yes":
         logger.info("User allowed PIP install. Starting...")
-        print("""Okay!
-        I'll download PIP's installer, and run it.
-        Doing such uses about 2-4 MB of data, and will quit PW setup.
-        When the setup script finishes, you'll need to run the setup script again.
-        I'll start in a few seconds.""")
+        print("","Okay!",
+        "I'll download PIP's installer, and run it.",
+        "Doing such uses about 2-4 MB of data, and will quit PW setup.",
+        "When the setup script finishes, you'll need to run the setup script again."
+        "I'll start in a few seconds.", sep="\n")
         time.sleep(3)
         print("Downloading the installer...")
         with urllib.request.urlopen('https://bootstrap.pypa.io/get-pip.py') as update_response, open('get-pip.py', 'wb') as update_out_file:
@@ -135,9 +135,9 @@ except ImportError:
         exec(open("get-pip.py").read())
     else:
         logger.warn("Couldn't understand the input. Closing...")
-        print("""I didn't understand what you said.
-        As a precaution, I'm closing setup, as I need PIP to continue.
-        Press enter to exit.""")
+        print("","I didn't understand what you said.",
+        "As a precaution, I'm closing setup, as I need PIP to continue.",
+        "Press enter to exit.", sep="\n")
         input()
         sys.exit()
 
@@ -242,10 +242,10 @@ else:
             logger.warn("geopy was not installed successfully.")
             logger.error("Here's the traceback:")
             printException()
-            print("""Hmm...geopy didn't install properly.
-Try executing 'pip install geopy' in a command shell.
-As a precaution, I'm now exiting. (Error 52, setup.py)
-Press enter to exit..""")
+            print("Hmm...geopy didn't install properly."
+                  "Try executing 'pip install geopy' in a command shell."
+                  "As a precaution, I'm now exiting. (Error 52, setup.py)"
+                  "Press enter to exit..", sep="\n")
             input()
             sys.exit()
         try:
