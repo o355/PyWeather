@@ -186,6 +186,6 @@ You can save it anywhere in PyWeather's folder. However, you'll want to take not
 
 2. When you want your backup key in a folder, instead of doing "/" or "\" for the folder (e.g. test/test.txt, or test\test.txt), you'll want to use "//" instead. (e.g. test//test.txt)
 
-3. The file extension has to end in .txt. I don't know what happens if you decide to use .md, or some other foreign file format.
+3. The file extension is no more. PyWeather will automatically save the backup key document as backkey.txt, to prevent conflicts.
 
-**Default option: backup//backkey.txt**
+**Default option: backup//**

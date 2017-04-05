@@ -26,10 +26,12 @@ except:
     
 def printException():
     if tracebacksEnabled == True:
+        print("Here's the full traceback:")
         traceback.print_exc()
         
 def printException_loggerinfo():
     if verbosity == True:
+        logger.info("Oh snap! We ran into a non-critical error. Here's the traceback.")
         logger.info(traceback.print_exc())
         
     
@@ -98,7 +100,7 @@ elif confirmPermissions != "yes":
     sys.exit()
     
 print("","Cool! Let's start.",
-      "I'm going to start by checking for necessary libraries (to run PyWeather)."
+      "I'm going to start by checking for necessary libraries (to run PyWeather).",
       "This can take a moment, so please hold tight while I check!", sep="\n")
 
 try:
@@ -413,7 +415,8 @@ if backup_APIkey == "yes":
         logger.debug("Performed 3 ops. Overwrite "+ folder_argument + "backkey.txt, write to backkey.txt" + 
                      ", and close backkey.txt.")
     except:
-        print("Could not find the location you input. Creating backup key in default folder...")
+        print("Could not find the location you wanted. Defaulting on the normal directory...")
+        printException_loggerinfo()
         print("Creating backup...")
         open("backup//backkey.txt", 'w').close()
         open("backup//backkey.txt", 'a').write(apikey_input)
@@ -505,8 +508,9 @@ except:
     logger.warn("codecs isn't available. Here's the traceback:")
     printException_loggerinfo()
     print("""codecs is not available. This is odd, it's a default library.
-    Try installing a usual Python install.
-    Press enter to exit.""")
+    Try installing a usual Python install.""")
+    printException()
+    print("Press enter to exit.")
     input()
     sys.exit()
 
@@ -522,8 +526,9 @@ try:
 except:
     logger.warn("Couldn't connect to Wunderground's API! No internet?")
     print("""We ran into an error. Make sure Wunderground's API is unblocked, and 
-            you have an internet connection.
-    Press enter to exit.""")
+            you have an internet connection.""")
+    printException()
+    print("Press enter to exit.")
     input()
     sys.exit()
     
@@ -538,6 +543,7 @@ try:
 except:
     logger.warn("Error! Is the API key invalid?")
     print("We ran into an error. Make sure your API key is valid.")
+    printException()
     print("Press enter to exit.")
     input()
     sys.exit()
@@ -559,6 +565,7 @@ except:
     logger.warn("Couldn't connect to Google's geocoder. No internet?")
     print("We ran into an error. Make sure Google's geocoder is unblocked, " +
           "and you have an internet connection.")
+    printException()
     print("Press enter to exit.")
     input()
     sys.exit()
@@ -577,6 +584,7 @@ except:
     logger.warn("Couldn't connect to Google's geocoder. No internet?")
     print("We ran into an error. Make sure Google's Geolocator is unblocked, " +
           "and you have an internet connection.")
+    printException()
     print("Press enter to exit.")
     input()
     sys.exit()
