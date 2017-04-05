@@ -395,16 +395,33 @@ with open("storage//apikey.txt", 'a') as out:
    
 print("I can also back up your API key, in case you do something wrong.")
 # A future release should bring customization as to the storage location.
-print("The backup text file would be stored at backup/backkey.txt.")
 print("Would you like me to save a backup? Yes or no.")
 backup_APIkey = input("Input here: ").lower()
 if backup_APIkey == "yes":
-    print("Creating a backup...")
-    open("backup//backkey.txt", 'w').close()
-    open("backup//backkey.txt", 'a').write(apikey_input)
-    open("backup//backkey.txt").close()
-    logger.debug("Performed 3 ops. Overwrite backup//backkey.txt, write to backkey.txt" + 
-                 ", and close backkey.txt.")    
+    print("Where would you want me to backup the key to?")
+    print("This is a directory. If I wanted my key at directory/backkey.txt,",
+          "You would enter 'directory//'.", sep="\n")
+    backup_APIkeydir = input("Input here: ")
+    try:
+        folder_argument = backup_APIkeydir + "//backkey.txt"
+        print("Creating a backup...")
+        open(folder_argument, 'w+').close()
+        open(folder_argument, 'a').write(apikey_input)
+        open(folder_argument).close()
+        config.read('storage//config.ini')
+        config['KEYBACKUP']['savedirectory'] = backup_APIkeydir
+        logger.debug("Performed 3 ops. Overwrite "+ folder_argument + "backkey.txt, write to backkey.txt" + 
+                     ", and close backkey.txt.")
+    except:
+        print("Could not find the location you input. Creating backup key in default folder...")
+        print("Creating backup...")
+        open("backup//backkey.txt", 'w').close()
+        open("backup//backkey.txt", 'a').write(apikey_input)
+        open("backup//backkey.txt").close()
+        config.read('storage//config.ini')
+        config['KEYBACKUP']['savelocation'] = 'backup//'
+        logger.debug("Performed 3 ops. Overwrite backup//backkey.txt, write to backkey.txt" + 
+                     ", and close backkey.txt.")
 # once a config file is properly added, options for configuring the config will go here
 
 print("Let's configure a few options for PyWeather.")
