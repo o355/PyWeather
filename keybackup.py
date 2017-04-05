@@ -9,7 +9,7 @@ config.read('storage//config.ini')
 
 try:
     verbosity = config.getboolean('VERBOSITY', 'keybackup_verbosity')
-    saveLocation = config.get('KEYBACKUP', 'savelocation')
+    saveDirectory = config.get('KEYBACKUP', 'savedirectory')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'keybackup_tracebacks')
 except:
     print("Could not load your config. Make sure your spelling is correct.")
@@ -36,17 +36,32 @@ confirmation = input("Input here: ").lower()
 logger.debug("confirmation: %s" % confirmation)
 if confirmation == "yes":
     logger.info("Selected yes - Backup key")
-    print("Backing up your key...")
+    print("Backing up your key.")
     apikey = open('storage//apikey.txt')
     apikey2 = apikey.read()
-    open(saveLocation, 'w').close()
+    saveLocation = saveDirectory + "backkey.txt"
+    try:
+        open(saveLocation, 'w').close()
+    except:
+        print("We ran into an error when overwriting a possibly existing file.",
+              "Please try again, and make sure your config file has the right spelling.",
+              "Press enter to continue.", sep="\n")
+        input()
+        sys.exit()
     logger.debug("apikey: %s" % apikey)
     logger.debug("Performed op: Delete %s" % saveLocation)
-    with open(saveLocation, 'a') as out:
-        logger.debug("out: %s" % out)
-        out.write(apikey2)
-        out.close()
-        logger.debug("Performed ops: out.write(apikey2), out.close()")
+    try:
+        with open(saveLocation, 'a') as out:
+            logger.debug("out: %s" % out)
+            out.write(apikey2)
+            out.close()
+            logger.debug("Performed ops: out.write(apikey2), out.close()")
+    except:
+        print("We ran into an error when writing to the backup file.",
+              "Please try again, and make sure your config file has the right spelling.",
+              "Press enter to continue.", sep="\n")
+        input()
+        sys.exit()
     print("Done!")
     print("Press enter to exit.")
     input()
