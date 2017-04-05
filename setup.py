@@ -107,7 +107,6 @@ try:
     import pip
 except ImportError:
     logger.warn("pip is NOT installed! Asking user for automated install...")
-    logger.warn("Here's the traceback:")
     printException_loggerinfo()
     print("","Shucks! I need PIP to check for/install libraries.",
     "Can I install PIP for you? Yes or No.", sep="\n")
@@ -128,10 +127,18 @@ except ImportError:
         "I'll start in a few seconds.", sep="\n")
         time.sleep(3)
         print("Downloading the installer...")
-        with urllib.request.urlopen('https://bootstrap.pypa.io/get-pip.py') as update_response, open('get-pip.py', 'wb') as update_out_file:
-            logger.debug("update_response: %s ; update_out_file: %s"
-                        % (update_response, update_out_file))
-            shutil.copyfileobj(update_response, update_out_file)
+        try:
+            with urllib.request.urlopen('https://bootstrap.pypa.io/get-pip.py') as update_response, open('get-pip.py', 'wb') as update_out_file:
+                logger.debug("update_response: %s ; update_out_file: %s"
+                             % (update_response, update_out_file))
+                shutil.copyfileobj(update_response, update_out_file)
+        except:
+            print("Can't download the PIP installer.",
+                  "Make sure bootstrap.pypa.io is unblocked.", sep="\n")
+            printException()
+            print("Press enter to exit.")
+            input()
+            sys.exit()
         print("Running the installer...")
         logger.debug("Executing get-pip.py...")
         exec(open("get-pip.py").read())
@@ -151,7 +158,7 @@ try:
 except ImportError:
     coloramaInstalled = False
     neededLibraries = neededLibraries + 1
-    logger.warn("Colorama is not installed. Here's the traceback:")
+    logger.warn("Colorama is not installed.")
     printException_loggerinfo()
     logger.debug("coloramaInstalled: %s ; neededLibraries: %s"
                 % (coloramaInstalled, neededLibraries))
@@ -164,7 +171,7 @@ try:
 except ImportError:
     geopyInstalled = False
     neededLibraries = neededLibraries + 1
-    logger.warn("geopy is NOT installed. Here's the traceback:")
+    logger.warn("geopy is NOT installed.")
     printException_loggerinfo()
     logger.debug("geopyInstalled: %s ; neededLibraries: %s"
                 % (geopyInstalled, neededLibraries))
@@ -177,7 +184,7 @@ try:
 except ImportError:
     geocoderInstalled = False
     neededLibraries = neededLibraries + 1
-    logger.info("geocoder is NOT installed. Here's the traceback:")
+    logger.info("geocoder is NOT installed.")
     printException_loggerinfo()
     logger.debug("geocoderInstalled: %s ; neededLibraries: %s"
                  % (geocoderInstalled, neededLibraries))
@@ -229,12 +236,11 @@ else:
             logger.info("Colorama installed successfully.")
         except ImportError:
             logger.warn("Colorama was not installed successfully.")
-            logger.error("Here's the traceback:")
+            print("Hmm...Colorama didn't install properly.",
+            "Try executing 'pip install colorama' in a command shell.",
+            "As a precaution, I'm now exiting. (Error 52, setup.py)", sep="\n")
             printException()
-            print("""Hmm...Colorama didn't install properly.
-            Try executing 'pip install colorama' in a command shell.
-            As a precaution, I'm now exiting. (Error 52, setup.py)
-            Press enter to exit.""")
+            print("Press enter to exit.")
             input()
             sys.exit()
         try:
@@ -242,12 +248,11 @@ else:
             logger.info("geopy installed successfully.")
         except ImportError:
             logger.warn("geopy was not installed successfully.")
-            logger.error("Here's the traceback:")
+            print("Hmm...geopy didn't install properly.",
+                  "Try executing 'pip install geopy' in a command shell.",
+                  "As a precaution, I'm now exiting. (Error 52, setup.py)", sep="\n")
             printException()
-            print("Hmm...geopy didn't install properly."
-                  "Try executing 'pip install geopy' in a command shell."
-                  "As a precaution, I'm now exiting. (Error 52, setup.py)"
-                  "Press enter to exit..", sep="\n")
+            print("Press enter to exit.")
             input()
             sys.exit()
         try:
@@ -255,12 +260,11 @@ else:
             logger.info("geocoder installed successfully.")
         except ImportError:
             logger.warn("geocoder was not installed successfully.")
-            logger.error("Here's the traceback:")
+            print("Hmm...geocoder didn't install properly.",
+            "Try executing 'pip install geocoder' in a command shell.",
+            "As a precaution, I'm now exiting. (Error 52, setup.py)", sep="\n")
             printException()
-            print("""Hmm...geocoder didn't install properly.
-            Try executing 'pip install geocoder' in a command shell.
-            As a precaution, I'm now exiting. (Error 52, setup.py)
-            Press enter to exit.""")
+            print("Press enter to exit.")
             input()
             sys.exit()
         print("All libraries are good to go! Let's move on.")
@@ -495,10 +499,10 @@ try:
     logger.debug("json is available.")
 except:
     logger.warn("json isn't available...that's odd.")
-    
-    print("""json is not available. This is odd, it's a default library.
-    Try installing a usual Python install.
-    Press enter to exit.""")
+    print("json is not available. This is odd, it's a default library.",
+    "Try installing a usual Python install.", sep="\n")
+    printException()
+    print("Press enter to exit.")
     input()
     sys.exit()
 try:
@@ -507,8 +511,8 @@ try:
 except:
     logger.warn("codecs isn't available. Here's the traceback:")
     printException_loggerinfo()
-    print("""codecs is not available. This is odd, it's a default library.
-    Try installing a usual Python install.""")
+    print("codecs is not available. This is odd, it's a default library.",
+    "Try installing a usual Python install.", sep="\n")
     printException()
     print("Press enter to exit.")
     input()
@@ -525,8 +529,8 @@ try:
     logger.debug("testJSON: %s" % testJSON)
 except:
     logger.warn("Couldn't connect to Wunderground's API! No internet?")
-    print("""We ran into an error. Make sure Wunderground's API is unblocked, and 
-            you have an internet connection.""")
+    print("We ran into an error. Make sure Wunderground's API is unblocked, and",
+          "you have an internet connection.", sep="\n")
     printException()
     print("Press enter to exit.")
     input()
@@ -582,8 +586,8 @@ try:
     print("Yay! The geolocator works.")
 except:
     logger.warn("Couldn't connect to Google's geocoder. No internet?")
-    print("We ran into an error. Make sure Google's Geolocator is unblocked, " +
-          "and you have an internet connection.")
+    print("We ran into an error. Make sure Google's Geolocator is unblocked,",
+          "and you have an internet connection.", sep="\n")
     printException()
     print("Press enter to exit.")
     input()

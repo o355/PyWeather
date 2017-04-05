@@ -13,7 +13,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 **NEW FEATURES/REMOVALS:**
 * Removes if verbosity == True in the separate updater, and keybackup scripts. - Done, and tested!
 * Adds the ability to load your backup key if PyWeather can't access your primary key. - Done, and tested!
-* Adds the raw traceback output in updater.py/setup.py - 60% done, but not tested
+* Adds the raw traceback output in updater.py/setup.py - 50% done, 50% tested
 * Adds the logger displaying configuration options at the start of every script - Done, but not tested
 * The backup key will now stay static to backkey.txt, with a configurable directory (thanks to @ModoUnreal for the PR) - Done, but not tested
 * Catches up the setup file with the new configuration options added in 0.5 beta. - Should be finished by 4/6

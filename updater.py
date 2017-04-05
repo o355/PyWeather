@@ -35,6 +35,16 @@ logger = logging.getLogger('pyweather_updater_0.5.1beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
+def printException():
+    if tracebacksEnabled == True:
+        print("Here's the full traceback:")
+        traceback.print_exc()
+        
+def printException_loggerinfo():
+    if verbosity == True:
+        logger.info("Oh snap! We ran into a non-critical error. Here's the traceback.")
+        logger.info(traceback.print_exc())
+
 if verbosity == True:
     logger.setLevel(logging.DEBUG)
 elif tracebacksEnabled == True:
