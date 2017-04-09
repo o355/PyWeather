@@ -683,7 +683,7 @@ while True:
           moreoptions == "view hourly" or
           moreoptions == "hourly" or
           moreoptions == "1"):
-        print(Fore.RED + "Loading...")
+        print(Fore.RED + "Loading, please wait a few seconds.")
         print("")
         logger.info("Selected view more hourly...")
         detailedHourlyIterations = 0
@@ -805,7 +805,7 @@ while True:
           moreoptions == "view 10 day hourly" or
           moreoptions == "10 day hourly" or
           moreoptions == "2"):
-        print(Fore.RED + "Loading...")
+        print(Fore.RED + "Loading, please wait a few seconds.")
         print("")
         logger.info("Selected view more 10 day hourly...")
         detailedHourly10Iterations = 0
@@ -953,7 +953,7 @@ while True:
           or moreoptions == "10 day" or moreoptions == "10 day forecast"
           or moreoptions == "10 day weather forecast"
           or moreoptions == "3"):
-        print(Fore.RED + "Loading...")
+        print(Fore.RED + "Loading, please wait a few seconds.")
         logger.info("Selected view more 10 day...")
         print("")
         detailedForecastIterations = 0
@@ -1139,7 +1139,7 @@ while True:
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
                     (buildnumber, buildversion))
-        print("Checking for updates. This shouldn't take that long.")
+        print("Checking for updates. This should only take a few seconds.")
         try:
             versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
             logger.debug("versioncheck: %s" % versioncheck)
@@ -1234,7 +1234,7 @@ while True:
           or moreoptions == "almanac" or moreoptions == "view almanac for today"
           or moreoptions == "view the almanac"):
         logger.info("Selected option: almanac")
-        print(Fore.RED + "Loading...")
+        print(Fore.RED + "Loading, please wait a few seconds...")
         print("")
         if almanac_summary == False and almanac_prefetched == False:
             logger.info("Almanac data NOT fetched at start. Fetching now...")
@@ -1298,7 +1298,7 @@ while True:
     elif (moreoptions == "6" or moreoptions == "view sunrise"
           or moreoptions == "view sunset" or moreoptions == "view moonrise"
           or moreoptions == "view moonset"):
-        print(Fore.RED + "Loading...")
+        print(Fore.RED + "Loading, please wait a few seconds...")
         print("")
         logger.info("Selected option - Sun/moon data")
         if sundata_summary == False and sundata_prefetched == False:
@@ -1786,7 +1786,7 @@ while True:
                     try:
                         print("")
                         print(Fore.RED + "Press enter to view the next", user_loopIterations
-                              , "hours of historical weather information.")
+                              , "iterations of historical weather information.")
                         print("Otherwise, press Control + C to get back to the main menu.")
                         input()
                         historical_loops = 0
