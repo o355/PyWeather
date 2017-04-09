@@ -52,6 +52,12 @@ elif tracebacksEnabled == True:
 else:
     logger.setLevel(logging.CRITICAL)
     
+logger.debug("Listing configuration options:")
+logger.debug("verbosity: %s ; jsonVerbosity: %s" %
+             (verbosity, jsonVerbosity))
+logger.debug("showReleaseTag: %s ; tracebacksEnabled: %s" %
+             (showReleaseTag, tracebacksEnabled))
+    
 buildnumber = 51
 buildversion = "0.5.1 beta"
 logger.debug("buildnumber: %s ; buildversion: %s" %
@@ -65,6 +71,7 @@ except:
     print(Style.BRIGHT + Fore.RED + "Couldn't check for updates.")
     print("Make sure GitHub user content is unblocked, and you have an internet connection.")
     print("Error 54, updater.py")
+    printException()
     print("Press enter to exit.")
     input()
     sys.exit()
@@ -129,6 +136,7 @@ elif buildnumber < version_buildNumber:
             print("Make sure GitHub user content is unblocked, "
                     + "and you have an internet connection.")
             print("Error 55, updater.py")
+            printException()
             print("Press enter to exit.")
             input()
             sys.exit()
@@ -165,9 +173,11 @@ else:
     except:
         logger.error("Variables are corrupted, or a typo was made.")
         logger.error("Trying to list variables 1 more time...")
+        printException_loggerinfo()
         try:
             logger.warn("buildnumber: %s" % buildnumber)
         except:
+            printException_loggerinfo()
             logger.warn("Variable buildnumber is corrupt.")
     print(Style.BRIGHT + Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
     print(Fore.RED + "Error 53, updater.py")

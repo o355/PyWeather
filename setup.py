@@ -9,6 +9,7 @@
 
 import configparser
 import traceback
+from pygame import display
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
     
@@ -47,6 +48,12 @@ elif tracebacksEnabled == True:
     logger.setLevel(logging.ERROR)
 else:
     logger.setLevel(logging.CRITICAL)
+    
+logger.debug("Listing configuration options:")
+logger.debug("verbosity: %s ; jsonVerbosity: %s" %
+             (verbosity, jsonVerbosity))
+logger.debug("tracebacksEnabled: %s" %
+             (tracebacksEnabled))
 
 print("Welcome to PyWeather setup.",
       "This is meant to run as a one-time program, when you first get PyWeather.",
@@ -434,9 +441,9 @@ if backup_APIkey == "yes":
 print("Let's configure a few options for PyWeather.")
 logger.debug("config: %s" % config)
 
-print("""\nOn the summary screen, would you like to show sunrise/sunset times?
-By default, this is disabled.
-Yes or No.""")
+print("On the summary screen, would you like to show sunrise/sunset times?",
+      "By default, this is disabled.",
+      "Yes or No.", sep="\n")
 sundata_Summary = input("Input here: ").lower()
 logger.debug("sundata_Summary: %s" % sundata_Summary)
 if sundata_Summary == "yes":
@@ -451,9 +458,9 @@ else:
     config['SUMMARY']['sundata_summary'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
    
-print("""\nOn the summary screen, would you like to show almanac data?
-By default, this is disabled.
-Yes or No.""")
+print("On the summary screen, would you like to show almanac data?",
+"By default, this is disabled.",
+"Yes or no:", sep="\n")
 almanacdata_Summary = input("Input here: ").lower()
 logger.debug("almanacdata_Summary: %s" % almanacdata_Summary)
 if almanacdata_Summary == "yes":
@@ -468,9 +475,9 @@ else:
     config['SUMMARY']['almanac_summary'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("""\nOn boot, would you like PyWeather to check for updates?
-By default, this is disabled, due to a load time increase of ~2-5 seconds.
-Yes or No.""")
+print("On boot, would you like PyWeather to check for updates?",
+      "By default, this is disabled, due to a load time increase of ~2-5 seconds.",
+      "Yes or No.", sep="\n")
 checkForUpdates = input("Input here: ").lower()
 logger.debug("checkForUpdates: %s" % checkForUpdates)
 if checkForUpdates == "yes":
@@ -484,6 +491,35 @@ else:
     print("Defaulting to the default value 'False'")
     config['UPDATER']['autoCheckForUpdates'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
+    
+print("When an error occurs, would you like PyWeather to show the full error?",
+      "When enabled, you'll have easier access to the full error for reporting",
+      "the bug on GitHub. By default, this is disabled, as errors look less",
+      "pretty when enabled.",
+      "Yes or no.", sep="\n")
+displayTracebacks = input("Input here: ").lower()
+logger.debug("displayTracebacks: %s" % displayTracebacks)
+if displayTracebacks == "yes":
+    config['TRACEBACK']['tracebacks'] = 'True'
+    config['TRACEBACK']['setup_tracebacks'] = 'True'
+    config['TRACEBACK']['updater_tracebacks'] = 'True'
+    config['TRACEBACK']['keybackup_tracebacks'] = 'True'
+    logger.debug("Printing tracebacks is ENABLED.")
+elif displayTracebacks == "no":
+    config['TRACEBACK']['tracebacks'] = 'False'
+    config['TRACEBACK']['setup_tracebacks'] = 'False'
+    config['TRACEBACK']['updater_tracebacks'] = 'False'
+    config['TRACEBACK']['keybackup_tracebacks'] = 'False'
+    logger.debug("Printing tracebacks is DISABLED.")
+else:
+    print("Couldn't understand what you said.",
+          "Defaulting to the default value 'False'", sep="\n")
+    config['TRACEBACK']['tracebacks'] = 'False'
+    config['TRACEBACK']['setup_tracebacks'] = 'False'
+    config['TRACEBACK']['updater_tracebacks'] = 'False'
+    config['TRACEBACK']['keybackup_tracebacks'] = 'False'
+    logger.debug("Could not understand input. Defaultig to DISABLED.")
+print("")
     
 print("That's it! Now commiting config changes...")
 with open('storage//config.ini', 'w') as configfile:

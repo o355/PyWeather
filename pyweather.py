@@ -8,11 +8,7 @@
 # Also, this is beta code. Bugs are bound to occur. Report issues on GitHub.
 # (if you find any of those small bugs)
 # (but don't report the intentionally hidden bugs)
-
-# A cleanup of the if verbosity == True is coming. I just need to turn it off.
-# the json verbosity will stay...for now.
-
-# Temporary until I get the config file set up to read this.
+# (but the intentionally hidden bugs are no more)
 
 import configparser
 import traceback
@@ -32,7 +28,7 @@ try:
     user_showCompletedIterations = config.getboolean('UI', 'show_completedIterations')
     user_forecastLoopIterations = config.getint('UI', 'forecast_detailedInfoLoops')
     user_showUpdaterReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
-    user_backupKeyDirectory = config.get('KEYBACKUP', 'SAVEDIRECTORY')
+    user_backupKeyDirectory = config.get('KEYBACKUP', 'savedirectory')
 except:
     print("""Couldn't load your config file. Make sure your spelling is correct.
     \nSetting variables to default...
@@ -50,7 +46,7 @@ except:
     user_showCompletedIterations = False
     user_forecastLoopIterations = 5
     user_showUpdaterReleaseTag = False
-    backupKeyLocation = 'backup//backkey.txt'
+    user_backupKeyDirectory = 'backup//'
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
@@ -163,10 +159,10 @@ if checkforUpdates == True:
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
-print("Welcome to PyWeather - Powered by Wunderground.")
-print("Please enter a location to get weather information for.")
+print("Welcome to PyWeather!")
+print("Below, enter a location to get weather information for!")
 locinput = input("Input here: ")
-print("Sweet! Getting your weather!")
+print("Fetching the weather, so give me a few seconds!")
 
 
 # Start the geocoder. If we don't have a connection, exit nicely.
@@ -922,6 +918,7 @@ while True:
             print(Fore.YELLOW + "Barometric pressure: " + Fore.CYAN +
                   hourly10_pressureInHg + " inHg (" + hourly10_pressureMb
                   + " mb)")
+            print("")
             detailedHourly10Iterations = detailedHourly10Iterations + 1
             totaldetailedHourly10Iterations = totaldetailedHourly10Iterations + 1
             if user_showCompletedIterations == True:
@@ -1652,7 +1649,7 @@ while True:
             except KeyboardInterrupt:
                 break
         for data in historical_json['history']['observations']:
-            logger.info("We're on iteration %s/24. User iteration limit: %s."
+            logger.info("We're on iteration %s. User iteration limit: %s."
                         % (historical_totalloops, user_loopIterations))
             historical_time = data['date']['pretty']
             historical_tempF = str(data['tempi'])
@@ -1774,18 +1771,16 @@ while True:
                       + " °F (" + historical_heatindexC + " °C)")
             print(Fore.YELLOW + "Precipitation: " + Fore.CYAN + historical_precipIN
                   + " in (" + historical_precipMM + " mm)")
+            print("")
             historical_loops = historical_loops + 1
             historical_totalloops = historical_totalloops + 1
             logger.debug("historical_loops: %s ; historical_totalloops: %s"
                          % (historical_loops, historical_totalloops))
             if user_showCompletedIterations == True:
-                print(Fore.RED + "Completed iterations: " + Fore.CYAN + "%s/24"
+                print(Fore.RED + "Completed iterations: " + Fore.CYAN + "%s"
                       % historical_totalloops)
                 print(Fore.RESET)
             if user_enterToContinue == True:
-                if historical_totalloops == 24:
-                    logger.info("historical_totalloops = 24. Breaking the loop...")
-                    break
                 if historical_loops == user_loopIterations:
                     logger.info("Asking user to continue.")
                     try:

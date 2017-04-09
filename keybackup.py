@@ -16,7 +16,7 @@ except:
     print("Setting variables to defaults...")
     print("")
     verbosity = False
-    saveLocation = 'backup//backkey.txt'
+    saveDirectory = 'backup//backkey.txt'
     tracebacksEnabled = False
 
 import logging
@@ -31,6 +31,12 @@ elif tracebacksEnabled == True:
 else:
     logger.setLevel(logging.CRITICAL)
     
+logger.debug("Listing configuration options:")
+logger.debug("verbosity: %s ; saveDirectory: %s" %
+             (verbosity, saveDirectory))
+logger.debug("tracebacksEnabled: %s" %
+             (tracebacksEnabled))
+
 print("Would you like to back up your API key?") 
 confirmation = input("Input here: ").lower()
 logger.debug("confirmation: %s" % confirmation)
