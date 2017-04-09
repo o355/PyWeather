@@ -60,6 +60,11 @@ Oh, I should mention that PyWeather is faster than going to Wunderground, is ad-
 
 Need mobile support? You could get Termux, but that doesn't work (tested it). The best option right now is to spin up a Linux box with SSH and PyWeather, and log into it using Termius (iPhone/Android).
 
+## The other important information
+First. I'm not responsible if my code fails your mission-criticial mission to get to Mars fails, or whatever you're doing goes wrong, because of my code. This code is offered as-is, so I'm not responsible for soaked clothes, or other bad things going wrong. Some of the blame could be placed on Wunderground, as they are the ones providing the information. Go blame them if you feel like it.
+
+Second. PyWeather is completely open-source, and will stay that way forever. That's why I love the GNU GPL license. PyWeather doesn't track you, or collect data about your usage, at all. I'm not even considering for a second coding in optional analytics data, PyWeather will forever stay open-source, and won't track you. Wunderground may still track your API requests, but I assume less data is collected with those requests.
+
 ## Contributing
 I'm not a full time Python developer, and I'm not about to skip school because I want to work on Python projects. Between school, and the other projects I work on (and gaming, too!), I try my best to get in Python coding time, but it's not enough. Coding all of 0.5 beta's new features took 3 weeks, because of the limited time I had. So, I'm open to contributions.
 
