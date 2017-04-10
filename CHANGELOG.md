@@ -9,8 +9,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the raw traceback output in keybackup.py
 * Adds the library check script, which checks for libraries PyWeather needs.
 * Adds a separate config.py script, to configure all available options.
-* Adds the ability to control where the backup API key will be stored in the setup script.
-* Adds the ability to fetch all JSON files using a backup key, if the primary one fails.
+* Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted.
 * Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution)
 
 ## version 0.5.1 beta - Should be released on 4/15/2017
@@ -20,6 +19,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the raw traceback output in updater.py/setup.py - Done, and tested!
 * Adds the logger displaying configuration options at the start of every script - Done, and tested!
 * The backup key will now stay static to backkey.txt, with a configurable directory (thanks to @ModoUnreal for the PR) - Done, and tested!
+* Changed the non-critical traceback print function from an info level to a warn level. - 25% done, should be finished by 4/9.
 * Catches up the setup file with the new configuration options added in 0.5 beta. - 20% done, should be finished by 4/10
 * Rewrites multiline prints in setup.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Should be finished by 4/12
 

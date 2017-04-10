@@ -30,10 +30,10 @@ def printException():
         print("Here's the full traceback:")
         traceback.print_exc()
         
-def printException_loggerinfo():
+def printException_loggerwarn():
     if verbosity == True:
-        logger.info("Oh snap! We ran into a non-critical error. Here's the traceback.")
-        logger.info(traceback.print_exc())
+        logger.warn("Oh snap! We ran into a non-critical error. Here's the traceback.")
+        logger.warn(traceback.print_exc())
         
     
 import logging
@@ -114,7 +114,7 @@ try:
     import pip
 except ImportError:
     logger.warn("pip is NOT installed! Asking user for automated install...")
-    printException_loggerinfo()
+    printException_loggerwarn()
     print("","Shucks! I need PIP to check for/install libraries.",
     "Can I install PIP for you? Yes or No.", sep="\n")
     pipConfirm = input("Input here: ").lower()
@@ -166,7 +166,7 @@ except ImportError:
     coloramaInstalled = False
     neededLibraries = neededLibraries + 1
     logger.warn("Colorama is not installed.")
-    printException_loggerinfo()
+    printException_loggerwarn()
     logger.debug("coloramaInstalled: %s ; neededLibraries: %s"
                 % (coloramaInstalled, neededLibraries))
     
@@ -179,7 +179,7 @@ except ImportError:
     geopyInstalled = False
     neededLibraries = neededLibraries + 1
     logger.warn("geopy is NOT installed.")
-    printException_loggerinfo()
+    printException_loggerwarn()
     logger.debug("geopyInstalled: %s ; neededLibraries: %s"
                 % (geopyInstalled, neededLibraries))
     
@@ -192,7 +192,7 @@ except ImportError:
     geocoderInstalled = False
     neededLibraries = neededLibraries + 1
     logger.info("geocoder is NOT installed.")
-    printException_loggerinfo()
+    printException_loggerwarn()
     logger.debug("geocoderInstalled: %s ; neededLibraries: %s"
                  % (geocoderInstalled, neededLibraries))
     
@@ -427,7 +427,7 @@ if backup_APIkey == "yes":
                      ", and close backkey.txt.")
     except:
         print("Could not find the location you wanted. Defaulting on the normal directory...")
-        printException_loggerinfo()
+        printException_loggerwarn()
         print("Creating backup...")
         open("backup//backkey.txt", 'w').close()
         open("backup//backkey.txt", 'a').write(apikey_input)
@@ -441,7 +441,7 @@ if backup_APIkey == "yes":
 print("Let's configure a few options for PyWeather.")
 logger.debug("config: %s" % config)
 
-print("On the summary screen, would you like to show sunrise/sunset times?",
+print("","On the summary screen, would you like to show sunrise/sunset times?",
       "By default, this is disabled.",
       "Yes or No.", sep="\n")
 sundata_Summary = input("Input here: ").lower()
@@ -453,14 +453,14 @@ elif sundata_Summary == "no":
     config['SUMMARY']['sundata_summary'] = 'False'
     logger.debug("Sundata on the summary is now DISABLED.")
 else:
-    print("Could not understand what you said.")
+    print("Could not understand what you inputted.")
     print("Defaulting to the default value 'False'")
     config['SUMMARY']['sundata_summary'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
    
-print("On the summary screen, would you like to show almanac data?",
-"By default, this is disabled.",
-"Yes or no:", sep="\n")
+print("","On the summary screen, would you like to show almanac data?",
+      "By default, this is disabled.",
+      "Yes or no:", sep="\n")
 almanacdata_Summary = input("Input here: ").lower()
 logger.debug("almanacdata_Summary: %s" % almanacdata_Summary)
 if almanacdata_Summary == "yes":
@@ -470,12 +470,12 @@ elif almanacdata_Summary == "no":
     config['SUMMARY']['almanac_summary'] = 'False'
     logger.debug("Almanac on the summary is now DISABLED.")
 else:
-    print("Could not understand what you said.")
+    print("Could not understand what you inputted.")
     print("Defaulting to the default value 'False'")
     config['SUMMARY']['almanac_summary'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("On boot, would you like PyWeather to check for updates?",
+print("","On boot, would you like PyWeather to check for updates?",
       "By default, this is disabled, due to a load time increase of ~2-5 seconds.",
       "Yes or No.", sep="\n")
 checkForUpdates = input("Input here: ").lower()
@@ -487,12 +487,12 @@ elif checkForUpdates == "no":
     config['UPDATER']['autoCheckForUpdates'] = 'False'
     logger.debug("Checking for updates on startup is DISABLED.")
 else:
-    print("Could not understand what you said.")
+    print("Could not understand what you inputted.")
     print("Defaulting to the default value 'False'")
     config['UPDATER']['autoCheckForUpdates'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
     
-print("When an error occurs, would you like PyWeather to show the full error?",
+print("","When an error occurs, would you like PyWeather to show the full error?",
       "When enabled, you'll have easier access to the full error for reporting",
       "the bug on GitHub. By default, this is disabled, as errors look less",
       "pretty when enabled.",
@@ -512,14 +512,62 @@ elif displayTracebacks == "no":
     config['TRACEBACK']['keybackup_tracebacks'] = 'False'
     logger.debug("Printing tracebacks is DISABLED.")
 else:
-    print("Couldn't understand what you said.",
+    print("Couldn't understand what you inputted.",
           "Defaulting to the default value 'False'", sep="\n")
     config['TRACEBACK']['tracebacks'] = 'False'
     config['TRACEBACK']['setup_tracebacks'] = 'False'
     config['TRACEBACK']['updater_tracebacks'] = 'False'
     config['TRACEBACK']['keybackup_tracebacks'] = 'False'
-    logger.debug("Could not understand input. Defaultig to DISABLED.")
-print("")
+    logger.debug("Could not understand input. Defaulting to DISABLED.")
+
+print("","When booting PyWeather up initially, would you like PyWeather to",
+      "fetch the 10-day hourly forecast, instead of the 3-day forecast?",
+      "This is disabled by default. When enabled, initial loading times are",
+      "increased. However, when you view the 10-day hourly forecast, you won't",
+      "have to wait for it to load, and use another API call.",
+      "Yes or No.", sep="\n")
+tenday_onboot = input("Input here: ").lower()
+if tenday_onboot == "yes":
+    config['HOURLY']['10dayfetch_atboot'] = 'True'
+    logger.debug("Fetching 10 day JSON at boot is ENABLED.")
+elif tenday_onboot == "no":
+    config['HOURLY']['10dayfetch_atboot'] = 'False'
+    logger.debug("Fetching 10 day JSON at boot is DISABLED.")
+else:
+    print("Couldn't understand what you inputted.",
+          "Defaulting to the default value 'False'", sep="\n")
+    config['HOURLY']['10dayfetch_atboot'] = 'False'
+    logger.debug("Could not understand input. Defaulting to DISABLED.")
+    
+print("","When viewing detailed hourly, 10-day hourly, and historical hourly,",
+      "detailed information, how many iterations should PyWeather go through",
+      "before asking you to continue? By default, this is 6. An input above 10",
+      "is not recommended.", sep="\n")
+detailedloops = input("Input here: ").lower()
+try:
+    detailedloops = int(detailedloops)
+    config['UI']['detailedinfoloops'] = detailedloops
+    logger.debug("Detailed info loops now %s." % detailedloops)
+except:
+    print("Couldn't convert input into a number. Defaulting to '6'.")
+    printException_loggerwarn()
+    config['UI']['detailedinfoloops'] = 6
+    logger.debug("Detailed info loops now 6.")
+    
+print("","When viewing detailed 10-day forecast information, how many",
+      "iterations should PyWeather go through, before asking you to",
+      "continue? By default, this is 5. An input above 10 will not prompt",
+      "the enter to continue prompt", sep="\n")
+detailedForecastLoops = input("Input here: ").lower()
+try:
+    detailedForecastLoops = int(detailedForecastLoops)
+    config['UI']['forecast_detailedinfoloops'] = detailedForecastLoops
+    logger.debug("Detailed forecast info loops now %s" % detailedForecastLoops)
+except:
+    print("Couldn't convert input into a number. Defaulting to '5'.")
+    printException_loggerwarn()
+    config['UI']['forecast_detailedinfoloops'] = 5
+    logger.debug("Detailed forecast info loops now 5.")
     
 print("That's it! Now commiting config changes...")
 with open('storage//config.ini', 'w') as configfile:
@@ -546,7 +594,7 @@ try:
     logger.debug("codecs is available.")
 except:
     logger.warn("codecs isn't available. Here's the traceback:")
-    printException_loggerinfo()
+    printException_loggerwarn()
     print("codecs is not available. This is odd, it's a default library.",
     "Try installing a usual Python install.", sep="\n")
     printException()
