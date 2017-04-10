@@ -23,7 +23,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Catches up the setup file with the new configuration options added in 0.5 beta. - Done, and tested!
 * PyWeather Updater will now show the release tag, even when PyWeather is up-to-date. - Done, and tested!
 * In setup, the key-reconfirmation is now a while true infinite loop. - Done, and tested!
-* Adds a check for "None" in of rain in the 10-day, and -999 mph winds in the 10-day on the current day - Done, but not tested (waiting for the night to come).
+* Adds a check for "None" in of rain in the 10-day forecast, and -999 mph winds in the 10-day on the current day - Done, but not tested (waiting for the night to come).
 * Rewrites multiline prints in setup.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Should be finished by 4/12
 * Adds the configdefault.py script, to reset all configuration options to their default. - Should be finished by 4/14.
 * Made some minor UI changes.

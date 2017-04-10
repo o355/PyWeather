@@ -282,103 +282,102 @@ else:
         sys.exit()
 
 # Verbosity is not needed here.
-print("""I'm now going to guide you through obtaining an API key.
-Please carefully read my detailed instructions, so you don't mess anything up.""")
+print("I'm now going to guide you through obtaining an API key.",
+"Please carefully read my detailed instructions, so you don't mess anything up.", sep="\n")
 
-print("""Let's begin.
-Start by opening a web browser, and going to https://www.wunderground.com/weather/api/.
-Press any key when you are done.""")
+print("Let's begin.",
+"Start by opening a web browser, and going to https://www.wunderground.com/weather/api/.",
+"Press any key when you are done.", sep="\n")
 input()
-print("""Next, click the 'Explore my options' button.
-Press any key when you are done.""")
+print("Next, click the 'Explore my options' button.",
+"Press any key when you are done.", sep="\n")
 input()
-print("""Next, click the small button next to 'ANVIL PLAN'.
-After that, confirm that the total underneath the 'Purchase Key' button says 
-'$0 USD per month'. 
-If the total underneath the 'Purchase Key' button doesn't 
-say '$0 USD per month, please ensure that the small button next to 'Developer' 
-on the table in the middle of the screen is selected, and the total 
-says '$0 USD per month'
-Press any key when you are done.""")
+print("Next, click the small button next to 'ANVIL PLAN'.",
+"After that, confirm that the total underneath the 'Purchase Key' button says",
+"'$0 USD per month'.", 
+"If the total underneath the 'Purchase Key' button doesn't",
+"say '$0 USD per month, please ensure that the small button next to 'Developer'", 
+"on the table in the middle of the screen is selected, and the total",
+"says '$0 USD per month'",
+"Press any key when you are done.", sep="\n")
 input()
-print("""Next, click the 'Purchase Key' button. 
-Press any key when you are done.""")
+print("Next, click the 'Purchase Key' button.", 
+"Press any key when you are done.", sep="\n")
 input()
-print("""Next, input your email, and a password to sign up for a Weather 
-Underground account.
-Be sure to select the checkbox next to 'I agree to the Terms of Service'
-It's best if you leave the checkbox next to 'I would like to receive WU 
-updates via email' unchecked.
-Press any key when you are done and ready.""")
+print("Next, input your email, and a password to sign up for a Weather",
+"Underground account.",
+"Be sure to select the checkbox next to 'I agree to the Terms of Service'",
+"It's best if you leave the checkbox next to 'I would like to receive WU", 
+"updates via email' unchecked.",
+"Press any key when you are done and ready.", sep="\n")
 input()
-print("""Next, press the 'Sign up for free' button.
-When the welcome window pops up, be sure to click the X button at the top right of the popup.
-When clicking the X, you should be redirected to wunderground.com.
-Press any key when you are done and ready.""")
+print("Next, press the 'Sign up for free' button.",
+"When the welcome window pops up, be sure to click the X button at the top right of the popup.",
+"When clicking the X, you should be redirected to wunderground.com.",
+"Press any key when you are done and ready.", sep="\n")
 input()
-print("""Next, click 'My Profile' at the top right corner of the homepage.
-In the dropdown, click 'My Email & Text Alerts'
-Press any key when you are done and ready.""")
+print("Next, click 'My Profile' at the top right corner of the homepage.",
+"In the dropdown, click 'My Email & Text Alerts'",
+"Press any key when you are done and ready.", sep="\n")
 input()
-print("""Next, next to your email listed on the page, click the 'Edit / Verify' button.
-After you click the button, click the 'Verify Email' button.
-Press any key when you are done and ready.""")
+print("Next, next to your email listed on the page, click the 'Edit / Verify' button.",
+"After you click the button, click the 'Verify Email' button.",
+"Press any key when you are done and ready.", sep="\n")
 input()
-print("""Next, check your email in which you signed up with.
-If you got a letter from Weather Underground, titled 'Daily Forecast 
-Email Verification', open that letter, and click the link.
-If you didn't get the letter, wait a few minutes, and be sure to check your spam folder.
-Hint: If you followed this guide exactly, WU will not be sending you daily forecasts to your email.
-Press any key when you are done and ready.""")
+print("Next, check your email in which you signed up with.",
+"If you got a letter from Weather Underground, titled 'Daily Forecast", 
+"Email Verification', open that letter, and click the link.",
+"If you didn't get the letter, wait a few minutes, and be sure to check your spam folder.",
+"Hint: If you followed this guide exactly, WU will not be sending you daily forecasts to your email.",
+"Press any key when you are done and ready.", sep="\n")
 input()
-print("""Your email should be verified.
-Next, in your web browser, head back to https://www.wunderground.com/weather/api/.
-Then, click the 'Explore my Options' button, again.
-Press any key when you are done and ready.""")
+print("Your email should be verified.",
+"Next, in your web browser, head back to https://www.wunderground.com/weather/api/.",
+"Then, click the 'Explore my Options' button, again.",
+"Press any key when you are done and ready.", sep="\n")
 input()
-print("""Next, at the top of the page, make sure the button next to 'ANVIL PLAN' 
-is selected.
-After that, confirm that the total underneath the 'Purchase Key' button says 
-'$0 USD per month'
-If the total doesn't say that, in the pricing table, make sure the button 
-next to 'Developer' is selected.
-Press any key when you are done and ready.""")
+print("Next, at the top of the page, make sure the button next to 'ANVIL PLAN'", 
+"is selected.",
+"After that, confirm that the total underneath the 'Purchase Key' button says", 
+"'$0 USD per month'",
+"If the total doesn't say that, in the pricing table, make sure the button", 
+"next to 'Developer' is selected.",
+"Press any key when you are done and ready.", sep="\n")
 input()
-print("""Next, click the 'Purchase Key' button, on top of your total (which 
-should be $0 USD per month)
-Next, fill out the form, considering these tips:
-For the contact name/email, it's recommended you use your real name 
-(first name last initial is fine).
-It's also recommended that you use your real email.
-For the project name, put in something generic, like 'to use a script that 
-uses WU's API', or 'PyWeather user'
-For the project website, put in something generic, like 'google.com', or 
-the homepage of PyWeather.
-Hint: The homepage of PyWeather is github.com/o355/py
-For the question 'Where will the API be used', answer Other.
-For the question 'Will the API be used for commercial use?', answer No.
-For the question 'Will the API be used for manufacturing mobile chip 
-processing?', answer No.
-Answer yes if you somehow are manufacturing mobile chip processing. I doubt 
-you are, however.
-For the country that you are based in, put your location.
-Before we move on, fill out these forms, and press any key when you are done 
-and ready.""")
+print("Next, click the 'Purchase Key' button, on top of your total (which",
+"should be $0 USD per month)",
+"Next, fill out the form, considering these tips:",
+"For the contact name/email, it's recommended you use your real name", 
+"(first name last initial is fine).",
+"It's also recommended that you use your real email.",
+"For the project name, put in something generic, like 'to use a script that",
+"uses WU's API', or 'WU API test'. It's up to you.",
+"For the project website, put in something generic, like 'google.com', or",
+"some other site you feel like having as the project site.",
+"For the question 'Where will the API be used', answer Other.",
+"For the question 'Will the API be used for commercial use?', answer No.",
+"For the question 'Will the API be used for manufacturing mobile chip", 
+"processing?', answer No.",
+"Answer yes if you somehow are manufacturing mobile chip processing. I doubt",
+"you are, however.",
+"For the country that you are based in, put your location."
+"Before we move on, fill out these forms, and press any key when you are done "
+"and ready.", sep="\n")
 input()
-print("""Next, for the brief description, put something like 'using an API key 
-to use a script using Wunderground'.
-After that, check both boxes at the bottom of the page. Read the ToS if you 
-feel like it.
-Finally, click 'Purchase Key'.
-You should land on a page that says 'Edit API Key'.
-Press any key when you are done and ready.""")
+print("Next, for the brief description, put something like 'using an API key",
+"to use a script using Wunderground'.",
+"After that, check both boxes at the bottom of the page. Read the ToS if you",
+"feel like it.",
+"Finally, click 'Purchase Key'.",
+"You should land on a page that says 'Edit API Key'.",
+"Press any key when you are done and ready.", sep="\n")
 input()
-print("""In the table to the left of the page, copy the text that's under Key ID. 
-(Ctrl+C, right click)
-I'm now going to ask you to input the API key into the text entry below.
-The API key will be saved to storage/apikey.txt, so PyWeather can easily 
-pull it up.
-Press any key when you are done and ready.""")
+print("In the table to the left of the page, copy the text that's under Key ID.",
+"(Ctrl+C, right click)",
+"I'm now going to ask you to input the API key into the text entry below.",
+"The API key will be saved to storage/apikey.txt, so PyWeather can easily",
+"pull it up.",
+"Press any key when you are done and ready.", sep="\n")
 input()
 print("Please input your API key below.")
 apikey_input = input("Input here: ")
