@@ -25,9 +25,12 @@ try:
     prefetch10Day_atStart = config.getboolean('HOURLY', '10dayfetch_atboot')
     user_loopIterations = config.getint('UI', 'detailedInfoLoops')
     user_enterToContinue = config.getboolean('UI', 'show_enterToContinue')
-    user_showCompletedIterations = config.getboolean('UI', 'show_completedIterations')
-    user_forecastLoopIterations = config.getint('UI', 'forecast_detailedInfoLoops')
-    user_showUpdaterReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
+    user_showCompletedIterations = config.getboolean('UI', 
+                                                     'show_completedIterations')
+    user_forecastLoopIterations = config.getint('UI', 
+                                                'forecast_detailedInfoLoops')
+    user_showUpdaterReleaseTag = config.getboolean('UPDATER', 
+                                                   'show_updaterReleaseTag')
     user_backupKeyDirectory = config.get('KEYBACKUP', 'savedirectory')
 except:
     print("""Couldn't load your config file. Make sure your spelling is correct.
@@ -116,7 +119,8 @@ except FileNotFoundError:
         print("Loaded your backup key successfully!")
     except FileNotFoundError:
         print("Your API key couldn't be loaded.")
-        logger.warn("Couldn't load the primary or backup key text file! Does it exist?")
+        logger.warn("Couldn't load the primary or backup key text file!" +
+                    " Does it exist?")
         print("Press enter to continue.")
         input()
         sys.exit()
@@ -128,10 +132,13 @@ buildversion = '0.5.1 beta'
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")
     try:
-        versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
+        versioncheck = urllib.request.urlopen("https://raw.githubusercontent.c"
+                                              + "om/o355/pyweather/master/upda"
+                                              + "ter/versioncheck.json")
     except:
-        print("Can't connect to GitHub to check for updates. Make sure you have an internet connection, " + 
-              "and GitHub is unblocked.")
+        print("Can't connect to GitHub to check for updates.",
+              "Make sure you have an internet connection,", 
+              "and GitHub is unblocked.", sep="\n")
         printException()
         print("Press enter to continue.")
         input()
@@ -178,12 +185,13 @@ try:
     # them off if verbosity is enabled (it isn't needed)
     # :/
     if verbosity == False:
-        print("[#---------] | 3% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        print("[#---------] | 3% |", round(time.time() - firstfetch,1), 
+              "seconds", end="\r")
 except:
     logger.warn("No connection to Google's geocoder!")
     print("Could not connect to Google's geocoder.")
-    print("Ensure you have an internet connection, and that Google's geocoder " +
-          "is unblocked.")
+    print("Ensure you have an internet connection, and that Google's geocoder "
+          + "is unblocked.")
     printException()
     print("Press enter to continue.")
     input()
@@ -1170,7 +1178,11 @@ while True:
             print("")
             print(Fore.GREEN + "PyWeather is up to date!")
             print("You have version: " + Fore.CYAN + buildversion)
-            print(Fore.GREEN + "The latest version is: " + Fore.CYAN + version_latestVersion)
+            print(Fore.GREEN + "The latest version is: " + Fore.CYAN 
+                  + version_latestVersion)
+            if user_showUpdaterReleaseTag == True:
+                print(Fore.GREEN + "The latest release tag is: " + Fore.CYAN 
+                      + version_latestReleaseTag)
         elif buildnumber < version_buildNumber:
             print("")
             logger.warn("PyWeather is NOT up to date.")

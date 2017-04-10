@@ -100,6 +100,9 @@ if buildnumber >= version_buildNumber:
     print(Style.BRIGHT + Fore.GREEN + "PyWeather is up to date!")
     print("You have version: " + Fore.CYAN + buildversion)
     print(Fore.GREEN + "The latest version is: " + Fore.CYAN + version_latestVersion)
+    if showReleaseTag == True:
+        print(Fore.GREEN + "The latest release tag is: " + Fore.CYAN +
+              version_latestReleaseTag)
     print(Fore.GREEN + "Press enter to exit.")
     input()
     sys.exit()
