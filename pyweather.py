@@ -1064,6 +1064,12 @@ while True:
             forecast10_snowNightIn = str(forecast10_snowNightCheck)
             forecast10_snowNightCm = str(day['snow_night']['cm'])
             forecast10_maxWindMPH = str(day['maxwind']['mph'])
+            if forecast10_maxWindMPH == "-999":
+                forecast10_maxWindCorrect = str(forecast10_maxWindMPH)
+                forecast10_maxWindMPH = forecast10_maxWindCorrect / 1.609344
+                forecast10_maxWindMPH = str(round(forecast10_maxWindMPH, 0))
+                logger.debug("forecast10_maxWindCorrect: %s ; forecast10_maxWindMPH: %s"
+                             % (forecast10_maxWindCorrect, forecast10_maxWindMPH))
             forecast10_maxWindKPH = str(day['maxwind']['kph'])
             logger.debug("forecast10_snowNightIn: %s ; forecast10_snowNightCm: %s"
                         % (forecast10_snowNightIn, forecast10_snowNightCm))
