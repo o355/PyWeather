@@ -1,6 +1,5 @@
 # PyWeather - version 0.5.1 beta
 # (c) 2017 o355, GNU GPL 3.0.
-# If there any random imports below here, blame Eclipse.
 
 # ==============
 # This is beta code. It's not pretty, and I'm not using proper naving conventions.
@@ -962,6 +961,8 @@ while True:
         print("")
         detailedForecastIterations = 0
         totaldetailedForecastIterations = 0
+        forecast10_precipDayData = True
+        forecast10_snowDayData = True
         print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
         for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
             print("")
@@ -1022,6 +1023,14 @@ while True:
             forecast10_precipTotalMm = str(day['qpf_allday']['mm'])
             forecast10_precipDayIn = str(day['qpf_day']['in'])
             forecast10_precipDayMm = str(day['qpf_day']['mm'])
+            if forecast10_precipDayIn == "None":
+                forecast10_precipDayData = False
+                logger.debug("forecast10_precipDayData: %s" 
+                             % forecast10_precipDayData)
+            else:
+                forecast10_precipDayData = True
+                logger.debug("forecast10_precipDayData: %s"
+                             % forecast10_precipDayData)
             logger.debug("forecast10_precipTotalIn: %s ; forecast10_precipTotalMm: %s"
                         % (forecast10_precipTotalIn, forecast10_precipTotalMm))
             logger.debug("forecast10_precipDayIn: %s ; forecast10_precipDayMm: %s"
@@ -1040,6 +1049,14 @@ while True:
             logger.debug("forecast10_snowDayCheck: %s" % forecast10_snowDayCheck)
             forecast10_snowDayIn = str(forecast10_snowDayCheck)
             forecast10_snowDayCm = str(day['snow_day']['cm'])
+            if forecast10_snowDayIn == "None":
+                forecast10_snowDayData = False
+                logger.debug("forecast10_snowDayData: %s" % 
+                             forecast10_snowDayData)
+            else:
+                forecast10_snowDayData = True
+                logger.debug("forecast10_snowDayData: %s" %
+                             forecast10_snowDayData)
             forecast10_snowNightCheck = day['snow_night']['in']
             logger.debug("forecast10_snowDayIn: %s ; forecast10_snowDayCm: %s"
                          % (forecast10_snowDayIn, forecast10_snowDayCm))
@@ -1083,15 +1100,12 @@ while True:
                 print(Fore.YELLOW + "Rain in total: " + Fore.CYAN + forecast10_precipTotalIn
                       + " in (" + forecast10_precipTotalMm + " mm)")
                 
-            if forecast10_showsnowdataday == False:
+            if forecast10_showsnowdataday == False and forecast10_precipDayData == True:
                 print(Fore.YELLOW + "Rain for the day: " + Fore.CYAN + forecast10_precipDayIn
                       + " in (" + forecast10_precipDayMm + " mm)")
-            elif forecast10_showsnowdataday == True:
+            elif forecast10_showsnowdataday == True and forecast10_snowDayData == True:
                 print(Fore.YELLOW + "Snow for the day: " + Fore.CYAN + forecast10_snowDayIn
                       + " in (" + forecast10_snowDayCm + " cm)")
-            else:
-                print(Fore.YELLOW + "Rain for the day: " + Fore.CYAN + forecast10_precipDayIn
-                      + " in (" + forecast10_precipDayMm + " mm)")
             
             if forecast10_showsnowdatanight == False:
                 print(Fore.YELLOW + "Rain for the night: " + Fore.CYAN + forecast10_precipNightIn

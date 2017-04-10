@@ -389,13 +389,21 @@ print("Please double check your input, and confirm in the dialogue below.")
 apikey_confirm = input("Is the API key right? Yes or no: ").lower()
 logger.debug("apikey_confirm: %s" % apikey_confirm)
 if apikey_confirm == "no":
-    logger.debug("User now re-entering key...")
-    print("Please input your API key below.")
-    apikey_input = input("Input here: ")
-    logger.debug("apikey_input: %s" % apikey_input)
-    print("Just to confirm, the API key you gave me was: " + apikey_input
-      + ".")
-    print("If you got the API key wrong, please close out of setup, and try again. ")
+    while True:
+        logger.debug("User now re-entering key...")
+        print("","Please input your API key below.", sep="\n")
+        apikey_input = input("Input here: ")
+        logger.debug("apikey_input: %s" % apikey_input)
+        print("Just to confirm, the API key you gave me was: " + apikey_input
+              + ".")
+        apikey_confirm = input("Is the API key right? Yes or no: ").lower()
+        if apikey_confirm == "yes":
+            break
+        elif apikey_confirm == "no":
+            continue
+        else:
+            print("Couldn't understand your input.",
+                  "I'll assume the API key is correct, moving on.", sep="\n")
 
 print("Now saving your API key...")
 open('storage//apikey.txt', 'w').close()
