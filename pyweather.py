@@ -94,11 +94,13 @@ geolocator2 = Nominatim()
 
 def printException():
     if tracebacksEnabled == True:
+        logger.error("Here's the full traceback for bug reports:")
         traceback.print_exc()
         
-def printException_loggerinfo():
+def printException_loggerwarn():
     if verbosity == True:
-        logger.info(traceback.print_exc())
+        logger.warn("Snap! We hit a non-critical error. Here's the traceback.")
+        logger.warn(traceback.print_exc())
 
 logger.debug("Begin API keyload...")
 try:
@@ -120,8 +122,8 @@ except FileNotFoundError:
         sys.exit()
 
 logger.debug("apikey = %s" % apikey)
-buildnumber = 50
-buildversion = '0.5 beta'    
+buildnumber = 51
+buildversion = '0.5.1 beta'    
 
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")
@@ -130,7 +132,6 @@ if checkforUpdates == True:
     except:
         print("Can't connect to GitHub to check for updates. Make sure you have an internet connection, " + 
               "and GitHub is unblocked.")
-        logger.error("Here's the full traceback (for bug reports):")
         printException()
         print("Press enter to continue.")
         input()
@@ -183,7 +184,6 @@ except:
     print("Could not connect to Google's geocoder.")
     print("Ensure you have an internet connection, and that Google's geocoder " +
           "is unblocked.")
-    logger.error("Here's the full traceback (for bug reports):")
     printException()
     print("Press enter to continue.")
     input()
@@ -197,7 +197,6 @@ except AttributeError:
     logger.warn("No lat/long was provided by Google! Bad location?")
     print("The location you inputted could not be understood.")
     print("Please try again.")
-    logger.error("Here's the full traceback (for bug reports):")
     printException()
     print("Press enter to continue.")
     input()
@@ -269,10 +268,9 @@ try:
         logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
 except:
     logger.warn("No connection to the API!! Is the connection offline?")
-    print("""Can't connect to the API. Make sure that Wunderground's API is 
-            unblocked, and the internet is online.
-    \nAlso check if your API key is valid.""")
-    logger.error("Here's the full traceback (for bug reports):")
+    print("Can't connect to the API. Make sure that Wunderground's API is",
+          "unblocked, and the internet is online."
+          "Also check if your API key is valid.", sep="\n")
     printException()
     print("Press enter to continue.")
     input()
@@ -331,7 +329,6 @@ except:
     logger.warn("No connection to Google's Geolocator!! Is the connection offline?")
     print("Can't connect to Google's Geolocator. Make sure that Google's " +
           "Geolocator is unblocked, and your internet is online.")
-    logger.error("Here's the full traceback (for bug reports):")
     printException()
     print("Press enter to continue.")
     input()
@@ -821,7 +818,6 @@ while True:
                 print("Couldn't connect to Wunderground's API. "
                       + "Make sure you have an internet connection.")
                 tenday_prefetched = False
-                logger.error("Here's the full traceback (for bug reports):")
                 printException()
                 print("Press enter to continue.")
                 input()
@@ -1246,7 +1242,6 @@ while True:
             except:
                 logger.warn("Couldn't contact Wunderground's API! Is the internet offline?")
                 print("Couldn't contact Wunderground's API. Make sure it's unblocked, and you have internet access.")
-                logger.error("Here's the full traceback (for bug reports):")
                 printException()
                 continue
             almanac_json = json.load(reader(almanacJSON))
@@ -1309,7 +1304,6 @@ while True:
             except:
                 print("Couldn't connect to Wunderground's API. "
                       + "Make sure you have an internet connection.")
-                logger.error("Here's the full traceback (for bug reports):")
                 printException()
                 print("Press enter to continue.")
                 input()
@@ -1426,6 +1420,7 @@ while True:
             logger.debug("MS_data: %s" % MS_data)
         except:
             logger.warn("Moonset data is not available!")
+            printException_loggerwarn()
             MS_data = False
             moonset_time = "Unavailable"
             logger.debug("MS_data: %s ; moonset_time: %s"
@@ -1499,7 +1494,6 @@ while True:
         except:
             print("Can't connect to Wunderground's API.")
             print("Make sure you have an internet connection, and WU's API is unblocked.")
-            logger.error("Here's the full traceback (for bug reports):")
             printException()
             print("Press enter to continue.")
             input()
@@ -1665,8 +1659,7 @@ while True:
             try:
                 historical_gustcheck = float(data['wgustm'])
             except ValueError:
-                logger.info("We hit a snag. Here's the traceback.")
-                printException_loggerinfo()
+                printException_loggerwarn()
                 historical_gustcheck = -9999
             logger.debug("historical_dewpointC: %s ; historical_windspeedKPH: %s"
                          % (historical_dewpointC, historical_windspeedKPH))
@@ -1725,8 +1718,7 @@ while True:
                 historical_precipMM = float(data['precipm'])
                 historical_precipIN = float(data['precipi'])
             except ValueError:
-                logger.info("We hit a snag. Here's the traceback.")
-                printException_loggerinfo()
+                printException_loggerwarn()
                 historical_precipMM = -9999
                 historical_precipIN = -9999
             logger.debug("historical_precipMM: %s ; historical_precipIN: %s"

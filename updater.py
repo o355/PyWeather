@@ -40,10 +40,10 @@ def printException():
         print("Here's the full traceback:")
         traceback.print_exc()
         
-def printException_loggerinfo():
+def printException_loggerwarn():
     if verbosity == True:
-        logger.info("Oh snap! We ran into a non-critical error. Here's the traceback.")
-        logger.info(traceback.print_exc())
+        logger.warn("Oh snap! We ran into a non-critical error. Here's the traceback.")
+        logger.warn(traceback.print_exc())
 
 if verbosity == True:
     logger.setLevel(logging.DEBUG)
