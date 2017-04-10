@@ -20,8 +20,9 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the logger displaying configuration options at the start of every script - Done, and tested!
 * The backup key will now stay static to backkey.txt, with a configurable directory (thanks to @ModoUnreal for the PR) - Done, and tested!
 * Changes the non-critical traceback print function from an info level to a warn level in all scripts. - 25% done, should be finished by 4/9.
-* Catches up the setup file with the new configuration options added in 0.5 beta. - Done, not tested.
+* Catches up the setup file with the new configuration options added in 0.5 beta. - Done, and tested!
 * PyWeather Updater will now show the release tag, even when PyWeather is up-to-date. - Should be finished by 4/10.
+* In setup, the key-reconfirmation is now a while true infinite loop. - Should be finished by 4/10.
 * Rewrites multiline prints in setup.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Should be finished by 4/12
 * Adds the configdefault.py script, to reset all configuration options to their default. - Should be finished by 4/14.
 

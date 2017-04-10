@@ -413,16 +413,17 @@ backup_APIkey = input("Input here: ").lower()
 if backup_APIkey == "yes":
     print("Where would you want me to backup the key to?")
     print("This is a directory. If I wanted my key at directory/backkey.txt,",
-          "You would enter 'directory//'.", sep="\n")
-    backup_APIkeydir = input("Input here: ")
+          "You would enter 'directory//'. The default directory is 'backup//'.", sep="\n")
+    # Doing a .lower() here to prevent case insensitiveness.
+    backup_APIkeydir = input("Input here: ").lower()
     try:
         folder_argument = backup_APIkeydir + "//backkey.txt"
         print("Creating a backup...")
         open(folder_argument, 'w+').close()
         open(folder_argument, 'a').write(apikey_input)
         open(folder_argument).close()
-        config.read('storage//config.ini')
         config['KEYBACKUP']['savedirectory'] = backup_APIkeydir
+        print("Backup successful!")
         logger.debug("Performed 3 ops. Overwrite "+ folder_argument + "backkey.txt, write to backkey.txt" + 
                      ", and close backkey.txt.")
     except:
@@ -436,7 +437,6 @@ if backup_APIkey == "yes":
         config['KEYBACKUP']['savelocation'] = 'backup//'
         logger.debug("Performed 3 ops. Overwrite backup//backkey.txt, write to backkey.txt" + 
                      ", and close backkey.txt.")
-# once a config file is properly added, options for configuring the config will go here
 
 print("Let's configure a few options for PyWeather.")
 logger.debug("config: %s" % config)
@@ -500,8 +500,8 @@ else:
     
 print("","When an error occurs, would you like PyWeather to show the full error?",
       "When enabled, you'll have easier access to the full error for reporting",
-      "the bug on GitHub. By default, this is disabled, as errors look less",
-      "pretty when enabled.",
+      "the bug on GitHub.",
+      "By default, this is disabled, as errors look less pretty when enabled.",
       "Yes or no.", sep="\n")
 displayTracebacks = input("Input here: ").lower()
 logger.debug("displayTracebacks: %s" % displayTracebacks)
@@ -551,38 +551,43 @@ else:
     
 print("","When viewing detailed hourly, 10-day hourly, and historical hourly,",
       "detailed information, how many iterations should PyWeather go through",
-      "before asking you to continue? By default, this is 6. An input above 10",
+      "before asking you to continue?",
+      "By default, this is 6. An input above 10",
       "is not recommended.", sep="\n")
-detailedloops = input("Input here: ").lower()
+detailedloops = input("Input here: ")
 try:
     detailedloops = int(detailedloops)
+    detailedloops = str(detailedloops)
     config['UI']['detailedinfoloops'] = detailedloops
     print("Changes saved.")
     logger.debug("Detailed info loops now %s." % detailedloops)
 except:
     print("Couldn't convert input into a number. Defaulting to '6'.")
     printException_loggerwarn()
-    config['UI']['detailedinfoloops'] = 6
+    config['UI']['detailedinfoloops'] = '6'
     logger.debug("Detailed info loops now 6.")
     
 print("","When viewing detailed 10-day forecast information, how many",
       "iterations should PyWeather go through, before asking you to",
-      "continue? By default, this is 5. An input above 10 will not prompt",
+      "continue?",
+      "By default, this is 5. An input above 10 will not prompt",
       "the enter to continue prompt", sep="\n")
-detailedForecastLoops = input("Input here: ").lower()
+detailedForecastLoops = input("Input here: ")
 try:
     detailedForecastLoops = int(detailedForecastLoops)
+    detailedForecastLoops = str(detailedForecastLoops)
     config['UI']['forecast_detailedinfoloops'] = detailedForecastLoops
     print("Changes saved.")
     logger.debug("Detailed forecast info loops now %s" % detailedForecastLoops)
 except:
     print("Couldn't convert input into a number. Defaulting to '5'.")
     printException_loggerwarn()
-    config['UI']['forecast_detailedinfoloops'] = 5
+    config['UI']['forecast_detailedinfoloops'] = '5'
     logger.debug("Detailed forecast info loops now 5.")
     
 print("","When PyWeather is going through detailed information, it can show",
-      "how many iterations are completed. By default, this is disabled.",
+      "how many iterations are completed.",
+      "By default, this is disabled.",
       "Yes or No.", sep="\n")
 showIterations = input("Input here: ").lower()
 if showIterations == "yes":
