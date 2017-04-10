@@ -618,7 +618,26 @@ else:
     config['UI']['show_entertocontinue'] = 'True'
     logger.debug("Could not understand input. Defaulting to ENABLED.")
     
+print("", "In the PyWeather Updater, the updater can show the release tag",
+      "associated with the latest release. Helpful for those using Git to",
+      "update PyWeather. By default, this is disabled.",
+      "Yes or No.", sep="\n")
+showReleaseTag = input("Input here: ").lower()
+if showReleaseTag == "yes":
+    config['UPDATER']['show_updaterreleasetag'] = 'True'
+    print("Changes saved.")
+    logger.debug("Showing release tag in updater is ENABLED.")
+elif showReleaseTag == "no":
+    config['UPDATER']['show_updaterreleasetag'] = 'False'
+    print("Changes saved.")
+    logger.debug("Showing release tag in updater is DISABLED.")
+else:
+    print("Could not understand what you inputted.",
+          "Defaulting to 'False'.", sep="\n")
+    config['UPDATER']['show_updaterreleasetag'] = 'False'
+    logger.debug("Could not understand input. Defaulting to DISABLED.")
     
+print("")
 print("That's it! Now commiting config changes...")
 with open('storage//config.ini', 'w') as configfile:
     logger.debug("configfile: %s" % configfile)
