@@ -448,13 +448,15 @@ sundata_Summary = input("Input here: ").lower()
 logger.debug("sundata_Summary: %s" % sundata_Summary)
 if sundata_Summary == "yes":
     config['SUMMARY']['sundata_summary'] = 'True'
+    print("Changes saved.")
     logger.debug("Sundata on the summary is now ENABLED.")
 elif sundata_Summary == "no":
     config['SUMMARY']['sundata_summary'] = 'False'
+    print("Changes saved.")
     logger.debug("Sundata on the summary is now DISABLED.")
 else:
     print("Could not understand what you inputted.")
-    print("Defaulting to the default value 'False'")
+    print("Defaulting to 'False'")
     config['SUMMARY']['sundata_summary'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
    
@@ -465,13 +467,15 @@ almanacdata_Summary = input("Input here: ").lower()
 logger.debug("almanacdata_Summary: %s" % almanacdata_Summary)
 if almanacdata_Summary == "yes":
     config['SUMMARY']['almanac_summary'] = 'True'
+    print("Changes saved.")
     logger.debug("Almanac on the summary is now ENABLED.")
 elif almanacdata_Summary == "no":
     config['SUMMARY']['almanac_summary'] = 'False'
+    print("Changes saved.")
     logger.debug("Almanac on the summary is now DISABLED.")
 else:
     print("Could not understand what you inputted.")
-    print("Defaulting to the default value 'False'")
+    print("Defaulting to 'False'")
     config['SUMMARY']['almanac_summary'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
@@ -482,13 +486,15 @@ checkForUpdates = input("Input here: ").lower()
 logger.debug("checkForUpdates: %s" % checkForUpdates)
 if checkForUpdates == "yes":
     config['UPDATER']['autoCheckForUpdates'] = 'True'
+    print("Changes saved.")
     logger.debug("Checking for updates on startup is ENABLED.")
 elif checkForUpdates == "no":
     config['UPDATER']['autoCheckForUpdates'] = 'False'
+    print("Changes saved.")
     logger.debug("Checking for updates on startup is DISABLED.")
 else:
     print("Could not understand what you inputted.")
-    print("Defaulting to the default value 'False'")
+    print("Defaulting to 'False'")
     config['UPDATER']['autoCheckForUpdates'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
     
@@ -504,16 +510,18 @@ if displayTracebacks == "yes":
     config['TRACEBACK']['setup_tracebacks'] = 'True'
     config['TRACEBACK']['updater_tracebacks'] = 'True'
     config['TRACEBACK']['keybackup_tracebacks'] = 'True'
+    print("Changes saved.")
     logger.debug("Printing tracebacks is ENABLED.")
 elif displayTracebacks == "no":
     config['TRACEBACK']['tracebacks'] = 'False'
     config['TRACEBACK']['setup_tracebacks'] = 'False'
     config['TRACEBACK']['updater_tracebacks'] = 'False'
     config['TRACEBACK']['keybackup_tracebacks'] = 'False'
+    print("Changes saved.")
     logger.debug("Printing tracebacks is DISABLED.")
 else:
     print("Couldn't understand what you inputted.",
-          "Defaulting to the default value 'False'", sep="\n")
+          "Defaulting to 'False'", sep="\n")
     config['TRACEBACK']['tracebacks'] = 'False'
     config['TRACEBACK']['setup_tracebacks'] = 'False'
     config['TRACEBACK']['updater_tracebacks'] = 'False'
@@ -529,9 +537,11 @@ print("","When booting PyWeather up initially, would you like PyWeather to",
 tenday_onboot = input("Input here: ").lower()
 if tenday_onboot == "yes":
     config['HOURLY']['10dayfetch_atboot'] = 'True'
+    print("Changes saved.")
     logger.debug("Fetching 10 day JSON at boot is ENABLED.")
 elif tenday_onboot == "no":
     config['HOURLY']['10dayfetch_atboot'] = 'False'
+    print("Changes saved.")
     logger.debug("Fetching 10 day JSON at boot is DISABLED.")
 else:
     print("Couldn't understand what you inputted.",
@@ -547,6 +557,7 @@ detailedloops = input("Input here: ").lower()
 try:
     detailedloops = int(detailedloops)
     config['UI']['detailedinfoloops'] = detailedloops
+    print("Changes saved.")
     logger.debug("Detailed info loops now %s." % detailedloops)
 except:
     print("Couldn't convert input into a number. Defaulting to '6'.")
@@ -562,6 +573,7 @@ detailedForecastLoops = input("Input here: ").lower()
 try:
     detailedForecastLoops = int(detailedForecastLoops)
     config['UI']['forecast_detailedinfoloops'] = detailedForecastLoops
+    print("Changes saved.")
     logger.debug("Detailed forecast info loops now %s" % detailedForecastLoops)
 except:
     print("Couldn't convert input into a number. Defaulting to '5'.")
@@ -569,10 +581,49 @@ except:
     config['UI']['forecast_detailedinfoloops'] = 5
     logger.debug("Detailed forecast info loops now 5.")
     
+print("","When PyWeather is going through detailed information, it can show",
+      "how many iterations are completed. By default, this is disabled.",
+      "Yes or No.", sep="\n")
+showIterations = input("Input here: ").lower()
+if showIterations == "yes":
+    config['UI']['show_completediterations'] = 'True'
+    print("Changes saved.")
+    logger.debug("Showing completed iterations is ENABLED.")
+elif showIterations == "no":
+    config['UI']['show_completediterations'] = 'False'
+    print("Changes saved.")
+    logger.debug("Showing completed iterations is DISABLED.")
+else:
+    print("Couldn't understand what you inputted.",
+          "Defaulting to 'FALSE'.", sep="\n")
+    config['UI']['show_completediterations'] = 'False'
+    logger.debug("Could not understand input. Defaulting to DISABLED.")
+    
+print("", "When PyWeather is going through detailed information, would",
+      "you like the 'Enter to Continue' prompts not to pop up?",
+      "By default, this is enabled.",
+      "Yes or No.", sep="\n")
+showEnterToContinue = input("Input here: ").lower()
+if showEnterToContinue == "yes":
+    config['UI']['show_entertocontinue'] = 'True'
+    print("Changes saved.")
+    logger.debug("Showing enter to continue prompts is ENABLED.")
+elif showEnterToContinue == "no":
+    config['UI']['show_entertocontinue'] = 'False'
+    print("Changes saved.")
+    logger.debug("Showing enter to continue prompts is DISABLED.")
+else:
+    print("Could not understand what you inputted.",
+          "Defaulting to 'True'.", sep="\n")
+    config['UI']['show_entertocontinue'] = 'True'
+    logger.debug("Could not understand input. Defaulting to ENABLED.")
+    
+    
 print("That's it! Now commiting config changes...")
 with open('storage//config.ini', 'w') as configfile:
     logger.debug("configfile: %s" % configfile)
     config.write(configfile)
+    print("Changes committed!")
     logger.info("Performed operation: config.write(configfile)")
 
 print("We're wrapping up, and performing a few tests.")
