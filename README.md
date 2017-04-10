@@ -1,11 +1,6 @@
 ## Welcome to PyWeather (0.5 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
-## What's up with the hiatus?
-My home network decided to hate me. As such, I had about no time to actually work on Python.
-
-I'll be back soon.
-
 ## Why? Why should I check my weather in a terminal?
 It's cooler. I think.
 
@@ -56,8 +51,6 @@ But that's just half the story. I've also baked in loads of other features, too!
 Oh, I should mention that PyWeather is faster than going to Wunderground, is ad-free (duh), and gets loads more data (that's pretty easy to view), and does it all without confusing you.
 
 Need mobile support? You could get Termux, but that doesn't work (tested it). The best option right now is to spin up a Linux box with SSH and PyWeather, and log into it using Termius (iPhone/Android).
-
-More information can be found in the "FAQs" page in the Wiki.
 
 ## Contributing
 I'm not a full time Python developer, and I'm not about to skip school because I want to work on Python projects. Between school, and the other projects I work on (and gaming, too!), I try my best to get in Python coding time, but it's not enough. Coding all of 0.5 beta's new features took 3 weeks, because of the limited time I had. So, I'm open to contributions.
