@@ -522,7 +522,7 @@ print(Fore.YELLOW + "Currently:")
 print(Fore.YELLOW + "Current conditions: " + Fore.CYAN + summary_overall)
 print(Fore.YELLOW + "Current temperature: " + Fore.CYAN + summary_tempf + "°F (" + summary_tempc + "°C)")
 print(Fore.YELLOW + "And it feels like: " + Fore.CYAN + summary_feelslikef
-      + "°F (" + summary_tempc + "°C)")
+      + "°F (" + summary_feelslikec + "°C)")
 print(Fore.YELLOW + "Current dew point: " + Fore.CYAN + summary_dewPointF
       + "°F (" + summary_dewPointC + "°C)")
 if winddata == True:
@@ -566,7 +566,7 @@ for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
           forecast10_highc + "°C), and a low of " + forecast10_lowf + "°F (" +
           forecast10_lowc + "°C).")
     summary_forecastIterations = summary_forecastIterations + 1
-    if summary_forecastIterations == 4:
+    if summary_forecastIterations == 5:
         break
 print("")
 if almanac_summary == True:
@@ -1070,11 +1070,11 @@ while True:
             logger.debug("forecast10_maxMPHcheck: %s ; forecast10_maxKPHcheck: %s"
                          % (forecast10_maxMPHcheck, forecast10_maxKPHcheck))
             if (forecast10_maxMPHcheck == -999 and forecast10_maxKPHcheck > -0.01):
-                forecast10_maxWindCorrect = str(forecast10_maxWindMPH)
-                forecast10_maxWindMPH = forecast10_maxWindCorrect / 1.609344
+                forecast10_maxWindMPH = forecast10_maxKPHcheck / 1.609344
                 forecast10_maxWindMPH = str(round(forecast10_maxWindMPH, 0))
-                logger.debug("forecast10_maxWindCorrect: %s ; forecast10_maxWindMPH: %s"
-                             % (forecast10_maxWindCorrect, forecast10_maxWindMPH))
+                forecast10_maxWindMPH = forecast10_maxWindMPH.strip(".0")
+                logger.debug("forecast10_maxWindMPH: %s" 
+                             % forecast10_maxWindMPH)
                 
             elif (forecast10_maxMPHcheck == -999 and forecast10_maxKPHcheck < -0.01):
                 forecast10_maxWindMPH = "N/A"

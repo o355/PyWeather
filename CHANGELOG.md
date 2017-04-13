@@ -2,15 +2,16 @@
 
 Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
 
-## version 0.5.3 beta - To be released May 2017
-* Rewrites multiline prints in keybackup.py/updater.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution)
+## version 0.5.3 beta - Should be released on 5/10/2017
+* Rewrites multiline prints in keybackup.py/updater.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Should be finished by 5/8.
+* Catches up config.py with the latest config options - Should be finished by 5/10.
 
-## version 0.5.2 beta - To be released late April
-* Adds the raw traceback output in keybackup.py
-* Adds the library check script, which checks for libraries PyWeather needs.
-* Adds a separate config.py script, to configure all available options.
-* Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted.
-* Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.)
+## version 0.5.2 beta - Should be released on 5/3/2017
+* Adds the raw traceback output in keybackup.py - Should be finished by 4/16.
+* Adds the library check script, which checks for libraries PyWeather needs. - Should be finished by 4/18.
+* Adds a separate config.py script, to configure all available options. - Should be finished by 4/24.
+* Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Should be finished by 4/26.
+* Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Should be finished by 5/2.
 
 ## version 0.5.1 beta - Should be released on 4/15/2017
 **NEW FEATURES/REMOVALS:**
@@ -23,10 +24,10 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Catches up the setup file with the new configuration options added in 0.5 beta. - Done, and tested!
 * PyWeather Updater will now show the release tag, even when PyWeather is up-to-date. - Done, and tested!
 * In setup, the key-reconfirmation is now a while true infinite loop. - Done, and tested!
-* Adds a check for "None" in of rain in the 10-day forecast, and -999 mph winds in the 10-day on the current day - Done, but not tested (waiting for the night to come).
-* Rewrites multiline prints in setup.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Should be finished by 4/12
+* Adds a check for "None" in of rain in the 10-day forecast, and -999 mph winds in the 10-day on the current day - Done, and tested!
+* Rewrites multiline prints in setup.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Done, needs to be tested.
 * Adds the configdefault.py script, to reset all configuration options to their default. - Should be finished by 4/14.
-* Made some minor UI changes.
+* Minor UI changes across most of the scripts.
 
 **BUG FIXES:**
 * Fixes a bug in which if the config file wouldn't load in the updater, the variable showReleaseTag wouldn't get defined, and it would presumably crash.
@@ -128,3 +129,32 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 
 ## version 0.2 beta (The Initial Update) - Released 2/22/2017
 * Initial build
+
+
+# Very future versions
+The upcoming dates here do come with uncertain release dates. Features might be added on the fly.
+
+## version 0.6 beta - Should be released on 6/9/2017
+* Adds alerts information to PyWeather - Should be finished by 5/17.
+* Adds radar/satellite loops to PyWeather - Should be finished by 5/26.
+* Adds updating PyWeather through Git - Should be finished by 6/2.
+* Adds the option to show release notes through the updater - Should be finished by 6/8.
+
+## version 0.6.1 beta - Should be released on 6/22/2017
+* Catches up the setup file with the latest config options - Should be finished by 6/19.
+* Catches up config.py with the latest config options - Should be finished by 6/21.
+
+## version 0.7 beta - Should be released on 7/13/2017
+* Adds the ability to view weather from a PWS - Should be finished by 6/30.
+* Adds alerts information to PyWeather, with the ability to turn it on and off. - Should be finished by 7/12.
+
+## version 0.7.1 beta - Should be released on 7/20/2017
+* Catches up the setup file with the latest config options - Should be finished by 7/14.
+* Catches up config.py with the latest config options - Should be finished by 7/19.
+
+## version 0.8 beta - Should be released on 8/26/2017
+* Adds PyWeather's Quick Weather, a nice way to get the weather in a pinch. - Should be finished by 8/18.
+* Adds hurricane/tide data to PyWeather. - Should be finished by 8/25.
+
+## version 0.8.1 beta - Should be released on 8/30/2017
+* Catches up config.py with the latest config options - Should be finished by 8/29.

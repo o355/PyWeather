@@ -88,7 +88,7 @@ if sys.version_info[0] < 3:
 print("","Before we get started, I want to confirm some permissions from you.",
       "Is it okay if I use 1-5 MB of data (downloading libraries), save a small",
       "text file called apikey.txt (> 2 KB), and automatically install Python", 
-      "libraries?","",
+      "libraries?",
       "Please input yes or no below:", sep="\n")
 confirmPermissions = input("Input here: ").lower()
 logger.debug("confirmPermissions: %s" % confirmPermissions)
@@ -209,15 +209,15 @@ else:
         print("- Geopy")
     if geocoderInstalled == False:
         print("- Geocoder")
-    print("If you want me to, I can automatically install these libraries.")
-    print("Would you like me to do such? Yes or No.")
+    print("If you want me to, I can automatically install these libraries.",
+    "Would you like me to do such? Yes or No.", sep="\n")
     neededLibrariesConfirm = input("Input here: ").lower()
     logger.debug("neededLibrariesConfirm: %s" % neededLibrariesConfirm)
     if neededLibrariesConfirm == "no":
         logger.warn("Not installing necessary libraries. Now exiting...")
-        print("Okay. I needed to install necessary libraries to continue.")
-        print("Now quitting...")
-        print("Press enter to exit.")
+        print("Okay. I needed to install necessary libraries to continue.",
+        "Now quitting...",
+        "Press enter to exit.", sep="\n")
         input()
         sys.exit()
     elif neededLibrariesConfirm == "yes":
@@ -236,8 +236,8 @@ else:
             print("Installing geocoder...")
             pip.main(['install', 'geocoder'])
             logger.info("Running the double check on libraries...")
-        print("Sweet! All libraries should be installed.")
-        print("Just to confirm, I'm double checking if needed libraries are installed.")
+        print("Sweet! All libraries should be installed.",
+              "Just to confirm, I'm double checking if needed libraries are installed.", sep="\n")
         try:
             import colorama
             logger.info("Colorama installed successfully.")
@@ -418,8 +418,8 @@ print("I can also back up your API key, in case you do something wrong.")
 print("Would you like me to save a backup? Yes or no.")
 backup_APIkey = input("Input here: ").lower()
 if backup_APIkey == "yes":
-    print("Where would you want me to backup the key to?")
-    print("This is a directory. If I wanted my key at directory/backkey.txt,",
+    print("Where would you want me to backup the key to?",
+        "This is a directory. If I wanted my key at directory/backkey.txt,",
           "You would enter 'directory//'. The default directory is 'backup//'.", sep="\n")
     # Doing a .lower() here to prevent case insensitiveness.
     backup_APIkeydir = input("Input here: ").lower()
@@ -436,7 +436,7 @@ if backup_APIkey == "yes":
     except:
         print("Could not find the location you wanted. Defaulting on the normal directory...")
         printException_loggerwarn()
-        print("Creating backup...")
+        print("Creating a backup...")
         open("backup//backkey.txt", 'w').close()
         open("backup//backkey.txt", 'a').write(apikey_input)
         open("backup//backkey.txt").close()
@@ -462,8 +462,8 @@ elif sundata_Summary == "no":
     print("Changes saved.")
     logger.debug("Sundata on the summary is now DISABLED.")
 else:
-    print("Could not understand what you inputted.")
-    print("Defaulting to 'False'")
+    print("Could not understand what you inputted.",
+          "Defaulting to 'False'", sep="\n")
     config['SUMMARY']['sundata_summary'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
    
@@ -481,8 +481,8 @@ elif almanacdata_Summary == "no":
     print("Changes saved.")
     logger.debug("Almanac on the summary is now DISABLED.")
 else:
-    print("Could not understand what you inputted.")
-    print("Defaulting to 'False'")
+    print("Could not understand what you inputted.",
+         "Defaulting to 'False'", sep="\n")
     config['SUMMARY']['almanac_summary'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
@@ -500,8 +500,8 @@ elif checkForUpdates == "no":
     print("Changes saved.")
     logger.debug("Checking for updates on startup is DISABLED.")
 else:
-    print("Could not understand what you inputted.")
-    print("Defaulting to 'False'")
+    print("Could not understand what you inputted.",
+        "Defaulting to 'False'", sep="\n")
     config['UPDATER']['autoCheckForUpdates'] = 'False'
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
     
@@ -649,17 +649,15 @@ else:
     config['UPDATER']['show_updaterreleasetag'] = 'False'
     logger.debug("Could not understand input. Defaulting to DISABLED.")
     
-print("")
-print("That's it! Now commiting config changes...")
+print("","That's it! Now commiting config changes...", sep="\n")
 with open('storage//config.ini', 'w') as configfile:
     logger.debug("configfile: %s" % configfile)
     config.write(configfile)
     print("Changes committed!")
     logger.info("Performed operation: config.write(configfile)")
 
-print("We're wrapping up, and performing a few tests.")
-
-print("Checking for parsing libraries...")
+print("We're wrapping up, and making sure everything works.",
+      "Checking for default libraries...", sep="\n")
 try:
     import json
     logger.debug("json is available.")
@@ -684,7 +682,10 @@ except:
     input()
     sys.exit()
 
-print("Testing the API connection, and seeing if the API key is valid...")
+
+print("Hurray! All default libraries are available.",
+      "Testing the API key, and it's validity...", sep="\n")
+
 apitest_URL = 'http://api.wunderground.com/api/' + apikey_input + '/conditions/q/NY/New_York.json'
 testreader = codecs.getreader("utf-8")
 logger.debug("apitest_URL: %s ; testreader: %s" %
@@ -709,7 +710,7 @@ if jsonVerbosity == True:
 try:
     test_conditions = str(test_json['current_observation']['temp_f'])
     logger.debug("test_conditions: %s" % test_conditions)
-    print("Yay! Your API key is valid and works.")
+    print("Hurray! Your API key is valid and works.")
 except:
     logger.warn("Error! Is the API key invalid?")
     print("We ran into an error. Make sure your API key is valid.")
@@ -718,7 +719,7 @@ except:
     input()
     sys.exit()
     
-print("Testing the Google geocoder connection...")
+print("Testing the connection to Google's geocoder...")
 
 from geopy import GoogleV3
 
@@ -730,7 +731,7 @@ try:
     logger.debug("testlocation: %s" % testlocation)
     logger.debug("testlocation.latitude: %s ; testlocation.longitude: %s" %
                  (testlocation.latitude, testlocation.longitude))
-    print("Yay! Google's geocoder works.")
+    print("Hurray! The connection to Google's geocoder works.")
 except:
     logger.warn("Couldn't connect to Google's geocoder. No internet?")
     print("We ran into an error. Make sure Google's geocoder is unblocked, " +
@@ -741,26 +742,25 @@ except:
     sys.exit()
     
     
-print("Testing the reverse geocoder connection...")
-
+print("Testing the connection to the reverse geocoder...")
 
 try:
     testlocation3 = geocoder.google([testlocation.latitude, testlocation.longitude], method='reverse')
     logger.debug("testlocation3: %s" % testlocation3)
     logger.debug("testlocation3.city: %s ; testlocation3.state: %s" %
                  (testlocation3.city, testlocation3.state))
-    print("Yay! The geolocator works.")
+    print("Yay! The connection to the reverse geocoder works.")
 except:
     logger.warn("Couldn't connect to Google's geocoder. No internet?")
-    print("We ran into an error. Make sure Google's Geolocator is unblocked,",
+    print("We ran into an error. Make sure Google's geocoder is unblocked,",
           "and you have an internet connection.", sep="\n")
     printException()
     print("Press enter to exit.")
     input()
     sys.exit()
 
-print("""\nEverything is set up and ready to rumble!
-Enjoy using PyWeather! If you have any issues, please report them on GitHub!
-Press enter to continue.""")
+print("","Everything is set up and ready to rumble!",
+      "Enjoy using PyWeather! If you have any issues, please report them on GitHub!"
+      "Press enter to continue.", sep="\n")
 input()
 sys.exit()
