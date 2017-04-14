@@ -18,8 +18,8 @@ import time
 import shutil
 from colorama import init, Fore, Style
 import codecs
-from geopy.geocoders import GoogleV3
-from geopy.geocoders import Nominatim
+from geopy import GoogleV3
+from geopy import Nominatim
 import geocoder
 geolocator = GoogleV3()
 geolocator2 = Nominatim()
