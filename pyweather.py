@@ -11,9 +11,29 @@
 
 import configparser
 import traceback
+import sys
+import urllib.request
+import json
+import time
+import shutil
+from colorama import init, Fore, Style
+import codecs
+from geopy.geocoders import GoogleV3
+from geopy.geocoders import Nominatim
+import geocoder
+geolocator = GoogleV3()
+geolocator2 = Nominatim()
 
-config = configparser.ConfigParser()
-config.read('storage//config.ini')
+try:
+    config = configparser.ConfigParser()
+    config.read('storage//config.ini')
+except:
+    print("The config file couldn't be loaded. Make sure the file",
+          "'storage//config.ini' can be loaded.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+    
 try:
     sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
     almanac_summary = config.getboolean('SUMMARY', 'almanac_summary')
@@ -81,18 +101,7 @@ logger.debug("user_forecastLoopIterations: %s ; user_showUpdaterReleaseTag: %s"
 logger.debug("user_backupKeyDirectory: %s"
              % (user_backupKeyDirectory))
 
-import urllib.request
-import sys
-import json
-import time
-import shutil
-from colorama import init, Fore, Style
-import codecs
-from geopy.geocoders import GoogleV3
-from geopy.geocoders import Nominatim
-import geocoder
-geolocator = GoogleV3()
-geolocator2 = Nominatim()
+
 
 def printException():
     if tracebacksEnabled == True:

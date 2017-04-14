@@ -12,8 +12,15 @@ reader = codecs.getreader("utf-8")
 from colorama import Fore, Style, init
 init()
 
-config = configparser.ConfigParser()
-config.read('storage//config.ini')
+try:
+    config = configparser.ConfigParser()
+    config.read('storage//config.ini')
+except:
+    print("The config file could not be loaded. Make sure the file",
+          "'storage//config.ini' can be loaded.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
 
 try:
     verbosity = config.getboolean('VERBOSITY', 'updater_verbosity')

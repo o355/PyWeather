@@ -9,9 +9,16 @@
 
 import configparser
 import traceback
-from pygame import display
-config = configparser.ConfigParser()
-config.read('storage//config.ini')
+
+try:
+    config = configparser.ConfigParser()
+    config.read('storage//config.ini')
+except:
+    print("The config file couldn't be loaded. Make sure the file",
+          "'storage//config.ini' can be loaded.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
     
 try:
     verbosity = config.getboolean('VERBOSITY', 'setup_verbosity')

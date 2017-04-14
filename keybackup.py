@@ -3,9 +3,17 @@
 
 import configparser
 import sys
+import logging
 
-config = configparser.ConfigParser()
-config.read('storage//config.ini')
+try:
+    config = configparser.ConfigParser()
+    config.read('storage//config.ini')
+except:
+    print("The config file couldn't be loaded. Make sure the file",
+          "'storage//config.ini' can be loaded.",
+          "Press enter to continue.", sep="\n")
+    input()
+    sys.exit()
 
 try:
     verbosity = config.getboolean('VERBOSITY', 'keybackup_verbosity')
@@ -19,7 +27,6 @@ except:
     saveDirectory = 'backup//backkey.txt'
     tracebacksEnabled = False
 
-import logging
 logger = logging.getLogger('pyweather_keybackup_0.5.1beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)

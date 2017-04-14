@@ -34,6 +34,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Fixes a bug in which in the keybackup script, the logger name was not `pyweather_keybackup_0.5beta` (it was instead `pyweather_keybackup_0.4.2beta`.
 * Fixed a bug in which if Wunderground gave >60 minute intervals for historical hourly information, PyWeather would only display 24 iterations. With this, the iteration break detection is gone, so a user may see "enter to continue", with no data following that.
 * Fixes multiple bugs with UI issues in historical hourly, and 10-day hourly information.
+* Fixes a "bug" in which if the config file couldn't be loaded, the error wasn't properly caught.
 
 ## version 0.5 beta (The Back to the Future Update) - Released on 3/31/2017
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.
