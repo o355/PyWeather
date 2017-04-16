@@ -18,11 +18,9 @@ import time
 import shutil
 from colorama import init, Fore, Style
 import codecs
-from geopy import GoogleV3
-from geopy import Nominatim
 import geocoder
+from geopy import GoogleV3
 geolocator = GoogleV3()
-geolocator2 = Nominatim()
 
 try:
     config = configparser.ConfigParser()
@@ -52,9 +50,9 @@ try:
                                                    'show_updaterReleaseTag')
     user_backupKeyDirectory = config.get('KEYBACKUP', 'savedirectory')
 except:
-    print("""Couldn't load your config file. Make sure your spelling is correct.
-    \nSetting variables to default...
-    \nIn case you need it, here's the traceback.""")
+    print("Couldn't load your config file. Make sure your spelling is correct.",
+    "Setting variables to default...",
+    "In case you need it, here's the traceback.", sep="\n")
     traceback.print_exc()
     sundata_summary = False
     almanac_summary = False
@@ -338,7 +336,7 @@ logger.info("Start 2nd geocoder...")
 # And how about asynchronius fetches? Coming soon, I mean, maybe?
 
 try:
-    location2 = geocoder.google([latstr, lonstr], method='reverse', timeout=20)
+    location2 = geocoder.google([latstr, lonstr], method="reverse")
     if verbosity == False:
         print("[#########-] | 91% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 except:

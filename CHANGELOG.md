@@ -7,13 +7,13 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Catches up config.py with the latest config options - Should be finished by 5/10.
 
 ## version 0.5.2 beta - Should be released on 5/3/2017
-* Adds the raw traceback output in keybackup.py - Should be finished by 4/16.
-* Adds the library check script, which checks for libraries PyWeather needs. - Should be finished by 4/18.
+* Adds the raw traceback output in keybackup.py - Should be finished by 4/18.
+* Adds the library check script, which checks for libraries PyWeather needs. - Should be finished by 4/20.
 * Adds a separate config.py script, to configure all available options. - Should be finished by 4/24.
 * Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Should be finished by 4/26.
 * Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Should be finished by 5/2.
 
-## version 0.5.1 beta - Should be released on 4/15/2017
+## version 0.5.1 beta - Should be released on 4/17/2017
 **NEW FEATURES/REMOVALS:**
 * Removes if verbosity == True in the separate updater, and keybackup scripts. - Done, and tested!
 * Adds the ability to load your backup key if PyWeather can't access your primary key. - Done, and tested!
@@ -26,7 +26,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * In setup, the key-reconfirmation is now a while true infinite loop. - Done, and tested!
 * Adds a check for "None" in of rain in the 10-day forecast, and -999 mph winds in the 10-day on the current day - Done, and tested!
 * Rewrites multiline prints in setup.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Done, needs to be tested.
-* Adds the configdefault.py script, to reset all configuration options to their default. - Should be finished by 4/14.
+* Adds the configdefault.py script, to reset all configuration options to their default. - Should be finished by 4/17.
 * Minor UI changes across most of the scripts.
 
 **BUG FIXES:**
