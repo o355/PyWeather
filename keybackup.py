@@ -1,33 +1,29 @@
-# PyWeather API Key Backup - version 0.5.1 beta
+# PyWeather API Key Backup - version 0.5.2 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 import configparser
 import sys
 import logging
+import traceback
 
-try:
-    config = configparser.ConfigParser()
-    config.read('storage//config.ini')
-except:
-    print("The config file couldn't be loaded. Make sure the file",
-          "'storage//config.ini' can be loaded.",
-          "Press enter to continue.", sep="\n")
-    input()
-    sys.exit()
+config = configparser.ConfigParser()
+config.read('storage//config.ini')
 
 try:
     verbosity = config.getboolean('VERBOSITY', 'keybackup_verbosity')
     saveDirectory = config.get('KEYBACKUP', 'savedirectory')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'keybackup_tracebacks')
 except:
-    print("Could not load your config. Make sure your spelling is correct.")
-    print("Setting variables to defaults...")
-    print("")
+    print("Couldn't load your config file. Make sure there aren't any typos",
+          "in the config, and that the config file is accessible.",
+          "Setting config variables to their defaults.",
+          "Here's the full traceback, in case you need it.", sep="\n")
+    traceback.print_exc()
     verbosity = False
     saveDirectory = 'backup//backkey.txt'
     tracebacksEnabled = False
 
-logger = logging.getLogger(name='pyweather_keybackup_0.5.1beta')
+logger = logging.getLogger(name='pyweather_keybackup_0.5.2beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
@@ -37,6 +33,11 @@ elif tracebacksEnabled == True:
     logger.setLevel(logging.ERROR)
 else:
     logger.setLevel(logging.CRITICAL)
+    
+def printException():
+    if tracebacksEnabled == True:
+        print("Here's the full traceback:")
+        traceback.print_exc()
     
 logger.debug("Listing configuration options:")
 logger.debug("verbosity: %s ; saveDirectory: %s" %
@@ -57,8 +58,9 @@ if confirmation == "yes":
         open(saveLocation, 'w').close()
     except:
         print("We ran into an error when overwriting a possibly existing file.",
-              "Please try again, and make sure your config file has the right spelling.",
-              "Press enter to continue.", sep="\n")
+              "Please try again, and make sure your config file has the right spelling.", sep="\n")
+        printException()
+        print("Press enter to exit.")
         input()
         sys.exit()
     logger.debug("apikey: %s" % apikey)
@@ -71,8 +73,9 @@ if confirmation == "yes":
             logger.debug("Performed ops: out.write(apikey2), out.close()")
     except:
         print("We ran into an error when writing to the backup file.",
-              "Please try again, and make sure your config file has the right spelling.",
-              "Press enter to continue.", sep="\n")
+              "Please try again, and make sure your config file has the right spelling.", sep="\n")
+        printException()
+        print("Press enter to exit.")
         input()
         sys.exit()
     print("Done!")

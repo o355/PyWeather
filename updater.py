@@ -1,4 +1,4 @@
-# PyWeather Updater - version 0.5.1 beta
+# PyWeather Updater - version 0.5.2 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 
@@ -8,19 +8,14 @@ import urllib.request
 import codecs
 import shutil
 import configparser
+import traceback
 reader = codecs.getreader("utf-8")
 from colorama import Fore, Style, init
 init()
 
-try:
-    config = configparser.ConfigParser()
-    config.read('storage//config.ini')
-except:
-    print("The config file could not be loaded. Make sure the file",
-          "'storage//config.ini' can be loaded.",
-          "Press enter to exit.", sep="\n")
-    input()
-    sys.exit()
+config = configparser.ConfigParser()
+config.read('storage//config.ini')
+
 
 try:
     verbosity = config.getboolean('VERBOSITY', 'updater_verbosity')
@@ -28,9 +23,11 @@ try:
     showReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'updater_tracebacks')
 except:
-    print("Couldn't load your config file. Make sure your spelling is correct.")
-    print("Setting variables to default...")
-    print("")
+    print("Couldn't load your config file. Make sure there aren't any typos",
+          "in the config, and that the config file is accessible.",
+          "Setting config variables to their defaults.",
+          "Here's the full traceback, in case you need it.", sep="\n")
+    traceback.print_exc()
     verbosity = False
     jsonVerbosity = False
     showReleaseTag = False

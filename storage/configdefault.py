@@ -45,7 +45,7 @@ logger.debug("verbosity: %s ; tracebacksEnabled: %s"
 
 def printException():
     if tracebacksEnabled == True:
-        print("Here's the full traceback:")
+        print("Here's the full traceback (for error reporting):")
         traceback.print_exc()
     
 print("Would you like me to set PyWeather configuration options to default?",

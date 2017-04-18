@@ -103,7 +103,7 @@ logger.debug("user_backupKeyDirectory: %s"
 
 def printException():
     if tracebacksEnabled == True:
-        logger.error("Here's the full traceback for bug reports:")
+        print("Here's the full traceback (for bug reporting):")
         traceback.print_exc()
         
 def printException_loggerwarn():

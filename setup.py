@@ -1,4 +1,4 @@
-# PyWeather Setup - version 0.5.1 beta
+# PyWeather Setup - version 0.5.2 beta
 # (c) 2017, o355, licensed under GNU GPL v3
 # If any random imports show beneath here, blame Eclipse.
 
@@ -10,31 +10,27 @@
 import configparser
 import traceback
 
-try:
-    config = configparser.ConfigParser()
-    config.read('storage//config.ini')
-except:
-    print("The config file couldn't be loaded. Make sure the file",
-          "'storage//config.ini' can be loaded.",
-          "Press enter to exit.", sep="\n")
-    input()
-    sys.exit()
+config = configparser.ConfigParser()
+config.read('storage//config.ini')
+
     
 try:
     verbosity = config.getboolean('VERBOSITY', 'setup_verbosity')
     jsonVerbosity = config.getboolean('VERBOSITY', 'setup_jsonverbosity')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'setup_tracebacks')
 except:
-    print("Couldn't load your config file. Make sure your spelling is correct.",
-          "Setting variables to default...", sep="\n")
-    
+    print("Couldn't load your config file. Make sure there aren't any typos",
+          "in the config, and that the config file is accessible.",
+          "Setting config variables to their defaults.",
+          "Here's the full traceback, in case you need it.", sep="\n")
+    traceback.print_exc()
     verbosity = False
     jsonVerbosity = False
     tracebacksEnabled = False
     
 def printException():
     if tracebacksEnabled == True:
-        print("Here's the full traceback:")
+        print("Here's the full traceback (for error reporting):")
         traceback.print_exc()
         
 def printException_loggerwarn():
