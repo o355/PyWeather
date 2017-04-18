@@ -71,7 +71,7 @@ except:
 # storage/config.ini. Have a lovely day!
 
 import logging
-logger = logging.getLogger('pyweather_0.5.1beta')
+logger = logging.getLogger(name='pyweather_0.5.1beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
@@ -1682,7 +1682,6 @@ while True:
                   + " inHg (" + historicals_maxPressureMB + " mb)")
             print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + historicals_precipIN
                   + " in (" + historicals_precipMM + "mb)")
-            print("")
             try:
                 print(Fore.RED + "To view hourly historical data, please press enter.")
                 print(Fore.RED + "If you want to return to the main menu, press Control + C.")
@@ -1823,7 +1822,6 @@ while True:
                 if historical_loops == user_loopIterations:
                     logger.info("Asking user to continue.")
                     try:
-                        print("")
                         print(Fore.RED + "Press enter to view the next", user_loopIterations
                               , "iterations of historical weather information.")
                         print("Otherwise, press Control + C to get back to the main menu.")

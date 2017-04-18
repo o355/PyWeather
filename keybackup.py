@@ -27,7 +27,7 @@ except:
     saveDirectory = 'backup//backkey.txt'
     tracebacksEnabled = False
 
-logger = logging.getLogger('pyweather_keybackup_0.5.1beta')
+logger = logging.getLogger(name='pyweather_keybackup_0.5.1beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 

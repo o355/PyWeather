@@ -83,8 +83,8 @@ if cd_confirmation == "yes":
     logger.debug("TRACEBACK/updater_tracebacks is now 'False'.")
     config['TRACEBACK']['configdefault_tracebacks'] = 'False'
     logger.debug("TRACEBACK/configdefault_tracebacks is now 'False'.")
-    config['UI']['show_entertocontinue'] = 'False'
-    logger.debug("UI/show_entertocontinue is now 'False'")
+    config['UI']['show_entertocontinue'] = 'True'
+    logger.debug("UI/show_entertocontinue is now 'True'")
     config['UI']['detailedinfoloops'] = '6'
     logger.debug("UI/detailedinfoloops is now '6'.")
     config['UI']['forecast_detailedinfoloops'] = '5'

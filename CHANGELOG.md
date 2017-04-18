@@ -8,25 +8,27 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 
 ## version 0.5.2 beta - Should be released on 5/3/2017
 * Adds the raw traceback output in keybackup.py - Should be finished by 4/18.
+* Changes the error message when the config file fails to load (the potential for the file to not get loaded) - Should be finished by 4/18.
+* Removes the error catching of a bad config file load, it's useless. - Should be finished by 4/18.
 * Adds the library check script, which checks for libraries PyWeather needs. - Should be finished by 4/20.
 * Adds a separate config.py script, to configure all available options. - Should be finished by 4/24.
 * Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Should be finished by 4/26.
 * Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Should be finished by 5/2.
 
-## version 0.5.1 beta - Should be released on 4/17/2017
+## version 0.5.1 beta - Released on 4/17/2017
 **NEW FEATURES/REMOVALS:**
-* Removes if verbosity == True in the separate updater, and keybackup scripts. - Done, and tested!
-* Adds the ability to load your backup key if PyWeather can't access your primary key. - Done, and tested!
-* Adds the raw traceback output in updater.py/setup.py - Done, and tested!
-* Adds the logger displaying configuration options at the start of every script - Done, and tested!
-* The backup key will now stay static to backkey.txt, with a configurable directory (thanks to @ModoUnreal for the PR) - Done, and tested!
-* Changes the non-critical traceback print function from an info level to a warn level in all scripts. - Done, and tested!
-* Catches up the setup file with the new configuration options added in 0.5 beta. - Done, and tested!
-* PyWeather Updater will now show the release tag, even when PyWeather is up-to-date. - Done, and tested!
+* Removes if verbosity == True in the separate updater, and keybackup scripts.
+* Adds the ability to load your backup key if PyWeather can't access your primary key.
+* Adds the raw traceback output in updater.py/setup.py.
+* Adds the logger displaying configuration options at the start of every script.
+* The backup key will now stay static to backkey.txt, with a configurable directory (thanks to @ModoUnreal for the PR).
+* Changes the non-critical traceback print function from an info level to a warn level in all scripts.
+* Catches up the setup file with the new configuration options added in 0.5 beta.
+* PyWeather Updater will now show the release tag, even when PyWeather is up-to-date.
 * In setup, the key-reconfirmation is now a while true infinite loop. - Done, and tested!
-* Adds a check for "None" in of rain in the 10-day forecast, and -999 mph winds in the 10-day on the current day - Done, and tested!
-* Rewrites multiline prints in setup.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Done, needs to be tested.
-* Adds the configdefault.py script, to reset all configuration options to their default. - Should be finished by 4/17.
+* Adds a check for "None" in of rain in the 10-day forecast, and -999 mph winds in the 10-day on the current day.
+* Rewrites multiline prints in setup.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution).
+* Adds the configdefault.py script, to reset all configuration options to their default.
 * Minor UI changes across most of the scripts.
 
 **BUG FIXES:**
@@ -34,7 +36,8 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Fixes a bug in which in the keybackup script, the logger name was not `pyweather_keybackup_0.5beta` (it was instead `pyweather_keybackup_0.4.2beta`.
 * Fixed a bug in which if Wunderground gave >60 minute intervals for historical hourly information, PyWeather would only display 24 iterations. With this, the iteration break detection is gone, so a user may see "enter to continue", with no data following that.
 * Fixes multiple bugs with UI issues in historical hourly, and 10-day hourly information.
-* Fixes a "bug" in which if the config file couldn't be loaded, the error wasn't properly caught.
+* Fixes a "bug" in which if the config file couldn't be loaded, the error wasn't properly caught. This is actually useless in practice, so hurray for wasted time!
+* Fixes a "bug" in which if the config file couldn't be properly written to in scripts, the error wasn't properly caught.
 
 ## version 0.5 beta (The Back to the Future Update) - Released on 3/31/2017
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.

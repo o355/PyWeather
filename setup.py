@@ -44,7 +44,7 @@ def printException_loggerwarn():
         
     
 import logging
-logger = logging.getLogger('pyweather_setup_0.5.1beta')
+logger = logging.getLogger(name='pyweather_setup_0.5.1beta')
 logger.setLevel(logging.DEBUG)
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
@@ -524,6 +524,7 @@ if displayTracebacks == "yes":
     config['TRACEBACK']['setup_tracebacks'] = 'True'
     config['TRACEBACK']['updater_tracebacks'] = 'True'
     config['TRACEBACK']['keybackup_tracebacks'] = 'True'
+    config['TRACEBACK']['configdefault_tracebacks'] = 'True'
     print("Changes saved.")
     logger.debug("Printing tracebacks is ENABLED.")
 elif displayTracebacks == "no":
@@ -531,6 +532,7 @@ elif displayTracebacks == "no":
     config['TRACEBACK']['setup_tracebacks'] = 'False'
     config['TRACEBACK']['updater_tracebacks'] = 'False'
     config['TRACEBACK']['keybackup_tracebacks'] = 'False'
+    config['TRACEBACK']['configdefault_tracebacks'] = 'False'
     print("Changes saved.")
     logger.debug("Printing tracebacks is DISABLED.")
 else:

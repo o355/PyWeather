@@ -1,4 +1,4 @@
-# PyWeather Updater - version 0.5 beta
+# PyWeather Updater - version 0.5.1 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 
@@ -38,7 +38,7 @@ except:
     
     
 import logging
-logger = logging.getLogger('pyweather_updater_0.5.1beta')
+logger = logging.getLogger(name='pyweather_updater_0.5.1beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 

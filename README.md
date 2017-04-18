@@ -1,4 +1,4 @@
-## Welcome to PyWeather (0.5 beta)!
+## Welcome to PyWeather (0.5.1 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
 ## Why? Why should I check my weather in a terminal?
@@ -10,6 +10,8 @@ I won't make you read the entire readme, so here's how to download PyWeather.
 Download a release from the releases tab, unzip it, and run setup.py. The script will walk you through installing necessary libraries, instructions for retrieving an API key, letting you configure stuff, and making sure things work.
 
 After that, double click pyweather.py, input a location, and that's it! No, really. That's actually it. No completed config files, none of that. setup.py, pyweather.py. Welcome to the world of simplicity! \ (•◡•) /
+
+**Sometimes, the setup script will have a tendancy to fail in regards to installing geocoder. See the wiki page "Setup" for more information.**
 
 If you have Git, and you'd prefer to clone over PyWeather from Git, please read the page on "Installing from Git" in the Wiki.
 
@@ -24,6 +26,7 @@ Alas, PyWeather was born. It's a Python script that let's you view weather data 
 
 ## What kind of features are in PyWeather?
 Want screenshots? https://imgur.com/a/n7L8B
+*asciinema demo goes here*
 
 (the almanac wasn't included, as I actually found a bug when taking the screenshots)
 
@@ -53,8 +56,10 @@ Oh, I should mention that PyWeather is faster than going to Wunderground, is ad-
 Need mobile support? You could get Termux, but that doesn't work (tested it). The best option right now is to spin up a Linux box with SSH and PyWeather, and log into it using Termius (iPhone/Android).
 
 ## Contributing
-I'm not a full time Python developer, and I'm not about to skip school because I want to work on Python projects. Between school, and the other projects I work on (and gaming, too!), I try my best to get in Python coding time, but it's not enough. Coding all of 0.5 beta's new features took 3 weeks, because of the limited time I had. So, I'm open to contributions.
+I'm not a full time Python developer. I have school, I work on other projects, and have other hobbies, too.
 
-Read over contributing.md in the .github folder to get a general rundown of how things work. After that, do your thing! Bug test, translate, submit some pull requests, you get the idea. Every contribution, bug report, etc, will get thanked in a release changelog!
+While I try to get in around 60 minutes of coding time a day, 80% of the time, I can't. Thanks school. Thanks. And, sometimes, I just need a break from coding Python, to focus on doing other projects, or spending time with family.
 
-If you have something to give constructive criticism about, please tell me! I'm all for constructive criticism, and learning through criticism.
+Contributing is the best way to help me out with the limited time I have to code PyWeather. Be it bug hunting, submitting feature ideas, coding parts of PyWeather, or telling me about something I can do better, I'm all for it.
+
+Read over CONTRIBUTING.md in the .github folder to get a general rundown of how things work.

@@ -1,5 +1,13 @@
-## PyWeather Configuration Readme
+## PyWeather Configuration Readme - For PyWeather 0.5.1 beta
 Since configparser hates comments, this will do for now.
+
+## CHANGELOG
+### forversion
+This is just to show you what version the config file is meant to be used for.
+
+Changing this does nothing.
+
+**Default option: 0.5.1**
 
 ## SUMMARY section
 ### sundata_summary
@@ -68,6 +76,13 @@ Useful for troubleshooting, and seeing if something is abnormal.
 
 **Default option: False**
 
+### configdefault_verbosity
+This option will let you turn on/off PyWeather Configuration Reset showing logging information.
+
+Useful for troubleshooting, and seeing if something is abnormal.
+
+**Default option: False**
+
 ## TRACEBACK section
 PyWeather can optionally show you a full traceback when an error occurs in a safety net. Turning this on is especially useful when you need to report an error.
 
@@ -79,7 +94,6 @@ Useful for reporting issues, and seeing what went wrong.
 **Default option: False**
 
 ### setup_tracebacks
-**This option is useless, but will be implemented in 0.5.1 beta.**
 
 This option allows you to turn on printing full tracebacks in PyWeather Setup.
 
@@ -88,7 +102,6 @@ Useful for reporting issues, and seeing what went wrong.
 **Default option: False**
 
 ### updater_tracebacks
-**This option is useless, but will be implemented in 0.5.1 beta.**
 
 This option allows you to turn on printing full tracebacks in PyWeather Updater.
 
@@ -100,6 +113,13 @@ Useful for reporting issues, and seeing what went wrong.
 **This option is useless, but will be implemented in 0.5.2 beta.**
 
 This option allows you to turn on printing full tracebacks in PyWeather API Key Backup.
+
+Useful for reporting issues, and seeing what went wrong.
+
+**Default option: False**
+
+### configdefault_tracebacks
+This option allows you to turn on printing full tracebacks in PyWeather Configuration Reset.
 
 Useful for reporting issues, and seeing what went wrong.
 
