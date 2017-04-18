@@ -657,11 +657,20 @@ else:
     logger.debug("Could not understand input. Defaulting to DISABLED.")
     
 print("","That's it! Now commiting config changes...", sep="\n")
-with open('storage//config.ini', 'w') as configfile:
-    logger.debug("configfile: %s" % configfile)
-    config.write(configfile)
-    print("Changes committed!")
-    logger.info("Performed operation: config.write(configfile)")
+try:
+    with open('storage//config.ini', 'w') as configfile:
+        logger.debug("configfile: %s" % configfile)
+        config.write(configfile)
+        print("Changes committed!")
+        logger.info("Performed operation: config.write(configfile)")
+except:
+    print("The config file couldn't be written to.",
+          "Make sure the config file can be written to.", sep="\n")
+    printException()
+    print("Press enter to exit.")
+    input()
+    sys.exit()
+    
 
 print("We're wrapping up, and making sure everything works.",
       "Checking for default libraries...", sep="\n")
