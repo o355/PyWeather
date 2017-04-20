@@ -7,6 +7,7 @@
 # Because I'm cool, you can have verbosity off, but JSON verbosity on.
 
 import sys
+from shutil import chown
 if sys.version_info < (3, 0, 0):
     print("You'll need Python 3 to run PyWeather.",
           "Press enter to exit.")
@@ -15,8 +16,9 @@ if sys.version_info < (3, 0, 0):
 elif (sys.version_info > (3, 0, 0)
       and sys.version_info < (3, 5, 0)):
     print("You have a Python version between 3.0 and 3.4.",
-          "While PyWeather will work, there are known issues.",
-          "Please take note of this in PyWeather.", sep="\n")
+          "While PyWeather will work, you may experience a few quirks.",
+          "Try updating to Python 3.6, as it works more reliably.",
+          "Please take note of this in PyWeather.","", sep="\n")
 
 import configparser
 import traceback
@@ -71,33 +73,68 @@ logger.debug("tracebacksEnabled: %s" %
              (tracebacksEnabled))
 
 print("Welcome to PyWeather setup.",
-      "This is meant to run as a one-time program, when you first get PyWeather.",
-      "Running preflight...", sep="\n")
+      "This is meant to run as a one-time program, when you first get PyWeather.","",
+      "Running a few checks...", sep="\n")
 
-if verbosity == True:
-    logger.info("Starting, importing 4 default libraries...")
+
+import urllib.request
+import shutil
+import time
+import json
+import codecs
+
+
+print("Preflight completed successfully.", "", sep="\n")
+buildnumber = 45
+buildversion = "0.5.2 beta"
+
+logger.debug("buildnumber: %s ; buildversion: %s" %
+             (buildnumber, buildversion))
+print("Checking for updates...")
 try:
-    import urllib.request
-    import shutil
-    import time
+    versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
+    logger.debug("versioncheck: %s" % versioncheck)
 except:
-    logger.warn("Odd, 4 default libraries are not available...")
-    print("Hmm...I tried to import default libraries, but ran into an error.",
-          "Make sure that sys, urllib.request, shutil, and are available with your",
-          "installation of Python.", sep="\n")
-    logger.error("Here's the full traceback:")
+    logger.warn("Couldn't check for updates! Is there an internet connection?")
+    print("Couldn't check for updates.",
+          "Make sure GitHub user content is unblocked, and you have an internet connection.", sep="\n")
     printException()
-neededLibraries = 0
-if sys.version_info[0] < 3:
-    logger.error("Python 3 is needed to run. You're using version: %s"
-                % sys.version_info)
-    print("Shucks! I can't proceed any further.",
-          "You'll need to install Python 3 to use PyWeather/PW Setup.", sep="\n")
-    logger.error("Here's the full traceback:")
-    printException()
-    print("Press enter to continue.")
-    input()
-    sys.exit()
+    
+reader = codecs.getreader("utf-8")
+versionJSON = json.load(reader(versioncheck))
+if jsonVerbosity == True:
+    logger.debug("versionJSON: %s" % versionJSON)
+logger.debug("Loaded versionJSON with reader %s" % reader)
+version_buildNumber = float(versionJSON['updater']['latestbuild'])
+version_latestVersion = versionJSON['updater']['latestversion']
+version_latestURL = versionJSON['updater']['latesturl']
+version_latestFileName = versionJSON['updater']['latestfilename']
+version_latestReleaseTag = versionJSON['updater']['latestversiontag']
+logger.debug("version_buildNumber: %s ; version_latestVersion: %s"
+             % (version_buildNumber, version_latestVersion))
+logger.debug("version_latestURL: %s ; verion_latestFileName: %s"
+             % (version_latestURL, version_latestFileName))
+logger.debug("version_latestReleaseTag: %s" % version_latestReleaseTag)
+version_latestReleaseDate = versionJSON['updater']['releasedate']
+logger.debug("version_latestReleaseDate: %s" % version_latestReleaseDate)
+if buildnumber >= version_buildNumber:
+    logger.info("PyWeather is up to date.")
+    logger.info("local build (%s) >= latest build (%s)"
+                % (buildnumber, version_buildNumber))
+    print("")
+    print("You're running PyWeather Setup for an up-to-date version of PyWeather.")
+    print("This setup script is designed for version " + buildversion
+          + ", and the latest PyWeather version is " + version_latestVersion)
+elif buildnumber < version_buildNumber:
+    logger.info("PyWeather is NOT up-to-date.")
+    logger.info("local build (%s) < latest build (%s)"
+                % (buildnumber, version_buildNumber))
+    print("You're running PyWeather Setup for an out-of-date version of PyWeather.")
+    print("This setup script is designed for version " + buildversion
+          + ", but the latest PyWeather version is " + version_latestVersion + ".")
+    print("You can download an up-to-date version of PyWeather at:",
+          version_latestURL + ".", sep="\n")
+
 # How to create a new line in 3 characters.
 print("","Before we get started, I want to confirm some permissions from you.",
       "Is it okay if I use 1-5 MB of data (downloading libraries), save a small",
@@ -236,6 +273,24 @@ else:
         sys.exit()
     elif neededLibrariesConfirm == "yes":
         logger.info("Installing necessary libraries...")
+        if sys.version_info > (3, 5, 0):
+            print("Your Python version is greater than 3.5.",
+                  "During the setup process, some installs may partially",
+                  "fail, due to bad permissions. If you want me to, I can fix",
+                  "this issue using a chown -R. Would you like me to do this?",
+                  "Yes or No.", sep="\n")
+            chownFolderInputs = input("Input here: ").lower()
+            logger.debug("chownFolderInputs: %s")
+            if chownFolderInputs == "yes":
+                print("Before we begin, I'll need the username of who you are.",
+                    "This is necessary to continue. If you want to exit, input",
+                    "'cancel' into the input prompt. Otherwise, enter your username,",
+                    "case sensitive.", sep="\n")
+                chownUsername = input("Input here: ")
+                if chownFolderInputs == "cancel":
+                    print("Cancelled.")
+                else:
+                    print("Now executing the command `sudo chown -R %s /usr/bin/whatsthedirectory")
         print("Now installing necessary libraries...")
         if coloramaInstalled == False:
             logger.debug("Installing colorama...")
@@ -329,6 +384,7 @@ else:
             "Do you want to use the shell option to install geopy?",
             "Yes or No.", sep="\n")
             geocoder_lastresort = input("Input here: ").lower()
+            logger.debug("geocoder_lastresort: %s" % geocoder_lastresort)
             if geocoder_lastresort == "yes":
                 print("Now executing `sudo -H pip3 install geocoder`.",
                       "Please enter the password for sudo when the prompt",
