@@ -13,14 +13,16 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the raw traceback output in keybackup.py - Done, and tested!
 * Changes the error message when the config file fails to load (the potential for the file to not get loaded) - Done, and tested!
 * Removes the error catching of a bad config file load, it's useless. - Done, and tested!
-* Adds a fallback to doing a system "sudo pip3 install library" if a library is found not to be installed. (in setup) - 100% done, not tested.
+* Adds a fallback to doing a system "sudo pip3 install library" if a library is found not to be installed. (in setup) - Done, and tested!
+* Added a warning to users using Python 3.0-3.4 in the setup script, it's known to cause errors. - Done, but not tested!
 * Switches the "here's the full traceback" thing from logger.error to a pure printout. - Should be finished by 4/20.
 * Adds version checking in the setup script, while trying not to be Windows 10. - Should be finished by 4/21.
 * Adds the library check script, which checks for libraries PyWeather needs. - Should be finished by 4/21.
-* Adds the option during setup to chown -R /usr/local/bin/geocode to the home user. - Should be finished by 4/22.
+* Adds the option during setup to chown -R /usr/local/bin/geocode to the home user. (Python 3.5-3.6 only) - Should be finished by 4/22.
 * Adds a separate config.py script, to configure all available options. - Should be finished by 4/24.
 * Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Should be finished by 4/26.
 * Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Should be finished by 5/2.
+* Finally gets around to getting the "can't run you have Python 2" warning in all scripts. - Should be finished by 5/3.
 
 **BUG FIXES**
 * Fixed a bug in which if tracebacks were enabled in the updater, the tracebacks wouldn't print properly, as such, producing a traceback. Huh.

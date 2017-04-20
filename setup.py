@@ -6,6 +6,17 @@
 # Verbosity turns on verbosity, jsonVerbosity outputs full JSONs.
 # Because I'm cool, you can have verbosity off, but JSON verbosity on.
 
+import sys
+if sys.version_info < (3, 0, 0):
+    print("You'll need Python 3 to run PyWeather.",
+          "Press enter to exit.")
+    input()
+    sys.exit()
+elif (sys.version_info > (3, 0, 0)
+      and sys.version_info < (3, 5, 0)):
+    print("You have a Python version between 3.0 and 3.4.",
+          "While PyWeather will work, there are known issues.",
+          "Please take note of this in PyWeather.", sep="\n")
 
 import configparser
 import traceback
@@ -66,7 +77,6 @@ print("Welcome to PyWeather setup.",
 if verbosity == True:
     logger.info("Starting, importing 4 default libraries...")
 try:
-    import sys
     import urllib.request
     import shutil
     import time
@@ -359,7 +369,7 @@ else:
                       "Press enter to exit.")
                 input()
                 sys.exit()   
-        print("All libraries are good to go! Let's move on.")
+        print("","All libraries are good to go! Let's move on.", sep="\n")
     else:
         logger.warn("Input was not understood. Closing...")
         print("""I'm not sure what you said.
