@@ -268,7 +268,7 @@ else:
             geopy_finalresort = input("Input here: ").lower()
             logger.debug("geopy_finalresort: %s" % geopy_finalresort)
             if geopy_finalresort == "yes":
-                print("Now executing `sudo -h pip3 install geopy`.")
+                print("Now executing `sudo -H pip3 install geopy`.")
                 print("Please enter the password for sudo when the prompt",
                       "comes up.",
                       "Starting in 3 seconds.", sep="\n")
@@ -276,7 +276,7 @@ else:
                 # This really only works on Linux.
                 # Because on Windows these install without much trouble.
                 try:
-                    subprocess.call(["sudo", "-h", "pip3", "install", "geopy"], shell=True)
+                    subprocess.call(["sudo", "-H", "pip3", "install", "geopy"], shell=True)
                     try:
                         print("Reattempting to import geopy...")
                         import geopy
@@ -315,18 +315,18 @@ else:
             logger.warn("geocoder was not installed successfully.")
             print("Hmm...geocoder didn't install properly.")
             printException()
-            print("As a last resort, we can use sudo -h to install packages.",
+            print("As a last resort, we can use sudo -H to install packages.",
             "Do you want to use the shell option to install geopy?",
             "Yes or No.", sep="\n")
             geocoder_lastresort = input("Input here: ").lower()
             if geocoder_lastresort == "yes":
-                print("Now executing `sudo -h pip3 install geocoder`.",
+                print("Now executing `sudo -H pip3 install geocoder`.",
                       "Please enter the password for sudo when the prompt",
                       "comes up.",
                       "Starting in 3 seconds...", sep="\n")
                 time.sleep(3)
                 try:
-                    subprocess.call(["sudo", "-h", "pip3", "install", "geocoder"], shell=True)
+                    subprocess.call(["sudo", "-H", "pip3", "install", "geocoder"], shell=True)
                     try:
                         print("Attempting to reimport geocoder.")
                         import geocoder
