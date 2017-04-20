@@ -17,6 +17,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Switches the "here's the full traceback" thing from logger.error to a pure printout. - Should be finished by 4/20.
 * Adds version checking in the setup script, while trying not to be Windows 10. - Should be finished by 4/21.
 * Adds the library check script, which checks for libraries PyWeather needs. - Should be finished by 4/21.
+* Adds the option during setup to chown -R /usr/local/bin/geocode to the home user. - Should be finished by 4/22.
 * Adds a separate config.py script, to configure all available options. - Should be finished by 4/24.
 * Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Should be finished by 4/26.
 * Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Should be finished by 5/2.

@@ -276,7 +276,7 @@ else:
                 # This really only works on Linux.
                 # Because on Windows these install without much trouble.
                 try:
-                    subprocess.run(["sudo", "-h", "pip3", "install", "geopy"])
+                    subprocess.call(["sudo", "-h", "pip3", "install", "geopy"], shell=True)
                     try:
                         print("Reattempting to import geopy...")
                         import geopy
@@ -326,7 +326,7 @@ else:
                       "Starting in 3 seconds...", sep="\n")
                 time.sleep(3)
                 try:
-                    subprocess.run(["sudo", "-h", "pip3", "install", "geocoder"])
+                    subprocess.call(["sudo", "-h", "pip3", "install", "geocoder"], shell=True)
                     try:
                         print("Attempting to reimport geocoder.")
                         import geocoder
