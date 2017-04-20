@@ -1,4 +1,4 @@
-# PyWeather - version 0.5.1 beta
+# PyWeather - version 0.5.2 beta
 # (c) 2017 o355, GNU GPL 3.0.
 
 # ==============
@@ -22,15 +22,8 @@ import geocoder
 from geopy import GoogleV3
 geolocator = GoogleV3()
 
-try:
-    config = configparser.ConfigParser()
-    config.read('storage//config.ini')
-except:
-    print("The config file couldn't be loaded. Make sure the file",
-          "'storage//config.ini' can be loaded.",
-          "Press enter to exit.", sep="\n")
-    input()
-    sys.exit()
+config = configparser.ConfigParser()
+config.read('storage//config.ini')
     
 try:
     sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
@@ -50,9 +43,10 @@ try:
                                                    'show_updaterReleaseTag')
     user_backupKeyDirectory = config.get('KEYBACKUP', 'savedirectory')
 except:
-    print("Couldn't load your config file. Make sure your spelling is correct.",
-    "Setting variables to default...",
-    "In case you need it, here's the traceback.", sep="\n")
+    print("Couldn't load your config file. Make sure there aren't any typos",
+          "in the config, and that the config file is accessible.",
+          "Setting config variables to their defaults.",
+          "Here's the full traceback, in case you need it.", sep="\n")
     traceback.print_exc()
     sundata_summary = False
     almanac_summary = False

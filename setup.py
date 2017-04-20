@@ -9,6 +9,7 @@
 
 import configparser
 import traceback
+import subprocess
 
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
@@ -225,7 +226,7 @@ else:
         sys.exit()
     elif neededLibrariesConfirm == "yes":
         logger.info("Installing necessary libraries...")
-        print("Sweet! I'm now installing necessary libraries.")
+        print("Now installing necessary libraries...")
         if coloramaInstalled == False:
             logger.debug("Installing colorama...")
             print("Installing Colorama...")
@@ -246,6 +247,7 @@ else:
             logger.info("Colorama installed successfully.")
         except ImportError:
             logger.warn("Colorama was not installed successfully.")
+            # Colorama really should install without trouble
             print("Hmm...Colorama didn't install properly.",
             "Try executing 'pip install colorama' in a command shell.",
             "As a precaution, I'm now exiting. (Error 52, setup.py)", sep="\n")
@@ -258,25 +260,105 @@ else:
             logger.info("geopy installed successfully.")
         except ImportError:
             logger.warn("geopy was not installed successfully.")
-            print("Hmm...geopy didn't install properly.",
-                  "Try executing 'pip install geopy' in a command shell.",
-                  "As a precaution, I'm now exiting. (Error 52, setup.py)", sep="\n")
+            print("Hmm...geopy didn't install properly.")
             printException()
-            print("Press enter to exit.")
-            input()
-            sys.exit()
+            print("As a last resort, we can use sudo -h to install packages.",
+                  "Do you want to use the shell option to install geopy?",
+                  "Yes or No.", sep="\n")
+            geopy_finalresort = input("Input here: ").lower()
+            logger.debug("geopy_finalresort: %s" % geopy_finalresort)
+            if geopy_finalresort == "yes":
+                print("Now executing `sudo -h pip3 install geopy`.")
+                print("Please enter the password for sudo when the prompt",
+                      "comes up.",
+                      "Starting in 3 seconds.", sep="\n")
+                time.sleep(3)
+                # This really only works on Linux.
+                # Because on Windows these install without much trouble.
+                try:
+                    subprocess.run(["sudo", "-h", "pip3", "install", "geopy"])
+                    try:
+                        print("Reattempting to import geopy...")
+                        import geopy
+                        print("Geopy is FINALLY installed!")
+                    except:
+                        print("Geopy still wasn't successfully installed.",
+                              "Cannot continue without geopy.",
+                              "Try doing a manual install of geopy with PIP.")
+                        printException()
+                        print("Press enter to exit.")
+                        input()
+                        sys.exit()
+                except:
+                    print("When running the command, an error occurred",
+                          "Cannot continue without geopy.",
+                          "Try doing a manual install of geopy with PIP.", sep="\n")
+                    printException()
+                    print("Press enter to exit.")
+                    input()
+                    sys.exit()
+            elif geopy_finalresort == "no":
+                print("Not installing geopy with a shell command.",
+                      "Cannot continue without geopy.",
+                      "Press enter to exit.", sep="\n")
+                input()
+                sys.exit()
+            else:
+                print("Did not understand input. Defaulting to not installing",
+                      "via the shell. Press enter to exit.", sep="\n")
+                input()
+                sys.exit()
         try:
             import geocoder
             logger.info("geocoder installed successfully.")
         except ImportError:
             logger.warn("geocoder was not installed successfully.")
-            print("Hmm...geocoder didn't install properly.",
-            "Try executing 'pip install geocoder' in a command shell.",
-            "As a precaution, I'm now exiting. (Error 52, setup.py)", sep="\n")
+            print("Hmm...geocoder didn't install properly.")
             printException()
-            print("Press enter to exit.")
-            input()
-            sys.exit()
+            print("As a last resort, we can use sudo -h to install packages.",
+            "Do you want to use the shell option to install geopy?",
+            "Yes or No.", sep="\n")
+            geocoder_lastresort = input("Input here: ").lower()
+            if geocoder_lastresort == "yes":
+                print("Now executing `sudo -h pip3 install geocoder`.",
+                      "Please enter the password for sudo when the prompt",
+                      "comes up.",
+                      "Starting in 3 seconds...", sep="\n")
+                time.sleep(3)
+                try:
+                    subprocess.run(["sudo", "-h", "pip3", "install", "geocoder"])
+                    try:
+                        print("Attempting to reimport geocoder.")
+                        import geocoder
+                        print("Geocoder is FINALLY installed!")
+                    except:
+                        print("Geocoder still wasn't successfully installed.",
+                              "Cannot continue without geocoder.",
+                              "Try doing a manual install of geopy with PIP.", sep="\n")
+                        printException()
+                        print("Press enter to exit.")
+                        input()
+                        sys.exit()
+                except:
+                    print("When running the command, an error occurred",
+                          "Try doing a manual install of geopy with PIP.", sep="\n")
+                    printException()
+                    print("Press enter to exit.")
+                    input()
+                    sys.exit()
+            elif geocoder_lastresort == "no":
+                print("Not installing geocoder with a shell command.",
+                      "Cannot continue without geocoder.",
+                      "Press enter to exit.", sep="\n")
+                input()
+                sys.exit()
+            else:
+                print("Did not understand your input. Defaulting to not installing",
+                      "via the shell. Cannot continue without geocoder.",
+                      "Try installing geocoder with PIP.",
+                      "Press enter to exit.")
+                input()
+                sys.exit()   
         print("All libraries are good to go! Let's move on.")
     else:
         logger.warn("Input was not understood. Closing...")
@@ -440,7 +522,7 @@ if backup_APIkey == "yes":
         print("Could not find the location you wanted. Defaulting on the normal directory...")
         printException_loggerwarn()
         print("Creating a backup...")
-        open("backup//backkey.txt", 'w').close()
+        open("backup//backkey.txt", 'w+').close()
         open("backup//backkey.txt", 'a').write(apikey_input)
         open("backup//backkey.txt").close()
         config.read('storage//config.ini')

@@ -11,12 +11,12 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 ## version 0.5.2 beta - Should be released on 5/3/2017
 **NEW FEATURES/REMOVALS**
 * Adds the raw traceback output in keybackup.py - Done, and tested!
-* Changes the error message when the config file fails to load (the potential for the file to not get loaded) - Should be finished by 4/18.
-* Removes the error catching of a bad config file load, it's useless. - Should be finished by 4/18.
-* Adds a confirmation in setup.py if the user wants to chown necessary folders for setup. - Should be finished by 4/18.
-* Switches the "here's the full traceback" thing from logger.error to a pure printout. - Should be finished by 4/18.
-* Adds version checking in the setup script, while trying not to be Windows 10. - Should be finished by 4/19.
-* Adds the library check script, which checks for libraries PyWeather needs. - Should be finished by 4/20.
+* Changes the error message when the config file fails to load (the potential for the file to not get loaded) - Done, and tested!
+* Removes the error catching of a bad config file load, it's useless. - Done, and tested!
+* Adds a fallback to doing a system "sudo pip3 install library" if a library is found not to be installed. (in setup) - 100% done, not tested.
+* Switches the "here's the full traceback" thing from logger.error to a pure printout. - Should be finished by 4/20.
+* Adds version checking in the setup script, while trying not to be Windows 10. - Should be finished by 4/21.
+* Adds the library check script, which checks for libraries PyWeather needs. - Should be finished by 4/21.
 * Adds a separate config.py script, to configure all available options. - Should be finished by 4/24.
 * Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Should be finished by 4/26.
 * Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Should be finished by 5/2.
