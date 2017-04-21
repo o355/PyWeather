@@ -19,10 +19,10 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Switches the "here's the full traceback" thing from logger.error to a pure printout. - Done, and tested!
 * Adds version checking in the setup script, while trying not to be Windows 10. - Done, and tested!
 * Adds the library check script, which checks for libraries PyWeather needs. - Scrapped. I might reconsider adding it at a later time, but at the moment, this is useless.
-* Adds the option during setup to chown -R /usr/local/bin/geocode to the home user. (Python 3.5-3.6 only) - 40% done, not tested.
-* Adds a separate config.py script, to configure all available options. - Should be finished by 4/24.
-* Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Should be finished by 4/26.
-* Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Should be finished by 5/2.
+* Adds the option during setup to chown -R /usr/local/bin/geocode to the home user. (Python 3.5-3.6 only) - 100% done, not tested.
+* Adds a separate config.py script, to configure all available options. - Should be finished by 4/25.
+* Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Should be finished by 4/27.
+* Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Should be finished by 5/1.
 * Finally gets around to getting the "can't run you have Python 2" warning in all scripts. - Should be finished by 5/3.
 
 **BUG FIXES**

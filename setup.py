@@ -275,7 +275,7 @@ else:
         logger.info("Installing necessary libraries...")
         if sys.version_info > (3, 5, 0):
             print("Your Python version is greater than 3.5.",
-                  "During the setup process, some installs may partially",
+                  "During the setup process, installing geocoder may partially",
                   "fail, due to bad permissions. If you want me to, I can fix",
                   "this issue using a chown -R. Would you like me to do this?",
                   "Yes or No.", sep="\n")
@@ -290,7 +290,21 @@ else:
                 if chownFolderInputs == "cancel":
                     print("Cancelled.")
                 else:
-                    print("Now executing the command `sudo chown -R %s /usr/bin/whatsthedirectory")
+                    print("Now executing the command `sudo chown -R %s /usr/bin/local/geocode",
+                          "When the sudo prompt comes up, please entire your password.",
+                          "Starting in 3 seconds.")
+                    time.sleep(3)
+                    try:
+                        subprocess.call(["sudo chown -R %s /usr/bin/local/geocode"], shell=True % chownUsername)
+                        print("The command was executed successfully! Moving on...")
+                    except:
+                        print("The command failed to execute.")
+                        printException()
+                        print("Moving on...")
+            else:
+                print("Not chowning the folder. You may encounter errors",
+                      "when installing geocoder.", sep="\n")
+                
         print("Now installing necessary libraries...")
         if coloramaInstalled == False:
             logger.debug("Installing colorama...")
