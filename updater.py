@@ -1,4 +1,4 @@
-# PyWeather Updater - version 0.5 beta
+# PyWeather Updater - version 0.5.2 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 
@@ -8,6 +8,7 @@ import urllib.request
 import codecs
 import shutil
 import configparser
+import traceback
 reader = codecs.getreader("utf-8")
 from colorama import Fore, Style, init
 init()
@@ -15,15 +16,18 @@ init()
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
 
+
 try:
     verbosity = config.getboolean('VERBOSITY', 'updater_verbosity')
     jsonVerbosity = config.getboolean('VERBOSITY', 'updater_jsonverbosity')
     showReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'updater_tracebacks')
 except:
-    print("Couldn't load your config file. Make sure your spelling is correct.")
-    print("Setting variables to default...")
-    print("")
+    print("Couldn't load your config file. Make sure there aren't any typos",
+          "in the config, and that the config file is accessible.",
+          "Setting config variables to their defaults.",
+          "Here's the full traceback, in case you need it.", sep="\n")
+    traceback.print_exc()
     verbosity = False
     jsonVerbosity = False
     showReleaseTag = False
@@ -31,9 +35,19 @@ except:
     
     
 import logging
-logger = logging.getLogger('pyweather_updater_0.5.1beta')
+logger = logging.getLogger(name='pyweather_updater_0.5.1beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
+
+def printException():
+    if tracebacksEnabled == True:
+        print("Here's the full traceback:")
+        traceback.print_exc()
+        
+def printException_loggerwarn():
+    if verbosity == True:
+        logger.warn("Oh snap! We ran into a non-critical error. Here's the traceback.")
+        logger.warn(traceback.print_exc())
 
 if verbosity == True:
     logger.setLevel(logging.DEBUG)
@@ -41,6 +55,12 @@ elif tracebacksEnabled == True:
     logger.setLevel(logging.ERROR)
 else:
     logger.setLevel(logging.CRITICAL)
+    
+logger.debug("Listing configuration options:")
+logger.debug("verbosity: %s ; jsonVerbosity: %s" %
+             (verbosity, jsonVerbosity))
+logger.debug("showReleaseTag: %s ; tracebacksEnabled: %s" %
+             (showReleaseTag, tracebacksEnabled))
     
 buildnumber = 51
 buildversion = "0.5.1 beta"
@@ -55,6 +75,7 @@ except:
     print(Style.BRIGHT + Fore.RED + "Couldn't check for updates.")
     print("Make sure GitHub user content is unblocked, and you have an internet connection.")
     print("Error 54, updater.py")
+    printException()
     print("Press enter to exit.")
     input()
     sys.exit()
@@ -83,6 +104,9 @@ if buildnumber >= version_buildNumber:
     print(Style.BRIGHT + Fore.GREEN + "PyWeather is up to date!")
     print("You have version: " + Fore.CYAN + buildversion)
     print(Fore.GREEN + "The latest version is: " + Fore.CYAN + version_latestVersion)
+    if showReleaseTag == True:
+        print(Fore.GREEN + "The latest release tag is: " + Fore.CYAN +
+              version_latestReleaseTag)
     print(Fore.GREEN + "Press enter to exit.")
     input()
     sys.exit()
@@ -119,6 +143,7 @@ elif buildnumber < version_buildNumber:
             print("Make sure GitHub user content is unblocked, "
                     + "and you have an internet connection.")
             print("Error 55, updater.py")
+            printException()
             print("Press enter to exit.")
             input()
             sys.exit()
@@ -155,9 +180,11 @@ else:
     except:
         logger.error("Variables are corrupted, or a typo was made.")
         logger.error("Trying to list variables 1 more time...")
+        printException_loggerinfo()
         try:
             logger.warn("buildnumber: %s" % buildnumber)
         except:
+            printException_loggerinfo()
             logger.warn("Variable buildnumber is corrupt.")
     print(Style.BRIGHT + Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
     print(Fore.RED + "Error 53, updater.py")

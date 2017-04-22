@@ -2,25 +2,56 @@
 
 Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
 
+## version 0.5.3 beta - Should be released on 5/18/2017
+* Rewrites multiline prints in keybackup.py/updater.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Should be finished by 5/8.
+* Catches up config.py with the latest config options - Should be finished by 5/10.
+* Adds the ability to update with git through the command line - Should be finished by 5/13. This is possible!
+* Adds back the iteration detections for historical hourly. This is accomplished by doing a for loop before user data is shown, and calculating the total amount of iterations that need to be done. - Should be finished by 5/17
+* Adds the option to cancel a pending shell command in PyWeather setup (Ctrl+C), and increases the time until the command is executed to 5 seconds. - Should be finished by 5/18
 
-## version 0.5.2 beta - To be released late April
-* Adds the raw traceback output in keybackup.py
-* Adds the library check script, which checks for libraries PyWeather needs.
-* Adds a separate config.py script, to configure all available options.
-* Adds the ability to control where the backup API key will be stored in the setup script.
+## version 0.5.2 beta - Should be released on 5/3/2017
+**NEW FEATURES/REMOVALS**
+* Adds the raw traceback output in keybackup.py - Done, and tested!
+* Changes the error message when the config file fails to load (the potential for the file to not get loaded) - Done, and tested!
+* Removes the error catching of a bad config file load, it's useless. - Done, and tested!
+* Adds a fallback to doing a system "sudo pip3 install library" if a library is found not to be installed. (in setup) - Done, and tested!
+* Added a warning to users using Python 3.0-3.4 in the setup script, it's known to cause errors. - Done, and tested!
+* Switches the "here's the full traceback" thing from logger.error to a pure printout. - Done, and tested!
+* Adds version checking in the setup script, while trying not to be Windows 10. - Done, and tested!
+* Adds the library check script, which checks for libraries PyWeather needs. - Scrapped. I might reconsider adding it at a later time, but at the moment, this is useless.
+* Adds the option during setup to chown -R /usr/local/bin/geocode to the home user. (Python 3.5-3.6 only) - 100% done, not tested.
+* Adds a separate config.py script, to configure all available options. - Should be finished by 4/25.
+* Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Should be finished by 4/27.
+* Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Should be finished by 5/1.
+* Finally gets around to getting the "can't run you have Python 2" warning in all scripts. - Should be finished by 5/3.
 
-## version 0.5.1 beta - Should be released on 4/7/2017
+**BUG FIXES**
+* Fixed a bug in which if tracebacks were enabled in the updater, the tracebacks wouldn't print properly, as such, producing a traceback. Huh.
 
+## version 0.5.1 beta - Released on 4/17/2017
 **NEW FEATURES/REMOVALS:**
-* Removes if verbosity == True in the separate updater, and keybackup scripts. - Done, and tested!
-* Adds the ability to load your backup key if PyWeather can't access your primary key. - Done, and tested!
-* Adds the raw traceback output in updater.py/setup.py - Should be finished by 4/1
-* Adds the logger displaying configuration options at the start of every script - Should be finished by 4/3
-* Catches up the setup file with the new configuration options added in 0.5 beta. - Should be finished by 4/6
+* Removes if verbosity == True in the separate updater, and keybackup scripts.
+* Adds the ability to load your backup key if PyWeather can't access your primary key.
+* Adds the raw traceback output in updater.py/setup.py.
+* Adds the logger displaying configuration options at the start of every script.
+* The backup key will now stay static to backkey.txt, with a configurable directory (thanks to @ModoUnreal for the PR).
+* Changes the non-critical traceback print function from an info level to a warn level in all scripts.
+* Catches up the setup file with the new configuration options added in 0.5 beta.
+* PyWeather Updater will now show the release tag, even when PyWeather is up-to-date.
+* In setup, the key-reconfirmation is now a while true infinite loop. - Done, and tested!
+* Adds a check for "None" in of rain in the 10-day forecast, and -999 mph winds in the 10-day forecast on the current day.
+* Rewrites multiline prints in setup.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution).
+* Adds the configdefault.py script, to reset all configuration options to their default.
+* Minor UI changes across most of the scripts.
 
 **BUG FIXES:**
-* Fixes a bug in which if the config file wouldn't load in the updater, the variable showReleaseTag wouldn't get defined, and it would presumably crash.
-* Fixes a bug in which in the keybackup script, the logger name was not `pyweather_keybackup_0.5beta` (it was instead `pyweather_keybackup_0.4.2beta`.
+* Fixed a bug in which if the config file wouldn't load in the updater, the variable showReleaseTag wouldn't get defined, and it would presumably crash.
+* Fixed a bug in which in the keybackup script, the logger name was not `pyweather_keybackup_0.5.1beta` (it was instead `pyweather_keybackup_0.4.2beta`.
+* Fixed a bug in which if Wunderground gave >60 minute intervals for historical hourly information, PyWeather would only display 24 iterations. With this, the iteration break detection is gone, so a user may see "enter to continue", with no data following that.
+* Fixes multiple bugs with UI issues in historical hourly, and 10-day hourly information.
+* Fixes a "bug" in which if the config file couldn't be loaded, the error wasn't properly caught. This is actually useless in practice, so hurray for wasted time!
+* Fixes a "bug" in which if the config file couldn't be properly written to in scripts, the error wasn't properly caught.
+* Fixes a bug in which the logger name wasn't properly defined.
 
 ## version 0.5 beta (The Back to the Future Update) - Released on 3/31/2017
 * The naming comes from a combination of adding history (back), and 10-day future (future). Sorry.
@@ -37,7 +68,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the ability to set the interval in which the "enter to continue" will appear
 * Adds the ability to show how many iterations are left in the enter to continue thing (if it's on)
 * Removes the if verbosity == True garbage in the setup file. 
-* Adds the option to view the release tag in the updater
+* Adds the option to view the release tag in the updater.
 * Adds verbosity for all new functions added. This will now be standard!
 * Minor UI changes.
 
@@ -116,3 +147,31 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 
 ## version 0.2 beta (The Initial Update) - Released 2/22/2017
 * Initial build
+
+
+# Very future versions
+The upcoming dates here do come with uncertain release dates. Features might be added on the fly.
+
+## version 0.6 beta - Should be released on 6/9/2017
+* Adds alerts information to PyWeather - Should be finished by 5/22.
+* Adds radar/satellite loops to PyWeather - Should be finished by 5/28.
+* Adds the option to show release notes through the updater - Should be finished by 6/8.
+
+## version 0.6.1 beta - Should be released on 6/22/2017
+* Catches up the setup file with the latest config options - Should be finished by 6/19.
+* Catches up config.py with the latest config options - Should be finished by 6/21.
+
+## version 0.7 beta - Should be released on 7/13/2017
+* Adds the ability to view weather from a PWS - Should be finished by 6/30.
+* Adds alerts information to PyWeather, with the ability to turn it on and off. - Should be finished by 7/12.
+
+## version 0.7.1 beta - Should be released on 7/20/2017
+* Catches up the setup file with the latest config options - Should be finished by 7/14.
+* Catches up config.py with the latest config options - Should be finished by 7/19.
+
+## version 0.8 beta - Should be released on 8/26/2017
+* Adds PyWeather's Quick Weather, a nice way to get the weather in a pinch. - Should be finished by 8/18.
+* Adds hurricane/tide data to PyWeather. - Should be finished by 8/25.
+
+## version 0.8.1 beta - Should be released on 8/30/2017
+* Catches up config.py with the latest config options - Should be finished by 8/29.
