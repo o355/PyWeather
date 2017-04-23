@@ -1,4 +1,4 @@
-# PyWeather - version 0.5.2 beta
+# PyWeather - version 0.5.2 indev
 # (c) 2017 o355, GNU GPL 3.0.
 
 # ==============
@@ -42,6 +42,7 @@ try:
     user_showUpdaterReleaseTag = config.getboolean('UPDATER', 
                                                    'show_updaterReleaseTag')
     user_backupKeyDirectory = config.get('KEYBACKUP', 'savedirectory')
+    validateAPIKey = config.getboolean('PYWEATHER BOOT', 'validateAPIKey')
 except:
     print("Couldn't load your config file. Make sure there aren't any typos",
           "in the config, and that the config file is accessible.",
@@ -61,6 +62,7 @@ except:
     user_forecastLoopIterations = 5
     user_showUpdaterReleaseTag = False
     user_backupKeyDirectory = 'backup//'
+    validateAPIKey = True
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
@@ -77,6 +79,7 @@ elif tracebacksEnabled == True:
 else:
     logger.setLevel(logging.CRITICAL)
     
+logger.info("PyWeather 0.5.2 indev now starting.")
 logger.info("Configuration options are as follows: ")
 logger.debug("sundata_summary: %s ; almanac_summary: %s" %
              (sundata_summary, almanac_summary))
@@ -90,8 +93,8 @@ logger.debug("user_enterToContinue: %s ; user_showCompletedIterations: %s"
              % (user_enterToContinue, user_showCompletedIterations))
 logger.debug("user_forecastLoopIterations: %s ; user_showUpdaterReleaseTag: %s"
              % (user_forecastLoopIterations, user_showUpdaterReleaseTag))
-logger.debug("user_backupKeyDirectory: %s"
-             % (user_backupKeyDirectory))
+logger.debug("user_backupKeyDirectory: %s ; validateAPIKey: %s"
+             % (user_backupKeyDirectory, validateAPIKey))
 
 
 
@@ -116,6 +119,7 @@ except FileNotFoundError:
         apikey2_load = open(user_backupKeyDirectory + "backkey.txt")
         logger.debug("apikey2_load: %s" % apikey2_load)
         apikey = apikey2_load.read()
+        logger.debug("apikey: %s" % apikey)
         print("Loaded your backup key successfully!")
     except FileNotFoundError:
         print("Your API key couldn't be loaded.")
@@ -124,10 +128,24 @@ except FileNotFoundError:
         print("Press enter to continue.")
         input()
         sys.exit()
+        
+if validateAPIKey == True:
+    logger.info("Making sure the backup key can be found.")
+    try:
+        apikey2_load = open(user_backupKeyDirectory + "backkey.txt")
+        logger.debug("apikey2_load: %s" % apikey2_load)
+        apikey2 = apikey2_load.read()
+        backupKeyLoaded = True
+        logger.debug("apikey2: %s ; backupKeyLoaded: %s" %
+                     (apikey2, backupKeyLoaded))
+    except:
+        logger.warn("Could not load the backup key for future validation.")
+        backupKeyLoaded = False
+        logger.debug("backupKeyLoaded: %s" % backupKeyLoaded)
 
 logger.debug("apikey = %s" % apikey)
 buildnumber = 51
-buildversion = '0.5.1 beta'    
+buildversion = '0.5.2 indev'    
 
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")
@@ -185,7 +203,7 @@ try:
     # them off if verbosity is enabled (it isn't needed)
     # :/
     if verbosity == False:
-        print("[#---------] | 3% |", round(time.time() - firstfetch,1), 
+        print("[#---------] | 1% |", round(time.time() - firstfetch,1), 
               "seconds", end="\r")
 except:
     logger.warn("No connection to Google's geocoder!")
@@ -225,7 +243,7 @@ astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + l
 almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
 
 if verbosity == False:
-    print("[##--------] | 9% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    print("[##--------] | 6% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 logger.debug("currenturl: %s" % currenturl)
 logger.debug("f10dayurl: %s" % f10dayurl)
 logger.debug("hourlyurl: %s" % hourlyurl)
@@ -238,12 +256,91 @@ logger.info("Start codec change...")
 # Due to Python, we have to get the UTF-8 reader to properly parse the JSON we got.
 reader = codecs.getreader("utf-8")
 if verbosity == False:
-    print("[##--------] | 12% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    print("[##--------] | 8% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 logger.debug("reader: %s" % reader)
 logger.info("End codec change...")
 logger.info("Start API fetch...")
+
+if validateAPIKey == True:
+    logger.info("Beginning API key validation.")
+    testurl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/NY/New_York.json'
+    logger.debug("testurl: %s" % testurl)
+    try:
+        testJSON = urllib.request.urlopen(testurl)
+        logger.debug("Acquired test JSON, end result: %s" % testJSON)
+    except:
+        logger.warn("Cannot connect to the API! Is the internet down?")
+        print("Cannot connect to Wunderground's API. Make sure you have",
+              "an internet connection, and that Wunderground's API is unblocked.",
+              sep="\n")
+        printException()
+        print("Press enter to exit.")
+        input()
+        sys.exit()
+    if verbosity == False:
+        print("[##--------] | 9% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    test_json = json.load(reader(testJSON))
+    if jsonVerbosity == True:
+        logger.debug("test_json: %s" % test_json)
+    try:
+        test_conditions = str(test_json['current_observation']['temp_f'])
+        logger.debug("test_conditions: %s" % test_conditions)
+        logger.info("API key is valid!")
+    except:
+        logger.warn("API key is NOT valid. Attempting to revalidate API key...")
+        if backupKeyLoaded == True:
+            logger.info("Beginning backup API key validation.")
+            testurl = 'http://api.wunderground.com/api/' + apikey2 + '/conditions/q/NY/New_York.json'
+            logger.debug("testurl: %s" % testurl)
+            # What if the user's internet connection was alive during the 1st
+            # validation, but not the 2nd? That's why this is here.
+            try:
+                testJSON = urllib.request.urlopen(testurl)
+                logger.debug("Acquired test JSON, end result: %s" % testJSON)
+            except:
+                print("Cannot connect to Wunderground's API. Make sure you have",
+                      "an internet connection, and that Wunderground's API is unblocked.",
+                      sep="\n")
+                printException()
+                print("Press enter to exit.")
+                input()
+                sys.exit()
+            if verbosity == False:
+                print("[##--------] | 12% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+            test_json = json.load(reader(testJSON))
+            if jsonVerbosity == True:
+                logger.debug("test_json: %s" % test_json)
+            try:
+                test_conditions = str(test_json['current_observation']['temp_f'])
+                logger.debug("test_conditions: %s" % test_conditions)
+                logger.info("Backup API key is valid!")
+                apikey = apikey2
+                logger.debug("apikey = apikey2. apikey: %s" % apikey)
+                currentJSON = testJSON
+            except:
+                logger.warn("Backup API key could not be validated!")
+                print("Your primary and backup API key(s) could not be validated.",
+                      "Make sure your primary API key is valid, and that you make",
+                      "a backup of your primary API key when you confirm that it is",
+                      "valid.", sep="\n")
+                printException()
+                print("Press enter to exit.")
+                input()
+                sys.exit()
+            
+        else:
+            logger.warn("Backup key couldn't get loaded!")
+            print("Your primary API key couldn't be validated, and your",
+                  "backup key could not be loaded at startup.",
+                  "Please make sure your primary API key is valid, and that",
+                  "your backup API key can be accessed.",
+                  "Press enter to exit.", sep="\n")
+            input()
+            sys.exit()
+        
+        
     
-# Fetch the JSON file using urllib.request, store it as a temporary file.
+# Fetch the JSON file using urllib.request, store it as a variable.
 try:
     summaryJSON = urllib.request.urlopen(currenturl)
     if verbosity == False:
