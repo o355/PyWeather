@@ -83,9 +83,7 @@ import time
 import json
 import codecs
 
-
-print("Preflight completed successfully.", "", sep="\n")
-buildnumber = 45
+buildnumber = 52
 buildversion = "0.5.2 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
@@ -207,6 +205,8 @@ except ImportError:
         "Press enter to exit.", sep="\n")
         input()
         sys.exit()
+
+neededLibraries = 0
 
 try:
     import colorama
