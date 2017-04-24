@@ -1,14 +1,11 @@
 # PyWeather Setup - version 0.5.2 beta
 # (c) 2017, o355, licensed under GNU GPL v3
-# If any random imports show beneath here, blame Eclipse.
 
 # Same deal as the main script.
 # Verbosity turns on verbosity, jsonVerbosity outputs full JSONs.
 # Because I'm cool, you can have verbosity off, but JSON verbosity on.
 
 import sys
-from shutil import chown
-from pygame.examples.midi import Keyboard
 if sys.version_info < (3, 0, 0):
     print("You'll need Python 3 to run PyWeather.",
           "Press enter to exit.")
