@@ -8,7 +8,7 @@ I'm basically tired of adding bells and whistles, I want to push myself further,
 
 Code cleanup was meant to occur later down the road, and I'll add the bells and whistles in other releases. I want to really focus on getting real features in PyWeather.
 
-Right now, PyWeather 0.5.2 beta is still slated to drop in Early May. 0.6 development will start afterwards.
+Right now, PyWeather 0.5.2 beta is still slated to drop in Early May. 0.6 development will start afterwards, and should drop in Mid June.
 
 ## Why? Why should I check my weather in a terminal?
 It's cooler. I think.

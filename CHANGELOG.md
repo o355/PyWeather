@@ -2,15 +2,20 @@
 
 Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
 
-## version 0.6 beta - Should be released on 6/9/2017
-* Adds alerts information to PyWeather - Should be finished by 5/22.
-* Adds radar/satellite loops to PyWeather - Should be finished by 5/28.
-* Adds the option to show release notes through the updater - Should be finished by 6/8.
+
+## version 0.6 beta - Should be released on 6/21/2017
+* Adds alerts information to PyWeather, including (of course) the ability to turn it on and off. - Should be finished by 5/11.
+* Adds radar/satellite loops to PyWeather - Should be finished by 5/25.
+* Adds the option to show release notes through the updater - Should be finished by 5/30.
+* Adds the config.py script, to let users configure every setting of PyWeather possible - Should be finished by 6/7.
+* The config will be stored in the "config" folder, along with scripts/files that relate to the config - Should be finished by 6/14.
+* The "What would you like to do now" menu will get switched to only a number-based input. - Should be finished by 6/17.
+* Doing the usual setup/configdefault catching up - Should be finished by 6/20.
 
 ### version 0.5.3 beta - Release not occurring.
 * Rewrites multiline prints in keybackup.py/updater.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Scrapped. Will be implemented in 0.9 beta.
 
-## version 0.5.2 beta - Should be released on 5/3/2017
+## version 0.5.2 beta - Should be released on 4/30/2017
 **NEW FEATURES/REMOVALS**
 * Adds the raw traceback output in keybackup.py - Done, and tested!
 * Changes the error message when the config file fails to load (the potential for the file to not get loaded) - Done, and tested!
@@ -20,14 +25,14 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Switches the "here's the full traceback" thing from logger.error to a pure printout. - Done, and tested!
 * Adds version checking in the setup script, while trying not to be Windows 10. - Done, and tested!
 * Adds the library check script, which checks for libraries PyWeather needs. - Scrapped. Will be implemented later down the road, before 0.9 beta.
-* Adds the option during setup to chown -R /usr/local/bin/geocode to the home user. (Python 3.5-3.6 only) - 100% done, not tested.
+* Adds a warning to users on Python 3.5/3.6 and running Linux about Geocoder failing during install. - 100% done, and tested.
 * Adds a separate config.py script, to configure all available options. - Scrapped. Adding it to PyWeather 0.6 beta.
 * Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Done, and tested!
 * Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Scrapped. Will be implemented in 0.9 beta.
-* Finally gets around to getting the "can't run you have Python 2" warning in all scripts. - Should be finished by 4/24.
-* Adds the option to cancel a pending shell command in PyWeather setup (Ctrl+C), and increases the time until the command is executed to 5 seconds. - Should be finished by 4/25
-* Adds the ability to update with git through the command line - Should be finished by 4/29.
-* Adds back the iteration detections for historical hourly. This is accomplished by doing a for loop before user data is shown, and calculating the total amount of iterations that need to be done. - Should be finished by 5/2.
+* Finally gets around to getting the "can't run you have Python 2" warning in all scripts. - This really isn't needed. The scripts will just fail to run.
+* Adds the option to cancel a pending shell command in PyWeather setup (Ctrl+C), and increases the time until the command is executed to 5 seconds. - 100% done, not tested.
+* Adds the ability to update with git through the command line - Should be finished by 4/27.
+* Adds back the iteration detections for historical hourly. This is accomplished by doing a for loop before user data is shown, and calculating the total amount of iterations that need to be done. - Should be finished by 4/29.
 
 **BUG FIXES**
 * Fixed a bug in which if tracebacks were enabled in the updater, the tracebacks wouldn't print properly, as such, producing a traceback. Huh.
@@ -156,26 +161,35 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 # Very future versions
 The upcoming dates here do come with uncertain release dates. Features might be added on the fly.
 
-## version 0.6 beta - Should be released on 6/9/2017
-* Adds alerts information to PyWeather - Should be finished by 5/22.
-* Adds radar/satellite loops to PyWeather - Should be finished by 5/28.
-* Adds the option to show release notes through the updater - Should be finished by 6/8.
 
-## version 0.6.1 beta - Should be released on 6/22/2017
-* Catches up the setup file with the latest config options - Should be finished by 6/19.
-* Catches up config.py with the latest config options - Should be finished by 6/21.
+## version 0.7 beta - Should be released on 7/11/2017
+* Adds the ability to view weather from a PWS - Should be finished by 7/6.
+* Doing the usual catching up all the scripts that involve configs - Should be finished by 7/10.
 
-## version 0.7 beta - Should be released on 7/13/2017
-* Adds the ability to view weather from a PWS - Should be finished by 6/30.
-* Adds alerts information to PyWeather, with the ability to turn it on and off. - Should be finished by 7/12.
+## version 0.8 beta - Should be released on 8/14/2017
+* Adds PyWeather's Quick Weather, a nice way to get the weather in a pinch. - Should be finished by 7/31.
+* Adds hurricane/tide data to PyWeather. - Should be finished by 8/6.
+* Again, does the usual "catching up all scripts involving a config" thing. - Should be finished by 8/13.
 
-## version 0.7.1 beta - Should be released on 7/20/2017
-* Catches up the setup file with the latest config options - Should be finished by 7/14.
-* Catches up config.py with the latest config options - Should be finished by 7/19.
+## version 0.9 beta - Should be released on 9/4/2017
+* Adds the ability to show yesterday's weather. - Should be finished by 8/26.
+* Adds the librarycheck.py script. - Should be finished by 9/3.
 
-## version 0.8 beta - Should be released on 8/26/2017
-* Adds PyWeather's Quick Weather, a nice way to get the weather in a pinch. - Should be finished by 8/18.
-* Adds hurricane/tide data to PyWeather. - Should be finished by 8/25.
+## version 0.10 beta
+* Cleans up the first 500 lines of code in the main PyWeather script.
+* Cleans up the first 450 lines of code in the setup script.
+* Cleans up all code in the updater script.
 
-## version 0.8.1 beta - Should be released on 8/30/2017
-* Catches up config.py with the latest config options - Should be finished by 8/29.
+## version 0.10.1 beta
+* Cleans up lines 500-1000 of code in the main PyWeather script.
+* Cleans up the remaining lines of code in the setup script.
+* Cleans up all code in the keybackup.py script.
+
+## version 0.10.2 beta
+* Cleans up lines 1000-1500 of code in the main PyWeather script.
+* Cleans up all code in the config.py script.
+* Cleans up all code in the configdefault.py script.
+
+## version 0.10.3 beta
+* Cleans up all remaining lines of code in the main PyWeather script.
+* Cleans up all code in the librarycheck.py script.

@@ -8,6 +8,7 @@
 
 import sys
 from shutil import chown
+from pygame.examples.midi import Keyboard
 if sys.version_info < (3, 0, 0):
     print("You'll need Python 3 to run PyWeather.",
           "Press enter to exit.")
@@ -323,35 +324,38 @@ else:
             geopy_finalresort = input("Input here: ").lower()
             logger.debug("geopy_finalresort: %s" % geopy_finalresort)
             if geopy_finalresort == "yes":
-                print("Now executing `sudo -H pip3 install geopy`.")
-                print("Please enter the password for sudo when the prompt",
-                      "comes up.",
-                      "Starting in 3 seconds.", sep="\n")
-                time.sleep(3)
-                # This really only works on Linux.
-                # Because on Windows these install without much trouble.
                 try:
-                    subprocess.call(["sudo -H pip3 install geopy"], shell=True)
+                    print("Now executing `sudo -H pip3 install geopy`.")
+                    print("Please enter the password for sudo when the prompt",
+                          "comes up. Press Control + C to cancel.",
+                          "Starting in 3 seconds.", sep="\n")
+                    time.sleep(3)
+                    # This really only works on Linux.
+                    # Because on Windows these install without much trouble
                     try:
-                        print("Reattempting to import geopy...")
-                        import geopy
-                        print("Geopy is FINALLY installed!")
+                        subprocess.call(["sudo -H pip3 install geopy"], shell=True)
+                        try:
+                            print("Reattempting to import geopy...")
+                            import geopy
+                            print("Geopy is FINALLY installed!")
+                        except:
+                            print("Geopy still wasn't successfully installed.",
+                                  "Cannot continue without geopy.",
+                                  "Try doing a manual install of geopy with PIP.", sep="\n")
+                            printException()
+                            print("Press enter to exit.")
+                            input()
+                            sys.exit()
                     except:
-                        print("Geopy still wasn't successfully installed.",
+                        print("When running the command, an error occurred",
                               "Cannot continue without geopy.",
-                              "Try doing a manual install of geopy with PIP.")
+                              "Try doing a manual install of geopy with PIP.", sep="\n")
                         printException()
                         print("Press enter to exit.")
                         input()
                         sys.exit()
-                except:
-                    print("When running the command, an error occurred",
-                          "Cannot continue without geopy.",
-                          "Try doing a manual install of geopy with PIP.", sep="\n")
-                    printException()
-                    print("Press enter to exit.")
-                    input()
-                    sys.exit()
+                except KeyboardInterrupt:
+                    print("Command execution aborted.")
             elif geopy_finalresort == "no":
                 print("Not installing geopy with a shell command.",
                       "Cannot continue without geopy.",
@@ -376,32 +380,35 @@ else:
             geocoder_lastresort = input("Input here: ").lower()
             logger.debug("geocoder_lastresort: %s" % geocoder_lastresort)
             if geocoder_lastresort == "yes":
-                print("Now executing `sudo -H pip3 install geocoder`.",
-                      "Please enter the password for sudo when the prompt",
-                      "comes up.",
-                      "Starting in 3 seconds...", sep="\n")
-                time.sleep(3)
                 try:
-                    subprocess.call(["sudo -H pip3 install geocoder"], shell=True)
+                    print("Now executing `sudo -H pip3 install geocoder`.",
+                          "Please enter the password for sudo when the prompt",
+                          "comes up. Press Control + C to cancel.",
+                          "Starting in 3 seconds...", sep="\n")
+                    time.sleep(3)
                     try:
-                        print("Attempting to reimport geocoder.")
-                        import geocoder
-                        print("Geocoder is FINALLY installed!")
+                        subprocess.call(["sudo -H pip3 install geocoder"], shell=True)
+                        try:
+                            print("Attempting to reimport geocoder.")
+                            import geocoder
+                            print("Geocoder is FINALLY installed!")
+                        except:
+                            print("Geocoder still wasn't successfully installed.",
+                                  "Cannot continue without geocoder.",
+                                  "Try doing a manual install of geopy with PIP.", sep="\n")
+                            printException()
+                            print("Press enter to exit.")
+                            input()
+                            sys.exit()
                     except:
-                        print("Geocoder still wasn't successfully installed.",
-                              "Cannot continue without geocoder.",
+                        print("When running the command, an error occurred",
                               "Try doing a manual install of geopy with PIP.", sep="\n")
                         printException()
                         print("Press enter to exit.")
                         input()
                         sys.exit()
-                except:
-                    print("When running the command, an error occurred",
-                          "Try doing a manual install of geopy with PIP.", sep="\n")
-                    printException()
-                    print("Press enter to exit.")
-                    input()
-                    sys.exit()
+                except KeyboardInterrupt:
+                    print("Command execution aborted.")
             elif geocoder_lastresort == "no":
                 print("Not installing geocoder with a shell command.",
                       "Cannot continue without geocoder.",
