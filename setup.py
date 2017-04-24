@@ -290,6 +290,7 @@ else:
                 if chownFolderInputs == "cancel":
                     print("Cancelled.")
                 else:
+                    chownUsername = str(chownUsername)
                     print("Now executing the command `sudo chown -R %s /usr/bin/local/geocode",
                           "When the sudo prompt comes up, please entire your password.",
                           "Starting in 3 seconds.", sep="\n" % (chownUsername))
