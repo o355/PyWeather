@@ -273,8 +273,9 @@ else:
         sys.exit()
     elif neededLibrariesConfirm == "yes":
         logger.info("Installing necessary libraries...")
-        if sys.version_info > (3, 5, 0):
-            print("Your Python version is greater than 3.5.",
+        # This check doesn't cover Unix systems that aren't Linux.
+        if sys.version_info > (3, 5, 0) and sys.platform.startswith('linux'):
+            print("Your Python version is greater than 3.5, and you run Linux.",
                   "During the setup process, installing geocoder may partially",
                   "fail, due to bad permissions. If you want me to, I can fix",
                   "this issue using a chown -R. Would you like me to do this?",
@@ -295,7 +296,7 @@ else:
                           "Starting in 3 seconds.", sep="\n")
                     time.sleep(3)
                     try:
-                        subprocess.call(["sudo chown -R %s /usr/bin/local/geocode"], shell=True % (chownUsername))
+                        subprocess.call(["sudo chown -R %s /usr/bin/local/geocode"] % chownUsername, shell=True)
                         print("The command was executed successfully! Moving on...")
                     except:
                         print("The command failed to execute.")
