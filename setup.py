@@ -292,10 +292,10 @@ else:
                 else:
                     print("Now executing the command `sudo chown -R %s /usr/bin/local/geocode",
                           "When the sudo prompt comes up, please entire your password.",
-                          "Starting in 3 seconds.")
+                          "Starting in 3 seconds.", sep="\n" % (chownUsername))
                     time.sleep(3)
                     try:
-                        subprocess.call(["sudo chown -R %s /usr/bin/local/geocode"], shell=True % chownUsername)
+                        subprocess.call(["sudo chown -R %s /usr/bin/local/geocode"], shell=True % (chownUsername))
                         print("The command was executed successfully! Moving on...")
                     except:
                         print("The command failed to execute.")
