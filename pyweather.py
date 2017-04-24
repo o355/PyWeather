@@ -1970,13 +1970,16 @@ while True:
             historical_totalloops = historical_totalloops + 1
             logger.debug("historical_loops: %s ; historical_totalloops: %s"
                          % (historical_loops, historical_totalloops))
+                         
             if historical_totalloops == historicalhourlyLoops:
-                logger.debug("Iterations now %s. Total iterations %s. Breaking...",
+                logger.debug("Iterations now %s. Total iterations %s. Breaking..."
                              % (historical_totalloops, historicalhourlyLoops))
+                             
             if user_showCompletedIterations == True:
                 print(Fore.RED + "Completed iterations: " + Fore.CYAN + "%s/%s"
-                      % ((historical_totalloops, historical_totalloops))
+                      % (historical_totalloops, historical_totalloops))
                 print(Fore.RESET)
+                
             if user_enterToContinue == True:
                 if historical_loops == user_loopIterations:
                     logger.info("Asking user to continue.")
