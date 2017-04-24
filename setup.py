@@ -290,10 +290,9 @@ else:
                 if chownFolderInputs == "cancel":
                     print("Cancelled.")
                 else:
-                    chownUsername = str(chownUsername)
-                    print("Now executing the command `sudo chown -R %s /usr/bin/local/geocode",
+                    print("Now executing the command `sudo chown -R %s /usr/bin/local/geocode" % chownUsername,
                           "When the sudo prompt comes up, please entire your password.",
-                          "Starting in 3 seconds.", sep="\n" % (chownUsername))
+                          "Starting in 3 seconds.", sep="\n")
                     time.sleep(3)
                     try:
                         subprocess.call(["sudo chown -R %s /usr/bin/local/geocode"], shell=True % (chownUsername))
