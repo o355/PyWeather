@@ -277,34 +277,9 @@ else:
         if sys.version_info > (3, 5, 0) and sys.platform.startswith('linux'):
             print("Your Python version is greater than 3.5, and you run Linux.",
                   "During the setup process, installing geocoder may partially",
-                  "fail, due to bad permissions. If you want me to, I can fix",
-                  "this issue using a chown -R. Would you like me to do this?",
-                  "Yes or No.", sep="\n")
-            chownFolderInputs = input("Input here: ").lower()
-            logger.debug("chownFolderInputs: %s")
-            if chownFolderInputs == "yes":
-                print("Before we begin, I'll need the username of who you are.",
-                    "This is necessary to continue. If you want to exit, input",
-                    "'cancel' into the input prompt. Otherwise, enter your username,",
-                    "case sensitive.", sep="\n")
-                chownUsername = input("Input here: ")
-                if chownFolderInputs == "cancel":
-                    print("Cancelled.")
-                else:
-                    print("Now executing the command `sudo chown -R %s /usr/local/bin/geocode" % chownUsername,
-                          "When the sudo prompt comes up, please entire your password.",
-                          "Starting in 3 seconds.", sep="\n")
-                    time.sleep(3)
-                    try:
-                        subprocess.call(["sudo chown -R %s /usr/local/bin/geocode"  % chownUsername], shell=True)
-                        print("The command was executed successfully! Moving on...")
-                    except:
-                        print("The command failed to execute.")
-                        printException()
-                        print("Moving on...")
-            else:
-                print("Not chowning the folder. You may encounter errors",
-                      "when installing geocoder.", sep="\n")
+                  "fail, due to bad permissions. This is completely normal,",
+                  "and geocoder will still install.", "", sep="\n")
+            
                 
         print("Now installing necessary libraries...")
         if coloramaInstalled == False:
