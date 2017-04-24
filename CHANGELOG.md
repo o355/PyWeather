@@ -2,12 +2,13 @@
 
 Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
 
-## version 0.5.3 beta - Should be released on 5/18/2017
-* Rewrites multiline prints in keybackup.py/updater.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Should be finished by 5/8.
-* Catches up config.py with the latest config options - Should be finished by 5/10.
-* Adds the ability to update with git through the command line - Should be finished by 5/13. This is possible!
-* Adds back the iteration detections for historical hourly. This is accomplished by doing a for loop before user data is shown, and calculating the total amount of iterations that need to be done. - Should be finished by 5/17
-* Adds the option to cancel a pending shell command in PyWeather setup (Ctrl+C), and increases the time until the command is executed to 5 seconds. - Should be finished by 5/18
+## version 0.6 beta - Should be released on 6/9/2017
+* Adds alerts information to PyWeather - Should be finished by 5/22.
+* Adds radar/satellite loops to PyWeather - Should be finished by 5/28.
+* Adds the option to show release notes through the updater - Should be finished by 6/8.
+
+### version 0.5.3 beta - Release not occurring.
+* Rewrites multiline prints in keybackup.py/updater.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Scrapped. Will be implemented in 0.9 beta.
 
 ## version 0.5.2 beta - Should be released on 5/3/2017
 **NEW FEATURES/REMOVALS**
@@ -18,12 +19,15 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Added a warning to users using Python 3.0-3.4 in the setup script, it's known to cause errors. - Done, and tested!
 * Switches the "here's the full traceback" thing from logger.error to a pure printout. - Done, and tested!
 * Adds version checking in the setup script, while trying not to be Windows 10. - Done, and tested!
-* Adds the library check script, which checks for libraries PyWeather needs. - Scrapped. I might reconsider adding it at a later time, but at the moment, this is useless.
+* Adds the library check script, which checks for libraries PyWeather needs. - Scrapped. Will be implemented later down the road, before 0.9 beta.
 * Adds the option during setup to chown -R /usr/local/bin/geocode to the home user. (Python 3.5-3.6 only) - 100% done, not tested.
-* Adds a separate config.py script, to configure all available options. - Should be finished by 4/25.
-* Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Should be finished by 4/27.
-* Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Should be finished by 5/1.
-* Finally gets around to getting the "can't run you have Python 2" warning in all scripts. - Should be finished by 5/3.
+* Adds a separate config.py script, to configure all available options. - Scrapped. Adding it to PyWeather 0.6 beta.
+* Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Done, and tested!
+* Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Scrapped. Will be implemented in 0.9 beta.
+* Finally gets around to getting the "can't run you have Python 2" warning in all scripts. - Should be finished by 4/24.
+* Adds the option to cancel a pending shell command in PyWeather setup (Ctrl+C), and increases the time until the command is executed to 5 seconds. - Should be finished by 4/25
+* Adds the ability to update with git through the command line - Should be finished by 4/29.
+* Adds back the iteration detections for historical hourly. This is accomplished by doing a for loop before user data is shown, and calculating the total amount of iterations that need to be done. - Should be finished by 5/2.
 
 **BUG FIXES**
 * Fixed a bug in which if tracebacks were enabled in the updater, the tracebacks wouldn't print properly, as such, producing a traceback. Huh.

@@ -316,7 +316,19 @@ if validateAPIKey == True:
                 logger.info("Backup API key is valid!")
                 apikey = apikey2
                 logger.debug("apikey = apikey2. apikey: %s" % apikey)
-                currentJSON = testJSON
+                logger.debug("Redefining URL variables...")
+                currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + "," + lonstr + '.json'
+                f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + "," + lonstr + '.json'
+                hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + "," + lonstr + '.json'
+                tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + "," + lonstr + '.json'
+                astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + "," + lonstr + '.json'
+                almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
+                logger.debug("currenturl: %s ; f10dayurl: %s" %
+                             (currenturl, f10dayurl))
+                logger.debug("hourlyurl: %s ; tendayurl: %s" %
+                             (hourlyurl, tendayurl))
+                logger.debug("astronomyurl: %s ; almanacurl: %s" %
+                             (astronomyurl, almanacurl))
             except:
                 logger.warn("Backup API key could not be validated!")
                 print("Your primary and backup API key(s) could not be validated.",
@@ -339,9 +351,10 @@ if validateAPIKey == True:
             sys.exit()
         
         
-    
+ 
 # Fetch the JSON file using urllib.request, store it as a variable.
 try:
+    # For sanity's sake, refetching the current JSON is probably the better thing to do.
     summaryJSON = urllib.request.urlopen(currenturl)
     if verbosity == False:
         print("[##--------] | 15% |", round(time.time() - firstfetch,1), "seconds", end="\r")

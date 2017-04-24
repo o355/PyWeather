@@ -1,6 +1,15 @@
 ## Welcome to PyWeather (0.5.1 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
+## Yet another development notice (oh boy)
+PyWeather 0.5.2 is on it's way, but if you have a quick glance at the changelog, everything changed.
+
+I'm basically tired of adding bells and whistles, I want to push myself further, and the pending list of "rewrite prints" and all that fun stuff was making it so that I would play KSP (great game, by the way) or Cities:Skylines (make sure you have a supercomputer handy) instead of coding.
+
+Code cleanup was meant to occur later down the road, and I'll add the bells and whistles in other releases. I want to really focus on getting real features in PyWeather.
+
+Right now, PyWeather 0.5.2 beta is still slated to drop in Early May. 0.6 development will start afterwards.
+
 ## Why? Why should I check my weather in a terminal?
 It's cooler. I think.
 
@@ -56,10 +65,15 @@ Oh, I should mention that PyWeather is faster than going to Wunderground, is ad-
 Need mobile support? You could get Termux, but that doesn't work (tested it). The best option right now is to spin up a Linux box with SSH and PyWeather, and log into it using Termius (iPhone/Android).
 
 ## Contributing
-I'm not a full time Python developer. I have school, I work on other projects, and have other hobbies, too.
+I'm not a full time Python developer. I have school, I work on other projects, and have other hobbies, too (you can thank my love for KSP).
 
 While I try to get in around 60 minutes of coding time a day, 80% of the time, I can't. Thanks school. Thanks. And, sometimes, I just need a break from coding Python, to focus on doing other projects, or spending time with family.
 
 Contributing is the best way to help me out with the limited time I have to code PyWeather. Be it bug hunting, submitting feature ideas, coding parts of PyWeather, or telling me about something I can do better, I'm all for it.
 
 Read over CONTRIBUTING.md in the .github folder to get a general rundown of how things work.
+
+## Sharing
+I've poured hundreds of hours into making PyWeather, and have thousands more to pour in. It would be awesome if you could help spread the word about PyWeather, and to let the courage ones know that they can check weather in their terminal.
+
+It's simple. Share the GitHub link. Done.
