@@ -325,8 +325,8 @@ else:
                     print("Now executing `sudo -H pip3 install geopy`.")
                     print("Please enter the password for sudo when the prompt",
                           "comes up. Press Control + C to cancel.",
-                          "Starting in 3 seconds.", sep="\n")
-                    time.sleep(3)
+                          "Starting in 5 seconds.", sep="\n")
+                    time.sleep(5)
                     # This really only works on Linux.
                     # Because on Windows these install without much trouble
                     try:
@@ -381,8 +381,8 @@ else:
                     print("Now executing `sudo -H pip3 install geocoder`.",
                           "Please enter the password for sudo when the prompt",
                           "comes up. Press Control + C to cancel.",
-                          "Starting in 3 seconds...", sep="\n")
-                    time.sleep(3)
+                          "Starting in 5 seconds...", sep="\n")
+                    time.sleep(5)
                     try:
                         subprocess.call(["sudo -H pip3 install geocoder"], shell=True)
                         try:
@@ -405,7 +405,14 @@ else:
                         input()
                         sys.exit()
                 except KeyboardInterrupt:
-                    print("Command execution aborted.")
+                    print("Command execution aborted.",
+                          "Cannot continue without geopy.",
+                          "Try and do a manual install of geopy with PIP",
+                          "in a command line.", sep="\n")
+                    printException()
+                    print("Press enter to exit.")
+                    input()
+                    sys.exit()
             elif geocoder_lastresort == "no":
                 print("Not installing geocoder with a shell command.",
                       "Cannot continue without geocoder.",

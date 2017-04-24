@@ -43,6 +43,7 @@ try:
                                                    'show_updaterReleaseTag')
     user_backupKeyDirectory = config.get('KEYBACKUP', 'savedirectory')
     validateAPIKey = config.getboolean('PYWEATHER BOOT', 'validateAPIKey')
+    allowGitForUpdating = config.getbolean('UPDATER', 'allowGitForUpdating')
 except:
     print("Couldn't load your config file. Make sure there aren't any typos",
           "in the config, and that the config file is accessible.",
@@ -63,6 +64,7 @@ except:
     user_showUpdaterReleaseTag = False
     user_backupKeyDirectory = 'backup//'
     validateAPIKey = True
+    allowGitForUpdating = False
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
@@ -95,6 +97,8 @@ logger.debug("user_forecastLoopIterations: %s ; user_showUpdaterReleaseTag: %s"
              % (user_forecastLoopIterations, user_showUpdaterReleaseTag))
 logger.debug("user_backupKeyDirectory: %s ; validateAPIKey: %s"
              % (user_backupKeyDirectory, validateAPIKey))
+logger.debug("allowGitForUpdating: %s"
+             % (useGitForUpdating))
 
 
 
@@ -1338,6 +1342,49 @@ while True:
             downloadLatest = input("Yes or No: ").lower()
             logger.debug("downloadLatest: %s" % downloadLatest)
             if downloadLatest == "yes":
+                if useGitForUpdating == True:
+                    print("Would you like to use Git to update PyWeather?",
+                          "Yes or No.")
+                    confirmUpdateWithGit = input("Input here: ").lower()
+                    if confirmUpdateWithGit == "yes":
+                        print("Now updating with Git.")
+                        try:
+                            subprocess.call(["git pull"], shell=True)
+                            subprocess.call(["git checkout %s"] % version_latestReleaseTag,
+                                            shell=True)
+                            print("Successfully updated with Git!")
+                            continue
+                        except:
+                            print("Couldn't update with Git. Would you like",
+                                  "to try and download the latest update using",
+                                  "a .zip download? Yes or No.", sep="\n")
+                            confirmZipDownload = input("Input here: ").lower()
+                            if confirmZipDownload == "yes":
+                                print("Downloading using the .zip method.")
+                            elif confirmZipDownload == "no":
+                                print("Not downloading latest updates using the",
+                                      ".zip method.", sep="\n")
+                                continue
+                            else:
+                                print("Couldn't understand your input. Defaulting",
+                                      "to downloading using a .zip.", sep="\n")
+                    # The unnecessary amounts of confirms was to boost the line count to 2,000.
+                    elif confirmUpdateWithGit == "no":
+                        print("Not updating with Git. Would you like to update",
+                              "PyWeather using the .zip download option?",
+                              "Yes or No.", sep="\n")
+                        confirmZipDownload = input("Input here: ").lower()
+                        if confirmZipDownload == "yes":
+                            print("Downloading the latest update with a .zip.")
+                        elif confirmZipDownload == "no":
+                            print("Not downloading the latest PyWeather updates.")
+                            continue
+                        else:
+                            print("Couldn't understand your input. Defaulting to",
+                                  "downloading the latest version with a .zip.", sep="\n")
+                    else:
+                        print("Couldn't understand your input. Defaulting to",
+                              "downloading the latest version with a .zip.", sep="\n")        
                 print("")
                 logger.debug("Downloading latest version...")
                 print(Fore.YELLOW + "Downloading the latest version of PyWeather...")
@@ -1792,9 +1839,14 @@ while True:
                 input()
             except KeyboardInterrupt:
                 break
+        # Start the pre-loop to see how many times we're looping.
+        historicalhourlyLoops = 0
         for data in historical_json['history']['observations']:
-            logger.info("We're on iteration %s. User iteration limit: %s."
-                        % (historical_totalloops, user_loopIterations))
+            historical_tempF = str(data['tempi'])
+            historicalhourlyLoops = historicalhourlyLoops + 1
+        for data in historical_json['history']['observations']:
+            logger.info("We're on iteration %s/%s. User iteration limit: %s."
+                        % (historical_totalloops, historicalhourlyLoops, user_loopIterations))
             historical_time = data['date']['pretty']
             historical_tempF = str(data['tempi'])
             historical_tempC = str(data['tempm'])
@@ -1918,9 +1970,12 @@ while True:
             historical_totalloops = historical_totalloops + 1
             logger.debug("historical_loops: %s ; historical_totalloops: %s"
                          % (historical_loops, historical_totalloops))
+            if historical_totalloops == historicalhourlyLoops:
+                logger.debug("Iterations now %s. Total iterations %s. Breaking...",
+                             % (historical_totalloops, historicalhourlyLoops))
             if user_showCompletedIterations == True:
-                print(Fore.RED + "Completed iterations: " + Fore.CYAN + "%s"
-                      % historical_totalloops)
+                print(Fore.RED + "Completed iterations: " + Fore.CYAN + "%s/%s"
+                      % ((historical_totalloops, historical_totalloops))
                 print(Fore.RESET)
             if user_enterToContinue == True:
                 if historical_loops == user_loopIterations:
