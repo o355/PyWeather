@@ -30,12 +30,13 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Done, and tested!
 * Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Scrapped. Will be implemented in 0.9 beta.
 * Finally gets around to getting the "can't run you have Python 2" warning in all scripts. - This really isn't needed. The scripts will just fail to run.
-* Adds the option to cancel a pending shell command in PyWeather setup (Ctrl+C), and increases the time until the command is executed to 5 seconds. - 100% done, not tested.
+* Adds the option to cancel a pending shell command in PyWeather setup (Ctrl+C), and increases the time until the command is executed to 5 seconds. - Done, and tested!
 * Adds the ability to update with git through the command line - 100% done, not tested.
-* Adds back the iteration detections for historical hourly. This is accomplished by doing a for loop before user data is shown, and calculating the total amount of iterations that need to be done. - 100% done, not tested.
+* Adds back the iteration detections for historical hourly. This is accomplished by doing a for loop before user data is shown, and calculating the total amount of iterations that need to be done. - Done, and tested!
 
 **BUG FIXES**
 * Fixed a bug in which if tracebacks were enabled in the updater, the tracebacks wouldn't print properly, as such, producing a traceback. Huh.
+* Fixing a bug in all scripts that involved issuing HTTP requests. This is now improved with user strings, and should prevent random 400 errors.
 
 ## version 0.5.1 beta - Released on 4/17/2017
 **NEW FEATURES/REMOVALS:**

@@ -13,6 +13,7 @@ import configparser
 import traceback
 import sys
 import urllib.request
+from urllib.request import FancyURLopener
 import json
 import time
 import shutil
@@ -100,7 +101,7 @@ logger.debug("user_backupKeyDirectory: %s ; validateAPIKey: %s"
 logger.debug("allowGitForUpdating: %s"
              % (allowGitForUpdating))
 
-
+logger.info("Defining exception functions...")
 
 def printException():
     if tracebacksEnabled == True:
@@ -111,6 +112,13 @@ def printException_loggerwarn():
     if verbosity == True:
         logger.warn("Snap! We hit a non-critical error. Here's the traceback.")
         logger.warn(traceback.print_exc())
+        
+logger.info("Defining requests classes...")
+
+class urlopener(FancyURLopener):
+    version = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+    
+urlopener = urlopener()
 
 logger.debug("Begin API keyload...")
 try:
@@ -155,7 +163,7 @@ buildversion = '0.5.2 indev'
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")
     try:
-        versioncheck = urllib.request.urlopen("https://raw.githubusercontent.c"
+        versioncheck = urlopener.open("https://raw.githubusercontent.c"
                                               + "om/o355/pyweather/master/upda"
                                               + "ter/versioncheck.json")
     except:
@@ -271,7 +279,7 @@ if validateAPIKey == True and backupKeyLoaded == True:
     testurl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/NY/New_York.json'
     logger.debug("testurl: %s" % testurl)
     try:
-        testJSON = urllib.request.urlopen(testurl)
+        testJSON = urlopener.open(testurl)
         logger.debug("Acquired test JSON, end result: %s" % testJSON)
     except:
         logger.warn("Cannot connect to the API! Is the internet down?")
@@ -300,7 +308,7 @@ if validateAPIKey == True and backupKeyLoaded == True:
             # What if the user's internet connection was alive during the 1st
             # validation, but not the 2nd? That's why this is here.
             try:
-                testJSON = urllib.request.urlopen(testurl)
+                testJSON = urlopener.open(testurl)
                 logger.debug("Acquired test JSON, end result: %s" % testJSON)
             except:
                 print("Cannot connect to Wunderground's API. Make sure you have",
@@ -361,32 +369,32 @@ elif validateAPIKey == True and backupKeyLoaded == False:
 # Fetch the JSON file using urllib.request, store it as a variable.
 try:
     # For sanity's sake, refetching the current JSON is probably the better thing to do.
-    summaryJSON = urllib.request.urlopen(currenturl)
+    summaryJSON = urlopener.open(currenturl)
     if verbosity == False:
         print("[##--------] | 15% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
-    forecast10JSON = urllib.request.urlopen(f10dayurl)
+    forecast10JSON = urlopener.open(f10dayurl)
     if verbosity == False:
         print("[###-------] | 24% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
     if sundata_summary == True:
-        sundataJSON = urllib.request.urlopen(astronomyurl)
+        sundataJSON = urlopener.open(astronomyurl)
         if verbosity == False:
             print("[###-------] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
     if prefetch10Day_atStart == True:
         # Masking the JSON as hourlyJSON makes life a LOT easier.
-        hourlyJSON = urllib.request.urlopen(tendayurl)
+        hourlyJSON = urlopener.open(tendayurl)
         logger.info("Acquiring the 10 day hourly JSON, instead of the 3 day.")
         tenday_prefetched = True
     else:
-        hourlyJSON = urllib.request.urlopen(hourlyurl)
+        hourlyJSON = urlopener.open(hourlyurl)
         tenday_prefetched = False
     if verbosity == False:
         print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
     if almanac_summary == True:
-        almanacJSON = urllib.request.urlopen(almanacurl)
+        almanacJSON = urlopener.open(almanacurl)
         if verbosity == False:
             print("[#####-----] | 49% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
@@ -935,7 +943,7 @@ while True:
             logger.info("Fetching 10 day JSON...not previously fetched")
             tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + "," + lonstr + '.json'
             try:
-                tendayJSON = urllib.request.urlopen(tendayurl)
+                tendayJSON = urlopener.open(tendayurl)
                 logger.debug("Retrieved ten day hourly JSON with response: %s" % tendayJSON)
                 tenday_prefetched = True
             except:
@@ -1290,7 +1298,7 @@ while True:
                     (buildnumber, buildversion))
         print("Checking for updates. This should only take a few seconds.")
         try:
-            versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
+            versioncheck = urlopener.open("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
             logger.debug("versioncheck: %s" % versioncheck)
         except:
             logger.warn("Couldn't check for updates! Is there an internet connection?")
@@ -1391,7 +1399,7 @@ while True:
                 logger.debug("Downloading latest version...")
                 print(Fore.YELLOW + "Downloading the latest version of PyWeather...")
                 try:
-                    with urllib.request.urlopen(version_latestURL) as update_response, open(version_latestFileName, 'wb') as update_out_file:
+                    with urlopener.open(version_latestURL) as update_response, open(version_latestFileName, 'wb') as update_out_file:
                         logger.debug("update_response: %s ; update_out_file: %s" %
                                     (update_response, update_out_file))
                         shutil.copyfileobj(update_response, update_out_file)
@@ -1437,7 +1445,7 @@ while True:
             try:
                 almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
                 logger.debug("almanacurl: %s" % almanacurl)
-                almanacJSON = urllib.request.urlopen(almanacurl)
+                almanacJSON = urlopener.open(almanacurl)
                 logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
             except:
                 logger.warn("Couldn't contact Wunderground's API! Is the internet offline?")
@@ -1499,7 +1507,7 @@ while True:
         if sundata_summary == False and sundata_prefetched == False:
             logger.info("Fetching sundata, was not prefetched.")
             try:
-                sundataJSON = urllib.request.urlopen(astronomyurl)
+                sundataJSON = urlopener.open(astronomyurl)
                 logger.debug("Retrieved sundata JSON with response: %s" % sundataJSON)
             except:
                 print("Couldn't connect to Wunderground's API. "
@@ -1690,7 +1698,7 @@ while True:
         historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historicaldate +  '/q/' + latstr + "," + lonstr + '.json'
         logger.debug("historicalurl: %s" % historicalurl)
         try:
-            historicalJSON = urllib.request.urlopen(historicalurl)
+            historicalJSON = urlopener.open(historicalurl)
         except:
             print("Can't connect to Wunderground's API.")
             print("Make sure you have an internet connection, and WU's API is unblocked.")
