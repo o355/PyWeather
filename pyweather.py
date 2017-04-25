@@ -126,7 +126,8 @@ except FileNotFoundError:
         logger.debug("apikey: %s" % apikey)
         print("Loaded your backup key successfully!")
     except FileNotFoundError:
-        print("Your API key couldn't be loaded.")
+        print("Your API key and backup key couldn't be loaded.",
+              "Make sure that your API key can be accessed.", sep="\n")
         logger.warn("Couldn't load the primary or backup key text file!" +
                     " Does it exist?")
         print("Press enter to continue.")
@@ -265,7 +266,7 @@ logger.debug("reader: %s" % reader)
 logger.info("End codec change...")
 logger.info("Start API fetch...")
 
-if validateAPIKey == True:
+if validateAPIKey == True and backupKeyLoaded == True:
     logger.info("Beginning API key validation.")
     testurl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/NY/New_York.json'
     logger.debug("testurl: %s" % testurl)
@@ -353,8 +354,9 @@ if validateAPIKey == True:
                   "Press enter to exit.", sep="\n")
             input()
             sys.exit()
-        
-        
+elif validateAPIKey == True and backupKeyLoaded == False:        
+    logger.warn("Validating the API key was enabled, but the backup key wasn't loaded.")
+    logger.warn("Skipping...")
  
 # Fetch the JSON file using urllib.request, store it as a variable.
 try:
