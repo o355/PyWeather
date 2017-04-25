@@ -329,12 +329,12 @@ if validateAPIKey == True and backupKeyLoaded == True:
                 apikey = apikey2
                 logger.debug("apikey = apikey2. apikey: %s" % apikey)
                 logger.debug("Redefining URL variables...")
-                currenturl = "http://api.wunderground.com/api/" + apikey + "/conditions/q/" + latstr + "," + lonstr + ".json"
-                f10dayurl = "http://api.wunderground.com/api/" + apikey + "/forecast10day/q/" + latstr + "," + lonstr + ".json"
-                hourlyurl = "http://api.wunderground.com/api/" + apikey + "/hourly/q/" + latstr + "," + lonstr + ".json"
-                tendayurl = "http://api.wunderground.com/api/" + apikey + "/hourly10day/q/" + latstr + "," + lonstr + ".json"
-                astronomyurl = "http://api.wunderground.com/api/" + apikey + "/astronomy/q/" + latstr + "," + lonstr + ".json"
-                almanacurl = "http://api.wunderground.com/api/" + apikey + "/almanac/q/" + latstr + "," + lonstr + ".json"
+                currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
+                f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
+                hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
+                tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
+                astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
+                almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
                 logger.debug("currenturl: %s ; f10dayurl: %s" %
                              (currenturl, f10dayurl))
                 logger.debug("hourlyurl: %s ; tendayurl: %s" %
