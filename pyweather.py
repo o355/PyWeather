@@ -43,7 +43,7 @@ try:
                                                    'show_updaterReleaseTag')
     user_backupKeyDirectory = config.get('KEYBACKUP', 'savedirectory')
     validateAPIKey = config.getboolean('PYWEATHER BOOT', 'validateAPIKey')
-    allowGitForUpdating = config.getbolean('UPDATER', 'allowGitForUpdating')
+    allowGitForUpdating = config.getboolean('UPDATER', 'allowGitForUpdating')
 except:
     print("Couldn't load your config file. Make sure there aren't any typos",
           "in the config, and that the config file is accessible.",
@@ -98,7 +98,7 @@ logger.debug("user_forecastLoopIterations: %s ; user_showUpdaterReleaseTag: %s"
 logger.debug("user_backupKeyDirectory: %s ; validateAPIKey: %s"
              % (user_backupKeyDirectory, validateAPIKey))
 logger.debug("allowGitForUpdating: %s"
-             % (useGitForUpdating))
+             % (allowGitForUpdating))
 
 
 
@@ -1844,6 +1844,7 @@ while True:
         for data in historical_json['history']['observations']:
             historical_tempF = str(data['tempi'])
             historicalhourlyLoops = historicalhourlyLoops + 1
+            
         for data in historical_json['history']['observations']:
             logger.info("We're on iteration %s/%s. User iteration limit: %s."
                         % (historical_totalloops, historicalhourlyLoops, user_loopIterations))
@@ -1965,7 +1966,6 @@ while True:
                       + " °F (" + historical_heatindexC + " °C)")
             print(Fore.YELLOW + "Precipitation: " + Fore.CYAN + historical_precipIN
                   + " in (" + historical_precipMM + " mm)")
-            print("")
             historical_loops = historical_loops + 1
             historical_totalloops = historical_totalloops + 1
             logger.debug("historical_loops: %s ; historical_totalloops: %s"
@@ -1977,7 +1977,7 @@ while True:
                              
             if user_showCompletedIterations == True:
                 print(Fore.RED + "Completed iterations: " + Fore.CYAN + "%s/%s"
-                      % (historical_totalloops, historical_totalloops))
+                      % (historical_totalloops, historicalhourlyLoops))
                 print(Fore.RESET)
                 
             if user_enterToContinue == True:

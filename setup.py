@@ -352,7 +352,14 @@ else:
                         input()
                         sys.exit()
                 except KeyboardInterrupt:
-                    print("Command execution aborted.")
+                    print("Command execution aborted.",
+                          "Cannot continue without geopy.",
+                          "Try doing a manual install of geopy with PIP",
+                          "in a command line.", sep="\n")
+                    printException()
+                    print("Press enter to exit.")
+                    input()
+                    sys.exit()
             elif geopy_finalresort == "no":
                 print("Not installing geopy with a shell command.",
                       "Cannot continue without geopy.",
@@ -392,22 +399,22 @@ else:
                         except:
                             print("Geocoder still wasn't successfully installed.",
                                   "Cannot continue without geocoder.",
-                                  "Try doing a manual install of geopy with PIP.", sep="\n")
+                                  "Try doing a manual install of geocoder with PIP.", sep="\n")
                             printException()
                             print("Press enter to exit.")
                             input()
                             sys.exit()
                     except:
                         print("When running the command, an error occurred",
-                              "Try doing a manual install of geopy with PIP.", sep="\n")
+                              "Try doing a manual install of geocoder with PIP.", sep="\n")
                         printException()
                         print("Press enter to exit.")
                         input()
                         sys.exit()
                 except KeyboardInterrupt:
                     print("Command execution aborted.",
-                          "Cannot continue without geopy.",
-                          "Try and do a manual install of geopy with PIP",
+                          "Cannot continue without geocoder.",
+                          "Try and do a manual install of geocoder with PIP",
                           "in a command line.", sep="\n")
                     printException()
                     print("Press enter to exit.")
