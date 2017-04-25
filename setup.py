@@ -631,6 +631,7 @@ else:
     print("Could not understand what you inputted.",
           "Defaulting to 'False'", sep="\n")
     config['SUMMARY']['sundata_summary'] = 'False'
+    print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
    
 print("","On the summary screen, would you like to show almanac data?",
@@ -650,6 +651,7 @@ else:
     print("Could not understand what you inputted.",
          "Defaulting to 'False'", sep="\n")
     config['SUMMARY']['almanac_summary'] = 'False'
+    print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
 print("","On boot, would you like PyWeather to check for updates?",
@@ -669,6 +671,7 @@ else:
     print("Could not understand what you inputted.",
         "Defaulting to 'False'", sep="\n")
     config['UPDATER']['autoCheckForUpdates'] = 'False'
+    print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
     
 print("","When an error occurs, would you like PyWeather to show the full error?",
@@ -701,6 +704,7 @@ else:
     config['TRACEBACK']['setup_tracebacks'] = 'False'
     config['TRACEBACK']['updater_tracebacks'] = 'False'
     config['TRACEBACK']['keybackup_tracebacks'] = 'False'
+    print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
 print("","When booting PyWeather up initially, would you like PyWeather to",
@@ -722,6 +726,7 @@ else:
     print("Couldn't understand what you inputted.",
           "Defaulting to the default value 'False'", sep="\n")
     config['HOURLY']['10dayfetch_atboot'] = 'False'
+    print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
     
 print("","When viewing detailed hourly, 10-day hourly, and historical hourly,",
@@ -740,6 +745,7 @@ except:
     print("Couldn't convert input into a number. Defaulting to '6'.")
     printException_loggerwarn()
     config['UI']['detailedinfoloops'] = '6'
+    print("Changes saved.")
     logger.debug("Detailed info loops now 6.")
     
 print("","When viewing detailed 10-day forecast information, how many",
@@ -758,6 +764,7 @@ except:
     print("Couldn't convert input into a number. Defaulting to '5'.")
     printException_loggerwarn()
     config['UI']['forecast_detailedinfoloops'] = '5'
+    print("Changes saved.")
     logger.debug("Detailed forecast info loops now 5.")
     
 print("","When PyWeather is going through detailed information, it can show",
@@ -777,6 +784,7 @@ else:
     print("Couldn't understand what you inputted.",
           "Defaulting to 'FALSE'.", sep="\n")
     config['UI']['show_completediterations'] = 'False'
+    print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
     
 print("", "When PyWeather is going through detailed information, would",
@@ -796,6 +804,7 @@ else:
     print("Could not understand what you inputted.",
           "Defaulting to 'True'.", sep="\n")
     config['UI']['show_entertocontinue'] = 'True'
+    print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to ENABLED.")
     
 print("", "In the PyWeather Updater, the updater can show the release tag",
@@ -815,7 +824,52 @@ else:
     print("Could not understand what you inputted.",
           "Defaulting to 'False'.", sep="\n")
     config['UPDATER']['show_updaterreleasetag'] = 'False'
+    print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
+    
+print("", "When you check for updates, and PyWeather notices",
+      "a new version is out, PyWeather can use Git to update",
+      "itself. Make sure you have Git installed if you enable this.",
+      "By default, this is disabled. Keep this disable if you're unsure",
+      "you have Git installed.",
+      "Yes or No.", sep="\n")
+allowGitUpdating = input("Input here: ").lower()
+if allowGitUpdating == "yes":
+    config['UPDATER']['allowGitForUpdating'] = 'True'
+    print("Changes saved.")
+    logger.debug("Allowing updates with Git is ENABLED.")
+elif allowGitUpdating == "no":
+    config['UPDATER']['allowGitForUpdating'] = 'False'
+    print("Changes saved.")
+    logger.debug("Allowing updates with Git is DISABLED.")
+else:
+    print("Could not understand what you inputted.",
+          "Defaulting to 'False'.", sep="\n")
+    config['UPDATER']['allowGitForUpdating'] = 'False'
+    print("Changes saved.")
+    logger.debug("Could not understand input. Defaulting to DISABLED.")
+
+print("", "When PyWeather boots, it can validate your API key. If PyWeather",
+      "finds your primary API key is invalid, it'll attempt to validate your",
+      "backup key, and load that if it's validated successfully.",
+      "By default, this is enabled, as it's well worth the 1 API call to make",
+      "sure your key is valid. However, if you said 'Yes' to almanac/sun data",
+      "on the summary screen, you might not want to enable this.",
+      "Yes or No.", sep="\n")
+validateKeyOnBoot = input("Input here: ").lower()
+if validateKeyOnBoot == "yes":
+    config['PYWEATHER BOOT']['validateAPIKey'] = 'True'
+    print("Changes saved.")
+    logger.debug("Validating API key on boot is ENABLED.")
+elif validateKeyOnBoot == "no":
+    config['PYWEATHER BOOT']['validateAPIKey'] = 'False'
+    print("Changes saved.")
+    logger.debug("Validating API key on boot is DISABLED.")
+else:
+    print("Could not understand what you inputted.",
+          "Defaulting to 'True'.", sep="\n")
+    config['PYWEATHER BOOT']['validateAPIKey'] = 'False'
+    logger.debug("Could not understand input. Defaulting to ENABLED.")
     
 print("","That's it! Now commiting config changes...", sep="\n")
 try:
