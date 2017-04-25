@@ -4,7 +4,7 @@
 
 import sys
 import json
-import urllib.request
+from urllib.request import FancyURLopener
 import codecs
 import shutil
 import configparser
@@ -35,9 +35,14 @@ except:
     
     
 import logging
-logger = logging.getLogger(name='pyweather_updater_0.5.1beta')
+logger = logging.getLogger(name='pyweather_updater_0.5.2beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
+
+class urlopener(FancyURLopener):
+    version = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+    
+urlopener = urlopener()
 
 def printException():
     if tracebacksEnabled == True:
@@ -68,7 +73,7 @@ logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
 print("Checking for updates. This shouldn't take that long.")
 try:
-    versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
+    versioncheck = urlopener.open("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
     logger.debug("versioncheck: %s" % versioncheck)
 except:
     logger.warn("Couldn't check for updates! Is there an internet connection?")

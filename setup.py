@@ -75,7 +75,7 @@ print("Welcome to PyWeather setup.",
       "Running a few checks...", sep="\n")
 
 
-import urllib.request
+from urllib.request import FancyURLopener
 import shutil
 import time
 import json
@@ -84,11 +84,18 @@ import codecs
 buildnumber = 52
 buildversion = "0.5.2 beta"
 
+logger.info("Defining URL opener...")
+
+class urlopener(FancyURLopener):
+    version = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+    
+urlopener = urlopener()
+
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
 print("Checking for updates...")
 try:
-    versioncheck = urllib.request.urlopen("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
+    versioncheck = urlopener.open("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
     logger.debug("versioncheck: %s" % versioncheck)
 except:
     logger.warn("Couldn't check for updates! Is there an internet connection?")
@@ -182,7 +189,7 @@ except ImportError:
         time.sleep(3)
         print("Downloading the installer...")
         try:
-            with urllib.request.urlopen('https://bootstrap.pypa.io/get-pip.py') as update_response, open('get-pip.py', 'wb') as update_out_file:
+            with urlopener.open('https://bootstrap.pypa.io/get-pip.py') as update_response, open('get-pip.py', 'wb') as update_out_file:
                 logger.debug("update_response: %s ; update_out_file: %s"
                              % (update_response, update_out_file))
                 shutil.copyfileobj(update_response, update_out_file)
@@ -862,7 +869,7 @@ logger.debug("apitest_URL: %s ; testreader: %s" %
              (apitest_URL, testreader))
 
 try:
-    testJSON = urllib.request.urlopen(apitest_URL)
+    testJSON = urlopener.open(apitest_URL)
     logger.debug("testJSON: %s" % testJSON)
 except:
     logger.warn("Couldn't connect to Wunderground's API! No internet?")

@@ -12,7 +12,6 @@
 import configparser
 import traceback
 import sys
-import urllib.request
 from urllib.request import FancyURLopener
 import json
 import time
