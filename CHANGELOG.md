@@ -33,6 +33,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the option to cancel a pending shell command in PyWeather setup (Ctrl+C), and increases the time until the command is executed to 5 seconds. - Done, and tested!
 * Adds the ability to update with git through the command line - 60% done (in pyweather.py, not in updater.py), not tested.
 * Adds back the iteration detections for historical hourly. This is accomplished by doing a for loop before user data is shown, and calculating the total amount of iterations that need to be done. - Done, and tested!
+* PyWeather is now using requests to request URLs. Thanks urllib for all the 400s.
 * Made error messages less vague. - 0% done.
 * Updated setup.py for the latest options - 100% done.
 * Updated keybackup.py for the latest options. - 0% done.

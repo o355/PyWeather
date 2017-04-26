@@ -414,30 +414,30 @@ if jsonVerbosity == True:
     logger.debug("current_json loaded with: %s" % current_json)
 if verbosity == False:
     print("[######----] | 63% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-forecast10_json = json.load(reader(forecast10JSON))
+forecast10_json = json.loads(forecast10JSON.text)
 if jsonVerbosity == True:
     logger.debug("forecast10_json loaded with: %s" % forecast10_json)
 if verbosity == False:
     print("[#######---] | 71% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     
 if prefetch10Day_atStart == True: 
-    hourly_json = json.load(reader(hourlyJSON))
+    hourly_json = json.loads(hourlyJSON.text)
     tenday_json = hourly_json
     if jsonVerbosity == True:
         logger.debug("hourly_json loaded with: %s" % hourly_json)
         logger.debug("tenday_json loaded with: %s" % tenday_json)
 else:
-    hourly_json = json.load(reader(hourlyJSON))
+    hourly_json = json.loads(hourlyJSON.text)
     if jsonVerbosity == True:
         logger.debug("hourly_json loaded with: %s" % hourly_json)
 if sundata_summary == True:
-    astronomy_json = json.load(reader(sundataJSON))
+    astronomy_json = json.loads(sundataJSON.text)
     if verbosity == False:
         print("[########--] | 81% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("astronomy_json loaded with: %s" % astronomy_json)
 if almanac_summary == True:
-    almanac_json = json.load(reader(almanacJSON))
+    almanac_json = json.loads(almanacJSON.text)
     if verbosity == False:
         print("[#########-] | 87% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
@@ -952,7 +952,7 @@ while True:
                 input()
                 continue
             
-            tenday_json = json.load(reader(tendayJSON))
+            tenday_json = json.loads(tendayJSON.text)
         print(Fore.YELLOW + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + location2.city + ", " + location2.state)  
         for hour in tenday_json['hourly_forecast']:
             logger.info("We're on iteration: %s/24. User iterations: %s." %
@@ -1305,7 +1305,7 @@ while True:
             logger.error("Here's the full traceback (for bug reports):")
             printException()
             continue
-        versionJSON = json.load(reader(versioncheck))
+        versionJSON = json.loads(versioncheck.text)
         if jsonVerbosity == True:
             logger.debug("versionJSON: %s" % versionJSON)
         logger.debug("Loaded versionJSON with reader %s" % reader)
@@ -1449,7 +1449,7 @@ while True:
                 print("Couldn't contact Wunderground's API. Make sure it's unblocked, and you have internet access.")
                 printException()
                 continue
-            almanac_json = json.load(reader(almanacJSON))
+            almanac_json = json.loads(almanacJSON.text)
             if jsonVerbosity == True:
                 logger.debug("almanac_json: %s" % almanac_json)
             logger.debug("1 JSON loaded successfully.")
@@ -1514,7 +1514,7 @@ while True:
                 input()
                 continue
             
-            astronomy_json = json.load(reader(sundataJSON))
+            astronomy_json = json.loads(sundataJSON.text)
             if jsonVerbosity == True:
                 logger.debug("astronomy_json: %s" % astronomy_json)
             SR_minute = int(astronomy_json['moon_phase']['sunrise']['minute'])
@@ -1705,7 +1705,7 @@ while True:
             continue
         
         logger.debug("historicalJSON loaded with: %s" % historicalJSON)
-        historical_json = json.load(reader(historicalJSON))
+        historical_json = json.loads(historicalJSON.text)
         if jsonVerbosity == True:
             logger.debug("historical_json: %s" % historical_json)
         else:
