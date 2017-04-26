@@ -10,6 +10,7 @@
 # (but the intentionally hidden bugs are no more)
 
 import configparser
+import subprocess
 import traceback
 import sys
 import requests
