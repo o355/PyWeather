@@ -75,7 +75,7 @@ print("Welcome to PyWeather setup.",
       "Running a few checks...", sep="\n")
 
 
-from urllib.request import FancyURLopener
+import requests
 import shutil
 import time
 import json
@@ -84,18 +84,12 @@ import codecs
 buildnumber = 52
 buildversion = "0.5.2 beta"
 
-logger.info("Defining URL opener...")
-
-class urlopener(FancyURLopener):
-    version = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-    
-urlopener = urlopener()
-
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
 print("Checking for updates...")
 try:
-    versioncheck = urlopener.open("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
+    versioncheckurl = "https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json"
+    versioncheck = requests.get(versioncheckurl)
     logger.debug("versioncheck: %s" % versioncheck)
 except:
     logger.warn("Couldn't check for updates! Is there an internet connection?")
@@ -103,8 +97,7 @@ except:
           "Make sure GitHub user content is unblocked, and you have an internet connection.", sep="\n")
     printException()
     
-reader = codecs.getreader("utf-8")
-versionJSON = json.load(reader(versioncheck))
+versionJSON = json.loads(versioncheck.text)
 if jsonVerbosity == True:
     logger.debug("versionJSON: %s" % versionJSON)
 logger.debug("Loaded versionJSON with reader %s" % reader)
@@ -189,10 +182,14 @@ except ImportError:
         time.sleep(3)
         print("Downloading the installer...")
         try:
-            with urlopener.open('https://bootstrap.pypa.io/get-pip.py') as update_response, open('get-pip.py', 'wb') as update_out_file:
-                logger.debug("update_response: %s ; update_out_file: %s"
-                             % (update_response, update_out_file))
-                shutil.copyfileobj(update_response, update_out_file)
+            # Experimental code. Never have dealt with doing this stuff.
+            pipurl = "https://bootstrap.pypa.io/get-pip.py"
+            pipinstaller = requests.get(pipurl, stream=True)
+            pipfilename = "get-pip.py"
+            with open(pipfilename, 'wb') as fw:
+                for chunk in pipurl.iter_content(chunk_size=128):
+                    fw.write(chunk)
+                fw.close()
         except:
             print("Can't download the PIP installer.",
                   "Make sure bootstrap.pypa.io is unblocked.", sep="\n")

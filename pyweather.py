@@ -114,7 +114,7 @@ def printException_loggerwarn():
         
 logger.info("Defining requests classes...")
 
-urlheader = {'user-agent': 'python-3/requests'}
+urlheader = {'user-agent': 'pyweather-0.5.2beta/apifetch'}
 
 logger.debug("Begin API keyload...")
 try:
