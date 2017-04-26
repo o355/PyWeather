@@ -1366,6 +1366,7 @@ while True:
                             print("Couldn't update with Git. Would you like",
                                   "to try and download the latest update using",
                                   "a .zip download? Yes or No.", sep="\n")
+                            printException()
                             confirmZipDownload = input("Input here: ").lower()
                             if confirmZipDownload == "yes":
                                 print("Downloading using the .zip method.")
