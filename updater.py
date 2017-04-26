@@ -4,7 +4,7 @@
 
 import sys
 import json
-from urllib.request import FancyURLopener
+import requests
 import codecs
 import shutil
 import configparser
@@ -38,11 +38,6 @@ import logging
 logger = logging.getLogger(name='pyweather_updater_0.5.2beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
-
-class urlopener(FancyURLopener):
-    version = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
-    
-urlopener = urlopener()
 
 def printException():
     if tracebacksEnabled == True:
@@ -137,10 +132,11 @@ elif buildnumber < version_buildNumber:
         logger.debug("Downloading latest version...")
         print(Fore.YELLOW + "Downloading the latest version of PyWeather...")
         try:
-            with urllib.request.urlopen(version_latestURL) as update_response, open(version_latestFileName, 'wb') as update_out_file:
-                logger.debug("update_response: %s ; update_out_file: %s" %
-                             (update_response, update_out_file))
-                shutil.copyfileobj(update_response, update_out_file)
+            updatezip = requests.get(version_latestURL)
+            with open(version_latestFileName, 'wb') as fw:
+                for chunk in updatezip.iter_content(chunk_size=128):
+                    fw.write(chunk)
+                fw.close()
         except:
             logger.warn("Couldn't download the latest version!")
             logger.warn("Is the internet online?")
