@@ -1349,7 +1349,7 @@ while True:
             downloadLatest = input("Yes or No: ").lower()
             logger.debug("downloadLatest: %s" % downloadLatest)
             if downloadLatest == "yes":
-                if useGitForUpdating == True:
+                if allowGitForUpdating == True:
                     print("Would you like to use Git to update PyWeather?",
                           "Yes or No.")
                     confirmUpdateWithGit = input("Input here: ").lower()
