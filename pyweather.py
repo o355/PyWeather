@@ -1396,10 +1396,11 @@ while True:
                 logger.debug("Downloading latest version...")
                 print(Fore.YELLOW + "Downloading the latest version of PyWeather...")
                 try:
-                    with requests.get(version_latestURL) as update_response, open(version_latestFileName, 'wb') as update_out_file:
-                        logger.debug("update_response: %s ; update_out_file: %s" %
-                                    (update_response, update_out_file))
-                        shutil.copyfileobj(update_response, update_out_file)
+                    updatezip = requests.get(version_latestURL)
+                    with open(version_latestFileName, 'wb') as fw:
+                        for chunk in pipurl.iter_content(chunk_size=128):
+                            fw.write(chunk)
+                        fw.close()
                 except:
                     logger.warn("Couldn't download the latest version!")
                     logger.warn("Is the internet online?")
