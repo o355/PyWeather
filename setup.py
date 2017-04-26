@@ -931,7 +931,7 @@ except:
     input()
     sys.exit()
     
-test_json = json.load(testreader(testJSON))
+test_json = json.loads(testJSON)
 if jsonVerbosity == True:
     logger.debug("test_json: %s" % test_json)
 

@@ -68,7 +68,7 @@ logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
 print("Checking for updates. This shouldn't take that long.")
 try:
-    versioncheck = urlopener.open("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
+    versioncheck = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
     logger.debug("versioncheck: %s" % versioncheck)
 except:
     logger.warn("Couldn't check for updates! Is there an internet connection?")
@@ -80,7 +80,7 @@ except:
     input()
     sys.exit()
     
-versionJSON = json.load(reader(versioncheck))
+versionJSON = json.loads(versioncheck.text)
 if jsonVerbosity == True:
     logger.debug("versionJSON: %s" % versionJSON)
 logger.debug("Loaded versionJSON with reader %s" % reader)
