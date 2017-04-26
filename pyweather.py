@@ -1356,6 +1356,7 @@ while True:
                     if confirmUpdateWithGit == "yes":
                         print("Now updating with Git.")
                         try:
+                            subprocess.call(["git stash"], shell=True)
                             subprocess.call(["git pull"], shell=True)
                             subprocess.call(["git checkout %s"] % version_latestReleaseTag,
                                             shell=True)
@@ -1398,7 +1399,7 @@ while True:
                 try:
                     updatezip = requests.get(version_latestURL)
                     with open(version_latestFileName, 'wb') as fw:
-                        for chunk in pipurl.iter_content(chunk_size=128):
+                        for chunk in updatezip.iter_content(chunk_size=128):
                             fw.write(chunk)
                         fw.close()
                 except:
