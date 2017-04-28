@@ -9,6 +9,7 @@ import codecs
 import shutil
 import configparser
 import traceback
+import subprocess
 reader = codecs.getreader("utf-8")
 from colorama import Fore, Style, init
 init()
@@ -36,6 +37,7 @@ except:
     jsonVerbosity = False
     showReleaseTag = False
     tracebacksEnabled = False
+    allowGitForUpdating = False
     overrideVersion = False
     overrideBuildNumber = 52
     overrideVersionText = "0.5.2 beta"
@@ -145,6 +147,60 @@ elif buildnumber < version_buildNumber:
     downloadLatest = input("Yes or No: ").lower()
     logger.debug("downloadLatest: %s" % downloadLatest)
     if downloadLatest == "yes":
+        if allowGitForUpdating == True:
+            print("Would you like to use Git to update PyWeather?",
+                  "Yes or No.")
+            confirmUpdateWithGit = input("Input here: ").lower()
+            if confirmUpdateWithGit == "yes":
+                print("Now updating with Git.")
+                try:
+                    subprocess.call(["git stash"], shell=True)
+                    subprocess.call(["git pull"], shell=True)
+                    subprocess.call(["git stash"], shell=True)
+                    subprocess.call(["git checkout %s" % version_latestReleaseTag],
+                                    shell=True)
+                    print("Successfully updated with Git!",
+                          "Press enter to exit.", sep="\n")
+                    input()
+                    sys.exit()
+                except:
+                    print("When attempting to execute `git stash`,",
+                          "`git pull`, and/or `git checkout`,",
+                          "an error occurred. Make sure you have git",
+                          "installed in your shell, and that it can be used",
+                          "from a shell. Anyways, would you like to try and update",
+                          "PyWeather by using a .zip download?",
+                          "Yes or No.", sep="\n")
+                    printException()
+                    confirmZipDownload = input("Input here: ").lower()
+                    if confirmZipDownload == "yes":
+                        print("Downloading using the .zip method.")
+                    elif confirmZipDownload == "no":
+                        print("Not downloading latest updates using the",
+                              ".zip method.", 
+                              "Press enter to exit.", sep="\n")
+                        
+                    else:
+                        print("Couldn't understand your input. Defaulting",
+                              "to downloading using a .zip.", sep="\n")
+            elif confirmUpdateWithGit == "no":
+                print("Not updating with Git. Would you like to update",
+                      "PyWeather using the .zip download option?",
+                      "Yes or No.", sep="\n")
+                confirmZipDownload = input("Input here: ").lower()
+                if confirmZipDownload == "yes":
+                    print("Downloading the latest update with a .zip.")
+                elif confirmZipDownload == "no":
+                    print("Not downloading the latest PyWeather updates.",
+                          "Press enter to exit.", sep="\n")
+                    input()
+                    sys.exit()
+                else:
+                    print("Couldn't understand your input. Defaulting to",
+                          "downloading the latest version with a .zip.", sep="\n")
+            else:
+                print("Couldn't understand your input. Defaulting to",
+                      "downloading the latest version with a .zip.", sep="\n")        
         print("")
         logger.debug("Downloading latest version...")
         print(Fore.YELLOW + "Downloading the latest version of PyWeather...")
@@ -157,55 +213,45 @@ elif buildnumber < version_buildNumber:
         except:
             logger.warn("Couldn't download the latest version!")
             logger.warn("Is the internet online?")
-            print(Fore.RED + "Couldn't download the latest version.")
-            print("Make sure GitHub user content is unblocked, "
-                    + "and you have an internet connection.")
-            print("Error 55, updater.py")
+            print("When attempting to download the latest .zip file",
+                  "for PyWeather, an error occurred. If you're on a",
+                  "network with a filter, make sure that",
+                  "'raw.githubusercontent.com' is unblocked.",
+                  "Otherwise, make sure you have an internet connection.",
+                  sep="\n")
+            logger.error("Here's the full traceback (for bug reports):")
             printException()
             print("Press enter to exit.")
             input()
             sys.exit()
-
         logger.debug("Latest version was saved, filename: %s"
-                     % version_latestFileName)
+                    % version_latestFileName)
         print(Fore.YELLOW + "The latest version of PyWeather was downloaded " +
-                    "to the base directory of PyWeather, and saved as " +
-                    Fore.CYAN + version_latestFileName + Fore.YELLOW + ".")
+              "to the base directory of PyWeather, and saved as " +
+             Fore.CYAN + version_latestFileName + Fore.YELLOW + ".")
         print("Press enter to exit.")
         input()
         sys.exit()
-        
     elif downloadLatest == "no":
-        if verbosity == True:
-            logger.debug("Not downloading the latest version.")
+        logger.debug("Not downloading the latest version.")
         print(Fore.YELLOW + "Not downloading the latest version of PyWeather.")
         print("For reference, you can download the latest version of PyWeather at:")
         print(Fore.CYAN + version_latestURL)
-        print(Fore.YELLOW + "Press enter to exit.")
+        print("Press enter to exit.")
         input()
         sys.exit()
     else:
         logger.warn("Input could not be understood!")
-        print(Fore.GREEN + "Could not understand what you said.")
-        print(Fore.GREEN + "Press enter to exit.")
+        print(Fore.GREEN + "Your input couldn't be understood.")
+        print("Press enter to exit.")
         input()
         sys.exit()
 else:
-    logger.warn("PW updater failed. Build comparison below.")
-    try:
-        logger.warn("local build: %s ; updater build: %s"
-                    % (buildnumber, version_buildNumber))
-    except:
-        logger.error("Variables are corrupted, or a typo was made.")
-        logger.error("Trying to list variables 1 more time...")
-        printException_loggerinfo()
-        try:
-            logger.warn("buildnumber: %s" % buildnumber)
-        except:
-            printException_loggerinfo()
-            logger.warn("Variable buildnumber is corrupt.")
-    print(Style.BRIGHT + Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
-    print(Fore.RED + "Error 53, updater.py")
-    print("Press enter to exit.")
+    logger.warn("PW updater failed. Variables corrupt, maybe?")
+    print("When attempting to compare version variables, PyWeather ran",
+          "into an error. This error is extremely rare. Make sure you're",
+          "not trying to travel through a wormhole with Cooper, and report",
+          "the error on GitHub, while it's around."
+          "Press enter to exit.", sep='\n')
     input()
-    sys.exit()
+    sys.exit()    
