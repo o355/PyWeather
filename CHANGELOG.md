@@ -3,15 +3,17 @@
 Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
 
 
-## version 0.6 beta - Should be released on 6/21/2017
-* Adds alerts information to PyWeather, including (of course) the ability to turn it on and off. - Should be finished by 5/11.
-* Adds radar/satellite loops to PyWeather - Should be finished by 5/25.
-* Adds the option to show release notes through the updater - Should be finished by 5/30.
+## version 0.6 beta - Should be released late June
+(Figuring out ETAs)
+* Adds alerts information to PyWeather, including (of course) the ability to turn it on and off.
+* Adds radar/satellite loops to PyWeather
+* Adds the option to show release notes through the updater
 * When PyWeather checks for updates at the top of the script, it'll now just continue onto the program.
-* Adds the config.py script, to let users configure every setting of PyWeather possible - Should be finished by 6/7.
-* The config will be stored in the "config" folder, along with scripts/files that relate to the config - Should be finished by 6/14.
-* The "What would you like to do now" menu will get switched to only a number-based input. - Should be finished by 6/17.
-* Doing the usual setup/configdefault catching up - Should be finished by 6/20.
+* Adds the config.py script, to let users configure every setting of PyWeather possible
+* The config will be stored in the "config" folder, along with scripts/files that relate to the config
+* The "What would you like to do now" menu will get switched to only a number-based input.
+* Doing the usual setup/configdefault catching up
+* Fixes for config updates. A new "configsetup.py" script will be introduced, which will update the config for each new version, but preserve old user settings. It'll get automatically executed when doing updates through PyWeather, but users doing updates through the .zip method or manual Git updating will have to execute the script each time. When PyWeather setup is launched for the first time, the config file will be created.  
 
 ### version 0.5.3 beta - Release not occurring.
 * Rewrites multiline prints in keybackup.py/updater.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Scrapped. Will be implemented in 0.9 beta.
@@ -36,7 +38,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds back the iteration detections for historical hourly. This is accomplished by doing a for loop before user data is shown, and calculating the total amount of iterations that need to be done. - Done, and tested!
 * Adds the ability to override the version number defined in PyWeather. This was done for debugging reasons. - 60% done.
 * PyWeather is now using requests to get the API .json files, in favor of better reliability - Done/tested in pyweather, not done/tested in setup/updater. Should be done by 4/28
-* Made error messages less vague. - 0% done. - Should be finished by 4/29
+* Made error messages less vague. - 25% done - Should be finished by 4/30.
 
 **BUG FIXES**
 * Fixed a bug in which if tracebacks were enabled in the updater, the tracebacks wouldn't print properly, as such, producing a traceback. Huh.
