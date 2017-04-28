@@ -113,7 +113,7 @@ except:
 versionJSON = json.loads(versioncheck.text)
 if jsonVerbosity == True:
     logger.debug("versionJSON: %s" % versionJSON)
-logger.debug("Loaded versionJSON with reader %s" % reader)
+logger.debug("Loaded versionJSON")
 version_buildNumber = float(versionJSON['updater']['latestbuild'])
 version_latestVersion = versionJSON['updater']['latestversion']
 version_latestURL = versionJSON['updater']['latesturl']

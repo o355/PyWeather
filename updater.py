@@ -22,6 +22,7 @@ try:
     jsonVerbosity = config.getboolean('VERBOSITY', 'updater_jsonverbosity')
     showReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'updater_tracebacks')
+    allowGitForUpdating = config.getboolean('UPDATER', 'allowGitForUpdating')
     overrideVersion = config.getboolean('VERSION', 'overrideVersion')
     overrideBuildNumber = config.getint('VERSION', 'overrideBuildNumber')
     overrideVersionText = config.get('VERSION', 'overrideVersionText')
@@ -77,8 +78,8 @@ if overrideVersion == True:
     buildnumber = overrideBuildNumber
     buildversion = overrideVersionText
 else:    
-    buildnumber = 51
-    buildversion = "0.5.1 beta"
+    buildnumber = 52
+    buildversion = "0.5.2 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))

@@ -93,6 +93,14 @@ if cd_confirmation == "yes":
     logger.debug("UPDATER/show_updaterreleasetag is now 'False'.")
     config['KEYBACKUP']['savedirectory'] = 'backup//'
     logger.debug("KEYBACKUP/savedirectory is now 'backup//'.")
+    config['UPDATER']['allowGitForUpdating'] = 'False'
+    logger.debug("UPDATER/allowGitForUpdating is now 'False'.")
+    config['VERSIONS']['overrideVersion'] = 'False'
+    logger.debug("VERSIONS/overrideVersion is now 'False'.")
+    config['VERSIONS']['overrideBuildNumber'] = '52'
+    logger.debug("VERSIONS/overrideBuildNumber is now '52'.")
+    config['VERSIONS']['overrideVersionText'] = '0.5.2 beta'
+    logger.debug("VERSIONS/overrideVersionText is now '0.5.2 beta'.")
     print("Committing changes...")
     try:
         with open('config.ini', 'w') as configfile:
