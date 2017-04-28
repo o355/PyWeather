@@ -1393,7 +1393,7 @@ while True:
                             subprocess.call(["git stash"], shell=True)
                             subprocess.call(["git pull"], shell=True)
                             subprocess.call(["git stash"], shell=True)
-                            subprocess.call(["git checkout %s"] % version_latestReleaseTag,
+                            subprocess.call(["git checkout %s" % version_latestReleaseTag],
                                             shell=True)
                             print("Successfully updated with Git!")
                             continue
