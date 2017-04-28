@@ -45,6 +45,9 @@ try:
     user_backupKeyDirectory = config.get('KEYBACKUP', 'savedirectory')
     validateAPIKey = config.getboolean('PYWEATHER BOOT', 'validateAPIKey')
     allowGitForUpdating = config.getboolean('UPDATER', 'allowGitForUpdating')
+    overrideVersion = config.getboolean('VERSIONS', 'overrideVersion')
+    overrideBuildNumber = config.getint('VERSIONS', 'overrideBuildNumber')
+    overrideVersionText = config.get('VERSIONS', 'overrideVersionText')
 except:
     print("Couldn't load your config file. Make sure there aren't any typos",
           "in the config, and that the config file is accessible.",
@@ -66,6 +69,9 @@ except:
     user_backupKeyDirectory = 'backup//'
     validateAPIKey = True
     allowGitForUpdating = False
+    overrideVersion = False
+    overrideBuildNumber = 52
+    overrideVersionText = "0.5.2 beta"
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
@@ -154,8 +160,13 @@ if validateAPIKey == True:
         logger.debug("backupKeyLoaded: %s" % backupKeyLoaded)
 
 logger.debug("apikey = %s" % apikey)
-buildnumber = 51
-buildversion = '0.5.2 indev'    
+
+if overrideVersion == True:
+    buildnumber = overrideBuildNumber
+    buildversion = overrideVersionText
+else:
+    buildnumber = 52
+    buildversion = '0.5.2 indev'    
 
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")

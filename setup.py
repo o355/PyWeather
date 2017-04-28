@@ -30,6 +30,9 @@ try:
     verbosity = config.getboolean('VERBOSITY', 'setup_verbosity')
     jsonVerbosity = config.getboolean('VERBOSITY', 'setup_jsonverbosity')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'setup_tracebacks')
+    overrideVersion = config.getboolean('VERSIONS', 'overrideVersion')
+    overrideBuildNumber = config.getint('VERSIONS', 'overrideBuildNumber')
+    overrideVersionText = config.get('VERSIONS', 'overrideVersionText')
 except:
     print("Couldn't load your config file. Make sure there aren't any typos",
           "in the config, and that the config file is accessible.",
@@ -39,6 +42,9 @@ except:
     verbosity = False
     jsonVerbosity = False
     tracebacksEnabled = False
+    overrideVersion = False
+    overrideBuildNumber = 52
+    overrideVersionText = "0.5.2 beta"
     
 def printException():
     if tracebacksEnabled == True:
@@ -67,8 +73,10 @@ else:
 logger.debug("Listing configuration options:")
 logger.debug("verbosity: %s ; jsonVerbosity: %s" %
              (verbosity, jsonVerbosity))
-logger.debug("tracebacksEnabled: %s" %
-             (tracebacksEnabled))
+logger.debug("tracebacksEnabled: %s ; overrideVersion: %s" %
+             (tracebacksEnabled, overrideVersion))
+logger.debug("overrideBuildNumber: %s ; overrideVersionText: %s" %
+             (overrideBuildNumber, overrideVersionText))
 
 print("Welcome to PyWeather setup.",
       "This is meant to run as a one-time program, when you first get PyWeather.","",
@@ -81,8 +89,13 @@ import time
 import json
 import codecs
 
-buildnumber = 52
-buildversion = "0.5.2 beta"
+if overrideVersion == True:
+    logger.info("Overriding version info...")
+    buildnumber = overrideBuildNumber
+    buildversion = overrideVersionText
+else:
+    buildnumber = 52
+    buildversion = "0.5.2 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))

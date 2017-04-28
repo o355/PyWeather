@@ -22,6 +22,9 @@ try:
     jsonVerbosity = config.getboolean('VERBOSITY', 'updater_jsonverbosity')
     showReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'updater_tracebacks')
+    overrideVersion = config.getboolean('VERSION', 'overrideVersion')
+    overrideBuildNumber = config.getint('VERSION', 'overrideBuildNumber')
+    overrideVersionText = config.get('VERSION', 'overrideVersionText')
 except:
     print("Couldn't load your config file. Make sure there aren't any typos",
           "in the config, and that the config file is accessible.",
@@ -32,6 +35,9 @@ except:
     jsonVerbosity = False
     showReleaseTag = False
     tracebacksEnabled = False
+    overrideVersion = False
+    overrideBuildNumber = 52
+    overrideVersionText = "0.5.2 beta"
     
     
 import logging
@@ -61,9 +67,19 @@ logger.debug("verbosity: %s ; jsonVerbosity: %s" %
              (verbosity, jsonVerbosity))
 logger.debug("showReleaseTag: %s ; tracebacksEnabled: %s" %
              (showReleaseTag, tracebacksEnabled))
-    
-buildnumber = 51
-buildversion = "0.5.1 beta"
+logger.debug("overrideVersion: %s ; overrideBuildNumber: %s" %
+             (overrideVersion, overrideBuildNumber))
+logger.debug("overrideVersionText: %s" %
+             (overrideVersionText))
+
+if overrideVersion == True:
+    logger.info("Overriding version info.")
+    buildnumber = overrideBuildNumber
+    buildversion = overrideVersionText
+else:    
+    buildnumber = 51
+    buildversion = "0.5.1 beta"
+
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
 print("Checking for updates. This shouldn't take that long.")
