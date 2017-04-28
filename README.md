@@ -64,6 +64,8 @@ Oh, I should mention that PyWeather is faster than going to Wunderground, is ad-
 
 Need mobile support? You could get Termux, but that doesn't work (tested it). The best option right now is to spin up a Linux box with SSH and PyWeather, and log into it using Termius (iPhone/Android).
 
+PyWeather also has a few easter eggs.
+
 ## Contributing
 I'm not a full time Python developer. I have school, I work on other projects, and have other hobbies, too (you can thank my love for KSP).
 

@@ -7,6 +7,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds alerts information to PyWeather, including (of course) the ability to turn it on and off. - Should be finished by 5/11.
 * Adds radar/satellite loops to PyWeather - Should be finished by 5/25.
 * Adds the option to show release notes through the updater - Should be finished by 5/30.
+* When PyWeather checks for updates at the top of the script, it'll now just continue onto the program.
 * Adds the config.py script, to let users configure every setting of PyWeather possible - Should be finished by 6/7.
 * The config will be stored in the "config" folder, along with scripts/files that relate to the config - Should be finished by 6/14.
 * The "What would you like to do now" menu will get switched to only a number-based input. - Should be finished by 6/17.
@@ -36,7 +37,6 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the ability to override the version number defined in PyWeather. This was done for debugging reasons. - 60% done.
 * PyWeather is now using requests to get the API .json files, in favor of better reliability - Done/tested in pyweather, not done/tested in setup/updater. Should be done by 4/28
 * Made error messages less vague. - 0% done. - Should be finished by 4/29
-* Updated configdefault.py for the latest options. - 0% done. - Should be finished by 4/30.
 
 **BUG FIXES**
 * Fixed a bug in which if tracebacks were enabled in the updater, the tracebacks wouldn't print properly, as such, producing a traceback. Huh.

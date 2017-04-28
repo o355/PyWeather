@@ -20,6 +20,7 @@ import shutil
 from colorama import init, Fore, Style
 import codecs
 import geocoder
+from random import randint
 from geopy import GoogleV3
 geolocator = GoogleV3()
 
@@ -49,10 +50,11 @@ try:
     overrideBuildNumber = config.getint('VERSIONS', 'overrideBuildNumber')
     overrideVersionText = config.get('VERSIONS', 'overrideVersionText')
 except:
-    print("Couldn't load your config file. Make sure there aren't any typos",
-          "in the config, and that the config file is accessible.",
-          "Setting config variables to their defaults.",
-          "Here's the full traceback, in case you need it.", sep="\n")
+    print("When attempting to load your configuration file, an error",
+          "occurred. This could of happened because of a typo, or an error",
+          "in the code. Make sure there aren't any typos in the config file,",
+          "and check the traceback below (report it to GitHub for extra internet",
+          "points).", sep="\n")
     traceback.print_exc()
     sundata_summary = False
     almanac_summary = False
@@ -129,7 +131,11 @@ try:
     logger.debug("apikey_load = %s" % apikey_load)
     apikey = apikey_load.read()
 except FileNotFoundError:
-    print("The API key wasn't found. Attempting to load your backup key...")
+    print("Your primary API key couldn't be loaded, as PyWeather ran into",
+          "an error when attempting to access it. Make sure that your primary key",
+          "file can be accessed (usually found at storage/apikey.txt. Make sure it has",
+          "proper permissions, and that it exists). In the mean time, we're attempting",
+          "to load your backup API key.", sep="\n")
     try:
         apikey2_load = open(user_backupKeyDirectory + "backkey.txt")
         logger.debug("apikey2_load: %s" % apikey2_load)
@@ -137,8 +143,9 @@ except FileNotFoundError:
         logger.debug("apikey: %s" % apikey)
         print("Loaded your backup key successfully!")
     except FileNotFoundError:
-        print("Your API key and backup key couldn't be loaded.",
-              "Make sure that your API key can be accessed.", sep="\n")
+        print("When attempting to access your backup API key, PyWeather ran into",
+              "an error. Make sure that your backup key file is accessible (wrong",
+              "permissions and the file not existing are common issues).", sep="\n")
         logger.warn("Couldn't load the primary or backup key text file!" +
                     " Does it exist?")
         print("Press enter to continue.")
@@ -175,9 +182,11 @@ if checkforUpdates == True:
                                               + "om/o355/pyweather/master/upda"
                                               + "ter/versioncheck.json")
     except:
-        print("Can't connect to GitHub to check for updates.",
-              "Make sure you have an internet connection,", 
-              "and GitHub is unblocked.", sep="\n")
+        print("When attempting to check for updates, PyWeather couldn't",
+              "fetch the .json for parsing. If you're on a network with a",
+              "filter, try asking your IT admin to unblock:",
+              "'https://raw.githubusercontent.com'. Otherwise, make",
+              "sure you have a valid internet connection.", sep="\n")
         printException()
         print("Press enter to continue.")
         input()
@@ -228,9 +237,10 @@ try:
               "seconds", end="\r")
 except:
     logger.warn("No connection to Google's geocoder!")
-    print("Could not connect to Google's geocoder.")
-    print("Ensure you have an internet connection, and that Google's geocoder "
-          + "is unblocked.")
+    print("When attempting to access Google's geocoder, PyWeather ran into an error.",
+          "A few things could of happened. If you're on a filter, make sure Google's",
+          "geocoder is unblocked. Otherwise, Make sure your internet connection is online.",
+          sep="\n")
     printException()
     print("Press enter to continue.")
     input()
@@ -242,8 +252,10 @@ try:
     lonstr = str(location.longitude)
 except AttributeError:
     logger.warn("No lat/long was provided by Google! Bad location?")
-    print("The location you inputted could not be understood.")
-    print("Please try again.")
+    print("When attempting to parse the location inputted, PyWeather",
+          "ran into an error. Make sure that the location you entered is",
+          "valid, and don't attempt to see the weather at Mark Watney's base.",
+          sep="\n")
     printException()
     print("Press enter to continue.")
     input()
@@ -291,9 +303,11 @@ if validateAPIKey == False and backupKeyLoaded == True:
         logger.debug("Acquired test JSON, end result: %s" % testJSON)
     except:
         logger.warn("Cannot connect to the API! Is the internet down?")
-        print("Cannot connect to Wunderground's API. Make sure you have",
-              "an internet connection, and that Wunderground's API is unblocked.",
-              sep="\n")
+        print("When attempting to validate your primary API key, PyWeather ran",
+              "into an error when accessing Wunderground's API. If you're",
+              "on a network with a filter, make sure that",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you",
+              "have an internet connection.", sep="\n")
         printException()
         print("Press enter to exit.")
         input()
@@ -319,9 +333,11 @@ if validateAPIKey == False and backupKeyLoaded == True:
                 testJSON = requests.get(testurl)
                 logger.debug("Acquired test JSON, end result: %s" % testJSON)
             except:
-                print("Cannot connect to Wunderground's API. Make sure you have",
-                      "an internet connection, and that Wunderground's API is unblocked.",
-                      sep="\n")
+                print("When attempting to validate your backup API key, PyWeather ran",
+                      "into an error. If you're on a network with a filter, make sure",
+                      "that 'api.wunderground.com' is unblocked. Otherwise, make sure you",
+                      "have an internet conection, that that your internet connection's latency",
+                      "isn't 1.59 days.", sep="\n")
                 printException()
                 print("Press enter to exit.")
                 input()
@@ -353,9 +369,9 @@ if validateAPIKey == False and backupKeyLoaded == True:
             except:
                 logger.warn("Backup API key could not be validated!")
                 print("Your primary and backup API key(s) could not be validated.",
-                      "Make sure your primary API key is valid, and that you make",
-                      "a backup of your primary API key when you confirm that it is",
-                      "valid.", sep="\n")
+                      "Make sure that your primary API key is valid, either because of a typo",
+                      "or some other reason. Installing Gentoo may help with the validation",
+                      "of your API key.", sep="\n")
                 printException()
                 print("Press enter to exit.")
                 input()
@@ -366,7 +382,8 @@ if validateAPIKey == False and backupKeyLoaded == True:
             print("Your primary API key couldn't be validated, and your",
                   "backup key could not be loaded at startup.",
                   "Please make sure your primary API key is valid, and that",
-                  "your backup API key can be accessed.",
+                  "your backup API key can be accessed (common mistakes include",
+                  "wrong permissions, and the file not existing).",
                   "Press enter to exit.", sep="\n")
             input()
             sys.exit()
@@ -408,9 +425,10 @@ try:
         logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
 except:
     logger.warn("No connection to the API!! Is the connection offline?")
-    print("Can't connect to the API. Make sure that Wunderground's API is",
-          "unblocked, and the internet is online."
-          "Also check if your API key is valid.", sep="\n")
+    print("When PyWeather attempted to fetch the .json files to show you the weather,",
+          "PyWeather ran into an error. If you're on a network with a filter, make sure",
+          "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+          "connection.", sep="\n")
     printException()
     print("Press enter to continue.")
     input()
@@ -468,8 +486,10 @@ try:
         print("[#########-] | 91% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 except:
     logger.warn("No connection to Google's Geolocator!! Is the connection offline?")
-    print("Can't connect to Google's Geolocator. Make sure that Google's " +
-          "Geolocator is unblocked, and your internet is online.")
+    print("When attempting to access Google's reverse geocoder, PyWeather ran into",
+          "an error. Make sure that if you're on a network with a filter Google's",
+          "reverse geocoder is unblocked. Otherwise, make sure you have an internet",
+          "connection.", sep="\n")
     printException()
     print("Press enter to continue.")
     input()
@@ -956,8 +976,10 @@ while True:
                 logger.debug("Retrieved ten day hourly JSON with response: %s" % tendayJSON)
                 tenday_prefetched = True
             except:
-                print("Couldn't connect to Wunderground's API. "
-                      + "Make sure you have an internet connection.")
+                print("When attempting to fetch the 10-day hourly forecast data, PyWeather ran",
+                      "info an error. If you're on a network with a filter, make sure that",
+                      "'api.wunderground.com' is unblocked. Otherwise, make sure that you have",
+                      "an internet connection.", sep="\n")
                 tenday_prefetched = False
                 printException()
                 print("Press enter to continue.")
@@ -1311,10 +1333,10 @@ while True:
             logger.debug("versioncheck: %s" % versioncheck)
         except:
             logger.warn("Couldn't check for updates! Is there an internet connection?")
-            print(Fore.RED + "Couldn't check for updates.")
-            print("Make sure GitHub user content is unblocked, and you have an internet connection.")
-            print("Error 54, pyweather.py")
-            logger.error("Here's the full traceback (for bug reports):")
+            print("When attempting to fetch the update data file, PyWeather",
+                  "ran into an error. If you're on a network with a filter,",
+                  "make sure that 'raw.githubusercontent.com' is unblocked. Otherwise,",
+                  "make sure that you have an internet connecction.", sep="\n")
             printException()
             continue
         versionJSON = json.loads(versioncheck.text)
@@ -1375,9 +1397,13 @@ while True:
                             print("Successfully updated with Git!")
                             continue
                         except:
-                            print("Couldn't update with Git. Would you like",
-                                  "to try and download the latest update using",
-                                  "a .zip download? Yes or No.", sep="\n")
+                            print("When attempting to execute `git stash`,",
+                                  "`git pull`, and/or `git checkout`,",
+                                  "an error occurred. Make sure you have git",
+                                  "installed in your shell, and that it can be used",
+                                  "from a shell. Anyways, would you like to try and update",
+                                  "PyWeather by using a .zip download?",
+                                  "Yes or No.", sep="\n")
                             printException()
                             confirmZipDownload = input("Input here: ").lower()
                             if confirmZipDownload == "yes":
@@ -1418,10 +1444,12 @@ while True:
                 except:
                     logger.warn("Couldn't download the latest version!")
                     logger.warn("Is the internet online?")
-                    print(Fore.RED + "Couldn't download the latest version.")
-                    print("Make sure GitHub user content is unblocked, "
-                          + "and you have an internet connection.")
-                    print("Error 55, pyweather.py")
+                    print("When attempting to download the latest .zip file",
+                          "for PyWeather, an error occurred. If you're on a",
+                          "network with a filter, make sure that",
+                          "'raw.githubusercontent.com' is unblocked.",
+                          "Otherwise, make sure you have an internet connection.",
+                          sep="\n")
                     logger.error("Here's the full traceback (for bug reports):")
                     printException()
                     continue
@@ -1439,12 +1467,14 @@ while True:
                 continue
             else:
                 logger.warn("Input could not be understood!")
-                print(Fore.GREEN + "Could not understand what you said.")
+                print(Fore.GREEN + "Your input couldn't be understood.")
                 continue
         else:
             logger.warn("PW updater failed. Variables corrupt, maybe?")
-            print(Fore.RED + "PyWeather Updater ran into an error, and couldn't compare versions.")
-            print(Fore.RED + "Error 53, pyweather.py")
+            print("When attempting to compare version variables, PyWeather ran",
+                  "into an error. This error is extremely rare. Make sure you're",
+                  "not trying to travel through a wormhole with Cooper, and report",
+                  "the error on GitHub, while it's around.", sep='\n')
             continue
     elif (moreoptions == "4" or moreoptions == "view almanac"
           or moreoptions == "almanac" or moreoptions == "view almanac for today"
@@ -1461,7 +1491,10 @@ while True:
                 logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
             except:
                 logger.warn("Couldn't contact Wunderground's API! Is the internet offline?")
-                print("Couldn't contact Wunderground's API. Make sure it's unblocked, and you have internet access.")
+                print("When fetching the almanac data from Wunderground, PyWeather ran into",
+                      "an error. If you're on a network with a filter, make sure that",
+                      "'api.wunderground.com' is unblocked. Otherwise, make sure you have",
+                      "an internet connection, and that Wunderground's HAL9000 is online.")
                 printException()
                 continue
             almanac_json = json.loads(almanacJSON.text)
@@ -1522,8 +1555,10 @@ while True:
                 sundataJSON = requests.get(astronomyurl)
                 logger.debug("Retrieved sundata JSON with response: %s" % sundataJSON)
             except:
-                print("Couldn't connect to Wunderground's API. "
-                      + "Make sure you have an internet connection.")
+                print("When attempting to fetch the 'sundata' from Wunderground,",
+                      "PyWeather ran into an error. If you're on a network with",
+                      "a filter, make sure 'api.wunderground.com' is unblocked.",
+                      "Otherwise, make sure you have an internet connection.", sep="\n")
                 printException()
                 print("Press enter to continue.")
                 input()
@@ -1712,8 +1747,11 @@ while True:
         try:
             historicalJSON = requests.get(historicalurl)
         except:
-            print("Can't connect to Wunderground's API.")
-            print("Make sure you have an internet connection, and WU's API is unblocked.")
+            print("When attempting to fetch historical data, PyWeather ran into",
+                  "an error. If you're on a network with a filter make sure that",
+                  "'api.wunderground.com' is unblocked. Otherwise, make sure that",
+                  "you have an internet connection, and that your DeLorean works.",
+                  sep="\n")
             printException()
             print("Press enter to continue.")
             input()
@@ -2018,7 +2056,49 @@ while True:
                         break         
             
     elif moreoptions == "tell me a joke":
-        print("I'm not Siri.")
+        # Jokes from searching "weather jokes" on DuckDuckGo (the first option)
+        # They're jokes for kids.
+        jokenum = randint(0,12)
+        print("")
+        if jokenum == 0:
+            print("How do hurricanes see?",
+                  "With one eye!", sep="\n")
+        elif jokenum == 1:
+            print("What does a cloud wear under his raincoat?",
+                  "Thunderwear!", sep="\n")
+        elif jokenum == 2:
+            print("What type of lightning likes to play sports?",
+                  "Ball lightning!", sep="\n")
+        elif jokenum == 3:
+            print("What type of cloud is so lazy, because it will never get up?",
+                  "Fog!", sep="\n")
+        elif jokenum == 4:
+            print("What did the lightning bolt say to the other lightning bolt?",
+                  "You're shocking!", sep="\n")
+        elif jokenum == 5:
+            print("Whatever happened to the cow that was lifted into the tornado?",
+                  "Udder disaster!", sep="\n")
+        elif jokenum == 6:
+            print("What did the one tornado say to the other?",
+                  "Let's twist again like we did last summer.", sep="\n")
+        elif jokenum == 7:
+            print("What did the thermometer say to the other thermometer?",
+                  "You make my temperature rise.", sep="\n")
+        elif jokenum == 8:
+            print("What's the difference between a horse and the weather?",
+                  "One is reined up and the other rains down.", sep="\n")
+        elif jokenum == 9:
+            print("What did the one raindrop say to the other raindrop?",
+                  "My plop is bigger than your plop.", sep="\n")
+        elif jokenum == 10:
+            print("Why did the woman go outdoors with her purse open?",
+                  "Because she expected some change in the weather.", sep="\n")
+        elif jokenum == 11:
+            print("What's the different between weather and climate?",
+                  "You can't weather a tree, but you can climate.", sep="\n")
+        elif jokenum == 12:
+            print("What did the hurricane say to the other hurricane?",
+                  "I have my eye on you.", sep="\n")
     else:
         logger.warn("Input could not be understood!")
         print(Fore.RED + "Not a valid option.")
