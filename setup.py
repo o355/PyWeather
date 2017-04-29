@@ -106,8 +106,9 @@ try:
     logger.debug("versioncheck: %s" % versioncheck)
 except:
     logger.warn("Couldn't check for updates! Is there an internet connection?")
-    print("Couldn't check for updates.",
-          "Make sure GitHub user content is unblocked, and you have an internet connection.", sep="\n")
+    print("When attempting to check for updates, PyWeather Setup ran into an error.",
+          "If you're on a network with a firewall, make sure 'raw.githubusercontent.com'",
+          "Otherwise, make sure that you have an internet connection.", sep="\n")
     printException()
     
 versionJSON = json.loads(versioncheck.text)
@@ -175,8 +176,9 @@ try:
 except ImportError:
     logger.warn("pip is NOT installed! Asking user for automated install...")
     printException_loggerwarn()
-    print("","Shucks! I need PIP to check for/install libraries.",
-    "Can I install PIP for you? Yes or No.", sep="\n")
+    print("","Shucks! PIP couldn't be imported, and I need PIP to install",
+          "libraries for you. Would you like me to install PIP for you?",
+          "Yes or No.", sep="\n")
     pipConfirm = input("Input here: ").lower()
     logger.debug("pipConfirm: %s" % pipConfirm)
     if pipConfirm == "no":
@@ -937,8 +939,10 @@ try:
     logger.debug("testJSON: %s" % testJSON)
 except:
     logger.warn("Couldn't connect to Wunderground's API! No internet?")
-    print("We ran into an error. Make sure Wunderground's API is unblocked, and",
-          "you have an internet connection.", sep="\n")
+    print("When PyWeather Setup attempted to fetch the .json to validate your API key,",
+          "it ran into an error. If you're on a network with a filter, make sure that",
+          "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+          "connection.", sep="\n")
     printException()
     print("Press enter to exit.")
     input()
@@ -954,7 +958,10 @@ try:
     print("Hurray! Your API key is valid and works.")
 except:
     logger.warn("Error! Is the API key invalid?")
-    print("We ran into an error. Make sure your API key is valid.")
+    print("When attempting to validate the API key that you entered/confirmed,",
+          "PyWeather ran into an error. Try rerunning this setup script, and make",
+          "sure that you're entering in your API key correctly. If you're doing this,",
+          "enable setup_tracebacks in the config.ini file, and report the error to GitHub.", sep="\n")
     printException()
     print("Press enter to exit.")
     input()
@@ -975,8 +982,10 @@ try:
     print("Hurray! The connection to Google's geocoder works.")
 except:
     logger.warn("Couldn't connect to Google's geocoder. No internet?")
-    print("We ran into an error. Make sure Google's geocoder is unblocked, " +
-          "and you have an internet connection.")
+    print("When attempting to test the conection to Google's geocoder,",
+          "PyWeather Setup ran into an error. If you're on a network with",
+          "a filter, make sure that Google's geocoder is unblocked. Otherwise",
+          "make sure that you have an internet connection.", sep="\n")
     printException()
     print("Press enter to exit.")
     input()
@@ -993,8 +1002,10 @@ try:
     print("Yay! The connection to the reverse geocoder works.")
 except:
     logger.warn("Couldn't connect to Google's geocoder. No internet?")
-    print("We ran into an error. Make sure Google's geocoder is unblocked,",
-          "and you have an internet connection.", sep="\n")
+    print("When attempting to test the connection to Google's geocoder,",
+          "PyWeather Setup ran into an error. If you're on a netowrk with",
+          "a filter, make sure that Google's geocoder is unblocked. Otherwise",
+          "make sure that you have an internet connection.", sep="\n")
     printException()
     print("Press enter to exit.")
     input()

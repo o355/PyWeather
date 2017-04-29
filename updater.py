@@ -160,6 +160,8 @@ elif buildnumber < version_buildNumber:
                     subprocess.call(["git checkout %s" % version_latestReleaseTag],
                                     shell=True)
                     print("Successfully updated with Git!",
+                          "Make sure you reapply any changes you made to your",
+                          "config file after the update.",
                           "Press enter to exit.", sep="\n")
                     input()
                     sys.exit()

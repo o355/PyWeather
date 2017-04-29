@@ -34,11 +34,11 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Scrapped. Will be implemented in 0.9 beta.
 * Finally gets around to getting the "can't run you have Python 2" warning in all scripts. - This really isn't needed. The scripts will just fail to run.
 * Adds the option to cancel a pending shell command in PyWeather setup (Ctrl+C), and increases the time until the command is executed to 5 seconds. - Done, and tested!
-* Adds the ability to update with git through the command line - 40% done (in pyweather.py, not in updater.py), not tested. - Should be finished by 4/29
+* Adds the ability to update with git through the command line - Done, and tested!
 * Adds back the iteration detections for historical hourly. This is accomplished by doing a for loop before user data is shown, and calculating the total amount of iterations that need to be done. - Done, and tested!
 * Adds the ability to override the version number defined in PyWeather. This was done for debugging reasons. - Done, and tested!
 * PyWeather is now using requests to get the API .json files, in favor of better reliability - Done/tested in pyweather, not done/tested in setup/updater. Done, and tested!
-* Made error messages less vague. - 25% done - Should be finished by 4/30.
+* Made error messages less vague. - 50% done.
 
 **BUG FIXES**
 * Fixed a bug in which if tracebacks were enabled in the updater, the tracebacks wouldn't print properly, as such, producing a traceback. Huh.

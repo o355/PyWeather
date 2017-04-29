@@ -1395,8 +1395,12 @@ while True:
                             subprocess.call(["git stash"], shell=True)
                             subprocess.call(["git checkout %s" % version_latestReleaseTag],
                                             shell=True)
-                            print("Successfully updated with Git!")
-                            continue
+                            print("Successfully updated with Git!",
+                                  "Make sure that you reapply any changes you made",
+                                  "to your config file after the update.",
+                                  "Closing PyWeather in 5 seconds...", sep="\n")
+                            time.sleep(5)
+                            sys.exit()
                         except:
                             print("When attempting to execute `git stash`,",
                                   "`git pull`, and/or `git checkout`,",
