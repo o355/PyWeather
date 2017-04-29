@@ -840,7 +840,7 @@ else:
 print("", "When you check for updates, and PyWeather notices",
       "a new version is out, PyWeather can use Git to update",
       "itself. Make sure you have Git installed if you enable this.",
-      "By default, this is disabled. Keep this disable if you're unsure",
+      "By default, this is disabled. Keep this disabled if you're unsure",
       "you have Git installed.",
       "Yes or No.", sep="\n")
 allowGitUpdating = input("Input here: ").lower()
@@ -933,7 +933,7 @@ logger.debug("apitest_URL: %s ; testreader: %s" %
              (apitest_URL, testreader))
 
 try:
-    testJSON = urlopener.open(apitest_URL)
+    testJSON = requests.get(apitest_URL)
     logger.debug("testJSON: %s" % testJSON)
 except:
     logger.warn("Couldn't connect to Wunderground's API! No internet?")
@@ -944,7 +944,7 @@ except:
     input()
     sys.exit()
     
-test_json = json.loads(testJSON)
+test_json = json.loads(testJSON.text)
 if jsonVerbosity == True:
     logger.debug("test_json: %s" % test_json)
 
@@ -1001,7 +1001,7 @@ except:
     sys.exit()
 
 print("","Everything is set up and ready to rumble!",
-      "Enjoy using PyWeather! If you have any issues, please report them on GitHub!"
+      "Enjoy using PyWeather! If you have any issues, please report them on GitHub!",
       "Press enter to continue.", sep="\n")
 input()
 sys.exit()
