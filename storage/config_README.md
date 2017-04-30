@@ -1,4 +1,4 @@
-## PyWeather Configuration Readme - For PyWeather 0.5.1 beta
+## PyWeather Configuration Readme - For PyWeather 0.5.2 beta
 Since configparser hates comments, this will do for now.
 
 ## CHANGELOG
@@ -7,7 +7,7 @@ This is just to show you what version the config file is meant to be used for.
 
 Changing this does nothing.
 
-**Default option: 0.5.1**
+**Default option: 0.5.2**
 
 ## SUMMARY section
 ### sundata_summary
@@ -110,7 +110,6 @@ Useful for reporting issues, and seeing what went wrong.
 **Default option: False**
 
 ### keybackup_tracebacks
-**This option is useless, but will be implemented in 0.5.2 beta.**
 
 This option allows you to turn on printing full tracebacks in PyWeather API Key Backup.
 
@@ -171,6 +170,20 @@ This isn't a default in the code due to the pros/cons of using each method.
 
 **Default option: False**
 
+## PYWEATHER BOOT section
+This section controls stuff that goes on when PyWeather boots.
+
+### validateapikey
+This option allows for PyWeather to validate your primary API key (stored at storage//apikey.txt), and make sure the key is valid.
+
+PyWeather will try to open the file, fetch a test JSON, and validate the primary key. If the key is valid, everything continues. If the key isn't valid, PyWeather will attempt to load a backup key (with the directory specified in the config), and vertify that. If it's verified, variables are changed, and PW continues on. 
+
+If the backup key can't be opened or verified, PyWeather stops.
+
+This option is enabled, as it's well worth the extra API call to make sure your key is valid.
+
+**Default option: True**
+
 ## UPDATER section
 This section controls PyWeather's updating mechanism.
 
@@ -194,6 +207,15 @@ It's off by default as it's presumed you're not using Git to download and update
 
 **Default option: False**
 
+### allowGitForUpdating
+This option allows you to control if PyWeather should prompt you to update with Git in PyWeather.
+
+Only turn this on if you're sure that you have Git on your system, and that it's available in your default shell. When PyWeather updates with Git, it'll automatically check out to the master branch, stash any local changes, pull new changes, stash local changes again, and check out to the latest "branch".
+
+When doing this, custom changes to your config file will be overwritten. PyWeather 0.6 beta will most likely be able to get around this, so it's just for now.
+
+**Default option: False**
+
 ## KEYBACKUP section
 This section allows you to control parts of the Key Backup script.
 
@@ -209,3 +231,32 @@ You can save it anywhere in PyWeather's folder. However, you'll want to take not
 3. The file extension is no more. PyWeather will automatically save the backup key document as backkey.txt, to prevent conflicts.
 
 **Default option: backup//**
+
+## VERSIONS section
+This section controls version overriding, mainly for debugging reasons.
+
+### overrideVersion
+This option allows you to control if PyWeather should override set build numbers/version texts, for debugging or some other reason.
+
+The two options below this are only valid if version overriding is enabled.
+
+**Default option: False**
+
+### overridebuildnumber
+This option lets you control the build number PyWeather uses (mainly for update checking). This option MUST BE AN INTEGER.
+
+Build numbers are basically the version number.
+
+0.5 beta = 50
+v1.0 = 100
+v1.0.1 = 101
+v1.1 = 110
+
+And so on and so forth.
+
+**Default option: 52**
+
+### overrideversiontext
+This option lets you control the version text that is visible to the user (when showing "PyWeather is out of date, you have version <version>, etc). This option is a string, you can put whatever you want here, if you so desire.
+
+**Default option: 0.5.2 beta**
