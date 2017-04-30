@@ -154,6 +154,7 @@ elif buildnumber < version_buildNumber:
             if confirmUpdateWithGit == "yes":
                 print("Now updating with Git.")
                 try:
+                    subprocess.call(["git checkout master"], shell=True)
                     subprocess.call(["git stash"], shell=True)
                     subprocess.call(["git pull"], shell=True)
                     subprocess.call(["git stash"], shell=True)

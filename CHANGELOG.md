@@ -18,27 +18,23 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 ### version 0.5.3 beta - Release not occurring.
 * Rewrites multiline prints in keybackup.py/updater.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Scrapped. Will be implemented in 0.9 beta.
 
-## version 0.5.2 beta - Should be released on 4/30/2017
+## version 0.5.2 beta - Released on 4/29/2017
 **NEW FEATURES/REMOVALS**
-* Adds the raw traceback output in keybackup.py - Done, and tested!
-* Changes the error message when the config file fails to load (the potential for the file to not get loaded) - Done, and tested!
-* Removes the error catching of a bad config file load, it's useless. - Done, and tested!
-* Adds a fallback to doing a system "sudo pip3 install library" if a library is found not to be installed. (in setup) - Done, and tested!
-* Added a warning to users using Python 3.0-3.4 in the setup script, it's known to cause errors. - Done, and tested!
-* Switches the "here's the full traceback" thing from logger.error to a pure printout. - Done, and tested!
-* Adds version checking in the setup script, while trying not to be Windows 10. - Done, and tested!
-* Adds the library check script, which checks for libraries PyWeather needs. - Scrapped. Will be implemented later down the road, before 0.9 beta.
-* Adds a warning to users on Python 3.5/3.6 and running Linux about Geocoder failing during install. - 100% done, and tested.
-* Adds a separate config.py script, to configure all available options. - Scrapped. Adding it to PyWeather 0.6 beta.
-* Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted. - Done, and tested!
-* Rewrites multiline prints in pyweather.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) (some multiline prints with a lot of variables won't be condensed, for the sake of sanity.) - Scrapped. Will be implemented in 0.9 beta.
-* Finally gets around to getting the "can't run you have Python 2" warning in all scripts. - This really isn't needed. The scripts will just fail to run.
-* Adds the option to cancel a pending shell command in PyWeather setup (Ctrl+C), and increases the time until the command is executed to 5 seconds. - Done, and tested!
-* Adds the ability to update with git through the command line - Done, and tested!
-* Adds back the iteration detections for historical hourly. This is accomplished by doing a for loop before user data is shown, and calculating the total amount of iterations that need to be done. - Done, and tested!
-* Adds the ability to override the version number defined in PyWeather. This was done for debugging reasons. - Done, and tested!
-* PyWeather is now using requests to get the API .json files, in favor of better reliability - Done/tested in pyweather, not done/tested in setup/updater. Done, and tested!
-* Made error messages less vague. - 50% done.
+* Adds the raw traceback output in keybackup.py
+* Changes the error message when the config file fails to load (the potential for the file to not get loaded)
+* Removes the error catching of a bad config file load, it's useless.
+* Adds a fallback to doing a system "sudo pip3 install library" if a library is found not to be installed. (in setup)
+* Added a warning to users using Python 3.0-3.4 in the setup script, it's known to cause errors.
+* Switches the "here's the full traceback" thing from logger.error to a pure printout.
+* Adds version checking in the setup script, while trying not to be Windows 10.
+* Adds a warning to users on Python 3.5/3.6 and running Linux about Geocoder failing during install.
+* Adds the ability to fetch all JSON files using a backup key, if the primary one fails. This is accomplished by using the first JSON fetch as a test, and seeing if a KeyError occurs. If a KeyError occurs, the backup key will be substituted.
+* Adds the option to cancel a pending shell command in PyWeather setup (Ctrl+C), and increases the time until the command is executed to 5 seconds.
+* Adds the ability to update with git through the command line.
+* Adds back the iteration detections for historical hourly. This is accomplished by doing a for loop before user data is shown, and calculating the total amount of iterations that need to be done.
+* Adds the ability to override the version number defined in PyWeather. This was done for debugging reasons.
+* PyWeather is now using requests to get the API .json files, in favor of better reliability.
+* Made error messages less vague. Hurray?
 
 **BUG FIXES**
 * Fixed a bug in which if tracebacks were enabled in the updater, the tracebacks wouldn't print properly, as such, producing a traceback. Huh.

@@ -58,7 +58,9 @@ if confirmation == "yes":
         open(saveLocation, 'w').close()
     except:
         print("We ran into an error when overwriting a possibly existing file.",
-              "Please try again, and make sure your config file has the right spelling.", sep="\n")
+              "Please try again, and make sure your config file has the right spelling",
+              "under the option for the backup directory. Furthermore, make sure that the",
+              "backup directory specified in the config file has proper permissions.", sep="\n")
         printException()
         print("Press enter to exit.")
         input()
@@ -72,8 +74,10 @@ if confirmation == "yes":
             out.close()
             logger.debug("Performed ops: out.write(apikey2), out.close()")
     except:
-        print("We ran into an error when writing to the backup file.",
-              "Please try again, and make sure your config file has the right spelling.", sep="\n")
+        print("We ran into an error when writing to the backup key text file.",
+              "Please try again, and make sure your config file has the right spelling", 
+              "under the option for the backup directory. Furthermore, make sure that the",
+              "backup directory specified in the config has proper permissions.",sep="\n")
         printException()
         print("Press enter to exit.")
         input()
