@@ -18,7 +18,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 ### version 0.5.3 beta - Release not occurring.
 * Rewrites multiline prints in keybackup.py/updater.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Scrapped. Will be implemented in 0.9 beta.
 
-## version 0.5.2 beta - Released on 4/29/2017
+## version 0.5.2 beta - Released on 4/30/2017
 **NEW FEATURES/REMOVALS**
 * Adds the raw traceback output in keybackup.py
 * Changes the error message when the config file fails to load (the potential for the file to not get loaded)
@@ -38,7 +38,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 
 **BUG FIXES**
 * Fixed a bug in which if tracebacks were enabled in the updater, the tracebacks wouldn't print properly, as such, producing a traceback. Huh.
-* Fixing a bug in all scripts that involved issuing HTTP requests. This is now improved with user strings, and should prevent random 400 errors.
+* Fixed a bug in all scripts that involved issuing HTTP requests. This is now improved with user strings, and should prevent random 400 errors.
 
 ## version 0.5.1 beta - Released on 4/17/2017
 **NEW FEATURES/REMOVALS:**

@@ -1390,11 +1390,8 @@ while True:
                     if confirmUpdateWithGit == "yes":
                         print("Now updating with Git.")
                         try:
-                            # We check out to master since doing git pull in a
-                            # detached head state is apparently impossible!
-                            subprocess.call(["git checkout master"], shell=True)
                             subprocess.call(["git stash"], shell=True)
-                            subprocess.call(["git pull"], shell=True)
+                            subprocess.call(["git fetch"], shell=True)
                             subprocess.call(["git stash"], shell=True)
                             subprocess.call(["git checkout %s" % version_latestReleaseTag],
                                             shell=True)
