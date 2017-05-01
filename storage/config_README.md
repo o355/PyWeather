@@ -1,4 +1,4 @@
-## PyWeather Configuration Readme - For PyWeather 0.5.2 beta
+## PyWeather Configuration Readme - For PyWeather 0.5.2.1 beta
 Since configparser hates comments, this will do for now.
 
 ## CHANGELOG
@@ -7,7 +7,7 @@ This is just to show you what version the config file is meant to be used for.
 
 Changing this does nothing.
 
-**Default option: 0.5.2**
+**Default option: 0.5.2.1**
 
 ## SUMMARY section
 ### sundata_summary
@@ -254,9 +254,11 @@ v1.1 = 110
 
 And so on and so forth.
 
-**Default option: 52**
+If a criticial hotfix needs to be applied (e.g. 0.5.2.1), the build number in such case would become 52.1.
+
+**Default option: 52.1**
 
 ### overrideversiontext
 This option lets you control the version text that is visible to the user (when showing "PyWeather is out of date, you have version <version>, etc). This option is a string, you can put whatever you want here, if you so desire.
 
-**Default option: 0.5.2 beta**
+**Default option: 0.5.2.1 beta**

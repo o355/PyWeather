@@ -1,4 +1,4 @@
-# PyWeather Setup - version 0.5.2 beta
+# PyWeather Setup - version 0.5.2.1 beta
 # (c) 2017, o355, licensed under GNU GPL v3
 
 # Same deal as the main script.
@@ -31,7 +31,7 @@ try:
     jsonVerbosity = config.getboolean('VERBOSITY', 'setup_jsonverbosity')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'setup_tracebacks')
     overrideVersion = config.getboolean('VERSIONS', 'overrideVersion')
-    overrideBuildNumber = config.getint('VERSIONS', 'overrideBuildNumber')
+    overrideBuildNumber = config.getfloat('VERSIONS', 'overrideBuildNumber')
     overrideVersionText = config.get('VERSIONS', 'overrideVersionText')
 except:
     print("Couldn't load your config file. Make sure there aren't any typos",
@@ -43,8 +43,8 @@ except:
     jsonVerbosity = False
     tracebacksEnabled = False
     overrideVersion = False
-    overrideBuildNumber = 52
-    overrideVersionText = "0.5.2 beta"
+    overrideBuildNumber = 52.1
+    overrideVersionText = "0.5.2.1 beta"
     
 def printException():
     if tracebacksEnabled == True:
@@ -58,7 +58,7 @@ def printException_loggerwarn():
         
     
 import logging
-logger = logging.getLogger(name='pyweather_setup_0.5.1beta')
+logger = logging.getLogger(name='pyweather_setup_0.5.2.1beta')
 logger.setLevel(logging.DEBUG)
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
@@ -94,8 +94,8 @@ if overrideVersion == True:
     buildnumber = overrideBuildNumber
     buildversion = overrideVersionText
 else:
-    buildnumber = 52
-    buildversion = "0.5.2 beta"
+    buildnumber = 52.1
+    buildversion = "0.5.2.1 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))

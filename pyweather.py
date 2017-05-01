@@ -1,4 +1,4 @@
-# PyWeather - version 0.5.2 indev
+# PyWeather - version 0.5.2.1 beta
 # (c) 2017 o355, GNU GPL 3.0.
 
 # ==============
@@ -47,7 +47,7 @@ try:
     validateAPIKey = config.getboolean('PYWEATHER BOOT', 'validateAPIKey')
     allowGitForUpdating = config.getboolean('UPDATER', 'allowGitForUpdating')
     overrideVersion = config.getboolean('VERSIONS', 'overrideVersion')
-    overrideBuildNumber = config.getint('VERSIONS', 'overrideBuildNumber')
+    overrideBuildNumber = config.getfloat('VERSIONS', 'overrideBuildNumber')
     overrideVersionText = config.get('VERSIONS', 'overrideVersionText')
 except:
     print("When attempting to load your configuration file, an error",
@@ -72,8 +72,8 @@ except:
     validateAPIKey = True
     allowGitForUpdating = False
     overrideVersion = False
-    overrideBuildNumber = 52
-    overrideVersionText = "0.5.2 beta"
+    overrideBuildNumber = 52.1
+    overrideVersionText = "0.5.2.1 beta"
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
@@ -165,6 +165,8 @@ if validateAPIKey == True:
         logger.warn("Could not load the backup key for future validation.")
         backupKeyLoaded = False
         logger.debug("backupKeyLoaded: %s" % backupKeyLoaded)
+else:
+    backupKeyLoaded = False
 
 logger.debug("apikey = %s" % apikey)
 
@@ -172,8 +174,8 @@ if overrideVersion == True:
     buildnumber = overrideBuildNumber
     buildversion = overrideVersionText
 else:
-    buildnumber = 52
-    buildversion = '0.5.2 indev'    
+    buildnumber = 52.1
+    buildversion = '0.5.2.1 indev'    
 
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")

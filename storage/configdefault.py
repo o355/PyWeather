@@ -1,4 +1,4 @@
-# PyWeather Configuration Defaults - 0.5.2 beta
+# PyWeather Configuration Defaults - 0.5.2.1 beta
 # (c) 2017, o355
 
 import sys
@@ -97,10 +97,10 @@ if cd_confirmation == "yes":
     logger.debug("UPDATER/allowGitForUpdating is now 'False'.")
     config['VERSIONS']['overrideVersion'] = 'False'
     logger.debug("VERSIONS/overrideVersion is now 'False'.")
-    config['VERSIONS']['overrideBuildNumber'] = '52'
-    logger.debug("VERSIONS/overrideBuildNumber is now '52'.")
-    config['VERSIONS']['overrideVersionText'] = '0.5.2 beta'
-    logger.debug("VERSIONS/overrideVersionText is now '0.5.2 beta'.")
+    config['VERSIONS']['overrideBuildNumber'] = '52.1'
+    logger.debug("VERSIONS/overrideBuildNumber is now '52.1'.")
+    config['VERSIONS']['overrideVersionText'] = '0.5.2.1 beta'
+    logger.debug("VERSIONS/overrideVersionText is now '0.5.2.1 beta'.")
     print("Committing changes...")
     try:
         with open('config.ini', 'w') as configfile:

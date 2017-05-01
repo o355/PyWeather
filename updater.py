@@ -1,4 +1,4 @@
-# PyWeather Updater - version 0.5.2 beta
+# PyWeather Updater - version 0.5.2.1 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 
@@ -39,12 +39,12 @@ except:
     tracebacksEnabled = False
     allowGitForUpdating = False
     overrideVersion = False
-    overrideBuildNumber = 52
-    overrideVersionText = "0.5.2 beta"
+    overrideBuildNumber = 52.1
+    overrideVersionText = "0.5.2.1 beta"
     
     
 import logging
-logger = logging.getLogger(name='pyweather_updater_0.5.2beta')
+logger = logging.getLogger(name='pyweather_updater_0.5.2.1beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
@@ -80,8 +80,8 @@ if overrideVersion == True:
     buildnumber = overrideBuildNumber
     buildversion = overrideVersionText
 else:    
-    buildnumber = 52
-    buildversion = "0.5.2 beta"
+    buildnumber = 52.1
+    buildversion = "0.5.2.1 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
