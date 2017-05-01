@@ -15,8 +15,8 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Doing the usual setup/configdefault catching up
 * Fixes for config updates. A new "configsetup.py" script will be introduced, which will update the config for each new version, but preserve old user settings. It'll get automatically executed when doing updates through PyWeather, but users doing updates through the .zip method or manual Git updating will have to execute the script each time. When PyWeather setup is launched for the first time, the config file will be created.  
 
-### version 0.5.3 beta - Release not occurring.
-* Rewrites multiline prints in keybackup.py/updater.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution) - Scrapped. Will be implemented in 0.9 beta.
+## version 0.5.2.1 beta - Released on 4/30/2017
+* Fixes a bug in which if validating your API key wasn't enabled, a variable wasn't defined, crashing PyWeather at boot.
 
 ## version 0.5.2 beta - Released on 4/30/2017
 **NEW FEATURES/REMOVALS**

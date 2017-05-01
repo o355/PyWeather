@@ -1,19 +1,16 @@
-## Welcome to PyWeather (0.5.2 beta)!
+## Welcome to PyWeather (0.5.2.1 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
-## Why? Why should I check my weather in a terminal?
-It's cooler. I think.
+## Download/Setup
+You can download PyWeather by visiting the releases tab, and getting the latest zip.
 
-## Setup
-I won't make you read the entire readme, so here's how to download PyWeather.
+You can also use git to download PyWeather, using the commands below.
 
-Download a release from the releases tab, unzip it, and run setup.py. The script will walk you through installing necessary libraries, instructions for retrieving an API key, letting you configure stuff, and making sure things work.
-
-After that, double click pyweather.py, input a location, and that's it! No, really. That's actually it. No completed config files, none of that. setup.py, pyweather.py. Welcome to the world of simplicity! \ (•◡•) /
-
-**Sometimes, the setup script will have a tendancy to fail in regards to installing geocoder. See the wiki page "Setup" for more information.**
-
-If you have Git, and you'd prefer to clone over PyWeather from Git, please read the page on "Installing from Git" in the Wiki.
+```
+git clone https://github.com/o355/pyweather.git
+git checkout 0.5.2.1 beta (if you want indev code, don't perform this command)
+```
+After that, run setup.py, and the setup file will guide you through setting up PyWeather. After that, run pyweather.py, and enjoy the magic of PyWeather! It's as easy as that.
 
 ## What's PyWeather?
 PyWeather was a script I made, because I couldn't find anything that I wanted (from a terminal-based weather machine)
