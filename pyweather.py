@@ -108,8 +108,8 @@ logger.debug("user_forecastLoopIterations: %s ; user_showUpdaterReleaseTag: %s"
              % (user_forecastLoopIterations, user_showUpdaterReleaseTag))
 logger.debug("user_backupKeyDirectory: %s ; validateAPIKey: %s"
              % (user_backupKeyDirectory, validateAPIKey))
-logger.debug("allowGitForUpdating: %s"
-             % (allowGitForUpdating))
+logger.debug("allowGitForUpdating: %s ; showAlerts: %s"
+             % (allowGitForUpdating, showAlerts))
 
 logger.info("Defining exception functions...")
 
@@ -285,6 +285,7 @@ hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr 
 tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
 astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
 almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
+alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + latstr + ',' + lonstr + '.json'
 
 if verbosity == False:
     print("[##--------] | 6% |", round(time.time() - firstfetch,1), "seconds", end="\r")
@@ -401,7 +402,7 @@ if validateAPIKey == False and backupKeyLoaded == True:
 elif validateAPIKey == True and backupKeyLoaded == False:        
     logger.warn("Validating the API key was enabled, but the backup key wasn't loaded.")
     logger.warn("Skipping...")
- 
+
 # Fetch the JSON file using urllib.request, store it as a variable.
 try:
     # For sanity's sake, refetching the current JSON is probably the better thing to do.
@@ -434,6 +435,14 @@ try:
         if verbosity == False:
             print("[#####-----] | 49% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
+    if showAlerts == True:
+        alertsJSON = requests.get(alertsurl)
+        alertsPrefetched = True
+        if verbosity == False:
+            print("[#####-----] | 52% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        logger.debug("Acquired alerts JSON, end result: %s" % alertsJSON)
+    else:
+        alertsPrefetched = False
 except:
     logger.warn("No connection to the API!! Is the connection offline?")
     print("When PyWeather attempted to fetch the .json files to show you the weather,",
@@ -483,6 +492,10 @@ if almanac_summary == True:
         print("[#########-] | 87% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("almanac_json loaded with: %s" % almanac_json)
+if showAlerts == True:
+    alerts_json = json.loads(alertsJSON.text)
+    if verbosity == False:
+        print("[#########-] | 90% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 logger.info("Some amount of JSONs loaded...")
 logger.info("Start 2nd geocoder...")
 
@@ -683,6 +696,31 @@ summaryHourlyIterations = 0
 print(Style.BRIGHT + Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + location2.city + ", " + location2.state)
 print(Fore.YELLOW + summary_lastupdated)
 print("")
+# Attempt to parse alerts here.
+if showAlerts == True:
+    try:
+        # We attempt to parse a Meteoalarm first, as it has unique
+        # data names, or whatever they're called.
+        for data in alerts_json['alerts']:
+            # If the alert isn't an EU alert, a KeyError is issued, and
+            # we then try to parse a US alert.
+            alerts_description = data['wtype_meteoalarm_name']
+            alerts_expiretime = data['expires']
+            print(Fore.RED + "** A " + alerts_description + " Meteoalarm has been issued" +
+                  " for this location, and is in effect until " + alerts_expiretime + ". **")
+    except:
+        try:
+            for data in alerts_json['alerts']:
+                alerts_description = data['description']
+                alerts_expiretime = data['expires']
+                print(Fore.RED + "** A " + alerts_description + " has been issued" + 
+                      " for this location, and is in effect until " + alerts_expiretime +
+                      " . **")
+        except:
+            logger.warn("No alert information available!")
+            
+            
+    
 print(Fore.YELLOW + "Currently:")
 print(Fore.YELLOW + "Current conditions: " + Fore.CYAN + summary_overall)
 print(Fore.YELLOW + "Current temperature: " + Fore.CYAN + summary_tempf + "°F (" + summary_tempc + "°C)")
