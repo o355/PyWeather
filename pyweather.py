@@ -709,8 +709,13 @@ if showAlertsOnSummary == True:
             logger.info("Attempting to parse EU alert first...")
             alerts_description = data['wtype_meteoalarm_name']
             alerts_expiretime = data['expires']
+            # By now, if the alert wasn't an EU alert, the error would of been
+            # caught. So, we add this. When a user wants detailed alert information,
+            # instead of redoing this catching, the type is used for things to be easy.
+            alerts_type = "EU"
             logger.debug("alerts_description: %s ; alerts_expiretime: %s"
                          % (alerts_description, alerts_expiretime))
+            logger.debug("alerts_type: %s" % alerts_type)
             print(Fore.RED + "** A " + alerts_description + " Meteoalarm has been issued" +
                   " for " + location2.city + ",", 
                   "and is in effect until " + alerts_expiretime + ". **", sep="\n")
@@ -721,16 +726,18 @@ if showAlertsOnSummary == True:
                 logger.info("Failed to parse EU alert data! Attempting to parse US alert data...")
                 alerts_description = data['description']
                 alerts_expiretime = data['expires']
+                alerts_type = "US"
                 logger.debug("alerts_description: %s ; alerts_expiretime: %s"
                              % (alerts_description, alerts_expiretime))
+                logger.debug("alerts_type: %s" % alerts_type)
                 print(Fore.RED + "** A " + alerts_description + " has been issued" + 
                       " for " + location2.city + ",",
                       "and is in effect until " + alerts_expiretime + ". **", sep="\n")
                 print("")
         except:
             logger.info("No alert information available!")
-            
-            
+            alerts_type = "None"
+            logger.debug("alerts_type: %s" % alerts_type)
     
 print(Fore.YELLOW + "Currently:")
 print(Fore.YELLOW + "Current conditions: " + Fore.CYAN + summary_overall)
@@ -885,7 +892,82 @@ while True:
               + " mm)")
         continue
     elif moreoptions == "1":
-        print("Detailed alerts information goes here.")
+        if alertsPrefetched == False:
+            try:
+                alertsJSON = requests.get(alertsurl)
+                logger.debug("alertsJSON acquired, end result %s." % alertsJSON)
+                alertsPrefetched = True
+                logger.debug("alertsPrefetched: %s" % alertsPrefetched)
+            except:
+                print("When attempting to fetch the alerts JSON file to parse,",
+                      "PyWeather ran into an error. If you're on a network with a",
+                      "filter, make sure that 'api.wunderground.com' is unblocked.",
+                      "Otherwise, make sure you have an internet connection.", sep="\n")
+                printException()
+                alertsPrefetched = False
+                logger.debug("alertsPrefetched: %s", alertsPrefetched)
+                print("Press enter to continue.")
+                input()
+                continue
+            alerts_json = json.loads(alertsJSON.text)
+            if jsonVerbosity == True:
+                logger.debug("alerts_json: %s" % alerts_json)
+            logger.info("Trying to parse alert type...")
+            try:
+                for data in alerts_json['alerts']:
+                    alerts_testtype = data['wtype_meteoalarm']
+                    alerts_type = "EU"
+                    logger.debug("alerts_type: %s" % alerts_type)
+            except:
+                try:
+                    for data in alerts_json['alerts']:
+                        alerts_testtype = data['description']
+                        alerts_type = "US"
+                        logger.debug("alerts_type: %s" % alerts_type)
+                except:
+                    logger.info("No alert data available!")
+                    alerts_type = "None"
+                    logger.debug("alerts_type: %s" % alerts_type)
+                    
+        if alerts_type == "EU":
+            logger.info("Showing detailed alerts info for EU.")
+            alerts_totaliterations = 0
+            alerts_completediterations = 0
+            for data in alerts_json['alerts']:
+                totaliterations = totaliterations + 1
+            for data in alerts_json['alerts']:
+                alerts_completediterations = alerts_completediterations + 1
+                logger.info("We're on iteration %s/%s" %
+                            (alerts_completediterations, alerts_totaliterations))
+                alerts_alertname = data['wtype_meteoalarm_name']
+                alerts_alertlevel = data['level_meteoalarm_name']
+                alerts_description = data['level_meteoalarm_description']
+                logger.debug("alerts_alertname: %s ; alerts_alertlevel: %s"
+                             % (alerts_alertname, alerts_alertlevel))
+                logger.debug("alerts_alertlevel: %s ; alerts_description: %s"
+                             % (alerts_alertlevel, alerts_description))
+                alerts_issuedtime = data['date']
+                alerts_expiretime = data['expires']
+                logger.debug("alerts_issuedtime: %s ; alerts_expiretime: %s"
+                             % (alerts_issuedtime, alerts_expiretime))
+                print(Fore.RED + "Alert %s/%s:" % 
+                      (alerts_completediterations, alerts_totaliterations))
+                print("Alert Name: " + Fore.CYAN + alerts_alertname)
+                print("Alert Level: " + Fore.CYAN + alerts_alertlevel)
+                print("Alert Description: " + Fore.CYAN + alerts_description)
+                print("Alert issued at: " + Fore.CYAN + alerts_issuedtime)
+                print("Alert expires at: " + Fore.CYAN + alerts_expiretime)
+        elif alerts_type == "US":
+            for data in alerts_json['alerts']:
+                alerts_alertname = data['description']
+                alerts_alerttype = data['type']
+                alerts_description = data['message']
+                alerts_issuedtime = data['date']
+                alerts_expiretime = data['expires']
+                
+            
+        
+        
 # <----------- Detailed Currently is above, Detailed Hourly is below -------->
     
     elif moreoptions == "2":
