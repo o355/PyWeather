@@ -799,33 +799,23 @@ if almanac_summary == True:
 while True:
     print("")
     print(Fore.YELLOW + "What would you like to do now?")
-    print("- View more current data (or press " + Fore.CYAN + "0" 
-          + Fore.YELLOW + ")")
-    print("- View more hourly data (or press " + Fore.CYAN + "1"
-          + Fore.YELLOW + ")")
-    print("- View the 10 day hourly forecast (or press " + Fore.CYAN + "2"
-          + Fore.YELLOW + ")")
-    print("- View more forecast data (or press " + Fore.CYAN + "3"
-          + Fore.YELLOW + ")")
-    print("- View the almanac for today (or press " + Fore.CYAN + "4"
-          + Fore.YELLOW + ")")
-    print("- View historical weather data (or press " + Fore.CYAN + "5"
-          + Fore.YELLOW + ")")
-    print("- View detailed sun/moon rise/set data (or press " + Fore.CYAN +
-          "6" + Fore.YELLOW + ")")
-    print("- Check for PyWeather updates (or press " + Fore.CYAN + "7"
-          + Fore.YELLOW + ")")
-    print("- View the about page for PyWeather - Press" + Fore.CYAN +
-          "8" + Fore.YELLOW)
-    print("- Close PyWeather (or press " + Fore.CYAN + "9" + Fore.YELLOW
+    print("- View more current data - Press " + Fore.CYAN + "0")
+    print("- View detailed alerts data - Press " + Fore.CYAN + "1")
+    print("- View more hourly data - Press " + Fore.CYAN + "2")
+    print("- View the 10 day hourly forecast - Press " + Fore.CYAN + "3")
+    print("- View more forecast data - Press " + Fore.CYAN + "4")
+    print("- View the almanac for today - Press " + Fore.CYAN + "5")
+    print("- View historical weather data - Press " + Fore.CYAN + "6")
+    print("- View detailed sun/moon rise/set data - Press " + Fore.CYAN + "7")
+    print("- Check for PyWeather updates - Press " + Fore.CYAN + "8")
+    print("- View the about page for PyWeather - Press" + Fore.CYAN + "9")
+    print("- Close PyWeather (or press " + Fore.CYAN + "10" + Fore.YELLOW
           + ")")
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
         
-    if (moreoptions == "view more current" or moreoptions == "view more current data" 
-        or moreoptions == "view currently" or moreoptions == "view more currently"
-        or moreoptions == "currently" or moreoptions == "current" or moreoptions == '0'):
+    if moreoptions == 0:
         print(Fore.RED + "Loading...")
         logger.info("Selected view more currently...")
         print("")
@@ -895,14 +885,11 @@ while True:
               + current_precipTodayIn + " inches (" + current_precipTodayMm
               + " mm)")
         continue
-    
+    elif moreoptions == "1":
+        print("Detailed alerts information goes here.")
 # <----------- Detailed Currently is above, Detailed Hourly is below -------->
     
-    elif (moreoptions == "view more hourly data" or
-          moreoptions == "view more hourly" or
-          moreoptions == "view hourly" or
-          moreoptions == "hourly" or
-          moreoptions == "1"):
+    elif moreoptions == "2":
         print(Fore.RED + "Loading, please wait a few seconds.")
         print("")
         logger.info("Selected view more hourly...")
@@ -1021,10 +1008,7 @@ while True:
                 if totaldetailedHourlyIterations == 36:
                     logger.debug("totalDetailedHourlyIterations is 36. Breaking...")
                     break
-    elif (moreoptions == "view the 10 day hourly" or
-          moreoptions == "view 10 day hourly" or
-          moreoptions == "10 day hourly" or
-          moreoptions == "2"):
+    elif moreoptions == "3":
         print(Fore.RED + "Loading, please wait a few seconds.")
         print("")
         logger.info("Selected view more 10 day hourly...")
@@ -1167,13 +1151,7 @@ while True:
                 if totaldetailedHourly10Iterations == 240:
                     logger.info("detailedhourly10Iterations is 240. Breaking...")
                     break
-    elif (moreoptions == "view the 10 day weather forecast" or
-          moreoptions == "view more forecast data" or
-          moreoptions == "view the 10 day" or moreoptions == "view 10 day"
-          or moreoptions == "view the 10 day"
-          or moreoptions == "10 day" or moreoptions == "10 day forecast"
-          or moreoptions == "10 day weather forecast"
-          or moreoptions == "3"):
+    elif moreoptions == "4":
         print(Fore.RED + "Loading, please wait a few seconds.")
         logger.info("Selected view more 10 day...")
         print("")
@@ -1380,12 +1358,9 @@ while True:
                     except KeyboardInterrupt:
                         break
                         logger.info("Exiting to the main menu.")
-    elif (moreoptions == "close pyweather" or moreoptions == "close"
-          or moreoptions == "9" or moreoptions == "close pw"):
+    elif moreoptions == "10":
         sys.exit()
-    elif (moreoptions == "update pyweather" or moreoptions == "update"
-          or moreoptions == "update pw" or moreoptions == "7"
-          or moreoptions == "check for pyweather updates"):
+    elif moreoptions == "8":
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
                     (buildnumber, buildversion))
@@ -1541,9 +1516,7 @@ while True:
                   "not trying to travel through a wormhole with Cooper, and report",
                   "the error on GitHub, while it's around.", sep='\n')
             continue
-    elif (moreoptions == "4" or moreoptions == "view almanac"
-          or moreoptions == "almanac" or moreoptions == "view almanac for today"
-          or moreoptions == "view the almanac"):
+    elif moreoptions == "5":
         logger.info("Selected option: almanac")
         print(Fore.RED + "Loading, please wait a few seconds...")
         print("")
@@ -1608,9 +1581,7 @@ while True:
         print(Fore.YELLOW + "Normal Low: " + Fore.CYAN + almanac_normalLowF + "°F ("
               + almanac_normalLowC + "°C)")
         print("")
-    elif (moreoptions == "6" or moreoptions == "view sunrise"
-          or moreoptions == "view sunset" or moreoptions == "view moonrise"
-          or moreoptions == "view moonset"):
+    elif moreoptions == "7":
         print(Fore.RED + "Loading, please wait a few seconds...")
         print("")
         logger.info("Selected option - Sun/moon data")
@@ -1794,7 +1765,7 @@ while True:
               moon_age + " days")
         print(Fore.YELLOW + "Phase of the moon: " + Fore.CYAN +
               moon_phase)
-    elif (moreoptions == "5"):
+    elif moreoptions == "6":
         print("To show historical data for this location, please enter a date to show the data.")
         print("The date must be in the format YYYYMMDD.")
         print("E.g: If I wanted to see the weather for February 15, 2013, you'd enter 20130215.")
@@ -2119,7 +2090,7 @@ while True:
                     except KeyboardInterrupt:
                         logger.info("Breaking to main menu, user issued KeyboardInterrupt")
                         break         
-    elif moreoptions == "8":
+    elif moreoptions == "9":
         print("", Fore.YELLOW + "--- PyWeather ---",
               Fore.CYAN + "Version " + about_version, "",
               Fore.YELLOW + "Build Number: " + Fore.CYAN + about_buildnumber,

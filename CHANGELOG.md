@@ -14,7 +14,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * When PyWeather checks for updates at the top of the script, it'll now just continue onto the program. - Should be finished by 5/21.
 * Adds the config.py script, to let users configure every setting of PyWeather (including debug options!) - Should be finished 5/29.
 * The config will be stored in the "config" folder, along with scripts/files that relate to the config. - Should be finished by 6/1.
-* The "What would you like to do now" menu will get switched to only a number-based input. - Should be finished by 6/3.
+* The "What would you like to do now" menu will get switched to only a number-based input. - 100% done, not tested (This was done early to set the stage for the rest of 0.6 beta)
 * Fixes for config updates. A new "configsetup.py" script will be introduced, which will update the config for each new version, but preserve old user settings. It'll get automatically executed when doing updates through PyWeather, but users doing updates through the .zip method or manual Git updating will have to execute the script each time. When PyWeather setup is launched for the first time, the config file will be created. - Should be finished by 6/14.
 
 ## version 0.5.2.1 beta - Released on 4/30/2017
