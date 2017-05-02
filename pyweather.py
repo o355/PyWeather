@@ -799,18 +799,17 @@ if almanac_summary == True:
 while True:
     print("")
     print(Fore.YELLOW + "What would you like to do now?")
-    print("- View more current data - Press " + Fore.CYAN + "0")
-    print("- View detailed alerts data - Press " + Fore.CYAN + "1")
-    print("- View more hourly data - Press " + Fore.CYAN + "2")
-    print("- View the 10 day hourly forecast - Press " + Fore.CYAN + "3")
-    print("- View more forecast data - Press " + Fore.CYAN + "4")
-    print("- View the almanac for today - Press " + Fore.CYAN + "5")
-    print("- View historical weather data - Press " + Fore.CYAN + "6")
-    print("- View detailed sun/moon rise/set data - Press " + Fore.CYAN + "7")
-    print("- Check for PyWeather updates - Press " + Fore.CYAN + "8")
-    print("- View the about page for PyWeather - Press" + Fore.CYAN + "9")
-    print("- Close PyWeather (or press " + Fore.CYAN + "10" + Fore.YELLOW
-          + ")")
+    print(Fore.YELLOW + "- View more current data - Press " + Fore.CYAN + "0")
+    print(Fore.YELLOW + "- View detailed alerts data - Press " + Fore.CYAN + "1")
+    print(Fore.YELLOW + "- View more hourly data - Press " + Fore.CYAN + "2")
+    print(Fore.YELLOW + "- View the 10 day hourly forecast - Press " + Fore.CYAN + "3")
+    print(Fore.YELLOW + "- View more forecast data - Press " + Fore.CYAN + "4")
+    print(Fore.YELLOW + "- View the almanac for today - Press " + Fore.CYAN + "5")
+    print(Fore.YELLOW + "- View historical weather data - Press " + Fore.CYAN + "6")
+    print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Press " + Fore.CYAN + "7")
+    print(Fore.YELLOW + "- Check for PyWeather updates - Press " + Fore.CYAN + "8")
+    print(Fore.YELLOW + "- View the about page for PyWeather - Press " + Fore.CYAN + "9")
+    print(Fore.YELLOW + "- Close PyWeather - Press " + Fore.CYAN + "10" + Fore.YELLOW)
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
@@ -1766,7 +1765,7 @@ while True:
         print(Fore.YELLOW + "Phase of the moon: " + Fore.CYAN +
               moon_phase)
     elif moreoptions == "6":
-        print("To show historical data for this location, please enter a date to show the data.")
+        print(Fore.RESET + "To show historical data for this location, please enter a date to show the data.")
         print("The date must be in the format YYYYMMDD.")
         print("E.g: If I wanted to see the weather for February 15, 2013, you'd enter 20130215.")
         print("Input the desired date below.")
