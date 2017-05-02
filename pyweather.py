@@ -712,7 +712,9 @@ if showAlertsOnSummary == True:
             logger.debug("alerts_description: %s ; alerts_expiretime: %s"
                          % (alerts_description, alerts_expiretime))
             print(Fore.RED + "** A " + alerts_description + " Meteoalarm has been issued" +
-                  " for this location, and is in effect until " + alerts_expiretime + ". **")
+                  " for " + location2.city + ",", 
+                  "and is in effect until " + alerts_expiretime + ". **", sep="\n")
+            print("")
     except:
         try:
             for data in alerts_json['alerts']:
@@ -722,8 +724,9 @@ if showAlertsOnSummary == True:
                 logger.debug("alerts_description: %s ; alerts_expiretime: %s"
                              % (alerts_description, alerts_expiretime))
                 print(Fore.RED + "** A " + alerts_description + " has been issued" + 
-                      " for this location, and is in effect until " + alerts_expiretime +
-                      " . **")
+                      " for " + location2.city + ",",
+                      "and is in effect until " + alerts_expiretime + ". **", sep="\n")
+                print("")
         except:
             logger.info("No alert information available!")
             
