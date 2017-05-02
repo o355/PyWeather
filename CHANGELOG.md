@@ -3,17 +3,17 @@
 Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
 
 
-## version 0.6 beta - Should be released late June
-(Figuring out ETAs)
-* Adds alerts information to PyWeather, including (of course) the ability to turn it on and off.
-* Adds radar/satellite loops to PyWeather
-* Adds the option to show release notes through the updater
-* When PyWeather checks for updates at the top of the script, it'll now just continue onto the program.
-* Adds the config.py script, to let users configure every setting of PyWeather possible
-* The config will be stored in the "config" folder, along with scripts/files that relate to the config
-* The "What would you like to do now" menu will get switched to only a number-based input.
-* Doing the usual setup/configdefault catching up
-* Fixes for config updates. A new "configsetup.py" script will be introduced, which will update the config for each new version, but preserve old user settings. It'll get automatically executed when doing updates through PyWeather, but users doing updates through the .zip method or manual Git updating will have to execute the script each time. When PyWeather setup is launched for the first time, the config file will be created.  
+## version 0.6 beta - Should be released mid-late June
+(ETAs are not set in stone. More features might get added to 0.6 beta at any time.)
+* Adds an "About" page to PyWeather. - 100% done, and tested!
+* Adds alerts information to PyWeather, including (of course) the ability to turn it on and off. - Should be finished by 5/9.
+* Adds radar/satellite loops to PyWeather - Should be finished by 5/17.
+* Adds the option to show release notes through the updater. - Should be finished by 5/19.
+* When PyWeather checks for updates at the top of the script, it'll now just continue onto the program. - Should be finished by 5/21.
+* Adds the config.py script, to let users configure every setting of PyWeather (including debug options!) - Should be finished 5/29.
+* The config will be stored in the "config" folder, along with scripts/files that relate to the config. - Should be finished by 6/1.
+* The "What would you like to do now" menu will get switched to only a number-based input. - Should be finished by 6/3.
+* Fixes for config updates. A new "configsetup.py" script will be introduced, which will update the config for each new version, but preserve old user settings. It'll get automatically executed when doing updates through PyWeather, but users doing updates through the .zip method or manual Git updating will have to execute the script each time. When PyWeather setup is launched for the first time, the config file will be created. - Should be finished by 6/14.
 
 ## version 0.5.2.1 beta - Released on 4/30/2017
 * Fixes a bug in which if validating your API key wasn't enabled, a variable wasn't defined, crashing PyWeather at boot.

@@ -1,4 +1,4 @@
-# PyWeather - version 0.5.2.1 beta
+# PyWeather - version 0.6 beta
 # (c) 2017 o355, GNU GPL 3.0.
 
 # ==============
@@ -49,6 +49,7 @@ try:
     overrideVersion = config.getboolean('VERSIONS', 'overrideVersion')
     overrideBuildNumber = config.getfloat('VERSIONS', 'overrideBuildNumber')
     overrideVersionText = config.get('VERSIONS', 'overrideVersionText')
+    showAlerts = config.getboolean('UI', 'showAlerts')
 except:
     print("When attempting to load your configuration file, an error",
           "occurred. This could of happened because of a typo, or an error",
@@ -72,13 +73,14 @@ except:
     validateAPIKey = True
     allowGitForUpdating = False
     overrideVersion = False
-    overrideBuildNumber = 52.1
-    overrideVersionText = "0.5.2.1 beta"
+    overrideBuildNumber = 60
+    overrideVersionText = "0.6 beta"
+    showAlerts = True
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
 import logging
-logger = logging.getLogger(name='pyweather_0.5.1beta')
+logger = logging.getLogger(name='pyweather_0.6beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
@@ -90,7 +92,7 @@ elif tracebacksEnabled == True:
 else:
     logger.setLevel(logging.CRITICAL)
     
-logger.info("PyWeather 0.5.2 indev now starting.")
+logger.info("PyWeather 0.6 indev now starting.")
 logger.info("Configuration options are as follows: ")
 logger.debug("sundata_summary: %s ; almanac_summary: %s" %
              (sundata_summary, almanac_summary))
@@ -174,8 +176,8 @@ if overrideVersion == True:
     buildnumber = overrideBuildNumber
     buildversion = overrideVersionText
 else:
-    buildnumber = 52.1
-    buildversion = '0.5.2.1 indev'    
+    buildnumber = 60
+    buildversion = '0.6 beta'    
 
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")
@@ -214,6 +216,13 @@ if checkforUpdates == True:
               ", and the latest version is " + version_latestVersion + ".")
         print("")
 
+about_buildnumber = "60"
+about_version = "0.6 beta"
+about_releasedate = "TBD"
+about_maindevelopers = "o355"
+about_contributors = "gsilvapt, ModoUnreal"
+about_releasetype = "beta"
+about_librariesinuse = "Colorama, Geopy, Geocoder, Requests"
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
@@ -757,7 +766,9 @@ while True:
           "6" + Fore.YELLOW + ")")
     print("- Check for PyWeather updates (or press " + Fore.CYAN + "7"
           + Fore.YELLOW + ")")
-    print("- Close PyWeather (or press " + Fore.CYAN + "8" + Fore.YELLOW
+    print("- View the about page for PyWeather - Press" + Fore.CYAN +
+          "8" + Fore.YELLOW)
+    print("- Close PyWeather (or press " + Fore.CYAN + "9" + Fore.YELLOW
           + ")")
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
@@ -1321,7 +1332,7 @@ while True:
                         break
                         logger.info("Exiting to the main menu.")
     elif (moreoptions == "close pyweather" or moreoptions == "close"
-          or moreoptions == "8" or moreoptions == "close pw"):
+          or moreoptions == "9" or moreoptions == "close pw"):
         sys.exit()
     elif (moreoptions == "update pyweather" or moreoptions == "update"
           or moreoptions == "update pw" or moreoptions == "7"
@@ -1392,9 +1403,7 @@ while True:
                     if confirmUpdateWithGit == "yes":
                         print("Now updating with Git.")
                         try:
-                            subprocess.call(["git stash"], shell=True)
                             subprocess.call(["git fetch"], shell=True)
-                            subprocess.call(["git stash"], shell=True)
                             subprocess.call(["git checkout %s" % version_latestReleaseTag],
                                             shell=True)
                             print("Successfully updated with Git!",
@@ -2061,7 +2070,18 @@ while True:
                     except KeyboardInterrupt:
                         logger.info("Breaking to main menu, user issued KeyboardInterrupt")
                         break         
-            
+    elif moreoptions == "8":
+        print("", Fore.YELLOW + "--- PyWeather ---",
+              Fore.CYAN + "Version " + about_version, "",
+              Fore.YELLOW + "Build Number: " + Fore.CYAN + about_buildnumber,
+              Fore.YELLOW + "Release Date: " + Fore.CYAN + about_releasedate,
+              Fore.YELLOW + "Release Type: " + Fore.CYAN + about_releasetype,
+              "",
+              Fore.YELLOW + "Main Developers: " + Fore.CYAN + about_maindevelopers,
+              Fore.YELLOW + "Contributors: " + Fore.CYAN + about_contributors,
+              Fore.YELLOW + "A special thanks to the developers of these libraries",
+              "that are used in PyWeather: " + Fore.CYAN,
+              about_librariesinuse + Fore.RESET, sep="\n")        
     elif moreoptions == "tell me a joke":
         # Jokes from searching "weather jokes" on DuckDuckGo (the first option)
         # They're jokes for kids.
