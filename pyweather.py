@@ -49,7 +49,7 @@ try:
     overrideVersion = config.getboolean('VERSIONS', 'overrideVersion')
     overrideBuildNumber = config.getfloat('VERSIONS', 'overrideBuildNumber')
     overrideVersionText = config.get('VERSIONS', 'overrideVersionText')
-    showAlerts = config.getboolean('UI', 'showAlerts')
+    showAlertsOnSummary = config.getboolean('SUMMARY', 'showAlertsOnSummary')
 except:
     print("When attempting to load your configuration file, an error",
           "occurred. This could of happened because of a typo, or an error",
@@ -75,7 +75,7 @@ except:
     overrideVersion = False
     overrideBuildNumber = 60
     overrideVersionText = "0.6 beta"
-    showAlerts = True
+    showAlertsOnSummary = True
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
@@ -108,8 +108,8 @@ logger.debug("user_forecastLoopIterations: %s ; user_showUpdaterReleaseTag: %s"
              % (user_forecastLoopIterations, user_showUpdaterReleaseTag))
 logger.debug("user_backupKeyDirectory: %s ; validateAPIKey: %s"
              % (user_backupKeyDirectory, validateAPIKey))
-logger.debug("allowGitForUpdating: %s ; showAlerts: %s"
-             % (allowGitForUpdating, showAlerts))
+logger.debug("allowGitForUpdating: %s ; showAlertsOnSummary: %s"
+             % (allowGitForUpdating, showAlertsOnSummary))
 
 logger.info("Defining exception functions...")
 
@@ -435,7 +435,7 @@ try:
         if verbosity == False:
             print("[#####-----] | 49% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
-    if showAlerts == True:
+    if showAlertsOnSummary == True:
         alertsJSON = requests.get(alertsurl)
         alertsPrefetched = True
         if verbosity == False:
@@ -492,10 +492,12 @@ if almanac_summary == True:
         print("[#########-] | 87% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("almanac_json loaded with: %s" % almanac_json)
-if showAlerts == True:
+if showAlertsOnSummary == True:
     alerts_json = json.loads(alertsJSON.text)
     if verbosity == False:
         print("[#########-] | 90% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    if jsonVerbosity == True:
+        logger.debug("almanac_json loaded with: %s" % almanac_json)
 logger.info("Some amount of JSONs loaded...")
 logger.info("Start 2nd geocoder...")
 
@@ -697,27 +699,33 @@ print(Style.BRIGHT + Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + loca
 print(Fore.YELLOW + summary_lastupdated)
 print("")
 # Attempt to parse alerts here.
-if showAlerts == True:
+if showAlertsOnSummary == True:
     try:
         # We attempt to parse a Meteoalarm first, as it has unique
         # data names, or whatever they're called.
         for data in alerts_json['alerts']:
             # If the alert isn't an EU alert, a KeyError is issued, and
             # we then try to parse a US alert.
+            logger.info("Attempting to parse EU alert first...")
             alerts_description = data['wtype_meteoalarm_name']
             alerts_expiretime = data['expires']
+            logger.debug("alerts_description: %s ; alerts_expiretime: %s"
+                         % (alerts_description, alerts_expiretime))
             print(Fore.RED + "** A " + alerts_description + " Meteoalarm has been issued" +
                   " for this location, and is in effect until " + alerts_expiretime + ". **")
     except:
         try:
             for data in alerts_json['alerts']:
+                logger.info("Failed to parse EU alert data! Attempting to parse US alert data...")
                 alerts_description = data['description']
                 alerts_expiretime = data['expires']
+                logger.debug("alerts_description: %s ; alerts_expiretime: %s"
+                             % (alerts_description, alerts_expiretime))
                 print(Fore.RED + "** A " + alerts_description + " has been issued" + 
                       " for this location, and is in effect until " + alerts_expiretime +
                       " . **")
         except:
-            logger.warn("No alert information available!")
+            logger.info("No alert information available!")
             
             
     
