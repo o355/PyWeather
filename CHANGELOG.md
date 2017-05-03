@@ -8,7 +8,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 
 ## version 0.6 beta - Should be released mid-late June
 * Adds an "About" page to PyWeather. - 100% done, and tested!
-* Adds alerts information to PyWeather, including (of course) the ability to turn it on and off. - 60% done.
+* Adds alerts information to PyWeather, including (of course) the ability to turn it on and off. - 85% done, and tested. Still need to finish getting extra logger information added, adding new config options to setup, and adding them to configdefault.
 * Adds radar/satellite loops to PyWeather - Should be finished by 5/17.
 * Adds the option to show release notes through the updater. - Should be finished by 5/19.
 * When PyWeather checks for updates at the top of the script, it'll now just continue onto the program. - Should be finished by 5/21.
