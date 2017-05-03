@@ -1031,6 +1031,7 @@ while True:
                 print(Fore.RED + "Alert expires at: " + Fore.CYAN + alerts_expiretime)
                 print(Fore.RED + "Alert Description: " + Fore.CYAN + alerts_description
                       + Fore.RESET)
+                alerts_tempiterations = alerts_tempiterations + 1
                 if alerts_completediterations == alerts_totaliterations:
                     logger.debug("Completed iterations equals total iterations. Breaking...")
                     break
