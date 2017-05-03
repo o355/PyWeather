@@ -934,7 +934,8 @@ while True:
             alerts_totaliterations = 0
             alerts_completediterations = 0
             for data in alerts_json['alerts']:
-                totaliterations = totaliterations + 1
+                alerts_totaliterations = alerts_totaliterations + 1
+                logger.debug("alerts_totaliterations: %s" % alerts_totaliterations)
             for data in alerts_json['alerts']:
                 alerts_completediterations = alerts_completediterations + 1
                 logger.info("We're on iteration %s/%s" %
@@ -953,21 +954,50 @@ while True:
                 print(Fore.RED + "Alert %s/%s:" % 
                       (alerts_completediterations, alerts_totaliterations))
                 print("Alert Name: " + Fore.CYAN + alerts_alertname)
-                print("Alert Level: " + Fore.CYAN + alerts_alertlevel)
-                print("Alert Description: " + Fore.CYAN + alerts_description)
-                print("Alert issued at: " + Fore.CYAN + alerts_issuedtime)
-                print("Alert expires at: " + Fore.CYAN + alerts_expiretime)
+                print(Fore.RED + "Alert Level: " + Fore.CYAN + alerts_alertlevel)
+                print(Fore.RED + "Alert issued at: " + Fore.CYAN + alerts_issuedtime)
+                print(Fore.RED + "Alert expires at: " + Fore.CYAN + alerts_expiretime)
+                print(Fore.RED + "Alert Description: " + Fore.CYAN + alerts_description
+                      + Fore.RESET)
         elif alerts_type == "US":
+            alerts_totaliterations = 0
+            alerts_completediterations = 0
             for data in alerts_json['alerts']:
+                alerts_totaliterations = alerts_totaliterations + 1
+                logger.debug("alerts_totaliterations: %s" % alerts_totaliterations)
+            for data in alerts_json['alerts']:
+                alerts_completediterations = alerts_completediterations + 1
+                logger.info("We're on iteration %s/%s" %
+                            (alerts_completediterations, alerts_totaliterations))
                 alerts_alertname = data['description']
                 alerts_alerttype = data['type']
                 alerts_description = data['message']
                 alerts_issuedtime = data['date']
+                logger.debug('alerts_alertname: %s ; alerts_alerttype: %s' %
+                             (alerts_alertname, alerts_alerttype))
+                logger.debug("alerts_description: %s ; alerts_issuedtime: %s"
+                             % (alerts_description, alerts_issuedtime))
                 alerts_expiretime = data['expires']
-                
-            
-        
-        
+                logger.debug("alerts_expiretime: %s" % alerts_expiretime)
+                print(Fore.RED + "Alert %s/%s:" %
+                      (alerts_completediterations, alerts_totaliterations))
+                print("Alert Name: " + Fore.CYAN + alerts_alertname)
+                print(Fore.RED + "Alert Type: " + Fore.CYAN + alerts_alerttype)
+                print(Fore.RED + "Alert issued at: " + Fore.CYAN + alerts_issuedtime)
+                print(Fore.RED + "Alert expires at: " + Fore.CYAN + alerts_expiretime)
+                print(Fore.RED + "Alert Description: " + Fore.CYAN + alerts_description
+                      + Fore.RESET)
+        elif alerts_type == "None":
+            print(Fore.YELLOW + "No data available! Either there are no alerts",
+                  "at the location inputted, or Wunderground doesn't support alerts",
+                  "for the location inputted.",
+                  "As a quick note, Wunderground only supports alerts in the US/EU.", sep="\n"
+                  + Fore.RESET)
+        else:
+            print(Fore.YELLOW + "Something went wrong when launching the correct conditional",
+                  "for the alert data type involved.",
+                  "For error reporting, this is what the variable 'alerts_type' is currently storing.",
+                  "alerts_type: %s" % alerts_type, sep="\n" + Fore.RESET)  
 # <----------- Detailed Currently is above, Detailed Hourly is below -------->
     
     elif moreoptions == "2":
