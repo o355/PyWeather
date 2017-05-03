@@ -50,6 +50,8 @@ try:
     overrideBuildNumber = config.getfloat('VERSIONS', 'overrideBuildNumber')
     overrideVersionText = config.get('VERSIONS', 'overrideVersionText')
     showAlertsOnSummary = config.getboolean('SUMMARY', 'showAlertsOnSummary')
+    user_alertsEUiterations = config.getint('UI', 'alerts_EUiterations')
+    user_alertsUSiterations = config.getint('UI', 'alerts_USiterations')
 except:
     print("When attempting to load your configuration file, an error",
           "occurred. This could of happened because of a typo, or an error",
@@ -76,6 +78,8 @@ except:
     overrideBuildNumber = 60
     overrideVersionText = "0.6 beta"
     showAlertsOnSummary = True
+    user_alertsEUiterations = 2
+    user_alertsUSiterations = 1
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
@@ -110,6 +114,8 @@ logger.debug("user_backupKeyDirectory: %s ; validateAPIKey: %s"
              % (user_backupKeyDirectory, validateAPIKey))
 logger.debug("allowGitForUpdating: %s ; showAlertsOnSummary: %s"
              % (allowGitForUpdating, showAlertsOnSummary))
+logger.debug("user_alertsEUiterations: %s ; user_alertsUSiterations: %s"
+             % (user_alertsEUiterations, user_alertsUSiterations))
 
 logger.info("Defining exception functions...")
 
@@ -497,7 +503,7 @@ if showAlertsOnSummary == True:
     if verbosity == False:
         print("[#########-] | 90% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
-        logger.debug("almanac_json loaded with: %s" % almanac_json)
+        logger.debug("alerts_json loaded with: %s" % alerts_json)
 logger.info("Some amount of JSONs loaded...")
 logger.info("Start 2nd geocoder...")
 
@@ -698,6 +704,7 @@ summaryHourlyIterations = 0
 print(Style.BRIGHT + Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + location2.city + ", " + location2.state)
 print(Fore.YELLOW + summary_lastupdated)
 print("")
+
 # Attempt to parse alerts here.
 if showAlertsOnSummary == True:
     try:
@@ -735,6 +742,7 @@ if showAlertsOnSummary == True:
                       "and is in effect until " + alerts_expiretime + ". **", sep="\n")
                 print("")
         except:
+            # I'll keep this here as a "just in case".
             logger.info("No alert information available!")
             alerts_type = "None"
             logger.debug("alerts_type: %s" % alerts_type)
@@ -929,14 +937,31 @@ while True:
                     alerts_type = "None"
                     logger.debug("alerts_type: %s" % alerts_type)
                     
+        # Because of the oddities of locations with no alerts, we're doing a mini
+        # catch the error here. An error would occur when going into the conditional.
+        
+        try:
+            logger.debug("Attempting to see if alert type is declared...")
+            if alerts_type == "US":
+                logger.debug("Alert type is declared!")
+            elif alerts_type == "EU":
+                logger.debug("Alert type is declared!")
+        except:
+            logger.debug("Alert type isn't declared, so it must be none.")
+            alerts_type = "None"
+            logger.debug("alerts_type: %s" % alerts_type)
+            
+                    
         if alerts_type == "EU":
             logger.info("Showing detailed alerts info for EU.")
             alerts_totaliterations = 0
             alerts_completediterations = 0
+            alerts_tempiterations = 0
             for data in alerts_json['alerts']:
                 alerts_totaliterations = alerts_totaliterations + 1
                 logger.debug("alerts_totaliterations: %s" % alerts_totaliterations)
             for data in alerts_json['alerts']:
+                print("")
                 alerts_completediterations = alerts_completediterations + 1
                 logger.info("We're on iteration %s/%s" %
                             (alerts_completediterations, alerts_totaliterations))
@@ -951,6 +976,7 @@ while True:
                 alerts_expiretime = data['expires']
                 logger.debug("alerts_issuedtime: %s ; alerts_expiretime: %s"
                              % (alerts_issuedtime, alerts_expiretime))
+                print(Fore.YELLOW + "-----")
                 print(Fore.RED + "Alert %s/%s:" % 
                       (alerts_completediterations, alerts_totaliterations))
                 print("Alert Name: " + Fore.CYAN + alerts_alertname)
@@ -959,13 +985,30 @@ while True:
                 print(Fore.RED + "Alert expires at: " + Fore.CYAN + alerts_expiretime)
                 print(Fore.RED + "Alert Description: " + Fore.CYAN + alerts_description
                       + Fore.RESET)
+                alerts_tempiterations = alerts_tempiterations + 1
+                if alerts_completediterations == alerts_totaliterations:
+                    logger.debug("Completed iterations == total iterations. Breaking...")
+                    break
+                if alerts_tempiterations == user_alertsEUiterations:
+                    print("")
+                    try:
+                        print(Fore.YELLOW + "Please press enter to view the next",
+                              "%s alerts. To exit, press Control + C." % user_alertsEUiterations
+                              ,sep="\n")
+                        input()
+                        alerts_tempiterations = 0
+                    except KeyboardInterrupt:
+                        logger.debug("User issued Keyboard Interrupt. Breaking...")
+                        break
         elif alerts_type == "US":
             alerts_totaliterations = 0
             alerts_completediterations = 0
+            alerts_tempiterations = 0
             for data in alerts_json['alerts']:
                 alerts_totaliterations = alerts_totaliterations + 1
                 logger.debug("alerts_totaliterations: %s" % alerts_totaliterations)
             for data in alerts_json['alerts']:
+                print("")
                 alerts_completediterations = alerts_completediterations + 1
                 logger.info("We're on iteration %s/%s" %
                             (alerts_completediterations, alerts_totaliterations))
@@ -981,12 +1024,26 @@ while True:
                 logger.debug("alerts_expiretime: %s" % alerts_expiretime)
                 print(Fore.RED + "Alert %s/%s:" %
                       (alerts_completediterations, alerts_totaliterations))
-                print("Alert Name: " + Fore.CYAN + alerts_alertname)
+                print(Fore.YELLOW + "-----")
+                print(Fore.RED + "Alert Name: " + Fore.CYAN + alerts_alertname)
                 print(Fore.RED + "Alert Type: " + Fore.CYAN + alerts_alerttype)
                 print(Fore.RED + "Alert issued at: " + Fore.CYAN + alerts_issuedtime)
                 print(Fore.RED + "Alert expires at: " + Fore.CYAN + alerts_expiretime)
                 print(Fore.RED + "Alert Description: " + Fore.CYAN + alerts_description
                       + Fore.RESET)
+                if alerts_completediterations == alerts_totaliterations:
+                    logger.debug("Completed iterations equals total iterations. Breaking...")
+                    break
+                if alerts_tempiterations == user_alertsUSiterations:
+                    try:
+                        print(Fore.YELLOW + "Please press enter to view the next",
+                              "%s alert(s). To exit, press Control + C." % user_alertsUSiterations,
+                              sep="\n")
+                        input()
+                        alerts_tempiterations = 0
+                    except KeyboardInterrupt:
+                        logger.debug("User issued KeyboardInterrupt. Breaking...")
+                        break
         elif alerts_type == "None":
             print(Fore.YELLOW + "No data available! Either there are no alerts",
                   "at the location inputted, or Wunderground doesn't support alerts",
