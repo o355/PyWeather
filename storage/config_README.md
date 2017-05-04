@@ -216,6 +216,27 @@ When doing this, custom changes to your config file will be overwritten. PyWeath
 
 **Default option: False**
 
+## RADARGUI section
+This section controls the GUI for displaying radar and other images.
+
+### gifsize
+This option allows you to control the size of the .gif image that is to be displayed.
+
+This option will only accept 5 sizes, as defined below
+(can't imagine how hard it'd be to code in every size ever. This is simpler, too)
+
+* extrasmall = 320x240
+* small = 480x320
+* normal = 640x480
+* large = 960x720
+* extralarge = 1280x960
+
+The default option is 640x480, it's a nice balance between size of the GUI and size of the radar image.
+
+Of course, on newer laptops with FHD screens, you can increase the resolution of the image. Note, the higher the image size, the longer it takes to fetch the .gif.
+
+**Default option: normal**
+
 ## KEYBACKUP section
 This section allows you to control parts of the Key Backup script.
 

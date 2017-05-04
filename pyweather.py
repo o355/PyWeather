@@ -1532,15 +1532,52 @@ while True:
                         break
                         logger.info("Exiting to the main menu.")
     elif moreoptions == "11":
-        frontend = gui()
+        print(Fore.YELLOW + "Loading the GUI. This should take around 5 seconds.")
+        try:
+            frontend = gui()
+        except:
+            print(Fore.RED + "Cannot launch a GUI on this platform. If you don't have",
+                  "a GUI on Linux, this is expected. Otherwise, investigate into why",
+                  "tkinter won't launch.", sep="\n" + Fore.RESET)
+            printException()
+            continue
+        print(Fore.YELLOW + "Defining variables...")
+        frontend_mode = "None"
+        frontend_zoom = "None"
+        # A quick note about cache variables.
+        # The syntax goes like this:
+        # (mode)(zoom)cached, where r = radar only, rs = radar & satellite,
+        # and s = satellite only.
+        print(Fore.YELLOW + "Defining functions...")
+        def frontend_modeswitch(btnName):
+            if btnName == "Radar Only":
+                frontend_mode = "Radar Only"
+                frontend.setStatusbar("Mode: Radar Only", 0)
+            elif btnName == "Radar & Satellite":
+                frontend_mode = "Radar & Satellite"
+                frontend.setStatusbar("Mode: Radar & Satellite", 0)
+            elif btnName == "Satellite":
+                frontend_mode = "Satellite"
+                frontend.setStatus("Mode: Satellite", 0)
+                
+        
         frontend.setTitle("PyWeather Radar Viewer")
         frontend.setResizable(canResize=False)
         frontend.addLabel("toplabel", "Select a Mode below.", column=0, row=0, colspan=3)
-        frontend.addButtons(["Radar Only", "Radar & Satellite", "Satellite Only"], frontend_modeswitch, column=1, row=0, colspan=3, rowspan=1)
-        frontend.startLabelFrame("gifviewer", column=2, row=0, colspan=3, sticky=True)
-        frontend.addLabel("midlabel", "Select a Zoom below.", 3, 0, colspan=3)
-        frontend.addButtons(["10 km (6 mi)", "20 km (12.4 mi)", "40 km (24.8 mi)"], zoom_switch, 4, 0, colspan=3)
-        frontend.addButtons(["60 km (37.3 mi)", "80 km (49.7 mi)", "100 km (62.1 mi)"], funcs, row, column, colspan, rowspan)
+        frontend.addButtons(["Radar Only", "Radar & Satellite", "Satellite Only"], frontend_modeswitch, column=0, row=1, colspan=3, rowspan=1)
+        frontend.startLabelFrame("gifviewer", column=0, row=2, colspan=3, sticky=True)
+        frontend.addLabel("mid2label", "Animation controls:", column=0, row=3)
+        frontend.addButtons(["Play", "Pause", "Slow Down", "Speed Up"], column=0, row=4)
+        frontend.addLabel("midlabel", "Select a Zoom below.", column=0, row=5, colspan=3)
+        frontend.addButtons(["10 km (6 mi)", "20 km (12.4 mi)", "40 km (24.8 mi)"], zoom_switch, column=0, row=6, colspan=3)
+        frontend.addButtons(["60 km (37.3 mi)", "80 km (49.7 mi)", "100 km (62.1 mi)"], zoom_switch, row=7, column=0, colspan=3,)
+        frontend.addButton("Return to PyWeather", frontend_exit, row=8, column=1, colspan=1)
+        frontend.setInPadding([10, 10])
+        frontend.addStatusbar(fields=3)
+        frontend.setStatusbar("Mode: None selected", 0)
+        frontend.setStatusbar("Zoom: None selected", 1)
+        frontend.setStatusbar("Status: Idle", 2)
+        frontend.go()
     elif moreoptions == "10":
         sys.exit()
     elif moreoptions == "8":
