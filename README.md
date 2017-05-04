@@ -23,6 +23,7 @@ Alas, PyWeather was born. It's a Python script that let's you view weather data 
 
 ## What kind of features are in PyWeather?
 Want screenshots? https://imgur.com/a/n7L8B
+
 *asciinema demo goes here*
 
 (the almanac wasn't included, as I actually found a bug when taking the screenshots)
@@ -37,16 +38,24 @@ Even though PyWeather is in beta, it can presently do a lot. Here's what you can
 * Sunrise/sunset/moonrise/moonset/moon data
 * Historical data
 
+Through the magic of typing, these features will eventually work their way into PyWeather!
+* Alerts data
+* Radar/satellite data
+* Tide data
+* Hurricane data
+* PWS data
+* "Yesterday's weather" - I don't have a delorean
+* "Quick Weather" - Getting the weather right now. In slow typing format.
+
 But that's just half the story. I've also baked in loads of other features, too!
-* Color! Lots of color!
-* The setup script!
-* Verbosity for debugging!
-* An updater (it's basic. Quite basic)
-* Support for traceback printing!
-* A super-configurable config file!
-* No arguments!
-* API key backups!
-* A pretty simple to use UI!
+* An easy setup! You can set PyWeather up (including getting an API key!) easily!
+* Colors! Lots of em!
+* A super configurable config file!
+* Debugging tools!
+* PyWeather is mostly modular! You can turn on/off features at will.
+* An updater!
+* No arguments! It's a script!
+* A bunch of other cool features!
 
 Oh, I should mention that PyWeather is faster than going to Wunderground, is ad-free (duh), and gets loads more data (that's pretty easy to view), and does it all without confusing you.
 
