@@ -1,4 +1,4 @@
-# PyWeather Configuration Defaults - 0.5.2.1 beta
+# PyWeather Configuration Defaults - 0.6 beta
 # (c) 2017, o355
 
 import sys
@@ -101,6 +101,12 @@ if cd_confirmation == "yes":
     logger.debug("VERSIONS/overrideBuildNumber is now '52.1'.")
     config['VERSIONS']['overrideVersionText'] = '0.5.2.1 beta'
     logger.debug("VERSIONS/overrideVersionText is now '0.5.2.1 beta'.")
+    config['SUMMARY']['showAlertsOnSummary'] = 'True'
+    logger.debug("SUMMARY/showAlertsOnSummary is now 'True'.")
+    config['UI']['alerts_EUiterations'] = '2'
+    logger.debug("UI/alerts_EUiterations is now '2'.")
+    config['UI']['alerts_USiterations'] = '1'
+    logger.debug("UI/alerts_USiterations is now '1'.")
     print("Committing changes...")
     try:
         with open('config.ini', 'w') as configfile:

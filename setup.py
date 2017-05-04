@@ -820,6 +820,19 @@ print("", "When viewing detailed US alerts information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
       "By default, this is 1.", sep="\n")
+USalertsloops = input("Input here: ")
+try:
+    USalertsloops = int(USalertsloops)
+    USalertsloops = str(USalertsloops)
+    config['UI']['alerts_USiterations'] = USalertsloops
+    print("Changes saved.")
+    logger.debug("Detailed US alert iterations now %s" % USalertsloops)
+except:
+    print("Couldn't convert input to a number. Defaulting to '1'.")
+    printException_loggerwarn()
+    config['UI']['alerts_USiterations'] = '1'
+    print("Changes saved.")
+    logger.debug("Detailed US alert iterations now 1.")
     
 print("","When PyWeather is going through detailed information, it can show",
       "how many iterations are completed.",
