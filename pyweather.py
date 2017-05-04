@@ -22,6 +22,8 @@ import codecs
 import geocoder
 from random import randint
 from geopy import GoogleV3
+# Sue me for using appjar
+from appJar import gui
 geolocator = GoogleV3()
 
 config = configparser.ConfigParser()
@@ -819,6 +821,8 @@ while True:
     print(Fore.YELLOW + "- View detailed hourly data - Press " + Fore.CYAN + "2")
     print(Fore.YELLOW + "- View the 10 day hourly forecast - Press " + Fore.CYAN + "3")
     print(Fore.YELLOW + "- View the 10 day forecast - Press " + Fore.CYAN + "4")
+    # Temporarily 11 when in development.
+    print(Fore.YELLOW + "- View radar/satellite data - Press " + Fore.CYAN + "11")
     print(Fore.YELLOW + "- View the almanac for today - Press " + Fore.CYAN + "5")
     print(Fore.YELLOW + "- View historical weather data - Press " + Fore.CYAN + "6")
     print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Press " + Fore.CYAN + "7")
@@ -1527,6 +1531,16 @@ while True:
                     except KeyboardInterrupt:
                         break
                         logger.info("Exiting to the main menu.")
+    elif moreoptions == "11":
+        frontend = gui()
+        frontend.setTitle("PyWeather Radar Viewer")
+        frontend.setResizable(canResize=False)
+        frontend.addLabel("toplabel", "Select a Mode below.", column=0, row=0, colspan=3)
+        frontend.addButtons(["Radar Only", "Radar & Satellite", "Satellite Only"], frontend_modeswitch, column=1, row=0, colspan=3, rowspan=1)
+        frontend.startLabelFrame("gifviewer", column=2, row=0, colspan=3, sticky=True)
+        frontend.addLabel("midlabel", "Select a Zoom below.", 3, 0, colspan=3)
+        frontend.addButtons(["10 km (6 mi)", "20 km (12.4 mi)", "40 km (24.8 mi)"], zoom_switch, 4, 0, colspan=3)
+        frontend.addButtons(["60 km (37.3 mi)", "80 km (49.7 mi)", "100 km (62.1 mi)"], funcs, row, column, colspan, rowspan)
     elif moreoptions == "10":
         sys.exit()
     elif moreoptions == "8":
