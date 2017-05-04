@@ -665,6 +665,25 @@ else:
     config['SUMMARY']['almanac_summary'] = 'False'
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
+    
+print("", "On the summary screen, would you like to show alerts data?",
+      "By default, this is enabled. Please note, Wunderground",
+      "only supports alert data in the US and EU at this time.",
+      "Yes or No.", sep="\n")
+alertsdata_Summary = input("Input here: ").lower()
+logger.debug("alertsdata_Summary: %s" % alertsdata_Summary)
+if alertsdata_Summary == "yes":
+    config['SUMMARY']['showAlertsOnSummary'] = 'True'
+    print("Changes saved.")
+    logger.debug("Alerts on the summary is now ENABLED.")
+elif alertsdata_Summary == "no":
+    config['SUMMARY']['showAlertsOnSummary'] = 'False'
+    print("Changes saved.")
+    logger.debug("Alerts on the summary is now DISABLED.")
+else:
+    print("Could not understand what you inputted.",
+          "Defaulting to 'True'", sep="\n")
+    config['SUMMARY']['showAlertsOnSummary'] = 'True'
 
 print("","On boot, would you like PyWeather to check for updates?",
       "By default, this is disabled, due to a load time increase of ~2-5 seconds.",
@@ -752,7 +771,7 @@ try:
     detailedloops = str(detailedloops)
     config['UI']['detailedinfoloops'] = detailedloops
     print("Changes saved.")
-    logger.debug("Detailed info loops now %s." % detailedloops)
+    logger.debug("Detailed info iterations now %s." % detailedloops)
 except:
     print("Couldn't convert input into a number. Defaulting to '6'.")
     printException_loggerwarn()
@@ -771,13 +790,36 @@ try:
     detailedForecastLoops = str(detailedForecastLoops)
     config['UI']['forecast_detailedinfoloops'] = detailedForecastLoops
     print("Changes saved.")
-    logger.debug("Detailed forecast info loops now %s" % detailedForecastLoops)
+    logger.debug("Detailed forecast info iterations now %s" % detailedForecastLoops)
 except:
     print("Couldn't convert input into a number. Defaulting to '5'.")
     printException_loggerwarn()
     config['UI']['forecast_detailedinfoloops'] = '5'
     print("Changes saved.")
     logger.debug("Detailed forecast info loops now 5.")
+    
+print("", "When viewing detailed EU alerts information, how many",
+      "iterations should PyWeather go through, before asking you to",
+      "continue?",
+      "By default, this is 2.", sep="\n")
+EUalertsloops = input("Input here: ")
+try:
+    EUalertsloops = int(EUalertsloops)
+    EUalertsloops = str(EUalertsloops)
+    config['UI']['alerts_EUiterations'] = EUalertsloops
+    print("Changes saved.")
+    logger.debug("Detailed EU alert iterations now %s" % EUalertsloops)
+except:
+    print("Couldn't convert input into a number. Defaulting to '2'.")
+    printException_loggerwarn()
+    config['UI']['alerts_EUiterations'] = '2'
+    print("Changes saved.")
+    logger.debug("Detailed EU alert iterations now 2.")
+    
+print("", "When viewing detailed US alerts information, how many",
+      "iterations should PyWeather go through, before asking you to",
+      "continue?",
+      "By default, this is 1.", sep="\n")
     
 print("","When PyWeather is going through detailed information, it can show",
       "how many iterations are completed.",
