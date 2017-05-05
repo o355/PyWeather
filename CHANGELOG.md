@@ -12,10 +12,10 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds radar/satellite loops to PyWeather. Here's what's done and not. - Should be completed by 5/12.
 
 DONE:
-* The "base" of the program. It can successfully acquire the necessary images.
+* The "base" of the program. It can successfully acquire necessary images, and it "works".
 
 NOT DONE:
-* Getting the "base" of the program propagated to all modes. - Should be completed by 5/6.
+* Getting the "base" of the program propagated to all modes. - 40% done, should be completed by 5/6.
 * Making GUI changes, like framing sections, reordering, showing the placeholder after a mode change, stuff like that. - Should be completed by 5/8.
 * Getting stop functions to work properly (clearing the cache, etc.) - Should be completed by 5/10.
 * Letting users set the animation speed. - Should be completed by 5/11.

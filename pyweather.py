@@ -1566,12 +1566,9 @@ while True:
         print(Fore.YELLOW + "Defining variables...")
         # A quick note about cache variables.
         # The syntax goes like this:
-        # (mode)(zoom)cached, where r = radar only, rs = radar & satellite,
-        # and s = satellite only.
+        # (mode)(zoom)cached, where r = radar only, s = satellite only
         r10cached = False; r20cached = False; r40cached = False
         r60cached = False; r80cached = False; r100cached = False
-        rs10cached = False; rs20cached = False; rs40cached = False
-        rs60cached = False; rs80cached = False; rs100cached = False
         s10cached = False; s20cached = False; s40cached = False
         s60cached = False; s80cached = False; s100cached = False
         r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&delay=75&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
@@ -1587,14 +1584,8 @@ while True:
         s80url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=80&key=sat_vis&radunits=km'
         s100url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=100&key=sat_vis&radunits=km'
         
-        # rsvariables get EXTREMELY long.
-        rs10url = """
-        http://api.wunderground.com/api/%s/animatedradar/animatedsatellite/image.gif?rad.centerlat=%s&rad.centerlon=%s
-        &sat.centerlat=%s&sat.centerlon=%s&rad.height=%s&sat.height=%s&rad.width=%s&sat.width=%s&rad.radius=10
-        &sat.radius=10&rad.radunits=km&sat.radunits=km&sat.key=sat_vis&rad.newmaps=1&rad.timelabel=1&rad.timelabel.y=10
-        &sat.basemap=1&num=8
-        """
-        # LOOK AT THIS!
+        
+        
         print(Fore.YELLOW + "Defining functions...")
         def frontend_modeswitch(btnName):
             global frontend_mode
@@ -1677,7 +1668,7 @@ while True:
         frontend.setTitle("PyWeather Radar Viewer")
         frontend.setResizable(canResize=False)
         frontend.addLabel("toplabel", "Select a Mode below.", column=0, row=0, colspan=3)
-        frontend.addButtons(["Radar Only", "Radar & Satellite", "Satellite Only"], frontend_modeswitch, column=0, row=1, colspan=3, rowspan=1)
+        frontend.addButtons(["Radar Only", "Radar & Satellite"], frontend_modeswitch, column=0, row=1, colspan=3, rowspan=1)
         frontend.startLabelFrame("Viewer", column=0, row=2, colspan=3)
         # Placeholders are needed to start the viewer.
         if user_radarImageSize == "extrasmall":
@@ -1688,7 +1679,7 @@ while True:
             frontend.addImage("Viewer", "storage//640x480placeholder.gif")
         frontend.stopLabelFrame()
         frontend.addLabel("mid2label", "Animation controls:", column=0, row=3)
-        frontend.addButtons(["Play", "Pause"], frontend_playerControls, column=0, row=4)
+        frontend.addButtons(["Play", "Pause"], frontend_playerControls, column=0, row=4, colspan=3)
         frontend.addLabel("midlabel", "Select a Zoom below.", column=0, row=5, colspan=3)
         frontend.addButtons(["10 km", "20 km", "40 km"], frontend_zoomswitch, column=0, row=6, colspan=3)
         frontend.addButtons(["60 km", "80 km", "100 km"], frontend_zoomswitch, row=7, column=0, colspan=3)
