@@ -1574,11 +1574,11 @@ while True:
         rs60cached = False; rs80cached = False; rs100cached = False
         s10cached = False; s20cached = False; s40cached = False
         s60cached = False; s80cached = False; s100cached = False
-        r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&num=10&timelabel=1&radius=10&radunits=km'
-        r20url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&num=10&timelabel=1&radius=20&radunits=km'
-        r40url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&num=10&timelabel=1&radius=40&radunits=km'
-        r60url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&num=10&timelabel=1&radius=60&radunits=km'
-        r80url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&num=10&timelabel=1&radius=80&radunits=km'
+        r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&delay=75&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
+        r20url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&delay=75&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
+        r40url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&delay=75&num=10&timelabel=1&timelabel.y=10&radius=40&radunits=km'
+        r60url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&delay=75&num=10&timelabel=1&timelabel.y=10&radius=60&radunits=km'
+        r80url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&delay=75&num=10&timelabel=1&timelabel.y=10&radius=80&radunits=km'
         r100url = 'http://api.wunderground.com/api/' + apikey + '/radar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&num=10&timelabel=1&radius=100&radunits=km'
         s10url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&radius=10&key=sat_vis&radunits=km'
         s20url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&radius=20&key=sat_vis&radunits=km'
@@ -1590,7 +1590,6 @@ while True:
         def frontend_modeswitch(btnName):
             global frontend_mode
             if btnName == "Radar Only":
-                print("Going into Radar Only.")
                 frontend_mode = "Radar Only"
                 frontend.setStatusbar("Mode: Radar Only", 0)
             elif btnName == "Radar & Satellite":
@@ -1601,9 +1600,6 @@ while True:
                 frontend.setStatus("Mode: Satellite", 0)
                 
         def frontend_zoomswitch(btnName):
-            print(btnName)
-            print(frontend_mode)
-            print(r10url)
             global r10cached; global r20cached; global r40cached
             if frontend_mode == "Radar Only":
                 print(btnName)
@@ -1616,11 +1612,11 @@ while True:
                             for chunk in tempurl.iter_content(chunk_size=128):
                                 fw.write(chunk)
                             fw.close()
-                        frontend.addImage("gifviewer", "temp//r10.gif")
+                        frontend.setImage("gifviewer", "temp//r10.gif")
                         r10cached = True
                     elif r10cached == True:
                         frontend.setStatusbar("Zoom: 10 km", 1)
-                        frontend.addImage("gifviewer", "temp//r10.gif")
+                        frontend.setImage("gifviewer", "temp//r10.gif")
                 elif btnName == "20 km":
                     if r20cached == False:
                         tempurl = requests.get(r20url, stream=True)
@@ -1629,10 +1625,10 @@ while True:
                             for chunk in tempurl.iter_content(chunk_size=128):
                                 fw.write(chunk)
                             fw.close()
-                        frontend.addImage("gifviewer", "temp//r20.gif")
+                        frontend.setImage("gifviewer", "temp//r20.gif")
                         r10cached = True
                     elif r10cached == True:
-                        frontend.addImage("gifviewer", "temp//r20.gif")
+                        frontend.setImage("gifviewer", "temp//r20.gif")
                     
         def frontend_exit():
             app.stop()
@@ -1656,6 +1652,7 @@ while True:
         elif user_radarImageSize == "normal":
             frontend.addImage("gifviewer", "storage//640x480placeholder.gif")
         frontend.stopLabelFrame()
+        frontend.setAnimationSpeed("gifviewer", 75)
         frontend.addLabel("mid2label", "Animation controls:", column=0, row=3)
         frontend.addButtons(["Play", "Pause"], frontend_playerControls, column=0, row=4)
         frontend.addLabel("midlabel", "Select a Zoom below.", column=0, row=5, colspan=3)
