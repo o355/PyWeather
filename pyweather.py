@@ -1548,6 +1548,12 @@ while True:
         # The syntax goes like this:
         # (mode)(zoom)cached, where r = radar only, rs = radar & satellite,
         # and s = satellite only.
+        r10cached = False; r20cached = False; r40cached = False
+        r60cached = False; r80cached = False; r100cached = False
+        rs10cached = False; rs20cached = False; rs40cached = False
+        rs60cached = False; rs80cached = False; rs100cached = False
+        s10cached = False; s20cached = False; s40cached = False
+        s60cached = False; s80cached = False; s100cached = False
         print(Fore.YELLOW + "Defining functions...")
         def frontend_modeswitch(btnName):
             if btnName == "Radar Only":
@@ -1560,12 +1566,19 @@ while True:
                 frontend_mode = "Satellite"
                 frontend.setStatus("Mode: Satellite", 0)
                 
-        
+        def frontend_zoomswitch(btnName):
+            if frontend_mode == "Radar Only":
+                if btnName == "10 km (6 mi)":
+                    print("cool")
+                    
+        def frontend_exit():
+            app.stop()
+
         frontend.setTitle("PyWeather Radar Viewer")
         frontend.setResizable(canResize=False)
         frontend.addLabel("toplabel", "Select a Mode below.", column=0, row=0, colspan=3)
         frontend.addButtons(["Radar Only", "Radar & Satellite", "Satellite Only"], frontend_modeswitch, column=0, row=1, colspan=3, rowspan=1)
-        frontend.startLabelFrame("gifviewer", column=0, row=2, colspan=3, sticky=True)
+        frontend.startLabelFrame("gifviewer", column=0, row=2, colspan=3)
         frontend.addLabel("mid2label", "Animation controls:", column=0, row=3)
         frontend.addButtons(["Play", "Pause", "Slow Down", "Speed Up"], column=0, row=4)
         frontend.addLabel("midlabel", "Select a Zoom below.", column=0, row=5, colspan=3)
