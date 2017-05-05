@@ -9,7 +9,18 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 ## version 0.6 beta - Should be released mid-late June
 * Adds an "About" page to PyWeather. - 100% done, and tested!
 * Adds alerts information to PyWeather, including (of course) the ability to turn it on and off. - Done, and tested!
-* Adds radar/satellite loops to PyWeather - 10% done. Still need to to config updates, setup updates, testing the GUI, and a bunch of other stuff.
+* Adds radar/satellite loops to PyWeather. Here's what's done and not. - Should be completed by 5/12.
+
+DONE:
+* The "base" of the program. It can successfully acquire the necessary images.
+
+NOT DONE:
+* Getting the "base" of the program propagated to all modes. - Should be completed by 5/6.
+* Making GUI changes, like framing sections, reordering, showing the placeholder after a mode change, stuff like that. - Should be completed by 5/8.
+* Getting stop functions to work properly (clearing the cache, etc.) - Should be completed by 5/10.
+* Letting users set the animation speed. - Should be completed by 5/11.
+* Cleaning up some code. - Should be completed by 5/13.
+
 * Adds the option to show release notes through the updater. - Should be finished by 5/19.
 * Adds the option to view when the next release should be dropping through the updater. - Should be finished by 5/20.
 * When PyWeather checks for updates at the top of the script, it'll now just continue onto the program. - Should be finished by 5/21.
