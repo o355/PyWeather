@@ -54,6 +54,7 @@ try:
     showAlertsOnSummary = config.getboolean('SUMMARY', 'showAlertsOnSummary')
     user_alertsEUiterations = config.getint('UI', 'alerts_EUiterations')
     user_alertsUSiterations = config.getint('UI', 'alerts_USiterations')
+    user_radarImageSize = config.get('RADAR GUI', 'gifsize')
 except:
     print("When attempting to load your configuration file, an error",
           "occurred. This could of happened because of a typo, or an error",
@@ -82,6 +83,7 @@ except:
     showAlertsOnSummary = True
     user_alertsEUiterations = 2
     user_alertsUSiterations = 1
+    user_radarImageSize = "normal"
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
@@ -118,6 +120,26 @@ logger.debug("allowGitForUpdating: %s ; showAlertsOnSummary: %s"
              % (allowGitForUpdating, showAlertsOnSummary))
 logger.debug("user_alertsEUiterations: %s ; user_alertsUSiterations: %s"
              % (user_alertsEUiterations, user_alertsUSiterations))
+
+logger.info("Setting gif x and y resolution...")
+if user_radarImageSize == "extrasmall":
+    radar_gifx = "320"
+    radar_gify = "240"
+elif user_radarImageSize == "small":
+    radar_gifx = "480"
+    radar_gify = "320"
+elif user_radarImageSize == "normal":
+    radar_gifx = "640"
+    radar_gify = "480"
+elif user_radarImageSize == "large":
+    radar_gifx = "960"
+    radar_gify = "720"
+elif user_radarImageSize == "extra large":
+    radar_gifx = "1280"
+    radar_gify = "960"
+else:
+    radar_gifx = "640"
+    radar_gify = "480"
 
 logger.info("Defining exception functions...")
 
@@ -1554,6 +1576,29 @@ while True:
         rs60cached = False; rs80cached = False; rs100cached = False
         s10cached = False; s20cached = False; s40cached = False
         s60cached = False; s80cached = False; s100cached = False
+        r10url = 'http://api.wunderground.com/api/' + apikey + '/radar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&num=10&timelabel=1&radius=10&radunits=km'
+        r20url = 'http://api.wunderground.com/api/' + apikey + '/radar/image.gif?centerlat=' + latstr + '&centerlon='
+        + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&num=10&timelabel=1&radius=20&radunits=km'
+        r40url = 'http://api.wunderground.com/api/' + apikey + '/radar/image.gif?centerlat=' + latstr + '&centerlon='
+        + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&num=10&timelabel=1&radius=40&radunits=km'
+        r60url = 'http://api.wunderground.com/api/' + apikey + '/radar/image.gif?centerlat=' + latstr + '&centerlon='
+        + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&num=10&timelabel=1&radius=60&radunits=km'
+        r80url = 'http://api.wunderground.com/api/' + apikey + '/radar/image.gif?centerlat=' + latstr + '&centerlon='
+        + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&num=10&timelabel=1&radius=80&radunits=km'
+        r100url = 'http://api.wunderground.com/api/' + apikey + '/radar/image.gif?centerlat=' + latstr + '&centerlon='
+        + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=1&num=10&timelabel=1&radius=100&radunits=km'
+        s10url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon='
+        + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&radius=10&key=sat_vis&radunits=km'
+        s20url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon='
+        + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&radius=20&key=sat_vis&radunits=km'
+        s40url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon='
+        + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&radius=40&key=sat_vis&radunits=km'
+        s60url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon='
+        + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&radius=60&key=sat_vis&radunits=km'
+        s80url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon='
+        + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&radius=80&key=sat_vis&radunits=km'
+        s100url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon='
+        + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&radius=100&key=sat_vis&radunits=km'
         print(Fore.YELLOW + "Defining functions...")
         def frontend_modeswitch(btnName):
             if btnName == "Radar Only":
@@ -1569,18 +1614,46 @@ while True:
         def frontend_zoomswitch(btnName):
             if frontend_mode == "Radar Only":
                 if btnName == "10 km (6 mi)":
-                    print("cool")
+                    if r10cached == False:
+                        tempurl = requests.get(r10url, stream=True)
+                        frontend.setStatusbar("Status: Fetching Image...", 1)
+                        with open("temp//r10.gif", 'wb') as fw:
+                            for chunk in tempurl.iter_content(chunk_size=128):
+                                fw.write(chunk)
+                            fw.close()
+                        frontend.addImage("gifviewer", "temp//r10.gif")
+                        r10cached = True
+                    elif r10cached == True:
+                        frontend.addImage("gifviewer", "temp//r10.gif")
+                elif btnName == "20 km (12.4 mi)":
+                    if r20cached == False:
+                        tempurl = requests.get(r20url, stream=True)
+                        frontend.setStatusbar("Status: Fetching Image...", 1)
+                        with open("temp//r20.gif", 'wb') as fw:
+                            for chunk in tempurl.iter_content(chunk_size=128):
+                                fw.write(chunk)
+                            fw.close()
+                        frontend.addImage("gifviewer", "temp//r20.gif")
+                        r10cached = True
+                    elif r10cached == True:
+                        frontend.addImage("gifviewer", "temp//r20.gif")
                     
         def frontend_exit():
             app.stop()
-
+            
+        def frontend_playerControls(btnName):
+            if btnName == "Play":
+                frontend.startAnimation("gifviewer")
+            elif btnName == "Pause":
+                frontend.stopAnimation("gifviewer")
+                
         frontend.setTitle("PyWeather Radar Viewer")
         frontend.setResizable(canResize=False)
         frontend.addLabel("toplabel", "Select a Mode below.", column=0, row=0, colspan=3)
         frontend.addButtons(["Radar Only", "Radar & Satellite", "Satellite Only"], frontend_modeswitch, column=0, row=1, colspan=3, rowspan=1)
         frontend.startLabelFrame("gifviewer", column=0, row=2, colspan=3)
         frontend.addLabel("mid2label", "Animation controls:", column=0, row=3)
-        frontend.addButtons(["Play", "Pause", "Slow Down", "Speed Up"], column=0, row=4)
+        frontend.addButtons(["Play", "Pause"], column=0, row=4)
         frontend.addLabel("midlabel", "Select a Zoom below.", column=0, row=5, colspan=3)
         frontend.addButtons(["10 km (6 mi)", "20 km (12.4 mi)", "40 km (24.8 mi)"], zoom_switch, column=0, row=6, colspan=3)
         frontend.addButtons(["60 km (37.3 mi)", "80 km (49.7 mi)", "100 km (62.1 mi)"], zoom_switch, row=7, column=0, colspan=3,)

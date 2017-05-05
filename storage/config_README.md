@@ -216,7 +216,7 @@ When doing this, custom changes to your config file will be overwritten. PyWeath
 
 **Default option: False**
 
-## RADARGUI section
+## RADAR GUI section
 This section controls the GUI for displaying radar and other images.
 
 ### gifsize

@@ -9,8 +9,9 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 ## version 0.6 beta - Should be released mid-late June
 * Adds an "About" page to PyWeather. - 100% done, and tested!
 * Adds alerts information to PyWeather, including (of course) the ability to turn it on and off. - Done, and tested!
-* Adds radar/satellite loops to PyWeather - 6% done. Still need to to config updates, setup updates, testing the GUI, and a bunch of other stuff.
+* Adds radar/satellite loops to PyWeather - 10% done. Still need to to config updates, setup updates, testing the GUI, and a bunch of other stuff.
 * Adds the option to show release notes through the updater. - Should be finished by 5/19.
+* Adds the option to view when the next release should be dropping through the updater. - Should be finished by 5/20.
 * When PyWeather checks for updates at the top of the script, it'll now just continue onto the program. - Should be finished by 5/21.
 * Adds the config.py script, to let users configure every setting of PyWeather (including debug options!) - Should be finished 5/29.
 * The config will be stored in the "config" folder, along with scripts/files that relate to the config. - Should be finished by 6/1.
