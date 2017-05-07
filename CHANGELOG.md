@@ -9,17 +9,11 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 ## version 0.6 beta - Should be released mid-late June
 * Adds an "About" page to PyWeather. - 100% done, and tested!
 * Adds alerts information to PyWeather, including (of course) the ability to turn it on and off. - Done, and tested!
-* Adds radar/satellite loops to PyWeather. Here's what's done and not. - Should be completed by 5/12.
+* Adds radar/satellite loops to PyWeather. Here's what's done and not. - Scrapped:
 
-DONE:
-* The "base" of the program. It can successfully acquire necessary images, and it "works".
+AppJar, the library I was going to use for the radar/satellite images has a weird glitch with .gif images. I've already reported the issue on GitHub (https://github.com/jarvisteach/appJar/issues/160). 
 
-NOT DONE:
-* Getting the "base" of the program propagated to all modes. - 40% done, should be completed by 5/6.
-* Making GUI changes, like framing sections, reordering, showing the placeholder after a mode change, stuff like that. - Should be completed by 5/8.
-* Getting stop functions to work properly (clearing the cache, etc.) - Should be completed by 5/10.
-* Letting users set the animation speed. - Should be completed by 5/11.
-* Cleaning up some code. - Should be completed by 5/13.
+Right now, I'm moving on to other things in the to-do list, and development of the radar feature is temporarily on hold. I'll be removing the code and appJar library dependence for the time being. Hopefully the issue gets fixed soon.
 
 * Adds the option to show release notes through the updater. - Should be finished by 5/19.
 * Adds the option to view when the next release should be dropping through the updater. - Should be finished by 5/20.
