@@ -17,8 +17,8 @@ The developer (jarvisteach) of appJar knows about the issue, I reported it on Gi
 
 However, development of the remaining features aren't as prioritized has the remaining features. Considering I have lots of extra time, getting radar done is possible.
 
-* Adds the option to show release notes through the updater. - Should be finished by 5/19.
-* Adds the option to view when the next release should be dropping through the updater. - Should be finished by 5/20.
+* Adds the option to show release notes through the updater. - 100% done, not tested.
+* Adds the option to view when the next release should be dropping through the updater. - 100% done, not tested.
 * When PyWeather checks for updates at the top of the script, it'll now just continue onto the program. - Should be finished by 5/21.
 * Adds the config.py script, to let users configure every setting of PyWeather (including debug options!) - Should be finished 5/29.
 * The config will be stored in the "config" folder, along with scripts/files that relate to the config. - Should be finished by 6/1.

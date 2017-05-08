@@ -27,6 +27,9 @@ try:
     overrideVersion = config.getboolean('VERSION', 'overrideVersion')
     overrideBuildNumber = config.getint('VERSION', 'overrideBuildNumber')
     overrideVersionText = config.get('VERSION', 'overrideVersionText')
+    showReleaseNotes = config.getboolean('UPDATER', 'showReleaseNotes')
+    showReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
+    showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
 except:
     print("Couldn't load your config file. Make sure there aren't any typos",
           "in the config, and that the config file is accessible.",
@@ -41,6 +44,9 @@ except:
     overrideVersion = False
     overrideBuildNumber = 52.1
     overrideVersionText = "0.5.2.1 beta"
+    showReleaseNotes = True
+    showReleaseNotes_uptodate = False
+    showNewVersionReleaseDate = True
     
     
 import logging
@@ -72,8 +78,10 @@ logger.debug("showReleaseTag: %s ; tracebacksEnabled: %s" %
              (showReleaseTag, tracebacksEnabled))
 logger.debug("overrideVersion: %s ; overrideBuildNumber: %s" %
              (overrideVersion, overrideBuildNumber))
-logger.debug("overrideVersionText: %s" %
-             (overrideVersionText))
+logger.debug("overrideVersionText: %s ; showReleaseNotes: %s" %
+             (overrideVersionText, showReleaseNotes))
+logger.debug("showReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: %s" %
+             (showReleaseNotes_uptodate, showNewVersionReleaseDate))
 
 if overrideVersion == True:
     logger.info("Overriding version info.")
@@ -93,7 +101,6 @@ except:
     logger.warn("Couldn't check for updates! Is there an internet connection?")
     print(Style.BRIGHT + Fore.RED + "Couldn't check for updates.")
     print("Make sure GitHub user content is unblocked, and you have an internet connection.")
-    print("Error 54, updater.py")
     printException()
     print("Press enter to exit.")
     input()
@@ -108,13 +115,9 @@ version_latestVersion = versionJSON['updater']['latestversion']
 version_latestURL = versionJSON['updater']['latesturl']
 version_latestFileName = versionJSON['updater']['latestfilename']
 version_latestReleaseTag = versionJSON['updater']['latestversiontag']
-logger.debug("version_buildNumber: %s ; version_latestVersion: %s"
-             % (version_buildNumber, version_latestVersion))
-logger.debug("version_latestURL: %s ; verion_latestFileName: %s"
-             % (version_latestURL, version_latestFileName))
-logger.debug("version_latestReleaseTag: %s" % version_latestReleaseTag)
 version_latestReleaseDate = versionJSON['updater']['releasedate']
-logger.debug("version_latestReleaseDate: %s" % version_latestReleaseDate)
+version_releaseNotes = versionJSON['updater']['releasenotes']
+version_nextVersionReleaseDate = versionJSON['updater']['nextversionreleasedate']
 if buildnumber >= version_buildNumber:
     logger.info("PyWeather is up to date.")
     logger.info("local build (%s) >= latest build (%s)"
@@ -126,6 +129,12 @@ if buildnumber >= version_buildNumber:
     if showReleaseTag == True:
         print(Fore.GREEN + "The latest release tag is: " + Fore.CYAN +
               version_latestReleaseTag)
+    if showNewVersionReleaseDate == True:
+        print(Fore.GREEN + "Psst, a new version of PyWeather should get released on: "
+              + Fore.CYAN + version_newversionreleasedate)
+    if showUpdaterReleaseNotes_uptodate == True:
+        print(Fore.GREEN + "Here's the release notes for this release:",
+              Fore.CYAN + version_releasenotes, sep="\n")
     print(Fore.GREEN + "Press enter to exit.")
     input()
     sys.exit()
@@ -142,6 +151,9 @@ elif buildnumber < version_buildNumber:
     if showReleaseTag == True:
         print(Fore.RED + "The latest release tag is: " + Fore.CYAN +
               version_latestReleaseTag)
+    if showUpdaterReleaseNotes == True:
+        print(Fore.RED + "Here's the release notes for the latest release:",
+              Fore.CYAN + version_releaseNotes, sep="\n")
     print("")
     print(Fore.RED + "Would you like to download the latest version?" + Fore.YELLOW)
     downloadLatest = input("Yes or No: ").lower()

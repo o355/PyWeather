@@ -1758,14 +1758,16 @@ while True:
         version_latestFileName = versionJSON['updater']['latestfilename']
         version_latestReleaseTag = versionJSON['updater']['latestversiontag']
         version_releasenotes = versionJSON['updater']['releasenotes']
-        version_newversionreleasedate = versionJSON['updater']['newversionreleasedate']
-        logger.debug("version_buildNumber: %s ; version_latestVersion: %s"
-                    % (version_buildNumber, version_latestVersion))
-        logger.debug("version_latestURL: %s ; verion_latestFileName: %s"
-                    % (version_latestURL, version_latestFileName))
-        logger.debug("version_latestReleaseTag: %s" % version_latestReleaseTag)
+        version_newversionreleasedate = versionJSON['updater']['nextversionreleasedate']
         version_latestReleaseDate = versionJSON['updater']['releasedate']
-        logger.debug("version_latestReleaseDate: %s" % version_latestReleaseDate)
+        logger.debug("version_buildNumber: %s ; version_latestVersion: %s" %
+                     (version_buildNumber, version_latestVersion))
+        logger.debug("version_latestURL: %s ; version_latestFileName: %s" %
+                     (version_latestURL, version_latestFileName))
+        logger.debug("version_latestReleaseTag: %s ; version_releasenotes: %s" %
+                     (version_latestReleaseTag, version_releasenotes))
+        logger.debug("version_newversionreleasedate: %s ; version_latestReleaseDate: %s" %
+                     (version_newversionreleasedate, version_latestReleaseDate))
         if buildnumber >= version_buildNumber:
             logger.info("PyWeather is up to date.")
             logger.info("local build (%s) >= latest build (%s)"
