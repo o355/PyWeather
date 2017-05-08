@@ -1,11 +1,13 @@
 {
 	"updater": {
-		"apiversion": "1.2",
+		"apiversion": "1.3",
 		"latestbuild": "52.1",
 		"latestversion": "0.5.2.1 beta",
 		"latestversiontag": "0.5.2.1-beta",
 		"latesturl": "https://github.com/o355/pyweather/releases/download/0.5.2.1-beta/pyweather-0.5.2.1beta.zip",
 		"latestfilename": "pyweather-0.5.2.1beta.zip",
-		"releasedate": "4/30/2017"
+		"releasedate": "4/30/2017",
+		"releasenotes": "- Fixed a bug in which if a user didn't have key validity checking enabled, PyWeather would crash on boot, due to an undefined variable."
+		"nextversionreleasedate": "6/18/2017",
 	}
 }

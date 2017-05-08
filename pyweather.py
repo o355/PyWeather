@@ -55,6 +55,9 @@ try:
     user_alertsEUiterations = config.getint('UI', 'alerts_EUiterations')
     user_alertsUSiterations = config.getint('UI', 'alerts_USiterations')
     user_radarImageSize = config.get('RADAR GUI', 'gifsize')
+    showUpdaterReleaseNotes = config.getboolean('UPDATER', 'showReleaseNotes')
+    showUpdaterReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
+    showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
 except:
     print("When attempting to load your configuration file, an error",
           "occurred. This could of happened because of a typo, or an error",
@@ -84,6 +87,9 @@ except:
     user_alertsEUiterations = 2
     user_alertsUSiterations = 1
     user_radarImageSize = "normal"
+    showUpdaterReleaseNotes = True
+    showUpdaterReleaseNotes_uptodate = False
+    showNewVersionReleaseDate = True
 # Where'd the verbosity switches go?
 # storage/config.ini. Have a lovely day!
 
@@ -120,8 +126,12 @@ logger.debug("allowGitForUpdating: %s ; showAlertsOnSummary: %s"
              % (allowGitForUpdating, showAlertsOnSummary))
 logger.debug("user_alertsEUiterations: %s ; user_alertsUSiterations: %s"
              % (user_alertsEUiterations, user_alertsUSiterations))
+logger.debug("user_radarImageSize: %s ; showUpdaterReleaseNotes: %s"
+             % (user_radarImageSize, showUpdaterReleaseNotes))
+logger.debug("showUpdaterReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: %s"
+             % (showUpdaterReleaseNotes_uptodate, showNewVersionReleaseDate))
 
-logger.info("Setting gif x and y resolution...")
+logger.info("Setting gif x and y resolution for radar...")
 if user_radarImageSize == "extrasmall":
     radar_gifx = "320"
     radar_gify = "240"
@@ -855,7 +865,7 @@ while True:
     logger.debug("moreoptions: %s" % moreoptions)
         
         
-    if moreoptions == 0:
+    if moreoptions == "0":
         print(Fore.RED + "Loading...")
         logger.info("Selected view more currently...")
         print("")
@@ -1553,7 +1563,11 @@ while True:
                     except KeyboardInterrupt:
                         break
                         logger.info("Exiting to the main menu.")
-    elif moreoptions == "11":
+    elif moreoptions == "radar":
+        print(Fore.RED + "The radar is currently bugged, and unfinished, due to",
+              "a .gif glitch in Tkinter/appJar. The code has been kept here so when",
+              "development of the radar can be resumed, it's easy enough to start back up.",
+              sep="\n")
         print(Fore.YELLOW + "Loading the GUI. This should take around 5 seconds.")
         try:
             frontend = gui()
@@ -1743,6 +1757,8 @@ while True:
         version_latestURL = versionJSON['updater']['latesturl']
         version_latestFileName = versionJSON['updater']['latestfilename']
         version_latestReleaseTag = versionJSON['updater']['latestversiontag']
+        version_releasenotes = versionJSON['updater']['releasenotes']
+        version_newversionreleasedate = versionJSON['updater']['newversionreleasedate']
         logger.debug("version_buildNumber: %s ; version_latestVersion: %s"
                     % (version_buildNumber, version_latestVersion))
         logger.debug("version_latestURL: %s ; verion_latestFileName: %s"
@@ -1762,6 +1778,12 @@ while True:
             if user_showUpdaterReleaseTag == True:
                 print(Fore.GREEN + "The latest release tag is: " + Fore.CYAN 
                       + version_latestReleaseTag)
+            if showNewVersionReleaseDate == True:
+                print(Fore.GREEN + "Psst, a new version of PyWeather should get released on: "
+                      + Fore.CYAN + version_newversionreleasedate)
+            if showUpdaterReleaseNotes_uptodate == True:
+                print(Fore.GREEN + "Here's the release notes for this release:",
+                      Fore.CYAN + version_releasenotes, sep="\n")
         elif buildnumber < version_buildNumber:
             print("")
             logger.warn("PyWeather is NOT up to date.")
@@ -1773,6 +1795,9 @@ while True:
             print(Fore.RED + "And it was released on: " + Fore.CYAN + version_latestReleaseDate)
             if user_showUpdaterReleaseTag == True:
                 print(Fore.RED + "The latest release tag is: " + Fore.CYAN + version_latestReleaseTag)
+            if showUpdaterReleaseNotes == True:
+                print(Fore.RED + "Here's the release notes for the latest release:",
+                      Fore.CYAN + version_releasenotes, sep="\n")
             print("")
             print(Fore.RED + "Would you like to download the latest version?" + Fore.YELLOW)
             downloadLatest = input("Yes or No: ").lower()
