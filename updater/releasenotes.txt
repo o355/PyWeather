@@ -1,0 +1,2 @@
+- Fixed a bug in which if a user didn't have key validity checking enabled, 
+  PyWeather would crash on boot, due to an undefined variable.
