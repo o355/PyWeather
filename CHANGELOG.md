@@ -17,10 +17,10 @@ The developer (jarvisteach) of appJar knows about the issue, I reported it on Gi
 
 However, development of the remaining features aren't as prioritized has the remaining features. Considering I have lots of extra time, getting radar done is possible.
 
-* Adds the option to show release notes through the updater. - 100% done, not tested.
-* Adds the option to view when the next release should be dropping through the updater. - 100% done, not tested.
-* When PyWeather checks for updates at the top of the script, it'll now just continue onto the program. - Should be finished by 5/21.
-* Adds the config.py script, to let users configure every setting of PyWeather (including debug options!) - Should be finished 5/29.
+* Adds the option to show release notes through the updater. - Done, and tested!
+* Adds the option to view when the next release should be dropping through the updater. - Done, and tested.
+* When PyWeather checks for updates at the top of the script, it'll now just continue onto the program. - It was already there.
+* Adds the config.py script, to let users configure every setting of PyWeather (including debug options!) - 4% done.
 * The config will be stored in the "config" folder, along with scripts/files that relate to the config. - Should be finished by 6/1.
 * The "What would you like to do now" menu will get switched to only a number-based input. - 100% done, not tested (This was done early to set the stage for the rest of 0.6 beta)
 * Fixes for config stashing in regards to Git updating. config.ini won't be included with GitHub any more. I still need to think about the full technical implementation (updating using git from 0.5.2 -> 0.6 doesn't execute the script). - Should be finished by 6/17.
