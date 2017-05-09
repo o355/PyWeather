@@ -10,6 +10,7 @@ import shutil
 import configparser
 import traceback
 import subprocess
+from platform import release
 reader = codecs.getreader("utf-8")
 from colorama import Fore, Style, init
 init()
@@ -24,9 +25,9 @@ try:
     showReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'updater_tracebacks')
     allowGitForUpdating = config.getboolean('UPDATER', 'allowGitForUpdating')
-    overrideVersion = config.getboolean('VERSION', 'overrideVersion')
-    overrideBuildNumber = config.getint('VERSION', 'overrideBuildNumber')
-    overrideVersionText = config.get('VERSION', 'overrideVersionText')
+    overrideVersion = config.getboolean('VERSIONS', 'overrideVersion')
+    overrideBuildNumber = config.getint('VERSIONS', 'overrideBuildNumber')
+    overrideVersionText = config.get('VERSIONS', 'overrideVersionText')
     showReleaseNotes = config.getboolean('UPDATER', 'showReleaseNotes')
     showReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
@@ -96,7 +97,9 @@ logger.debug("buildnumber: %s ; buildversion: %s" %
 print("Checking for updates. This shouldn't take that long.")
 try:
     versioncheck = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
-    logger.debug("versioncheck: %s" % versioncheck)
+    releasenotes = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/releasenotes.txt")
+    logger.debug("versioncheck: %s ; releasenotes: %s" %
+                 (versioncheck, releasenotes))
 except:
     logger.warn("Couldn't check for updates! Is there an internet connection?")
     print(Style.BRIGHT + Fore.RED + "Couldn't check for updates.")
@@ -116,8 +119,14 @@ version_latestURL = versionJSON['updater']['latesturl']
 version_latestFileName = versionJSON['updater']['latestfilename']
 version_latestReleaseTag = versionJSON['updater']['latestversiontag']
 version_latestReleaseDate = versionJSON['updater']['releasedate']
-version_releaseNotes = versionJSON['updater']['releasenotes']
 version_nextVersionReleaseDate = versionJSON['updater']['nextversionreleasedate']
+logger.debug("version_buildNumber: %s ; version_latestVersion: %s" %
+             (version_buildNumber, version_latestVersion))
+logger.debug("version_latestURL: %s ; version_latestFileName: %s" %
+             (version_latestURL, version_latestFileName))
+logger.debug("version_latestReleaseTag: %s ; version_latestReleaseDate: %s" %
+             (version_latestReleaseTag, version_latestReleaseDate))
+logger.debug("version_nextVersionReleaseDate: %s" % version_nextVersionReleaseDate)
 if buildnumber >= version_buildNumber:
     logger.info("PyWeather is up to date.")
     logger.info("local build (%s) >= latest build (%s)"
@@ -131,11 +140,11 @@ if buildnumber >= version_buildNumber:
               version_latestReleaseTag)
     if showNewVersionReleaseDate == True:
         print(Fore.GREEN + "Psst, a new version of PyWeather should get released on: "
-              + Fore.CYAN + version_newversionreleasedate)
-    if showUpdaterReleaseNotes_uptodate == True:
+              + Fore.CYAN + version_nextVersionReleaseDate)
+    if showReleaseNotes_uptodate == True:
         print(Fore.GREEN + "Here's the release notes for this release:",
-              Fore.CYAN + version_releasenotes, sep="\n")
-    print(Fore.GREEN + "Press enter to exit.")
+              Fore.CYAN + releasenotes.text, sep="\n")
+    print("", Fore.GREEN + "Press enter to exit.", sep="\n")
     input()
     sys.exit()
 
@@ -151,9 +160,9 @@ elif buildnumber < version_buildNumber:
     if showReleaseTag == True:
         print(Fore.RED + "The latest release tag is: " + Fore.CYAN +
               version_latestReleaseTag)
-    if showUpdaterReleaseNotes == True:
+    if showReleaseNotes == True:
         print(Fore.RED + "Here's the release notes for the latest release:",
-              Fore.CYAN + version_releaseNotes, sep="\n")
+              Fore.CYAN + releasenotes.text, sep="\n")
     print("")
     print(Fore.RED + "Would you like to download the latest version?" + Fore.YELLOW)
     downloadLatest = input("Yes or No: ").lower()

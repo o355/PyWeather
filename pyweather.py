@@ -1739,6 +1739,7 @@ while True:
         print("Checking for updates. This should only take a few seconds.")
         try:
             versioncheck = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
+            releasenotes = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/releasenotes.txt")
             logger.debug("versioncheck: %s" % versioncheck)
         except:
             logger.warn("Couldn't check for updates! Is there an internet connection?")
@@ -1757,15 +1758,14 @@ while True:
         version_latestURL = versionJSON['updater']['latesturl']
         version_latestFileName = versionJSON['updater']['latestfilename']
         version_latestReleaseTag = versionJSON['updater']['latestversiontag']
-        version_releasenotes = versionJSON['updater']['releasenotes']
         version_newversionreleasedate = versionJSON['updater']['nextversionreleasedate']
         version_latestReleaseDate = versionJSON['updater']['releasedate']
         logger.debug("version_buildNumber: %s ; version_latestVersion: %s" %
                      (version_buildNumber, version_latestVersion))
         logger.debug("version_latestURL: %s ; version_latestFileName: %s" %
                      (version_latestURL, version_latestFileName))
-        logger.debug("version_latestReleaseTag: %s ; version_releasenotes: %s" %
-                     (version_latestReleaseTag, version_releasenotes))
+        logger.debug("version_latestReleaseTag: %s" %
+                     (version_latestReleaseTag))
         logger.debug("version_newversionreleasedate: %s ; version_latestReleaseDate: %s" %
                      (version_newversionreleasedate, version_latestReleaseDate))
         if buildnumber >= version_buildNumber:
@@ -1785,7 +1785,7 @@ while True:
                       + Fore.CYAN + version_newversionreleasedate)
             if showUpdaterReleaseNotes_uptodate == True:
                 print(Fore.GREEN + "Here's the release notes for this release:",
-                      Fore.CYAN + version_releasenotes, sep="\n")
+                      Fore.CYAN + releasenotes.text, sep="\n")
         elif buildnumber < version_buildNumber:
             print("")
             logger.warn("PyWeather is NOT up to date.")
@@ -1799,7 +1799,7 @@ while True:
                 print(Fore.RED + "The latest release tag is: " + Fore.CYAN + version_latestReleaseTag)
             if showUpdaterReleaseNotes == True:
                 print(Fore.RED + "Here's the release notes for the latest release:",
-                      Fore.CYAN + version_releasenotes, sep="\n")
+                      Fore.CYAN + releasenotes.text, sep="\n")
             print("")
             print(Fore.RED + "Would you like to download the latest version?" + Fore.YELLOW)
             downloadLatest = input("Yes or No: ").lower()
