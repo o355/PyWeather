@@ -22,6 +22,17 @@ import configparser
 import traceback
 import subprocess
 
+# Try loading the versioninfo.txt file. If it isn't around, create the file with
+# the present version info.
+
+try:
+    versioninfo = open('storage//versioninfo.txt')
+except:
+    open('storage//versioninfo.txt', 'w').close()
+    with open("storage//versioninfo.txt", 'a') as out:
+        out.write("0.6 beta")
+        out.close()
+
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
 

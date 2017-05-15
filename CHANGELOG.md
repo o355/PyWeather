@@ -6,36 +6,24 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds some form of a cache to PyWeather, so that after a set time, PyWeather will renew weather data when looking at detailed information. The exact implementation of this isn't set in stone.
 * Adds some form of a THIRD updater, which will overwrite files to update.
 
-## version 0.6 beta - Should be released 6/18/2017
+## version 0.6 beta - Should be released 7/5/2017
 * Adds an "About" page to PyWeather. - 100% done, and tested!
 * Adds alerts information to PyWeather, including (of course) the ability to turn it on and off. - Done, and tested!
-* Adds radar/satellite loops to PyWeather. Here's what's done and not. - Scrapped...sort of.
-
-Due to a glitch in the way Tkinter/appJar processes .gif files, I was getting a boat load of issues when displaying a .gif.
-
-The developer (jarvisteach) of appJar knows about the issue, I reported it on GitHub. The radar will still get developed, just not 100% implemented into PyWeather, until .gif processing is fixed.
-
-However, development of the remaining features aren't as prioritized has the remaining features. Considering I have lots of extra time, getting radar done is possible.
-
+* Adds radar/satellite loops to PyWeather. Here's what's done and not. - Now an experimental feature. On hold while the other main features are under development.
 * Adds the option to show release notes through the updater. - Done, and tested!
 * Adds the option to view when the next release should be dropping through the updater. - Done, and tested.
-* When PyWeather checks for updates at the top of the script, it'll now just continue onto the program. - It was already there.
-* Adds the config.py script, to let users configure every setting of PyWeather (including debug options!). Getting there. Should be done by 5/19.:
-
-* Summary section - Done
-* Verbosity section - ~40% done
-* Traceback section - 0% done
-* UI section - 0% done
-* Hourly section - 0% done
-* PyWeather Boot section - 0% done
-* Updater section - 0% done
-* Radar GUI section - 0% done
-* Key Backup section - 0% done
-* Versions section - 0% done
-
-* The config will be stored in the "config" folder, along with scripts/files that relate to the config. - Should be finished by 6/1.
 * The "What would you like to do now" menu will get switched to only a number-based input. - 100% done, not tested (This was done early to set the stage for the rest of 0.6 beta)
-* Fixes for config stashing in regards to Git updating. config.ini won't be included with GitHub any more. I still need to think about the full technical implementation (updating using git from 0.5.2 -> 0.6 doesn't execute the script). - Should be finished by 6/17.
+* Fixes for config stashing in regards to Git updating. There's a lot to do, so get a system where we can effectively update a user's config file for a lot of scenarios.
+
+Here's the todo list:
+* Created the configupdate.py file - 60% done.
+* Make the configsetup.py script (to be used for future versions. Payload will be packed into 0.6 to avoid future conflicts!) - 3% done?
+* Update all scripts to check for a provisioned config file - 10% done
+* Get all scripts to make a versioninfo.txt file if it isn't around at boot - Done!
+* Update the updaters to at least include the configupdate.py script - 0% done
+
+**BUG FIXES**
+* Fixes a bug where if your backup API key couldn't be found, key validation was entirely skipped. I guess this was intentional, but now your primary key is still validated, but if your backup key couldn't be loaded at first boot, it'll stop before trying to validate a non-existant backup key. 
 
 ## version 0.5.2.1 beta - Released on 4/30/2017
 * Fixes a bug in which if validating your API key wasn't enabled, a variable wasn't defined, crashing PyWeather at boot.

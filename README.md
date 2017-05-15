@@ -1,6 +1,13 @@
 ## Welcome to PyWeather (0.5.2.1 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
+## Development notice:
+Another one. Whoops.
+
+As finals up in the northern hemisphere get under way, of course, development time is slowly diminishing.  Until the end of June, I'll be working on PyWeather less and less, not even working on it some days. Once June has passed over, I'll start development at full storm again.
+
+PyWeather 0.6 beta's release date has been pushed back to July 5, 2017. Of course, this is subject to change.
+
 ## Download/Setup
 You can download PyWeather by visiting the releases tab, and getting the latest zip.
 

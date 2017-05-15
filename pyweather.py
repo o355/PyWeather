@@ -9,6 +9,7 @@
 # (but don't report the intentionally hidden bugs)
 # (but the intentionally hidden bugs are no more)
 
+# Begin the import process.
 import configparser
 import subprocess
 import traceback
@@ -20,15 +21,39 @@ import shutil
 from colorama import init, Fore, Style
 import codecs
 import geocoder
+import os
 from random import randint
 from geopy import GoogleV3
 # Sue me for using appjar
 from appJar import gui
 geolocator = GoogleV3()
 
+# Try loading the versioninfo.txt file. If it isn't around, create the file with
+# the present version info.
+
+try:
+    versioninfo = open('storage//versioninfo.txt')
+except:
+    open('storage//versioninfo.txt', 'w').close()
+    with open("storage//versioninfo.txt", 'a') as out:
+        out.write("0.6 beta")
+        out.close()
+
+
+# Define configparser under config, and read the config.
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
+
+# See if the config is "provisioned". If it isn't, a KeyError will occur,
+# because it's not created. Creative.
+try:
+    configprovisioned = config.getboolean('USER', 'configprovisioned')
+except KeyError:
+    print("Shucks! Your config file isn't provisioned.",
+          "PyWeather can launch a script that will provision your config file.",
+          "Would you like to provision your config file? Yes or No.", sep="\n")
     
+# Try to parse configuration options.    
 try:
     sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
     almanac_summary = config.getboolean('SUMMARY', 'almanac_summary')
@@ -59,6 +84,7 @@ try:
     showUpdaterReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
 except:
+    # If it fails (typo or code error), we set all options to default.
     print("When attempting to load your configuration file, an error",
           "occurred. This could of happened because of a typo, or an error",
           "in the code. Make sure there aren't any typos in the config file,",
@@ -90,15 +116,15 @@ except:
     showUpdaterReleaseNotes = True
     showUpdaterReleaseNotes_uptodate = False
     showNewVersionReleaseDate = True
-# Where'd the verbosity switches go?
-# storage/config.ini. Have a lovely day!
 
+# Import logging, and set up the logger.
 import logging
 logger = logging.getLogger(name='pyweather_0.6beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
-# There are no critical messages in PyWeather, so this works by design.
+# Set the logger levels by design. Critical works as a non-verbosity
+# option, as I made sure not to have any critical messages.
 if verbosity == True:
     logger.setLevel(logging.DEBUG)
 elif tracebacksEnabled == True:
@@ -106,6 +132,7 @@ elif tracebacksEnabled == True:
 else:
     logger.setLevel(logging.CRITICAL)
     
+# List config options for those who have verbosity enabled.    
 logger.info("PyWeather 0.6 indev now starting.")
 logger.info("Configuration options are as follows: ")
 logger.debug("sundata_summary: %s ; almanac_summary: %s" %
@@ -132,6 +159,7 @@ logger.debug("showUpdaterReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: 
              % (showUpdaterReleaseNotes_uptodate, showNewVersionReleaseDate))
 
 logger.info("Setting gif x and y resolution for radar...")
+# Set the x/y resolution of the .gif files for the experimental radar.
 if user_radarImageSize == "extrasmall":
     radar_gifx = "320"
     radar_gify = "240"
@@ -154,20 +182,25 @@ else:
 logger.info("Defining exception functions...")
 
 def printException():
+    # We use tracebacksEnabled here, as it just worked.
     if tracebacksEnabled == True:
         print("Here's the full traceback (for bug reporting):")
         traceback.print_exc()
         
 def printException_loggerwarn():
+    # Same idea. If the print_exc was in just logger.warn, it'd print even
+    # if verbosity was disabled.
     if verbosity == True:
         logger.warn("Snap! We hit a non-critical error. Here's the traceback.")
         logger.warn(traceback.print_exc())
         
 logger.info("Defining requests classes...")
 
+# This is no more.
 urlheader = {'user-agent': 'pyweather-0.5.2beta/apifetch'}
 
 logger.debug("Begin API keyload...")
+# Load the API key.
 try:
     apikey_load = open('storage//apikey.txt')
     logger.debug("apikey_load = %s" % apikey_load)
@@ -178,6 +211,7 @@ except FileNotFoundError:
           "file can be accessed (usually found at storage/apikey.txt. Make sure it has",
           "proper permissions, and that it exists). In the mean time, we're attempting",
           "to load your backup API key.", sep="\n")
+    # If the key isn't found, try to find the second key.
     try:
         apikey2_load = open(user_backupKeyDirectory + "backkey.txt")
         logger.debug("apikey2_load: %s" % apikey2_load)
@@ -185,6 +219,7 @@ except FileNotFoundError:
         logger.debug("apikey: %s" % apikey)
         print("Loaded your backup key successfully!")
     except FileNotFoundError:
+        # If that isn't found, you're screwed!
         print("When attempting to access your backup API key, PyWeather ran into",
               "an error. Make sure that your backup key file is accessible (wrong",
               "permissions and the file not existing are common issues).", sep="\n")
@@ -195,6 +230,9 @@ except FileNotFoundError:
         sys.exit()
         
 if validateAPIKey == True:
+    # If the primary API key is valid, and got through the check,
+    # this is here for those who validate their API key, and making sure
+    # we can find their bacakup key.
     logger.info("Making sure the backup key can be found.")
     try:
         apikey2_load = open(user_backupKeyDirectory + "backkey.txt")
@@ -205,12 +243,15 @@ if validateAPIKey == True:
                      (apikey2, backupKeyLoaded))
     except:
         logger.warn("Could not load the backup key for future validation.")
+        # If we can't find it, a variable is set for future use.
         backupKeyLoaded = False
         logger.debug("backupKeyLoaded: %s" % backupKeyLoaded)
 else:
     backupKeyLoaded = False
 
 logger.debug("apikey = %s" % apikey)
+
+# Version info gets defined here.
 
 if overrideVersion == True:
     buildnumber = overrideBuildNumber
@@ -222,10 +263,12 @@ else:
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")
     try:
+        # Request the version JSON.
         versioncheck = requests.get("https://raw.githubusercontent.c"
                                               + "om/o355/pyweather/master/upda"
                                               + "ter/versioncheck.json")
     except:
+        # Error? Whoops.
         print("When attempting to check for updates, PyWeather couldn't",
               "fetch the .json for parsing. If you're on a network with a",
               "filter, try asking your IT admin to unblock:",
@@ -235,6 +278,7 @@ if checkforUpdates == True:
         print("Press enter to continue.")
         input()
         sys.exit()
+    # Parse all the lovely .json info.
     versionJSON = json.load(reader2(versioncheck))
     version_buildNumber = float(versionJSON['updater']['latestbuild'])
     logger.debug("reader2: %s ; versioncheck: %s" %
@@ -251,18 +295,28 @@ if checkforUpdates == True:
     logger.debug("version_latestFileName: %s ; version_latestReleaseDate: %s"
                  % (version_latestFileName, version_latestReleaseDate))
     if buildnumber < version_buildNumber:
+        # Print if we're out of date.
         logger.info("PyWeather is not up to date.")
         print("PyWeather is not up to date. You have version " + buildversion +
               ", and the latest version is " + version_latestVersion + ".")
         print("")
 
+# Define about variables here.
+logger.info("Defining about variables...")
 about_buildnumber = "60"
 about_version = "0.6 beta"
 about_releasedate = "TBD"
 about_maindevelopers = "o355"
+logger.debug("about_buildnumber: %s ; about_version: %s" %
+             (about_buildnumber, about_version))
+logger.debug("about_releasedate: %s ; about_maindevelopers: %s" %
+             (about_releasedate, about_maindevelopers))
 about_contributors = "gsilvapt, ModoUnreal"
 about_releasetype = "beta"
 about_librariesinuse = "Colorama, Geopy, Geocoder, Requests"
+logger.debug("about_contributors: %s ; about_releasetype: %s" %
+             (about_contributors, about_releasetype))
+logger.debug("about_librariesinuse: %s" % about_librariesinuse)
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
@@ -338,7 +392,8 @@ logger.debug("almanacurl: %s" % almanacurl)
 logger.info("End API var declare...")
 logger.info("Start codec change...")
 
-# Due to Python, we have to get the UTF-8 reader to properly parse the JSON we got.
+# Due to Python being Python, we have to get the UTF-8 reader 
+# to properly parse the JSON we got.
 reader = codecs.getreader("utf-8")
 if verbosity == False:
     print("[##--------] | 8% |", round(time.time() - firstfetch,1), "seconds", end="\r")
@@ -346,6 +401,8 @@ logger.debug("reader: %s" % reader)
 logger.info("End codec change...")
 logger.info("Start API fetch...")
 
+# If a user requested their API key to be validated, and the backup key
+# can be loaded (as was checked earlier), we do it here.
 if validateAPIKey == False and backupKeyLoaded == True:
     logger.info("Beginning API key validation.")
     testurl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/NY/New_York.json'
@@ -439,7 +496,8 @@ if validateAPIKey == False and backupKeyLoaded == True:
                   "Press enter to exit.", sep="\n")
             input()
             sys.exit()
-elif validateAPIKey == True and backupKeyLoaded == False:        
+elif validateAPIKey == True and backupKeyLoaded == False:
+    # Guess this was the easy way out...        
     logger.warn("Validating the API key was enabled, but the backup key wasn't loaded.")
     logger.warn("Skipping...")
 
@@ -2531,6 +2589,24 @@ while True:
         elif jokenum == 12:
             print("What did the hurricane say to the other hurricane?",
                   "I have my eye on you.", sep="\n")
+    elif moreoptions == "testing":
+        print(Fore.RESET + "Attempting to relaunch PyWeather...")
+        try:
+            os.system("python3 pyweather.py")
+            print("")
+            sys.exit()
+        except:
+            try:
+                os.system("python pyweather.py")
+                print("")
+                sys.exit()
+            except:
+                try:
+                    os.system("pyweather.py")
+                    print("")
+                    sys.exit()
+                except:
+                    print("Can't relaunch PyWeather!")
     else:
         logger.warn("Input could not be understood!")
         print(Fore.RED + "Not a valid option.")
