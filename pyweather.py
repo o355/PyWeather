@@ -2399,7 +2399,7 @@ while True:
                 print(Fore.RED + "If you want to return to the main menu, press Control + C.")
                 input()
             except KeyboardInterrupt:
-                break
+                continue
         # Start the pre-loop to see how many times we're looping.
         historicalhourlyLoops = 0
         for data in historical_json['history']['observations']:
@@ -2508,6 +2508,7 @@ while True:
             historical_condition = str(data['conds'])
             logger.debug("historical_condition: %s" % historical_condition)
             logger.info("Now printing weather data...")
+            print("")
             print(Fore.YELLOW + historical_time + ":")
             print(Fore.YELLOW + "Conditions: " + Fore.CYAN + historical_condition)
             print(Fore.YELLOW + "Temperature: " + Fore.CYAN + historical_tempF
