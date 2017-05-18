@@ -32,10 +32,10 @@ geolocator = GoogleV3()
 # the present version info.
 
 try:
-    versioninfo = open('storage//versioninfo.txt')
+    versioninfo = open('updater//versioninfo.txt')
 except:
-    open('storage//versioninfo.txt', 'w').close()
-    with open("storage//versioninfo.txt", 'a') as out:
+    open('updater//versioninfo.txt', 'w').close()
+    with open("updater//versioninfo.txt", 'a') as out:
         out.write("0.6 beta")
         out.close()
 
@@ -879,7 +879,7 @@ if sundata_summary == True:
     print(Fore.YELLOW + "The sunrise and sunset:")
     print(Fore.YELLOW + "Sunrise: " + Fore.CYAN + sunrise_time)
     print(Fore.YELLOW + "Sunset: " + Fore.CYAN + sunset_time)
-print("")
+    print("")
 print(Fore.YELLOW + "The hourly forecast:")
 
 for hour in hourly_json['hourly_forecast']:
@@ -1163,11 +1163,10 @@ while True:
                         logger.debug("User issued KeyboardInterrupt. Breaking...")
                         break
         elif alerts_type == "None":
-            print(Fore.YELLOW + "No data available! Either there are no alerts",
+            print(Fore.RED + "No data available! Either there are no alerts",
                   "at the location inputted, or Wunderground doesn't support alerts",
                   "for the location inputted.",
-                  "As a quick note, Wunderground only supports alerts in the US/EU.", sep="\n"
-                  + Fore.RESET)
+                  "As a quick note, Wunderground only supports alerts in the US/EU.", sep="\n")
         else:
             print(Fore.YELLOW + "Something went wrong when launching the correct conditional",
                   "for the alert data type involved.",
@@ -2358,17 +2357,17 @@ while True:
                          (historicals_precipMM, historicals_precipIN))
             print(Fore.YELLOW + "Here's the summary for the day.")
             print(Fore.YELLOW + "Minimum Temperature: " + Fore.CYAN + historicals_minTempF
-                  + "°F (" + historicals_minTempC + " °C)")
+                  + "°F (" + historicals_minTempC + "°C)")
             print(Fore.YELLOW + "Average Temperature: " + Fore.CYAN + historicals_avgTempF
-                  + "°F (" + historicals_avgTempC + " °C)")
+                  + "°F (" + historicals_avgTempC + "°C)")
             print(Fore.YELLOW + "Maxmimum Temperature: " + Fore.CYAN + historicals_maxTempF
-                  + "°F (" + historicals_maxTempC + " °C)")
+                  + "°F (" + historicals_maxTempC + "°C)")
             print(Fore.YELLOW + "Minimum Dew Point: " + Fore.CYAN + historicals_minDewpointF
-                  + "°F (" + historicals_minDewpointC + " °C)")
+                  + "°F (" + historicals_minDewpointC + "°C)")
             print(Fore.YELLOW + "Average Dew Point: " + Fore.CYAN + historicals_avgDewpointF
-                  + "°F (" + historicals_avgDewpointC + " °C)")
+                  + "°F (" + historicals_avgDewpointC + "°C)")
             print(Fore.YELLOW + "Maximum Dew Point: " + Fore.CYAN + historicals_maxDewpointF
-                  + "°F (" + historicals_maxDewpointC + " °C)")
+                  + "°F (" + historicals_maxDewpointC + "°C)")
             print(Fore.YELLOW + "Minimum Humidity: " + Fore.CYAN + historicals_minHumidity
                   + "%")
             print(Fore.YELLOW + "Average Humidity: " + Fore.CYAN + historicals_avgHumidity

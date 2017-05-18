@@ -26,10 +26,10 @@ import subprocess
 # the present version info.
 
 try:
-    versioninfo = open('storage//versioninfo.txt')
+    versioninfo = open('updater//versioninfo.txt')
 except:
-    open('storage//versioninfo.txt', 'w').close()
-    with open("storage//versioninfo.txt", 'a') as out:
+    open('updater//versioninfo.txt', 'w').close()
+    with open("updater//versioninfo.txt", 'a') as out:
         out.write("0.6 beta")
         out.close()
 

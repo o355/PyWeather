@@ -9,7 +9,10 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 ## version 0.6 beta - Should be released 7/5/2017
 * Adds an "About" page to PyWeather. - 100% done, and tested!
 * Adds alerts information to PyWeather, including (of course) the ability to turn it on and off. - Done, and tested!
-* Adds radar/satellite loops to PyWeather. Here's what's done and not. - Now an experimental feature. On hold while the other main features are under development.
+* Adds radar/satellite loops to PyWeather. Here's what's done and not. - On hold-ish. It'll be experimental.
+
+Radar will have .gif viewing. I wasthinking I could display 8 .pngs in a row, but that'd be inefficient on calls and loading time.
+
 * Adds the option to show release notes through the updater. - Done, and tested!
 * Adds the option to view when the next release should be dropping through the updater. - Done, and tested.
 * The "What would you like to do now" menu will get switched to only a number-based input. - 100% done, not tested (This was done early to set the stage for the rest of 0.6 beta)

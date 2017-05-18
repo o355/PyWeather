@@ -5,5 +5,5 @@
 
 # From 0.6.1 and on, this file will actually fill up.
 
-versioninfo = open("storage//versioninfo.txt")
+versioninfo = open("versioninfo.txt")
 versioninfo = versioninfo.read()
