@@ -36,6 +36,15 @@ except:
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
 
+# See if the config is "provisioned". If it isn't, a KeyError will occur,
+# because it's not created. Here, we set up the config to defaults if it's not
+# provisioned.
+try:
+    configprovisioned = config.getboolean('USER', 'configprovisioned')
+except KeyError:
+    print("Your config isn't provisioned. Doing that now...")
+    # code from configsetup goes here...
+
     
 try:
     verbosity = config.getboolean('VERBOSITY', 'setup_verbosity')

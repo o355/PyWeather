@@ -1,65 +1,35 @@
-# PyWeather Configuration Defaults - 0.6 beta
-# (c) 2017, o355
+# (c) 2017, o355. GNU GPL.
 
 import sys
 import configparser
-import logging
-import traceback
 
-# Try loading the versioninfo.txt file. If it isn't around, create the file with
-# the present version info.
-
-try:
-    versioninfo = open('updater//versioninfo.txt')
-except:
-    open('updater//versioninfo.txt', 'w').close()
-    with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6 beta")
-        out.close()
-        
 config = configparser.ConfigParser()
-config.read('config.ini')
-    
-try:
-    verbosity = config.getboolean('VERBOSITY', 'configdefault_verbosity')
-    tracebacksEnabled = config.getboolean('TRACEBACK', 'configdefault_tracebacks')
-except:
-    print("Couldn't load your config file. Make sure there aren't any typos",
-          "in the config, and that the config file is accessible.",
-          "Setting config variables to their defaults.",
-          "Here's the full traceback, in case you need it.", sep="\n")
-    traceback.print_exc()
-    verbosity = False
-    tracebacksEnabled = False
-    
-logger = logging.getLogger(name='pyweather_configdefault_0.5.2beta')
-logformat = '%(asctime)s | %(levelname)s | %(message)s'
-logging.basicConfig(format=logformat)
+config.read("config.ini")
 
-# There are no critical messages in PyWeather, so this works by design.
-if verbosity == True:
-    logger.setLevel(logging.DEBUG)
-elif tracebacksEnabled == True:
-    logger.setLevel(logging.ERROR)
-else:
-    logger.setLevel(logging.CRITICAL)
-    
-logger.debug("Listing configuration options.")
-logger.debug("verbosity: %s ; tracebacksEnabled: %s"
-             % (verbosity, tracebacksEnabled))
+# Verbosity and all that fun stuff isn't available here.
+# If the config isn't set up, and by default, verbosity is off
+# why should I code it in?
 
-def printException():
-    if tracebacksEnabled == True:
-        print("Here's the full traceback (for error reporting):")
-        traceback.print_exc()
-    
-print("Would you like me to set PyWeather configuration options to default?",
+print("Would you like me to set up PyWeather's config?",
       "Yes or No.", sep="\n")
 cd_confirmation = input("Input here: ").lower()
 logger.debug("cd_confirmation: %s" % cd_confirmation)
 if cd_confirmation == "yes":
-    print("Resetting variables to their defaults.",
-          "Setting variables...", sep="\n")
+    try:
+        provisioned = config['USER']['configprovisioned']
+        print("Your config file is already provisioned! Would you still",
+              "like to have your config provisioned?", 
+              "Yes or No.", sep="\n")
+        keepprovisioning = input("Input here: ").lower()
+        if keepprovisioning == "yes":
+            print("Re-provisioning your config...")
+        elif keepprovisioning == "no":
+            print("Not re-provisioning your config.",
+                  "Press enter to exit.")
+            input()
+            sys.exit()
+    except:
+        print("Setting up your config...")
     config['SUMMARY']['sundata_summary'] = 'False'
     logger.debug("SUMMARY/sundata_summary is now 'False'.")
     config['SUMMARY']['almanac_summary'] = 'False'
@@ -108,10 +78,10 @@ if cd_confirmation == "yes":
     logger.debug("UPDATER/allowGitForUpdating is now 'False'.")
     config['VERSIONS']['overrideVersion'] = 'False'
     logger.debug("VERSIONS/overrideVersion is now 'False'.")
-    config['VERSIONS']['overrideBuildNumber'] = '52.1'
-    logger.debug("VERSIONS/overrideBuildNumber is now '52.1'.")
-    config['VERSIONS']['overrideVersionText'] = '0.5.2.1 beta'
-    logger.debug("VERSIONS/overrideVersionText is now '0.5.2.1 beta'.")
+    config['VERSIONS']['overrideBuildNumber'] = '60'
+    logger.debug("VERSIONS/overrideBuildNumber is now '60'.")
+    config['VERSIONS']['overrideVersionText'] = '0.6 beta'
+    logger.debug("VERSIONS/overrideVersionText is now '0.6 beta'.")
     config['SUMMARY']['showAlertsOnSummary'] = 'True'
     logger.debug("SUMMARY/showAlertsOnSummary is now 'True'.")
     config['UI']['alerts_EUiterations'] = '2'

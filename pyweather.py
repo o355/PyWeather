@@ -51,30 +51,14 @@ try:
 except KeyError:
     print("We ran into an error. Full traceback below.")
     traceback.print_exc()
-    # In case of a code mistake when developing, confirmation is shown
-    # to rewrite a user's config file.
+    # Not doing a separate script launch. Doing sys.exit in that script would just continue
+    # PyWeather. We ask the user to run the script themselves.
     print("This isn't good. Your config file isn't provisioned.",
-          "PyWeather can launch a script that will provision your config file.",
-          "Would you like to provision your config file? Yes or No.", sep="\n")
-    provisonconfig = input("Input here: ").lower()
-    if provisonconfig == "yes":
-        print("Now executing a script that will create your config file.")
-        # using exec here, it should work on most platforms.
-        exec(open("storage//configsetup.py").read())
-    else:
-        print("Either you selected no, or your input wasn't understood.",
-              "PyWeather can still load, just with default configuration options.",
-              "Would you like to continue loading PyWeather?"
-              "Yes or No.", sep="\n")
-        # Couldn't use the "continue" variable name. Eclipse got mad.
-        contPWload = input("Input here: ").lower()
-        if contPWload == "yes":
-            print("You'll soon get an error that your config file couldn't be loaded.",
-                  "This is normal, given the route you've taken.", sep="\n")
-        elif contPWload == "no":
-            print("Stopping PyWeather. If you want to provision your config, you",
-                  "can laaunch configsetup.py in the storage folder.",
-                  "Press enter to exit.", sep="\n")
+          "If you're new to PyWeather, you should run the setup script.",
+          "Otherwise, try launching configsetup.py, which is available in the", 
+          "storage folder. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
     
 # Try to parse configuration options.    
 try:
@@ -508,7 +492,14 @@ if validateAPIKey == False and backupKeyLoaded == True:
                 print("Press enter to exit.")
                 input()
                 sys.exit()
-            
+        elif backupKeyLoaded == False:
+            print("When attempting to validate your API key, your primary key",
+                  "couldn't be validated, and your backup key wasn't able to",
+                  "load at boot. Make sure that your primary API key is valid,",
+                  "and that your backup API key can be accessed by PyWeather."
+                  "Press enter to exit.", sep="\n")
+            input()
+            sys.exit()
         else:
             logger.warn("Backup key couldn't get loaded!")
             print("Your primary API key couldn't be validated, and your",
@@ -519,10 +510,6 @@ if validateAPIKey == False and backupKeyLoaded == True:
                   "Press enter to exit.", sep="\n")
             input()
             sys.exit()
-elif validateAPIKey == True and backupKeyLoaded == False:
-    # Guess this was the easy way out...        
-    logger.warn("Validating the API key was enabled, but the backup key wasn't loaded.")
-    logger.warn("Skipping...")
 
 # Fetch the JSON file using urllib.request, store it as a variable.
 try:

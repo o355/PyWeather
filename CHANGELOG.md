@@ -26,7 +26,9 @@ Here's the todo list:
 * Update the updaters to at least include the configupdate.py script - 0% done
 
 **BUG FIXES**
-* Fixes a bug where if your backup API key couldn't be found, key validation was entirely skipped. I guess this was intentional, but now your primary key is still validated, but if your backup key couldn't be loaded at first boot, it'll stop before trying to validate a non-existant backup key. 
+* Fixed a bug where if your backup API key couldn't be found, key validation was entirely skipped. I guess this was intentional, but now your primary key is still validated, but if your backup key couldn't be loaded at first boot, it'll stop before trying to validate a non-existant backup key. 
+* Fixed a bug where when running configdefault.py, "PYWEATHER BOOT/validateapikey" wasn't reset to it's default value.
+
 
 ## version 0.5.2.1 beta - Released on 4/30/2017
 * Fixes a bug in which if validating your API key wasn't enabled, a variable wasn't defined, crashing PyWeather at boot.
