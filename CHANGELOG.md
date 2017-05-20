@@ -19,9 +19,9 @@ Radar will have .gif viewing. I wasthinking I could display 8 .pngs in a row, bu
 * Fixes for config stashing in regards to Git updating. There's a lot to do, so get a system where we can effectively update a user's config file for a lot of scenarios.
 
 Here's the todo list:
-* Create the configupdate.py script - 60% done.
-* Make the configsetup.py script (to be used for future versions. Payload will be packed into 0.6 to avoid future conflicts!) - 0% done
-* Update all scripts to check for a provisioned config file. If a config file isn't provisioned, ask the user to either set up their config file, or continue. - 60% done. Needs a special thing in setup. Needs to be done in configdefault.
+* Create the configupdate.py script - 100% done.
+* Make the configsetup.py script (to be used for future versions. Payload will be packed into 0.6 to avoid future conflicts!) - 100% done.
+* Update all scripts to check for a provisioned config file. If a config file isn't provisioned, ask the user to either set up their config file, or continue. - Going to go over all scripts to make sure they have necessary code.
 * Get all scripts to make a versioninfo.txt file if it isn't around at boot - Done!
 * Update the updaters to at least include the configupdate.py script - 0% done
 

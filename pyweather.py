@@ -1764,7 +1764,7 @@ while True:
                         frontend.reloadImage("Viewer", "temp//r100.gif")
                     
         def frontend_exit(btnName):
-            app.stop()
+            frontend.stop()
             
         def frontend_playerControls(btnName):
             if btnName == "Play":

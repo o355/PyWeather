@@ -5,6 +5,10 @@
 
 # From 0.6.1 and on, this file will actually fill up.
 
+import sys
+import configparser
+import traceback
+
 versioninfo = open("versioninfo.txt")
 versioninfo = versioninfo.read()
 
