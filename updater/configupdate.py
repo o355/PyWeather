@@ -13,7 +13,6 @@ versioninfo = open("versioninfo.txt")
 versioninfo = versioninfo.read()
 
 if versioninfo == "0.6 beta":
-    print("No changes to your config file is needed!",
-          "Press enter to exit.", sep="\n")
-    input()
-    sys.exit()
+    # A usual input() and sys.exit() isn't present here, as it's assumed this
+    # is getting executed inside of the updater.
+    print("No changes to your config file is needed!")

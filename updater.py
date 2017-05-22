@@ -1,4 +1,4 @@
-# PyWeather Updater - version 0.5.2.1 beta
+# PyWeather Updater - version 0.6w beta
 # (c) 2017, o355, GNU GPL 3.0
 
 
@@ -203,24 +203,22 @@ elif buildnumber < version_buildNumber:
                 print("Now updating with Git.")
                 try:
                     # Doesn't hurt to stash twice.
-                    subprocess.call(["git stash"], shell=True)
                     subprocess.call(["git fetch"], shell=True)
-                    subprocess.call(["git stash"], shell=True)
                     subprocess.call(["git checkout %s" % version_latestReleaseTag],
                                     shell=True)
-                    print("Successfully updated with Git!",
-                          "Make sure you reapply any changes you made to your",
-                          "config file after the update.",
+                    print("Now updating your config file.")
+                    exec(open("updater//configupdate.py").open())
+                    print("PyWeather has been updated to version %s." % version_latestReleaseTag,
+                          "To finish the update, PyWeather has to exit.",
                           "Press enter to exit.", sep="\n")
                     input()
                     sys.exit()
                 except:
-                    print("When attempting to execute `git stash`,",
-                          "`git pull`, and/or `git checkout`,",
-                          "an error occurred. Make sure you have git",
-                          "installed in your shell, and that it can be used",
-                          "from a shell. Anyways, would you like to try and update",
-                          "PyWeather by using a .zip download?",
+                    print("When attempting to update using git, either",
+                          "when doing `git fetch`, `git checkout`, or to",
+                          "execute the configupdate script, an error occurred."
+                          "We can try updating using the .zip method.",
+                          "Would you like to update PyWeather using the .zip method?",
                           "Yes or No.", sep="\n")
                     printException()
                     confirmZipDownload = input("Input here: ").lower()
