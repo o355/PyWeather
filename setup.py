@@ -42,8 +42,45 @@ config.read('storage//config.ini')
 try:
     configprovisioned = config.getboolean('USER', 'configprovisioned')
 except KeyError:
-    print("Your config isn't provisioned. Doing that now...")
-    # code from configsetup goes here...
+    print("Your config isn't provisioned. Would you like to provision your config?",
+          "It's highly recommended you provision your config. If you decide not to,",
+          "you may run into issues using PyWeather.",
+          "Yes or No.", sep="\n")
+    provisionconfig = input("Input here: ").lower()
+    if provisionconfig == "yes":
+        print("Provisioning your config.")
+        config['SUMMARY']['sundata_summary'] = 'False'
+        config['SUMMARY']['almanac_summary'] = 'False'
+        config['VERBOSITY']['verbosity'] = 'False'
+        config['VERBOSITY']['json_verbosity'] = 'False'
+        config['VERBOSITY']['setup_verbosity'] = 'False'
+        config['VERBOSITY']['setup_jsonverbosity'] = 'False'
+        config['VERBOSITY']['updater_verbosity'] = 'False'
+        config['VERBOSITY']['updater_jsonverbosity'] = 'False'
+        config['VERBOSITY']['keybackup_verbosity'] = 'False'
+        config['VERBOSITY']['configdefault_verbosity'] = 'False'
+        config['TRACEBACK']['tracebacks'] = 'False'
+        config['TRACEBACK']['setup_tracebacks'] = 'False'
+        config['TRACEBACK']['updater_tracebacks'] = 'False'
+        config['TRACEBACK']['configdefault_tracebacks'] = 'False'
+        config['UI']['show_entertocontinue'] = 'True'
+        config['UI']['detailedinfoloops'] = '6'
+        config['UI']['forecast_detailedinfoloops'] = '5'
+        config['UI']['show_completediterations'] = 'False'
+        config['HOURLY']['10dayfetch_atboot'] = 'False'
+        config['UPDATER']['autocheckforupdates'] = 'False'
+        config['UPDATER']['show_updaterreleasetag'] = 'False'
+        config['KEYBACKUP']['savedirectory'] = 'backup//'
+        config['UPDATER']['allowGitForUpdating'] = 'False'
+        config['VERSIONS']['overrideVersion'] = 'False'
+        config['SUMMARY']['showAlertsOnSummary'] = 'True'
+        config['UI']['alerts_EUiterations'] = '2'
+        config['UI']['alerts_USiterations'] = '1'
+        config['PYWEATHER BOOT']['validateapikey'] = 'True'
+        config['UPDATER']['showReleaseNotes'] = 'True'
+        config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
+        config['UPDATER']['showNewVersionReleaseDate'] = 'True'
+        config['USER']['configprovisioned'] = 'True'
 
     
 try:

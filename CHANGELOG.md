@@ -4,26 +4,26 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 
 ## version 0.6.1 beta - Should be released in July
 * Adds some form of a cache to PyWeather, so that after a set time, PyWeather will renew weather data when looking at detailed information. The exact implementation of this isn't set in stone.
-* Adds some form of a THIRD updater, which will overwrite files to update.
+* Adds an experimental radar to PyWeather.
 
 ## version 0.6 beta - Should be released 7/5/2017
 * Adds an "About" page to PyWeather. - 100% done, and tested!
 * Adds alerts information to PyWeather, including (of course) the ability to turn it on and off. - Done, and tested!
-* Adds radar/satellite loops to PyWeather. Here's what's done and not. - On hold-ish. It'll be experimental.
-
-Radar will have .gif viewing. I wasthinking I could display 8 .pngs in a row, but that'd be inefficient on calls and loading time.
-
+* Adds radar/satellite loops to PyWeather. Here's what's done and not. - Scrapped. Experimental radar will be added in 0.6.1 beta.
 * Adds the option to show release notes through the updater. - Done, and tested!
 * Adds the option to view when the next release should be dropping through the updater. - Done, and tested.
 * The "What would you like to do now" menu will get switched to only a number-based input. - 100% done, not tested (This was done early to set the stage for the rest of 0.6 beta)
 * Fixes for config stashing in regards to Git updating. There's a lot to do, so get a system where we can effectively update a user's config file for a lot of scenarios.
 
 Here's the todo list:
-* Create the configupdate.py script - 100% done.
-* Make the configsetup.py script (to be used for future versions. Payload will be packed into 0.6 to avoid future conflicts!) - 100% done.
-* Update all scripts to check for a provisioned config file. If a config file isn't provisioned, ask the user to either set up their config file, or continue. - Going to go over all scripts to make sure they have necessary code.
+* Create the configupdate.py script - Done!
+* Make the configsetup.py script (to be used for future versions. Payload will be packed into 0.6 to avoid future conflicts!) - Done!
+* Update all scripts to check for a provisioned config file. If a config file isn't provisioned, ask the user to either set up their config file, or continue. - Done!
 * Get all scripts to make a versioninfo.txt file if it isn't around at boot - Done!
-* Update the updaters to at least include the configupdate.py script - 0% done
+* Update the updaters to at least include the configupdate.py script - Done!
+* Update the setup file to setup the config if it can't be found. - 20% done
+
+*Remove support for overriding version information. It won't work with the new updater when it comes to config updating. - 0% done
 
 **BUG FIXES**
 * Fixed a bug where if your backup API key couldn't be found, key validation was entirely skipped. I guess this was intentional, but now your primary key is still validated, but if your backup key couldn't be loaded at first boot, it'll stop before trying to validate a non-existant backup key. 
