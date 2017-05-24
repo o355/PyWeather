@@ -49,6 +49,16 @@ except KeyError:
     provisionconfig = input("Input here: ").lower()
     if provisionconfig == "yes":
         print("Provisioning your config.")
+        config.add_section('SUMMARY')
+        config.add_section('VERBOSITY')
+        config.add_section('TRACEBACK')
+        config.add_section('UI')
+        config.add_section('HOURLY')
+        config.add_section('UPDATER')
+        config.add_section('KEYBACKUP')
+        config.add_section('VERSIONS')
+        config.add_section('PYWEATHER BOOT')
+        config.add_section('USER')
         config['SUMMARY']['sundata_summary'] = 'False'
         config['SUMMARY']['almanac_summary'] = 'False'
         config['VERBOSITY']['verbosity'] = 'False'
@@ -118,6 +128,16 @@ except KeyError:
     else:
         print("Couldn't understand your input. By default, I'm going to provision",
               "your config. Beginning now...", sep="\n")
+        config.add_section('SUMMARY')
+        config.add_section('VERBOSITY')
+        config.add_section('TRACEBACK')
+        config.add_section('UI')
+        config.add_section('HOURLY')
+        config.add_section('UPDATER')
+        config.add_section('KEYBACKUP')
+        config.add_section('VERSIONS')
+        config.add_section('PYWEATHER BOOT')
+        config.add_section('USER')
         config['SUMMARY']['sundata_summary'] = 'False'
         config['SUMMARY']['almanac_summary'] = 'False'
         config['VERBOSITY']['verbosity'] = 'False'

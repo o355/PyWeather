@@ -3,6 +3,7 @@ Since configparser hates comments, this will do for now.
 
 ## CHANGELOG
 ### forversion
+**This option was depreciated in PyWeather 0.6 beta.**
 This is just to show you what version the config file is meant to be used for.
 
 Changing this does nothing.
@@ -217,11 +218,11 @@ When doing this, custom changes to your config file will be overwritten. PyWeath
 **Default option: False**
 
 ## RADAR GUI section
+**This section was depreciated in PyWeather 0.6 indev.**
 This section controls the GUI for displaying radar and other images.
 
 ### gifsize
 This option allows you to control the size of the .gif image that is to be displayed.
-
 This option will only accept 5 sizes, as defined below
 (can't imagine how hard it'd be to code in every size ever. This is simpler, too)
 
@@ -254,6 +255,7 @@ You can save it anywhere in PyWeather's folder. However, you'll want to take not
 **Default option: backup//**
 
 ## VERSIONS section
+**This section was depreciated in PyWeather 0.6 beta.**
 This section controls version overriding, mainly for debugging reasons.
 
 ### overrideVersion

@@ -31,6 +31,17 @@ if cd_confirmation == "yes":
             sys.exit()
     except:
         print("Setting up your config...")
+    config.add_section('CHANGELOG')
+    config.add_section('SUMMARY')
+    config.add_section('VERBOSITY')
+    config.add_section('TRACEBACK')
+    config.add_section('UI')
+    config.add_section('HOURLY')
+    config.add_section('UPDATER')
+    config.add_section('KEYBACKUP')
+    config.add_section('VERSIONS')
+    config.add_section('PYWEATHER BOOT')
+    config.add_section('USER')
     config['SUMMARY']['sundata_summary'] = 'False'
     config['SUMMARY']['almanac_summary'] = 'False'
     config['VERBOSITY']['verbosity'] = 'False'
