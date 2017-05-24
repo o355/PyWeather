@@ -81,6 +81,106 @@ except KeyError:
         config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
         config['UPDATER']['showNewVersionReleaseDate'] = 'True'
         config['USER']['configprovisioned'] = 'True'
+        try:
+            with open('config.ini', 'w') as configfile:
+                config.write(configfile)
+        except:
+            print("Hmmf...an odd error occurred. A full traceback will be",
+                  "printed below. Please report this issue on GitHub",
+                  "(github.com/o355/pyweather), as that would be greatly appreciated",
+                  "for trying to fix the bug that you just encountered!", sep="\n")
+            traceback.print_exc()
+            # Giving users choice, unlike Microsoft.
+            print("Would you like to continue using PyWeather with an unprovisioned config?",
+                  "It's highly recommended you don't continue, as you may encounter",
+                  "unexpected errors and issues with using PyWeather. Yes or No.", sep="\n")
+            provisionfailed_continue = input("Input here: ").lower()
+            if provisionfailed_continue == "yes":
+                print("Continuing with PyWeather Setup. Please remember, you may encounter",
+                      "unexpected errors and issues. You can always retry provisioning your config",
+                      "by using the configsetup.py script in the storage folder.", sep="\n")
+            elif provisionfailed_continue == "no":
+                print("Stopping PyWeather Setup. You can retry to provision your config by using",
+                      "the configsetup.py script in the storage folder.",
+                      "Press enter to exit.", sep="\n")
+                input()
+                sys.exit()
+            else:
+                print("Couldn't understand your input. By default, PyWeather Setup is stopping.",
+                      "You can retry to provision your config by using the configsetup.py script",
+                      "in the storage folder. Press enter to exit.", sep="\n")
+                input()
+                sys.exit()
+        print("Config file provisioned successfully! Moving on with PyWeather setup...")
+    elif provisionconfig == "no":
+        print("Not provisioning your config. You may encounter unexpected errors",
+              "and issues when using PyWeather, however.", sep="\n")
+    else:
+        print("Couldn't understand your input. By default, I'm going to provision",
+              "your config. Beginning now...", sep="\n")
+        config['SUMMARY']['sundata_summary'] = 'False'
+        config['SUMMARY']['almanac_summary'] = 'False'
+        config['VERBOSITY']['verbosity'] = 'False'
+        config['VERBOSITY']['json_verbosity'] = 'False'
+        config['VERBOSITY']['setup_verbosity'] = 'False'
+        config['VERBOSITY']['setup_jsonverbosity'] = 'False'
+        config['VERBOSITY']['updater_verbosity'] = 'False'
+        config['VERBOSITY']['updater_jsonverbosity'] = 'False'
+        config['VERBOSITY']['keybackup_verbosity'] = 'False'
+        config['VERBOSITY']['configdefault_verbosity'] = 'False'
+        config['TRACEBACK']['tracebacks'] = 'False'
+        config['TRACEBACK']['setup_tracebacks'] = 'False'
+        config['TRACEBACK']['updater_tracebacks'] = 'False'
+        config['TRACEBACK']['configdefault_tracebacks'] = 'False'
+        config['UI']['show_entertocontinue'] = 'True'
+        config['UI']['detailedinfoloops'] = '6'
+        config['UI']['forecast_detailedinfoloops'] = '5'
+        config['UI']['show_completediterations'] = 'False'
+        config['HOURLY']['10dayfetch_atboot'] = 'False'
+        config['UPDATER']['autocheckforupdates'] = 'False'
+        config['UPDATER']['show_updaterreleasetag'] = 'False'
+        config['KEYBACKUP']['savedirectory'] = 'backup//'
+        config['UPDATER']['allowGitForUpdating'] = 'False'
+        config['VERSIONS']['overrideVersion'] = 'False'
+        config['SUMMARY']['showAlertsOnSummary'] = 'True'
+        config['UI']['alerts_EUiterations'] = '2'
+        config['UI']['alerts_USiterations'] = '1'
+        config['PYWEATHER BOOT']['validateapikey'] = 'True'
+        config['UPDATER']['showReleaseNotes'] = 'True'
+        config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
+        config['UPDATER']['showNewVersionReleaseDate'] = 'True'
+        config['USER']['configprovisioned'] = 'True'
+        try:
+            with open('config.ini', 'w') as configfile:
+                config.write(configfile)
+        except:
+            print("Hmmf...an odd error occurred. A full traceback will be",
+                  "printed below. Please report this issue on GitHub",
+                  "(github.com/o355/pyweather), as that would be greatly appreciated",
+                  "for trying to fix the bug that you just encountered!", sep="\n")
+            traceback.print_exc()
+            # Giving users choice, unlike Microsoft.
+            print("Would you like to continue using PyWeather with an unprovisioned config?",
+                  "It's highly recommended you don't continue, as you may encounter",
+                  "unexpected errors and issues with using PyWeather. Yes or No.", sep="\n")
+            provisionfailed_continue = input("Input here: ").lower()
+            if provisionfailed_continue == "yes":
+                print("Continuing with PyWeather Setup. Please remember, you may encounter",
+                      "unexpected errors and issues. You can always retry provisioning your config",
+                      "by using the configsetup.py script in the storage folder.", sep="\n")
+            elif provisionfailed_continue == "no":
+                print("Stopping PyWeather Setup. You can retry to provision your config by using",
+                      "the configsetup.py script in the storage folder.",
+                      "Press enter to exit.", sep="\n")
+                input()
+                sys.exit()
+            else:
+                print("Couldn't understand your input. By default, PyWeather Setup is stopping.",
+                      "You can retry to provision your config by using the configsetup.py script",
+                      "in the storage folder. Press enter to exit.", sep="\n")
+                input()
+                sys.exit()
+        print("Config file provisioned successfully! Moving on with PyWeather setup...")
 
     
 try:
