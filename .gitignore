@@ -94,3 +94,4 @@ apikey.txt
 storage/apikey2.txt
 backup/backkey.txt
 temp/*.gif
+storage/config.ini

@@ -86,7 +86,6 @@ try:
     showAlertsOnSummary = config.getboolean('SUMMARY', 'showAlertsOnSummary')
     user_alertsEUiterations = config.getint('UI', 'alerts_EUiterations')
     user_alertsUSiterations = config.getint('UI', 'alerts_USiterations')
-    user_radarImageSize = config.get('RADAR GUI', 'gifsize')
     showUpdaterReleaseNotes = config.getboolean('UPDATER', 'showReleaseNotes')
     showUpdaterReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
