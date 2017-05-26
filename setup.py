@@ -236,8 +236,6 @@ else:
 logger.debug("Listing configuration options:")
 logger.debug("verbosity: %s ; jsonVerbosity: %s" %
              (verbosity, jsonVerbosity))
-logger.debug("overrideBuildNumber: %s ; overrideVersionText: %s" %
-             (overrideBuildNumber, overrideVersionText))
 logger.debug("tracebacksEnabled: %s" %
              (tracebacksEnabled))
 
