@@ -1629,6 +1629,8 @@ while True:
                     except KeyboardInterrupt:
                         break
                         logger.info("Exiting to the main menu.")
+
+# Commented out this entire part for when I want to resume development.
 #    elif moreoptions == "radar":
 #        print(Fore.RED + "The radar is currently bugged, and unfinished, due to",
 #              "a .gif glitch in Tkinter/appJar. The code has been kept here so when",
@@ -1649,153 +1651,151 @@ while True:
 #        # (mode)(zoom)cached, where r = radar only, s = satellite only
 #        r10cached = False; r20cached = False; r40cached = False
 #        r60cached = False; r80cached = False; r100cached = False
-        s10cached = False; s20cached = False; s40cached = False
-        s60cached = False; s80cached = False; s100cached = False
-        r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
-        r20url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
-        r40url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=40&radunits=km'
-        r60url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=60&radunits=km'
-        r80url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=80&radunits=km'
-        r100url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=100&radunits=km'
-        s10url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=10&key=sat_vis&radunits=km'
-        s20url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=20&key=sat_vis&radunits=km'
-        s40url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=40&key=sat_vis&radunits=km'
-        s60url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=60&key=sat_vis&radunits=km'
-        s80url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=80&key=sat_vis&radunits=km'
-        s100url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=100&key=sat_vis&radunits=km'
-        
-        
-        
-        print(Fore.YELLOW + "Defining functions...")
-        def frontend_modeswitch(btnName):
-            global frontend_mode
-            if btnName == "Radar Only":
-                frontend_mode = "Radar Only"
-                frontend.setStatusbar("Mode: Radar Only", 0)
-            elif btnName == "Radar & Satellite":
-                frontend_mode = "Radar & Satellite"
-                frontend.setStatusbar("Mode: Radar & Satellite", 0)
-            elif btnName == "Satellite":
-                frontend_mode = "Satellite"
-                frontend.setStatus("Mode: Satellite", 0)
-                
-        def frontend_zoomswitch(btnName):
-            global r10cached; global r20cached; global r40cached
-            global r60cached; global r80cached; global r100cached
-            if frontend_mode == "Radar Only":
-                print(btnName)
-                if btnName == "10 km":
-                    if r10cached == False:
-                        frontend.setStatusbar("Zoom: 10 km", 1)
-                        frontend.setStatusbar("Status: Fetching Image...", 2)
-                        tempurl = requests.get(r10url, stream=True)
-                        with open('temp//r10.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.clearImageCache()
-                        frontend.reloadImage("Viewer", "temp//r10.gif")
-                        frontend.clearImageCache()
-                        frontend.setStatusbar("Status: Idle", 2)
-                        r10cached = True
-                    elif r10cached == True:
-                        frontend.setStatusbar("Zoom: 10 km", 1)
-                        frontend.reloadImage("Viewer", "temp//r10.gif")
-                elif btnName == "20 km":
-                    if r20cached == False:
-                        tempurl = requests.get(r20url, stream=True)
-                        frontend.setStatusbar("Status: Fetching Image...", 1)
-                        with open('temp//r20.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//r20.gif")
-                        r20cached = True
-                    elif r20cached == True:
-                        frontend.reloadImage("Viewer", "temp//r20.gif")
-                elif btnName == "40 km":
-                    if r40cached == False:
-                        tempurl = requests.get(r40url, stream=True)
-                        frontend.setStatusbar("Status: Fetching Image...", 1)
-                        with open('temp//r40.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//r40.gif")
-                        r40cached = True
-                    elif r40cached == True:
-                        frontend.reloadImage("Viewer", "temp//r40.gif")
-                elif btnName == "60 km":
-                    if r60cached == False:
-                        tempurl = requests.get(r60url, stream=True)
-                        frontend.setStatusbar("Status: Fetching Image...", 1)
-                        with open('temp//r60.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//r60.gif")
-                        r60cached = True
-                    elif r60cached == True:
-                        frontend.reloadImage("Viewer", "temp//r60.gif")
-                elif btnName == "80 km":
-                    if r80cached == False:
-                        tempurl = requests.get(r80url, stream=True)
-                        frontend.setStatusbar("Status: Fetching Image...", 1)
-                        with open('temp//r80.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//r80.gif")
-                        r80cached = True
-                    elif r80cached == True:
-                        frontend.reloadImage("Viewer", "temp//r80.gif")
-                elif btnName == "100 km":
-                    if r100cached == False:
-                        tempurl = requests.get(r100url, stream=True)
-                        frontend.setStatusbar("Status: Fetching Image...", 1)
-                        with open('temp//r100.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//r100.gif")
-                        r100cached = True
-                    elif r100cached == True:
-                        frontend.reloadImage("Viewer", "temp//r100.gif")
-                    
-        def frontend_exit(btnName):
-            frontend.stop()
-            
-        def frontend_playerControls(btnName):
-            if btnName == "Play":
-                frontend.startAnimation("Viewer")
-            elif btnName == "Pause":
-                frontend.stopAnimation("Viewer")
-        frontend.clearImageCache()       
-        frontend.setTitle("PyWeather Radar Viewer")
-        frontend.setResizable(canResize=False)
-        frontend.addLabel("toplabel", "Select a Mode below.", column=0, row=0, colspan=3)
-        frontend.addButtons(["Radar Only", "Radar & Satellite"], frontend_modeswitch, column=0, row=1, colspan=3, rowspan=1)
-        frontend.startLabelFrame("Viewer", column=0, row=2, colspan=3)
-        # Placeholders are needed to start the viewer.
-        if user_radarImageSize == "extrasmall":
-            frontend.addImage("Viewer", "storage//320x240placeholder.gif")
-        elif user_radarImageSize == "small":
-            frontend.addImage("Viewer", "storage//480x360placeholder.gif")
-        elif user_radarImageSize == "normal":
-            frontend.addImage("Viewer", "storage//640x480placeholder.gif")
-        frontend.stopLabelFrame()
-        frontend.addLabel("mid2label", "Animation controls:", column=0, row=3)
-        frontend.addButtons(["Play", "Pause"], frontend_playerControls, column=0, row=4, colspan=3)
-        frontend.addLabel("midlabel", "Select a Zoom below.", column=0, row=5, colspan=3)
-        frontend.addButtons(["10 km", "20 km", "40 km"], frontend_zoomswitch, column=0, row=6, colspan=3)
-        frontend.addButtons(["60 km", "80 km", "100 km"], frontend_zoomswitch, row=7, column=0, colspan=3)
-        frontend.addButton("Return to PyWeather", frontend_exit, row=8, column=1, colspan=1)
-        frontend.setInPadding([10, 10])
-        frontend.addStatusbar(fields=3)
-        frontend.setStatusbar("Mode: None selected", 0)
-        frontend.setStatusbar("Zoom: None selected", 1)
-        frontend.setStatusbar("Status: Idle", 2)
-        frontend.go()
+#        s10cached = False; s20cached = False; s40cached = False
+#        s60cached = False; s80cached = False; s100cached = False
+#        r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
+#        r20url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
+#        r40url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=40&radunits=km'
+#        r60url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=60&radunits=km'
+#        r80url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=80&radunits=km'
+#        r100url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=100&radunits=k       s10url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=10&key=sat_vis&radunits=      s20url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=20&key=sat_vis&radunits=km'
+#        s40url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=40&key=sat_vis&radunits=km'
+#        s60url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=60&key=sat_vis&radunits=km'
+#        s80url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=80&key=sat_vis&radunits=km'
+#        s100url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=100&key=sat_vis&radunits=km'
+#        
+#        
+#        
+#        print(Fore.YELLOW + "Defining functions...")
+#        def frontend_modeswitch(btnName):
+#            global frontend_mode
+#            if btnName == "Radar Only":
+#                frontend_mode = "Radar Only"
+#                frontend.setStatusbar("Mode: Radar Only", 0)
+#            elif btnName == "Radar & Satellite":
+#                frontend_mode = "Radar & Satellite"
+#                frontend.setStatusbar("Mode: Radar & Satellite", 0)
+#            elif btnName == "Satellite":
+#                frontend_mode = "Satellite"
+#                frontend.setStatus("Mode: Satellite", 0)
+#                
+#        def frontend_zoomswitch(btnName):
+#            global r10cached; global r20cached; global r40cached
+#            global r60cached; global r80cached; global r100cached
+#            if frontend_mode == "Radar Only":
+#                print(btnName)
+#                if btnName == "10 km":
+#                    if r10cached == False:
+#                        frontend.setStatusbar("Zoom: 10 km", 1)
+#                        frontend.setStatusbar("Status: Fetching Image...", 2)
+#                        tempurl = requests.get(r10url, stream=True)
+#                        with open('temp//r10.gif', 'wb') as fw:
+#                            for chunk in tempurl.iter_content(chunk_size=128):
+#                                fw.write(chunk)
+#                            fw.close()
+#                        frontend.clearImageCache()
+#                        frontend.reloadImage("Viewer", "temp//r10.gif")
+#                        frontend.clearImageCache()
+#                        frontend.setStatusbar("Status: Idle", 2)
+#                        r10cached = True
+#                    elif r10cached == True:
+#                        frontend.setStatusbar("Zoom: 10 km", 1)
+#                        frontend.reloadImage("Viewer", "temp//r10.gif")
+#                elif btnName == "20 km":
+#                    if r20cached == False:
+#                        tempurl = requests.get(r20url, stream=True)
+#                        frontend.setStatusbar("Status: Fetching Image...", 1)
+#                        with open('temp//r20.gif', 'wb') as fw:
+#                            for chunk in tempurl.iter_content(chunk_size=128):
+#                                fw.write(chunk)
+#                            fw.close()
+#                        frontend.reloadImage("Viewer", "temp//r20.gif")
+#                        r20cached = True
+#                    elif r20cached == True:
+#                        frontend.reloadImage("Viewer", "temp//r20.gif")
+#                elif btnName == "40 km":
+#                    if r40cached == False:
+#                        tempurl = requests.get(r40url, stream=True)
+#                        frontend.setStatusbar("Status: Fetching Image...", 1)
+#                        with open('temp//r40.gif', 'wb') as fw:
+#                            for chunk in tempurl.iter_content(chunk_size=128):
+#                                fw.write(chunk)
+#                            fw.close()
+#                        frontend.reloadImage("Viewer", "temp//r40.gif")
+#                        r40cached = True
+#                    elif r40cached == True:
+#                        frontend.reloadImage("Viewer", "temp//r40.gif")
+#                elif btnName == "60 km":
+#                    if r60cached == False:
+#                        tempurl = requests.get(r60url, stream=True)
+#                        frontend.setStatusbar("Status: Fetching Image...", 1)
+#                        with open('temp//r60.gif', 'wb') as fw:
+#                            for chunk in tempurl.iter_content(chunk_size=128):
+#                                fw.write(chunk)
+#                            fw.close()
+#                        frontend.reloadImage("Viewer", "temp//r60.gif")
+#                        r60cached = True
+#                    elif r60cached == True:
+#                        frontend.reloadImage("Viewer", "temp//r60.gif")
+#                elif btnName == "80 km":
+#                    if r80cached == False:
+#                        tempurl = requests.get(r80url, stream=True)
+#                        frontend.setStatusbar("Status: Fetching Image...", 1)
+#                        with open('temp//r80.gif', 'wb') as fw:
+#                            for chunk in tempurl.iter_content(chunk_size=128):
+#                                fw.write(chunk)
+#                            fw.close()
+#                        frontend.reloadImage("Viewer", "temp//r80.gif")
+#                        r80cached = True
+#                    elif r80cached == True:
+#                        frontend.reloadImage("Viewer", "temp//r80.gif")
+#                elif btnName == "100 km":
+#                    if r100cached == False:
+#                        tempurl = requests.get(r100url, stream=True)
+#                        frontend.setStatusbar("Status: Fetching Image...", 1)
+#                        with open('temp//r100.gif', 'wb') as fw:
+#                            for chunk in tempurl.iter_content(chunk_size=128):
+#                                fw.write(chunk)
+#                            fw.close()
+#                        frontend.reloadImage("Viewer", "temp//r100.gif")
+#                        r100cached = True
+#                    elif r100cached == True:
+#                        frontend.reloadImage("Viewer", "temp//r100.gif")
+#                    
+#        def frontend_exit(btnName):
+#            frontend.stop()
+#            
+#        def frontend_playerControls(btnName):
+#            if btnName == "Play":
+#                frontend.startAnimation("Viewer")
+#            elif btnName == "Pause":
+#                frontend.stopAnimation("Viewer")
+#        frontend.clearImageCache()       
+#        frontend.setTitle("PyWeather Radar Viewer")
+#        frontend.setResizable(canResize=False)
+#        frontend.addLabel("toplabel", "Select a Mode below.", column=0, row=0, colspan=3)
+#        frontend.addButtons(["Radar Only", "Radar & Satellite"], frontend_modeswitch, column=0, row=1, colspan=3, rowspan=1)
+#        frontend.startLabelFrame("Viewer", column=0, row=2, colspan=3)
+#        # Placeholders are needed to start the viewer.
+#        if user_radarImageSize == "extrasmall":
+#            frontend.addImage("Viewer", "storage//320x240placeholder.gif")
+#        elif user_radarImageSize == "small":
+#            frontend.addImage("Viewer", "storage//480x360placeholder.gif")
+#        elif user_radarImageSize == "normal":
+#            frontend.addImage("Viewer", "storage//640x480placeholder.gif")
+#        frontend.stopLabelFrame()
+#        frontend.addLabel("mid2label", "Animation controls:", column=0, row=3)
+#        frontend.addButtons(["Play", "Pause"], frontend_playerControls, column=0, row=4, colspan=3)
+#        frontend.addLabel("midlabel", "Select a Zoom below.", column=0, row=5, colspan=3)
+#        frontend.addButtons(["10 km", "20 km", "40 km"], frontend_zoomswitch, column=0, row=6, colspan=3)
+#        frontend.addButtons(["60 km", "80 km", "100 km"], frontend_zoomswitch, row=7, column=0, colspan=3)
+#        frontend.addButton("Return to PyWeather", frontend_exit, row=8, column=1, colspan=1)
+#        frontend.setInPadding([10, 10])
+#        frontend.addStatusbar(fields=3)
+#        frontend.setStatusbar("Mode: None selected", 0)
+#        frontend.setStatusbar("Zoom: None selected", 1)
+#        frontend.setStatusbar("Status: Idle", 2)
+#        frontend.go()
     elif moreoptions == "10":
         sys.exit()
     elif moreoptions == "8":
