@@ -21,7 +21,7 @@ except:
 # because it's not created. Creative.
 try:
     configprovisioned = config.getboolean('USER', 'configprovisioned')
-except KeyError:
+except KeyError or configparser.NoSectionError:
     print("We ran into an error. Full traceback below.")
     traceback.print_exc()
     # Not doing a separate script launch. Doing sys.exit in that script would just continue

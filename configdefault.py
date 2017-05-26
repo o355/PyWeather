@@ -21,6 +21,20 @@ config = configparser.ConfigParser()
 config.read('config.ini')
     
 try:
+    configprovisioned = config.getboolean('USER', 'configprovisioned')
+except KeyError or configparser.NoSectionError:
+    print("We ran into an error. Full traceback below.")
+    traceback.print_exc()
+    # Not doing a separate script launch. Doing sys.exit in that script would just continue
+    # PyWeather. We ask the user to run the script themselves.
+    print("This isn't good. Your config file isn't provisioned.",
+          "If you're new to PyWeather, you should run the setup script.",
+          "Otherwise, try launching configsetup.py, which is available in the", 
+          "storage folder. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+        
+try:
     verbosity = config.getboolean('VERBOSITY', 'configdefault_verbosity')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'configdefault_tracebacks')
 except:
