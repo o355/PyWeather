@@ -21,6 +21,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * The "What would you like to do now" menu will get switched to only a number-based input. - 100% done, not tested (This was done early to set the stage for the rest of 0.6 beta)
 * Fixes for config stashing in regards to Git updating. There's a lot to do, so get a system where we can effectively update a user's config file for a lot of scenarios. - Basic testing (provisioning config, etc.) works.
 * Removed support for overriding version information. It won't work with the new updater when it comes to config updating. - Done, and tested!
+* Adds error catching for a bad geolocator fetch in pyweather.py/setup.py. - 0% done
 
 **BUG FIXES**
 * Fixed a bug where if your backup API key couldn't be found, key validation was entirely skipped. I guess this was intentional, but now your primary key is still validated, but if your backup key couldn't be loaded at first boot, it'll stop before trying to validate a non-existant backup key. 
