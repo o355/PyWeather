@@ -1629,26 +1629,26 @@ while True:
                     except KeyboardInterrupt:
                         break
                         logger.info("Exiting to the main menu.")
-    elif moreoptions == "radar":
-        print(Fore.RED + "The radar is currently bugged, and unfinished, due to",
-              "a .gif glitch in Tkinter/appJar. The code has been kept here so when",
-              "development of the radar can be resumed, it's easy enough to start back up.",
-              sep="\n")
-        print(Fore.YELLOW + "Loading the GUI. This should take around 5 seconds.")
-        try:
-            frontend = gui()
-        except:
-            print(Fore.RED + "Cannot launch a GUI on this platform. If you don't have",
-                  "a GUI on Linux, this is expected. Otherwise, investigate into why",
-                  "tkinter won't launch.", sep="\n" + Fore.RESET)
-            printException()
-            continue
-        print(Fore.YELLOW + "Defining variables...")
-        # A quick note about cache variables.
-        # The syntax goes like this:
-        # (mode)(zoom)cached, where r = radar only, s = satellite only
-        r10cached = False; r20cached = False; r40cached = False
-        r60cached = False; r80cached = False; r100cached = False
+#    elif moreoptions == "radar":
+#        print(Fore.RED + "The radar is currently bugged, and unfinished, due to",
+#              "a .gif glitch in Tkinter/appJar. The code has been kept here so when",
+#              "development of the radar can be resumed, it's easy enough to start back up.",
+#              sep="\n")
+#        print(Fore.YELLOW + "Loading the GUI. This should take around 5 seconds.")
+#        try:
+#            frontend = gui()
+#        except:
+#            print(Fore.RED + "Cannot launch a GUI on this platform. If you don't have",
+#                  "a GUI on Linux, this is expected. Otherwise, investigate into why",
+#                  "tkinter won't launch.", sep="\n" + Fore.RESET)
+#            printException()
+#            continue
+#        print(Fore.YELLOW + "Defining variables...")
+#        # A quick note about cache variables.
+#        # The syntax goes like this:
+#        # (mode)(zoom)cached, where r = radar only, s = satellite only
+#        r10cached = False; r20cached = False; r40cached = False
+#        r60cached = False; r80cached = False; r100cached = False
         s10cached = False; s20cached = False; s40cached = False
         s60cached = False; s80cached = False; s100cached = False
         r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
