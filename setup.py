@@ -41,9 +41,8 @@ config.read('storage//config.ini')
 # provisioned.
 try:
     configprovisioned = config.getboolean('USER', 'configprovisioned')
-except KeyError or configparser.NoSectionError:
-    print("")
-    print("Your config isn't provisioned. Would you like to provision your config?",
+except:
+    print("Your config likely isn't provisioned. Would you like to provision your config?",
           "It's highly recommended you provision your config. If you decide not to,",
           "you may run into issues using PyWeather.",
           "Yes or No.", sep="\n")

@@ -22,7 +22,7 @@ config.read('config.ini')
     
 try:
     configprovisioned = config.getboolean('USER', 'configprovisioned')
-except KeyError or configparser.NoSectionError:
+except:
     print("We ran into an error. Full traceback below.")
     traceback.print_exc()
     # Not doing a separate script launch. Doing sys.exit in that script would just continue
