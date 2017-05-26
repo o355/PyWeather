@@ -106,17 +106,6 @@ if cd_confirmation == "yes":
     logger.debug("KEYBACKUP/savedirectory is now 'backup//'.")
     config['UPDATER']['allowGitForUpdating'] = 'False'
     logger.debug("UPDATER/allowGitForUpdating is now 'False'.")
-    config['VERSIONS']['overrideVersion'] = 'False'
-    logger.debug("VERSIONS/overrideVersion is now 'False'.")
-    config['VERSIONS']['overrideBuildNumber'] = '52.1'
-    logger.debug("VERSIONS/overrideBuildNumber is now '52.1'.")
-    config['VERSIONS']['overrideVersionText'] = '0.5.2.1 beta'
-    logger.debug("VERSIONS/overrideVersionText is now '0.5.2.1 beta'.")
-    config['SUMMARY']['showAlertsOnSummary'] = 'True'
-    logger.debug("SUMMARY/showAlertsOnSummary is now 'True'.")
-    config['UI']['alerts_EUiterations'] = '2'
-    logger.debug("UI/alerts_EUiterations is now '2'.")
-    config['UI']['alerts_USiterations'] = '1'
     logger.debug("UI/alerts_USiterations is now '1'.")
     config['PYWEATHER BOOT']['validateapikey'] = 'True'
     logger.debug("PYWEATHER BOOT/validateapikey is now 'True'.")

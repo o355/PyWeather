@@ -80,12 +80,7 @@ try:
     user_backupKeyDirectory = config.get('KEYBACKUP', 'savedirectory')
     validateAPIKey = config.getboolean('PYWEATHER BOOT', 'validateAPIKey')
     allowGitForUpdating = config.getboolean('UPDATER', 'allowGitForUpdating')
-    overrideVersion = config.getboolean('VERSIONS', 'overrideVersion')
-    overrideBuildNumber = config.getfloat('VERSIONS', 'overrideBuildNumber')
-    overrideVersionText = config.get('VERSIONS', 'overrideVersionText')
     showAlertsOnSummary = config.getboolean('SUMMARY', 'showAlertsOnSummary')
-    user_alertsEUiterations = config.getint('UI', 'alerts_EUiterations')
-    user_alertsUSiterations = config.getint('UI', 'alerts_USiterations')
     showUpdaterReleaseNotes = config.getboolean('UPDATER', 'showReleaseNotes')
     showUpdaterReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
@@ -112,9 +107,6 @@ except:
     user_backupKeyDirectory = 'backup//'
     validateAPIKey = True
     allowGitForUpdating = False
-    overrideVersion = False
-    overrideBuildNumber = 60
-    overrideVersionText = "0.6 beta"
     showAlertsOnSummary = True
     user_alertsEUiterations = 2
     user_alertsUSiterations = 1
@@ -157,12 +149,10 @@ logger.debug("user_backupKeyDirectory: %s ; validateAPIKey: %s"
              % (user_backupKeyDirectory, validateAPIKey))
 logger.debug("allowGitForUpdating: %s ; showAlertsOnSummary: %s"
              % (allowGitForUpdating, showAlertsOnSummary))
-logger.debug("user_alertsEUiterations: %s ; user_alertsUSiterations: %s"
-             % (user_alertsEUiterations, user_alertsUSiterations))
-logger.debug("user_radarImageSize: %s ; showUpdaterReleaseNotes: %s"
-             % (user_radarImageSize, showUpdaterReleaseNotes))
 logger.debug("showUpdaterReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: %s"
              % (showUpdaterReleaseNotes_uptodate, showNewVersionReleaseDate))
+logger.debug("showUpdaterReleaseNotes: %s" %
+             (showUpdaterReleaseNotes))
 
 logger.info("Setting gif x and y resolution for radar...")
 # Set the x/y resolution of the .gif files for the experimental radar.

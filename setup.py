@@ -82,10 +82,6 @@ except KeyError:
         config['UPDATER']['show_updaterreleasetag'] = 'False'
         config['KEYBACKUP']['savedirectory'] = 'backup//'
         config['UPDATER']['allowGitForUpdating'] = 'False'
-        config['VERSIONS']['overrideVersion'] = 'False'
-        config['SUMMARY']['showAlertsOnSummary'] = 'True'
-        config['UI']['alerts_EUiterations'] = '2'
-        config['UI']['alerts_USiterations'] = '1'
         config['PYWEATHER BOOT']['validateapikey'] = 'True'
         config['UPDATER']['showReleaseNotes'] = 'True'
         config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
@@ -161,10 +157,6 @@ except KeyError:
         config['UPDATER']['show_updaterreleasetag'] = 'False'
         config['KEYBACKUP']['savedirectory'] = 'backup//'
         config['UPDATER']['allowGitForUpdating'] = 'False'
-        config['VERSIONS']['overrideVersion'] = 'False'
-        config['SUMMARY']['showAlertsOnSummary'] = 'True'
-        config['UI']['alerts_EUiterations'] = '2'
-        config['UI']['alerts_USiterations'] = '1'
         config['PYWEATHER BOOT']['validateapikey'] = 'True'
         config['UPDATER']['showReleaseNotes'] = 'True'
         config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
@@ -737,8 +729,8 @@ input()
 print("Please input your API key below.")
 apikey_input = input("Input here: ")
 logger.debug("apikey_input: %s" % apikey_input)
-print("Just to confirm, the API key you gave me was: " + apikey_input
-      + ".")
+print("", "Just to confirm, the API key you gave me was: " + apikey_input
+      + ".", sep="\n")
 print("Please double check your input, and confirm in the dialogue below.")
 apikey_confirm = input("Is the API key right? Yes or no: ").lower()
 logger.debug("apikey_confirm: %s" % apikey_confirm)
@@ -768,12 +760,13 @@ with open("storage//apikey.txt", 'a') as out:
     out.close()
     logger.debug("Performed ops: overwrite apikey.txt, out.write(apikey_input), out.close()")
    
-print("I can also back up your API key, in case you do something wrong.")
+print("", "I can also back up your API key, in case you do something wrong.",
+      sep="\n")
 # A future release should bring customization as to the storage location.
 print("Would you like me to save a backup? Yes or no.")
 backup_APIkey = input("Input here: ").lower()
 if backup_APIkey == "yes":
-    print("Where would you want me to backup the key to?",
+    print("","Where would you want me to backup the key to?",
         "This is a directory. If I wanted my key at directory/backkey.txt,",
           "You would enter 'directory//'. The default directory is 'backup//'.", sep="\n")
     # Doing a .lower() here to prevent case insensitiveness.
@@ -785,11 +778,12 @@ if backup_APIkey == "yes":
         open(folder_argument, 'a').write(apikey_input)
         open(folder_argument).close()
         config['KEYBACKUP']['savedirectory'] = backup_APIkeydir
-        print("Backup successful!")
+        print("The API key was backed up successfully!")
         logger.debug("Performed 3 ops. Overwrite "+ folder_argument + "backkey.txt, write to backkey.txt" + 
                      ", and close backkey.txt.")
     except:
-        print("Could not find the location you wanted. Defaulting on the normal directory...")
+        print("The directory you wanted to put your backup in was invalid.",
+              "Defaulting to the default directory of backup//...")
         printException_loggerwarn()
         print("Creating a backup...")
         open("backup//backkey.txt", 'w+').close()
