@@ -613,6 +613,18 @@ logger.debug("location2: %s ; Location2.city: %s ; Location2.state: %s" % (locat
 logger.info("End 2nd geolocator...")
 logger.info("Start parsing...")
 
+# Check if the reverse geolocator has an invalid location
+
+if (location2.state == "None" or location2.city == "None"):
+    logger.warn("Geolocator had an invalid location! Cannot proceed.")
+    print(Fore.RED + "PyWeather ran into an error with the reverse geolocator.",
+          "An unexpected, and random error occurred when trying to use Google's",
+          "reverse geocoder, and as such, PyWeather cannot proceed. Try to look",
+          "up the weather for the location you wanted in about 2-4 minutes.",
+          "(please do not report this issue to GitHub, it's a known issue!)",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
 
 
 # Parse the current weather!

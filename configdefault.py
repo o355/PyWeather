@@ -18,7 +18,7 @@ except:
         out.close()
         
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('storage//config.ini')
     
 try:
     configprovisioned = config.getboolean('USER', 'configprovisioned')

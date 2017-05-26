@@ -1213,7 +1213,13 @@ try:
     logger.debug("testlocation3: %s" % testlocation3)
     logger.debug("testlocation3.city: %s ; testlocation3.state: %s" %
                  (testlocation3.city, testlocation3.state))
-    print("Yay! The connection to the reverse geocoder works.")
+    if (testlocation3.state == "None" or testlocation3.city == "None"):
+        logger.warn("Geolocator had an invalid location! A random error.")
+        print("", "WARNING: The reverse geocoder had an invalid location. This is",
+              "a known issue, and can occur at random. Please wait 2-4 minutes after",
+              "you're done with PyWeather Setup before you use PyWeather.")
+    else:
+        print("Yay! The connection to the reverse geocoder works.")
 except:
     logger.warn("Couldn't connect to Google's geocoder. No internet?")
     print("When attempting to test the connection to Google's geocoder,",
