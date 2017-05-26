@@ -236,10 +236,10 @@ else:
 logger.debug("Listing configuration options:")
 logger.debug("verbosity: %s ; jsonVerbosity: %s" %
              (verbosity, jsonVerbosity))
-logger.debug("tracebacksEnabled: %s ; overrideVersion: %s" %
-             (tracebacksEnabled, overrideVersion))
 logger.debug("overrideBuildNumber: %s ; overrideVersionText: %s" %
              (overrideBuildNumber, overrideVersionText))
+logger.debug("tracebacksEnabled: %s" %
+             (tracebacksEnabled))
 
 print("Welcome to PyWeather setup.",
       "This is meant to run as a one-time program, when you first get PyWeather.","",
