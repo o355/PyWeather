@@ -52,9 +52,6 @@ try:
     showReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'updater_tracebacks')
     allowGitForUpdating = config.getboolean('UPDATER', 'allowGitForUpdating')
-    overrideVersion = config.getboolean('VERSIONS', 'overrideVersion')
-    overrideBuildNumber = config.getint('VERSIONS', 'overrideBuildNumber')
-    overrideVersionText = config.get('VERSIONS', 'overrideVersionText')
     showReleaseNotes = config.getboolean('UPDATER', 'showReleaseNotes')
     showReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
@@ -69,9 +66,6 @@ except:
     showReleaseTag = False
     tracebacksEnabled = False
     allowGitForUpdating = False
-    overrideVersion = False
-    overrideBuildNumber = 52.1
-    overrideVersionText = "0.5.2.1 beta"
     showReleaseNotes = True
     showReleaseNotes_uptodate = False
     showNewVersionReleaseDate = True
@@ -104,20 +98,13 @@ logger.debug("verbosity: %s ; jsonVerbosity: %s" %
              (verbosity, jsonVerbosity))
 logger.debug("showReleaseTag: %s ; tracebacksEnabled: %s" %
              (showReleaseTag, tracebacksEnabled))
-logger.debug("overrideVersion: %s ; overrideBuildNumber: %s" %
-             (overrideVersion, overrideBuildNumber))
-logger.debug("overrideVersionText: %s ; showReleaseNotes: %s" %
-             (overrideVersionText, showReleaseNotes))
 logger.debug("showReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: %s" %
              (showReleaseNotes_uptodate, showNewVersionReleaseDate))
+logger.debug("showReleaseNotes: %s" %
+             (showReleaseNotes))
 
-if overrideVersion == True:
-    logger.info("Overriding version info.")
-    buildnumber = overrideBuildNumber
-    buildversion = overrideVersionText
-else:    
-    buildnumber = 52.1
-    buildversion = "0.5.2.1 beta"
+buildnumber = 60
+buildversion = "0.6 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))

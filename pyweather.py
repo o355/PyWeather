@@ -24,8 +24,6 @@ import geocoder
 import os
 from random import randint
 from geopy import GoogleV3
-# Sue me for using appjar
-from appJar import gui
 geolocator = GoogleV3()
 
 # Try loading the versioninfo.txt file. If it isn't around, create the file with
@@ -108,9 +106,6 @@ except:
     validateAPIKey = True
     allowGitForUpdating = False
     showAlertsOnSummary = True
-    user_alertsEUiterations = 2
-    user_alertsUSiterations = 1
-    user_radarImageSize = "normal"
     showUpdaterReleaseNotes = True
     showUpdaterReleaseNotes_uptodate = False
     showNewVersionReleaseDate = True
@@ -154,26 +149,26 @@ logger.debug("showUpdaterReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: 
 logger.debug("showUpdaterReleaseNotes: %s" %
              (showUpdaterReleaseNotes))
 
-logger.info("Setting gif x and y resolution for radar...")
+#logger.info("Setting gif x and y resolution for radar...")
 # Set the x/y resolution of the .gif files for the experimental radar.
-if user_radarImageSize == "extrasmall":
-    radar_gifx = "320"
-    radar_gify = "240"
-elif user_radarImageSize == "small":
-    radar_gifx = "480"
-    radar_gify = "360"
-elif user_radarImageSize == "normal":
-    radar_gifx = "640"
-    radar_gify = "480"
-elif user_radarImageSize == "large":
-    radar_gifx = "960"
-    radar_gify = "720"
-elif user_radarImageSize == "extra large":
-    radar_gifx = "1280"
-    radar_gify = "960"
-else:
-    radar_gifx = "640"
-    radar_gify = "480"
+#if user_radarImageSize == "extrasmall":
+#    radar_gifx = "320"
+#    radar_gify = "240"
+#elif user_radarImageSize == "small":
+#    radar_gifx = "480"
+#    radar_gify = "360"
+#elif user_radarImageSize == "normal":
+#    radar_gifx = "640"
+#    radar_gify = "480"
+#elif user_radarImageSize == "large":
+#    radar_gifx = "960"
+#    radar_gify = "720"
+#elif user_radarImageSize == "extra large":
+#    radar_gifx = "1280"
+#    radar_gify = "960"
+#else:
+#    radar_gifx = "640"
+#    radar_gify = "480"
 
 logger.info("Defining exception functions...")
 
@@ -249,12 +244,8 @@ logger.debug("apikey = %s" % apikey)
 
 # Version info gets defined here.
 
-if overrideVersion == True:
-    buildnumber = overrideBuildNumber
-    buildversion = overrideVersionText
-else:
-    buildnumber = 60
-    buildversion = '0.6 beta'    
+buildnumber = 60
+buildversion = '0.6 beta'    
 
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")
@@ -275,7 +266,7 @@ if checkforUpdates == True:
         input()
         sys.exit()
     # Parse all the lovely .json info.
-    versionJSON = json.load(reader2(versioncheck))
+    versionJSON = json.loads(versioncheck.text)
     version_buildNumber = float(versionJSON['updater']['latestbuild'])
     logger.debug("reader2: %s ; versioncheck: %s" %
                  (reader2, versioncheck))
@@ -419,7 +410,7 @@ if validateAPIKey == False and backupKeyLoaded == True:
         sys.exit()
     if verbosity == False:
         print("[##--------] | 9% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    test_json = json.load(reader(testJSON))
+    test_json = json.loads(testJSON.text)
     if jsonVerbosity == True:
         logger.debug("test_json: %s" % test_json)
     try:
@@ -449,7 +440,7 @@ if validateAPIKey == False and backupKeyLoaded == True:
                 sys.exit()
             if verbosity == False:
                 print("[##--------] | 12% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-            test_json = json.load(reader(testJSON))
+            test_json = json.loads(testJSON.text)
             if jsonVerbosity == True:
                 logger.debug("test_json: %s" % test_json)
             try:
@@ -2514,7 +2505,7 @@ while True:
                              % (historical_totalloops, historicalhourlyLoops))
                              
             if user_showCompletedIterations == True:
-                print(Fore.RED + "Completed iterations: " + Fore.CYAN + "%s/%s"
+                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s"
                       % (historical_totalloops, historicalhourlyLoops))
                 print(Fore.RESET)
                 

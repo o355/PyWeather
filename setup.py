@@ -199,9 +199,6 @@ try:
     verbosity = config.getboolean('VERBOSITY', 'setup_verbosity')
     jsonVerbosity = config.getboolean('VERBOSITY', 'setup_jsonverbosity')
     tracebacksEnabled = config.getboolean('TRACEBACK', 'setup_tracebacks')
-    overrideVersion = config.getboolean('VERSIONS', 'overrideVersion')
-    overrideBuildNumber = config.getfloat('VERSIONS', 'overrideBuildNumber')
-    overrideVersionText = config.get('VERSIONS', 'overrideVersionText')
 except:
     print("Couldn't load your config file. Make sure there aren't any typos",
           "in the config, and that the config file is accessible.",
@@ -211,9 +208,6 @@ except:
     verbosity = False
     jsonVerbosity = False
     tracebacksEnabled = False
-    overrideVersion = False
-    overrideBuildNumber = 52.1
-    overrideVersionText = "0.5.2.1 beta"
     
 def printException():
     if tracebacksEnabled == True:
@@ -258,13 +252,9 @@ import time
 import json
 import codecs
 
-if overrideVersion == True:
-    logger.info("Overriding version info...")
-    buildnumber = overrideBuildNumber
-    buildversion = overrideVersionText
-else:
-    buildnumber = 52.1
-    buildversion = "0.5.2.1 beta"
+
+buildnumber = 60
+buildversion = "0.6 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
