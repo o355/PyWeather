@@ -9,7 +9,7 @@ import sys
 import configparser
 import traceback
 
-versioninfo = open("versioninfo.txt")
+versioninfo = open("updater//versioninfo.txt")
 versioninfo = versioninfo.read()
 
 if versioninfo == "0.6 beta":
