@@ -78,6 +78,8 @@ if cd_confirmation == "yes":
     logger.debug("SUMMARY/sundata_summary is now 'False'.")
     config['SUMMARY']['almanac_summary'] = 'False'
     logger.debug("SUMMARY/almanac_summary is now 'False'.")
+    config['SUMMARY']['showAlertsOnSummary'] = 'True'
+    logger.debug("SUMMARY/showAlertsOnSummary is now 'True'.")
     config['VERBOSITY']['verbosity'] = 'False'
     logger.debug("VERBOSITY/verbosity is now 'False'.")
     config['VERBOSITY']['json_verbosity'] = 'False'

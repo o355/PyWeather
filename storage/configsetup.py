@@ -44,6 +44,7 @@ if cd_confirmation == "yes":
     config.add_section('USER')
     config['SUMMARY']['sundata_summary'] = 'False'
     config['SUMMARY']['almanac_summary'] = 'False'
+    config['SUMMARY']['showalertsonsummary'] = 'True'
     config['VERBOSITY']['verbosity'] = 'False'
     config['VERBOSITY']['json_verbosity'] = 'False'
     config['VERBOSITY']['setup_verbosity'] = 'False'
