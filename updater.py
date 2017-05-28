@@ -191,6 +191,7 @@ elif buildnumber < version_buildNumber:
                 try:
                     # Doesn't hurt to stash twice.
                     subprocess.call(["git fetch"], shell=True)
+                    subprocess.call(["git stash"], shell=True)
                     subprocess.call(["git checkout %s" % version_latestReleaseTag],
                                     shell=True)
                     print("Now updating your config file.")

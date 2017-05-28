@@ -1871,6 +1871,7 @@ while True:
                         print("Now updating with Git.")
                         try:
                             subprocess.call(["git fetch"], shell=True)
+                            subprocess.call(["git stash"], shell=True)
                             subprocess.call(["git checkout %s" % version_latestReleaseTag],
                                             shell=True)
                             print("Now updating your config file.")
