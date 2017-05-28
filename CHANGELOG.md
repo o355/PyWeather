@@ -26,6 +26,7 @@ The clever title comes from the addition of alerts, and the gigantic backbone up
 * Fixes for config stashing in regards to Git updating. There's a lot to do, so get a system where we can effectively update a user's config file for a lot of scenarios.
 * Removed support for overriding version information. It won't work with the new updater when it comes to config updating.
 * Adds error catching for a bad geolocator fetch in pyweather.py/setup.py.
+* Minor UI changes.
 
 **BUG FIXES**
 * Fixed a bug where if your backup API key couldn't be found, key validation was entirely skipped. I guess this was intentional, but now your primary key is still validated, but if your backup key couldn't be loaded at first boot, it'll stop before trying to validate a non-existant backup key. 
@@ -54,6 +55,7 @@ The clever title comes from the addition of alerts, and the gigantic backbone up
 * Adds the ability to override the version number defined in PyWeather. This was done for debugging reasons.
 * PyWeather is now using requests to get the API .json files, in favor of better reliability.
 * Made error messages less vague. Hurray?
+* Minor UI changes.
 
 **BUG FIXES**
 * Fixed a bug in which if tracebacks were enabled in the updater, the tracebacks wouldn't print properly, as such, producing a traceback. Huh.
@@ -73,7 +75,7 @@ The clever title comes from the addition of alerts, and the gigantic backbone up
 * Adds a check for "None" in of rain in the 10-day forecast, and -999 mph winds in the 10-day forecast on the current day.
 * Rewrites multiline prints in setup.py (thanks to @gsilvapt for the PR/notifing me of the issue, and @Rhomboid on /r/learnpython for a good solution).
 * Adds the configdefault.py script, to reset all configuration options to their default.
-* Minor UI changes across most of the scripts.
+* Minor UI changes.
 
 **BUG FIXES:**
 * Fixed a bug in which if the config file wouldn't load in the updater, the variable showReleaseTag wouldn't get defined, and it would presumably crash.
@@ -120,6 +122,7 @@ The clever title comes from the addition of alerts, and the gigantic backbone up
 * Fixes a bug in which sunset/sunrise times would show 6:0, when it was really 6:00, etc.
 * Fixes a bug in which if the sun/moon data or almanac data wasn't prefetched on summary, in the detailed view, every time a user viewed the data, a new API call was made.
 * Cleans up some legacy code.
+* Minor UI changes.
 
 ## version 0.4.1 beta - Released 3/8/2017
 * Fixes a bug in which detailed sun/moon data wouldn't get shown
@@ -128,13 +131,14 @@ The clever title comes from the addition of alerts, and the gigantic backbone up
 * Fully implements almanac on the summary screen
 * Fully implements the config
 * Fixes a variety of smaller bugs
+* Minor UI changes
 
 ## version 0.4 beta (The Astronomy Update) - Released 3/4/2017
 * Adds the almanac to PyWeather
 * Adds sunrise/sunset data to PyWeather
 * Mostly adds a config file to PyWeather
 * Adds a separate updater to update PyWeather
-* UI changed some (wow)
+* Minor UI changes
 * Fixed bugs
 
 ## version 0.3.3 beta (The "Relapse of 0.2.3" Update) - Released 3/2/2017
@@ -145,7 +149,7 @@ The clever title comes from the addition of alerts, and the gigantic backbone up
 * Adds verbosity to the updater
 * Adds verbosity to setup
 * Improves the updater some
-* Minor UI improvements
+* Minor UI changes
 
 ## version 0.3.1 beta (The Updater Update) - Released 2/27/2017
 * Adds an updater to PyWeather to check for the latest updates, and download them
