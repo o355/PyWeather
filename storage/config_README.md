@@ -187,6 +187,7 @@ This isn't a default in the code due to the pros/cons of using each method.
 This section controls stuff that goes on when PyWeather boots.
 
 ### validateapikey
+**Available in PyWeather 0.6 beta and above**
 This option allows for PyWeather to validate your primary API key (stored at storage//apikey.txt), and make sure the key is valid.
 
 PyWeather will try to open the file, fetch a test JSON, and validate the primary key. If the key is valid, everything continues. If the key isn't valid, PyWeather will attempt to load a backup key (with the directory specified in the config), and vertify that. If it's verified, variables are changed, and PW continues on. 
