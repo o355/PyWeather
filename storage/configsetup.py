@@ -17,6 +17,7 @@ print("Would you like me to set up PyWeather's config?",
 cd_confirmation = input("Input here: ").lower()
 if cd_confirmation == "yes":
     try:
+        traceback.print_exc()
         provisioned = config['USER']['configprovisioned']
         print("Your config file is already provisioned! Would you still",
               "like to have your config provisioned?", 
