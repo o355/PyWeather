@@ -2,9 +2,9 @@
 Viewing the weather in a terminal has never been so much fun.
 
 ## Development notice:
-PyWeather progress is slow. Am I getting bored of developing Python? No. Am I busy? Yes.
+I'll be taking a ~3 week hiatus from PyWeather development, thanks to tests. I really wanted to squeak out 0.6 beta before I took a hiatus.
 
-PyWeather 0.6 beta is now scheduled for release on May 27, and is more of an under-the-hood release. Yes, some cool new features are here, but the backbone of PyWeather has been significantly changed.
+I'll be back at the end of mid-June for serious PyWeather development. Until then, expect sporadic development.
 
 ## Download/Setup
 You can download PyWeather by visiting the releases tab, and getting the latest zip.
@@ -13,24 +13,17 @@ You can also use git to download PyWeather, using the commands below.
 
 ```
 git clone https://github.com/o355/pyweather.git
-git checkout 0.5.2.1 beta (if you want indev code, don't perform this command)
+git checkout 0.6-beta (if you want indev code, don't perform this command)
 ```
 After that, run setup.py, and the setup file will guide you through setting up PyWeather. After that, run pyweather.py, and enjoy the magic of PyWeather! It's as easy as that.
 
 ## What's PyWeather?
 PyWeather was an idea born out of a need for a few things in a terminal weather script.
-1. Accurate data (No OpenWeatherMap)
-2. Lots, and lots of data.
-3. Simplicity. No arguments, no libraries, no hard and confusing setups.
+1. No arguments. Most of the stuff I came across on GitHub were command-line utilities, but I wanted a script!
+2. Accurate weather data. Some scripts use OpenWeatherMap, which in past experience, was inaccurate.
+3. Simplicity! Most of the scripts I found were made with the open-mind that you knew how to acquire a Wunderground API key, and follow the tedious steps to get it (or something like that).
 
 I couldn't find a script that like on GitHub, so I made my own. And look what it turned into...
-
-## A brief history
-For PyWeather 0.0.1 beta, I decided to use a premade library from Dark Sky to use to fetch weather. This was before PyWeather went public (or else I'd violate Dark Sky's ToS! woo!)
-
-By PyWeather 0.0.3 beta? I guess, I had current data. Forecast data was next and woah! Raw data? No one likes that!
-
-For PyWeather 0.1 beta? Yeah, okay, sure, I began using Wunderground's API to parse raw .jsons. I mean, look at PyWeather 0.2 beta! Look how far it's come!
 
 ## What kind of features are in PyWeather?
 Want screenshots? https://imgur.com/a/n7L8B
@@ -48,14 +41,17 @@ Even though PyWeather is in beta, it can presently do a lot. Here's what you can
 * The almanac
 * Sunrise/sunset/moonrise/moonset/moon data
 * Historical data
+* Alerts data
 
-Through the magic of typing, these features will eventually work their way into PyWeather!
-* Alerts data - Coming in 0.6 beta
+Through the magic of typing, these features will eventually work their way into PyWeather.
 * Radar/satellite data (experimental, for now) - Coming in 0.6.1 beta
 * "Yesterday's weather" - I don't have a delorean - Coming in 0.6.2 beta
 * Tide data - Coming in 0.7 beta
 * Hurricane data - Coming in 0.7 beta
 * PWS mode/data - Coming in 0.7.1 beta
+* Raw tide data - Coming in 0.7.2 beta
+* Webcams - Coming in 0.8 beta
+* A historical "planner" - Coming in 0.8.1 beta - With these release, I would have effectively used every feature there is in the Wunderground API.
 
 But that's just half the story. I've also baked in loads of other features, too!
 * An easy setup! You can set PyWeather up (including getting an API key!) easily!
