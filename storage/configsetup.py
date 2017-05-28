@@ -125,7 +125,7 @@ if cd_confirmation == "yes":
     config['USER']['configprovisioned'] = 'True'
     print("Committing changes...")
     try:
-        with open('storage//config.ini', 'w') as configfile:
+        with open('config.ini', 'w') as configfile:
             config.write(configfile)
     except:
         print("Hmmf...an odd error occurred. A full traceback will be",

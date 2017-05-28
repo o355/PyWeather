@@ -292,7 +292,7 @@ if checkforUpdates == True:
 logger.info("Defining about variables...")
 about_buildnumber = "60"
 about_version = "0.6 beta"
-about_releasedate = "TBD"
+about_releasedate = "May 27, 2017"
 about_maindevelopers = "o355"
 logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))
@@ -913,8 +913,6 @@ while True:
     print(Fore.YELLOW + "- View detailed hourly data - Press " + Fore.CYAN + "2")
     print(Fore.YELLOW + "- View the 10 day hourly forecast - Press " + Fore.CYAN + "3")
     print(Fore.YELLOW + "- View the 10 day forecast - Press " + Fore.CYAN + "4")
-    # Temporarily 11 when in development.
-    print(Fore.YELLOW + "- View radar/satellite data - Press " + Fore.CYAN + "11")
     print(Fore.YELLOW + "- View the almanac for today - Press " + Fore.CYAN + "5")
     print(Fore.YELLOW + "- View historical weather data - Press " + Fore.CYAN + "6")
     print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Press " + Fore.CYAN + "7")
@@ -2536,21 +2534,24 @@ while True:
                         logger.info("Breaking to main menu, user issued KeyboardInterrupt")
                         break         
     elif moreoptions == "9":
-        print("", Fore.YELLOW + "--- PyWeather ---",
-              Fore.CYAN + "Version " + about_version, "",
+        logger.debug("moreoptions: %s" % moreoptions)
+        print("", Fore.YELLOW + "-=-=- " + Fore.CYAN + "PyWeather" + Fore.YELLOW + " -=-=-",
+              Fore.CYAN + "version " + about_version, "",
               Fore.YELLOW + "Build Number: " + Fore.CYAN + about_buildnumber,
               Fore.YELLOW + "Release Date: " + Fore.CYAN + about_releasedate,
               Fore.YELLOW + "Release Type: " + Fore.CYAN + about_releasetype,
               "",
-              Fore.YELLOW + "Main Developers: " + Fore.CYAN + about_maindevelopers,
+              Fore.YELLOW + "Created, and mostly coded by: " + Fore.CYAN + about_maindevelopers,
               Fore.YELLOW + "Contributors: " + Fore.CYAN + about_contributors,
               Fore.YELLOW + "A special thanks to the developers of these libraries",
               "that are used in PyWeather: " + Fore.CYAN,
               about_librariesinuse + Fore.RESET, sep="\n")        
     elif moreoptions == "tell me a joke":
+        logger.debug("moreoptions: %s" % moreoptions)
         # Jokes from searching "weather jokes" on DuckDuckGo (the first option)
         # They're jokes for kids.
         jokenum = randint(0,12)
+        logger.debug("jokenum: %s" % jokenum)
         print("")
         if jokenum == 0:
             print("How do hurricanes see?",
