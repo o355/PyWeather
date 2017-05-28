@@ -1,4 +1,4 @@
-# PyWeather Updater - version 0.6w beta
+# PyWeather Updater - version 0.6 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 
@@ -22,7 +22,7 @@ config.read('storage//config.ini')
 # the present version info.
 
 try:
-    versioninfo = open('updater//versioninfo.txt')
+    versioninfo = open('updater//versioninfo.txt').close()
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
@@ -72,7 +72,7 @@ except:
     
     
 import logging
-logger = logging.getLogger(name='pyweather_updater_0.5.2.1beta')
+logger = logging.getLogger()
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 

@@ -1,4 +1,4 @@
-# PyWeather Setup - version 0.5.2.1 beta
+# PyWeather Setup - version 0.6 beta
 # (c) 2017, o355, licensed under GNU GPL v3
 
 # Same deal as the main script.
@@ -221,7 +221,7 @@ def printException_loggerwarn():
         
     
 import logging
-logger = logging.getLogger(name='pyweather_setup_0.5.2.1beta')
+logger = logging.getLogger(name='pyweather_setup_0.6beta')
 logger.setLevel(logging.DEBUG)
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)

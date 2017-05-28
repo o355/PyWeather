@@ -30,7 +30,7 @@ geolocator = GoogleV3()
 # the present version info.
 
 try:
-    versioninfo = open('updater//versioninfo.txt')
+    versioninfo = open('updater//versioninfo.txt').close()
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
@@ -187,8 +187,9 @@ def printException_loggerwarn():
         
 logger.info("Defining requests classes...")
 
-# This is no more.
-urlheader = {'user-agent': 'pyweather-0.5.2beta/apifetch'}
+# It'll eventually come as an optional "show your support for PyWeather with
+# a custom user agent" sorta thing later.
+urlheader = {'user-agent': 'pyweather-0.6beta/apifetcher'}
 
 logger.debug("Begin API keyload...")
 # Load the API key.

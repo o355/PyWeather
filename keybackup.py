@@ -1,4 +1,4 @@
-# PyWeather API Key Backup - version 0.5.2.1 beta
+# PyWeather API Key Backup - version 0.6 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 import configparser
@@ -50,7 +50,7 @@ except:
     saveDirectory = 'backup//backkey.txt'
     tracebacksEnabled = False
 
-logger = logging.getLogger(name='pyweather_keybackup_0.5.2beta')
+logger = logging.getLogger(name='pyweather_keybackup_0.6beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 

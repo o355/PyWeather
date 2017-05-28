@@ -11,7 +11,8 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds an experimental radar to PyWeather.
 * Adds error checking for the requests library at boot for all scripts.
 * Finally, some OOP programming comes to PyWeather! Config updates will now be handled by a module.
-* Adds a config folder for all the config stuff to 
+* Adds a config folder for all the config stuff to live in.
+
 
 ## version 0.6 beta - Should be released on 5/28/2017 - Now in QA testing.
 * Adds an "About" page to PyWeather. - 100% done, and tested!

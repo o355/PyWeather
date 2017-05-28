@@ -46,7 +46,7 @@ except:
     verbosity = False
     tracebacksEnabled = False
     
-logger = logging.getLogger(name='pyweather_configdefault_0.5.2beta')
+logger = logging.getLogger(name='pyweather_configdefault_0.6beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
