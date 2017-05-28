@@ -1874,7 +1874,7 @@ while True:
                             subprocess.call(["git checkout %s" % version_latestReleaseTag],
                                             shell=True)
                             print("Now updating your config file.")
-                            exec(open("updater//configupdate.py").open())
+                            exec(open("configupdate.py").open())
                             print("PyWeather has been updated to version %s." % version_latestReleaseTag,
                                   "To finish the update, PyWeather has to exit.",
                                   "Press enter to exit.", sep="\n")
