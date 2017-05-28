@@ -224,7 +224,7 @@ except FileNotFoundError:
 if validateAPIKey == True:
     # If the primary API key is valid, and got through the check,
     # this is here for those who validate their API key, and making sure
-    # we can find their bacakup key.
+    # we can find their backup key.
     logger.info("Making sure the backup key can be found.")
     try:
         apikey2_load = open(user_backupKeyDirectory + "backkey.txt")
@@ -293,7 +293,7 @@ if checkforUpdates == True:
 logger.info("Defining about variables...")
 about_buildnumber = "60"
 about_version = "0.6 beta"
-about_releasedate = "May 27, 2017"
+about_releasedate = "May 28, 2017"
 about_maindevelopers = "o355"
 logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))

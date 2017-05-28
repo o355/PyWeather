@@ -1,14 +1,17 @@
-## PyWeather Configuration Readme - For PyWeather 0.5.2.1 beta
+## PyWeather Configuration Readme - For PyWeather 0.5.2.1/0.6 beta
 Since configparser hates comments, this will do for now.
+
+Quick notice: This little readme will get an overhaul soon, but that overhaul requires me to look through old versions of PyWeather, to see what configuration options appeared when. That takes time.
 
 ## CHANGELOG
 ### forversion
-**This option was depreciated in PyWeather 0.6 beta.**
+**Available in PyWeather ? beta - 0.5.2.1 beta**
+
 This is just to show you what version the config file is meant to be used for.
 
 Changing this does nothing.
 
-**Default option: 0.5.2.1**
+**Default option: The version of PyWeather you're running**
 
 ## SUMMARY section
 ### sundata_summary
@@ -18,12 +21,21 @@ If this option is enabled, PyWeather may take a bit longer to start up, and will
 
 **Default option: False**
 
-###almanac_summary
+### almanac_summary
 This option will let you turn on/off PyWeather showing almanac data on startup.
 
 If this option is enabled, PyWeather may take a bit longer to start up, and will use 1 more API call at start.
 
 **Default option: False**
+
+### showAlertsOnSummary
+**Available in PyWeather 0.6 beta and above**
+
+This option will let you turn on/off PyWeather showing you alerts on the summary screen.
+
+This is on by default, but if you mainly search for non US/EU locations, you might want to turn this off, as you do use one API call at boot when this option is enabled.
+
+**Default option: True**
 
 ## VERBOSITY section
 PyWeather can give you extra information across all scripts, to help debug problems.
@@ -218,7 +230,7 @@ When doing this, custom changes to your config file will be overwritten. PyWeath
 **Default option: False**
 
 ## RADAR GUI section
-**This section was depreciated in PyWeather 0.6 indev.**
+**Available in PyWeather 0.6 indev, and PyWeather 0.6.1 beta and above**
 This section controls the GUI for displaying radar and other images.
 
 ### gifsize
@@ -255,7 +267,7 @@ You can save it anywhere in PyWeather's folder. However, you'll want to take not
 **Default option: backup//**
 
 ## VERSIONS section
-**This section was depreciated in PyWeather 0.6 beta.**
+**Available in PyWeather ? beta - PyWeather 0.5.2.1 beta**
 This section controls version overriding, mainly for debugging reasons.
 
 ### overrideVersion
@@ -285,3 +297,15 @@ If a criticial hotfix needs to be applied (e.g. 0.5.2.1), the build number in su
 This option lets you control the version text that is visible to the user (when showing "PyWeather is out of date, you have version <version>, etc). This option is a string, you can put whatever you want here, if you so desire.
 
 **Default option: 0.5.2.1 beta**
+
+## USER section
+**Available in PyWeather 0.6 beta and above**
+
+An explaination isn't needed.
+
+### configprovisioned
+This option controls if your config file is provisioned. This mainly does nothing, as this section/option is used to rat out an unprovisioned config.
+
+Changing this should do nothing, but keep it True just to be safe.
+
+**Default option: True**

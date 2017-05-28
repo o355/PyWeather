@@ -5,24 +5,27 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 ## version 0.6.2 beta - Should be released in August
 * Adds the yesterday's weather feature.
 * Hopefully adding the config updates to be completed by a simple module import.
+* Adds the option to turn on a custom user agent. Cool, right?
 
 ## version 0.6.1 beta - Should be released in July
 * Adds some form of a cache to PyWeather, so that after a set time, PyWeather will renew weather data when looking at detailed information. The exact implementation of this isn't set in stone.
 * Adds an experimental radar to PyWeather.
 * Adds error checking for the requests library at boot for all scripts.
-* Finally, some OOP programming comes to PyWeather! Config updates will now be handled by a module.
+* Finally, some OOP programming comes to PyWeather! Config updates will now be handled by a module. - This is not set in stone as a new feature, and may get scrapped at any time.
 * Adds a config folder for all the config stuff to live in.
 
+## version 0.6 beta (The "Alerts to change the PyWeather backbone" Update) - Released on 5/28/2017
+The clever title comes from the addition of alerts, and the gigantic backbone update too.
 
-## version 0.6 beta - Should be released on 5/28/2017 - Now in QA testing.
-* Adds an "About" page to PyWeather. - 100% done, and tested!
-* Adds alerts information to PyWeather, including (of course) the ability to turn it on and off. - Done, and tested!
-* Adds the option to show release notes through the updater. - Done, and tested!
-* Adds the option to view when the next release should be dropping through the updater. - Done, and tested.
-* The "What would you like to do now" menu will get switched to only a number-based input. - 100% done, not tested (This was done early to set the stage for the rest of 0.6 beta)
-* Fixes for config stashing in regards to Git updating. There's a lot to do, so get a system where we can effectively update a user's config file for a lot of scenarios. - Basic testing (provisioning config, etc.) works.
-* Removed support for overriding version information. It won't work with the new updater when it comes to config updating. - Done, and tested!
-* Adds error catching for a bad geolocator fetch in pyweather.py/setup.py. - Done, and tested!
+**NEW ALERTS/REMOVALS**
+* Adds an "About" page to PyWeather.
+* Adds alerts information to PyWeather, including (of course) the ability to turn it on and off.
+* Adds the option to show release notes through the updater.
+* Adds the option to view when the next release should be dropping through the updater.
+* The "What would you like to do now" menu will get switched to only a number-based input.
+* Fixes for config stashing in regards to Git updating. There's a lot to do, so get a system where we can effectively update a user's config file for a lot of scenarios.
+* Removed support for overriding version information. It won't work with the new updater when it comes to config updating.
+* Adds error catching for a bad geolocator fetch in pyweather.py/setup.py.
 
 **BUG FIXES**
 * Fixed a bug where if your backup API key couldn't be found, key validation was entirely skipped. I guess this was intentional, but now your primary key is still validated, but if your backup key couldn't be loaded at first boot, it'll stop before trying to validate a non-existant backup key. 
