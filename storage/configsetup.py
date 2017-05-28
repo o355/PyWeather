@@ -4,10 +4,22 @@
 import sys
 import configparser
 import traceback
+import os
 
 config = configparser.ConfigParser()
 config.read("config.ini")
 
+# Check our working directory. This script can't work in the base PyWeather folder.
+
+if "/pyweather/storage" in os.getcwd():
+    cool = True
+else:
+    print("Whoops! You're running this script from PyWeather's base folder, but",
+          "the script can't work when running from the base folder of PyWeather.",
+          "Move into the storage folder, and run the script there.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
 # Verbosity and all that fun stuff isn't available here.
 # If the config isn't set up, and by default, verbosity is off
 # why should I code it in?
