@@ -308,10 +308,10 @@ logger.debug("about_librariesinuse: %s" % about_librariesinuse)
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
-print("Welcome to PyWeather!")
-print("Below, enter a location to get weather information for!")
+print("Hey! Welcome to PyWeather!")
+print("Below, enter a location to check the weather for that location!")
 locinput = input("Input here: ")
-print("Fetching the weather, so give me a few seconds!")
+print("Checking the weather, it'll take a few seconds!")
 
 
 # Start the geocoder. If we don't have a connection, exit nicely.
