@@ -7,7 +7,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Hopefully adding the config updates to be completed by a simple module import.
 * Adds the option to turn on a custom user agent. Cool, right?
 
-## version 0.6.1 beta - Should be released in July
+## version 0.6.1 beta - Should be released on July 15, 2017 (preliminary)
 * Adds some form of a cache to PyWeather, so that after a set time, PyWeather will renew weather data when looking at detailed information. The exact implementation of this isn't set in stone.
 * Adds an experimental radar to PyWeather.
 * Adds error checking for the requests library at boot for all scripts.
