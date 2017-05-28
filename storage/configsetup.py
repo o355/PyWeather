@@ -17,7 +17,6 @@ print("Would you like me to set up PyWeather's config?",
 cd_confirmation = input("Input here: ").lower()
 if cd_confirmation == "yes":
     try:
-        traceback.print_exc()
         provisioned = config['USER']['configprovisioned']
         print("Your config file is already provisioned! Would you still",
               "like to have your config provisioned?", 
@@ -32,17 +31,57 @@ if cd_confirmation == "yes":
             sys.exit()
     except:
         print("Setting up your config...")
-    config.add_section('CHANGELOG')
-    config.add_section('SUMMARY')
-    config.add_section('VERBOSITY')
-    config.add_section('TRACEBACK')
-    config.add_section('UI')
-    config.add_section('HOURLY')
-    config.add_section('UPDATER')
-    config.add_section('KEYBACKUP')
-    config.add_section('VERSIONS')
-    config.add_section('PYWEATHER BOOT')
-    config.add_section('USER')
+        
+    try:
+        config.add_section('CHANGELOG')
+    except:
+        print("Couldn't add the changelog section.")
+    
+    try:
+        config.add_section('SUMMARY')
+    except:
+        print("Couldn't add the summary section.")
+    
+    try:
+        config.add_section('VERBOSITY')
+    except:
+        print("Couldn't add the verbosity section.")
+        
+    try:
+        config.add_section('TRACEBACK')
+    except:
+        print("Couldn't add the traceback section.")
+        
+    try:
+        config.add_section('UI')
+    except:
+        print("Couldn't add the UI section.")
+        
+    try:
+        config.add_section('HOURLY')
+    except:
+        print("Couldn't add the hourly section.")
+        
+    try:
+        config.add_section('UPDATER')
+    except:
+        print("Couldn't add the updater section.")
+        
+    try:
+        config.add_section('KEYBACKUP')
+    except:
+        print("Couldn't add the keybackup section.")
+    
+    try:
+        config.add_section('PYWEATHER BOOT')
+    except:
+        print("Couldn't add the pyweather boot section.")
+        
+    try:
+        config.add_section('USER')
+    except:
+        print("Couldn't add the user section.")
+        
     config['SUMMARY']['sundata_summary'] = 'False'
     config['SUMMARY']['almanac_summary'] = 'False'
     config['SUMMARY']['showalertsonsummary'] = 'True'
