@@ -1,4 +1,4 @@
-## PyWeather Configuration Readme - For PyWeather 0.5.2.1/0.6 beta
+## PyWeather Configuration Readme - For PyWeather 0.5.2.1/0.6.0.1 beta
 Since configparser hates comments, this will do for now.
 
 Quick notice: This little readme will get an overhaul soon, but that overhaul requires me to look through old versions of PyWeather, to see what configuration options appeared when. That takes time.

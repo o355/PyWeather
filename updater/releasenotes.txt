@@ -1,3 +1,10 @@
+0.6.0.1 beta:
+- Fixes a critical bug where a user couldn't provision their config file 
+when they first downloaded the program.
+- Fixes a critical bug where if a user attempted to use the configuration 
+defaults program, the program didn't properly reset their config file.
+
+0.6 beta:
 - Adds an about page was added to PyWeather.
 - Adds alerts information to PyWeather, but it's only available for
 US/EU locations.
