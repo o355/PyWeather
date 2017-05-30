@@ -695,7 +695,15 @@ if sundata_summary == True:
     SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
     logger.debug("SR_minute: %s ; SR_hour: %s" %
                 (SR_minute, SR_hour))
-    if SR_hour > 12:
+    if SR_hour == 0:
+        logger.debug("Sunrise hour = 0. Prefixing AM, 12-hr correction...")
+        SR_hour = "12"
+        SR_minute = str(SR_minute).zfill(2)
+        sunrise_time = SR_hour + ":" + SR_minute + " AM"
+        logger.debug("SR_hour : %s ; SR_minute: %s" %
+                    (SR_hour, SR_minute))
+        logger.debug("sunrise_time: %s" % sunrise_time)
+    elif SR_hour > 12:
         logger.info("Sunrise time > 12. Starting 12hr time conversion...")
         SR_hour = SR_hour - 12
         SR_hour = str(SR_hour)
@@ -728,7 +736,15 @@ if sundata_summary == True:
     SS_hour = int(astronomy_json['moon_phase']['sunset']['hour'])
     logger.debug("SS_minute: %s ; SS_hour: %s" %
                  (SS_minute, SS_hour))
-    if SS_hour > 12:
+    if SS_hour == 0:
+        logger.debug("Sunset hour = 0. Prefixing AM, 12-hr correction...")
+        SS_hour = "0"
+        SS_minute = str(SS_minute).zfill(2)
+        sunset_time = SS_hour + ":" + SS_minute + " AM"
+        logger.debug("SS_hour: %s ; SS_minute: %s" %
+                    (SS_hour, SS_minute))
+        logger.debug("sunset_time: %s" % sunset_time)
+    elif SS_hour > 12:
         logger.info("Sunset time > 12. Starting 12hr time conversion...")
         SS_hour = SS_hour - 12
         SS_hour = str(SS_hour)
@@ -2194,6 +2210,9 @@ while True:
                 MS_hour = "12"
                 MS_minute = str(MS_minute).zfill(2)
                 moonset_time = MS_hour + ":" + MS_minute + " AM"
+                logger.debug("MS_hour: %s ; MS_minute: %s"
+                             % (MS_hour, MS_minute))
+                logger.debug("moonset_time: %s" % moonset_time)
             elif MS_hour > 12:
                 logger.debug("Moonset hour > 12. Prefixing PM, 12-hr correction...")
                 MS_hour = MS_hour - 12
