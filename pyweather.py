@@ -1,4 +1,4 @@
-# PyWeather - version 0.6 beta
+# PyWeather - version 0.6.0.1 beta
 # (c) 2017 o355, GNU GPL 3.0.
 
 # ==============
@@ -245,8 +245,8 @@ logger.debug("apikey = %s" % apikey)
 
 # Version info gets defined here.
 
-buildnumber = 60
-buildversion = '0.6 beta'    
+buildnumber = 60.1
+buildversion = '0.6.0.1 beta'    
 
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")
@@ -291,9 +291,9 @@ if checkforUpdates == True:
 
 # Define about variables here.
 logger.info("Defining about variables...")
-about_buildnumber = "60"
-about_version = "0.6 beta"
-about_releasedate = "May 28, 2017"
+about_buildnumber = "60.1"
+about_version = "0.6.0.1 beta"
+about_releasedate = "May 29, 2017"
 about_maindevelopers = "o355"
 logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))

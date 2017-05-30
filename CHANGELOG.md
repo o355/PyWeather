@@ -13,6 +13,11 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds error checking for the requests library at boot for all scripts.
 * Finally, some OOP programming comes to PyWeather! Config updates will now be handled by a module. - This is not set in stone as a new feature, and may get scrapped at any time.
 * Adds a config folder for all the config stuff to live in.
+* The PyWeather updater will now try each command. This helps in determining if a user can still update PyWeather using the .zip method.
+
+## version 0.6.0.1 beta - Released on 5/29/2017
+* Fixes a critical bug where a user couldn't provision their config file when they first downloaded the program.
+* Fixes a critical bug where if a user attempted to use the configuration defaults program, the program didn't properly reset their config file.
 
 ## version 0.6 beta (The "Alerts to change the PyWeather backbone" Update) - Released on 5/28/2017
 The clever title comes from the addition of alerts, and the gigantic backbone update too.
@@ -29,7 +34,7 @@ The clever title comes from the addition of alerts, and the gigantic backbone up
 * Minor UI changes.
 
 **BUG FIXES**
-* Fixed a bug where if your backup API key couldn't be found, key validation was entirely skipped. I guess this was intentional, but now your primary key is still validated, but if your backup key couldn't be loaded at first boot, it'll stop before trying to validate a non-existant backup key. 
+* Fixed a bug where if your backup API key couldn't be found, key validation was entirely skipped. I guess this was intentional, but now your primary key is still validated, but if your backup key couldn't be loaded at first boot, it'll stop before trying to validate a non-existent backup key. 
 * Fixed a bug where when running configdefault.py, "PYWEATHER BOOT/validateapikey" wasn't reset to it's default value.
 * Fixed a bug where if you enabled update checking at boot, PyWeather would crash from an old JSON loading definition.
 * Fixed a bug where in historical hourly information, if you had the iteration counter on, it'd print in red.

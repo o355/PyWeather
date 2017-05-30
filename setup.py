@@ -1,4 +1,4 @@
-# PyWeather Setup - version 0.6 beta
+# PyWeather Setup - version 0.6.0.1 beta
 # (c) 2017, o355, licensed under GNU GPL v3
 
 # Same deal as the main script.
@@ -30,7 +30,7 @@ try:
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6 beta")
+        out.write("0.6.0.1 beta")
         out.close()
 
 config = configparser.ConfigParser()
@@ -88,7 +88,7 @@ except:
         config['UPDATER']['showNewVersionReleaseDate'] = 'True'
         config['USER']['configprovisioned'] = 'True'
         try:
-            with open('config.ini', 'w') as configfile:
+            with open('storage//config.ini', 'w') as configfile:
                 config.write(configfile)
         except:
             print("Hmmf...an odd error occurred. A full traceback will be",
@@ -163,7 +163,7 @@ except:
         config['UPDATER']['showNewVersionReleaseDate'] = 'True'
         config['USER']['configprovisioned'] = 'True'
         try:
-            with open('config.ini', 'w') as configfile:
+            with open('storage//config.ini', 'w') as configfile:
                 config.write(configfile)
         except:
             print("Hmmf...an odd error occurred. A full traceback will be",
@@ -221,7 +221,7 @@ def printException_loggerwarn():
         
     
 import logging
-logger = logging.getLogger(name='pyweather_setup_0.6beta')
+logger = logging.getLogger(name='pyweather_setup_0.6.0.1beta')
 logger.setLevel(logging.DEBUG)
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
@@ -251,8 +251,8 @@ import json
 import codecs
 
 
-buildnumber = 60
-buildversion = "0.6 beta"
+buildnumber = 60.1
+buildversion = "0.6.0.1 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))

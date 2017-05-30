@@ -1,4 +1,4 @@
-# PyWeather Configuration Defaults - 0.6 beta
+# PyWeather Configuration Defaults - 0.6.0.1 beta
 # (c) 2017, o355
 
 import sys
@@ -46,7 +46,7 @@ except:
     verbosity = False
     tracebacksEnabled = False
     
-logger = logging.getLogger(name='pyweather_configdefault_0.6beta')
+logger = logging.getLogger(name='pyweather_configdefault_0.6.0.1beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
@@ -135,7 +135,7 @@ if cd_confirmation == "yes":
     logger.debug("USER/configprovisioned is now 'True'.")
     print("Committing changes...")
     try:
-        with open('config.ini', 'w') as configfile:
+        with open('storage//config.ini', 'w') as configfile:
             logger.debug("configfile: %s" % configfile)
             config.write(configfile)
             logger.info("Performed operation: config.write(configfile)")

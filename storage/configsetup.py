@@ -1,4 +1,4 @@
-# PyWeather Config Setup - 0.6 beta
+# PyWeather Config Setup - 0.6.0.1 beta
 # (c) 2017, o355. GNU GPL.
 
 import sys
@@ -20,7 +20,7 @@ else:
     except:
         open('updater//versioninfo.txt', 'w').close()
         with open("updater//versioninfo.txt", 'a') as out:
-            out.write("0.6 beta")
+            out.write("0.6.0.1 beta")
             out.close()
     print("Whoops! You're running this script from PyWeather's base folder, but",
           "the script can't work when running from the base folder of PyWeather.",

@@ -1,4 +1,4 @@
-# PyWeather Updater - version 0.6 beta
+# PyWeather Updater - version 0.6.0.1 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 
@@ -26,7 +26,7 @@ try:
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6 beta")
+        out.write("0.6.0.1 beta")
         out.close()
         
 # See if the config is "provisioned". If it isn't, a KeyError will occur,
@@ -103,8 +103,8 @@ logger.debug("showReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: %s" %
 logger.debug("showReleaseNotes: %s" %
              (showReleaseNotes))
 
-buildnumber = 60
-buildversion = "0.6 beta"
+buildnumber = 60.1
+buildversion = "0.6.0.1 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
