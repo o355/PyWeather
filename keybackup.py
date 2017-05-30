@@ -1,4 +1,4 @@
-# PyWeather API Key Backup - version 0.6 beta
+# PyWeather API Key Backup - version 0.6.0.1 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 import configparser
@@ -14,7 +14,7 @@ try:
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6 beta")
+        out.write("0.6.0.1 beta")
         out.close()
         
 # See if the config is "provisioned". If it isn't, a KeyError will occur,
@@ -50,7 +50,7 @@ except:
     saveDirectory = 'backup//backkey.txt'
     tracebacksEnabled = False
 
-logger = logging.getLogger(name='pyweather_keybackup_0.6beta')
+logger = logging.getLogger(name='pyweather_keybackup_0.6.0.1beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
