@@ -195,7 +195,7 @@ elif buildnumber < version_buildNumber:
                     subprocess.call(["git checkout %s" % version_latestReleaseTag],
                                     shell=True)
                     print("Now updating your config file.")
-                    exec(open("configupdate.py").open())
+                    exec(open("configupdate.py").read())
                     print("PyWeather has been updated to version %s." % version_latestReleaseTag,
                           "To finish the update, PyWeather has to exit.",
                           "Press enter to exit.", sep="\n")

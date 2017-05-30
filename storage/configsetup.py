@@ -7,13 +7,13 @@ import traceback
 import os
 
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read("/config.ini")
 
 # Check our working directory. This script can't work in the base PyWeather folder.
         
 if "/pyweather/storage" in os.getcwd():
     cool = True
-else:
+elif "/pyweather/" in os.getcwd():
     # If we are in the base folder, it's a perfect time to write to versioninfo.txt!
     try:
         versioninfo = open('updater//versioninfo.txt').close()
@@ -22,6 +22,13 @@ else:
         with open("updater//versioninfo.txt", 'a') as out:
             out.write("0.6.0.1 beta")
             out.close()
+    print("Whoops! You're running this script from PyWeather's base folder, but",
+          "the script can't work when running from the base folder of PyWeather.",
+          "Move into the storage folder, and run the script there.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+else:
     print("Whoops! You're running this script from PyWeather's base folder, but",
           "the script can't work when running from the base folder of PyWeather.",
           "Move into the storage folder, and run the script there.",

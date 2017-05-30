@@ -1875,7 +1875,7 @@ while True:
                             subprocess.call(["git checkout %s" % version_latestReleaseTag],
                                             shell=True)
                             print("Now updating your config file.")
-                            exec(open("configupdate.py").open())
+                            exec(open("configupdate.py").read())
                             print("PyWeather has been updated to version %s." % version_latestReleaseTag,
                                   "To finish the update, PyWeather has to exit.",
                                   "Press enter to exit.", sep="\n")
@@ -2051,7 +2051,15 @@ while True:
             SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
             logger.debug("SR_minute: %s ; SR_hour: %s" %
                         (SR_minute, SR_hour))
-            if SR_hour > 12:
+            if SR_hour == 0:
+                logger.debug("Sunrise hour = 0. Prefixing AM, 12-hr correction...")
+                SR_hour = "12"
+                SR_minute = str(SR_minute).zfill(2)
+                sunrise_time = SR_hour + ":" + SR_minute + " AM"
+                logger.debug("SR_hour : %s ; SR_minute: %s" %
+                             (SR_hour, SR_minute))
+                logger.debug("sunrise_time: %s" % sunrise_time)
+            elif SR_hour > 12:
                 logger.debug("Sunrise Hour > 12. Prefixing PM, 12-hr correction...")
                 SR_hour = SR_hour - 12
                 SR_hour = str(SR_hour)
@@ -2081,7 +2089,16 @@ while True:
             SS_hour = int(astronomy_json['moon_phase']['sunset']['hour'])
             logger.debug("SS_minute: %s ; SS_hour: %s" %
                          (SS_minute, SS_hour))
-            if SS_hour > 12:
+            
+            if SS_hour == 0:
+                logger.debug("Sunset hour = 0. Prefixing AM, 12-hr correction...")
+                SS_hour = "0"
+                SS_minute = str(SS_minute).zfill(2)
+                sunset_time = SS_hour + ":" + SS_minute + " AM"
+                logger.debug("SS_hour: %s ; SS_minute: %s" %
+                             (SS_hour, SS_minute))
+                logger.debug("sunset_time: %s" % sunset_time)
+            elif SS_hour > 12:
                 logger.debug("Sunset hour > 12. Prefixing PM, 12-hr correction...")
                 SS_hour = SS_hour - 12
                 SS_hour = str(SS_hour)
@@ -2119,8 +2136,16 @@ while True:
                      (moon_phase, MR_minute))
         MR_hour = int(astronomy_json['moon_phase']['moonrise']['hour'])
         logger.debug("MR_minute: %s" % MR_minute)
-            
-        if MR_hour > 12:
+           
+        if MR_hour == 0:
+            logger.debug("Moonrise hour is 0. Prefixing AM, and 12-hr correction...")
+            MR_hour = "12"
+            MR_minute = str(MR_minute).zfill(2)
+            moonrise_time = MR_hour + ":" + MR_minute + " AM" 
+            logger.debug("MR_hour: %s ; MR_minute: %s" %
+                         (MR_hour, MR_minute))
+            logger.debug("moonrise_time: %s" % moonrise_time)   
+        elif MR_hour > 12:
             logger.debug("Moonrise hour > 12. Prefixing PM, 12-hr correction...")
             MR_hour = MR_hour - 12
             MR_hour = str(MR_hour)
@@ -2163,7 +2188,13 @@ while True:
         
         if MS_data == True:
             logger.debug("Moonset data is available. Preceding with checks...")
-            if MS_hour > 12 and MS_data == True:
+            
+            if MS_hour == 0:
+                logger.debug("Moonset hour is 0. Prefixing AM, 12-hr correction...")
+                MS_hour = "12"
+                MS_minute = str(MS_minute).zfill(2)
+                moonset_time = MS_hour + ":" + MS_minute + " AM"
+            elif MS_hour > 12:
                 logger.debug("Moonset hour > 12. Prefixing PM, 12-hr correction...")
                 MS_hour = MS_hour - 12
                 MS_hour = str(MS_hour)
@@ -2172,7 +2203,7 @@ while True:
                 logger.debug("MS_hour: %s ; MS_minute: %s"
                              % (MS_hour, MS_minute))
                 logger.debug("moonset_time: %s" % moonset_time)
-            elif MS_hour == 12 and MS_data == True:
+            elif MS_hour == 12:
                 logger.debug("Moonset hour = 12. Prefixing PM...")
                 MS_hour = str(MS_hour)
                 MS_minute = str(MS_minute).zfill(2)

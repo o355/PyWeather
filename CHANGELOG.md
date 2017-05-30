@@ -2,18 +2,22 @@
 
 Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
 
-## version 0.6.2 beta - Should be released in August
-* Adds the yesterday's weather feature.
-* Hopefully adding the config updates to be completed by a simple module import.
-* Adds the option to turn on a custom user agent. Cool, right?
+## version 0.6.2 beta - Should be released ~7/14/2017
+* Adds the yesterday's weather feature. - Should be finished by 7/12
+* Adds the option to turn on a custom user agent. Cool, right? - Should be finished by 7/14
 
-## version 0.6.1 beta - Should be released on July 15, 2017 (preliminary)
-* Adds some form of a cache to PyWeather, so that after a set time, PyWeather will renew weather data when looking at detailed information. The exact implementation of this isn't set in stone.
-* Adds an experimental radar to PyWeather.
-* Adds error checking for the requests library at boot for all scripts.
-* Finally, some OOP programming comes to PyWeather! Config updates will now be handled by a module. - This is not set in stone as a new feature, and may get scrapped at any time.
-* Adds a config folder for all the config stuff to live in.
-* The PyWeather updater will now try each command. This helps in determining if a user can still update PyWeather using the .zip method.
+## version 0.6.1 beta - Should be released on July 7, 2017 (preliminary)
+**NEW FEATURES/REMOVALS**
+* Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache. - Should be finished by 6/19
+* Adds an experimental radar to PyWeather. - Should be finished by 6/26
+* Adds error checking for the requests library at boot for all scripts. - Should be finished by 6/27
+* Restructures the file system. configdefault.py will now live in the storage folder, along with versioninfo.txt. A new "Documentation" folder will also be added, just to clean up things. Some rescripting will be needed. - Should be finished by 7/1
+* The PyWeather updater will now try each command. This helps in determining if a user can still update PyWeather using the .zip method. - Should be finished by 7/5
+
+**BUG FIXES**
+* Fixed a major bug where the PyWeather Git updater wouldn't, uh, fully update.
+* Will fix potential bugs with the directory checking for configsetup. For all I know, a user could end up being called pyweather. - Should be finished by 6/2.
+* Fixes a bug where if the sunrise/sunset/moonrise/moonset hour was 0, PyWeather wasn't correcting it to a 12.
 
 ## version 0.6.0.1 beta - Released on 5/29/2017
 * Fixes a critical bug where a user couldn't provision their config file when they first downloaded the program.
@@ -22,7 +26,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 ## version 0.6 beta (The "Alerts to change the PyWeather backbone" Update) - Released on 5/28/2017
 The clever title comes from the addition of alerts, and the gigantic backbone update too.
 
-**NEW ALERTS/REMOVALS**
+**NEW FEATURES/REMOVALS**
 * Adds an "About" page to PyWeather.
 * Adds alerts information to PyWeather, including (of course) the ability to turn it on and off.
 * Adds the option to show release notes through the updater.
