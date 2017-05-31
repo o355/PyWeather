@@ -109,6 +109,16 @@ if cd_confirmation == "yes":
     except:
         print("Couldn't add the user section.")
         
+    try:
+        config.add_section('CACHE')
+    except:
+        print("Couldn't add the cache section.")
+        
+    try:
+        config.add_section('RADAR GUI')
+    except:
+        print("Couldn't add the radar gui section.")
+        
     config['SUMMARY']['sundata_summary'] = 'False'
     config['SUMMARY']['almanac_summary'] = 'False'
     config['SUMMARY']['showalertsonsummary'] = 'True'
@@ -138,6 +148,13 @@ if cd_confirmation == "yes":
     config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
     config['UPDATER']['showNewVersionReleaseDate'] = 'True'
     config['USER']['configprovisioned'] = 'True'
+    config['CACHE']['alerts_cachedtime'] = '5'
+    config['CACHE']['current_cachedtime'] = '10'
+    config['CACHE']['hourly_cachedtime'] = '60'
+    config['CACHE']['forecast_cachedtime'] = '60'
+    config['CACHE']['almanac_cachedtime'] = '240'
+    config['CACHE']['sunrise_cachedtime'] = '480'
+    config['RADAR GUI']['radar_imagesize'] = 'normal'
     print("Committing changes...")
     try:
         with open('config.ini', 'w') as configfile:
