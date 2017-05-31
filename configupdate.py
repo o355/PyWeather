@@ -1,4 +1,4 @@
-# PyWeather Config Update - version 0.6.0.1
+# PyWeather Config Update - version 0.6.1
 
 # This script is empty. With the improved 0.6 updater, there is no
 # update from 0.6 to 0.6.
@@ -19,7 +19,6 @@ config.read("storage//config.ini")
 if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     # A usual input() and sys.exit() isn't present here, as it's assumed this
     # is getting executed inside of the updater.
-    print("Updating 6 configuration options...")
     try:
         config.add_section("CACHE")
     except:
@@ -30,11 +29,40 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     except:
         print("Failed to add the cache section. Does it exist?")
         
-    print("New configuration options are available. Would you like to configure",
-          "them, or leave them to their defaults? Yes or No.", sep="\n")
-    configurenewoptions_06beta = input("")
-    with open("updater//versioninfo.txt", 'a') as out:
+    print("7 new configuration options have been added.",
+          "Details:",
+          "- CACHE/alerts_cachedtime - Sets the cache time on alert data - Defaults to 5",
+          "- CACHE/current_cachedtime - Sets the cache time on current data - Defaults to 10",
+          "- CACHE/hourly_cachedtime - Sets the cache time on hourly data - Defaults to 60",
+          "- CACHE/forecast_cachedtime - Sets the cache time on forecast data - Defaults to 60",
+          "- CACHE/almanac_cachedtime - Sets the cache time on almanac data - Defaults to 240",
+          "- CACHE/sunrise_cachedtime - Sets the cache time on sunrise data - Defaults to 480",
+          "- RADAR GUI/radar_imagesize - Sets the image size of radar animations - Defaults to normal", sep="\n")
+    
+    config['CACHE']['alerts_cachedtime'] = '5'
+    config['CACHE']['current_cachedtime'] = '10'
+    config['CACHE']['hourly_cachedtime'] = '60'
+    config['CACHE']['forecast_cachedtime'] = '60'
+    config['CACHE']['almanac_cachedtime'] = '240'
+    config['CACHE']['sunrise_cachedtime'] = '480'
+    config['RADAR GUI']['radar_imagesize'] = 'normal'
+    
+    try:
+        with open('storage//config.ini', 'w') as configfile:
+                config.write(configfile)
+        print("Configuration options committed successfully!")
+    except:
+        print("Couldn't update your config file! A full error will be printed below.")
+        traceback.print_exc()
+        with open("updater//versioninfo.txt", 'a') as out:
             out.write("0.6.1 beta")
             out.close()
+        print("Please report this bug to GitHub (github.com/o355/pyweather), along with",
+              "the full error. Along with that, please manually add the configuration entries",
+              "as listed above, with their default values in your configuration file.",
+              "Press enter to exit.")
+    with open("updater//versioninfo.txt", 'a') as out:
+        out.write("0.6.1 beta")
+        out.close()
     
     

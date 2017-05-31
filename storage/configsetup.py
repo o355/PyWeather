@@ -7,7 +7,7 @@ import traceback
 import os
 
 config = configparser.ConfigParser()
-config.read("/config.ini")
+config.read("config.ini")
 
 # Check our working directory. This script can't work in the base PyWeather folder.
         

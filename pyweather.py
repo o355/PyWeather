@@ -2586,7 +2586,6 @@ while True:
                         logger.info("Breaking to main menu, user issued KeyboardInterrupt")
                         break         
     elif moreoptions == "9":
-        logger.debug("moreoptions: %s" % moreoptions)
         print("", Fore.YELLOW + "-=-=- " + Fore.CYAN + "PyWeather" + Fore.YELLOW + " -=-=-",
               Fore.CYAN + "version " + about_version, "",
               Fore.YELLOW + "Build Number: " + Fore.CYAN + about_buildnumber,

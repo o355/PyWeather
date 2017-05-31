@@ -2,17 +2,33 @@
 
 Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
 
-## version 0.6.2 beta - Should be released ~7/14/2017
-* Adds the yesterday's weather feature. - Should be finished by 7/12
-* Adds the option to turn on a custom user agent. Cool, right? - Should be finished by 7/14
+## version 0.6.2 beta - Should be released 7/20/2017
+* Adds the yesterday's weather feature. - Should be finished by 7/17
+* Adds the option to turn on a custom user agent. Cool, right? - Should be finished by 7/19
 
-## version 0.6.1 beta - Should be released on July 7, 2017 (preliminary)
+## version 0.6.1 beta - Should be released on 7/11/2017
 **NEW FEATURES/REMOVALS**
-* Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache. - Should be finished by 6/19
-* Adds an experimental radar to PyWeather. - Should be finished by 6/26
-* Adds error checking for the requests library at boot for all scripts. - Should be finished by 6/27
-* Restructures the file system. configdefault.py will now live in the storage folder, along with versioninfo.txt. A new "Documentation" folder will also be added, just to clean up things. Some rescripting will be needed. - Should be finished by 7/1
-* The PyWeather updater will now try each command. This helps in determining if a user can still update PyWeather using the .zip method. - Should be finished by 7/5
+* Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache. - 10% done, Should be finished by 6/19.
+	* Add new options to configupdate - 100% done
+	* Add new options to configsetup - 0% done
+	* Add new options to configdefault - 0% done
+	* Add new options to setup - 0% done
+	* Implement cache (current/alerts) - 0% done
+	* Implement cache (hourly/forecast) - 0% done
+	* Implement cache (almanac/sunrise) - 0% done
+* Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/26
+* Adds error checking for the requests library at boot for all scripts. - 0% done, Should be finished by 6/27
+	* Add error checking (pyweather/updater) - 0% done
+	* Add error checking (setup) - 0% done
+* Restructures the file system. configdefault.py will now live in the storage folder, along with versioninfo.txt. A new "Documentation" folder will also be added, just to clean up things. Some rescripting will be needed. - 0% done, Should be finished by 7/1
+	* configdefault -> storage/configdefault & script updates - 0% done
+	* versioninfo.txt -> storage/versioninfo.txt & script updates - 0% done
+	* updater/README -> documentation/updater_README - 0% done
+	* backup/README -> documentation/backup_README - 0% done
+	* storage/README -> storage/storage_README - 0% done
+	* storage/config_README -> documentation/config_README - 0% done
+* The PyWeather updater will now try each command. This helps in determining if a user can still update PyWeather using the .zip method. - 0% done, Should be finished by 7/5
+* Updates config_README for the latest options, and detailed "when did each option appear" analysis (<3 you Git tagging) - 0% done, Should be finished by 7/9
 
 **BUG FIXES**
 * Fixed a major bug where the PyWeather Git updater wouldn't, uh, fully update.
