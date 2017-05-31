@@ -155,6 +155,7 @@ if cd_confirmation == "yes":
     config['CACHE']['almanac_cachedtime'] = '240'
     config['CACHE']['sunrise_cachedtime'] = '480'
     config['RADAR GUI']['radar_imagesize'] = 'normal'
+    config['RADAR GUI']['bypassconfirmation'] = 'False'
     print("Committing changes...")
     try:
         with open('config.ini', 'w') as configfile:

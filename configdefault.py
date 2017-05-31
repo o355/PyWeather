@@ -133,6 +133,22 @@ if cd_confirmation == "yes":
     logger.debug("UPDATER/showNewVersionReleaseDate is now 'True'.")
     config['USER']['configprovisioned'] = 'True'
     logger.debug("USER/configprovisioned is now 'True'.")
+    config['CACHE']['alerts_cachedtime'] = '5'
+    logger.debug("CACHE/alerts_cachedtime is now '5'.")
+    config['CACHE']['current_cachedtime'] = '10'
+    logger.debug("CACHE/current_cachedtime is now '10'.")
+    config['CACHE']['hourly_cachedtime'] = '60'
+    logger.debug("CACHE/hourly_cachedtime is now '60'.")
+    config['CACHE']['forecast_cachedtime'] = '60'
+    logger.debug("CACHE/forecast_cachedtime is now '60'.")
+    config['CACHE']['almanac_cachedtime'] = '240'
+    logger.debug("CACHE/almanac_cachedtime is now '240'.")
+    config['CACHE']['sunrise_cachedtime'] = '480'
+    logger.debug("CACHE/sunrise_cachedtime is now '480'.")
+    config['RADAR GUI']['radar_imagesize'] = 'normal'
+    logger.debug("RADAR GUI/radar_imagesize is now 'normal'.")
+    config['RADAR GUI']['bypassconfirmation'] = 'False'
+    logger.debug("RADAR GUI/bypassconfirmation is now 'False'.")
     print("Committing changes...")
     try:
         with open('storage//config.ini', 'w') as configfile:

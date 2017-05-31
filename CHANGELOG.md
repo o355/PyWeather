@@ -8,10 +8,10 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 
 ## version 0.6.1 beta - Should be released on 7/11/2017
 **NEW FEATURES/REMOVALS**
-* Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache. - 10% done, Should be finished by 6/19.
+* Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache. - 12% done, Should be finished by 6/19.
 	* Add new options to configupdate - 100% done
 	* Add new options to configsetup - 100% done
-	* Add new options to configdefault - 0% done
+	* Add new options to configdefault - 100% done
 	* Add new options to setup - 0% done
 	* Initial implementation - 0% done
 	* Implement cache (current/alerts) - 0% done
