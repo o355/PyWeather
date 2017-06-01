@@ -957,6 +957,64 @@ except:
     print("Changes saved.")
     logger.debug("Detailed forecast info loops now 5.")
     
+print("", "PyWeather has a caching system, in which if you're gone for some time",
+      "data will automatically refresh. Would you like to turn this on?",
+      "This is enabled by default. Yes or No.", sep="\n")
+enablecache = input("Input here: ").lower()
+if enablecache == "no":
+    print("Cache will be disabled.")
+    config['CACHE']['enabled'] = 'False'
+    print("Changes saved.")
+else:
+    config['CACHE']['enabled'] = 'True'
+    print("You entered yes, or your input wasn't understood (yes is the default.)",
+          "In the next few inputs, enter the time in minutes that PyWeather should keep",
+          "certain types of data, before a data refresh is automatically requested.",
+          "If you want to leave cache values to their defaults, press enter at any prompt.", sep="\n")
+    
+    print("Please enter the cache time for alerts data in minutes (default = 5)")
+    alertscachetime = input("Input here: ").lower()
+    try:
+        alertscachetime = int(alertscachetime)
+        alertscachetime = str(alertscachetime)
+        config['CACHE']['alerts_cachedtime'] = alertscachetime
+        print("Changes saved.")
+        logger.debug("Alerts cache time now %s minutes." % alertscachetime)
+    except:
+        print("Your input couldn't be converted into a number. Setting alerts",
+              "cache time to it's default value of '5'.")
+        config['CACHE']['alerts_cachedtime'] = '5'
+        logger.debug("Alerts cache time now 5 minutes.")
+        
+    print("Please enter the cache time for current data in minutes (default = 10)")
+    currentcachetime = input("Input here: ").lower()
+    try:
+        currentcachetime = int(currentcachetime)
+        currentcachetime = str(currentcachetime)
+        config['CACHE']['current_cachedtime'] = currentcachetime
+        print("Changes saved.")
+        logger.debug("Current cache time now %s minutes." % alertscachetime)
+    except:
+        print("Your input couldn't be converted into a number. Setting alerts",
+              "cache time to it's default value of '10'.")
+        config['CACHE']['current_cachedtime'] = '10'
+        logger.debug("Current cache time now 10 minutes.")
+    
+    print("Please enter the cache time for hourly data in minutes (default = 60)")
+    hourlycachetime = input("Input here: ").lower()
+    try:
+        hourlycachetime = int(hourlycachetime)
+        hourlycachetime = str(hourlycachetime)
+        config['CACHE']['hourly_cachedtime'] = alertscachetime
+        print("Changes saved.")
+        logger.debug("Hourly cache time now %s minutes." % alertscachetime)
+    except:
+        print("Your input couldn't be converted into a number. Setting alerts",
+              "cache time to it's default value of '60'.")
+        config['CACHE']['alerts_cachedtime'] = '60'
+        logger.debug("Alerts cache time now 60 minutes.")   
+
+    
 print("", "When viewing detailed EU alerts information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",

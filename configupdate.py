@@ -37,8 +37,9 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
           "- CACHE/forecast_cachedtime - Sets the cache time on forecast data - Defaults to 60",
           "- CACHE/almanac_cachedtime - Sets the cache time on almanac data - Defaults to 240",
           "- CACHE/sunrise_cachedtime - Sets the cache time on sunrise data - Defaults to 480",
+          "- CACHE/enabled - Enables or disables the new cache system - Defaults to True",
           "- RADAR GUI/radar_imagesize - Sets the image size of radar animations - Defaults to normal", 
-          "- RADAR GUI/bypassconfirmation - Sets if the experimental warning can be bypassed - Defaults to False",sep="\n")
+          "- RADAR GUI/bypassconfirmation - Sets if the experimental warning can be bypassed - Defaults to False", sep="\n")
     
     config['CACHE']['alerts_cachedtime'] = '5'
     config['CACHE']['current_cachedtime'] = '10'
@@ -48,6 +49,7 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     config['CACHE']['sunrise_cachedtime'] = '480'
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
+    config['CACHE']['enabled'] = 'True'
     
     try:
         with open('storage//config.ini', 'w') as configfile:

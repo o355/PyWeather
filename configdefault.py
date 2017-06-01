@@ -149,6 +149,8 @@ if cd_confirmation == "yes":
     logger.debug("RADAR GUI/radar_imagesize is now 'normal'.")
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     logger.debug("RADAR GUI/bypassconfirmation is now 'False'.")
+    config['CACHE']['enabled'] = 'True'
+    logger.debug("CACHE/enabled is now 'True'.")
     print("Committing changes...")
     try:
         with open('storage//config.ini', 'w') as configfile:
