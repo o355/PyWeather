@@ -36,7 +36,7 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
           "- CACHE/hourly_cachedtime - Sets the cache time on hourly data - Defaults to 60",
           "- CACHE/forecast_cachedtime - Sets the cache time on forecast data - Defaults to 60",
           "- CACHE/almanac_cachedtime - Sets the cache time on almanac data - Defaults to 240",
-          "- CACHE/sunrise_cachedtime - Sets the cache time on sunrise data - Defaults to 480",
+          "- CACHE/sundata_cachedtime - Sets the cache time on sunrise data - Defaults to 480",
           "- CACHE/enabled - Enables or disables the new cache system - Defaults to True",
           "- RADAR GUI/radar_imagesize - Sets the image size of radar animations - Defaults to normal", 
           "- RADAR GUI/bypassconfirmation - Sets if the experimental warning can be bypassed - Defaults to False", sep="\n")
@@ -46,7 +46,7 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     config['CACHE']['hourly_cachedtime'] = '60'
     config['CACHE']['forecast_cachedtime'] = '60'
     config['CACHE']['almanac_cachedtime'] = '240'
-    config['CACHE']['sunrise_cachedtime'] = '480'
+    config['CACHE']['sundata_cachedtime'] = '480'
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['CACHE']['enabled'] = 'True'

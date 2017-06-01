@@ -12,7 +12,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 	* Add new options to configupdate - 100% done
 	* Add new options to configsetup - 100% done
 	* Add new options to configdefault - 100% done
-	* Add new options to setup - 35% done
+	* Add new options to setup - 100% done
 	* Initial implementation - 0% done
 	* Implement cache (current/alerts) - 0% done
 	* Implement cache (hourly/forecast) - 0% done

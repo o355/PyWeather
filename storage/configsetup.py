@@ -153,7 +153,7 @@ if cd_confirmation == "yes":
     config['CACHE']['hourly_cachedtime'] = '60'
     config['CACHE']['forecast_cachedtime'] = '60'
     config['CACHE']['almanac_cachedtime'] = '240'
-    config['CACHE']['sunrise_cachedtime'] = '480'
+    config['CACHE']['sundata_cachedtime'] = '480'
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['CACHE']['enabled'] = 'True'

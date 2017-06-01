@@ -995,7 +995,7 @@ else:
         print("Changes saved.")
         logger.debug("Current cache time now %s minutes." % alertscachetime)
     except:
-        print("Your input couldn't be converted into a number. Setting alerts",
+        print("Your input couldn't be converted into a number. Setting current",
               "cache time to it's default value of '10'.")
         config['CACHE']['current_cachedtime'] = '10'
         logger.debug("Current cache time now 10 minutes.")
@@ -1005,14 +1005,56 @@ else:
     try:
         hourlycachetime = int(hourlycachetime)
         hourlycachetime = str(hourlycachetime)
-        config['CACHE']['hourly_cachedtime'] = alertscachetime
+        config['CACHE']['hourly_cachedtime'] = hourlycachetime
         print("Changes saved.")
-        logger.debug("Hourly cache time now %s minutes." % alertscachetime)
+        logger.debug("Hourly cache time now %s minutes." % hourlycachetime)
     except:
-        print("Your input couldn't be converted into a number. Setting alerts",
+        print("Your input couldn't be converted into a number. Setting hourly",
               "cache time to it's default value of '60'.")
-        config['CACHE']['alerts_cachedtime'] = '60'
-        logger.debug("Alerts cache time now 60 minutes.")   
+        config['CACHE']['hourly_cachedtime'] = '60'
+        logger.debug("Hourly cache time now 60 minutes.") 
+        
+    print("Please enter the cache time for forecast data in minutes (default = 60)")
+    forecastcachetime = input("Input here: ").lower()
+    try:
+        forecastcachetime = int(forecastcachetime)
+        forecastcachetime = str(forecastcachetime)
+        config['CACHE']['forecast_cachedtime'] = forecastcachetime
+        print("Changes saved.")
+        logger.debug("Forecast cache time now %s minutes." % forecastcachetime)
+    except:
+        print("Your input couldn't be converted into a number. Setting forecast",
+              "cache time to it's default value of '60'.")
+        config['CACHE']['forecast_cachedtime'] = '60'
+        logger.debug("Forecast cache time now 60 minutes.")
+        
+    print("Please enter the cache time for almanac data in minutes (default = 240)")
+    almanaccachetime = input("Input here: ").lower()
+    try:
+        almanaccachetime = int(almanaccachetime)
+        almanaccachetime = str(almanaccachetime)
+        config['CACHE']['almanac_cachedtime'] = almanaccachetime
+        print("Changes saved.")
+        logger.debug("Almanac cache time now %s minutes." % almanaccachetime)
+    except:
+        print("Your input couldn't be converted into a number. Setting almanac",
+              "cache time to it's default value of '240'.")
+        config['CACHE']['almanac_cachedtime'] = '240'
+        logger.debug("Almanac cache time now 240 minutes.")
+        
+    print("Please enter the cache time for sun data in minutes (default = 480)")
+    sundatacachetime = input("Input here: ").lower()
+    try:
+        sundatacachetime = int(sundatacachetime)
+        sundatacachetime = str(sundatacachetime)
+        config['CACHE']['sundata_cachedtime'] = forecastcachetime
+        print("Changes saved.")
+        logger.debug("Sun data cache time now %s minutes." % sundatacachetime)
+    except:
+        print("Your input couldn't be converted into a number. Setting sun data",
+              "cache time to it's default value of '480'.")
+        config['CACHE']['sundata_cachedtime'] = '480'
+        logger.debug("Sun data cache time now 480 minutes.")      
 
     
 print("", "When viewing detailed EU alerts information, how many",

@@ -143,8 +143,8 @@ if cd_confirmation == "yes":
     logger.debug("CACHE/forecast_cachedtime is now '60'.")
     config['CACHE']['almanac_cachedtime'] = '240'
     logger.debug("CACHE/almanac_cachedtime is now '240'.")
-    config['CACHE']['sunrise_cachedtime'] = '480'
-    logger.debug("CACHE/sunrise_cachedtime is now '480'.")
+    config['CACHE']['sundata_cachedtime'] = '480'
+    logger.debug("CACHE/sundata_cachedtime is now '480'.")
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     logger.debug("RADAR GUI/radar_imagesize is now 'normal'.")
     config['RADAR GUI']['bypassconfirmation'] = 'False'
