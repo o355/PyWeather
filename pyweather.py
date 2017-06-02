@@ -82,6 +82,14 @@ try:
     showUpdaterReleaseNotes = config.getboolean('UPDATER', 'showReleaseNotes')
     showUpdaterReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
+    cache_enabled = config.getboolean('CACHE', 'enabled')
+    cache_alertstime = config.getint('CACHE', 'alerts_cachedtime')
+    cache_currenttime = config.getint('CACHE', 'current_cachedtime')
+    cache_hourlytime = config.getint('CACHE', 'hourly_cachedtime')
+    cache_forecasttime = config.getint('CACHE', 'forecast_cachedtime')
+    cache_almanactime = config.getint('CACHE', 'almanac_cachedtime')
+    cache_sundatatime = config.getint('CACHE', 'sundata_cachedtime')
+    
 except:
     # If it fails (typo or code error), we set all options to default.
     print("When attempting to load your configuration file, an error",
@@ -325,6 +333,7 @@ try:
     # Since the loading bars interfere with true verbosity logging, we turn
     # them off if verbosity is enabled (it isn't needed)
     # :/
+    print(location)
     if verbosity == False:
         print("[#---------] | 1% |", round(time.time() - firstfetch,1), 
               "seconds", end="\r")
@@ -595,38 +604,6 @@ logger.info("Start 2nd geocoder...")
 
 # And how about asynchronius fetches? Coming soon, I mean, maybe?
 
-try:
-    location2 = geocoder.google([latstr, lonstr], method="reverse")
-    if verbosity == False:
-        print("[#########-] | 91% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-except:
-    logger.warn("No connection to Google's Geolocator!! Is the connection offline?")
-    print("When attempting to access Google's reverse geocoder, PyWeather ran into",
-          "an error. Make sure that if you're on a network with a filter Google's",
-          "reverse geocoder is unblocked. Otherwise, make sure you have an internet",
-          "connection.", sep="\n")
-    printException()
-    print("Press enter to continue.")
-    input()
-    sys.exit()
-        
-logger.debug("location2: %s ; Location2.city: %s ; Location2.state: %s" % (location2, location2.city, location2.state))
-logger.info("End 2nd geolocator...")
-logger.info("Start parsing...")
-
-# Check if the reverse geolocator has an invalid location
-
-if (location2.state == "None" or location2.city == "None"):
-    logger.warn("Geolocator had an invalid location! Cannot proceed.")
-    print(Fore.RED + "PyWeather ran into an error with the reverse geolocator.",
-          "An unexpected, and random error occurred when trying to use Google's",
-          "reverse geocoder, and as such, PyWeather cannot proceed. Try to look",
-          "up the weather for the location you wanted in about 2-4 minutes.",
-          "(please do not report this issue to GitHub, it's a known issue!)",
-          "Press enter to exit.", sep="\n")
-    input()
-    sys.exit()
-
 
 # Parse the current weather!
 
@@ -812,7 +789,7 @@ logger.info("Printing current conditions...")
 
 summaryHourlyIterations = 0
 
-print(Style.BRIGHT + Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + location2.city + ", " + location2.state)
+print(Style.BRIGHT + Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + str(location))
 print(Fore.YELLOW + summary_lastupdated)
 print("")
 
@@ -835,7 +812,7 @@ if showAlertsOnSummary == True:
                          % (alerts_description, alerts_expiretime))
             logger.debug("alerts_type: %s" % alerts_type)
             print(Fore.RED + "** A " + alerts_description + " Meteoalarm has been issued" +
-                  " for " + location2.city + ",", 
+                  " for " + str(location) + ",", 
                   "and is in effect until " + alerts_expiretime + ". **", sep="\n")
             print("")
     except:
@@ -849,7 +826,7 @@ if showAlertsOnSummary == True:
                              % (alerts_description, alerts_expiretime))
                 logger.debug("alerts_type: %s" % alerts_type)
                 print(Fore.RED + "** A " + alerts_description + " has been issued" + 
-                      " for " + location2.city + ",",
+                      " for " + str(location) + ",",
                       "and is in effect until " + alerts_expiretime + ". **", sep="\n")
                 print("")
         except:
@@ -982,7 +959,7 @@ while True:
                     % (current_precip1HrIn, current_precip1HrMm))
         logger.debug("current_precipTodayIn: %s ; current_precipTodayMm: %s"
                      % (current_precipTodayIn, current_precipTodayMm))
-        print(Fore.YELLOW + "Here's the detailed current weather for: " + Fore.CYAN + location2.city + ", " + location2.state)
+        print(Fore.YELLOW + "Here's the detailed current weather for: " + Fore.CYAN + str(location))
         print(Fore.YELLOW + summary_lastupdated)
         print("")
         print(Fore.YELLOW + "Current conditions: " + Fore.CYAN + summary_overall)
@@ -1174,7 +1151,7 @@ while True:
         logger.info("Selected view more hourly...")
         detailedHourlyIterations = 0
         totaldetailedHourlyIterations = 0
-        print(Fore.YELLOW + "Here's the detailed hourly forecast for: " + Fore.CYAN + location2.city + ", " + location2.state)
+        print(Fore.YELLOW + "Here's the detailed hourly forecast for: " + Fore.CYAN + str(location))
         for hour in hourly_json['hourly_forecast']:
             logger.info("We're on iteration: %s" % detailedHourlyIterations)
             hourly_time = hour['FCTTIME']['civil']
@@ -1312,7 +1289,7 @@ while True:
                 continue
             
             tenday_json = json.loads(tendayJSON.text)
-        print(Fore.YELLOW + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + location2.city + ", " + location2.state)  
+        print(Fore.YELLOW + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + str(location))  
         for hour in tenday_json['hourly_forecast']:
             logger.info("We're on iteration: %s/24. User iterations: %s." %
                         (detailedHourly10Iterations, user_loopIterations))
@@ -1438,7 +1415,7 @@ while True:
         totaldetailedForecastIterations = 0
         forecast10_precipDayData = True
         forecast10_snowDayData = True
-        print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + location2.city + ", " + location2.state)
+        print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + str(location))
         for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
             print("")
             logger.info("We're on iteration: %s" % detailedForecastIterations)
@@ -2246,7 +2223,7 @@ while True:
         
         logger.info("Printing data...")
         print(Fore.YELLOW + "Here's the detailed sun/moon data for: " +
-              Fore.CYAN + location2.city + ", " + location2.state)
+              Fore.CYAN + str(location))
         print("")
         print(Fore.YELLOW + "Sunrise time: " + Fore.CYAN + sunrise_time)
         print(Fore.YELLOW + "Sunset time: " + Fore.CYAN + sunset_time)
@@ -2295,7 +2272,7 @@ while True:
             logger.debug("Loaded 1 JSON.")
         historical_date = historical_json['history']['date']['pretty']
         print(Fore.YELLOW + "Here's the historical weather for " + Fore.CYAN + 
-              location2.city + ", " + location2.state + Fore.YELLOW + " on "
+              str(location) + Fore.YELLOW + " on "
               + Fore.CYAN + historical_date)
         logger.debug("historical_date: %s" % historical_date)
         for data in historical_json['history']['dailysummary']:

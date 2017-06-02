@@ -31,10 +31,17 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * The PyWeather updater will now try each command. This helps in determining if a user can still update PyWeather using the .zip method. - 0% done, Should be finished by 7/5
 * Updates config_README for the latest options, and detailed "when did each option appear" analysis (<3 you Git tagging) - 0% done, Should be finished by 7/9
 
+**OTHER CHANGES**
+* Geopy is no longer required to run PyWeather, so the dependency was removed.
+* AppJar is required to run the experimental radar, so the dependency was added, but only if you enable it in setup.
+* Loading times are increased by 100-500 ms (depending on your connection). That's a good thing.
+
 **BUG FIXES**
 * Fixed a major bug where the PyWeather Git updater wouldn't, uh, fully update.
-* Will fix potential bugs with the directory checking for configsetup. For all I know, a user could end up being called pyweather. - Should be finished by 6/2.
-* Fixes a bug where if the sunrise/sunset/moonrise/moonset hour was 0, PyWeather wasn't correcting it to a 12.
+* Will fix a bug where configsetup's directory checking wasn't 100% compatible with Windows. - Should be finished 6/3.
+* Fixed a bug where if the sunrise/sunset/moonrise/moonset hour was 0, PyWeather wasn't correcting it to a 12.
+* Fixed a bug where if you entered a weird name to check the weather for, an encoding error would occur. It's fixed, and there is no more 2nd reverse geocoder.
+* Will fix a major bug where alerts wouldn't iterate, due to a non-defined config varibale - Should be finished by 6/3.
 
 ## version 0.6.0.1 beta - Released on 5/29/2017
 * Fixes a critical bug where a user couldn't provision their config file when they first downloaded the program.
