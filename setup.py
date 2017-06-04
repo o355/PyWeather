@@ -59,6 +59,7 @@ except:
         config.add_section('VERSIONS')
         config.add_section('PYWEATHER BOOT')
         config.add_section('USER')
+        config.add_section('CACHE')
         config['SUMMARY']['sundata_summary'] = 'False'
         config['SUMMARY']['almanac_summary'] = 'False'
         config['VERBOSITY']['verbosity'] = 'False'
@@ -162,6 +163,7 @@ except:
         config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
         config['UPDATER']['showNewVersionReleaseDate'] = 'True'
         config['USER']['configprovisioned'] = 'True'
+        config['CACHE']['enabled'] = 'True'
         try:
             with open('storage//config.ini', 'w') as configfile:
                 config.write(configfile)
