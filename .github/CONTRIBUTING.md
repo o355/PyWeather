@@ -1,17 +1,35 @@
 # Contributing to PyWeather
 
-When contributing to PyWeather, please follow the Code of Conduct, and how you can contribute in a meaningful way to PyWeather.
+Let's make this simple.
 
-Please read through this document carefully. If you have any questions, please open an issue with your question.
+Bug reports? All the detail. No, seriously. All the detail. Make sure it isn't a "you messed up" issue, and you provide every single bit of detail (the Traceback/Error message, OS, version, etc), and I'll get to work on fixing the bug. If you don't have the detail, I can't fix the bug. 
 
-## Reporting Issuesh
-As a solo developer, I can't catch every single issue in PyWeather. To meaningfully report an issue, please follow these guidelines for your different types of reports.
+Enhancements? As much detail. Draw me a basic design. I'm visual.
 
-### Bug Reports
-To make a successful bug report, be sure to make sure that your bug doesn't contain the following:
-* If you don't see a total Python error (usually a Traceback), don't report it. With these bugs, PyWeather has a safety net, and will tell you what you might be doing wrong. However, if you are 100% sure that you aren't doing anything wrong, you may report the issue.
-* Make sure you can reproduce the bug 100% of the time, or when reproducing the bug, it happens on a steady interval. Basically, no "this bug happened once and never happened again in weeks" reports. Make sure the bug you're reporting can be reproduced 100% of the time, or happens on a steady interval.
-* Turn on verbosity in the code (>0.4.3), or in the config file ( < 0.4.3), and see if anything looks odd.
-* When reporting the issue, make sure to include every detail you can. The more details, the easier I can find the bug. When reporting a bug, you'll at least need to include an error output, and steps to reproduce the bug. Information about your OS, something like a video (I'm more visual), and any other details you want to include will help me fix the bug faster.
-* Please, for the love of anything, if you have an error log/console output that's 20+ lines, please post it to a site like Pastebin.
-* Don't share personal information in issues. If in a video, or detailed output, you input a location, try to not make it your own city, unless the issue happens ONLY in your city. (encoding error)
+Pull requests? Do it. Follow PyWeather's design and code layout (as can be seen in the code), and I'll handle verisoning and updating the changelog. You do the coding. I do the logistics. If you're doing something off of the todo list, don't do the first thing on said todo list. I will scream and bang my head against an object that cannot injure my head. I need to stay alive.
+
+Criticism? Constructive, please. I'll take 100% of constructive criticism to heart, including those that bash my terminal coding style (get it, bash terminal...that was really bad). Non-constructive criticism isn't welcome, and such examples include:
+
+* GET WEATHER ON MARS RIGHT NOW CREEPER MAN
+* UR PROGRAM SUCKS LOL
+* STOP CODING PYTHON UR CODING STYLE SUCKS LOL
+
+Basically, if you give criticism, but also give ways on how to correct/improve said criticism, that's constructive criticism.
+
+Translations? Don't use Google Translate. Google Translate es muy mal. Generalmente, no usar Google Translate, Bing Translate, Wordreference. Muchas gracias. Don't use online translate services, and don't think you know Spanish from Spanish class. If you're a native speaker, awesome! You can go ahead and translate PyWeather in one of two ways:
+
+* Submit a Pull Request with the modified code. I'll do a quick Google Translate runover, and make sure things look accurate.
+* You can look into the code, and wherever you see print() or logger.XXXXX(), translate that text, and submit an issue with all the translated text. I'll put it into a translated version myself!
+
+Documentation? I'll set up read the docs when I feel like it. The wiki will do for now. I've closed off public editing because I haven't tested that.
+
+Rules? Respect everyone. Everyone. There will be no discrimination on who you are. None of the bad stuff, only positive stuff around here. I'm a positive guy. Respect the rules, respect each other, and I won't have an issue.
+
+Questions? Report an issue, and I'll do my best to answer them in a reasonable time!
+
+**When you contribute, no matter how small or big, you'll get thanked in a release. Here's how a thank you in a changelog will probably look.**
+
+- Bug Fix: Fixed a random bug (thanks to @yourusername for reporting)
+- Pull Request: Added xyz (thanks to @yourusername), etc.
+- Translations: Translated pyweather.py to Spanish (thanks to @tuelnombredeusuario for translating)
+- Enhancements: Added xyz (thanks to @yourusername for suggesting)

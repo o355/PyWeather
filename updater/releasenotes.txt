@@ -1,0 +1,20 @@
+0.6.0.1 beta:
+- Fixes a critical bug where a user couldn't provision their config file 
+when they first downloaded the program.
+- Fixes a critical bug where if a user attempted to use the configuration 
+defaults program, the program didn't properly reset their config file.
+
+0.6 beta:
+- Adds an about page was added to PyWeather.
+- Adds alerts information to PyWeather, but it's only available for
+US/EU locations.
+- Adds the option to show release notes in the updater.
+- Adds the option to show when a new version of PyWeather should be
+releasing in the updater. (trying to avoid an Android Wear 2.0)
+- The "What would you like to do now" menu is now number-based now.
+- A lot of under the hood changes for those using Git for updating,
+and in general. The default config.ini file isn't bundled with PyWeather
+now to avoid Git conflicts.
+- Removed support for overriding version info.
+- Adds error catching for a bad reverse geolocator fetch.
+- Minor UI changes.

@@ -90,3 +90,8 @@ ENV/
 apikey.txt
 *.project
 *.pydevproject
+.settings/org.eclipse.ltk.core.refactoring.prefs
+storage/apikey2.txt
+backup/backkey.txt
+temp/*.gif
+storage/config.ini
