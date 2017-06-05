@@ -1,3 +1,4 @@
+
 ## Welcome to PyWeather (0.6.0.1 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
