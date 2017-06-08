@@ -2,7 +2,7 @@
 # (c) 2017 o355, GNU GPL 3.0.
 
 # ==============
-# This is beta code. It's not pretty, and I'm not using proper naving conventions.
+# This is beta code. It's not pretty, and I'm not using proper naming conventions.
 # That will get cleaned up in later betas. I think it will. I hope it will.
 # Also, this is beta code. Bugs are bound to occur. Report issues on GitHub.
 # (if you find any of those small bugs)
@@ -20,7 +20,6 @@ import time
 import shutil
 from colorama import init, Fore, Style
 import codecs
-import geocoder
 import os
 from random import randint
 from geopy import GoogleV3
@@ -79,6 +78,7 @@ try:
     validateAPIKey = config.getboolean('PYWEATHER BOOT', 'validateAPIKey')
     allowGitForUpdating = config.getboolean('UPDATER', 'allowGitForUpdating')
     showAlertsOnSummary = config.getboolean('SUMMARY', 'showAlertsOnSummary')
+    showYesterdayOnSummary = config.getboolean('SUMMARY', 'showYesterdayOnSummary')
     showUpdaterReleaseNotes = config.getboolean('UPDATER', 'showReleaseNotes')
     showUpdaterReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
@@ -114,6 +114,7 @@ except:
     validateAPIKey = True
     allowGitForUpdating = False
     showAlertsOnSummary = True
+    showYesterdayOnSummary = False
     showUpdaterReleaseNotes = True
     showUpdaterReleaseNotes_uptodate = False
     showNewVersionReleaseDate = True
@@ -377,6 +378,8 @@ tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + la
 astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
 almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
 alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + latstr + ',' + lonstr + '.json'
+yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
+
 
 if verbosity == False:
     print("[##--------] | 6% |", round(time.time() - firstfetch,1), "seconds", end="\r")
@@ -386,6 +389,8 @@ logger.debug("hourlyurl: %s" % hourlyurl)
 logger.debug("tendayurl: %s" % tendayurl)
 logger.debug("astronomyurl: %s" % astronomyurl)
 logger.debug("almanacurl: %s" % almanacurl)
+logger.debug("alertsurl: %s" % almanacurl)
+logger.debug("yesterdayurl: %s" % yesterdayurl)
 logger.info("End API var declare...")
 logger.info("Start codec change...")
 
@@ -466,12 +471,14 @@ if validateAPIKey == False and backupKeyLoaded == True:
                 tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
                 astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
                 almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
+                yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
                 logger.debug("currenturl: %s ; f10dayurl: %s" %
                              (currenturl, f10dayurl))
                 logger.debug("hourlyurl: %s ; tendayurl: %s" %
                              (hourlyurl, tendayurl))
                 logger.debug("astronomyurl: %s ; almanacurl: %s" %
                              (astronomyurl, almanacurl))
+                logger.debug("yesterdayurl: %s" % yesterdayurl)
             except:
                 logger.warn("Backup API key could not be validated!")
                 print("Your primary and backup API key(s) could not be validated.",
@@ -541,6 +548,12 @@ try:
         logger.debug("Acquired alerts JSON, end result: %s" % alertsJSON)
     else:
         alertsPrefetched = False
+    if showYesterdayOnSummary == True:
+        yesterdayJSON = requests.get(yesterdayurl)
+        if verbosity == False:
+            print("[#####-----] | 52% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        logger.debug("Acquired yesterdays weather JSON, end result: %s" % yesterdayJSON)
+
 except:
     logger.warn("No connection to the API!! Is the connection offline?")
     print("When PyWeather attempted to fetch the .json files to show you the weather,",
@@ -551,7 +564,7 @@ except:
     print("Press enter to continue.")
     input()
     sys.exit()
-    
+
 # And we parse the json using json.load.
 logger.info("End API fetch...")
 logger.info("Start JSON load...")
@@ -567,8 +580,8 @@ if jsonVerbosity == True:
     logger.debug("forecast10_json loaded with: %s" % forecast10_json)
 if verbosity == False:
     print("[#######---] | 71% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    
-if prefetch10Day_atStart == True: 
+
+if prefetch10Day_atStart == True:
     hourly_json = json.loads(hourlyJSON.text)
     tenday_json = hourly_json
     if jsonVerbosity == True:
@@ -596,6 +609,13 @@ if showAlertsOnSummary == True:
         print("[#########-] | 90% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("alerts_json loaded with: %s" % alerts_json)
+if showYesterdayOnSummary == True:
+    yesterday_json = yesterdayJSON.json() 
+    if verbosity == False:
+        print("[#########-] | 93% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    if jsonVerbosity == True:
+        logger.debug("yesterday_json loaded with: %s" % yesterday_json)
+
 logger.info("Some amount of JSONs loaded...")
 logger.info("Start 2nd geocoder...")
 
@@ -609,7 +629,7 @@ logger.info("Start 2nd geocoder...")
 
 summary_overall = current_json['current_observation']['weather']
 summary_lastupdated = current_json['current_observation']['observation_time']
-    
+
 # While made for the US, metric units will also be tagged along.
 summary_tempf = str(current_json['current_observation']['temp_f'])
 summary_tempc = str(current_json['current_observation']['temp_c'])
@@ -638,7 +658,7 @@ if verbosity == False:
 # This method is probably reliable, but I need to see if it'll work by testing it work PWS stations around my area.
 windcheck = float(summary_windmph)
 windcheck2 = float(summary_windkph)
-logger.debug("windcheck: %s ; windcheck2: %s" 
+logger.debug("windcheck: %s ; windcheck2: %s"
              % (windcheck, windcheck2))
 if windcheck == -9999:
     winddata = False
@@ -658,11 +678,24 @@ logger.debug("summary_feelslikef: %s ; summary_feelslikec: %s"
              % (summary_feelslikef, summary_feelslikec))
 logger.debug("summary_dewPointF: %s ; summary_dewPointC: %s"
              % (summary_dewPointF, summary_dewPointC))
-    
+
 sundata_prefetched = False
 almanac_prefetched = False
 logger.debug("sundata_prefetched: %s ; almanac_prefetched: %s"
              % (sundata_prefetched, almanac_prefetched))
+
+# yesterday_tempc = str(yesterday_json['history']['observations']['tempm'])
+# yesterday_tempf = str(yesterday_json['history']['tempi'])
+# yesterday_dewPointF = str(yesterday_json['history']['dewpti'])
+# yesterday_dewPointC = str(yesterday_json['history']['dewptm'])
+# yesterday_windkph = str(yesterday_json['history']['wspdm'])
+# yesterday_windmph = str(yesterday_json['history']['wspdi'])
+# yesterday_humidity = str(yesterday_json['history']['hum'])
+# yesterday_winddescription = str(yesterday_json['history']['wdire'])
+# This is code to be used later, once I figure out how the yesterday json file is actually meant to be structured.
+
+
+
 # <--- Sun data gets parsed here, if the option for showing it in the summary
 # is enabled in the config. --->
 
@@ -707,7 +740,7 @@ if sundata_summary == True:
         logger.debug("SR_hour: %s ; SR_minute: %s" %
                     (SR_hour, SR_minute))
         logger.debug("sunrise_time: %s" % sunrise_time)
-            
+
 
     SS_minute = int(astronomy_json['moon_phase']['sunset']['minute'])
     SS_hour = int(astronomy_json['moon_phase']['sunset']['hour'])
@@ -915,8 +948,8 @@ while True:
     print(Fore.YELLOW + "- Close PyWeather - Press " + Fore.CYAN + "10" + Fore.YELLOW)
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
-        
-        
+
+
     if moreoptions == "0":
         print(Fore.RED + "Loading...")
         logger.info("Selected view more currently...")
@@ -969,8 +1002,8 @@ while True:
         print(Fore.YELLOW + "Current dew point: " + Fore.CYAN + summary_dewPointF
               + "°F (" + summary_dewPointC + "°C)")
         if winddata == True:
-            print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + 
-                  " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir 
+            print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr +
+                  " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir
                   + " (" + current_windDegrees + " degrees)")
         else:
             print(Fore.YELLOW + "Wind data is not available for this location.")
