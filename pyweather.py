@@ -274,7 +274,7 @@ buildversion = '0.6.0.1 beta'
 # Refresh flag variables go here.
 refresh_currentflagged = False
 refresh_alertsflagged = False
-refresh_hourly3flagged = False
+refresh_hourly36flagged = False
 refresh_hourly10flagged = False
 refresh_forecastflagged = False
 refresh_almanacflagged = False
@@ -282,8 +282,8 @@ refresh_sundataflagged = False
 
 logger.debug("refresh_currentflagged: %s ; refresh_alertsflagged: %s" %
              (refresh_currentflagged, refresh_alertsflagged))
-logger.debug("refresh_hourly3flagged: %s ; refresh_hourly10flagged: %s" %
-             (refresh_hourly3flagged, refresh_hourly10flagged))
+logger.debug("refresh_hourly36flagged: %s ; refresh_hourly10flagged: %s" %
+             (refresh_hourly36flagged, refresh_hourly10flagged))
 logger.debug("refresh_forecastflagged: %s ; refresh_almanacflagged: %s" %
              (refresh_forecastflagged, refresh_almanacflagged))
 logger.debug("refresh_sundataflagged: %s" % refresh_sundataflagged)
@@ -554,19 +554,24 @@ try:
         logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
     if prefetch10Day_atStart == True:
         # Masking the JSON as hourlyJSON makes life a LOT easier.
-        hourlyJSON = requests.get(tendayurl)
+        hourly10JSON = requests.get(tendayurl)
         # Special situation: We separate the 3-day/10-day hourly caches, but
         # they use the same cache timer. 
         cachetime_hourly10 = time.time()
-        logger.info("Acquiring the 10 day hourly JSON, instead of the 3 day.")
+        logger.info("Acquiring the 10 day hourly JSON, as specified.")
         tenday_prefetched = True
-    else:
-        hourlyJSON = requests.get(hourlyurl)
-        cachetime_hourly3 = time.time()
+        logger.debug("tenday_prefetched: %s" % tenday_prefetched)
+        logger.debug("Acquired 10 day hourly JSON, end result: %s" % hourly10JSON)
+        hourly36JSON = requests.get(hourlyurl)
+        cachetime_hourly36 = time.time()
+        logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
+    else:   
+        hourly36JSON = requests.get(hourlyurl)
+        cachetime_hourly36 = time.time()
         tenday_prefetched = False
+        logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
     if verbosity == False:
         print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
     if almanac_summary == True:
         almanacJSON = requests.get(almanacurl)
         cachetime_almanac = time.time()
@@ -609,14 +614,16 @@ if jsonVerbosity == True:
 if verbosity == False:
     print("[#######---] | 71% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     
+
 if prefetch10Day_atStart == True: 
-    hourly_json = json.loads(hourlyJSON.text)
-    tenday_json = hourly_json
+    hourly10_json = json.loads(hourly10JSON.text)
     if jsonVerbosity == True:
         logger.debug("hourly_json loaded with: %s" % hourly_json)
-        logger.debug("tenday_json loaded with: %s" % tenday_json)
+    hourly36_json = json.loads(hourly36JSON.text)
+    if jsonVerbosity == True:
+        logger.debug("hourly_json loaded with: %s" % hourly_json)
 else:
-    hourly_json = json.loads(hourlyJSON.text)
+    hourly36_json = json.loads(hourly36JSON.text)
     if jsonVerbosity == True:
         logger.debug("hourly_json loaded with: %s" % hourly_json)
 if sundata_summary == True:
@@ -961,7 +968,7 @@ while True:
     if moreoptions == "0":
         print(Fore.RED + "Loading...")
         logger.info("Selected view more currently...")
-        if (time.time() - cachetime_current * 60 > cache_currenttime
+        if (time.time() - cachetime_current * 60 >= cache_currenttime
             or refresh_currentflagged == True):
             print(Fore.RED + "Refreshing current data...")
             logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
@@ -1055,7 +1062,7 @@ while True:
         continue
     elif moreoptions == "1":
         # Or condition will sort out 3 potential conditions.
-        if (alertsPrefetched == False or time.time() - cachetime_alerts * 60 > cache_alertstime
+        if (alertsPrefetched == False or time.time() - cachetime_alerts * 60 >= cache_alertstime
             or refresh_alertsflagged == True):
             logger.info("Alerts wasn't prefetched, the cache expired, or alerts was flagged" + 
                         " for a refresh. Refreshing...")
@@ -1223,9 +1230,16 @@ while True:
 # <----------- Detailed Currently is above, Detailed Hourly is below -------->
     
     elif moreoptions == "2":
-        print(Fore.RED + "Loading, please wait a few seconds.")
+        print(Fore.RED + "Loading...")
         print("")
         logger.info("Selected view more hourly...")
+        if (refresh_hourly3flagged == True or time.time() - cachetime_hourly3 >= cache_hourlytime):
+            print(Fore.RED + "Refreshing 3 day hourly data...")
+            try:
+                hourly36JSON = requests.get(hourlyurl)
+            except:
+                print("a problem occurred ill code this later")
+                
         detailedHourlyIterations = 0
         totaldetailedHourlyIterations = 0
         print(Fore.YELLOW + "Here's the detailed hourly forecast for: " + Fore.CYAN + str(location))
