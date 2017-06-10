@@ -684,17 +684,26 @@ almanac_prefetched = False
 logger.debug("sundata_prefetched: %s ; almanac_prefetched: %s"
              % (sundata_prefetched, almanac_prefetched))
 
-# yesterday_tempc = str(yesterday_json['history']['observations']['tempm'])
-# yesterday_tempf = str(yesterday_json['history']['tempi'])
-# yesterday_dewPointF = str(yesterday_json['history']['dewpti'])
-# yesterday_dewPointC = str(yesterday_json['history']['dewptm'])
-# yesterday_windkph = str(yesterday_json['history']['wspdm'])
-# yesterday_windmph = str(yesterday_json['history']['wspdi'])
-# yesterday_humidity = str(yesterday_json['history']['hum'])
-# yesterday_winddescription = str(yesterday_json['history']['wdire'])
-# This is code to be used later, once I figure out how the yesterday json file is actually meant to be structured.
+yesterday_tempC = str(yesterday_json['history']['observations'][0]['tempm'])
+yesterday_tempF = str(yesterday_json['history']['observations'][0]['tempi'])
+yesterday_dewPointF = str(yesterday_json['history']['observations'][0]['dewpti'])
+yesterday_dewPointC = str(yesterday_json['history']['observations'][0]['dewptm'])
+yesterday_windkph = str(yesterday_json['history']['observations'][0]['wspdm'])
+yesterday_windmph = str(yesterday_json['history']['observations'][0]['wspdi'])
+yesterday_humidity = str(yesterday_json['history']['observations'][0]['hum'])
+yesterday_windDescription = str(yesterday_json['history']['observations'][0]['wdire'])
+yesterday_windCompassPoint = str(yesterday_json['history']['observations'][0]['wdird'])
+yesterday_pressuremBar = str(yesterday_json['history']['observations'][0]['pressurem'])
+yesterday_pressureHg = str(yesterday_json['history']['observations'][0]['pressurei'])
+yesterday_visibilityKph = str(yesterday_json['history']['observations'][0]['vism'])
+yesterday_visibilityMph = str(yesterday_json['history']['observations'][0]['visi'])
+yesterday_windChillF = str(yesterday_json['history']['observations'][0]['windchilli'])
+yesterday_windChillC = str(yesterday_json['history']['observations'][0]['windchillm'])
 
-
+if yesterday_windChillF == '-999':
+    windChillAvailable = False
+else:
+    windChillAvailable = True
 
 # <--- Sun data gets parsed here, if the option for showing it in the summary
 # is enabled in the config. --->
@@ -936,16 +945,17 @@ while True:
     print("")
     print(Fore.YELLOW + "What would you like to do now?")
     print(Fore.YELLOW + "- View detailed current data - Press " + Fore.CYAN + "0")
-    print(Fore.YELLOW + "- View detailed alerts data - Press " + Fore.CYAN + "1")
-    print(Fore.YELLOW + "- View detailed hourly data - Press " + Fore.CYAN + "2")
-    print(Fore.YELLOW + "- View the 10 day hourly forecast - Press " + Fore.CYAN + "3")
-    print(Fore.YELLOW + "- View the 10 day forecast - Press " + Fore.CYAN + "4")
-    print(Fore.YELLOW + "- View the almanac for today - Press " + Fore.CYAN + "5")
-    print(Fore.YELLOW + "- View historical weather data - Press " + Fore.CYAN + "6")
-    print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Press " + Fore.CYAN + "7")
-    print(Fore.YELLOW + "- Check for PyWeather updates - Press " + Fore.CYAN + "8")
-    print(Fore.YELLOW + "- View the about page for PyWeather - Press " + Fore.CYAN + "9")
-    print(Fore.YELLOW + "- Close PyWeather - Press " + Fore.CYAN + "10" + Fore.YELLOW)
+    print(Fore.YELLOW + "- View detailed data for previous day - Press " + Fore.CYAN + "1")
+    print(Fore.YELLOW + "- View detailed alerts data - Press " + Fore.CYAN + "2")
+    print(Fore.YELLOW + "- View detailed hourly data - Press " + Fore.CYAN + "3")
+    print(Fore.YELLOW + "- View the 10 day hourly forecast - Press " + Fore.CYAN + "4")
+    print(Fore.YELLOW + "- View the 10 day forecast - Press " + Fore.CYAN + "5")
+    print(Fore.YELLOW + "- View the almanac for today - Press " + Fore.CYAN + "6")
+    print(Fore.YELLOW + "- View historical weather data - Press " + Fore.CYAN + "7")
+    print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Press " + Fore.CYAN + "8")
+    print(Fore.YELLOW + "- Check for PyWeather updates - Press " + Fore.CYAN + "9")
+    print(Fore.YELLOW + "- View the about page for PyWeather - Press " + Fore.CYAN + "10")
+    print(Fore.YELLOW + "- Close PyWeather - Press " + Fore.CYAN + "11" + Fore.YELLOW)
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
 
@@ -975,7 +985,7 @@ while True:
         current_visibilityMi = str(current_json['current_observation']['visibility_mi'])
         current_visibilityKm = str(current_json['current_observation']['visibility_km'])
         current_UVIndex = str(current_json['current_observation']['UV'])
-        logger.debug("current_windDegrees: %s ; current_feelsLikeF: %s" 
+        logger.debug("current_windDegrees: %s ; current_feelsLikeF: %s"
                     % (current_windDegrees, current_feelsLikeF))
         logger.debug("current_feelsLikeC: %s ; current_visibilityMi: %s"
                     % (current_feelsLikeC, current_visibilityMi))
@@ -1020,7 +1030,33 @@ while True:
               + current_precipTodayIn + " inches (" + current_precipTodayMm
               + " mm)")
         continue
+
     elif moreoptions == "1":
+        print(Fore.RED + "Loading...")
+        logger.info("Selected view more currently...")
+        print("Here's the detailed previous weather for: " + Fore.CYAN + str(location))
+        print(Fore.YELLOW + "Yesterday's temperature: " + Fore.CYAN + yesterday_tempF
+                + "°F (" + yesterday_tempC + "°C)")
+        print(Fore.YELLOW + "Yesterday's dewpoint: " + Fore.CYAN + yesterday_dewPointF
+                + "°F (" + yesterday_dewPointC + "°C)")
+        print(Fore.YELLOW + "Yesterday's windspeed: " + Fore.CYAN + yesterday_windkph
+                    + "kph (" + yesterday_windmph + "mph)")
+        print(Fore.YELLOW + "Yesterday's wind direction: " +  Fore.CYAN + yesterday_windCompassPoint
+                    + "° (" + yesterday_windDescription + ")" )
+        if windChillAvailable == True:
+            print(Fore.YELLOW + "Yesterday's windchill: " + Fore.CYAN + yesterday_windChillF
+                    + "°F (" + yesterday_windChillC + "°C)")
+        elif windChillAvailable == False:
+            print("Wind chill data unavailable...")
+
+        print(Fore.YELLOW + "Yesterday's humidity percentage: " + Fore.CYAN + yesterday_humidity + "%")
+        print(Fore.YELLOW + "Yesterday's pressure: " + Fore.CYAN + yesterday_pressureHg
+                + "Hg (" + yesterday_pressuremBar + "mBar)")
+        print(Fore.YELLOW + "Yesterday's visibility: " + Fore.CYAN + yesterday_visibilityKph
+                + "kph (" + yesterday_visibilityMph + "mph)")
+
+
+    elif moreoptions == "2":
         if alertsPrefetched == False:
             try:
                 alertsJSON = requests.get(alertsurl)
@@ -1178,7 +1214,7 @@ while True:
                   "alerts_type: %s" % alerts_type, sep="\n" + Fore.RESET)  
 # <----------- Detailed Currently is above, Detailed Hourly is below -------->
     
-    elif moreoptions == "2":
+    elif moreoptions == "3":
         print(Fore.RED + "Loading, please wait a few seconds.")
         print("")
         logger.info("Selected view more hourly...")
@@ -1297,7 +1333,7 @@ while True:
                 if totaldetailedHourlyIterations == 36:
                     logger.debug("totalDetailedHourlyIterations is 36. Breaking...")
                     break
-    elif moreoptions == "3":
+    elif moreoptions == "4":
         print(Fore.RED + "Loading, please wait a few seconds.")
         print("")
         logger.info("Selected view more 10 day hourly...")
@@ -1440,7 +1476,7 @@ while True:
                 if totaldetailedHourly10Iterations == 240:
                     logger.info("detailedhourly10Iterations is 240. Breaking...")
                     break
-    elif moreoptions == "4":
+    elif moreoptions == "5":
         print(Fore.RED + "Loading, please wait a few seconds.")
         logger.info("Selected view more 10 day...")
         print("")
@@ -1814,9 +1850,9 @@ while True:
 #        frontend.setStatusbar("Zoom: None selected", 1)
 #        frontend.setStatusbar("Status: Idle", 2)
 #        frontend.go()
-    elif moreoptions == "10":
+    elif moreoptions == "11":
         sys.exit()
-    elif moreoptions == "8":
+    elif moreoptions == "9":
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
                     (buildnumber, buildversion))
@@ -1986,7 +2022,7 @@ while True:
                   "not trying to travel through a wormhole with Cooper, and report",
                   "the error on GitHub, while it's around.", sep='\n')
             continue
-    elif moreoptions == "5":
+    elif moreoptions == "6":
         logger.info("Selected option: almanac")
         print(Fore.RED + "Loading, please wait a few seconds...")
         print("")
@@ -2051,7 +2087,7 @@ while True:
         print(Fore.YELLOW + "Normal Low: " + Fore.CYAN + almanac_normalLowF + "°F ("
               + almanac_normalLowC + "°C)")
         print("")
-    elif moreoptions == "7":
+    elif moreoptions == "8":
         print(Fore.RED + "Loading, please wait a few seconds...")
         print("")
         logger.info("Selected option - Sun/moon data")
@@ -2269,7 +2305,7 @@ while True:
               moon_age + " days")
         print(Fore.YELLOW + "Phase of the moon: " + Fore.CYAN +
               moon_phase)
-    elif moreoptions == "6":
+    elif moreoptions == "7":
         print(Fore.RESET + "To show historical data for this location, please enter a date to show the data.")
         print("The date must be in the format YYYYMMDD.")
         print("E.g: If I wanted to see the weather for February 15, 2013, you'd enter 20130215.")
@@ -2595,7 +2631,7 @@ while True:
                     except KeyboardInterrupt:
                         logger.info("Breaking to main menu, user issued KeyboardInterrupt")
                         break         
-    elif moreoptions == "9":
+    elif moreoptions == "10":
         print("", Fore.YELLOW + "-=-=- " + Fore.CYAN + "PyWeather" + Fore.YELLOW + " -=-=-",
               Fore.CYAN + "version " + about_version, "",
               Fore.YELLOW + "Build Number: " + Fore.CYAN + about_buildnumber,
