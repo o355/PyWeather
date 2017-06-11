@@ -9,6 +9,8 @@
 # (but don't report the intentionally hidden bugs)
 # (but the intentionally hidden bugs are no more)
 
+# <---- Preload starts here ---->
+
 # Begin the import process.
 import configparser
 import subprocess
@@ -118,6 +120,13 @@ except:
     showUpdaterReleaseNotes = True
     showUpdaterReleaseNotes_uptodate = False
     showNewVersionReleaseDate = True
+    cache_enabled = True
+    cache_alertstime = 5
+    cache_currenttime = 10
+    cache_hourlytime = 60
+    cache_forecasttime = 60
+    cache_almanactime = 240
+    cache_sundatatime = 480
 
 # Import logging, and set up the logger.
 import logging
@@ -155,8 +164,14 @@ logger.debug("allowGitForUpdating: %s ; showAlertsOnSummary: %s"
              % (allowGitForUpdating, showAlertsOnSummary))
 logger.debug("showUpdaterReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: %s"
              % (showUpdaterReleaseNotes_uptodate, showNewVersionReleaseDate))
-logger.debug("showUpdaterReleaseNotes: %s" %
-             (showUpdaterReleaseNotes))
+logger.debug("showUpdaterReleaseNotes: %s ; cache_enabled: %s" %
+             (showUpdaterReleaseNotes, cache_enabled))
+logger.debug("cache_alertstime: %s ; cache_currenttime: %s" %
+             (cache_alertstime, cache_currenttime))
+logger.debug("cache_hourlytime: %s ; cache_forecasttime: %s" %
+             (cache_hourlytime, cache_forecasttime))
+logger.debug("cache_almanactime: %s ; cache_sundatatime: %s" %
+             (cache_almanactime, cache_sundatatime))
 
 #logger.info("Setting gif x and y resolution for radar...")
 # Set the x/y resolution of the .gif files for the experimental radar.
@@ -255,8 +270,25 @@ logger.debug("apikey = %s" % apikey)
 # Version info gets defined here.
 
 buildnumber = 60.1
-buildversion = '0.6.0.1 beta'    
+buildversion = '0.6.0.1 beta'
 
+# Refresh flag variables go here.
+refresh_currentflagged = False
+refresh_alertsflagged = False
+refresh_hourly36flagged = False
+refresh_hourly10flagged = False
+refresh_forecastflagged = False
+refresh_almanacflagged = False
+refresh_sundataflagged = False
+
+logger.debug("refresh_currentflagged: %s ; refresh_alertsflagged: %s" %
+             (refresh_currentflagged, refresh_alertsflagged))
+logger.debug("refresh_hourly36flagged: %s ; refresh_hourly10flagged: %s" %
+             (refresh_hourly36flagged, refresh_hourly10flagged))
+logger.debug("refresh_forecastflagged: %s ; refresh_almanacflagged: %s" %
+             (refresh_forecastflagged, refresh_almanacflagged))
+logger.debug("refresh_sundataflagged: %s" % refresh_sundataflagged)
+ 
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")
     try:
@@ -512,36 +544,50 @@ if validateAPIKey == False and backupKeyLoaded == True:
 try:
     # For sanity's sake, refetching the current JSON is probably the better thing to do.
     summaryJSON = requests.get(currenturl)
+    cachetime_current = time.time()
     if verbosity == False:
         print("[##--------] | 15% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
     forecast10JSON = requests.get(f10dayurl)
+    cachetime_forecast = time.time()
     if verbosity == False:
         print("[###-------] | 24% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
     if sundata_summary == True:
+        cachetime_sundata = time.time()
         sundataJSON = requests.get(astronomyurl)
         if verbosity == False:
             print("[###-------] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
     if prefetch10Day_atStart == True:
         # Masking the JSON as hourlyJSON makes life a LOT easier.
-        hourlyJSON = requests.get(tendayurl)
-        logger.info("Acquiring the 10 day hourly JSON, instead of the 3 day.")
+        hourly10JSON = requests.get(tendayurl)
+        # Special situation: We separate the 3-day/10-day hourly caches, but
+        # they use the same cache timer. 
+        cachetime_hourly10 = time.time()
+        logger.info("Acquiring the 10 day hourly JSON, as specified.")
         tenday_prefetched = True
-    else:
-        hourlyJSON = requests.get(hourlyurl)
+        logger.debug("tenday_prefetched: %s" % tenday_prefetched)
+        logger.debug("Acquired 10 day hourly JSON, end result: %s" % hourly10JSON)
+        hourly36JSON = requests.get(hourlyurl)
+        cachetime_hourly36 = time.time()
+        logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
+    else:   
+        hourly36JSON = requests.get(hourlyurl)
+        cachetime_hourly36 = time.time()
         tenday_prefetched = False
+        logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
     if verbosity == False:
         print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    logger.debug("Acquired hourly JSON, end result: %s" % hourlyJSON)
     if almanac_summary == True:
         almanacJSON = requests.get(almanacurl)
+        cachetime_almanac = time.time()
         if verbosity == False:
             print("[#####-----] | 49% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
     if showAlertsOnSummary == True:
         alertsJSON = requests.get(alertsurl)
+        cachetime_alerts = time.time()
         alertsPrefetched = True
         if verbosity == False:
             print("[#####-----] | 52% |", round(time.time() - firstfetch,1), "seconds", end="\r")
@@ -579,18 +625,20 @@ forecast10_json = json.loads(forecast10JSON.text)
 if jsonVerbosity == True:
     logger.debug("forecast10_json loaded with: %s" % forecast10_json)
 if verbosity == False:
-    print("[#######---] | 71% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    print("[#######---] | 71% |", round(time.time() - firstfetch,1), "seconds", end="\r")    
 
-if prefetch10Day_atStart == True:
-    hourly_json = json.loads(hourlyJSON.text)
-    tenday_json = hourly_json
+if prefetch10Day_atStart == True: 
+    hourly10_json = json.loads(hourly10JSON.text)
     if jsonVerbosity == True:
-        logger.debug("hourly_json loaded with: %s" % hourly_json)
-        logger.debug("tenday_json loaded with: %s" % tenday_json)
+        logger.debug("hourly10_json loaded with: %s" % hourly10_json)
+    hourly36_json = json.loads(hourly36JSON.text)
+    if jsonVerbosity == True:
+        logger.debug("hourly36_json loaded with: %s" % hourly36_json)
 else:
-    hourly_json = json.loads(hourlyJSON.text)
+    hourly36_json = json.loads(hourly36JSON.text)
     if jsonVerbosity == True:
-        logger.debug("hourly_json loaded with: %s" % hourly_json)
+        logger.debug("hourly36_json loaded with: %s" % hourly36_json)
+        
 if sundata_summary == True:
     astronomy_json = json.loads(sundataJSON.text)
     if verbosity == False:
@@ -963,6 +1011,31 @@ while True:
     if moreoptions == "0":
         print(Fore.RED + "Loading...")
         logger.info("Selected view more currently...")
+        if (time.time() - cachetime_current * 60 >= cache_currenttime
+            or refresh_currentflagged == True):
+            print(Fore.RED + "Refreshing current data...")
+            logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
+                         (refresh_currentflagged, time.time() - cachetime_current))
+            try:
+                summaryJSON = requests.get(currenturl)
+                cachetime_current = time.time()
+                refresh_currentflagged = False
+                logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
+                             (refresh_currentflagged, time.time() - cachetime_current))
+            except:
+                print("Whoops! PyWeather ran into an error when refetching current",
+                      "weather. Make sure that you have an internet connection, and",
+                      "if you're on a filtered network, api.wunderground.com is unblocked.", 
+                      "Press enter to exit to the main menu.", sep="\n")
+                input()
+                refresh_currentflagged = True
+                logger.debug("refresh_currentflagged: %s" % refresh_currentflagged)
+            current_json = json.loads(summaryJSON.text)
+            if jsonVerbosity == True:
+                logger.debug("current_json loaded with: %s" % current_json)
+            
+                
+                
         print("")
         current_pressureInHg = str(current_json['current_observation']['pressure_in'])
         current_pressureMb = str(current_json['current_observation']['pressure_mb'])
@@ -1032,6 +1105,7 @@ while True:
         continue
 
     elif moreoptions == "1":
+<<<<<<< HEAD
         print(Fore.RED + "Loading...")
         logger.info("Selected view more currently...")
         print("Here's the detailed previous weather for: " + Fore.CYAN + str(location))
@@ -1058,10 +1132,22 @@ while True:
 
     elif moreoptions == "2":
         if alertsPrefetched == False:
+=======
+        # Or condition will sort out 3 potential conditions.
+        if (alertsPrefetched == False or time.time() - cachetime_alerts * 60 >= cache_alertstime
+            or refresh_alertsflagged == True):
+            logger.info("Alerts wasn't prefetched, the cache expired, or alerts was flagged" + 
+                        " for a refresh. Refreshing...")
+            logger.debug("alertsPrefetched: %s ; alerts cache time: %s" % 
+                         (alertsPrefetched, time.time() - cachetime_alerts))
+            logger.debug("refresh_alertsflagged: %s" % refresh_alertsflagged)
+>>>>>>> 51d86d0f6561cc383b313c31eebf9e313b601649
             try:
                 alertsJSON = requests.get(alertsurl)
                 logger.debug("alertsJSON acquired, end result %s." % alertsJSON)
                 alertsPrefetched = True
+                cachetime_alerts = time.time()
+                refresh_alertsflagged = False
                 logger.debug("alertsPrefetched: %s" % alertsPrefetched)
             except:
                 print("When attempting to fetch the alerts JSON file to parse,",
@@ -1070,7 +1156,9 @@ while True:
                       "Otherwise, make sure you have an internet connection.", sep="\n")
                 printException()
                 alertsPrefetched = False
-                logger.debug("alertsPrefetched: %s", alertsPrefetched)
+                refresh_alertsflagged = True
+                logger.debug("alertsPrefetched: %s ; refresh_alertsflagged: %s" % 
+                             (alertsPrefetched, refresh_alertsflagged))
                 print("Press enter to continue.")
                 input()
                 continue
@@ -1214,10 +1302,22 @@ while True:
                   "alerts_type: %s" % alerts_type, sep="\n" + Fore.RESET)  
 # <----------- Detailed Currently is above, Detailed Hourly is below -------->
     
+<<<<<<< HEAD
     elif moreoptions == "3":
         print(Fore.RED + "Loading, please wait a few seconds.")
+=======
+    elif moreoptions == "2":
+        print(Fore.RED + "Loading...")
+>>>>>>> 51d86d0f6561cc383b313c31eebf9e313b601649
         print("")
         logger.info("Selected view more hourly...")
+        if (refresh_hourly3flagged == True or time.time() - cachetime_hourly3 >= cache_hourlytime):
+            print(Fore.RED + "Refreshing 3 day hourly data...")
+            try:
+                hourly36JSON = requests.get(hourlyurl)
+            except:
+                print("a problem occurred ill code this later")
+                
         detailedHourlyIterations = 0
         totaldetailedHourlyIterations = 0
         print(Fore.YELLOW + "Here's the detailed hourly forecast for: " + Fore.CYAN + str(location))

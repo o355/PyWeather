@@ -5,6 +5,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 ## version 0.6.2 beta - Should be released 7/20/2017
 * Adds the yesterday's weather feature. - Should be finished by 7/17
 * Adds the option to turn on a custom user agent. Cool, right? - Should be finished by 7/19
+* Adds the manual configuration of 3-day and 10-day hourly cache times - Should be finished by 7/19
 
 ## version 0.6.1 beta - Should be released on 7/11/2017
 **NEW FEATURES/REMOVALS**
@@ -13,11 +14,21 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 	* Add new options to configsetup - 100% done
 	* Add new options to configdefault - 100% done
 	* Add new options to setup - 100% done
-	* Initial implementation - 0% done
-	* Implement cache (current/alerts) - 0% done
-	* Implement cache (hourly/forecast) - 0% done
+	* Initial implementation - 100% done
+	* Implement cache (current/alerts) - 100% done
+	* Implement cache (hourly (3 day/10 day)/forecast) - 15% done
+		* The cache implementation required a large backbone change. 10-day fetching at boot is still enabled, it now also has to fetch the normal hourly JSON because of the new implementation. Implementing the cache, while preserving call efficiency would require a massive amount of condition checking, and would probably be less efficient on API calls.
 	* Implement cache (almanac/sunrise) - 0% done
+	* Adding the refresh option - 0% done
 * Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/26
+	* Uncommenting code - 0% done
+	* Adding all radar/satellite views - 0% done
+	* Adding proper cache removal (at start of the radar option, when user closes it out) - 0% done
+	* Bringing back the placeholder .gifs - 0% done
+	* Improving the nuts and bolts in the GUI (status bars, etc.) - 0% done
+	* Adding new options to configupdate, configsetup, and configdefault - 0% done
+	* Adding radar options to setup (case by case installing of libraries/importing of libraries) - 0% done
+	* Doing error checking for the appJar library on radar "boot", offering user to install it, etc. - 0% done
 * Adds error checking for the requests library at boot for all scripts. - 0% done, Should be finished by 6/27
 	* Add error checking (pyweather/updater) - 0% done
 	* Add error checking (setup) - 0% done
@@ -29,7 +40,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 	* storage/README -> storage/storage_README - 0% done
 	* storage/config_README -> documentation/config_README - 0% done
 * The PyWeather updater will now try each command. This helps in determining if a user can still update PyWeather using the .zip method. - 0% done, Should be finished by 7/5
-* Updates config_README for the latest options, and detailed "when did each option appear" analysis (<3 you Git tagging) - 0% done, Should be finished by 7/9
+* Updates config_README for the latest options, and detailed "when did each option appear" analysis (using previous releases.) - 0% done, Should be finished by 7/9
 
 **OTHER CHANGES**
 * Geopy is no longer required to run PyWeather, so the dependency was removed.
