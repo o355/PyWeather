@@ -366,7 +366,6 @@ try:
     # Since the loading bars interfere with true verbosity logging, we turn
     # them off if verbosity is enabled (it isn't needed)
     # :/
-    print(location)
     if verbosity == False:
         print("[#---------] | 1% |", round(time.time() - firstfetch,1), 
               "seconds", end="\r")
@@ -576,6 +575,7 @@ try:
         hourly36JSON = requests.get(hourlyurl)
         cachetime_hourly36 = time.time()
         tenday_prefetched = False
+        logger.debug("tenday_prefetched: %s" % tenday_prefetched)
         logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
     if verbosity == False:
         print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
@@ -945,7 +945,7 @@ if sundata_summary == True:
     print("")
 print(Fore.YELLOW + "The hourly forecast:")
 
-for hour in hourly_json['hourly_forecast']:
+for hour in hourly36_json['hourly_forecast']:
     hourly_time = hour['FCTTIME']['civil']
     hourly_tempf = hour['temp']['english']
     hourly_tempc = hour['temp']['metric']
@@ -1033,9 +1033,7 @@ while True:
             current_json = json.loads(summaryJSON.text)
             if jsonVerbosity == True:
                 logger.debug("current_json loaded with: %s" % current_json)
-            
-                
-                
+                   
         print("")
         current_pressureInHg = str(current_json['current_observation']['pressure_in'])
         current_pressureMb = str(current_json['current_observation']['pressure_mb'])
@@ -1105,7 +1103,6 @@ while True:
         continue
 
     elif moreoptions == "1":
-<<<<<<< HEAD
         print(Fore.RED + "Loading...")
         logger.info("Selected view more currently...")
         print("Here's the detailed previous weather for: " + Fore.CYAN + str(location))
@@ -1131,8 +1128,6 @@ while True:
 
 
     elif moreoptions == "2":
-        if alertsPrefetched == False:
-=======
         # Or condition will sort out 3 potential conditions.
         if (alertsPrefetched == False or time.time() - cachetime_alerts * 60 >= cache_alertstime
             or refresh_alertsflagged == True):
@@ -1141,7 +1136,7 @@ while True:
             logger.debug("alertsPrefetched: %s ; alerts cache time: %s" % 
                          (alertsPrefetched, time.time() - cachetime_alerts))
             logger.debug("refresh_alertsflagged: %s" % refresh_alertsflagged)
->>>>>>> 51d86d0f6561cc383b313c31eebf9e313b601649
+
             try:
                 alertsJSON = requests.get(alertsurl)
                 logger.debug("alertsJSON acquired, end result %s." % alertsJSON)
@@ -1166,6 +1161,7 @@ while True:
             if jsonVerbosity == True:
                 logger.debug("alerts_json: %s" % alerts_json)
             logger.info("Trying to parse alert type...")
+            
             try:
                 for data in alerts_json['alerts']:
                     alerts_testtype = data['wtype_meteoalarm']
@@ -1302,26 +1298,40 @@ while True:
                   "alerts_type: %s" % alerts_type, sep="\n" + Fore.RESET)  
 # <----------- Detailed Currently is above, Detailed Hourly is below -------->
     
-<<<<<<< HEAD
+
     elif moreoptions == "3":
         print(Fore.RED + "Loading, please wait a few seconds.")
-=======
-    elif moreoptions == "2":
-        print(Fore.RED + "Loading...")
->>>>>>> 51d86d0f6561cc383b313c31eebf9e313b601649
         print("")
         logger.info("Selected view more hourly...")
-        if (refresh_hourly3flagged == True or time.time() - cachetime_hourly3 >= cache_hourlytime):
+        if (refresh_hourly36flagged == True or time.time() - cachetime_hourly36 * 60 >= cache_hourlytime):
             print(Fore.RED + "Refreshing 3 day hourly data...")
+            logger.debug("refresh_hourly36flagged: %s ; hourly36 cache time: %s" %
+                         (refresh_hourly36flagged, time.time() - cachetime_hourly36))
             try:
                 hourly36JSON = requests.get(hourlyurl)
+                cachetime_hourly36 = time.time()
             except:
-                print("a problem occurred ill code this later")
+                print("Whoops! A problem occurred when trying to refresh 36 hour",
+                      "hourly data. Make sure you have an internet connection, and if",
+                      "you're on a network with a filter, make sure that api.wunderground.com",
+                      "is unblocked.",
+                      "Press enter to continue.", sep="\n")
+                printException()
+                input()
+                refresh_hourly36flagged = False
+                continue
+            
+            hourly36_json = json.loads(hourly36JSON.text)
+            if jsonVerbosity == True:
+                logger.debug("hourly36_json: %s" % hourly36_json)
+            refresh_hourly36flagged = False
+            logger.debug("refresh_hourly36flagged: %s" % refresh_hourly36flagged)
+            
                 
         detailedHourlyIterations = 0
         totaldetailedHourlyIterations = 0
         print(Fore.YELLOW + "Here's the detailed hourly forecast for: " + Fore.CYAN + str(location))
-        for hour in hourly_json['hourly_forecast']:
+        for hour in hourly36_json['hourly_forecast']:
             logger.info("We're on iteration: %s" % detailedHourlyIterations)
             hourly_time = hour['FCTTIME']['civil']
             hourly_tempf = hour['temp']['english']
@@ -1433,25 +1443,29 @@ while True:
                 if totaldetailedHourlyIterations == 36:
                     logger.debug("totalDetailedHourlyIterations is 36. Breaking...")
                     break
+
     elif moreoptions == "4":
         print(Fore.RED + "Loading, please wait a few seconds.")
         print("")
         logger.info("Selected view more 10 day hourly...")
         detailedHourly10Iterations = 0
         totaldetailedHourly10Iterations = 0
-        if tenday_prefetched == False:
-            logger.info("Fetching 10 day JSON...not previously fetched")
-            tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + "," + lonstr + '.json'
+        if (tenday_prefetched == False or refresh_hourly10flagged == True or
+            time.time() - cachetime_hourly10 * 60 >= cache_hourlytime):
+            print(Fore.RED + "Refreshing (or fetching for the first time) 10 day hourly data...")
             try:
                 tendayJSON = requests.get(tendayurl)
-                logger.debug("Retrieved ten day hourly JSON with response: %s" % tendayJSON)
-                tenday_prefetched = True
+                logger.debug("Retrieved hourly 10 JSON with end result: %s" % tendayJSON)
+                cachetime_hourly10 = time.time()
             except:
                 print("When attempting to fetch the 10-day hourly forecast data, PyWeather ran",
                       "info an error. If you're on a network with a filter, make sure that",
                       "'api.wunderground.com' is unblocked. Otherwise, make sure that you have",
                       "an internet connection.", sep="\n")
                 tenday_prefetched = False
+                refresh_hourly10flagged = False
+                logger.debug("tenday_prefetched: %s ; refresh_hourly10flagged: %s" %
+                             (tenday_prefetched, refresh_hourly10flagged))
                 printException()
                 print("Press enter to continue.")
                 input()
