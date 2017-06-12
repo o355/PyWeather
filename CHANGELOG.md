@@ -2,10 +2,11 @@
 
 Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
 
-## version 0.6.2 beta - Should be released 7/20/2017
+## version 0.6.2 beta - Should be released 7/27/2017
 * Adds the yesterday's weather feature. - Should be finished by 7/17
 * Adds the option to turn on a custom user agent. Cool, right? - Should be finished by 7/19
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Should be finished by 7/19
+* Adds caching to the radar - Should be finished by 7/27
 
 ## version 0.6.1 beta - Should be released on 7/11/2017
 **NEW FEATURES/REMOVALS**
@@ -16,29 +17,28 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 	* Add new options to setup - 100% done
 	* Initial implementation - 100% done
 	* Implement cache (current/alerts) - 100% done
-	* Implement cache (hourly (3 day/10 day)/forecast) - 15% done
-		* The cache implementation required a large backbone change. 10-day fetching at boot is still enabled, it now also has to fetch the normal hourly JSON because of the new implementation. Implementing the cache, while preserving call efficiency would require a massive amount of condition checking, and would probably be less efficient on API calls.
-	* Implement cache (almanac/sunrise) - 0% done
-	* Adding the refresh option - 0% done
-* Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/26
-	* Uncommenting code - 0% done
-	* Adding all radar/satellite views - 0% done
-	* Adding proper cache removal (at start of the radar option, when user closes it out) - 0% done
-	* Bringing back the placeholder .gifs - 0% done
-	* Improving the nuts and bolts in the GUI (status bars, etc.) - 0% done
-	* Adding new options to configupdate, configsetup, and configdefault - 0% done
-	* Adding radar options to setup (case by case installing of libraries/importing of libraries) - 0% done
-	* Doing error checking for the appJar library on radar "boot", offering user to install it, etc. - 0% done
-* Adds error checking for the requests library at boot for all scripts. - 0% done, Should be finished by 6/27
-	* Add error checking (pyweather/updater) - 0% done
-	* Add error checking (setup) - 0% done
-* Restructures the file system. configdefault.py will now live in the storage folder, along with versioninfo.txt. A new "Documentation" folder will also be added, just to clean up things. Some rescripting will be needed. - 0% done, Should be finished by 7/1
-	* configdefault -> storage/configdefault & script updates - 0% done
-	* versioninfo.txt -> storage/versioninfo.txt & script updates - 0% done
-	* updater/README -> documentation/updater_README - 0% done
-	* backup/README -> documentation/backup_README - 0% done
-	* storage/README -> storage/storage_README - 0% done
-	* storage/config_README -> documentation/config_README - 0% done
+	* Implement cache (hourly (3 day/10 day)/forecast) - 50% done - Should be finished by 6/10
+	* Implement cache (almanac/sunrise) - 0% done - Should be finished by 6/12
+	* Adding the refresh option - 0% done - Should be finished by 6/14
+* Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/27
+	* Uncommenting code - 0% done - Should be finished by 6/19
+	* Adding all radar/satellite views - 0% done - Should be finished by 6/20
+	* Adding proper cache removal (at start of the radar option, when user closes it out) - 0% done - Should be finished by 6/21
+	* Bringing back the placeholder .gifs - 0% done - Should be finished by 6/22
+	* Improving the nuts and bolts in the GUI (status bars, etc.) - 0% done - Should be finished by 6/22
+	* Adding new options to configupdate, configsetup, and configdefault - 0% done - Should be finished by 6/23
+	* Adding radar options to setup (case by case installing of libraries/importing of libraries) - 0% done - Should be finished by 6/24
+	* Doing error checking for the appJar library on radar "boot", offering user to install it, etc. - 0% done - Should be finished by 6/25
+* Adds error checking for the requests library at boot for all scripts. - 0% done, Should be finished by 6/29
+	* Add error checking (pyweather/updater) - 0% done - Should be finished by 6/28
+	* Add error checking (setup) - 0% done - Should be finished by 6/28
+* Restructures the file system. configdefault.py will now live in the storage folder, along with versioninfo.txt. A new "Documentation" folder will also be added, just to clean up things. Some rescripting will be needed. - 0% done, Should be finished by 7/2
+	* configdefault -> storage/configdefault & script updates - 0% done - Should be finished by 6/29
+	* versioninfo.txt -> storage/versioninfo.txt & script updates - 0% done - Should be finished by 6/29
+	* updater/README -> documentation/updater_README - 0% done - Should be finished by 6/30
+	* backup/README -> documentation/backup_README - 0% done - Should be finished by 6/30
+	* storage/README -> storage/storage_README - 0% done - Should be finished by 7/1
+	* storage/config_README -> documentation/config_README - 0% done - Should be finished by 7/1
 * The PyWeather updater will now try each command. This helps in determining if a user can still update PyWeather using the .zip method. - 0% done, Should be finished by 7/5
 * Updates config_README for the latest options, and detailed "when did each option appear" analysis (using previous releases.) - 0% done, Should be finished by 7/9
 
@@ -226,40 +226,3 @@ The clever title comes from the addition of alerts, and the gigantic backbone up
 
 ## version 0.2 beta (The Initial Update) - Released 2/22/2017
 * Initial build
-
-
-# Very future versions
-The upcoming dates here do come with uncertain release dates. Features might be added on the fly.
-
-
-## version 0.7 beta - Should be released on 7/11/2017
-* Adds the ability to view weather from a PWS - Should be finished by 7/6.
-* Doing the usual catching up all the scripts that involve configs - Should be finished by 7/10.
-
-## version 0.8 beta - Should be released on 8/14/2017
-* Adds PyWeather's Quick Weather, a nice way to get the weather in a pinch. - Should be finished by 7/31.
-* Adds hurricane/tide data to PyWeather. - Should be finished by 8/6.
-* Again, does the usual "catching up all scripts involving a config" thing. - Should be finished by 8/13.
-
-## version 0.9 beta - Should be released on 9/4/2017
-* Adds the ability to show yesterday's weather. - Should be finished by 8/26.
-* Adds the librarycheck.py script. - Should be finished by 9/3.
-
-## version 0.10 beta
-* Cleans up the first 500 lines of code in the main PyWeather script.
-* Cleans up the first 450 lines of code in the setup script.
-* Cleans up all code in the updater script.
-
-## version 0.10.1 beta
-* Cleans up lines 500-1000 of code in the main PyWeather script.
-* Cleans up the remaining lines of code in the setup script.
-* Cleans up all code in the keybackup.py script.
-
-## version 0.10.2 beta
-* Cleans up lines 1000-1500 of code in the main PyWeather script.
-* Cleans up all code in the config.py script.
-* Cleans up all code in the configdefault.py script.
-
-## version 0.10.3 beta
-* Cleans up all remaining lines of code in the main PyWeather script.
-* Cleans up all code in the librarycheck.py script.

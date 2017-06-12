@@ -14,8 +14,17 @@ You can also use git to download PyWeather, using the commands below.
 
 ```
 git clone https://github.com/o355/pyweather.git
-git checkout 0.6.0.1-beta (if you want indev code, don't perform this command)
+git checkout 0.6.0.1-beta
 ```
+
+If you'd prefer to live on the bleeding edge of PyWeather updates, run these commands.
+
+```
+git clone https://github.com/o355/pyweather.git
+```
+
+(please note: indev code is subject to work on some nights, and not on other nights. indev code is also indev code, so there will be bugs!)
+
 After that, run setup.py, and the setup file will guide you through setting up PyWeather. After that, run pyweather.py, and enjoy the magic of PyWeather! It's as easy as that.
 
 ## What's PyWeather?
