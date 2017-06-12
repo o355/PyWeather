@@ -945,7 +945,7 @@ if sundata_summary == True:
     print("")
 print(Fore.YELLOW + "The hourly forecast:")
 
-for hour in hourly_json['hourly_forecast']:
+for hour in hourly36_json['hourly_forecast']:
     hourly_time = hour['FCTTIME']['civil']
     hourly_tempf = hour['temp']['english']
     hourly_tempc = hour['temp']['metric']
@@ -1105,7 +1105,6 @@ while True:
         continue
 
     elif moreoptions == "1":
-<<<<<<< HEAD
         print(Fore.RED + "Loading...")
         logger.info("Selected view more currently...")
         print("Here's the detailed previous weather for: " + Fore.CYAN + str(location))
@@ -1132,16 +1131,13 @@ while True:
 
     elif moreoptions == "2":
         if alertsPrefetched == False:
-=======
         # Or condition will sort out 3 potential conditions.
-        if (alertsPrefetched == False or time.time() - cachetime_alerts * 60 >= cache_alertstime
-            or refresh_alertsflagged == True):
-            logger.info("Alerts wasn't prefetched, the cache expired, or alerts was flagged" + 
+            if (alertsPrefetched == False or time.time() - cachetime_alerts * 60 >= cache_alertstime or refresh_alertsflagged == True): 
+                logger.info("Alerts wasn't prefetched, the cache expired, or alerts was flagged" + 
                         " for a refresh. Refreshing...")
-            logger.debug("alertsPrefetched: %s ; alerts cache time: %s" % 
+                logger.debug("alertsPrefetched: %s ; alerts cache time: %s" % 
                          (alertsPrefetched, time.time() - cachetime_alerts))
-            logger.debug("refresh_alertsflagged: %s" % refresh_alertsflagged)
->>>>>>> 51d86d0f6561cc383b313c31eebf9e313b601649
+                logger.debug("refresh_alertsflagged: %s" % refresh_alertsflagged)
             try:
                 alertsJSON = requests.get(alertsurl)
                 logger.debug("alertsJSON acquired, end result %s." % alertsJSON)
@@ -1301,27 +1297,22 @@ while True:
                   "For error reporting, this is what the variable 'alerts_type' is currently storing.",
                   "alerts_type: %s" % alerts_type, sep="\n" + Fore.RESET)  
 # <----------- Detailed Currently is above, Detailed Hourly is below -------->
-    
-<<<<<<< HEAD
+
     elif moreoptions == "3":
         print(Fore.RED + "Loading, please wait a few seconds.")
-=======
-    elif moreoptions == "2":
-        print(Fore.RED + "Loading...")
->>>>>>> 51d86d0f6561cc383b313c31eebf9e313b601649
         print("")
         logger.info("Selected view more hourly...")
-        if (refresh_hourly3flagged == True or time.time() - cachetime_hourly3 >= cache_hourlytime):
+        if (refresh_hourly36flagged == True or time.time() - cachetime_hourly36 >= cache_hourlytime):
             print(Fore.RED + "Refreshing 3 day hourly data...")
             try:
                 hourly36JSON = requests.get(hourlyurl)
             except:
                 print("a problem occurred ill code this later")
-                
+
         detailedHourlyIterations = 0
         totaldetailedHourlyIterations = 0
         print(Fore.YELLOW + "Here's the detailed hourly forecast for: " + Fore.CYAN + str(location))
-        for hour in hourly_json['hourly_forecast']:
+        for hour in hourly36_json['hourly_forecast']:
             logger.info("We're on iteration: %s" % detailedHourlyIterations)
             hourly_time = hour['FCTTIME']['civil']
             hourly_tempf = hour['temp']['english']
