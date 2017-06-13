@@ -1455,6 +1455,7 @@ while True:
             try:
                 tendayJSON = requests.get(tendayurl)
                 logger.debug("Retrieved hourly 10 JSON with end result: %s" % tendayJSON)
+                tenday_json = json.loads(tendayJSON.text)
                 cachetime_hourly10 = time.time()
             except:
                 print("When attempting to fetch the 10-day hourly forecast data, PyWeather ran",
@@ -1469,8 +1470,12 @@ while True:
                 print("Press enter to continue.")
                 input()
                 continue
-            
+
+        else:
+            tendayJSON = requests.get(tendayurl)
+            logger.debug("Retrieved hourly 10 JSON with end result: %s" % tendayJSON)
             tenday_json = json.loads(tendayJSON.text)
+
         print(Fore.YELLOW + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + str(location))  
         for hour in tenday_json['hourly_forecast']:
             logger.info("We're on iteration: %s/24. User iterations: %s." %
