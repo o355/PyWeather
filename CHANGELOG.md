@@ -45,7 +45,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 **OTHER CHANGES**
 * Geopy is no longer required to run PyWeather, so the dependency was removed.
 * AppJar is required to run the experimental radar, so the dependency was added, but only if you enable it in setup.
-* Loading times are increased by 100-500 ms (depending on your connection). That's a good thing.
+* Loading times are increased by ~100ms (much higher if your connection is slow), thanks to 
 
 **BUG FIXES**
 * Fixed a major bug where the PyWeather Git updater wouldn't, uh, fully update.
