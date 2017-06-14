@@ -17,7 +17,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 	* Add new options to setup - 100% done
 	* Initial implementation - 100% done
 	* Implement cache (current/alerts) - 100% done
-	* Implement cache (hourly (3 day/10 day)/forecast) - 60% done - Should be finished by 6/14
+	* Implement cache (hourly (3 day/10 day)/forecast) - 70% done - Should be finished by 6/14
 	* Implement cache (almanac/sunrise) - 0% done - Should be finished by 6/17
 	* Adding the refresh option - 0% done - Should be finished by 6/18
 * Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/27
