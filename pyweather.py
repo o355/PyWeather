@@ -1248,6 +1248,7 @@ while True:
                 printException()
                 input()
                 refresh_hourly36flagged = False
+                logger.debug("refresh_hourly36flagged: %s" % refresh_hourly36flagged)
                 continue
             
             hourly36_json = json.loads(hourly36JSON.text)
@@ -1372,6 +1373,7 @@ while True:
                 if totaldetailedHourlyIterations == 36:
                     logger.debug("totalDetailedHourlyIterations is 36. Breaking...")
                     break
+                
     elif moreoptions == "3":
         print(Fore.RED + "Loading...")
         print("")
@@ -1380,6 +1382,9 @@ while True:
         totaldetailedHourly10Iterations = 0
         if (tenday_prefetched == False or refresh_hourly10flagged == True or
             time.time() - cachetime_hourly10 * 60 >= cache_hourlytime):
+            logger.debug("tenday_prefetched: %s ; refresh_hourly10flagged: %s" %
+                         (tenday_prefetched, refresh_hourly10flagged))
+            logger.debug("hourly 10 cache time: %s" % time.time() - cachetime_hourly10)
             print(Fore.RED + "Refreshing (or fetching for the first time) 10 day hourly data...")
             try:
                 tendayJSON = requests.get(tendayurl)
@@ -1390,6 +1395,7 @@ while True:
                       "info an error. If you're on a network with a filter, make sure that",
                       "'api.wunderground.com' is unblocked. Otherwise, make sure that you have",
                       "an internet connection.", sep="\n")
+                printException()
                 tenday_prefetched = False
                 refresh_hourly10flagged = False
                 logger.debug("tenday_prefetched: %s ; refresh_hourly10flagged: %s" %
@@ -1399,7 +1405,15 @@ while True:
                 input()
                 continue
             
+            tenday_prefetched = True
+            refresh_hourly10flagged = False
+            logger.debug("tenday_prefetched: %s ; refresh_hourly10flagged: %s" %
+                         (tenday_prefetched, refresh_hourly10flagged))
             tenday_json = json.loads(tendayJSON.text)
+            if jsonVerbosity == True:
+                logger.debug("tenday_json: %s" % tenday_json)
+            logger.debug("tenday json loaded.")
+            
         print(Fore.YELLOW + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + str(location))  
         for hour in tenday_json['hourly_forecast']:
             logger.info("We're on iteration: %s/24. User iterations: %s." %
@@ -1447,7 +1461,7 @@ while True:
                 logger.warn("No snow data! Maybe it's summer?")
             else:
                 hourly10_snowData = True
-                logger.info("Lucky duck getting some snow.")
+                logger.info("Snow data is present.")
             
             hourly10_snowIn = str(hourly10_snowCheck)
             hourly10_snowMm = str(hour['snow']['metric'])
@@ -1522,6 +1536,33 @@ while True:
         print(Fore.RED + "Loading, please wait a few seconds.")
         logger.info("Selected view more 10 day...")
         print("")
+        if (refresh_forecastflagged == True or time.time() - cachetime_forecast * 60 >= cache_hourlytime):
+            print(Fore.RED + "Refreshing forecast data...")
+            logger.debug("refresh_forecastflagged: %s ; forecast cache time: %s" %
+                         (refresh_forecastflagged, time.time() - cachetime_forecast))
+            try:
+                forecast10JSON = requests.get(f10url)
+                cachetime_forecast = time.time()
+            except:
+                print("PyWeather ran into an error when trying to refetch forecast",
+                      "data. If you're on a filtered network, make sure that",
+                      "api.wunderground.com is unblocked. Otherwise, make sure you have",
+                      "an internet connection.", sep="\n")
+                printException()
+                refresh_forecastflagged = False
+                logger.debug("refresh_forecastflagged: %s" % refresh_forecastflagged)
+                print("Press enter to continue.")
+                input()
+                continue
+            
+            refresh_forecastflagged = False
+            forecast10_json = json.loads(forecast10JSON)
+            if jsonVerbosity == True:
+                logger.debug("refresh_forecastflagged: %s" % refresh_forecastflagged)
+                logger.debug("forecast10_json: %s" % forecast10_json)
+            else:
+                logger.debug("refresh_forecastflagged: %s" % refresh_forecastflagged)
+                logger.debug("forecast10_json loaded")
         detailedForecastIterations = 0
         totaldetailedForecastIterations = 0
         forecast10_precipDayData = True
