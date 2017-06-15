@@ -1130,7 +1130,7 @@ else:
     logger.debug("Could not understand input. Defaulting to DISABLED.")
     
 print("", "When PyWeather is going through detailed information, would",
-      "you like the 'Enter to Continue' prompts not to pop up?",
+      "you like the 'Enter to Continue' prompts to pop up?",
       "By default, this is enabled.",
       "Yes or No.", sep="\n")
 showEnterToContinue = input("Input here: ").lower()
