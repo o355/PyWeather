@@ -1,35 +1,77 @@
 # Contributing to PyWeather
 
-Let's make this simple.
+Hey, thanks for your interest in contributing to PyWeather. If you don't taking 2 minutes of your day to read this, you'll get the run-down on how things work.
 
-Bug reports? All the detail. No, seriously. All the detail. Make sure it isn't a "you messed up" issue, and you provide every single bit of detail (the Traceback/Error message, OS, version, etc), and I'll get to work on fixing the bug. If you don't have the detail, I can't fix the bug. 
+Oh, and quick side note, I'm (o355) am a GitHub novice. This is a learning experience for me, and this will adapt.
 
-Enhancements? As much detail. Draw me a basic design. I'm visual.
+## Code of Conduct
+When contributing to PyWeather, please make sure to follow the code of conduct, available here: https://github.com/o355/PyWeather/blob/master/CODE_OF_CONDUCT.md
 
-Pull requests? Do it. Follow PyWeather's design and code layout (as can be seen in the code), and I'll handle verisoning and updating the changelog. You do the coding. I do the logistics. If you're doing something off of the todo list, don't do the first thing on said todo list. I will scream and bang my head against an object that cannot injure my head. I need to stay alive.
+## Issues
+When reporting an issue, make sure that you include lots of details. Details that contribute to a successful report are as follows:
 
-Criticism? Constructive, please. I'll take 100% of constructive criticism to heart, including those that bash my terminal coding style (get it, bash terminal...that was really bad). Non-constructive criticism isn't welcome, and such examples include:
+### OS version
+Make sure you detail your OS version. 
 
-* GET WEATHER ON MARS RIGHT NOW CREEPER MAN
-* UR PROGRAM SUCKS LOL
-* STOP CODING PYTHON UR CODING STYLE SUCKS LOL
+Pro-tip: Linux users: Use `uname -a` to get your kernel version.
 
-Basically, if you give criticism, but also give ways on how to correct/improve said criticism, that's constructive criticism.
+`Windows 10 | Ubuntu 16.04 | Debian 8.7` - Is acceptable, but doesn't provide too much detail. Instead, try for:
 
-Translations? Don't use Google Translate. Google Translate es muy mal. Generalmente, no usar Google Translate, Bing Translate, Wordreference. Muchas gracias. Don't use online translate services, and don't think you know Spanish from Spanish class. If you're a native speaker, awesome! You can go ahead and translate PyWeather in one of two ways:
+`Windows 10 Pro version 1703 | Ubuntu Server 16.04.2 LTS | Debian 8.7 amd64` - Is good, but you can even try for more detail:
 
-* Submit a Pull Request with the modified code. I'll do a quick Google Translate runover, and make sure things look accurate.
-* You can look into the code, and wherever you see print() or logger.XXXXX(), translate that text, and submit an issue with all the translated text. I'll put it into a translated version myself!
+`Windows 10 Pro version 1703 build 15063.296 | Ubuntu Server 16.04.2 LTS, kernel 4.4.0-78-generic` - Is amazing!
 
-Documentation? I'll set up read the docs when I feel like it. The wiki will do for now. I've closed off public editing because I haven't tested that.
+### Python version
+Make sure you detail what Python version you have.
 
-Rules? Respect everyone. Everyone. There will be no discrimination on who you are. None of the bad stuff, only positive stuff around here. I'm a positive guy. Respect the rules, respect each other, and I won't have an issue.
+Doing such is easy enough, open a Python 3 shell using the command `python` or `python3` in a command prompt. Detailed version info is in the first two lines of when you start up a Python 3 shell.
 
-Questions? Report an issue, and I'll do my best to answer them in a reasonable time!
+You'll want to paste something like this into your report:
 
-**When you contribute, no matter how small or big, you'll get thanked in a release. Here's how a thank you in a changelog will probably look.**
+```
+Python 3.5.2 (default, Nov 17 2016, 17:05:23)
+[GCC 5.4.0 20160609] on linux
+```
 
-- Bug Fix: Fixed a random bug (thanks to @yourusername for reporting)
-- Pull Request: Added xyz (thanks to @yourusername), etc.
-- Translations: Translated pyweather.py to Spanish (thanks to @tuelnombredeusuario for translating)
-- Enhancements: Added xyz (thanks to @yourusername for suggesting)
+### A full traceback
+Providing a full traceback, if possible, will 90% of the time let me find the issue quickly. If the bug can be replicated, go into the `config.ini` file, located in the `storage` folder, and make your `[TRACEBACK]` section look like the following:
+
+```
+[TRACEBACK]
+tracebacks = True
+setup_tracebacks = True
+updater_tracebacks = True
+configdefault_tracebacks = True
+```
+
+### If it's needed, the location that causes the issue
+Sometimes, bugs are location-based. If you need to share your location for a bug report, please do so in a way that respects your privacy.
+
+`123 5th Avenue, New York, NY` is not acceptable, as that is violating your privacy.
+
+`5th Avenue, New York, NY` is not acceptable, as that is still technically violating your privacy.
+
+`New York, NY` is acceptable, that's a general location.
+
+If you make a report with a location, once I notice the issue, I'll immediately censor the location provided. If you insist on making a bug report, please contact me, at pyweather at owenthe dot ninja. 
+
+Along with that, a full description is always nice to have, along with potential solutions.
+
+I'll usually get back to reports within 24-48 hours, sometimes less. I have an IFTTT trigger set up on my phone to alert me whenever a new issue is created.
+
+## Enhancement suggestions
+If you'd like to suggest an enhancement, you'll generally want these things:
+
+### A full description of the enhancement
+Just saying "add 1 year ago weather" doesn't help. Instead, try for something along the lines of this:
+
+"I'd like to suggest adding 1 year ago weather in the similar fashion of yesterday's weather. A user would be able to see the weather 1 year ago, look at the daily summary, and then dive into detailed hourly information. The 1 year ago weather would be determined based on year."
+
+### Add suggestions for parts of the implementation
+This isn't required, but you can help bring your idea to fruition by suggesting how I should code your suggestion in.
+
+Something like this is what you should shoot for:
+
+"For finding the one year ago date, try and grab the current year, date, and month off of the user's box. The date and month should have leading 0s for the API. Make the year a int, then subtract by 1. Combine the year, date, month into a string like this:
+
+YEARMONTHDATE, and then make an API request.
