@@ -75,3 +75,25 @@ Something like this is what you should shoot for:
 "For finding the one year ago date, try and grab the current year, date, and month off of the user's box. The date and month should have leading 0s for the API. Make the year a int, then subtract by 1. Combine the year, date, month into a string like this:
 
 YEARMONTHDATE, and then make an API request.
+
+When making the enhancement, for now, add the prefix [ENHANCEMENT] to the report's name. I'll most likely get back to enhancement reports in 24-48 hours, and I'll see if I can code it in.
+
+## OS compatibility reports
+If you saw the wiki page, and would like to report that an OS works with PyWeather, you'll want to do some testing, and add some things into your report, to make the OS you're reporting officially work with PyWeather.
+
+### When testing, test most basic functions.
+Run the setup script, set it up as a real user. Launch PyWeather, go into all the options, and then launch the other scripts and see if they work, too.
+
+### When making the report, detail the OS that PyWeather is compatible with.
+As the title says.
+
+### Add (a) screenshot(s) (or better, a video/asciinema) of PyWeather working.
+Make sure you launch into a generic location when recording or taking (a) screenshot(s) when you do so. If you record the set up process, in which you input your API key, you should really change it afterwards.
+
+### Add the [OS REPORT] prefix to your alert name.
+Shabang.
+
+As stated above, I'll get back to you within 24-48 hours, and add it to the wiki, if you have all your detail. If you miss out on some detail, I'll notify you.
+
+## Pull Requests
+writing this later
