@@ -1,4 +1,5 @@
-# Contributor Covenant Code of Conduct
+# PyWeather Contributor Covenant Code of Conduct
+Last updated: June 14, 2017
 
 ## Our Pledge
 
@@ -13,13 +14,14 @@ Examples of behavior that contributes to creating a positive environment include
 * Gracefully accepting constructive criticism
 * Focusing on what is best for the community
 * Showing empathy towards other community members
+* Giving each other helpful tips, etc.
 
 Examples of unacceptable behavior by participants include:
 
 * The use of sexualized language or imagery and unwelcome sexual attention or advances
 * Trolling, insulting/derogatory comments, and personal or political attacks
 * Public or private harassment
-* Publishing others' private information, such as a physical or electronic address, without explicit permission
+* Publishing others' private information, such as a physical or electronic address, even with explicit permission.
 * Other conduct which could reasonably be considered inappropriate in a professional setting
 
 ## Our Responsibilities
