@@ -17,9 +17,9 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 	* Add new options to setup - 100% done
 	* Initial implementation - 100% done
 	* Implement cache (current/alerts) - 100% done
-	* Implement cache (hourly (3 day/10 day)/forecast) - 50% done - Should be finished by 6/10
-	* Implement cache (almanac/sunrise) - 0% done - Should be finished by 6/12
-	* Adding the refresh option - 0% done - Should be finished by 6/14
+	* Implement cache (hourly (3 day/10 day)/forecast) - 70% done - Should be finished by 6/14
+	* Implement cache (almanac/sunrise) - 0% done - Should be finished by 6/17
+	* Adding the refresh option - 0% done - Should be finished by 6/18
 * Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/27
 	* Uncommenting code - 0% done - Should be finished by 6/19
 	* Adding all radar/satellite views - 0% done - Should be finished by 6/20
@@ -45,7 +45,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 **OTHER CHANGES**
 * Geopy is no longer required to run PyWeather, so the dependency was removed.
 * AppJar is required to run the experimental radar, so the dependency was added, but only if you enable it in setup.
-* Loading times are increased by 100-500 ms (depending on your connection). That's a good thing.
+* Loading times are increased by ~100ms (much higher if your connection is slow), thanks to 
 
 **BUG FIXES**
 * Fixed a major bug where the PyWeather Git updater wouldn't, uh, fully update.
