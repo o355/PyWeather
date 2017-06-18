@@ -1562,7 +1562,8 @@ while True:
                 logger.debug("forecast10_json: %s" % forecast10_json)
             else:
                 logger.debug("refresh_forecastflagged: %s" % refresh_forecastflagged)
-                logger.debug("forecast10_json loaded")
+                logger.debug("forecast10_json loaded.")
+                
         detailedForecastIterations = 0
         totaldetailedForecastIterations = 0
         forecast10_precipDayData = True
@@ -2107,15 +2108,15 @@ while True:
             continue
     elif moreoptions == "5":
         logger.info("Selected option: almanac")
-        print(Fore.RED + "Loading, please wait a few seconds...")
+        print(Fore.RED + "Loading, please wait...")
         print("")
-        if almanac_summary == False and almanac_prefetched == False:
-            logger.info("Almanac data NOT fetched at start. Fetching now...")
+        if (almanac_prefetched == False or time.time() - cachetime_almanac * 60 >= cache_almanactime
+            or refresh_almanacflagged == True):
+            print(Fore.RED + "Fetching (or refreshing) almanac data...")
             try:
-                almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + "," + lonstr + '.json'
-                logger.debug("almanacurl: %s" % almanacurl)
                 almanacJSON = requests.get(almanacurl)
                 logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
+                cachetime_almanac = time.time()
             except:
                 logger.warn("Couldn't contact Wunderground's API! Is the internet offline?")
                 print("When fetching the almanac data from Wunderground, PyWeather ran into",
@@ -2123,11 +2124,20 @@ while True:
                       "'api.wunderground.com' is unblocked. Otherwise, make sure you have",
                       "an internet connection, and that Wunderground's HAL9000 is online.")
                 printException()
+                print("Press enter to continue.")
+                input()
                 continue
+            
+            almanac_prefetched = True
+            refresh_almanacflagged = False
+            logger.debug("almanac_prefetched: %s ; refresh_almanacflagged: %s" %
+                         (almanac_prefetched, refresh_almanacflagged))
             almanac_json = json.loads(almanacJSON.text)
             if jsonVerbosity == True:
                 logger.debug("almanac_json: %s" % almanac_json)
-            logger.debug("1 JSON loaded successfully.")
+            else:
+                logger.debug("1 JSON loaded successfully.")
+            
             almanac_airportCode = almanac_json['almanac']['airport_code']
             almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
             almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
@@ -2150,8 +2160,6 @@ while True:
             logger.debug("alamanac_recordLowF: %s ; almanac_recordLowC: %s"
                          % (almanac_recordLowF, almanac_recordLowC))
             logger.debug("almanac_recordLowYear: %s" % almanac_recordLowYear)
-            almanac_prefetched = True
-            logger.debug("almanac_prefetched: %s" % almanac_prefetched)
         
         print(Fore.YELLOW + "Here's the almanac for: " + Fore.CYAN +
               almanac_airportCode + Fore.YELLOW + " (the nearest airport)")
@@ -2174,7 +2182,7 @@ while True:
         print(Fore.RED + "Loading, please wait a few seconds...")
         print("")
         logger.info("Selected option - Sun/moon data")
-        if sundata_summary == False and sundata_prefetched == False:
+        if (sundata_prefetched == False):
             logger.info("Fetching sundata, was not prefetched.")
             try:
                 sundataJSON = requests.get(astronomyurl)
