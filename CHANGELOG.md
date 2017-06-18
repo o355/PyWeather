@@ -21,6 +21,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 	* Implement cache (almanac/sunrise) - 0% done - Should be finished by 6/17
 	* Implement cache (historical) - 0% done
 	* Adding the refresh option - 0% done - Should be finished by 6/18
+* Removes the geopy dependency from the setup file.
 * Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/27
 	* Uncommenting code - 0% done - Should be finished by 6/19
 	* Adding all radar/satellite views - 0% done - Should be finished by 6/20

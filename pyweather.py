@@ -214,6 +214,10 @@ logger.info("Defining requests classes...")
 # a custom user agent" sorta thing later.
 urlheader = {'user-agent': 'pyweather-0.6beta/apifetcher'}
 
+# Declare historical cache dictionary
+historical_cache = {}
+logger.debug("historical_cache: %s" % historical_cache)
+
 logger.debug("Begin API keyload...")
 # Load the API key.
 try:
@@ -950,17 +954,19 @@ if almanac_summary == True:
 while True:
     print("")
     print(Fore.YELLOW + "What would you like to do now?")
-    print(Fore.YELLOW + "- View detailed current data - Press " + Fore.CYAN + "0")
-    print(Fore.YELLOW + "- View detailed alerts data - Press " + Fore.CYAN + "1")
-    print(Fore.YELLOW + "- View detailed hourly data - Press " + Fore.CYAN + "2")
-    print(Fore.YELLOW + "- View the 10 day hourly forecast - Press " + Fore.CYAN + "3")
-    print(Fore.YELLOW + "- View the 10 day forecast - Press " + Fore.CYAN + "4")
-    print(Fore.YELLOW + "- View the almanac for today - Press " + Fore.CYAN + "5")
-    print(Fore.YELLOW + "- View historical weather data - Press " + Fore.CYAN + "6")
-    print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Press " + Fore.CYAN + "7")
-    print(Fore.YELLOW + "- Check for PyWeather updates - Press " + Fore.CYAN + "8")
-    print(Fore.YELLOW + "- View the about page for PyWeather - Press " + Fore.CYAN + "9")
-    print(Fore.YELLOW + "- Close PyWeather - Press " + Fore.CYAN + "10" + Fore.YELLOW)
+    print(Fore.YELLOW + "- View detailed current data - Enter " + Fore.CYAN + "0")
+    print(Fore.YELLOW + "- View detailed alerts data - Enter " + Fore.CYAN + "1")
+    print(Fore.YELLOW + "- View detailed hourly data - Enter " + Fore.CYAN + "2")
+    print(Fore.YELLOW + "- View the 10 day hourly forecast - Enter " + Fore.CYAN + "3")
+    print(Fore.YELLOW + "- View the 10 day forecast - Enter " + Fore.CYAN + "4")
+    print(Fore.YELLOW + "- View the almanac for today - Enter " + Fore.CYAN + "5")
+    print(Fore.YELLOW + "- View historical weather data - Enter " + Fore.CYAN + "6")
+    print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Enter " + Fore.CYAN + "7")
+    print(Fore.YELLOW + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + "8")
+    print(Fore.YELLOW + "- Check for PyWeather updates - Enter " + Fore.CYAN + "9")
+    print(Fore.YELLOW + "- View the about page for PyWeather - Enter " + Fore.CYAN + "10")
+    print(Fore.YELLOW + "- Close PyWeather - Enter " + Fore.CYAN + "11" + Fore.YELLOW)
+    print(Fore.YELLOW + "- Restart PyWeather (in beta) - Enter " + Fore.CYAN + "12" + Fore.YELLOW)
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
@@ -2113,6 +2119,9 @@ while True:
         if (almanac_prefetched == False or time.time() - cachetime_almanac * 60 >= cache_almanactime
             or refresh_almanacflagged == True):
             print(Fore.RED + "Fetching (or refreshing) almanac data...")
+            logger.debug("almanac_prefetched: %s ; almanac cache time: %s" %
+                         (almanac_prefetched, time.time() - cachetime_almanac))
+            logger.debug("refresh_almanacflagged: %s" % refresh_almanacflagged)
             try:
                 almanacJSON = requests.get(almanacurl)
                 logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
@@ -2182,11 +2191,17 @@ while True:
         print(Fore.RED + "Loading, please wait a few seconds...")
         print("")
         logger.info("Selected option - Sun/moon data")
-        if (sundata_prefetched == False):
-            logger.info("Fetching sundata, was not prefetched.")
+        if (sundata_prefetched == False or time.time() - cachetime_sundata * 60 >= cache_sundatatime
+            or refresh_sundataflagged == True):
+            print(Fore.RED + "Fetching (or refreshing) sun/moon data...")
+            logger.debug("sundata_prefetched: %s ; sundata cache time: %s" %
+                         (sundata_prefetched, time.time() - cachetime_sundata))
+            logger.debug("refresh_sundataflagged: %s" % refresh_sundataflagged)
             try:
                 sundataJSON = requests.get(astronomyurl)
                 logger.debug("Retrieved sundata JSON with response: %s" % sundataJSON)
+                cachetime_sundata = time.time()
+                
             except:
                 print("When attempting to fetch the 'sundata' from Wunderground,",
                       "PyWeather ran into an error. If you're on a network with",
@@ -2197,9 +2212,17 @@ while True:
                 input()
                 continue
             
+            sundata_prefetched = True
+            refresh_sundataflagged = False
+            logger.debug("sundata_prefetched: %s ; refresh_sundataflagged: %s" %
+                         (sundata_prefetched, refresh_sundataflagged))
+            
             astronomy_json = json.loads(sundataJSON.text)
             if jsonVerbosity == True:
                 logger.debug("astronomy_json: %s" % astronomy_json)
+            else:
+                logger.debug("astronomy json loaded.")
+                
             SR_minute = int(astronomy_json['moon_phase']['sunrise']['minute'])
             SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
             logger.debug("SR_minute: %s ; SR_hour: %s" %
@@ -2401,35 +2424,59 @@ while True:
         print("The date must be in the format YYYYMMDD.")
         print("E.g: If I wanted to see the weather for February 15, 2013, you'd enter 20130215.")
         print("Input the desired date below.")
-        historicaldate = input("Input here: ").lower()
-        logger.debug("historicaldate: %s" % historicaldate)
+        historical_input = input("Input here: ").lower()
+        logger.debug("historical_input: %s" % historical_input)
         print(Fore.RED + "Loading...")
         print("")
         historical_loops = 0
         historical_totalloops = 0
         logger.debug("historical_loops: %s ; historical_totalloops: %s"
                      % (historical_loops, historical_totalloops))
-        historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historicaldate +  '/q/' + latstr + "," + lonstr + '.json'
+        historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historical_input +  '/q/' + latstr + "," + lonstr + '.json'
         logger.debug("historicalurl: %s" % historicalurl)
-        try:
-            historicalJSON = requests.get(historicalurl)
-        except:
-            print("When attempting to fetch historical data, PyWeather ran into",
-                  "an error. If you're on a network with a filter make sure that",
-                  "'api.wunderground.com' is unblocked. Otherwise, make sure that",
-                  "you have an internet connection, and that your DeLorean works.",
-                  sep="\n")
-            printException()
-            print("Press enter to continue.")
-            input()
-            continue
         
-        logger.debug("historicalJSON loaded with: %s" % historicalJSON)
-        historical_json = json.loads(historicalJSON.text)
-        if jsonVerbosity == True:
-            logger.debug("historical_json: %s" % historical_json)
-        else:
-            logger.debug("Loaded 1 JSON.")
+        historical_skipfetch = False
+        logger.debug("historical_skipfetch: %s" % historical_skipfetch)
+        
+        for historical_cacheddate, payload in historical_cache:
+            logger.debug("historical_cacheddate: %s")
+            if historical_cacheddate == historical_input:
+                print(Fore.RED + "Loading cached data...")
+                historical_json = payload
+                if jsonVerbosity == True:
+                    logger.debug("historical_json: %s" % historical_json)
+                historical_skipfetch = True
+                logger.debug("historical_skipfetch: %s" % historical_skipfetch)
+                break
+            else:
+                historical_skipfetch = False
+                logger.debug("historical_skipfetch: %s" % historical_skipfetch)
+                
+                
+        if historical_skipfetch == False:
+            try:
+                historicalJSON = requests.get(historicalurl)
+                logger.debug("historicalJSON acquired, end response: %s" % historicalJSON)
+            except:
+                print("When attempting to fetch historical data, PyWeather ran into",
+                      "an error. If you're on a network with a filter make sure that",
+                      "'api.wunderground.com' is unblocked. Otherwise, make sure that",
+                      "you have an internet connection, and that your DeLorean works.",
+                      sep="\n")
+                printException()
+                print("Press enter to continue.")
+                input()
+                continue
+        
+        
+            historical_json = json.loads(historicalJSON.text)
+            historical_cache[historical_input] = historical_json
+            logger.debug("Appended new key to historal cache: %s with value historical json"
+                         % historical_input)
+            if jsonVerbosity == True:
+                logger.debug("historical_json: %s" % historical_json)
+            else:
+                logger.debug("Loaded 1 JSON.")
         historical_date = historical_json['history']['date']['pretty']
         print(Fore.YELLOW + "Here's the historical weather for " + Fore.CYAN + 
               str(location) + Fore.YELLOW + " on "
@@ -2780,7 +2827,7 @@ while True:
         elif jokenum == 12:
             print("What did the hurricane say to the other hurricane?",
                   "I have my eye on you.", sep="\n")
-    elif moreoptions == "testing":
+    elif moreoptions == "restarting_beta":
         print(Fore.RESET + "Attempting to relaunch PyWeather...")
         try:
             os.system("python3 pyweather.py")
@@ -2798,6 +2845,16 @@ while True:
                     sys.exit()
                 except:
                     print("Can't relaunch PyWeather!")
+    elif moreoptions == "8":
+        print(Fore.RESET + "Flagging all data types to be refreshed when they are next",
+              "launched.", sep="\n")
+        refresh_alertsflagged = True
+        refresh_almanacflagged = True
+        refresh_currentflagged = True
+        refresh_forecastflagged = True
+        refresh_hourly10flagged = True
+        refresh_hourly36flagged = True
+        refresh_sundataflagged = True
     else:
         logger.warn("Input could not be understood!")
         print(Fore.RED + "Not a valid option.")
