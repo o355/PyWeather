@@ -411,18 +411,6 @@ except ImportError:
     logger.debug("coloramaInstalled: %s ; neededLibraries: %s"
                 % (coloramaInstalled, neededLibraries))
     
-try:
-    import geopy
-    geopyInstalled = True
-    logger.info("geopy is installed.")
-    logger.debug("geopyInstalled: %s" % geopyInstalled)
-except ImportError:
-    geopyInstalled = False
-    neededLibraries = neededLibraries + 1
-    logger.warn("geopy is NOT installed.")
-    printException_loggerwarn()
-    logger.debug("geopyInstalled: %s ; neededLibraries: %s"
-                % (geopyInstalled, neededLibraries))
     
 try:
     import geocoder
@@ -446,8 +434,6 @@ else:
     print("Shucks. Not all libraries are installed. Here's what needs to be installed:")
     if coloramaInstalled == False:
         print("- Colorama")
-    if geopyInstalled == False:
-        print("- Geopy")
     if geocoderInstalled == False:
         print("- Geocoder")
     print("If you want me to, I can automatically install these libraries.",
@@ -476,10 +462,6 @@ else:
             logger.debug("Installing colorama...")
             print("Installing Colorama...")
             pip.main(['install', 'colorama'])
-        if geopyInstalled == False:
-            logger.debug("Installing geopy...")
-            print("Installing geopy...")
-            pip.main(['install', 'geopy'])
         if geocoderInstalled == False:
             logger.debug("Installing geocoder...")
             print("Installing geocoder...")
@@ -500,69 +482,7 @@ else:
             print("Press enter to exit.")
             input()
             sys.exit()
-        try:
-            import geopy
-            logger.info("geopy installed successfully.")
-        except ImportError:
-            logger.warn("geopy was not installed successfully.")
-            print("Hmm...geopy didn't install properly.")
-            printException()
-            print("As a last resort, we can use sudo -h to install packages.",
-                  "Do you want to use the shell option to install geopy?",
-                  "Yes or No.", sep="\n")
-            geopy_finalresort = input("Input here: ").lower()
-            logger.debug("geopy_finalresort: %s" % geopy_finalresort)
-            if geopy_finalresort == "yes":
-                try:
-                    print("Now executing `sudo -H pip3 install geopy`.")
-                    print("Please enter the password for sudo when the prompt",
-                          "comes up. Press Control + C to cancel.",
-                          "Starting in 5 seconds.", sep="\n")
-                    time.sleep(5)
-                    # This really only works on Linux.
-                    # Because on Windows these install without much trouble
-                    try:
-                        subprocess.call(["sudo -H pip3 install geopy"], shell=True)
-                        try:
-                            print("Reattempting to import geopy...")
-                            import geopy
-                            print("Geopy is FINALLY installed!")
-                        except:
-                            print("Geopy still wasn't successfully installed.",
-                                  "Cannot continue without geopy.",
-                                  "Try doing a manual install of geopy with PIP.", sep="\n")
-                            printException()
-                            print("Press enter to exit.")
-                            input()
-                            sys.exit()
-                    except:
-                        print("When running the command, an error occurred",
-                              "Cannot continue without geopy.",
-                              "Try doing a manual install of geopy with PIP.", sep="\n")
-                        printException()
-                        print("Press enter to exit.")
-                        input()
-                        sys.exit()
-                except KeyboardInterrupt:
-                    print("Command execution aborted.",
-                          "Cannot continue without geopy.",
-                          "Try doing a manual install of geopy with PIP",
-                          "in a command line.", sep="\n")
-                    printException()
-                    print("Press enter to exit.")
-                    input()
-                    sys.exit()
-            elif geopy_finalresort == "no":
-                print("Not installing geopy with a shell command.",
-                      "Cannot continue without geopy.",
-                      "Press enter to exit.", sep="\n")
-                input()
-                sys.exit()
-            else:
-                print("Did not understand input. Defaulting to not installing",
-                      "via the shell. Press enter to exit.", sep="\n")
-                input()
-                sys.exit()
+        
         try:
             import geocoder
             logger.info("geocoder installed successfully.")

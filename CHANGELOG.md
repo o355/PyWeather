@@ -11,10 +11,10 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 
 ## version 0.6.1 beta - Should be released on 7/11/2017
 **NEW FEATURES/REMOVALS**
-* Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache. - QA testing, 100% done! - Should be finished by 6/19
-* Removes the geopy dependency from the setup file. - Should be finished by 6/19
+* Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache. - Done!
+* Removes the geopy dependency from the setup file. - Done!
 * Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/27
-	* Uncommenting code - 0% done - Should be finished by 6/19
+	* Uncommenting code - Done
 	* Adding all radar/satellite views - 0% done - Should be finished by 6/20
 	* Adding proper cache removal (at start of the radar option, when user closes it out) - 0% done - Should be finished by 6/21
 	* Bringing back the placeholder .gifs - 0% done - Should be finished by 6/22

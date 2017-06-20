@@ -86,11 +86,17 @@ try:
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
     cache_enabled = config.getboolean('CACHE', 'enabled')
     cache_alertstime = config.getint('CACHE', 'alerts_cachedtime')
+    cache_alertstime = cache_alertstime * 60
     cache_currenttime = config.getint('CACHE', 'current_cachedtime')
+    cache_currenttime = cache_currenttime * 60
     cache_hourlytime = config.getint('CACHE', 'hourly_cachedtime')
+    cache_hourlytime = cache_hourlytime * 60
     cache_forecasttime = config.getint('CACHE', 'forecast_cachedtime')
+    cache_forecasttime = cache_forecasttime * 60
     cache_almanactime = config.getint('CACHE', 'almanac_cachedtime')
+    cache_almanactime = cache_almanactime * 60
     cache_sundatatime = config.getint('CACHE', 'sundata_cachedtime')
+    cache_sundatatime = cache_sundatatime * 60
     user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
     user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
     
@@ -980,13 +986,14 @@ while True:
     if moreoptions == "0":
         print(Fore.RED + "Loading...")
         logger.info("Selected view more currently...")
-        if (time.time() - cachetime_current * 60 >= cache_currenttime
+        logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
+                    (refresh_currentflagged, time.time() - cachetime_current))
+        if (time.time() - cachetime_current >= cache_currenttime
             or refresh_currentflagged == True):
             print(Fore.RED + "Refreshing current data...")
-            logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
-                         (refresh_currentflagged, time.time() - cachetime_current))
             try:
                 summaryJSON = requests.get(currenturl)
+                logger.debug("summaryJSON acquired, end result: %s" % summaryJSON)
                 cachetime_current = time.time()
                 refresh_currentflagged = False
                 logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
@@ -1072,18 +1079,20 @@ while True:
         continue
     elif moreoptions == "1":
         # Or condition will sort out 3 potential conditions.
-        if (alertsPrefetched == False or time.time() - cachetime_alerts * 60 >= cache_alertstime
-            or refresh_alertsflagged == True):
-            logger.info("Alerts wasn't prefetched, the cache expired, or alerts was flagged" + 
-                        " for a refresh. Refreshing...")
-            logger.debug("alertsPrefetched: %s ; alerts cache time: %s" % 
+        logger.debug("alertsPrefetched: %s ; alerts cache time: %s" % 
                          (alertsPrefetched, time.time() - cachetime_alerts))
+        if (alertsPrefetched == False or time.time() - cachetime_alerts >= cache_alertstime
+            or refresh_alertsflagged == True):
+            print(Fore.RED + "Alerts wasn't prefetched, the cache expired, or alerts was flagged", 
+                  " for a refresh. Refreshing...", sep="\n")
             logger.debug("refresh_alertsflagged: %s" % refresh_alertsflagged)
             try:
                 alertsJSON = requests.get(alertsurl)
                 logger.debug("alertsJSON acquired, end result %s." % alertsJSON)
                 alertsPrefetched = True
                 cachetime_alerts = time.time()
+                logger.debug("alertsPrefetched: %s ; alerts cache time: %s" %
+                             (alertsPrefetched, time.time() - cachetime_alerts))
                 refresh_alertsflagged = False
                 logger.debug("alertsPrefetched: %s" % alertsPrefetched)
             except:
@@ -1243,13 +1252,14 @@ while True:
     elif moreoptions == "2":
         print(Fore.RED + "Loading...")
         print("")
+        logger.debug("refresh_hourly36flagged: %s ; hourly36 cache time: %s" %
+                    (refresh_hourly36flagged, time.time() - cachetime_hourly36))
         logger.info("Selected view more hourly...")
-        if (refresh_hourly36flagged == True or time.time() - cachetime_hourly36 * 60 >= cache_hourlytime):
+        if (refresh_hourly36flagged == True or time.time() - cachetime_hourly36 >= cache_hourlytime):
             print(Fore.RED + "Refreshing 3 day hourly data...")
-            logger.debug("refresh_hourly36flagged: %s ; hourly36 cache time: %s" %
-                         (refresh_hourly36flagged, time.time() - cachetime_hourly36))
             try:
                 hourly36JSON = requests.get(hourlyurl)
+                logger.debug("hourly36JSON acquired, end result: %s" % hourly36JSON)
                 cachetime_hourly36 = time.time()
             except:
                 print("Whoops! A problem occurred when trying to refresh 36 hour",
@@ -1392,11 +1402,14 @@ while True:
         logger.info("Selected view more 10 day hourly...")
         detailedHourly10Iterations = 0
         totaldetailedHourly10Iterations = 0
-        if (tenday_prefetched == False or refresh_hourly10flagged == True or
-            time.time() - cachetime_hourly10 * 60 >= cache_hourlytime):
-            logger.debug("tenday_prefetched: %s ; refresh_hourly10flagged: %s" %
-                         (tenday_prefetched, refresh_hourly10flagged))
+        logger.debug("tenday_prefetched: %s ; refresh_hourly10flagged: %s" %
+                    (tenday_prefetched, refresh_hourly10flagged))
+        try:
             logger.debug("hourly 10 cache time: %s" % time.time() - cachetime_hourly10)
+        except:
+            logger.debug("no hourly 10 cache time")
+        if (tenday_prefetched == False or refresh_hourly10flagged == True or
+            time.time() - cachetime_hourly10 >= cache_hourlytime):
             print(Fore.RED + "Refreshing (or fetching for the first time) 10 day hourly data...")
             try:
                 tendayJSON = requests.get(tendayurl)
@@ -1548,13 +1561,14 @@ while True:
         print(Fore.RED + "Loading, please wait a few seconds.")
         logger.info("Selected view more 10 day...")
         print("")
-        if (refresh_forecastflagged == True or time.time() - cachetime_forecast * 60 >= cache_hourlytime):
+        logger.debug("refresh_forecastflagged: %s ; forecast cache time: %s" %
+                    (refresh_forecastflagged, time.time() - cachetime_forecast))
+        if (refresh_forecastflagged == True or time.time() - cachetime_forecast >= cache_hourlytime):
             print(Fore.RED + "Refreshing forecast data...")
-            logger.debug("refresh_forecastflagged: %s ; forecast cache time: %s" %
-                         (refresh_forecastflagged, time.time() - cachetime_forecast))
             try:
                 forecast10JSON = requests.get(f10dayurl)
                 cachetime_forecast = time.time()
+                logger.debug("forecast10JSON acquired, end result: %s" % forecast10JSON)
             except:
                 print("PyWeather ran into an error when trying to refetch forecast",
                       "data. If you're on a filtered network, make sure that",
@@ -1780,174 +1794,176 @@ while True:
                         break
                         logger.info("Exiting to the main menu.")
 
-# Commented out this entire part for when I want to resume development.
-#    elif moreoptions == "radar":
-#        print(Fore.RED + "The radar is currently bugged, and unfinished, due to",
-#              "a .gif glitch in Tkinter/appJar. The code has been kept here so when",
-#              "development of the radar can be resumed, it's easy enough to start back up.",
-#              sep="\n")
-#        print(Fore.YELLOW + "Loading the GUI. This should take around 5 seconds.")
-#        try:
-#            frontend = gui()
-#        except:
-#            print(Fore.RED + "Cannot launch a GUI on this platform. If you don't have",
-#                  "a GUI on Linux, this is expected. Otherwise, investigate into why",
-#                  "tkinter won't launch.", sep="\n" + Fore.RESET)
-#            printException()
-#            continue
-#        print(Fore.YELLOW + "Defining variables...")
-#        # A quick note about cache variables.
-#        # The syntax goes like this:
-#        # (mode)(zoom)cached, where r = radar only, s = satellite only
-#        r10cached = False; r20cached = False; r40cached = False
-#        r60cached = False; r80cached = False; r100cached = False
-#        s10cached = False; s20cached = False; s40cached = False
-#        s60cached = False; s80cached = False; s100cached = False
-#        r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
-#        r20url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
-#        r40url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=40&radunits=km'
-#        r60url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=60&radunits=km'
-#        r80url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=80&radunits=km'
-#        r100url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=100&radunits=k       s10url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=10&key=sat_vis&radunits=      s20url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=20&key=sat_vis&radunits=km'
-#        s40url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=40&key=sat_vis&radunits=km'
-#        s60url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=60&key=sat_vis&radunits=km'
-#        s80url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=80&key=sat_vis&radunits=km'
-#        s100url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=100&key=sat_vis&radunits=km'
-#        
-#        
-#        
-#        print(Fore.YELLOW + "Defining functions...")
-#        def frontend_modeswitch(btnName):
-#            global frontend_mode
-#            if btnName == "Radar Only":
-#                frontend_mode = "Radar Only"
-#                frontend.setStatusbar("Mode: Radar Only", 0)
-#            elif btnName == "Radar & Satellite":
-#                frontend_mode = "Radar & Satellite"
-#                frontend.setStatusbar("Mode: Radar & Satellite", 0)
-#            elif btnName == "Satellite":
-#                frontend_mode = "Satellite"
-#                frontend.setStatus("Mode: Satellite", 0)
-#                
-#        def frontend_zoomswitch(btnName):
-#            global r10cached; global r20cached; global r40cached
-#            global r60cached; global r80cached; global r100cached
-#            if frontend_mode == "Radar Only":
-#                print(btnName)
-#                if btnName == "10 km":
-#                    if r10cached == False:
-#                        frontend.setStatusbar("Zoom: 10 km", 1)
-#                        frontend.setStatusbar("Status: Fetching Image...", 2)
-#                        tempurl = requests.get(r10url, stream=True)
-#                        with open('temp//r10.gif', 'wb') as fw:
-#                            for chunk in tempurl.iter_content(chunk_size=128):
-#                                fw.write(chunk)
-#                            fw.close()
-#                        frontend.clearImageCache()
-#                        frontend.reloadImage("Viewer", "temp//r10.gif")
-#                        frontend.clearImageCache()
-#                        frontend.setStatusbar("Status: Idle", 2)
-#                        r10cached = True
-#                    elif r10cached == True:
-#                        frontend.setStatusbar("Zoom: 10 km", 1)
-#                        frontend.reloadImage("Viewer", "temp//r10.gif")
-#                elif btnName == "20 km":
-#                    if r20cached == False:
-#                        tempurl = requests.get(r20url, stream=True)
-#                        frontend.setStatusbar("Status: Fetching Image...", 1)
-#                        with open('temp//r20.gif', 'wb') as fw:
-#                            for chunk in tempurl.iter_content(chunk_size=128):
-#                                fw.write(chunk)
-#                            fw.close()
-#                        frontend.reloadImage("Viewer", "temp//r20.gif")
-#                        r20cached = True
-#                    elif r20cached == True:
-#                        frontend.reloadImage("Viewer", "temp//r20.gif")
-#                elif btnName == "40 km":
-#                    if r40cached == False:
-#                        tempurl = requests.get(r40url, stream=True)
-#                        frontend.setStatusbar("Status: Fetching Image...", 1)
-#                        with open('temp//r40.gif', 'wb') as fw:
-#                            for chunk in tempurl.iter_content(chunk_size=128):
-#                                fw.write(chunk)
-#                            fw.close()
-#                        frontend.reloadImage("Viewer", "temp//r40.gif")
-#                        r40cached = True
-#                    elif r40cached == True:
-#                        frontend.reloadImage("Viewer", "temp//r40.gif")
-#                elif btnName == "60 km":
-#                    if r60cached == False:
-#                        tempurl = requests.get(r60url, stream=True)
-#                        frontend.setStatusbar("Status: Fetching Image...", 1)
-#                        with open('temp//r60.gif', 'wb') as fw:
-#                            for chunk in tempurl.iter_content(chunk_size=128):
-#                                fw.write(chunk)
-#                            fw.close()
-#                        frontend.reloadImage("Viewer", "temp//r60.gif")
-#                        r60cached = True
-#                    elif r60cached == True:
-#                        frontend.reloadImage("Viewer", "temp//r60.gif")
-#                elif btnName == "80 km":
-#                    if r80cached == False:
-#                        tempurl = requests.get(r80url, stream=True)
-#                        frontend.setStatusbar("Status: Fetching Image...", 1)
-#                        with open('temp//r80.gif', 'wb') as fw:
-#                            for chunk in tempurl.iter_content(chunk_size=128):
-#                                fw.write(chunk)
-#                            fw.close()
-#                        frontend.reloadImage("Viewer", "temp//r80.gif")
-#                        r80cached = True
-#                    elif r80cached == True:
-#                        frontend.reloadImage("Viewer", "temp//r80.gif")
-#                elif btnName == "100 km":
-#                    if r100cached == False:
-#                        tempurl = requests.get(r100url, stream=True)
-#                        frontend.setStatusbar("Status: Fetching Image...", 1)
-#                        with open('temp//r100.gif', 'wb') as fw:
-#                            for chunk in tempurl.iter_content(chunk_size=128):
-#                                fw.write(chunk)
-#                            fw.close()
-#                        frontend.reloadImage("Viewer", "temp//r100.gif")
-#                        r100cached = True
-#                    elif r100cached == True:
-#                        frontend.reloadImage("Viewer", "temp//r100.gif")
-#                    
-#        def frontend_exit(btnName):
-#            frontend.stop()
-#            
-#        def frontend_playerControls(btnName):
-#            if btnName == "Play":
-#                frontend.startAnimation("Viewer")
-#            elif btnName == "Pause":
-#                frontend.stopAnimation("Viewer")
-#        frontend.clearImageCache()       
-#        frontend.setTitle("PyWeather Radar Viewer")
-#        frontend.setResizable(canResize=False)
-#        frontend.addLabel("toplabel", "Select a Mode below.", column=0, row=0, colspan=3)
-#        frontend.addButtons(["Radar Only", "Radar & Satellite"], frontend_modeswitch, column=0, row=1, colspan=3, rowspan=1)
-#        frontend.startLabelFrame("Viewer", column=0, row=2, colspan=3)
-#        # Placeholders are needed to start the viewer.
-#        if user_radarImageSize == "extrasmall":
-#            frontend.addImage("Viewer", "storage//320x240placeholder.gif")
-#        elif user_radarImageSize == "small":
-#            frontend.addImage("Viewer", "storage//480x360placeholder.gif")
-#        elif user_radarImageSize == "normal":
-#            frontend.addImage("Viewer", "storage//640x480placeholder.gif")
-#        frontend.stopLabelFrame()
-#        frontend.addLabel("mid2label", "Animation controls:", column=0, row=3)
-#        frontend.addButtons(["Play", "Pause"], frontend_playerControls, column=0, row=4, colspan=3)
-#        frontend.addLabel("midlabel", "Select a Zoom below.", column=0, row=5, colspan=3)
-#        frontend.addButtons(["10 km", "20 km", "40 km"], frontend_zoomswitch, column=0, row=6, colspan=3)
-#        frontend.addButtons(["60 km", "80 km", "100 km"], frontend_zoomswitch, row=7, column=0, colspan=3)
-#        frontend.addButton("Return to PyWeather", frontend_exit, row=8, column=1, colspan=1)
-#        frontend.setInPadding([10, 10])
-#        frontend.addStatusbar(fields=3)
-#        frontend.setStatusbar("Mode: None selected", 0)
-#        frontend.setStatusbar("Zoom: None selected", 1)
-#        frontend.setStatusbar("Status: Idle", 2)
-#        frontend.go()
+
+    elif moreoptions == "radar":
+        print(Fore.RED + "The radar is currently bugged, and unfinished, due to",
+              "a .gif glitch in Tkinter/appJar. The code has been kept here so when",
+              "development of the radar can be resumed, it's easy enough to start back up.",
+              sep="\n")
+        print(Fore.YELLOW + "Loading the GUI. This should take around 5 seconds.")
+        try:
+            frontend = gui()
+        except:
+            print(Fore.RED + "Cannot launch a GUI on this platform. If you don't have",
+                  "a GUI on Linux, this is expected. Otherwise, investigate into why",
+                  "tkinter won't launch.", sep="\n" + Fore.RESET)
+            printException()
+            continue
+        print(Fore.YELLOW + "Defining variables...")
+        # A quick note about cache variables.
+        # The syntax goes like this:
+        # (mode)(zoom)cached, where r = radar only, s = satellite only
+        r10cached = False; r20cached = False; r40cached = False
+        r60cached = False; r80cached = False; r100cached = False
+        s10cached = False; s20cached = False; s40cached = False
+        s60cached = False; s80cached = False; s100cached = False
+        r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
+        r20url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
+        r40url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=40&radunits=km'
+        r60url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=60&radunits=km'
+        r80url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=80&radunits=km'
+        r100url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=100&radunits=km'       
+        s10url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=10&key=sat_vis&radunits=km'      
+        s20url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=20&key=sat_vis&radunits=km'
+        s40url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=40&key=sat_vis&radunits=km'
+        s60url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=60&key=sat_vis&radunits=km'
+        s80url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=80&key=sat_vis&radunits=km'
+        s100url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=100&key=sat_vis&radunits=km'
+        
+        
+        
+        print(Fore.YELLOW + "Defining functions...")
+        def frontend_modeswitch(btnName):
+            global frontend_mode
+            if btnName == "Radar Only":
+                frontend_mode = "Radar Only"
+                frontend.setStatusbar("Mode: Radar Only", 0)
+            elif btnName == "Radar & Satellite":
+                frontend_mode = "Radar & Satellite"
+                frontend.setStatusbar("Mode: Radar & Satellite", 0)
+            elif btnName == "Satellite":
+                frontend_mode = "Satellite"
+                frontend.setStatus("Mode: Satellite", 0)
+                
+        def frontend_zoomswitch(btnName):
+            global r10cached; global r20cached; global r40cached
+            global r60cached; global r80cached; global r100cached
+            if frontend_mode == "Radar Only":
+                print(btnName)
+                if btnName == "10 km":
+                    if r10cached == False:
+                        frontend.setStatusbar("Zoom: 10 km", 1)
+                        frontend.setStatusbar("Status: Fetching Image...", 2)
+                        tempurl = requests.get(r10url, stream=True)
+                        with open('temp//r10.gif', 'wb') as fw:
+                            for chunk in tempurl.iter_content(chunk_size=128):
+                                fw.write(chunk)
+                            fw.close()
+                        frontend.clearImageCache()
+                        frontend.reloadImage("Viewer", "temp//r10.gif")
+                        frontend.clearImageCache()
+                        frontend.setStatusbar("Status: Idle", 2)
+                        r10cached = True
+                    elif r10cached == True:
+                        frontend.setStatusbar("Zoom: 10 km", 1)
+                        frontend.reloadImage("Viewer", "temp//r10.gif")
+                elif btnName == "20 km":
+                    if r20cached == False:
+                        tempurl = requests.get(r20url, stream=True)
+                        frontend.setStatusbar("Status: Fetching Image...", 1)
+                        with open('temp//r20.gif', 'wb') as fw:
+                            for chunk in tempurl.iter_content(chunk_size=128):
+                                fw.write(chunk)
+                            fw.close()
+                        frontend.reloadImage("Viewer", "temp//r20.gif")
+                        r20cached = True
+                    elif r20cached == True:
+                        frontend.reloadImage("Viewer", "temp//r20.gif")
+                elif btnName == "40 km":
+                    if r40cached == False:
+                        tempurl = requests.get(r40url, stream=True)
+                        frontend.setStatusbar("Status: Fetching Image...", 1)
+                        with open('temp//r40.gif', 'wb') as fw:
+                            for chunk in tempurl.iter_content(chunk_size=128):
+                                fw.write(chunk)
+                            fw.close()
+                        frontend.reloadImage("Viewer", "temp//r40.gif")
+                        r40cached = True
+                    elif r40cached == True:
+                        frontend.reloadImage("Viewer", "temp//r40.gif")
+                elif btnName == "60 km":
+                    if r60cached == False:
+                        tempurl = requests.get(r60url, stream=True)
+                        frontend.setStatusbar("Status: Fetching Image...", 1)
+                        with open('temp//r60.gif', 'wb') as fw:
+                            for chunk in tempurl.iter_content(chunk_size=128):
+                                fw.write(chunk)
+                            fw.close()
+                        frontend.reloadImage("Viewer", "temp//r60.gif")
+                        r60cached = True
+                    elif r60cached == True:
+                        frontend.reloadImage("Viewer", "temp//r60.gif")
+                elif btnName == "80 km":
+                    if r80cached == False:
+                        tempurl = requests.get(r80url, stream=True)
+                        frontend.setStatusbar("Status: Fetching Image...", 1)
+                        with open('temp//r80.gif', 'wb') as fw:
+                            for chunk in tempurl.iter_content(chunk_size=128):
+                                fw.write(chunk)
+                            fw.close()
+                        frontend.reloadImage("Viewer", "temp//r80.gif")
+                        r80cached = True
+                    elif r80cached == True:
+                        frontend.reloadImage("Viewer", "temp//r80.gif")
+                elif btnName == "100 km":
+                    if r100cached == False:
+                        tempurl = requests.get(r100url, stream=True)
+                        frontend.setStatusbar("Status: Fetching Image...", 1)
+                        with open('temp//r100.gif', 'wb') as fw:
+                            for chunk in tempurl.iter_content(chunk_size=128):
+                                fw.write(chunk)
+                            fw.close()
+                        frontend.reloadImage("Viewer", "temp//r100.gif")
+                        r100cached = True
+                    elif r100cached == True:
+                        frontend.reloadImage("Viewer", "temp//r100.gif")
+                    
+        def frontend_exit(btnName):
+            frontend.stop()
+            
+        def frontend_playerControls(btnName):
+            if btnName == "Play":
+                frontend.startAnimation("Viewer")
+            elif btnName == "Pause":
+                frontend.stopAnimation("Viewer")
+        frontend.clearImageCache()       
+        frontend.setTitle("PyWeather Radar Viewer")
+        frontend.setResizable(canResize=False)
+        frontend.addLabel("toplabel", "Select a Mode below.", column=0, row=0, colspan=3)
+        frontend.addButtons(["Radar Only", "Radar & Satellite"], frontend_modeswitch, column=0, row=1, colspan=3, rowspan=1)
+        frontend.startLabelFrame("Viewer", column=0, row=2, colspan=3)
+        # Placeholders are needed to start the viewer.
+        if user_radarImageSize == "extrasmall":
+            frontend.addImage("Viewer", "storage//320x240placeholder.gif")
+        elif user_radarImageSize == "small":
+            frontend.addImage("Viewer", "storage//480x360placeholder.gif")
+        elif user_radarImageSize == "normal":
+            frontend.addImage("Viewer", "storage//640x480placeholder.gif")
+        frontend.stopLabelFrame()
+        frontend.addLabel("mid2label", "Animation controls:", column=0, row=3)
+        frontend.addButtons(["Play", "Pause"], frontend_playerControls, column=0, row=4, colspan=3)
+        frontend.addLabel("midlabel", "Select a Zoom below.", column=0, row=5, colspan=3)
+        frontend.addButtons(["10 km", "20 km", "40 km"], frontend_zoomswitch, column=0, row=6, colspan=3)
+        frontend.addButtons(["60 km", "80 km", "100 km"], frontend_zoomswitch, row=7, column=0, colspan=3)
+        frontend.addButton("Return to PyWeather", frontend_exit, row=8, column=1, colspan=1)
+        frontend.setInPadding([10, 10])
+        frontend.addStatusbar(fields=3)
+        frontend.setStatusbar("Mode: None selected", 0)
+        frontend.setStatusbar("Zoom: None selected", 1)
+        frontend.setStatusbar("Status: Idle", 2)
+        frontend.go()
     elif moreoptions == "11":
-        sys.exit()
+       sys.exit()
     elif moreoptions == "9":
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
@@ -2122,12 +2138,16 @@ while True:
         logger.info("Selected option: almanac")
         print(Fore.RED + "Loading, please wait...")
         print("")
-        if (almanac_prefetched == False or time.time() - cachetime_almanac * 60 >= cache_almanactime
-            or refresh_almanacflagged == True):
-            print(Fore.RED + "Fetching (or refreshing) almanac data...")
+        try:
             logger.debug("almanac_prefetched: %s ; almanac cache time: %s" %
                          (almanac_prefetched, time.time() - cachetime_almanac))
-            logger.debug("refresh_almanacflagged: %s" % refresh_almanacflagged)
+        except:
+            logger.debug("almanac_prefetched: %s" % almanac_prefetched)
+            
+        logger.debug("refresh_almanacflagged: %s" % refresh_almanacflagged)
+        if (almanac_prefetched == False or time.time() - cachetime_almanac >= cache_almanactime
+            or refresh_almanacflagged == True):
+            print(Fore.RED + "Fetching (or refreshing) almanac data...")
             try:
                 almanacJSON = requests.get(almanacurl)
                 logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
@@ -2196,13 +2216,17 @@ while True:
     elif moreoptions == "7":
         print(Fore.RED + "Loading, please wait a few seconds...")
         print("")
-        logger.info("Selected option - Sun/moon data")
-        if (sundata_prefetched == False or time.time() - cachetime_sundata * 60 >= cache_sundatatime
-            or refresh_sundataflagged == True):
-            print(Fore.RED + "Fetching (or refreshing) sun/moon data...")
+        try:
             logger.debug("sundata_prefetched: %s ; sundata cache time: %s" %
                          (sundata_prefetched, time.time() - cachetime_sundata))
-            logger.debug("refresh_sundataflagged: %s" % refresh_sundataflagged)
+        except:
+            logger.debug("sundata_prefetched: %s" % sundata_prefetched)
+            
+        logger.debug("refresh_sundataflagged: %s" % refresh_sundataflagged)
+        logger.info("Selected option - Sun/moon data")
+        if (sundata_prefetched == False or time.time() - cachetime_sundata >= cache_sundatatime
+            or refresh_sundataflagged == True):
+            print(Fore.RED + "Fetching (or refreshing) sun/moon data...")
             try:
                 sundataJSON = requests.get(astronomyurl)
                 logger.debug("Retrieved sundata JSON with response: %s" % sundataJSON)
