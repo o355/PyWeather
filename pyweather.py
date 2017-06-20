@@ -91,6 +91,8 @@ try:
     cache_forecasttime = config.getint('CACHE', 'forecast_cachedtime')
     cache_almanactime = config.getint('CACHE', 'almanac_cachedtime')
     cache_sundatatime = config.getint('CACHE', 'sundata_cachedtime')
+    user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
+    user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
     
 except:
     # If it fails (typo or code error), we set all options to default.
@@ -126,6 +128,8 @@ except:
     cache_forecasttime = 60
     cache_almanactime = 240
     cache_sundatatime = 480
+    user_alertsEUiterations = 2
+    user_alertsUSiterations = 1
 
 # Import logging, and set up the logger.
 import logging
@@ -171,6 +175,8 @@ logger.debug("cache_hourlytime: %s ; cache_forecasttime: %s" %
              (cache_hourlytime, cache_forecasttime))
 logger.debug("cache_almanactime: %s ; cache_sundatatime: %s" %
              (cache_almanactime, cache_sundatatime))
+logger.debug("user_alertsUSiterations: %s ; user_alertsEUiterations: %s" %
+             (user_alertsUSiterations, user_alertsEUiterations))
 
 #logger.info("Setting gif x and y resolution for radar...")
 # Set the x/y resolution of the .gif files for the experimental radar.
@@ -1547,7 +1553,7 @@ while True:
             logger.debug("refresh_forecastflagged: %s ; forecast cache time: %s" %
                          (refresh_forecastflagged, time.time() - cachetime_forecast))
             try:
-                forecast10JSON = requests.get(f10url)
+                forecast10JSON = requests.get(f10dayurl)
                 cachetime_forecast = time.time()
             except:
                 print("PyWeather ran into an error when trying to refetch forecast",
@@ -1562,7 +1568,7 @@ while True:
                 continue
             
             refresh_forecastflagged = False
-            forecast10_json = json.loads(forecast10JSON)
+            forecast10_json = json.loads(forecast10JSON.text)
             if jsonVerbosity == True:
                 logger.debug("refresh_forecastflagged: %s" % refresh_forecastflagged)
                 logger.debug("forecast10_json: %s" % forecast10_json)
@@ -1940,9 +1946,9 @@ while True:
 #        frontend.setStatusbar("Zoom: None selected", 1)
 #        frontend.setStatusbar("Status: Idle", 2)
 #        frontend.go()
-    elif moreoptions == "10":
+    elif moreoptions == "11":
         sys.exit()
-    elif moreoptions == "8":
+    elif moreoptions == "9":
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
                     (buildnumber, buildversion))
@@ -2438,7 +2444,7 @@ while True:
         historical_skipfetch = False
         logger.debug("historical_skipfetch: %s" % historical_skipfetch)
         
-        for historical_cacheddate, payload in historical_cache:
+        for historical_cacheddate, payload in historical_cache.items():
             logger.debug("historical_cacheddate: %s")
             if historical_cacheddate == historical_input:
                 print(Fore.RED + "Loading cached data...")
@@ -2769,7 +2775,7 @@ while True:
                     except KeyboardInterrupt:
                         logger.info("Breaking to main menu, user issued KeyboardInterrupt")
                         break         
-    elif moreoptions == "9":
+    elif moreoptions == "10":
         print("", Fore.YELLOW + "-=-=- " + Fore.CYAN + "PyWeather" + Fore.YELLOW + " -=-=-",
               Fore.CYAN + "version " + about_version, "",
               Fore.YELLOW + "Build Number: " + Fore.CYAN + about_buildnumber,
@@ -2827,7 +2833,7 @@ while True:
         elif jokenum == 12:
             print("What did the hurricane say to the other hurricane?",
                   "I have my eye on you.", sep="\n")
-    elif moreoptions == "restarting_beta":
+    elif moreoptions == "12":
         print(Fore.RESET + "Attempting to relaunch PyWeather...")
         try:
             os.system("python3 pyweather.py")
@@ -2850,11 +2856,18 @@ while True:
               "launched.", sep="\n")
         refresh_alertsflagged = True
         refresh_almanacflagged = True
+        logger.debug("refresh_alertsflagged: %s ; refresh_almanacflagged: %s" %
+                     (refresh_alertsflagged, refresh_almanacflagged))
         refresh_currentflagged = True
         refresh_forecastflagged = True
+        logger.debug("refresh_currentflagged: %s ; refresh_forecastflagged: %s" %
+                     (refresh_currentflagged, refresh_forecastflagged))
         refresh_hourly10flagged = True
         refresh_hourly36flagged = True
+        logger.debug("refresh_hourly10flagged: %s ; refresh_hourly36flagged: %s" %
+                     (refresh_hourly10flagged, refresh_hourly36flagged))
         refresh_sundataflagged = True
+        logger.debug("refresh_sundataflagged: %s" % refresh_sundataflagged)
     else:
         logger.warn("Input could not be understood!")
         print(Fore.RED + "Not a valid option.")

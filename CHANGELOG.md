@@ -3,25 +3,16 @@
 Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
 
 ## version 0.6.2 beta - Should be released 7/27/2017
-* Adds the yesterday's weather feature. - Should be finished by 7/17
+* Adds the yesterday's weather feature. - "Scrapped", ModoUnreal is in control of this feature, so no ETA right now.
+* Adds the ability to read PyWeather's development news posts in PyWeather - Should be finished by 7/17.
 * Adds the option to turn on a custom user agent. Cool, right? - Should be finished by 7/19
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Should be finished by 7/19
 * Adds caching to the radar - Should be finished by 7/27
 
 ## version 0.6.1 beta - Should be released on 7/11/2017
 **NEW FEATURES/REMOVALS**
-* Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache. - 12% done, Should be finished by 6/19.
-	* Add new options to configupdate - 100% done
-	* Add new options to configsetup - 100% done
-	* Add new options to configdefault - 100% done
-	* Add new options to setup - 100% done
-	* Initial implementation - 100% done
-	* Implement cache (current/alerts) - 100% done
-	* Implement cache (hourly (3 day/10 day)/forecast) - 70% done - Should be finished by 6/14
-	* Implement cache (almanac/sunrise) - 0% done - Should be finished by 6/17
-	* Implement cache (historical) - 0% done
-	* Adding the refresh option - 0% done - Should be finished by 6/18
-* Removes the geopy dependency from the setup file.
+* Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache. - QA testing, 100% done! - Should be finished by 6/19
+* Removes the geopy dependency from the setup file. - Should be finished by 6/19
 * Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/27
 	* Uncommenting code - 0% done - Should be finished by 6/19
 	* Adding all radar/satellite views - 0% done - Should be finished by 6/20
@@ -51,10 +42,10 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 
 **BUG FIXES**
 * Fixed a major bug where the PyWeather Git updater wouldn't, uh, fully update.
-* Will fix a bug where configsetup's directory checking wasn't 100% compatible with Windows. - Should be finished 6/3.
+* Fixed a bug where configsetup's directory checking wasn't 100% compatible with Windows.
 * Fixed a bug where if the sunrise/sunset/moonrise/moonset hour was 0, PyWeather wasn't correcting it to a 12.
 * Fixed a bug where if you entered a weird name to check the weather for, an encoding error would occur. It's fixed, and there is no more 2nd reverse geocoder.
-* Will fix a major bug where alerts wouldn't iterate, due to a non-defined config varibale - Should be finished by 6/3.
+* Fixed a major bug where alerts wouldn't iterate, due to a non-defined config variable
 
 ## version 0.6.0.1 beta - Released on 5/29/2017
 * Fixes a critical bug where a user couldn't provision their config file when they first downloaded the program.

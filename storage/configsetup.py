@@ -11,9 +11,10 @@ config.read("config.ini")
 
 # Check our working directory. This script can't work in the base PyWeather folder.
         
-if "/pyweather/storage" in os.getcwd():
+if "/pyweather/storage" or "\pyweather\storage" in os.getcwd():
     cool = True
-elif "/pyweather/" in os.getcwd():
+# I can't do the 
+elif "/pyweather/" or "\pyweather" in os.getcwd():
     # If we are in the base folder, it's a perfect time to write to versioninfo.txt!
     try:
         versioninfo = open('updater//versioninfo.txt').close()
