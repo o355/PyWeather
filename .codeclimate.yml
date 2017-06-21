@@ -12,6 +12,9 @@ engines:
     enabled: true
   radon:
     enabled: true
+    checks:
+      BUG:
+        enabled: false
 ratings:
   paths:
   - "**.inc"
