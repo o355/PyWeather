@@ -16,10 +16,10 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/27
 	* Uncommenting code - 100% done!
 	* Adding all radar views - 100% done!
-	* Full logger implementation - 40% done, should be finished by 6/20
+	* Full logger implementation - 50% done, should be finished by 6/20
 	* Adding a proper cache (Refresh button, deleting all images on close) - 0% done - Should be finished by 6/21
 	* Bringing back the placeholder .gifs - 100% done!
-	* Improving the nuts and bolts in the GUI - 60% done, should be finished by 6/22
+	* Improving the nuts and bolts in the GUI (error checking for bad cache, etc) - 60% done, should be finished by 6/22
 	* Adding new options to configupdate, configsetup, and configdefault - 0% done - Should be finished by 6/23
 	* Adding radar options to setup (case by case installing of libraries/importing of libraries) - 0% done - Should be finished by 6/24
 	* Doing error checking for the appJar library on radar "boot", offering user to install it, etc. - 0% done - Should be finished by 6/25
