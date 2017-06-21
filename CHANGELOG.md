@@ -16,7 +16,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/27
 	* Uncommenting code - 100% done!
 	* Adding all radar views - 100% done!
-	* Full logger implementation - 50% done, should be finished by 6/20
+	* Full logger implementation - 100% done!
 	* Adding a proper cache (Refresh button, deleting all images on close) - 0% done - Should be finished by 6/21
 	* Bringing back the placeholder .gifs - 100% done!
 	* Improving the nuts and bolts in the GUI (error checking for bad cache, etc) - 60% done, should be finished by 6/22

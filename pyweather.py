@@ -1898,6 +1898,7 @@ while True:
                     tempurl = requests.get(r40url, stream=True)
                     logger.debug("40 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r40.gif', 'wb') as fw:
+                        logger.debug("saving file...")
                         for chunk in tempurl.iter_content(chunk_size=128):
                             fw.write(chunk)
                         fw.close()
@@ -1905,17 +1906,23 @@ while True:
                     frontend.reloadImage("Viewer", "temp//r40.gif")
                     frontend.setStatusbar("Status: Idle", 1)
                     r40cached = True
+                    logger.debug("r40cached: %s" % r40cached)
                 elif r40cached == True:
+                    logger.debug("r40cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 40 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
                     frontend.reloadImage("Viewer", "temp//r40.gif")
                     frontend.setStatusbar("Status: Idle", 1)
             elif btnName == "60 km":
+                logger.debug("r60cached: %s" % r60cached)
                 if r60cached == False:
+                    logger.debug("r60cached is false, fetching...")
                     frontend.setStatusbar("Zoom: 60 km", 0)
                     frontend.setStatusbar("Status: Fetching image...", 1)
                     tempurl = requests.get(r60url, stream=True)
+                    logger.debug("60 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r60.gif', 'wb') as fw:
+                        logger.debug("saving file...")
                         for chunk in tempurl.iter_content(chunk_size=128):
                             fw.write(chunk)
                         fw.close()
@@ -1923,17 +1930,23 @@ while True:
                     frontend.reloadImage("Viewer", "temp//r60.gif")
                     frontend.setStatusbar("Status: Idle", 1)
                     r60cached = True
+                    logger.debug("r60cached: %s" % r60cached)
                 elif r60cached == True:
+                    logger.debug("r60cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 60 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
                     frontend.reloadImage("Viewer", "temp//r60.gif")
                     frontend.setStatusbar("Status: Idle", 1)
             elif btnName == "80 km":
+                logger.debug("r80cached: %s" % r80cached)
                 if r80cached == False:
+                    logger.debug("r80cached is false, fetching...")
                     frontend.setStatusbar("Zoom: 80 km", 0)
                     frontend.setStatusbar("Status: Fetching image...", 1)
                     tempurl = requests.get(r80url, stream=True)
+                    logger.debug("80 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r80.gif', 'wb') as fw:
+                        logger.debug("saving file...")
                         for chunk in tempurl.iter_content(chunk_size=128):
                             fw.write(chunk)
                         fw.close()
@@ -1941,17 +1954,23 @@ while True:
                     frontend.reloadImage("Viewer", "temp//r80.gif")
                     frontend.setStatusbar("Status: Idle", 1)
                     r80cached = True
+                    logger.debug("r80cached: %s" % r80cached)
                 elif r80cached == True:
+                    logger.debug("r80cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 80 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
                     frontend.reloadImage("Viewer", "temp//r80.gif")
                     frontend.setStatusbar("Status: Idle", 1)
             elif btnName == "100 km":
+                logger.debug("r100cached: %s" % r100cached)
                 if r100cached == False:
+                    logger.debug("r100cached is false, fetching...")
                     frontend.setStatusbar("Zoom: 100 km", 0)
                     frontend.setStatusbar("Status: Fetching image...", 1)
                     tempurl = requests.get(r100url, stream=True)
+                    logger.debug("100 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r100.gif', 'wb') as fw:
+                        logger.debug("saving file...")
                         for chunk in tempurl.iter_content(chunk_size=128):
                             fw.write(chunk)
                         fw.close()
@@ -1959,7 +1978,9 @@ while True:
                     frontend.reloadImage("Viewer", "temp//r100.gif")
                     frontend.setStatusbar("Status: Idle", 1)
                     r100cached = True
+                    logger.debug("r100cached: %s" % r100cached)
                 elif r100cached == True:
+                    logger.debug("r100cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 100 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
                     frontend.reloadImage("Viewer", "temp//r100.gif")
