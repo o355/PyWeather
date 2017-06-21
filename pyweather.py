@@ -1821,12 +1821,6 @@ while True:
         r60cached = False; r80cached = False; r100cached = False
         logger.debug("r60cached: %s ; r80cached: %s ; r100cached: %s" %
                      (r60cached, r80cached, r100cached))
-        s10cached = False; s20cached = False; s40cached = False
-        logger.debug("s10cached: %s ; s20cached: %s ; s40cached: %s" %
-                     (s10cached, s20cached, s40cached))
-        s60cached = False; s80cached = False; s100cached = False
-        logger.debug("s60cached: %s ; s80cached: %s ; s100cached: %s" %
-                     (s60cached, s80cached, s100cached))
         r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
         r20url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
         logger.debug("r10url: %s ; r20url: %s" %
@@ -1839,199 +1833,110 @@ while True:
         r100url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=100&radunits=km' 
         logger.debug("r80url: %s ; r100url: %s" %
                      (r80url, r100url))      
-        s10url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=10&key=sat_vis&radunits=km'      
-        s20url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=20&key=sat_vis&radunits=km'
-        logger.debug("s10url: %s ; s20url: %s" %
-                     (s10url, s20url))
-        s40url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=40&key=sat_vis&radunits=km'
-        s60url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=60&key=sat_vis&radunits=km'
-        logger.debug("s40url: %s ; s60url: %s" %
-                     (s40url, s60url))
-        s80url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=80&key=sat_vis&radunits=km'
-        s100url = 'http://api.wunderground.com/api/' + apikey + '/satellite/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&basemap=1&num=8&timelabel=1&timelabel.y=10&radius=100&key=sat_vis&radunits=km'
-        logger.debug("s80url: %s ; s100url: %s" %
-                     (s80url, s100url))
         
         
         print(Fore.YELLOW + "Defining functions...")
-        def frontend_modeswitch(btnName):
-            global frontend_mode
-            if btnName == "Radar":
-                frontend_mode = "Radar"
-                frontend.setStatusbar("Mode: Radar Only", 0)
-            elif btnName == "Satellite":
-                frontend_mode = "Satellite"
-                frontend.setStatus("Mode: Satellite", 0)
                 
         def frontend_zoomswitch(btnName):
             global r10cached; global r20cached; global r40cached
             global r60cached; global r80cached; global r100cached
-            global s10cached; global s20cached; global s40cached
-            global s60cached; global s80cached; global s100cached
-            if frontend_mode == "Radar":
-                if btnName == "10 km":
-                    if r10cached == False:
-                        frontend.setStatusbar("Zoom: 10 km", 1)
-                        frontend.setStatusbar("Status: Fetching Image...", 2)
-                        tempurl = requests.get(r10url, stream=True)
-                        with open('temp//r10.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.clearImageCache()
-                        frontend.reloadImage("Viewer", "temp//r10.gif")
-                        frontend.clearImageCache()
-                        frontend.setStatusbar("Status: Idle", 2)
-                        r10cached = True
-                    elif r10cached == True:
-                        frontend.setStatusbar("Zoom: 10 km", 1)
-                        frontend.setStatusbar("Status: Idle", 2)
-                        frontend.reloadImage("Viewer", "temp//r10.gif")
-                elif btnName == "20 km":
-                    if r20cached == False:
-                        tempurl = requests.get(r20url, stream=True)
-                        frontend.setStatusbar("Zoom: 20 km", 2)
-                        frontend.setStatusbar("Status: Fetching Image...", 2)
-                        with open('temp//r20.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//r20.gif")
-                        r20cached = True
-                    elif r20cached == True:
-                        frontend.setStatusbar("Zoom: 20 km", 1)
-                        frontend.setStatusbar("Status: Idle", 2)
-                        frontend.reloadImage("Viewer", "temp//r20.gif")
-                elif btnName == "40 km":
-                    if r40cached == False:
-                        tempurl = requests.get(r40url, stream=True)
-                        frontend.setStatusbar("Status: Fetching Image...", 1)
-                        with open('temp//r40.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//r40.gif")
-                        r40cached = True
-                    elif r40cached == True:
-                        frontend.reloadImage("Viewer", "temp//r40.gif")
-                elif btnName == "60 km":
-                    if r60cached == False:
-                        tempurl = requests.get(r60url, stream=True)
-                        frontend.setStatusbar("Status: Fetching Image...", 1)
-                        with open('temp//r60.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//r60.gif")
-                        r60cached = True
-                    elif r60cached == True:
-                        frontend.reloadImage("Viewer", "temp//r60.gif")
-                elif btnName == "80 km":
-                    if r80cached == False:
-                        tempurl = requests.get(r80url, stream=True)
-                        frontend.setStatusbar("Status: Fetching Image...", 1)
-                        with open('temp//r80.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//r80.gif")
-                        r80cached = True
-                    elif r80cached == True:
-                        frontend.reloadImage("Viewer", "temp//r80.gif")
-                elif btnName == "100 km":
-                    if r100cached == False:
-                        tempurl = requests.get(r100url, stream=True)
-                        frontend.setStatusbar("Status: Fetching Image...", 1)
-                        with open('temp//r100.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//r100.gif")
-                        r100cached = True
-                    elif r100cached == True:
-                        frontend.reloadImage("Viewer", "temp//r100.gif")
-            elif frontend_mode == "Satellite":
-                if btnName == "10 km":
-                    if s10cached == False:
-                        frontend.setStatusbar("Zoom: 10 km", 1)
-                        frontend.setStatusbar("Status: Fetching Image...", 2)
-                        tempurl = requests.get(s10url, stream=True)
-                        with open('temp//s10.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.clearImageCache()
-                        frontend.reloadImage("Viewer", "temp//s10.gif")
-                        frontend.clearImageCache()
-                        frontend.setStatusbar("Status: Idle", 2)
-                        s10cached = True
-                    elif s10cached == True:
-                        frontend.setStatusbar("Zoom: 10 km", 1)
-                        frontend.setStatusbar("Status: Idle", 2)
-                        frontend.reloadImage("Viewer", "temp//s10.gif")
-                elif btnName == "20 km":
-                    if s20cached == False:
-                        frontend.setStatusbar("Zoom: 20 km", 2)
-                        frontend.setStatusbar("Status: Fetching Image...", 2)
-                        tempurl = requests.get(s20url, stream=True)
-                        with open('temp//s20.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//s20.gif")
-                        s20cached = True
-                    elif s20cached == True:
-                        frontend.setStatusbar("Zoom: 20 km", 1)
-                        frontend.setStatusbar("Status: Idle", 2)
-                        frontend.reloadImage("Viewer", "temp//r20.gif")
-                elif btnName == "40 km":
-                    if s40cached == False:
-                        tempurl = requests.get(s40url, stream=True)
-                        frontend.setStatusbar("Status: Fetching Image...", 1)
-                        with open('temp//s40.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//s40.gif")
-                        s40cached = True
-                    elif s40cached == True:
-                        frontend.reloadImage("Viewer", "temp//s40.gif")
-                elif btnName == "60 km":
-                    if s60cached == False:
-                        tempurl = requests.get(s60url, stream=True)
-                        frontend.setStatusbar("Status: Fetching Image...", 1)
-                        with open('temp//s60.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//s60.gif")
-                        s60cached = True
-                    elif s60cached == True:
-                        frontend.reloadImage("Viewer", "temp//s60.gif")
-                elif btnName == "80 km":
-                    if s80cached == False:
-                        tempurl = requests.get(s80url, stream=True)
-                        frontend.setStatusbar("Status: Fetching Image...", 1)
-                        with open('temp//s80.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//s80.gif")
-                        s80cached = True
-                    elif s80cached == True:
-                        frontend.reloadImage("Viewer", "temp//s80.gif")
-                elif btnName == "100 km":
-                    if s100cached == False:
-                        tempurl = requests.get(s100url, stream=True)
-                        frontend.setStatusbar("Status: Fetching Image...", 1)
-                        with open('temp//s100.gif', 'wb') as fw:
-                            for chunk in tempurl.iter_content(chunk_size=128):
-                                fw.write(chunk)
-                            fw.close()
-                        frontend.reloadImage("Viewer", "temp//s100.gif")
-                        s100cached = True
-                    elif s100cached == True:
-                        frontend.reloadImage("Viewer", "temp//s100.gif")
+            if btnName == "10 km":
+                if r10cached == False:
+                    frontend.setStatusbar("Zoom: 10 km", 0)
+                    frontend.setStatusbar("Status: Fetching image...", 1)
+                    tempurl = requests.get(r10url, stream=True)
+                    with open('temp//r10.gif', 'wb') as fw:
+                        for chunk in tempurl.iter_content(chunk_size=128):
+                            fw.write(chunk)
+                        fw.close()
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r10.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+                    r10cached = True
+                elif r10cached == True:
+                    frontend.setStatusbar("Zoom: 10 km", 0)
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r10.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+            elif btnName == "20 km":
+                if r20cached == False:
+                    frontend.setStatusbar("Zoom: 20 km", 0)
+                    frontend.setStatusbar("Status: Fetching image...", 1)
+                    tempurl = requests.get(r20url, stream=True)
+                    with open('temp//r20.gif', 'wb') as fw:
+                        for chunk in tempurl.iter_content(chunk_size=128):
+                            fw.write(chunk)
+                        fw.close()
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r20.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+                    r20cached = True
+                elif r20cached == True:
+                    frontend.setStatusbar("Zoom: 20 km", 0)
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r20.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+            elif btnName == "40 km":
+                if r40cached == False:
+                    frontend.setStatusbar("Zoom: 40 km", 0)
+                    frontend.setStatusbar("Status: Fetching image...", 1)
+                    tempurl = requests.get(r40url, stream=True)
+                    with open('temp//r40.gif', 'wb') as fw:
+                        for chunk in tempurl.iter_content(chunk_size=128):
+                            fw.write(chunk)
+                        fw.close()
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r40.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+                    r40cached = True
+                elif r40cached == True:
+                    frontend.setStatusbar("Zoom: 40 km", 0)
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r40.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+            elif btnName == "60 km":
+                if r60cached == False:
+                    frontend.setStatusbar("Zoom: 60 km", 0)
+                    frontend.setStatusbar("Status: Fetching image...", 1)
+                    tempurl = requests.get(r60url, stream=True)
+                    with open('temp//r60.gif', 'wb') as fw:
+                        for chunk in tempurl.iter_content(chunk_size=128):
+                            fw.write(chunk)
+                        fw.close()
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r60.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+                    r60cached = True
+                elif r60cached == True:
+                    frontend.setStatusbar("Zoom: 60 km", 0)
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r60.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+            elif btnName == "80 km":
+                if r80cached == False:
+                    frontend.setStatusbar("Zoom: 80 km", 0)
+                    frontend.setStatusbar("Status: Fetching image...", 1)
+                    tempurl = requests.get(r80url, stream=True)
+                    with open('temp//r80.gif', 'wb') as fw:
+                        for chunk in tempurl.iter_content(chunk_size=128):
+                            fw.write(chunk)
+                        fw.close()
+                    frontend.reloadImage("Viewer", "temp//r80.gif")
+                    r80cached = True
+                elif r80cached == True:
+                    frontend.reloadImage("Viewer", "temp//r80.gif")
+            elif btnName == "100 km":
+                if r100cached == False:
+                    tempurl = requests.get(r100url, stream=True)
+                    frontend.setStatusbar("Status: Fetching Image...", 1)
+                    with open('temp//r100.gif', 'wb') as fw:
+                        for chunk in tempurl.iter_content(chunk_size=128):
+                            fw.write(chunk)
+                        fw.close()
+                    frontend.reloadImage("Viewer", "temp//r100.gif")
+                    r100cached = True
+                elif r100cached == True:
+                    frontend.reloadImage("Viewer", "temp//r100.gif")
                     
         def frontend_exit(btnName):
             frontend.stop()
@@ -2042,11 +1947,9 @@ while True:
             elif btnName == "Pause":
                 frontend.stopAnimation("Viewer")
         frontend.clearImageCache()       
-        frontend.setTitle("PyWeather Radar Viewer")
+        frontend.setTitle("PyWeather Radar Viewer - version 0.6.1 beta")
         frontend.setResizable(canResize=False)
-        frontend.addLabel("toplabel", "Select a Mode below.", column=0, row=0, colspan=3)
-        frontend.addButtons(["Radar", "Satellite"], frontend_modeswitch, column=0, row=1, colspan=3, rowspan=1)
-        frontend.startLabelFrame("Viewer", column=0, row=2, colspan=3)
+        frontend.startLabelFrame("Viewer", column=0, row=0, colspan=3)
         # Placeholders are needed to start the viewer.
         if user_radarImageSize == "extrasmall":
             frontend.addImage("Viewer", "storage//320x240placeholder.gif")
@@ -2055,17 +1958,16 @@ while True:
         elif user_radarImageSize == "normal":
             frontend.addImage("Viewer", "storage//640x480placeholder.gif")
         frontend.stopLabelFrame()
-        frontend.addLabel("mid2label", "Animation controls:", column=0, row=3)
-        frontend.addButtons(["Play", "Pause"], frontend_playerControls, column=0, row=4, colspan=3)
-        frontend.addLabel("midlabel", "Select a Zoom below.", column=0, row=5, colspan=3)
-        frontend.addButtons(["10 km", "20 km", "40 km"], frontend_zoomswitch, column=0, row=6, colspan=3)
-        frontend.addButtons(["60 km", "80 km", "100 km"], frontend_zoomswitch, row=7, column=0, colspan=3)
-        frontend.addButton("Return to PyWeather", frontend_exit, row=8, column=1, colspan=1)
+        frontend.addLabel("mid2label", "Animation controls:", column=0, row=2)
+        frontend.addButtons(["Play", "Pause"], frontend_playerControls, column=0, row=3, colspan=3)
+        frontend.addLabel("midlabel", "Select a Zoom below.", column=0, row=4, colspan=3)
+        frontend.addButtons(["10 km", "20 km", "40 km"], frontend_zoomswitch, column=0, row=5, colspan=3)
+        frontend.addButtons(["60 km", "80 km", "100 km"], frontend_zoomswitch, row=6, column=0, colspan=3)
+        frontend.addButton("Return to PyWeather", frontend_exit, row=7, column=1, colspan=1)
         frontend.setInPadding([10, 10])
-        frontend.addStatusbar(fields=3)
-        frontend.setStatusbar("Mode: None selected", 0)
-        frontend.setStatusbar("Zoom: None selected", 1)
-        frontend.setStatusbar("Status: Idle", 2)
+        frontend.addStatusbar(fields=2)
+        frontend.setStatusbar("Zoom: None selected", 0)
+        frontend.setStatusbar("Status: Idle", 1)
         frontend.go()
     elif moreoptions == "11":
        sys.exit()

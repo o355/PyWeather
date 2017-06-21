@@ -14,12 +14,12 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache. - Done!
 * Removes the geopy dependency from the setup file. - Done!
 * Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/27
-	* Uncommenting code - Done
-	* Adding all radar/satellite views - 0% done - Should be finished by 6/20
-	* Full logger implementation - 0% done - Should be finished by 6/20
+	* Uncommenting code - 100% done!
+	* Adding all radar views - 100% done!
+	* Full logger implementation - 40% done, should be finished by 6/20
 	* Adding a proper cache (Refresh button, deleting all images on close) - 0% done - Should be finished by 6/21
-	* Bringing back the placeholder .gifs - 0% done - Should be finished by 6/22
-	* Improving the nuts and bolts in the GUI (status bars, warnings on no mode found, stuff like that) - 0% done - Should be finished by 6/22
+	* Bringing back the placeholder .gifs - 100% done!
+	* Improving the nuts and bolts in the GUI - 60% done, should be finished by 6/22
 	* Adding new options to configupdate, configsetup, and configdefault - 0% done - Should be finished by 6/23
 	* Adding radar options to setup (case by case installing of libraries/importing of libraries) - 0% done - Should be finished by 6/24
 	* Doing error checking for the appJar library on radar "boot", offering user to install it, etc. - 0% done - Should be finished by 6/25
