@@ -44,7 +44,8 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 	* Almanac information
 	* Astronomy (sunrise/sunset/moonrise/moonset + moon) information
 	* Historical weather information, including hourly weather for a historical date
-In addition, you'll soon be able to view these data types soon:
+	
+* In addition, you'll soon be able to view these data types soon:
 	* Radar/satellite information (experimental for now. the developer of the GUI library I'm using is fixing it)
 	* Yesterday's weather
 	* Webcam images (a big maybe on animated videos)
