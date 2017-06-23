@@ -2013,6 +2013,7 @@ while True:
                     
         def frontend_extrabuttons(btnName):
             if btnName == "Refresh":
+                logger.debug("refresh button pressed. zoom level: %s" % radar_zoomlevel)
                 if radar_zoomlevel == "None":
                     frontend.warningBox("No zoom level selected!", "Please select a zoom level before using the Refresh button.")
                 elif radar_zoomlevel == "10 km":
@@ -2031,9 +2032,113 @@ while True:
                 elif radar_zoomlevel == "20 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
                     tempurl = requests.get(r20url, stream=True)
-                    logger.debug("20 km loop acquired: end result: %s" % tempurl)
-                    os.remove("temp//r20.gif")
+                    logger.debug("20 km loop acquired, end result: %s" % tempurl)
+                    os.remove("temp//r10.gif")
                     with open('temp//r20.gif', 'wb') as fw:
+                        logger.debug("saving file...")
+                        for chunk in tempurl.iter_content(chunk_size=128):
+                            fw.write(chunk)
+                        fw.close()
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r20.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+                elif radar_zoomlevel == "40 km":
+                    frontend.setStatusbar("Status: Fetching image...", 1)
+                    tempurl = requests.get(r40url, stream=True)
+                    logger.debug("40 km loop acquired, end result: %s" % tempurl)
+                    with open('temp//r40.gif', 'wb') as fw:
+                        logger.debug("saving file...")
+                        for chunk in tempurl.iter_content(chunk_size=128):
+                            fw.write(chunk)
+                        fw.close()
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r40.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+                elif radar_zoomlevel == "60 km":
+                    frontend.setStatusbar("Status: Fetching image...", 1)
+                    tempurl = requests.get(r60url, stream=True)
+                    logger.debug("60 km loop acquired, end result: %s" % tempurl)
+                    with open('temp//r60.gif', 'wb') as fw:
+                        logger.debug("saving file...")
+                        for chunk in tempurl.iter_content(chunk_size=128):
+                            fw.write(chunk)
+                        fw.close()
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r60.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+                elif radar_zoomlevel == "80 km":
+                    frontend.setStatusbar("Status: Fetching image...", 1)
+                    tempurl = requests.get(r80url, stream=True)
+                    logger.debug("80 km loop acquired, end result: %s" % tempurl)
+                    with open('temp//r80.gif', 'wb') as fw:
+                        logger.debug("saving file...")
+                        for chunk in tempurl.iter_content(chunk_size=128):
+                            fw.write(chunk)
+                        fw.close()
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r80.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+                elif radar_zoomlevel == "100 km":
+                    frontend.setStatusbar("Status: Fetching image...", 1)
+                    tempurl = requests.get(r100url, stream=True)
+                    logger.debug("100 km loop acquired, end result: %s" % tempurl)
+                    with open('temp//r100.gif', 'wb') as fw:
+                        logger.debug("saving file...")
+                        for chunk in tempurl.iter_content(chunk_size=128):
+                            fw.write(chunk)
+                        fw.close()
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r100.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+            elif btnName == "Empty Cache":
+                radar_confirmation = frontend.yesNoBox("Empty the cache?", 
+                                                       "Would you like to empty the cache? If you do" +
+                                                       ", you'll need to reselect a zoom level.")
+                if radar_confirmation == False:
+                    logger.debug("not emptying cache.")
+                elif radar_confirmation == True:
+                    logger.debug("emptying cache.")
+                    r10cached = False
+                    r20cached = False
+                    logger.debug("r10cached: %s ; r20cached: %s")
+                    r40cached = False
+                    r60cached = False
+                    r80cached = False
+                    r100cached = False
+                    # We have to try each removal, or we may hit errors.
+                    logger.debug("removing r10.gif...")
+                    try:
+                        os.remove("temp//r10.gif")
+                    except:
+                        printException_loggerwarn()
+                    logger.debug("removing r20.gif...")   
+                    try:
+                        os.remove("temp//r20.gif")
+                    except:
+                        printException_loggerwarn()
+                    logger.debug("removing r40.gif...")
+                    try:
+                        os.remove("temp//r40.gif")
+                    except:
+                        printException_loggerwarn()
+                    logger.debug("removing r60.gif...")
+                    try:
+                        os.remove("temp//r60.gif")
+                    except:
+                        printException_loggerwarn()
+                    logger.debug("removing r80.gif...")
+                    try:
+                        os.remove("temp//r80.gif")
+                    except:
+                        printException_loggerwarn()
+                    logger.debug("removing r100.gif...")   
+                    try:
+                        os.remove("temp//r100.gif")
+                    except:
+                        printException_loggerwarn()
+                    
+                    
+                    
                 
             
         def frontend_playerControls(btnName):
