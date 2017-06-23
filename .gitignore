@@ -1,3 +1,9 @@
+# PyWeather .gitignore
+# These are files to be ignored by Git.
+# GitHub's Python preset is here, along with my own customizations.
+
+# <-- Default GitHub gitignore settings -->
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -87,11 +93,21 @@ ENV/
 
 # Rope project settings
 .ropeproject
-apikey.txt
+
+# <-- PyWeather extra gitignore stuff -->
+
+# Eclipse files
 *.project
 *.pydevproject
 .settings/org.eclipse.ltk.core.refactoring.prefs
+
+# API keys
+apikey.txt
 storage/apikey2.txt
 backup/backkey.txt
+
+# Temporary .gif files for radar
 temp/*.gif
+
+# Config file
 storage/config.ini

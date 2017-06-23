@@ -635,14 +635,14 @@ if verbosity == False:
 if prefetch10Day_atStart == True: 
     hourly10_json = json.loads(hourly10JSON.text)
     if jsonVerbosity == True:
-        logger.debug("hourly_json loaded with: %s" % hourly_json)
+        logger.debug("hourly10_json loaded with: %s" % hourly10_json)
     hourly36_json = json.loads(hourly36JSON.text)
     if jsonVerbosity == True:
-        logger.debug("hourly_json loaded with: %s" % hourly_json)
+        logger.debug("hourly36_json loaded with: %s" % hourly36_json)
 else:
     hourly36_json = json.loads(hourly36JSON.text)
     if jsonVerbosity == True:
-        logger.debug("hourly_json loaded with: %s" % hourly_json)
+        logger.debug("hourly36_json loaded with: %s" % hourly36_json)
 if sundata_summary == True:
     astronomy_json = json.loads(sundataJSON.text)
     if verbosity == False:
@@ -1821,6 +1821,7 @@ while True:
         r60cached = False; r80cached = False; r100cached = False
         logger.debug("r60cached: %s ; r80cached: %s ; r100cached: %s" %
                      (r60cached, r80cached, r100cached))
+        radar_zoomlevel = "None"
         r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
         r20url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
         logger.debug("r10url: %s ; r20url: %s" %
@@ -1840,6 +1841,7 @@ while True:
         def frontend_zoomswitch(btnName):
             global r10cached; global r20cached; global r40cached
             global r60cached; global r80cached; global r100cached
+            global radar_zoomlevel
             logger.debug("btnName: %s" % btnName)
             if btnName == "10 km":
                 logger.debug("r10cached: %s" % r10cached)
@@ -1858,13 +1860,17 @@ while True:
                     frontend.reloadImage("Viewer", "temp//r10.gif")
                     frontend.setStatusbar("Status: Idle", 1)
                     r10cached = True
-                    logger.debug("r10cached: %s" % r10cached)
+                    radar_zoomlevel = "10 km"
+                    logger.debug("r10cached: %s ; radar_zoomlevel" %
+                                 (r10cached, radar_zoomlevel))
                 elif r10cached == True:
                     logger.debug("r10cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 10 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
                     frontend.reloadImage("Viewer", "temp//r10.gif")
                     frontend.setStatusbar("Status: Idle", 1)
+                    radar_zoomlevel = "10 km"
+                    logger.debug("radar_zoomlevel: %s" % radar_zoomlevel)
             elif btnName == "20 km":
                 logger.debug("r20cached: %s" % r20cached)
                 if r20cached == False:
@@ -1882,13 +1888,17 @@ while True:
                     frontend.reloadImage("Viewer", "temp//r20.gif")
                     frontend.setStatusbar("Status: Idle", 1)
                     r20cached = True
-                    logger.debug("r20cached: %s" % r20cached)
+                    radar_zoomlevel = "20 km"
+                    logger.debug("r20cached: %s ; radar_zoomlevel: %s" %
+                                 (r20cached, radar_zoomlevel))
                 elif r20cached == True:
                     logger.debug("r20cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 20 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
                     frontend.reloadImage("Viewer", "temp//r20.gif")
                     frontend.setStatusbar("Status: Idle", 1)
+                    radar_zoomlevel = "20 km"
+                    logger.debug("radar_zoomlevel: %s" % radar_zoomlevel)
             elif btnName == "40 km":
                 logger.debug("r40cached: %s" % r40cached)
                 if r40cached == False:
@@ -1906,13 +1916,17 @@ while True:
                     frontend.reloadImage("Viewer", "temp//r40.gif")
                     frontend.setStatusbar("Status: Idle", 1)
                     r40cached = True
-                    logger.debug("r40cached: %s" % r40cached)
+                    radar_zoomlevel = "40 km"
+                    logger.debug("r40cached: %s ; radar_zoomlevel: %s"
+                                 (r40cached, radar_zoomlevel))
                 elif r40cached == True:
                     logger.debug("r40cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 40 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
                     frontend.reloadImage("Viewer", "temp//r40.gif")
                     frontend.setStatusbar("Status: Idle", 1)
+                    radar_zoomlevel = "40 km"
+                    logger.debug("radar_zoomlevel: %s" % radar_zoomlevel)
             elif btnName == "60 km":
                 logger.debug("r60cached: %s" % r60cached)
                 if r60cached == False:
@@ -1930,13 +1944,16 @@ while True:
                     frontend.reloadImage("Viewer", "temp//r60.gif")
                     frontend.setStatusbar("Status: Idle", 1)
                     r60cached = True
-                    logger.debug("r60cached: %s" % r60cached)
+                    radar_zoomlevel = "60 km"
+                    logger.debug("r60cached: %s ; radar_zoomlevel: %s" %
+                                 (r60cached, radar_zoomlevel))
                 elif r60cached == True:
                     logger.debug("r60cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 60 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
                     frontend.reloadImage("Viewer", "temp//r60.gif")
                     frontend.setStatusbar("Status: Idle", 1)
+                    radar_zoomlevel = "60 km"
             elif btnName == "80 km":
                 logger.debug("r80cached: %s" % r80cached)
                 if r80cached == False:
@@ -1954,13 +1971,17 @@ while True:
                     frontend.reloadImage("Viewer", "temp//r80.gif")
                     frontend.setStatusbar("Status: Idle", 1)
                     r80cached = True
-                    logger.debug("r80cached: %s" % r80cached)
+                    radar_zoomlevel = "80 km"
+                    logger.debug("r80cached: %s ; radar_zoomlevel: %s" %
+                                 (r80cached, radar_zoomlevel))
                 elif r80cached == True:
                     logger.debug("r80cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 80 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
                     frontend.reloadImage("Viewer", "temp//r80.gif")
                     frontend.setStatusbar("Status: Idle", 1)
+                    radar_zoomlevel = "80 km"
+                    logger.debug("radar_zoomlevel: %s" % radar_zoomlevel)
             elif btnName == "100 km":
                 logger.debug("r100cached: %s" % r100cached)
                 if r100cached == False:
@@ -1978,16 +1999,42 @@ while True:
                     frontend.reloadImage("Viewer", "temp//r100.gif")
                     frontend.setStatusbar("Status: Idle", 1)
                     r100cached = True
-                    logger.debug("r100cached: %s" % r100cached)
+                    radar_zoomlevel = "100 km"
+                    logger.debug("r100cached: %s ; radar_zoomlevel: %s" %
+                                 (r100cached, radar_zoomlevel))
                 elif r100cached == True:
                     logger.debug("r100cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 100 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
                     frontend.reloadImage("Viewer", "temp//r100.gif")
                     frontend.setStatusbar("Status: Idle", 1)
+                    radar_zoomlevel = "100 km"
+                    logger.debug("radar_zoomlevel: %s" % radar_zoomlevel)
                     
-        def frontend_exit(btnName):
-            frontend.stop()
+        def frontend_extrabuttons(btnName):
+            if btnName == "Refresh":
+                if radar_zoomlevel == "None":
+                    frontend.warningBox("No zoom level selected!", "Please select a zoom level before using the Refresh button.")
+                elif radar_zoomlevel == "10 km":
+                    frontend.setStatusbar("Status: Fetching image...", 1)
+                    tempurl = requests.get(r10url, stream=True)
+                    logger.debug("10 km loop acquired, end result: %s" % tempurl)
+                    os.remove("temp//r10.gif")
+                    with open('temp//r10.gif', 'wb') as fw:
+                        logger.debug("saving file...")
+                        for chunk in tempurl.iter_content(chunk_size=128):
+                            fw.write(chunk)
+                        fw.close()
+                    frontend.setStatusbar("Status: Loading image...", 1)
+                    frontend.reloadImage("Viewer", "temp//r10.gif")
+                    frontend.setStatusbar("Status: Idle", 1)
+                elif radar_zoomlevel == "20 km":
+                    frontend.setStatusbar("Status: Fetching image...", 1)
+                    tempurl = requests.get(r20url, stream=True)
+                    logger.debug("20 km loop acquired: end result: %s" % tempurl)
+                    os.remove("temp//r20.gif")
+                    with open('temp//r20.gif', 'wb') as fw:
+                
             
         def frontend_playerControls(btnName):
             if btnName == "Play":
@@ -2006,19 +2053,19 @@ while True:
         elif user_radarImageSize == "normal":
             frontend.addImage("Viewer", "storage//640x480placeholder.gif")
         frontend.stopLabelFrame()
-        frontend.addLabel("mid2label", "Animation controls:", column=0, row=2)
+        frontend.addLabel("mid2label", "Animation Control", column=0, row=2)
         frontend.addButtons(["Play", "Pause"], frontend_playerControls, column=0, row=3, colspan=3)
-        frontend.addLabel("midlabel", "Select a Zoom below.", column=0, row=4, colspan=3)
+        frontend.addLabel("midlabel", "Zoom Control", column=0, row=4, colspan=3)
         frontend.addButtons(["10 km", "20 km", "40 km"], frontend_zoomswitch, column=0, row=5, colspan=3)
         frontend.addButtons(["60 km", "80 km", "100 km"], frontend_zoomswitch, row=6, column=0, colspan=3)
-        frontend.addButton("Return to PyWeather", frontend_exit, row=7, column=1, colspan=1)
+        frontend.addButton(["Refresh", "Empty Cache", "Return to PyWeather"], frontend_extrabuttons, row=7, column=0, colspan=3)
         frontend.setInPadding([10, 10])
         frontend.addStatusbar(fields=2)
         frontend.setStatusbar("Zoom: None selected", 0)
         frontend.setStatusbar("Status: Idle", 1)
         frontend.go()
     elif moreoptions == "11":
-       sys.exit()
+        sys.exit()
     elif moreoptions == "9":
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %

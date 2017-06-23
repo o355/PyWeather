@@ -9,7 +9,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Should be finished by 7/19
 * Adds caching to the radar - Should be finished by 7/27
 
-## version 0.6.1 beta - Should be released on 7/11/2017
+## version 0.6.1 beta - Should be released on 7/14/2017
 **NEW FEATURES/REMOVALS**
 * Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache. - Done!
 * Removes the geopy dependency from the setup file. - Done!
@@ -35,6 +35,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 	* storage/config_README -> documentation/config_README - 0% done - Should be finished by 7/1
 * The PyWeather updater will now try each command. This helps in determining if a user can still update PyWeather using the .zip method. - 0% done, Should be finished by 7/5
 * Updates config_README for the latest options, and detailed "when did each option appear" analysis (using previous releases.) - 0% done, Should be finished by 7/9
+* PyWeather Setup will now update PIP packages with user approval. - 0% done, should be finished by 7/10
 
 **OTHER CHANGES**
 * Geopy is no longer required to run PyWeather, so the dependency was removed.

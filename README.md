@@ -46,12 +46,12 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 	* Historical weather information, including hourly weather for a historical date
 	
 * In addition, you'll soon be able to view these data types soon:
-	* Radar/satellite information (experimental for now. the developer of the GUI library I'm using is fixing it)
-	* Yesterday's weather
-	* Webcam images (a big maybe on animated videos)
-	* Tide data
-	* Hurricane data
-	* Some form of a historical planner
+	* Radar information (experimental, for now) - Coming in 0.6.1 beta
+	* Yesterday's weather - Coming sometime around 0.7 beta
+	* Webcam images (a big maybe on animated videos) - Coming in either 0.7.2 beta or 0.8 beta
+	* Tide data - Coming in 0.7 beta
+	* Hurricane data - Coming in 0.7 beta
+	* Some form of a historical planner - Coming in 0.7.1 beta
 * PyWeather is pretty modular. As I said earlier with the super-configurable config file, this also translates into modularity. PyWeather's features can be turned on and off at will.
 * PyWeather has a built-in updater, provided you have git installed. I hope to eventually incorporate a universal "download the zip and unzip it" system down the road.
 * PyWeather has a robust built-in debugger/logger. When turned on, it'll spam your console with verbosityness, or whatever that's called.
