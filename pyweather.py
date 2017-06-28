@@ -2056,6 +2056,7 @@ while True:
                     logger.debug("radar_zoomlevel: %s" % radar_zoomlevel)
                     
         def frontend_extrabuttons(btnName):
+            global radar_zoomlevel
             if btnName == "Refresh":
                 logger.debug("refresh button pressed. zoom level: %s" % radar_zoomlevel)
                 if radar_zoomlevel == "None":
