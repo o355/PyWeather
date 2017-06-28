@@ -2100,9 +2100,12 @@ while True:
                     logger.debug("emptying cache.")
                     r10cached = False
                     r20cached = False
-                    logger.debug("r10cached: %s ; r20cached: %s")
+                    logger.debug("r10cached: %s ; r20cached: %s" %
+                                 (r10cached, r20cached))
                     r40cached = False
                     r60cached = False
+                    logger.debug("r40cached: %s ; r60cached: %s" %
+                                 (r40cached, r60cached))
                     r80cached = False
                     r100cached = False
                     # We have to try each removal, or we may hit errors.
@@ -2136,11 +2139,39 @@ while True:
                         os.remove("temp//r100.gif")
                     except:
                         printException_loggerwarn()
-                    
-                    
-                    
-                
-            
+            elif btnName == "Return to PyWeather":
+                frontend.stop()
+                logger.debug("clearing temporary images...")
+                logger.debug("removing r10.gif...")
+                try:
+                    os.remove("temp//r10.gif")
+                except:
+                    printException_loggerwarn()
+                logger.debug("removing r20.gif...")   
+                try:
+                    os.remove("temp//r20.gif")
+                except:
+                    printException_loggerwarn()
+                logger.debug("removing r40.gif...")
+                try:
+                    os.remove("temp//r40.gif")
+                except:
+                    printException_loggerwarn()
+                logger.debug("removing r60.gif...")
+                try:
+                    os.remove("temp//r60.gif")
+                except:
+                    printException_loggerwarn()
+                logger.debug("removing r80.gif...")
+                try:
+                    os.remove("temp//r80.gif")
+                except:
+                    printException_loggerwarn()
+                logger.debug("removing r100.gif...")   
+                try:
+                    os.remove("temp//r100.gif")
+                except:
+                    printException_loggerwarn()    
         def frontend_playerControls(btnName):
             if btnName == "Play":
                 frontend.startAnimation("Viewer")

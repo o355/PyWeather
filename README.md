@@ -52,15 +52,36 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 	* Tide data - Coming in 0.7 beta
 	* Hurricane data - Coming in 0.7 beta
 	* Some form of a historical planner - Coming in 0.7.1 beta
+	* PWS mode - Coming in 0.8 beta
+	* Favorite locations - Coming in 0.9 beta
 * PyWeather is pretty modular. As I said earlier with the super-configurable config file, this also translates into modularity. PyWeather's features can be turned on and off at will.
 * PyWeather has a built-in updater, provided you have git installed. I hope to eventually incorporate a universal "download the zip and unzip it" system down the road.
 * PyWeather has a robust built-in debugger/logger. When turned on, it'll spam your console with verbosityness, or whatever that's called.
 * PyWeather has colors. I made the program colorful.
 
+## Why actually use PyWeather over Wunderground, or other apps?
+PyWeather has lots of advantages over using websites on your desktop, or even weather apps on mobile (PyWeather is compatible with Termux for Android, and other SSH apps of course)
+
+**On a desktop:**
+* If you have a desktop shortcut to the homepage of wunderground.com, or weather.com, PyWeather (given a shortcut on your desktop) can be faster than visiting Wunderground, and much faster than visiting weather.com
+* PyWeather has no ads (or annoying articles), so you get distraction-free weather.
+* PyWeather has the essential features other sites have, and more features are coming in future versions.
+* PyWeather "gets to the point". It just shows you the weather, nothing else.
+
+**On a phone:**
+* PyWeather when paired with Termux, or an SSH client uses A LOT less battery (my GS7 reported Wunderground's app using 4% of battery power/hour!)
+* PyWeather can easily save mobile data with default settings versus other weather apps, since ads aren't being loaded. If you more carefully tune PyWeather's settings, you can save even more data.
+* PyWeather may be slower than opening apps, and having direct access (Termux users, if you pay $1.99 for the widgets, it begins to compete with weather apps, and will get better with favorite locations in 0.9 beta) to the weather, but PyWeather fetches data that most apps don't include (like the almanac, yesterday's weather, etc)
+
+**Other advantages:**
+* PyWeather is open-source, and uses completely open-source libraries, AND PyWeather is licensed under GNU's GPL v3 license! Richard Stallman would approve.
+* You'll look cool being that one person using a terminal to check your weather like it's the 80s. 
+
+
 ## What's the current status of PyWeather?
 PyWeather is presently in a rapid-development beta.
 
-Until the end of September 2017, I expect to continue adding new features to PyWeather at a rapid pace. Until this point, I'll be attempting to use every part of Wunderground's API, and implement it into PyWeather.
+Until the end of 2017, I expect to continue adding new features to PyWeather at a rapid pace. Until this point, I'll be attempting to use every part of Wunderground's API, and implement it into PyWeather.
 
 ## Contributing
 Since I don't have all the time in the world to work on PyWeather, contributing is a great way to help with PyWeather.
