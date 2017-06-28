@@ -206,7 +206,7 @@ else:
     radar_gifx = "640"
     radar_gify = "480"
 
-logger.info("Defining exception functions...")
+logger.info("Defining custom functions...")
 
 def printException():
     # We use tracebacksEnabled here, as it just worked.
@@ -220,6 +220,49 @@ def printException_loggerwarn():
     if verbosity == True:
         logger.warn("Snap! We hit a non-critical error. Here's the traceback.")
         logger.warn(traceback.print_exc())
+        
+def radar_clearImages():
+    logger.debug("clearing temporary images...")
+    logger.debug("removing r10.gif...")
+    try:
+        os.remove("temp//r10.gif")
+    except:
+        printException_loggerwarn()
+    logger.debug("removing r20.gif...")   
+    try:
+        os.remove("temp//r20.gif")
+    except:
+        printException_loggerwarn()
+    logger.debug("removing r40.gif...")
+    try:
+        os.remove("temp//r40.gif")
+    except:
+        printException_loggerwarn()
+    logger.debug("removing r60.gif...")
+    try:
+        os.remove("temp//r60.gif")
+    except:
+        printException_loggerwarn()
+    logger.debug("removing r80.gif...")
+    try:
+        os.remove("temp//r80.gif")
+    except:
+        printException_loggerwarn()
+    logger.debug("removing r100.gif...")   
+    try:
+        os.remove("temp//r100.gif")
+    except:
+        printException_loggerwarn()
+        
+# down the road
+def logvars(var1, var2, var3=None, var4=None):
+    if var3 and var4 is None:
+        varcount = 2
+    elif var3 is not None and var4 is None:
+        varcount = 3
+    elif var3 is not None and var4 is not None:
+        varcount = 4
+
         
 logger.info("Defining requests classes...")
 
@@ -1797,11 +1840,12 @@ while True:
 
 
     elif moreoptions == "radar":
-        print(Fore.RED + "The radar is currently bugged, and unfinished, due to",
-              "a .gif glitch in Tkinter/appJar. The code has been kept here so when",
-              "development of the radar can be resumed, it's easy enough to start back up.",
-              sep="\n")
+        try:
+            os.mkdir("temp")
+        except:
+            printException_loggerwarn()
         print(Fore.YELLOW + "Loading the GUI. This should take around 5 seconds.")
+        radar_clearImages()
         try:
             from appJar import gui
             frontend = gui()
@@ -1861,7 +1905,7 @@ while True:
                     frontend.setStatusbar("Status: Idle", 1)
                     r10cached = True
                     radar_zoomlevel = "10 km"
-                    logger.debug("r10cached: %s ; radar_zoomlevel" %
+                    logger.debug("r10cached: %s ; radar_zoomlevel: %s" %
                                  (r10cached, radar_zoomlevel))
                 elif r10cached == True:
                     logger.debug("r10cached is true, fetching from cache...")
@@ -2109,69 +2153,25 @@ while True:
                     r80cached = False
                     r100cached = False
                     # We have to try each removal, or we may hit errors.
-                    logger.debug("removing r10.gif...")
-                    try:
-                        os.remove("temp//r10.gif")
-                    except:
-                        printException_loggerwarn()
-                    logger.debug("removing r20.gif...")   
-                    try:
-                        os.remove("temp//r20.gif")
-                    except:
-                        printException_loggerwarn()
-                    logger.debug("removing r40.gif...")
-                    try:
-                        os.remove("temp//r40.gif")
-                    except:
-                        printException_loggerwarn()
-                    logger.debug("removing r60.gif...")
-                    try:
-                        os.remove("temp//r60.gif")
-                    except:
-                        printException_loggerwarn()
-                    logger.debug("removing r80.gif...")
-                    try:
-                        os.remove("temp//r80.gif")
-                    except:
-                        printException_loggerwarn()
-                    logger.debug("removing r100.gif...")   
-                    try:
-                        os.remove("temp//r100.gif")
-                    except:
-                        printException_loggerwarn()
+                    radar_clearImages()
+                    frontend.clearImageCache()
+                if user_radarImageSize == "extrasmall":
+                    frontend.reloadImage("Viewer", "storage//320x240placeholder.gif")
+                elif user_radarImageSize == "small":
+                    frontend.reloadImage("Viewer", "storage//480x360placeholder.gif")
+                elif user_radarImageSize == "normal":
+                    frontend.reloadImage("Viewer", "storage//640x480placeholder.gif")
+                elif user_radarImageSize == "large":
+                    frontend.reloadImage("Viewer", "storage//960x720placeholder.gif")
+                elif user_radarImageSize == "extralarge":
+                    frontend.reloadImage("Viewer", "storage//1280x960placeholder.gif") 
+                frontend.setStatusbar("Zoom: Not selected", 0)
+                radar_zoomlevel = "None"
+                logger.debug("radar_zoomlevel: %s" % radar_zoomlevel)
             elif btnName == "Return to PyWeather":
                 frontend.stop()
-                logger.debug("clearing temporary images...")
-                logger.debug("removing r10.gif...")
-                try:
-                    os.remove("temp//r10.gif")
-                except:
-                    printException_loggerwarn()
-                logger.debug("removing r20.gif...")   
-                try:
-                    os.remove("temp//r20.gif")
-                except:
-                    printException_loggerwarn()
-                logger.debug("removing r40.gif...")
-                try:
-                    os.remove("temp//r40.gif")
-                except:
-                    printException_loggerwarn()
-                logger.debug("removing r60.gif...")
-                try:
-                    os.remove("temp//r60.gif")
-                except:
-                    printException_loggerwarn()
-                logger.debug("removing r80.gif...")
-                try:
-                    os.remove("temp//r80.gif")
-                except:
-                    printException_loggerwarn()
-                logger.debug("removing r100.gif...")   
-                try:
-                    os.remove("temp//r100.gif")
-                except:
-                    printException_loggerwarn()    
+                radar_clearImages()   
+                
         def frontend_playerControls(btnName):
             if btnName == "Play":
                 frontend.startAnimation("Viewer")
@@ -2188,13 +2188,17 @@ while True:
             frontend.addImage("Viewer", "storage//480x360placeholder.gif")
         elif user_radarImageSize == "normal":
             frontend.addImage("Viewer", "storage//640x480placeholder.gif")
+        elif user_radarImageSize == "large":
+            frontend.addImage("Viewer", "storage//960x720placeholder.gif")
+        elif user_radarImageSize == "extralarge":
+            frontend.addImage("Viewer", "storage//1280x960placeholder.gif")
         frontend.stopLabelFrame()
         frontend.addLabel("mid2label", "Animation Control", column=0, row=2)
         frontend.addButtons(["Play", "Pause"], frontend_playerControls, column=0, row=3, colspan=3)
         frontend.addLabel("midlabel", "Zoom Control", column=0, row=4, colspan=3)
         frontend.addButtons(["10 km", "20 km", "40 km"], frontend_zoomswitch, column=0, row=5, colspan=3)
         frontend.addButtons(["60 km", "80 km", "100 km"], frontend_zoomswitch, row=6, column=0, colspan=3)
-        frontend.addButton(["Refresh", "Empty Cache", "Return to PyWeather"], frontend_extrabuttons, row=7, column=0, colspan=3)
+        frontend.addButtons(["Refresh", "Empty Cache", "Return to PyWeather"], frontend_extrabuttons, row=7, column=0, colspan=3)
         frontend.setInPadding([10, 10])
         frontend.addStatusbar(fields=2)
         frontend.setStatusbar("Zoom: None selected", 0)

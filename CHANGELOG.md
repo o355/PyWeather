@@ -17,7 +17,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 	* Uncommenting code - 100% done!
 	* Adding all radar views - 100% done!
 	* Full logger implementation - 100% done!
-	* Adding a proper cache (Refresh button, deleting all images on close) - 80% done - Should be finished by 6/21
+	* Adding a proper cache (Refresh button, deleting all images on close) - 100% done!
 	* Bringing back the placeholder .gifs - 100% done!
 	* Improving the nuts and bolts in the GUI (error checking for bad cache, etc) - 60% done, should be finished by 6/22
 	* Adding new options to configupdate, configsetup, and configdefault - 0% done - Should be finished by 6/23
