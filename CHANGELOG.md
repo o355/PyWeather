@@ -9,7 +9,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Should be finished by 7/19
 * Adds caching to the radar - Should be finished by 7/27
 
-## version 0.6.1 beta - Should be released on 7/14/2017
+## version 0.6.1 beta - Should be released on 7/15/2017
 **NEW FEATURES/REMOVALS**
 * Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache. - Done!
 * Removes the geopy dependency from the setup file. - Done!
@@ -19,10 +19,10 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 	* Full logger implementation - 100% done!
 	* Adding a proper cache (Refresh button, deleting all images on close) - 100% done!
 	* Bringing back the placeholder .gifs - 100% done!
-	* Improving the nuts and bolts in the GUI (error checking for bad cache, etc) - 60% done, should be finished by 6/22
-	* Adding new options to configupdate, configsetup, and configdefault - 0% done - Should be finished by 6/23
-	* Adding radar options to setup (case by case installing of libraries/importing of libraries) - 0% done - Should be finished by 6/24
-	* Doing error checking for the appJar library on radar "boot", offering user to install it, etc. - 0% done - Should be finished by 6/25
+	* Improving the nuts and bolts in the GUI (error checking for bad cache, etc) - 80% done, should be finished by 6/29
+	* Adding new options to configupdate, configsetup, and configdefault - 0% done - Should be finished by 6/29
+	* Adding radar options to setup (case by case installing of libraries/importing of libraries) - 0% done - Should be finished by 6/30
+	* Doing error checking for the appJar library on radar "boot", offering user to install it, etc. - 0% done - Should be finished by 6/30
 * Adds error checking for the requests library at boot for all scripts. - 0% done, Should be finished by 6/29
 	* Add error checking (pyweather/updater) - 0% done - Should be finished by 6/28
 	* Add error checking (setup) - 0% done - Should be finished by 6/28

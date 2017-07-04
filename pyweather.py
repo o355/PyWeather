@@ -1844,6 +1844,7 @@ while True:
             os.mkdir("temp")
         except:
             printException_loggerwarn()
+            
         print(Fore.YELLOW + "Loading the GUI. This should take around 5 seconds.")
         radar_clearImages()
         try:
@@ -1893,7 +1894,16 @@ while True:
                     logger.debug("r10cached is false, fetching...")
                     frontend.setStatusbar("Zoom: 10 km", 0)
                     frontend.setStatusbar("Status: Fetching image...", 1)
-                    tempurl = requests.get(r10url, stream=True)
+                    try:
+                        tempurl = requests.get(r10url, stream=True)
+                    except:
+                        frontend.setStatusbar("Zoom: Not selected", 0)
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather couldn't acquire radar data. Please make sure" + 
+                                          " you have an internet connection, and that you can access Wunderground's API.")
+                        printException()
+                        return
                     logger.debug("10 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r10.gif', 'wb') as fw:
                         logger.debug("saving file...")
@@ -1911,7 +1921,18 @@ while True:
                     logger.debug("r10cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 10 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r10.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r10.gif")
+                    except:
+                        frontend.setStatusbar("Zoom: " + radar_zoomlevel, 0)
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather could not acquire cached radar data. Please reselect a" +
+                                          " 10 km zoom level again.")
+                        printException()
+                        r10cached = False
+                        logger.debug("r10cached: %s" % r10cached)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                     radar_zoomlevel = "10 km"
                     logger.debug("radar_zoomlevel: %s" % radar_zoomlevel)
@@ -1921,7 +1942,16 @@ while True:
                     logger.debug("r20cached is false, fetching...")
                     frontend.setStatusbar("Zoom: 20 km", 0)
                     frontend.setStatusbar("Status: Fetching image...", 1)
-                    tempurl = requests.get(r20url, stream=True)
+                    try:
+                        tempurl = requests.get(r20url, stream=True)
+                    except:
+                        frontend.setStatusbar("Zoom: Not selected", 0)
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather couldn't acquire radar data. Please make sure" + 
+                                          " you have an internet connection, and that you can access Wunderground's API.")
+                        printException()
+                        return
                     logger.debug("20 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r20.gif', 'wb') as fw:
                         logger.debug("saving file...")
@@ -1939,7 +1969,18 @@ while True:
                     logger.debug("r20cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 20 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r20.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r20.gif")
+                    except:
+                        frontend.setStatusbar("Zoom: " + radar_zoomlevel, 0)
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather could not acquire cached radar data. Please reselect a" +
+                                          " 20 km zoom level again.")
+                        printException()
+                        r20cached = False
+                        logger.debug("r20cached: %s" % r20cached)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                     radar_zoomlevel = "20 km"
                     logger.debug("radar_zoomlevel: %s" % radar_zoomlevel)
@@ -1949,7 +1990,16 @@ while True:
                     logger.debug("r40cached is false, fetching...")
                     frontend.setStatusbar("Zoom: 40 km", 0)
                     frontend.setStatusbar("Status: Fetching image...", 1)
-                    tempurl = requests.get(r40url, stream=True)
+                    try:
+                        tempurl = requests.get(r40url, stream=True)
+                    except:
+                        frontend.setStatusbar("Zoom: Not selected", 0)
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather couldn't acquire radar data. Please make sure" + 
+                                          " you have an internet connection, and that you can access Wunderground's API.")
+                        printException()
+                        return
                     logger.debug("40 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r40.gif', 'wb') as fw:
                         logger.debug("saving file...")
@@ -1967,7 +2017,18 @@ while True:
                     logger.debug("r40cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 40 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r40.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r40.gif")
+                    except:
+                        frontend.setStatusbar("Zoom: " + radar_zoomlevel, 0)
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather could not acquire cached radar data. Please reselect a" +
+                                          " 40 km zoom level again.")
+                        printException()
+                        r40cached = False
+                        logger.debug("r40cached: %s" % r40cached)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                     radar_zoomlevel = "40 km"
                     logger.debug("radar_zoomlevel: %s" % radar_zoomlevel)
@@ -1977,7 +2038,16 @@ while True:
                     logger.debug("r60cached is false, fetching...")
                     frontend.setStatusbar("Zoom: 60 km", 0)
                     frontend.setStatusbar("Status: Fetching image...", 1)
-                    tempurl = requests.get(r60url, stream=True)
+                    try:
+                        tempurl = requests.get(r60url, stream=True)
+                    except:
+                        frontend.setStatusbar("Zoom: Not selected", 0)
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather couldn't acquire radar data. Please make sure" + 
+                                          " you have an internet connection, and that you can access Wunderground's API.")
+                        printException()
+                        return
                     logger.debug("60 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r60.gif', 'wb') as fw:
                         logger.debug("saving file...")
@@ -1995,7 +2065,18 @@ while True:
                     logger.debug("r60cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 60 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r60.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r60.gif")
+                    except:
+                        frontend.setStatusbar("Zoom: " + radar_zoomlevel, 0)
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather could not acquire cached radar data. Please reselect a" +
+                                          " 60 km zoom level again.")
+                        printException()
+                        r60cached = False
+                        logger.debug("r60cached: %s" % r60cached)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                     radar_zoomlevel = "60 km"
             elif btnName == "80 km":
@@ -2004,7 +2085,16 @@ while True:
                     logger.debug("r80cached is false, fetching...")
                     frontend.setStatusbar("Zoom: 80 km", 0)
                     frontend.setStatusbar("Status: Fetching image...", 1)
-                    tempurl = requests.get(r80url, stream=True)
+                    try:
+                        tempurl = requests.get(r80url, stream=True)
+                    except:
+                        frontend.setStatusbar("Zoom: Not selected", 0)
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather couldn't acquire radar data. Please make sure" + 
+                                          " you have an internet connection, and that you can access Wunderground's API.")
+                        printException()
+                        return
                     logger.debug("80 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r80.gif', 'wb') as fw:
                         logger.debug("saving file...")
@@ -2022,7 +2112,18 @@ while True:
                     logger.debug("r80cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 80 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r80.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r80.gif")
+                    except:
+                        frontend.setStatusbar("Zoom: " + radar_zoomlevel, 0)
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather could not acquire cached radar data. Please reselect a" +
+                                          " 80 km zoom level again.")
+                        printException()
+                        r80cached = False
+                        logger.debug("r80cached: %s" % r80cached)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                     radar_zoomlevel = "80 km"
                     logger.debug("radar_zoomlevel: %s" % radar_zoomlevel)
@@ -2032,7 +2133,16 @@ while True:
                     logger.debug("r100cached is false, fetching...")
                     frontend.setStatusbar("Zoom: 100 km", 0)
                     frontend.setStatusbar("Status: Fetching image...", 1)
-                    tempurl = requests.get(r100url, stream=True)
+                    try:
+                        tempurl = requests.get(r100url, stream=True)
+                    except:
+                        frontend.setStatusbar("Zoom: Not selected", 0)
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather couldn't acquire radar data. Please make sure" + 
+                                          " you have an internet connection, and that you can access Wunderground's API.")
+                        printException()
+                        return
                     logger.debug("100 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r100.gif', 'wb') as fw:
                         logger.debug("saving file...")
@@ -2050,7 +2160,18 @@ while True:
                     logger.debug("r100cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 100 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r100.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r100.gif")
+                    except:
+                        frontend.setStatusbar("Zoom: " + radar_zoomlevel, 0)
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather could not acquire cached radar data. Please reselect a" +
+                                          " 100 km zoom level again.")
+                        printException()
+                        r100cached = False
+                        logger.debug("r100cached: %s" % r10cached)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                     radar_zoomlevel = "100 km"
                     logger.debug("radar_zoomlevel: %s" % radar_zoomlevel)
@@ -2063,9 +2184,21 @@ while True:
                     frontend.warningBox("No zoom level selected!", "Please select a zoom level before using the Refresh button.")
                 elif radar_zoomlevel == "10 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
-                    tempurl = requests.get(r10url, stream=True)
+                    try:
+                        tempurl = requests.get(r10url, stream=True)
+                    except:
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather couldn't acquire radar data. Please make sure" + 
+                                          " you have an internet connection, and that you can access Wunderground's API.")
+                        printException()
+                        return
                     logger.debug("10 km loop acquired, end result: %s" % tempurl)
-                    os.remove("temp//r10.gif")
+                    try:
+                        os.remove("temp//r10.gif")
+                    except:
+                        printException_loggerwarn()
+                        
                     with open('temp//r10.gif', 'wb') as fw:
                         logger.debug("saving file...")
                         for chunk in tempurl.iter_content(chunk_size=128):
@@ -2076,9 +2209,18 @@ while True:
                     frontend.setStatusbar("Status: Idle", 1)
                 elif radar_zoomlevel == "20 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
-                    tempurl = requests.get(r20url, stream=True)
+                    try:
+                        tempurl = requests.get(r20url, stream=True)
+                    except:
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather couldn't acquire radar data. Please make sure" + 
+                                          " you have an internet connection, and that you can access Wunderground's API.")
+                        printException()
+                        return
+                    
                     logger.debug("20 km loop acquired, end result: %s" % tempurl)
-                    os.remove("temp//r10.gif")
+                    os.remove("temp//r20.gif")
                     with open('temp//r20.gif', 'wb') as fw:
                         logger.debug("saving file...")
                         for chunk in tempurl.iter_content(chunk_size=128):
@@ -2089,7 +2231,16 @@ while True:
                     frontend.setStatusbar("Status: Idle", 1)
                 elif radar_zoomlevel == "40 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
-                    tempurl = requests.get(r40url, stream=True)
+                    try:
+                        tempurl = requests.get(r40url, stream=True)
+                    except:
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather couldn't acquire radar data. Please make sure" + 
+                                          " you have an internet connection, and that you can access Wunderground's API.")
+                        printException()
+                        return
+                    
                     logger.debug("40 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r40.gif', 'wb') as fw:
                         logger.debug("saving file...")
@@ -2101,7 +2252,16 @@ while True:
                     frontend.setStatusbar("Status: Idle", 1)
                 elif radar_zoomlevel == "60 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
-                    tempurl = requests.get(r60url, stream=True)
+                    try:
+                        tempurl = requests.get(r60url, stream=True)
+                    except:
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather couldn't acquire radar data. Please make sure" + 
+                                          " you have an internet connection, and that you can access Wunderground's API.")
+                        printException()
+                        return
+                    
                     logger.debug("60 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r60.gif', 'wb') as fw:
                         logger.debug("saving file...")
@@ -2113,7 +2273,16 @@ while True:
                     frontend.setStatusbar("Status: Idle", 1)
                 elif radar_zoomlevel == "80 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
-                    tempurl = requests.get(r80url, stream=True)
+                    try:
+                        tempurl = requests.get(r80url, stream=True)
+                    except:
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather couldn't acquire radar data. Please make sure" + 
+                                          " you have an internet connection, and that you can access Wunderground's API.")
+                        printException()
+                        return
+                    
                     logger.debug("80 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r80.gif', 'wb') as fw:
                         logger.debug("saving file...")
@@ -2125,7 +2294,16 @@ while True:
                     frontend.setStatusbar("Status: Idle", 1)
                 elif radar_zoomlevel == "100 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
-                    tempurl = requests.get(r100url, stream=True)
+                    try:
+                        tempurl = requests.get(r100url, stream=True)
+                    except:
+                        frontend.setStatusbar("Status: Idle", 1)
+                        frontend.errorBox("Could not acquire radar data!", 
+                                          "PyWeather couldn't acquire radar data. Please make sure" + 
+                                          " you have an internet connection, and that you can access Wunderground's API.")
+                        printException()
+                        return
+                    
                     logger.debug("100 km loop acquired, end result: %s" % tempurl)
                     with open('temp//r100.gif', 'wb') as fw:
                         logger.debug("saving file...")
@@ -2202,7 +2380,7 @@ while True:
         frontend.addButtons(["Refresh", "Empty Cache", "Return to PyWeather"], frontend_extrabuttons, row=7, column=0, colspan=3)
         frontend.setInPadding([10, 10])
         frontend.addStatusbar(fields=2)
-        frontend.setStatusbar("Zoom: None selected", 0)
+        frontend.setStatusbar("Zoom: Not selected", 0)
         frontend.setStatusbar("Status: Idle", 1)
         frontend.go()
     elif moreoptions == "11":

@@ -52,12 +52,15 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 	* Tide data - Coming in 0.7 beta
 	* Hurricane data - Coming in 0.7 beta
 	* Some form of a historical planner - Coming in 0.7.1 beta
-	* PWS mode - Coming in 0.8 beta
-	* Favorite locations - Coming in 0.9 beta
 * PyWeather is pretty modular. As I said earlier with the super-configurable config file, this also translates into modularity. PyWeather's features can be turned on and off at will.
 * PyWeather has a built-in updater, provided you have git installed. I hope to eventually incorporate a universal "download the zip and unzip it" system down the road.
 * PyWeather has a robust built-in debugger/logger. When turned on, it'll spam your console with verbosityness, or whatever that's called.
 * PyWeather has colors. I made the program colorful.
+
+In addition, these features will soon be coming to PyWeather:
+* PyWeather will soon be able to get weather for your current location, as would be provided by an IP Geolocator. It will be inaccurate on cellular connections, but should be of good accuracy otherwise - Coming in 0.8 beta
+* PyWeather will soon be able to get weather from individual personal weather stations. - Coming in 0.8.1 beta
+* PyWeather **MAY** soon be able to get weather easily for your favorite locations. I'm not 100% sure about how I would go about doing this. - Possibly coming in 0.9 beta
 
 ## Why actually use PyWeather over Wunderground, or other apps?
 PyWeather has lots of advantages over using websites on your desktop, or even weather apps on mobile (PyWeather is compatible with Termux for Android, and other SSH apps of course)
