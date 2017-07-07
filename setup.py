@@ -413,29 +413,45 @@ except ImportError:
     
     
 try:
-    import geocoder
-    geocoderInstalled = True
-    logger.info("geocoder is installed.")
-    logger.debug("geocoderInstalled: %s" % geocoderInstalled)
+    import geopy
+    geopyInstalled = True
+    logger.info("geopy is installed.")
+    logger.debug("geopyInstalled: %s" % geopyInstalled)
 except ImportError:
-    geocoderInstalled = False
+    geopyInstalled = False
     neededLibraries = neededLibraries + 1
-    logger.info("geocoder is NOT installed.")
+    logger.info("geopy is NOT installed.")
     printException_loggerwarn()
-    logger.debug("geocoderInstalled: %s ; neededLibraries: %s"
-                 % (geocoderInstalled, neededLibraries))
+    logger.debug("geopyInstalled: %s ; neededLibraries: %s"
+                 % (geopyInstalled, neededLibraries))
+    
+try:
+    import appJar
+    appjarInstalled = True
+    logger.info("appjar is installed.")
+    logger.debug("appjarInstalled: %s" % appjarInstalled)
+except:
+    appjarInstalled = False
+    neededLibraries = neededLibraries + 1
+    logger.debug("appJar is NOT installed.")
+    printException_loggerwarn()
+    logger.debug("appjarInstalled: %s ; neededLibraries: %s" %
+                 (appjarInstalled, neededLibraries))
+    
     
 print("All done!")
 if neededLibraries == 0:
     logger.debug("All libraries are installed.")
-    print("You must be magic. All necessary libraries are installed! Let's move on.")
+    print("All necessary libraries have been installed!")
 else:
     logger.debug("Libraries need to be installed.")
-    print("Shucks. Not all libraries are installed. Here's what needs to be installed:")
+    print("Shucks. Not all necessary libraries are installed. Here's what needs to be installed:")
     if coloramaInstalled == False:
         print("- Colorama")
-    if geocoderInstalled == False:
-        print("- Geocoder")
+    if geopyInstalled == False:
+        print("- Geopy")
+    if appjarInstalled == False:
+        print("- appJar")
     print("If you want me to, I can automatically install these libraries.",
     "Would you like me to do such? Yes or No.", sep="\n")
     neededLibrariesConfirm = input("Input here: ").lower()
@@ -448,103 +464,146 @@ else:
         input()
         sys.exit()
     elif neededLibrariesConfirm == "yes":
-        logger.info("Installing necessary libraries...")
-        # This check doesn't cover Unix systems that aren't Linux.
-        if sys.version_info > (3, 5, 0) and sys.platform.startswith('linux'):
-            print("Your Python version is greater than 3.5, and you run Linux.",
-                  "During the setup process, installing geocoder may partially",
-                  "fail, due to bad permissions. This is completely normal,",
-                  "and geocoder will still install.", "", sep="\n")
-            
-                
         print("Now installing necessary libraries...")
         if coloramaInstalled == False:
-            logger.debug("Installing colorama...")
             print("Installing Colorama...")
             pip.main(['install', 'colorama'])
-        if geocoderInstalled == False:
-            logger.debug("Installing geocoder...")
-            print("Installing geocoder...")
+        if geopyInstalled == False:
+            print("Installing geopy...")
             pip.main(['install', 'geocoder'])
-            logger.info("Running the double check on libraries...")
+        if appjarInstalled == False:
+            print("Installing appJar...")
+            pip.main(['install', 'appJar'])
+        
+        logger.info("Running the double check on libraries...")
         print("Sweet! All libraries should be installed.",
               "Just to confirm, I'm double checking if needed libraries are installed.", sep="\n")
         try:
             import colorama
             logger.info("Colorama installed successfully.")
         except ImportError:
-            logger.warn("Colorama was not installed successfully.")
-            # Colorama really should install without trouble
-            print("Hmm...Colorama didn't install properly.",
-            "Try executing 'pip install colorama' in a command shell.",
-            "As a precaution, I'm now exiting. (Error 52, setup.py)", sep="\n")
-            printException()
-            print("Press enter to exit.")
-            input()
-            sys.exit()
-        
-        try:
-            import geocoder
-            logger.info("geocoder installed successfully.")
-        except ImportError:
-            logger.warn("geocoder was not installed successfully.")
-            print("Hmm...geocoder didn't install properly.")
+            logger.warn("colorama was not installed successfully.")
+            print("Hmm...Colorama didn't install properly.")
             printException()
             print("As a last resort, we can use sudo -H to install packages.",
-            "Do you want to use the shell option to install geopy?",
+            "Do you want to use the shell option to install colorama?",
             "Yes or No.", sep="\n")
-            geocoder_lastresort = input("Input here: ").lower()
-            logger.debug("geocoder_lastresort: %s" % geocoder_lastresort)
-            if geocoder_lastresort == "yes":
+            colorama_lastresort = input("Input here: ").lower()
+            logger.debug("colorama_lastresort: %s" % colorama_lastresort)
+            if colorama_lastresort == "yes":
                 try:
-                    print("Now executing `sudo -H pip3 install geocoder`.",
+                    print("Now executing `sudo -H pip3 install colorama`.",
                           "Please enter the password for sudo when the prompt",
                           "comes up. Press Control + C to cancel.",
                           "Starting in 5 seconds...", sep="\n")
                     time.sleep(5)
                     try:
-                        subprocess.call(["sudo -H pip3 install geocoder"], shell=True)
+                        subprocess.call(["sudo -H pip3 install colorama"], shell=True)
                         try:
-                            print("Attempting to reimport geocoder.")
-                            import geocoder
-                            print("Geocoder is FINALLY installed!")
+                            print("Attempting to reimport colorama.")
+                            import colorama
+                            print("Colorama is FINALLY installed!")
                         except:
-                            print("Geocoder still wasn't successfully installed.",
-                                  "Cannot continue without geocoder.",
-                                  "Try doing a manual install of geocoder with PIP.", sep="\n")
+                            print("Colorama still wasn't successfully installed.",
+                                  "Cannot continue without Colorama.",
+                                  "Try doing a manual install of Colorama with PIP.", sep="\n")
                             printException()
                             print("Press enter to exit.")
                             input()
                             sys.exit()
                     except:
                         print("When running the command, an error occurred",
-                              "Try doing a manual install of geocoder with PIP.", sep="\n")
+                              "Try doing a manual install of Colorama with PIP.", sep="\n")
                         printException()
                         print("Press enter to exit.")
                         input()
                         sys.exit()
                 except KeyboardInterrupt:
                     print("Command execution aborted.",
-                          "Cannot continue without geocoder.",
-                          "Try and do a manual install of geocoder with PIP",
+                          "Cannot continue without Colorama.",
+                          "Try and do a manual install of Colorama with PIP",
                           "in a command line.", sep="\n")
                     printException()
                     print("Press enter to exit.")
                     input()
                     sys.exit()
-            elif geocoder_lastresort == "no":
-                print("Not installing geocoder with a shell command.",
-                      "Cannot continue without geocoder.",
+            elif colorama_lastresort == "no":
+                print("Not installing Colorama with a shell command.",
+                      "Cannot continue without Colorama.",
                       "Press enter to exit.", sep="\n")
                 input()
                 sys.exit()
             else:
                 print("Did not understand your input. Defaulting to not installing",
-                      "via the shell. Cannot continue without geocoder.",
-                      "Try installing geocoder with PIP.",
+                      "via the shell. Cannot continue without Colorama.",
+                      "Try installing Colorama with PIP.",
+                      "Press enter to exit.")
+                input()
+                sys.exit()
+        
+        try:
+            import geopy
+            logger.info("geopy installed successfully.")
+        except ImportError:
+            logger.warn("geopy was not installed successfully.")
+            print("Hmm...geopy didn't install properly.")
+            printException()
+            print("As a last resort, we can use sudo -H to install packages.",
+            "Do you want to use the shell option to install geopy?",
+            "Yes or No.", sep="\n")
+            geopy_lastresort = input("Input here: ").lower()
+            logger.debug("geopy_lastresort: %s" % geopy_lastresort)
+            if geopy_lastresort == "yes":
+                try:
+                    print("Now executing `sudo -H pip3 install geopy`.",
+                          "Please enter the password for sudo when the prompt",
+                          "comes up. Press Control + C to cancel.",
+                          "Starting in 5 seconds...", sep="\n")
+                    time.sleep(5)
+                    try:
+                        subprocess.call(["sudo -H pip3 install geopy"], shell=True)
+                        try:
+                            print("Attempting to reimport geopy.")
+                            import geopy
+                            print("Geopy is FINALLY installed!")
+                        except:
+                            print("Geopy still wasn't successfully installed.",
+                                  "Cannot continue without geopy.",
+                                  "Try doing a manual install of geopy with PIP.", sep="\n")
+                            printException()
+                            print("Press enter to exit.")
+                            input()
+                            sys.exit()
+                    except:
+                        print("When running the command, an error occurred",
+                              "Try doing a manual install of geopy with PIP.", sep="\n")
+                        printException()
+                        print("Press enter to exit.")
+                        input()
+                        sys.exit()
+                except KeyboardInterrupt:
+                    print("Command execution aborted.",
+                          "Cannot continue without geopy.",
+                          "Try and do a manual install of geopy with PIP",
+                          "in a command line.", sep="\n")
+                    printException()
+                    print("Press enter to exit.")
+                    input()
+                    sys.exit()
+            elif geopy_lastresort == "no":
+                print("Not installing geopy with a shell command.",
+                      "Cannot continue without geopy.",
+                      "Press enter to exit.", sep="\n")
+                input()
+                sys.exit()
+            else:
+                print("Did not understand your input. Defaulting to not installing",
+                      "via the shell. Cannot continue without geopy.",
+                      "Try installing geopy with PIP.",
                       "Press enter to exit.")
                 input()
                 sys.exit()   
+                
         print("","All libraries are good to go! Let's move on.", sep="\n")
     else:
         logger.warn("Input was not understood. Closing...")

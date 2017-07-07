@@ -11,15 +11,18 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 
 ## version 0.6.1 beta - Should be released on 7/15/2017
 **NEW FEATURES/REMOVALS**
-* Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache. - Done!
-* Removes the geopy dependency from the setup file. - Done!
+* Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache.
+* Removed the dependency on geocoder, and by extension, removed the unnecessary reverse geocoder, and 
+* Added the dependency of appJar.
+* Loading times have been increased by about 0.2 seconds, due to the removal of the unnecessary second geocoder.
+* Added the last-resort option when installing Colorama in the setup file.
 * Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/27
 	* Uncommenting code - 100% done!
 	* Adding all radar views - 100% done!
 	* Full logger implementation - 100% done!
 	* Adding a proper cache (Refresh button, deleting all images on close) - 100% done!
 	* Bringing back the placeholder .gifs - 100% done!
-	* Improving the nuts and bolts in the GUI (error checking for bad cache, etc) - 80% done, should be finished by 6/29
+	* Improving the nuts and bolts in the GUI (error checking for bad cache, etc) - 100% done
 	* Adding new options to configupdate, configsetup, and configdefault - 0% done - Should be finished by 6/29
 	* Adding radar options to setup (case by case installing of libraries/importing of libraries) - 0% done - Should be finished by 6/30
 	* Doing error checking for the appJar library on radar "boot", offering user to install it, etc. - 0% done - Should be finished by 6/30
@@ -35,19 +38,15 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 	* storage/config_README -> documentation/config_README - 0% done - Should be finished by 7/1
 * The PyWeather updater will now try each command. This helps in determining if a user can still update PyWeather using the .zip method. - 0% done, Should be finished by 7/5
 * Updates config_README for the latest options, and detailed "when did each option appear" analysis (using previous releases.) - 0% done, Should be finished by 7/9
-* PyWeather Setup will now update PIP packages with user approval. - 0% done, should be finished by 7/10
-
-**OTHER CHANGES**
-* Geopy is no longer required to run PyWeather, so the dependency was removed.
-* AppJar is required to run the experimental radar, so the dependency was added, but only if you enable it in setup.
-* Loading times are increased by ~100ms (much higher if your connection is slow), thanks to 
+* PyWeather Setup will now update PIP packages with user approval. - 0% done, should be finished by 7/10 
 
 **BUG FIXES**
 * Fixed a major bug where the PyWeather Git updater wouldn't, uh, fully update.
 * Fixed a bug where configsetup's directory checking wasn't 100% compatible with Windows.
 * Fixed a bug where if the sunrise/sunset/moonrise/moonset hour was 0, PyWeather wasn't correcting it to a 12.
-* Fixed a bug where if you entered a weird name to check the weather for, an encoding error would occur. It's fixed, and there is no more 2nd reverse geocoder.
-* Fixed a major bug where alerts wouldn't iterate, due to a non-defined config variable
+* Fixed a bug where if you entered a weird name to check the weather for, an encoding error would occur.
+* Fixed a major bug where alerts wouldn't iterate, due to a non-defined config variable.
+* Fixed a super tiny bug where a logger.info statement would not print in the setup file, unless Geopy was not installed.
 
 ## version 0.6.0.1 beta - Released on 5/29/2017
 * Fixes a critical bug where a user couldn't provision their config file when they first downloaded the program.

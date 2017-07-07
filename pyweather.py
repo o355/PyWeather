@@ -22,7 +22,6 @@ import time
 import shutil
 from colorama import init, Fore, Style
 import codecs
-import geocoder
 import os
 from random import randint
 from geopy import GoogleV3
@@ -146,9 +145,9 @@ logging.basicConfig(format=logformat)
 
 # Set the logger levels by design. Critical works as a non-verbosity
 # option, as I made sure not to have any critical messages.
-if verbosity == True:
+if verbosity:
     logger.setLevel(logging.DEBUG)
-elif tracebacksEnabled == True:
+elif tracebacksEnabled:
     logger.setLevel(logging.ERROR)
 else:
     logger.setLevel(logging.CRITICAL)
@@ -401,7 +400,7 @@ logger.debug("about_releasedate: %s ; about_maindevelopers: %s" %
              (about_releasedate, about_maindevelopers))
 about_contributors = "gsilvapt, ModoUnreal"
 about_releasetype = "beta"
-about_librariesinuse = "Colorama, Geopy, Geocoder, Requests"
+about_librariesinuse = "Colorama, Geopy, Requests"
 logger.debug("about_contributors: %s ; about_releasetype: %s" %
              (about_contributors, about_releasetype))
 logger.debug("about_librariesinuse: %s" % about_librariesinuse)
@@ -444,7 +443,7 @@ try:
     latstr = str(location.latitude)
     lonstr = str(location.longitude)
 except AttributeError:
-    logger.warn("No lat/long was provided by Google! Bad location?")
+    logger.warning("No lat/long was provided by Google! Bad location?")
     print("When attempting to parse the location inputted, PyWeather",
           "ran into an error. Make sure that the location you entered is",
           "valid, and don't attempt to see the weather at Mark Watney's base.",
@@ -705,12 +704,9 @@ if showAlertsOnSummary == True:
     if jsonVerbosity == True:
         logger.debug("alerts_json loaded with: %s" % alerts_json)
 logger.info("Some amount of JSONs loaded...")
-logger.info("Start 2nd geocoder...")
 
-# The 2nd geocoder hit will get removed in future versions, I believe geopy
-# can do reverse.
+# The 2nd geocoder was removed, as geopy can also do reverse information.
 
-# And how about asynchronius fetches? Coming soon, I mean, maybe?
 
 
 # Parse the current weather!
@@ -2220,7 +2216,12 @@ while True:
                         return
                     
                     logger.debug("20 km loop acquired, end result: %s" % tempurl)
-                    os.remove("temp//r20.gif")
+                    
+                    try:
+                        os.remove("temp//r20.gif")
+                    except:
+                        printException_loggerwarn()
+                    
                     with open('temp//r20.gif', 'wb') as fw:
                         logger.debug("saving file...")
                         for chunk in tempurl.iter_content(chunk_size=128):
@@ -2242,6 +2243,12 @@ while True:
                         return
                     
                     logger.debug("40 km loop acquired, end result: %s" % tempurl)
+                    
+                    try:
+                        os.remove("temp//r40.gif")
+                    except:
+                        printException_loggerwarn()
+                        
                     with open('temp//r40.gif', 'wb') as fw:
                         logger.debug("saving file...")
                         for chunk in tempurl.iter_content(chunk_size=128):
@@ -2263,6 +2270,12 @@ while True:
                         return
                     
                     logger.debug("60 km loop acquired, end result: %s" % tempurl)
+                    
+                    try:
+                        os.remove("temp//r60.gif")
+                    except:
+                        printException_loggerwarn()
+                        
                     with open('temp//r60.gif', 'wb') as fw:
                         logger.debug("saving file...")
                         for chunk in tempurl.iter_content(chunk_size=128):
@@ -2284,6 +2297,12 @@ while True:
                         return
                     
                     logger.debug("80 km loop acquired, end result: %s" % tempurl)
+                    
+                    try:
+                        os.remove("temp//r80.gif")
+                    except:
+                        printException_loggerwarn()
+                        
                     with open('temp//r80.gif', 'wb') as fw:
                         logger.debug("saving file...")
                         for chunk in tempurl.iter_content(chunk_size=128):
@@ -2305,6 +2324,12 @@ while True:
                         return
                     
                     logger.debug("100 km loop acquired, end result: %s" % tempurl)
+                    
+                    try:
+                        os.remove("temp//r100.gif")
+                    except:
+                        printException_loggerwarn()
+                        
                     with open('temp//r100.gif', 'wb') as fw:
                         logger.debug("saving file...")
                         for chunk in tempurl.iter_content(chunk_size=128):
