@@ -21,6 +21,7 @@ elif (sys.version_info > (3, 0, 0)
 import configparser
 import traceback
 import subprocess
+import logging
 
 # Try loading the versioninfo.txt file. If it isn't around, create the file with
 # the present version info.
@@ -210,7 +211,7 @@ except:
                 sys.exit()
         print("Config file provisioned successfully! Moving on with PyWeather setup...")
 
-    
+
 try:
     verbosity = config.getboolean('VERBOSITY', 'setup_verbosity')
     jsonVerbosity = config.getboolean('VERBOSITY', 'setup_jsonverbosity')
@@ -224,19 +225,18 @@ except:
     verbosity = False
     jsonVerbosity = False
     tracebacksEnabled = False
-    
+
 def printException():
     if tracebacksEnabled == True:
         print("Here's the full traceback (for error reporting):")
         traceback.print_exc()
-        
+
 def printException_loggerwarn():
     if verbosity == True:
         logger.warn("Oh snap! We ran into a non-critical error. Here's the traceback.")
         logger.warn(traceback.print_exc())
-        
-    
-import logging
+
+
 logger = logging.getLogger(name='pyweather_setup_0.6.0.1beta')
 logger.setLevel(logging.DEBUG)
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
@@ -248,12 +248,12 @@ elif tracebacksEnabled == True:
     logger.setLevel(logging.ERROR)
 else:
     logger.setLevel(logging.CRITICAL)
-    
+
 logger.debug("Listing configuration options:")
 logger.debug("verbosity: %s ; jsonVerbosity: %s" %
              (verbosity, jsonVerbosity))
 logger.debug("tracebacksEnabled: %s" %
-             (tracebacksEnabled))
+             tracebacksEnabled)
 
 print("Welcome to PyWeather setup.",
       "This is meant to run as a one-time program, when you first get PyWeather.","",
@@ -283,7 +283,7 @@ except:
           "If you're on a network with a firewall, make sure 'raw.githubusercontent.com'",
           "Otherwise, make sure that you have an internet connection.", sep="\n")
     printException()
-    
+
 versionJSON = json.loads(versioncheck.text)
 if jsonVerbosity == True:
     logger.debug("versionJSON: %s" % versionJSON)
@@ -321,7 +321,7 @@ elif buildnumber < version_buildNumber:
 # How to create a new line in 3 characters.
 print("","Before we get started, I want to confirm some permissions from you.",
       "Is it okay if I use 1-5 MB of data (downloading libraries), save a small",
-      "text file called apikey.txt (> 2 KB), and automatically install Python", 
+      "text file called apikey.txt (> 2 KB), and automatically install Python",
       "libraries?",
       "Please input yes or no below:", sep="\n")
 confirmPermissions = input("Input here: ").lower()
@@ -339,7 +339,7 @@ elif confirmPermissions != "yes":
           "Press enter to exit.", sep="\n")
     input()
     sys.exit()
-    
+
 print("","Cool! Let's start.",
       "I'm going to start by checking for necessary libraries (to run PyWeather).",
       "This can take a moment, so please hold tight while I check!", sep="\n")
@@ -410,8 +410,8 @@ except ImportError:
     printException_loggerwarn()
     logger.debug("coloramaInstalled: %s ; neededLibraries: %s"
                 % (coloramaInstalled, neededLibraries))
-    
-    
+
+
 try:
     import geopy
     geopyInstalled = True
@@ -424,7 +424,7 @@ except ImportError:
     printException_loggerwarn()
     logger.debug("geopyInstalled: %s ; neededLibraries: %s"
                  % (geopyInstalled, neededLibraries))
-    
+
 try:
     import appJar
     appjarInstalled = True
@@ -437,8 +437,8 @@ except:
     printException_loggerwarn()
     logger.debug("appjarInstalled: %s ; neededLibraries: %s" %
                  (appjarInstalled, neededLibraries))
-    
-    
+
+
 print("All done!")
 if neededLibraries == 0:
     logger.debug("All libraries are installed.")
@@ -474,7 +474,7 @@ else:
         if appjarInstalled == False:
             print("Installing appJar...")
             pip.main(['install', 'appJar'])
-        
+
         logger.info("Running the double check on libraries...")
         print("Sweet! All libraries should be installed.",
               "Just to confirm, I'm double checking if needed libraries are installed.", sep="\n")
@@ -540,7 +540,7 @@ else:
                       "Press enter to exit.")
                 input()
                 sys.exit()
-        
+
         try:
             import geopy
             logger.info("geopy installed successfully.")
@@ -602,8 +602,71 @@ else:
                       "Try installing geopy with PIP.",
                       "Press enter to exit.")
                 input()
-                sys.exit()   
-                
+                sys.exit()
+
+        try:
+            import appJar
+            logger.info("appjar installed successfully.")
+        except ImportError:
+            logger.warning("appjar was not installed successfully.")
+            print("Hmm...geopy didn't install properly.")
+            printException()
+            print("As a last resort, we can use sudo -H to install packages.",
+            "Do you want to use the shell option to install geopy?",
+            "Yes or No.", sep="\n")
+            geopy_lastresort = input("Input here: ").lower()
+            logger.debug("geopy_lastresort: %s" % geopy_lastresort)
+            if geopy_lastresort == "yes":
+                try:
+                    print("Now executing `sudo -H pip3 install geopy`.",
+                          "Please enter the password for sudo when the prompt",
+                          "comes up. Press Control + C to cancel.",
+                          "Starting in 5 seconds...", sep="\n")
+                    time.sleep(5)
+                    try:
+                        subprocess.call(["sudo -H pip3 install geopy"], shell=True)
+                        try:
+                            print("Attempting to reimport geopy.")
+                            import geopy
+                            print("Geopy is FINALLY installed!")
+                        except:
+                            print("Geopy still wasn't successfully installed.",
+                                  "Cannot continue without geopy.",
+                                  "Try doing a manual install of geopy with PIP.", sep="\n")
+                            printException()
+                            print("Press enter to exit.")
+                            input()
+                            sys.exit()
+                    except:
+                        print("When running the command, an error occurred",
+                              "Try doing a manual install of geopy with PIP.", sep="\n")
+                        printException()
+                        print("Press enter to exit.")
+                        input()
+                        sys.exit()
+                except KeyboardInterrupt:
+                    print("Command execution aborted.",
+                          "Cannot continue without geopy.",
+                          "Try and do a manual install of geopy with PIP",
+                          "in a command line.", sep="\n")
+                    printException()
+                    print("Press enter to exit.")
+                    input()
+                    sys.exit()
+            elif geopy_lastresort == "no":
+                print("Not installing geopy with a shell command.",
+                      "Cannot continue without geopy.",
+                      "Press enter to exit.", sep="\n")
+                input()
+                sys.exit()
+            else:
+                print("Did not understand your input. Defaulting to not installing",
+                      "via the shell. Cannot continue without geopy.",
+                      "Try installing geopy with PIP.",
+                      "Press enter to exit.")
+                input()
+                sys.exit()
+
         print("","All libraries are good to go! Let's move on.", sep="\n")
     else:
         logger.warn("Input was not understood. Closing...")
@@ -624,20 +687,20 @@ print("Next, click the 'Explore my options' button.",
 input()
 print("Next, click the small button next to 'ANVIL PLAN'.",
 "After that, confirm that the total underneath the 'Purchase Key' button says",
-"'$0 USD per month'.", 
+"'$0 USD per month'.",
 "If the total underneath the 'Purchase Key' button doesn't",
-"say '$0 USD per month, please ensure that the small button next to 'Developer'", 
+"say '$0 USD per month, please ensure that the small button next to 'Developer'",
 "on the table in the middle of the screen is selected, and the total",
 "says '$0 USD per month'",
 "Press any key when you are done.", sep="\n")
 input()
-print("Next, click the 'Purchase Key' button.", 
+print("Next, click the 'Purchase Key' button.",
 "Press any key when you are done.", sep="\n")
 input()
 print("Next, input your email, and a password to sign up for a Weather",
 "Underground account.",
 "Be sure to select the checkbox next to 'I agree to the Terms of Service'",
-"It's best if you leave the checkbox next to 'I would like to receive WU", 
+"It's best if you leave the checkbox next to 'I would like to receive WU",
 "updates via email' unchecked.",
 "Press any key when you are done and ready.", sep="\n")
 input()
@@ -655,7 +718,7 @@ print("Next, next to your email listed on the page, click the 'Edit / Verify' bu
 "Press any key when you are done and ready.", sep="\n")
 input()
 print("Next, check your email in which you signed up with.",
-"If you got a letter from Weather Underground, titled 'Daily Forecast", 
+"If you got a letter from Weather Underground, titled 'Daily Forecast",
 "Email Verification', open that letter, and click the link.",
 "If you didn't get the letter, wait a few minutes, and be sure to check your spam folder.",
 "Hint: If you followed this guide exactly, WU will not be sending you daily forecasts to your email.",
@@ -666,18 +729,18 @@ print("Your email should be verified.",
 "Then, click the 'Explore my Options' button, again.",
 "Press any key when you are done and ready.", sep="\n")
 input()
-print("Next, at the top of the page, make sure the button next to 'ANVIL PLAN'", 
+print("Next, at the top of the page, make sure the button next to 'ANVIL PLAN'",
 "is selected.",
-"After that, confirm that the total underneath the 'Purchase Key' button says", 
+"After that, confirm that the total underneath the 'Purchase Key' button says",
 "'$0 USD per month'",
-"If the total doesn't say that, in the pricing table, make sure the button", 
+"If the total doesn't say that, in the pricing table, make sure the button",
 "next to 'Developer' is selected.",
 "Press any key when you are done and ready.", sep="\n")
 input()
 print("Next, click the 'Purchase Key' button, on top of your total (which",
 "should be $0 USD per month)",
 "Next, fill out the form, considering these tips:",
-"For the contact name/email, it's recommended you use your real name", 
+"For the contact name/email, it's recommended you use your real name",
 "(first name last initial is fine).",
 "It's also recommended that you use your real email.",
 "For the project name, put in something generic, like 'to use a script that",
@@ -686,7 +749,7 @@ print("Next, click the 'Purchase Key' button, on top of your total (which",
 "some other site you feel like having as the project site.",
 "For the question 'Where will the API be used', answer Other.",
 "For the question 'Will the API be used for commercial use?', answer No.",
-"For the question 'Will the API be used for manufacturing mobile chip", 
+"For the question 'Will the API be used for manufacturing mobile chip",
 "processing?', answer No.",
 "Answer yes if you somehow are manufacturing mobile chip processing. I doubt",
 "you are, however.",
@@ -742,7 +805,7 @@ with open("storage//apikey.txt", 'a') as out:
     out.write(apikey_input)
     out.close()
     logger.debug("Performed ops: overwrite apikey.txt, out.write(apikey_input), out.close()")
-   
+
 print("", "I can also back up your API key, in case you do something wrong.",
       sep="\n")
 # A future release should bring customization as to the storage location.
@@ -762,7 +825,7 @@ if backup_APIkey == "yes":
         open(folder_argument).close()
         config['KEYBACKUP']['savedirectory'] = backup_APIkeydir
         print("The API key was backed up successfully!")
-        logger.debug("Performed 3 ops. Overwrite "+ folder_argument + "backkey.txt, write to backkey.txt" + 
+        logger.debug("Performed 3 ops. Overwrite "+ folder_argument + "backkey.txt, write to backkey.txt" +
                      ", and close backkey.txt.")
     except:
         print("The directory you wanted to put your backup in was invalid.",
@@ -774,7 +837,7 @@ if backup_APIkey == "yes":
         open("backup//backkey.txt").close()
         config.read('storage//config.ini')
         config['KEYBACKUP']['savelocation'] = 'backup//'
-        logger.debug("Performed 3 ops. Overwrite backup//backkey.txt, write to backkey.txt" + 
+        logger.debug("Performed 3 ops. Overwrite backup//backkey.txt, write to backkey.txt" +
                      ", and close backkey.txt.")
 
 print("Let's configure a few options for PyWeather.")
@@ -799,7 +862,7 @@ else:
     config['SUMMARY']['sundata_summary'] = 'False'
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
-   
+
 print("","On the summary screen, would you like to show almanac data?",
       "By default, this is disabled.",
       "Yes or no:", sep="\n")
@@ -819,7 +882,7 @@ else:
     config['SUMMARY']['almanac_summary'] = 'False'
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
-    
+
 print("", "On the summary screen, would you like to show alerts data?",
       "By default, this is enabled. Please note, Wunderground",
       "only supports alert data in the US and EU at this time.",
@@ -858,7 +921,7 @@ else:
     config['UPDATER']['autoCheckForUpdates'] = 'False'
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
-    
+
 print("","When an error occurs, would you like PyWeather to show the full error?",
       "When enabled, you'll have easier access to the full error for reporting",
       "the bug on GitHub.",
@@ -913,7 +976,7 @@ else:
     config['HOURLY']['10dayfetch_atboot'] = 'False'
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
-    
+
 print("","When viewing detailed hourly, 10-day hourly, and historical hourly,",
       "detailed information, how many iterations should PyWeather go through",
       "before asking you to continue?",
@@ -932,7 +995,7 @@ except:
     config['UI']['detailedinfoloops'] = '6'
     print("Changes saved.")
     logger.debug("Detailed info loops now 6.")
-    
+
 print("","When viewing detailed 10-day forecast information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
@@ -951,7 +1014,7 @@ except:
     config['UI']['forecast_detailedinfoloops'] = '5'
     print("Changes saved.")
     logger.debug("Detailed forecast info loops now 5.")
-    
+
 print("", "PyWeather has a caching system, in which if you're gone for some time",
       "data will automatically refresh. Would you like to turn this on?",
       "This is enabled by default. Yes or No.", sep="\n")
@@ -966,7 +1029,7 @@ else:
           "In the next few inputs, enter the time in minutes that PyWeather should keep",
           "certain types of data, before a data refresh is automatically requested.",
           "If you want to leave cache values to their defaults, press enter at any prompt.", sep="\n")
-    
+
     print("Please enter the cache time for alerts data in minutes (default = 5)")
     alertscachetime = input("Input here: ").lower()
     try:
@@ -980,7 +1043,7 @@ else:
               "cache time to it's default value of '5'.")
         config['CACHE']['alerts_cachedtime'] = '5'
         logger.debug("Alerts cache time now 5 minutes.")
-        
+
     print("Please enter the cache time for current data in minutes (default = 10)")
     currentcachetime = input("Input here: ").lower()
     try:
@@ -994,7 +1057,7 @@ else:
               "cache time to it's default value of '10'.")
         config['CACHE']['current_cachedtime'] = '10'
         logger.debug("Current cache time now 10 minutes.")
-    
+
     print("Please enter the cache time for hourly data in minutes (default = 60)")
     hourlycachetime = input("Input here: ").lower()
     try:
@@ -1007,8 +1070,8 @@ else:
         print("Your input couldn't be converted into a number. Setting hourly",
               "cache time to it's default value of '60'.")
         config['CACHE']['hourly_cachedtime'] = '60'
-        logger.debug("Hourly cache time now 60 minutes.") 
-        
+        logger.debug("Hourly cache time now 60 minutes.")
+
     print("Please enter the cache time for forecast data in minutes (default = 60)")
     forecastcachetime = input("Input here: ").lower()
     try:
@@ -1022,7 +1085,7 @@ else:
               "cache time to it's default value of '60'.")
         config['CACHE']['forecast_cachedtime'] = '60'
         logger.debug("Forecast cache time now 60 minutes.")
-        
+
     print("Please enter the cache time for almanac data in minutes (default = 240)")
     almanaccachetime = input("Input here: ").lower()
     try:
@@ -1036,7 +1099,7 @@ else:
               "cache time to it's default value of '240'.")
         config['CACHE']['almanac_cachedtime'] = '240'
         logger.debug("Almanac cache time now 240 minutes.")
-        
+
     print("Please enter the cache time for sun data in minutes (default = 480)")
     sundatacachetime = input("Input here: ").lower()
     try:
@@ -1049,9 +1112,9 @@ else:
         print("Your input couldn't be converted into a number. Setting sun data",
               "cache time to it's default value of '480'.")
         config['CACHE']['sundata_cachedtime'] = '480'
-        logger.debug("Sun data cache time now 480 minutes.")      
+        logger.debug("Sun data cache time now 480 minutes.")
 
-    
+
 print("", "When viewing detailed EU alerts information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
@@ -1069,7 +1132,7 @@ except:
     config['UI']['alerts_EUiterations'] = '2'
     print("Changes saved.")
     logger.debug("Detailed EU alert iterations now 2.")
-    
+
 print("", "When viewing detailed US alerts information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
@@ -1087,7 +1150,7 @@ except:
     config['UI']['alerts_USiterations'] = '1'
     print("Changes saved.")
     logger.debug("Detailed US alert iterations now 1.")
-    
+
 print("","When PyWeather is going through detailed information, it can show",
       "how many iterations are completed.",
       "By default, this is disabled.",
@@ -1107,7 +1170,7 @@ else:
     config['UI']['show_completediterations'] = 'False'
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
-    
+
 print("", "When PyWeather is going through detailed information, would",
       "you like the 'Enter to Continue' prompts to pop up?",
       "By default, this is enabled.",
@@ -1127,7 +1190,7 @@ else:
     config['UI']['show_entertocontinue'] = 'True'
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to ENABLED.")
-    
+
 print("", "In the PyWeather Updater, the updater can show the release tag",
       "associated with the latest release. Helpful for those using Git to",
       "update PyWeather. By default, this is disabled.",
@@ -1147,7 +1210,7 @@ else:
     config['UPDATER']['show_updaterreleasetag'] = 'False'
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
-    
+
 print("", "When you check for updates, and PyWeather notices",
       "a new version is out, PyWeather can use Git to update",
       "itself. Make sure you have Git installed if you enable this.",
@@ -1191,7 +1254,7 @@ else:
           "Defaulting to 'True'.", sep="\n")
     config['PYWEATHER BOOT']['validateAPIKey'] = 'False'
     logger.debug("Could not understand input. Defaulting to ENABLED.")
-    
+
 print("","That's it! Now commiting config changes...", sep="\n")
 try:
     with open('storage//config.ini', 'w') as configfile:
@@ -1206,7 +1269,7 @@ except:
     print("Press enter to exit.")
     input()
     sys.exit()
-    
+
 
 print("We're wrapping up, and making sure everything works.",
       "Checking for default libraries...", sep="\n")
@@ -1256,7 +1319,7 @@ except:
     print("Press enter to exit.")
     input()
     sys.exit()
-    
+
 test_json = json.loads(testJSON.text)
 if jsonVerbosity == True:
     logger.debug("test_json: %s" % test_json)
@@ -1275,7 +1338,7 @@ except:
     print("Press enter to exit.")
     input()
     sys.exit()
-    
+
 print("Testing the connection to Google's geocoder...")
 
 from geopy import GoogleV3
@@ -1299,32 +1362,7 @@ except:
     print("Press enter to exit.")
     input()
     sys.exit()
-    
-    
-print("Testing the connection to the reverse geocoder...")
 
-try:
-    testlocation3 = geocoder.google([testlocation.latitude, testlocation.longitude], method='reverse')
-    logger.debug("testlocation3: %s" % testlocation3)
-    logger.debug("testlocation3.city: %s ; testlocation3.state: %s" %
-                 (testlocation3.city, testlocation3.state))
-    if (testlocation3.state == "None" or testlocation3.city == "None"):
-        logger.warn("Geolocator had an invalid location! A random error.")
-        print("", "WARNING: The reverse geocoder had an invalid location. This is",
-              "a known issue, and can occur at random. Please wait 2-4 minutes after",
-              "you're done with PyWeather Setup before you use PyWeather.")
-    else:
-        print("Yay! The connection to the reverse geocoder works.")
-except:
-    logger.warn("Couldn't connect to Google's geocoder. No internet?")
-    print("When attempting to test the connection to Google's geocoder,",
-          "PyWeather Setup ran into an error. If you're on a netowrk with",
-          "a filter, make sure that Google's geocoder is unblocked. Otherwise",
-          "make sure that you have an internet connection.", sep="\n")
-    printException()
-    print("Press enter to exit.")
-    input()
-    sys.exit()
 
 print("","Everything is set up and ready to rumble!",
       "Enjoy using PyWeather! If you have any issues, please report them on GitHub!",

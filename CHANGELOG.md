@@ -2,7 +2,7 @@
 
 Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
 
-## version 0.6.2 beta - Should be released 7/27/2017
+## version 0.6.2 beta - Should be released 8/3/2017
 * Adds the yesterday's weather feature. - "Scrapped", ModoUnreal is in control of this feature, so no ETA right now.
 * Adds the ability to read PyWeather's development news posts in PyWeather - Should be finished by 7/17.
 * Adds the option to turn on a custom user agent. Cool, right? - Should be finished by 7/19

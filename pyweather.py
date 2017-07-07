@@ -293,11 +293,10 @@ except FileNotFoundError:
         logger.debug("apikey: %s" % apikey)
         print("Loaded your backup key successfully!")
     except FileNotFoundError:
-        # If that isn't found, you're screwed!
         print("When attempting to access your backup API key, PyWeather ran into",
               "an error. Make sure that your backup key file is accessible (wrong",
               "permissions and the file not existing are common issues).", sep="\n")
-        logger.warn("Couldn't load the primary or backup key text file!" +
+        logger.warning("Couldn't load the primary or backup key text file!" +
                     " Does it exist?")
         print("Press enter to continue.")
         input()

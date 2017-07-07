@@ -101,6 +101,9 @@ ENV/
 *.pydevproject
 .settings/org.eclipse.ltk.core.refactoring.prefs
 
+# PyCharm files
+.idea/
+
 # API keys
 apikey.txt
 storage/apikey2.txt
