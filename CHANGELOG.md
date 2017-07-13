@@ -23,7 +23,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 	* Adding a proper cache (Refresh button, deleting all images on close) - 100% done!
 	* Bringing back the placeholder .gifs - 100% done!
 	* Improving the nuts and bolts in the GUI (error checking for bad cache, etc) - 100% done
-	* Adding new options to configupdate, configsetup, and configdefault - 0% done - Should be finished by 6/29
+	* Adding new options to configupdate, configsetup, and configdefault - 100% done - Should be finished by 6/29
 	* Adding radar options to setup (case by case installing of libraries/importing of libraries) - 0% done - Should be finished by 6/30
 	* Doing error checking for the appJar library on radar "boot", offering user to install it, etc. - 0% done - Should be finished by 6/30
 * Adds error checking for the requests library at boot for all scripts. - 0% done, Should be finished by 6/29

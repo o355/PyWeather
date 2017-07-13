@@ -47,7 +47,7 @@ config.read('storage//config.ini')
 # because it's not created. Creative.
 try:
     configprovisioned = config.getboolean('USER', 'configprovisioned')
-except:
+except KeyError:
     print("We ran into an error. Full traceback below.")
     traceback.print_exc()
     # Not doing a separate script launch. Doing sys.exit in that script would just continue
@@ -99,6 +99,7 @@ try:
     user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
     user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
     user_radarImageSize = config.get('RADAR GUI', 'radar_imagesize')
+    radar_bypassconfirmation = config.getboolean('RADAR GUI', 'bypassconfirmation')
     
 except:
     # If it fails (typo or code error), we set all options to default.
@@ -136,6 +137,8 @@ except:
     cache_sundatatime = 480
     user_alertsEUiterations = 2
     user_alertsUSiterations = 1
+    user_radarImageSize = "normal"
+    radar_bypassconfirmation = False
 
 # Import logging, and set up the logger.
 import logging

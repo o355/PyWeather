@@ -609,60 +609,60 @@ else:
             logger.info("appjar installed successfully.")
         except ImportError:
             logger.warning("appjar was not installed successfully.")
-            print("Hmm...geopy didn't install properly.")
+            print("Hmm...appJar didn't install properly.")
             printException()
             print("As a last resort, we can use sudo -H to install packages.",
-            "Do you want to use the shell option to install geopy?",
+            "Do you want to use the shell option to install appJar?",
             "Yes or No.", sep="\n")
-            geopy_lastresort = input("Input here: ").lower()
-            logger.debug("geopy_lastresort: %s" % geopy_lastresort)
+            appjar_lastresort = input("Input here: ").lower()
+            logger.debug("appjar_lastresort: %s" % appjar_lastresort)
             if geopy_lastresort == "yes":
                 try:
-                    print("Now executing `sudo -H pip3 install geopy`.",
+                    print("Now executing `sudo -H pip3 install appjar`.",
                           "Please enter the password for sudo when the prompt",
                           "comes up. Press Control + C to cancel.",
                           "Starting in 5 seconds...", sep="\n")
                     time.sleep(5)
                     try:
-                        subprocess.call(["sudo -H pip3 install geopy"], shell=True)
+                        subprocess.call(["sudo -H pip3 install appjar"], shell=True)
                         try:
-                            print("Attempting to reimport geopy.")
-                            import geopy
-                            print("Geopy is FINALLY installed!")
+                            print("Attempting to reimport appJar.")
+                            import appJar
+                            print("appJar is FINALLY installed!")
                         except:
-                            print("Geopy still wasn't successfully installed.",
-                                  "Cannot continue without geopy.",
-                                  "Try doing a manual install of geopy with PIP.", sep="\n")
+                            print("appJar still wasn't successfully installed.",
+                                  "Cannot continue without appJar.",
+                                  "Try doing a manual install of appJar with PIP.", sep="\n")
                             printException()
                             print("Press enter to exit.")
                             input()
                             sys.exit()
                     except:
                         print("When running the command, an error occurred",
-                              "Try doing a manual install of geopy with PIP.", sep="\n")
+                              "Try doing a manual install of appJar with PIP.", sep="\n")
                         printException()
                         print("Press enter to exit.")
                         input()
                         sys.exit()
                 except KeyboardInterrupt:
                     print("Command execution aborted.",
-                          "Cannot continue without geopy.",
-                          "Try and do a manual install of geopy with PIP",
+                          "Cannot continue without appJar.",
+                          "Try and do a manual install of appJar with PIP",
                           "in a command line.", sep="\n")
                     printException()
                     print("Press enter to exit.")
                     input()
                     sys.exit()
-            elif geopy_lastresort == "no":
-                print("Not installing geopy with a shell command.",
-                      "Cannot continue without geopy.",
+            elif appjar_lastresort == "no":
+                print("Not installing appJar with a shell command.",
+                      "Cannot continue without appJar.",
                       "Press enter to exit.", sep="\n")
                 input()
                 sys.exit()
             else:
                 print("Did not understand your input. Defaulting to not installing",
-                      "via the shell. Cannot continue without geopy.",
-                      "Try installing geopy with PIP.",
+                      "via the shell. Cannot continue without appJar.",
+                      "Try installing appJar with PIP.",
                       "Press enter to exit.")
                 input()
                 sys.exit()
@@ -1254,6 +1254,37 @@ else:
           "Defaulting to 'True'.", sep="\n")
     config['PYWEATHER BOOT']['validateAPIKey'] = 'False'
     logger.debug("Could not understand input. Defaulting to ENABLED.")
+
+print("", "PyWeather now has a radar feature, which opens up a GUI on supported",
+      "platforms. Depending on your screen resolution, you'll have to set how large",
+      "the radar picture is when rendered. In the prompt below, enter one of five sizes.",
+      "extrasmall - 320x240 window",
+      "small - 480x320 window",
+      "normal - 640x480 window",
+      "large - 960x720 window",
+      "extralarge - 1280x960 window",
+      "By default, the resolution is normal. Adapt your choice to the screen resolution",
+      "of the machine you're using.", sep="\n")
+radar_resolutions = ["extrasmall", "small", "normal", "large", "extralarge"]
+logger.debug("radar_resolutions: %s" % radar_resolutions)
+radar_resolutioninput = input("Input here: ").lower()
+for x in range(0, 4):
+    if radar_resolutioninput == radar_resolutions[x]:
+        logger.debug("Resolution input matched, end result: %s" % radar_resolutions[x])
+        config['RADAR GUI']['radar_imagesize'] = radar_resolutions[x]
+        print("Changes saved.")
+        break
+    # This works by design. If x = 4 (extralarge), the if would catch first.
+    elif x == 4:
+        print("Could not understand what you inputted. Defaulting to 'normal'.")
+
+print("", "PyWeather's radar feature is unfortunately experimental as of PyWeather 0.6.1 beta.",
+      "By default, a confirmation message will always appear when attempting to launch the radar.",
+      "However, this can be turned off, if you plan to use the experimental radar on a regular basis.",
+      "By default, bypassing the confirmation message is disabled. Yes or No.", sep="\n")
+radar_bypassconfinput = input("Input here: ").lower()
+
+
 
 print("","That's it! Now commiting config changes...", sep="\n")
 try:
