@@ -114,3 +114,6 @@ temp/*.gif
 
 # Config file
 storage/config.ini
+
+# Version information file
+storage/versioninfo.txt
