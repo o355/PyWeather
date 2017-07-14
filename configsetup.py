@@ -1,4 +1,4 @@
-# PyWeather Config Setup - 0.6.0.1 beta
+# PyWeather Config Setup - 0.6.1 beta
 # (c) 2017, o355. GNU GPL.
 
 import sys
@@ -7,33 +7,16 @@ import traceback
 import os
 
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read("storage//config.ini")
 
-# Check our working directory. This script can't work in the base PyWeather folder.
-        
-if "/pyweather/storage" or "\pyweather\storage" in os.getcwd():
-    cool = True
-# I can't do the 
-elif "/pyweather/" or "\pyweather" in os.getcwd():
-    # If we are in the base folder, it's a perfect time to write to versioninfo.txt!
-    try:
-        versioninfo = open('updater//versioninfo.txt').close()
-    except:
-        open('updater//versioninfo.txt', 'w').close()
-        with open("updater//versioninfo.txt", 'a') as out:
-            out.write("0.6.0.1 beta")
-            out.close()
-    print("Whoops! You're running this script from PyWeather's base folder, but",
-          "the script can't work when running from the base folder of PyWeather.",
-          "Move into the storage folder, and run the script there.",
-          "Press enter to exit.", sep="\n")
-    input()
-    sys.exit()
-else:
-    print("Whoops! You're running this script from PyWeather's base folder, but",
-          "the script can't work when running from the base folder of PyWeather.",
-          "Move into the storage folder, and run the script there.",
-          "Press enter to exit.", sep="\n")
+
+try:
+    versioninfo = open('updater//versioninfo.txt').close()
+except:
+    open('updater//versioninfo.txt', 'w').close()
+    with open("updater//versioninfo.txt", 'a') as out:
+        out.write("0.6.1 beta")
+        out.close()
     input()
     sys.exit()
 # Verbosity and all that fun stuff isn't available here.
@@ -41,7 +24,7 @@ else:
 # why should I code it in?
 
 print("Would you like me to set up PyWeather's config?",
-      "Yes or No.", sep="\n")
+      "Yes or No.", sep=="\n")
 cd_confirmation = input("Input here: ").lower()
 if cd_confirmation == "yes":
     try:
@@ -59,11 +42,6 @@ if cd_confirmation == "yes":
             sys.exit()
     except:
         print("Setting up your config...")
-        
-    try:
-        config.add_section('CHANGELOG')
-    except:
-        print("Couldn't add the changelog section.")
     
     try:
         config.add_section('SUMMARY')
@@ -160,7 +138,7 @@ if cd_confirmation == "yes":
     config['CACHE']['enabled'] = 'True'
     print("Committing changes...")
     try:
-        with open('config.ini', 'w') as configfile:
+        with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)
     except:
         print("Hmmf...an odd error occurred. A full traceback will be",

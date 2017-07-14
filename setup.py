@@ -50,17 +50,60 @@ except:
     provisionconfig = input("Input here: ").lower()
     if provisionconfig == "yes":
         print("Provisioning your config.")
-        config.add_section('SUMMARY')
-        config.add_section('VERBOSITY')
-        config.add_section('TRACEBACK')
-        config.add_section('UI')
-        config.add_section('HOURLY')
-        config.add_section('UPDATER')
-        config.add_section('KEYBACKUP')
-        config.add_section('VERSIONS')
-        config.add_section('PYWEATHER BOOT')
-        config.add_section('USER')
-        config.add_section('CACHE')
+        try:
+            config.add_section('SUMMARY')
+        except configparser.DuplicateSectionError:
+            logger.debug("Cache section could not be added.")
+
+        try:
+            config.add_section('VERBOSITY')
+        except configparser.DuplicateSectionError:
+            logger.debug("Verbosity section could not be added.")
+
+        try:
+            config.add_section('TRACEBACK')
+        except configparser.DuplicateSectionError:
+            logger.debug("Traceback section could not be added.")
+
+        try:
+            config.add_section('UI')
+        except configparser.DuplicateSectionError:
+            logger.debug("UI section could not be added.")
+
+        try:
+            config.add_section('HOURLY')
+        except configparser.DuplicateSectionError:
+            logger.debug("Hourly section could not be added.")
+
+        try:
+            config.add_section('UPDATER')
+        except configparser.DuplicateSectionError:
+            logger.debug("Updater section could not be added.")
+
+        try:
+            config.add_section('KEYBACKUP')
+        except configparser.DuplicateSectionError:
+            logger.debug("Key Backup section could not be added.")
+
+        try:
+            config.add_section('VERSIONS')
+        except configparser.DuplicateSectionError:
+            logger.debug("Versions section could not be added.")
+
+        try:
+            config.add_section('PYWEATHER BOOT')
+        except configparser.DuplicateSectionError:
+            logger.debug("PyWeather Boot section could not be added.")
+
+        try:
+            config.add_section('USER')
+        except configparser.DuplicateSectionError:
+            logger.debug("User section could not be added.")
+        try:
+            config.add_section('CACHE')
+        except configparser.DuplicateSectionError:
+            logger.debug("Cache section could not be added.")
+            
         config['SUMMARY']['sundata_summary'] = 'False'
         config['SUMMARY']['almanac_summary'] = 'False'
         config['VERBOSITY']['verbosity'] = 'False'
@@ -1283,6 +1326,14 @@ print("", "PyWeather's radar feature is unfortunately experimental as of PyWeath
       "However, this can be turned off, if you plan to use the experimental radar on a regular basis.",
       "By default, bypassing the confirmation message is disabled. Yes or No.", sep="\n")
 radar_bypassconfinput = input("Input here: ").lower()
+if radar_bypassconfinput == "yes":
+    config['RADAR GUI']['bypassconfirmation'] = True
+    logger.debug("RADAR GUI/bypassconfirmation is now TRUE")
+    print("Changes saved.")
+elif radar_bypassconfinput == "no":
+    config['RADAR GUI']['bypassconfirmation'] = False
+    logger.debug("RADAR GUI/bypassconfirmation is now FALSE")
+    print("Changes saved.")
 
 
 

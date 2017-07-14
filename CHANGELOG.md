@@ -47,6 +47,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Fixed a bug where if you entered a weird name to check the weather for, an encoding error would occur.
 * Fixed a major bug where alerts wouldn't iterate, due to a non-defined config variable.
 * Fixed a super tiny bug where a logger.info statement would not print in the setup file, unless Geopy was not installed.
+* Fixed a bug in the setup file, in which if sections were already added to a config file without the configprovisioned flag, PyWeather Setup would not run.
 
 ## version 0.6.0.1 beta - Released on 5/29/2017
 * Fixes a critical bug where a user couldn't provision their config file when they first downloaded the program.
