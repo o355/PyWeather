@@ -22,6 +22,7 @@ import configparser
 import traceback
 import subprocess
 import logging
+import os
 
 # Try loading the versioninfo.txt file. If it isn't around, create the file with
 # the present version info.
@@ -904,35 +905,21 @@ if backup_APIkey == "yes":
         "This is a directory. If I wanted my key at directory/backkey.txt,",
           "You would enter 'directory'. The default directory is 'backup'.", sep="\n")
     # Doing a .lower() here to prevent case insensitiveness.
-    backup_APIkeydir = input("Input here: ").lower() + "//"
-    try:
-        folder_argument = backup_APIkeydir + "//backkey.txt"
-        print("Creating a backup...")
-        try:
-            os.mkdir(backup_APIkeydir)
-        except (FileExistsError, OSError) as error:
-            logger.debug("Couldn't create directory %s: %s" %
-                         (backup_APIkeydir, error))
-
-        open(folder_argument, 'w+').close()
-        open(folder_argument, 'a').write(apikey_input)
-        open(folder_argument).close()
-        config['KEYBACKUP']['savedirectory'] = backup_APIkeydir
-        print("The API key was backed up successfully!")
-        logger.debug("Performed 3 ops. Overwrite "+ folder_argument + "backkey.txt, write to backkey.txt" +
-                     ", and close backkey.txt.")
-    except:
-        print("The directory you wanted to put your backup in was invalid.",
-              "Defaulting to the default directory of backup//...")
-        printException_loggerwarn()
-        print("Creating a backup...")
-        open("backup//backkey.txt", 'w+').close()
-        open("backup//backkey.txt", 'a').write(apikey_input)
-        open("backup//backkey.txt").close()
-        config.read('storage//config.ini')
-        config['KEYBACKUP']['savelocation'] = 'backup//'
-        logger.debug("Performed 3 ops. Overwrite backup//backkey.txt, write to backkey.txt" +
-                     ", and close backkey.txt.")
+    backup_APIkeydirectory = input("Input here: ").lower()
+    backup_APIkeydirectory2 = backup_APIkeydirectory + "//"
+    folder_argument = backup_APIkeydirectory + "//backkey.txt"
+    logger.debug("backup_APIkeydirectory: %s ; backup_APIkeydirectory2: %s" %
+                 (backup_APIkeydirectory, backup_APIkeydirectory2))
+    logger.debug("folder_argument: %s" % folder_argument)
+    print("Creating a backup...")
+    os.mkdir(backup_APIkeydirectory2)
+    open(folder_argument, 'w+').close()
+    open(folder_argument, 'a').write(apikey_input)
+    open(folder_argument).close()
+    config['KEYBACKUP']['savedirectory'] = backup_APIkeydirectory2
+    print("The API key was backed up successfully!")
+    logger.debug("Performed 3 ops. Overwrite "+ folder_argument + "backkey.txt, write to backkey.txt" +
+                ", and close backkey.txt.")
 
 print("Before we configure PyWeather, I'll now validate your API key.")
 
@@ -992,10 +979,10 @@ while True:
         input()
         sys.exit()
 
-print("Let's configure a few options for PyWeather.")
+print("Let's configure PyWeather to your liking.")
 logger.debug("config: %s" % config)
 
-print("","On the summary screen, would you like to show sunrise/sunset times?",
+print("", "(1/24)","On the summary screen, would you like to show sunrise/sunset times?",
       "By default, this is disabled.",
       "Yes or No.", sep="\n")
 sundata_Summary = input("Input here: ").lower()
@@ -1015,7 +1002,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("","On the summary screen, would you like to show almanac data?",
+print("", "(2/24)","On the summary screen, would you like to show almanac data?",
       "By default, this is disabled.",
       "Yes or no:", sep="\n")
 almanacdata_Summary = input("Input here: ").lower()
@@ -1035,7 +1022,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("", "On the summary screen, would you like to show alerts data?",
+print("", "(3/24)", "On the summary screen, would you like to show alerts data?",
       "By default, this is enabled. Please note, Wunderground",
       "only supports alert data in the US and EU at this time.",
       "Yes or No.", sep="\n")
@@ -1054,7 +1041,7 @@ else:
           "Defaulting to 'True'", sep="\n")
     config['SUMMARY']['showAlertsOnSummary'] = 'True'
 
-print("","On boot, would you like PyWeather to check for updates?",
+print("", "(4/24)","On boot, would you like PyWeather to check for updates?",
       "By default, this is disabled, due to a load time increase of ~2-5 seconds.",
       "Yes or No.", sep="\n")
 checkForUpdates = input("Input here: ").lower()
@@ -1074,7 +1061,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("","When an error occurs, would you like PyWeather to show the full error?",
+print("", "(5/24)","When an error occurs, would you like PyWeather to show the full error?",
       "When enabled, you'll have easier access to the full error for reporting",
       "the bug on GitHub.",
       "By default, this is disabled, as errors look less pretty when enabled.",
@@ -1107,7 +1094,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("","When booting PyWeather up initially, would you like PyWeather to",
+print("", "(6/24)", "When booting PyWeather up initially, would you like PyWeather to",
       "fetch the 10-day hourly forecast, instead of the 3-day forecast?",
       "This is disabled by default. When enabled, initial loading times are",
       "increased. However, when you view the 10-day hourly forecast, you won't",
@@ -1129,7 +1116,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("","When viewing detailed hourly, 10-day hourly, and historical hourly,",
+print("", "(7/24)", "When viewing detailed hourly, 10-day hourly, and historical hourly,",
       "detailed information, how many iterations should PyWeather go through",
       "before asking you to continue?",
       "By default, this is 6. An input above 10",
@@ -1148,7 +1135,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed info loops now 6.")
 
-print("","When viewing detailed 10-day forecast information, how many",
+print("", "(8/24)", "When viewing detailed 10-day forecast information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
       "By default, this is 5. An input above 10 will not prompt",
@@ -1167,7 +1154,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed forecast info loops now 5.")
 
-print("", "PyWeather has a caching system, in which if you're gone for some time",
+print("", "(9/24)", "PyWeather has a caching system, in which if you're gone for some time",
       "data will automatically refresh. Would you like to turn this on?",
       "This is enabled by default. Yes or No.", sep="\n")
 enablecache = input("Input here: ").lower()
@@ -1182,7 +1169,7 @@ else:
           "certain types of data, before a data refresh is automatically requested.",
           "If you want to leave cache values to their defaults, press enter at any prompt.", sep="\n")
 
-    print("Please enter the cache time for alerts data in minutes (default = 5)")
+    print("", "(10/24)", "Please enter the cache time for alerts data in minutes (default = 5)")
     alertscachetime = input("Input here: ").lower()
     try:
         alertscachetime = int(alertscachetime)
@@ -1191,12 +1178,12 @@ else:
         print("Changes saved.")
         logger.debug("Alerts cache time now %s minutes." % alertscachetime)
     except:
-        print("Your input couldn't be converted into a number. Setting alerts",
+        print("", "Your input couldn't be converted into a number. Setting alerts",
               "cache time to it's default value of '5'.")
         config['CACHE']['alerts_cachedtime'] = '5'
         logger.debug("Alerts cache time now 5 minutes.")
 
-    print("Please enter the cache time for current data in minutes (default = 10)")
+    print("", "(11/24)", "Please enter the cache time for current data in minutes (default = 10)")
     currentcachetime = input("Input here: ").lower()
     try:
         currentcachetime = int(currentcachetime)
@@ -1205,12 +1192,12 @@ else:
         print("Changes saved.")
         logger.debug("Current cache time now %s minutes." % alertscachetime)
     except:
-        print("Your input couldn't be converted into a number. Setting current",
+        print("", "Your input couldn't be converted into a number. Setting current",
               "cache time to it's default value of '10'.")
         config['CACHE']['current_cachedtime'] = '10'
         logger.debug("Current cache time now 10 minutes.")
 
-    print("Please enter the cache time for hourly data in minutes (default = 60)")
+    print("", "(12/24)", "Please enter the cache time for hourly data in minutes (default = 60)")
     hourlycachetime = input("Input here: ").lower()
     try:
         hourlycachetime = int(hourlycachetime)
@@ -1219,12 +1206,12 @@ else:
         print("Changes saved.")
         logger.debug("Hourly cache time now %s minutes." % hourlycachetime)
     except:
-        print("Your input couldn't be converted into a number. Setting hourly",
+        print("", "Your input couldn't be converted into a number. Setting hourly",
               "cache time to it's default value of '60'.")
         config['CACHE']['hourly_cachedtime'] = '60'
         logger.debug("Hourly cache time now 60 minutes.")
 
-    print("Please enter the cache time for forecast data in minutes (default = 60)")
+    print("", "(13/24)", "Please enter the cache time for forecast data in minutes (default = 60)")
     forecastcachetime = input("Input here: ").lower()
     try:
         forecastcachetime = int(forecastcachetime)
@@ -1233,12 +1220,12 @@ else:
         print("Changes saved.")
         logger.debug("Forecast cache time now %s minutes." % forecastcachetime)
     except:
-        print("Your input couldn't be converted into a number. Setting forecast",
+        print("", "Your input couldn't be converted into a number. Setting forecast",
               "cache time to it's default value of '60'.")
         config['CACHE']['forecast_cachedtime'] = '60'
         logger.debug("Forecast cache time now 60 minutes.")
 
-    print("Please enter the cache time for almanac data in minutes (default = 240)")
+    print("", "(14/24)", "Please enter the cache time for almanac data in minutes (default = 240)")
     almanaccachetime = input("Input here: ").lower()
     try:
         almanaccachetime = int(almanaccachetime)
@@ -1247,12 +1234,12 @@ else:
         print("Changes saved.")
         logger.debug("Almanac cache time now %s minutes." % almanaccachetime)
     except:
-        print("Your input couldn't be converted into a number. Setting almanac",
+        print("", "Your input couldn't be converted into a number. Setting almanac",
               "cache time to it's default value of '240'.")
         config['CACHE']['almanac_cachedtime'] = '240'
         logger.debug("Almanac cache time now 240 minutes.")
 
-    print("Please enter the cache time for sun data in minutes (default = 480)")
+    print("", "(15/24)", "Please enter the cache time for sun data in minutes (default = 480)")
     sundatacachetime = input("Input here: ").lower()
     try:
         sundatacachetime = int(sundatacachetime)
@@ -1261,13 +1248,13 @@ else:
         print("Changes saved.")
         logger.debug("Sun data cache time now %s minutes." % sundatacachetime)
     except:
-        print("Your input couldn't be converted into a number. Setting sun data",
+        print("", "Your input couldn't be converted into a number. Setting sun data",
               "cache time to it's default value of '480'.")
         config['CACHE']['sundata_cachedtime'] = '480'
         logger.debug("Sun data cache time now 480 minutes.")
 
 
-print("", "When viewing detailed EU alerts information, how many",
+print("", "(16/24)", "When viewing detailed EU alerts information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
       "By default, this is 2.", sep="\n")
@@ -1285,7 +1272,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed EU alert iterations now 2.")
 
-print("", "When viewing detailed US alerts information, how many",
+print("", "(17/24)", "When viewing detailed US alerts information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
       "By default, this is 1.", sep="\n")
@@ -1303,7 +1290,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed US alert iterations now 1.")
 
-print("","When PyWeather is going through detailed information, it can show",
+print("", "(18/24)","When PyWeather is going through detailed information, it can show",
       "how many iterations are completed.",
       "By default, this is disabled.",
       "Yes or No.", sep="\n")
@@ -1323,7 +1310,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "When PyWeather is going through detailed information, would",
+print("", "(19/24)", "When PyWeather is going through detailed information, would",
       "you like the 'Enter to Continue' prompts to pop up?",
       "By default, this is enabled.",
       "Yes or No.", sep="\n")
@@ -1343,7 +1330,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to ENABLED.")
 
-print("", "In the PyWeather Updater, the updater can show the release tag",
+print("", "(20/24)", "In the PyWeather Updater, the updater can show the release tag",
       "associated with the latest release. Helpful for those using Git to",
       "update PyWeather. By default, this is disabled.",
       "Yes or No.", sep="\n")
@@ -1363,7 +1350,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "When you check for updates, and PyWeather notices",
+print("", "(21/24)", "When you check for updates, and PyWeather notices",
       "a new version is out, PyWeather can use Git to update",
       "itself. Make sure you have Git installed if you enable this.",
       "By default, this is disabled. Keep this disabled if you're unsure",
@@ -1385,7 +1372,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "When PyWeather boots, it can validate your API key. If PyWeather",
+print("", "(22/24)", "When PyWeather boots, it can validate your API key. If PyWeather",
       "finds your primary API key is invalid, it'll attempt to validate your",
       "backup key, and load that if it's validated successfully.",
       "By default, this is enabled, as it's well worth the 1 API call to make",
@@ -1407,7 +1394,7 @@ else:
     config['PYWEATHER BOOT']['validateAPIKey'] = 'False'
     logger.debug("Could not understand input. Defaulting to ENABLED.")
 
-print("", "PyWeather now has a radar feature, which opens up a GUI on supported",
+print("", "(23/24)", "PyWeather now has a radar feature, which opens up a GUI on supported",
       "platforms. Depending on your screen resolution, you'll have to set how large",
       "the radar picture is when rendered. In the prompt below, enter one of five sizes.",
       "extrasmall - 320x240 window",
@@ -1430,7 +1417,7 @@ for x in range(0, 4):
     elif x == 4:
         print("Could not understand what you inputted. Defaulting to 'normal'.")
 
-print("", "PyWeather's radar feature is unfortunately experimental as of PyWeather 0.6.1 beta.",
+print("", "(24/24)", "PyWeather's radar feature is unfortunately experimental as of PyWeather 0.6.1 beta.",
       "By default, a confirmation message will always appear when attempting to launch the radar.",
       "However, this can be turned off, if you plan to use the experimental radar on a regular basis.",
       "By default, bypassing the confirmation message is disabled. Yes or No.", sep="\n")

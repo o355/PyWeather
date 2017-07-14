@@ -7,6 +7,11 @@ I've been slacking off recently, so PyWeather 0.6.1 beta has been delayed by at 
 
 I'm also finding LOTS of bugs, and adding new features on the fly.
 
+## Beta Notice
+If you haven't noticed, PyWeather is in beta. At this point, essential features mostly work.
+
+However, newer or more complex features may not work as expected. It's also up to you to report bugs that you find, as it makes every new PyWeather release better.
+
 ## Download/Setup
 You can download PyWeather by visiting the releases tab, and getting the latest zip.
 

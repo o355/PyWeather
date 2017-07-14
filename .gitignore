@@ -109,6 +109,10 @@ apikey.txt
 storage/apikey2.txt
 backup/backkey.txt
 
+# Test directories for backup keys
+backup2/
+backup3/
+
 # Temporary .gif files for radar
 temp/*.gif
 
@@ -117,3 +121,6 @@ storage/config.ini
 
 # Version information file
 storage/versioninfo.txt
+
+# DS Store file
+.DS_Store

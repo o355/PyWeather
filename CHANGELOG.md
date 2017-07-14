@@ -23,18 +23,11 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Added the dependency of appJar.
 * Loading times have been increased by about 0.2 seconds, due to the removal of the unnecessary second geocoder.
 * Added the last-resort option when installing Colorama in the setup file.
-* Adds an experimental radar to PyWeather. - 85% done
-	* Uncommenting code - 100% done!
-	* Adding all radar views - 100% done!
-	* Full logger implementation - 100% done!
-	* Adding a proper cache (Refresh button, deleting all images on close) - 100% done!
-	* Bringing back the placeholder .gifs - 100% done!
-	* Improving the nuts and bolts in the GUI (error checking for bad cache, etc) - 100% done
-	* Adding new options to configupdate, configsetup, and configdefault - 100% done - Should be finished by 6/29
-	* Adding radar options to setup (case by case installing of libraries/importing of libraries) - 100% done - Should be finished by 6/30
+* Adds an experimental radar to PyWeather.
 * Adds error checking for imports on all scripts (non-standard libraries) - 0% done
-* Adds requests as a necessary library to setup - 100% done, testing...
-* PyWeather Setup now validates your API key after you input it (and after the backup) - 0% done
+* Adds a progress indicator during setup configuration.
+* Adds requests as a necessary library to setup
+* PyWeather Setup now validates your API key after you input it (and after the backup)
 * The PyWeather updater will now try each command. This helps in determining if a user can still update PyWeather using the .zip method. - 0% done, Should be finished by 7/5
 * Updates config_README for the latest options, and detailed "when did each option appear" analysis (using previous releases.) - 0% done, Should be finished by 7/9
 * PyWeather Setup will now update PIP packages with user approval. - 0% done, should be finished by 7/10 
@@ -47,6 +40,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Fixed a major bug where alerts wouldn't iterate, due to a non-defined config variable.
 * Fixed a super tiny bug where a logger.info statement would not print in the setup file, unless Geopy was not installed.
 * Fixed a bug in the setup file, in which if sections were already added to a config file without the configprovisioned flag, PyWeather Setup would not run.
+* Fixing a bug in which custom directories really didn't work for the backup API key in the setup script - 60% done, need to add error catching
 
 ## version 0.6.0.1 beta - Released on 5/29/2017
 * Fixes a critical bug where a user couldn't provision their config file when they first downloaded the program.
