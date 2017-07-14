@@ -1,4 +1,4 @@
-# PyWeather - version 0.6.0.1 beta
+# PyWeather - version 0.6.1 beta
 # (c) 2017 o355, GNU GPL 3.0.
 
 # ==============
