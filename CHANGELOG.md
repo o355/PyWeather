@@ -2,21 +2,28 @@
 
 Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
 
+## version 0.6.3 beta - Should be released late August:
+* Adds rounding in PyWeather (fixing a major bug with Termux)
+
 ## version 0.6.2 beta - Should be released 8/3/2017
-* Adds the yesterday's weather feature. - "Scrapped", ModoUnreal is in control of this feature, so no ETA right now.
+* Adds the yesterday's weather feature. - ModoUnreal is coding this in, ETA is TBD.
 * Adds the ability to read PyWeather's development news posts in PyWeather - Should be finished by 7/17.
 * Adds the option to turn on a custom user agent. Cool, right? - Should be finished by 7/19
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Should be finished by 7/19
 * Adds caching to the radar - Should be finished by 7/27
+* Restructures the filesystem (as was planned in 0.6.1 beta). Changes include:
+    * Radar placeholder gifs going into a /radar folder
+    * Getting a separate /config folder for the uh, config file.
+    * Docs folder for uh, documents.
 
-## version 0.6.1 beta - Should be released on 7/15/2017
+## version 0.6.1 beta - Should be released on 7/21/2017
 **NEW FEATURES/REMOVALS**
 * Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache.
 * Removed the dependency on geocoder, and by extension, removed the unnecessary reverse geocoder, and 
 * Added the dependency of appJar.
 * Loading times have been increased by about 0.2 seconds, due to the removal of the unnecessary second geocoder.
 * Added the last-resort option when installing Colorama in the setup file.
-* Adds an experimental radar to PyWeather. - 0% done, Should be finished by 6/27
+* Adds an experimental radar to PyWeather. - 85% done
 	* Uncommenting code - 100% done!
 	* Adding all radar views - 100% done!
 	* Full logger implementation - 100% done!
@@ -24,18 +31,10 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 	* Bringing back the placeholder .gifs - 100% done!
 	* Improving the nuts and bolts in the GUI (error checking for bad cache, etc) - 100% done
 	* Adding new options to configupdate, configsetup, and configdefault - 100% done - Should be finished by 6/29
-	* Adding radar options to setup (case by case installing of libraries/importing of libraries) - 0% done - Should be finished by 6/30
-	* Doing error checking for the appJar library on radar "boot", offering user to install it, etc. - 0% done - Should be finished by 6/30
-* Adds error checking for the requests library at boot for all scripts. - 0% done, Should be finished by 6/29
-	* Add error checking (pyweather/updater) - 0% done - Should be finished by 6/28
-	* Add error checking (setup) - 0% done - Should be finished by 6/28
-* Restructures the file system. configdefault.py will now live in the storage folder, along with versioninfo.txt. A new "Documentation" folder will also be added, just to clean up things. Some rescripting will be needed. - 0% done, Should be finished by 7/2
-	* configdefault -> storage/configdefault & script updates - 0% done - Should be finished by 6/29
-	* versioninfo.txt -> storage/versioninfo.txt & script updates - 0% done - Should be finished by 6/29
-	* updater/README -> documentation/updater_README - 0% done - Should be finished by 6/30
-	* backup/README -> documentation/backup_README - 0% done - Should be finished by 6/30
-	* storage/README -> storage/storage_README - 0% done - Should be finished by 7/1
-	* storage/config_README -> documentation/config_README - 0% done - Should be finished by 7/1
+	* Adding radar options to setup (case by case installing of libraries/importing of libraries) - 100% done - Should be finished by 6/30
+* Adds error checking for imports on all scripts (non-standard libraries) - 0% done
+* Adds requests as a necessary library to setup - 100% done, testing...
+* PyWeather Setup now validates your API key after you input it (and after the backup) - 0% done
 * The PyWeather updater will now try each command. This helps in determining if a user can still update PyWeather using the .zip method. - 0% done, Should be finished by 7/5
 * Updates config_README for the latest options, and detailed "when did each option appear" analysis (using previous releases.) - 0% done, Should be finished by 7/9
 * PyWeather Setup will now update PIP packages with user approval. - 0% done, should be finished by 7/10 

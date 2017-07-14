@@ -2,6 +2,11 @@
 ## Welcome to PyWeather (0.6.0.1 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
+## PyWeather 0.6.1 has been delayed :(
+I've been slacking off recently, so PyWeather 0.6.1 beta has been delayed by at least a week or so.
+
+I'm also finding LOTS of bugs, and adding new features on the fly.
+
 ## Download/Setup
 You can download PyWeather by visiting the releases tab, and getting the latest zip.
 

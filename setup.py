@@ -53,57 +53,62 @@ except:
         try:
             config.add_section('SUMMARY')
         except configparser.DuplicateSectionError:
-            logger.debug("Cache section could not be added.")
+            print("Cache section could not be added.")
 
         try:
             config.add_section('VERBOSITY')
         except configparser.DuplicateSectionError:
-            logger.debug("Verbosity section could not be added.")
+            print("Verbosity section could not be added.")
 
         try:
             config.add_section('TRACEBACK')
         except configparser.DuplicateSectionError:
-            logger.debug("Traceback section could not be added.")
+            print("Traceback section could not be added.")
 
         try:
             config.add_section('UI')
         except configparser.DuplicateSectionError:
-            logger.debug("UI section could not be added.")
+            print("UI section could not be added.")
 
         try:
             config.add_section('HOURLY')
         except configparser.DuplicateSectionError:
-            logger.debug("Hourly section could not be added.")
+            print("Hourly section could not be added.")
 
         try:
             config.add_section('UPDATER')
         except configparser.DuplicateSectionError:
-            logger.debug("Updater section could not be added.")
+            print("Updater section could not be added.")
 
         try:
             config.add_section('KEYBACKUP')
         except configparser.DuplicateSectionError:
-            logger.debug("Key Backup section could not be added.")
+            print("Key Backup section could not be added.")
 
         try:
             config.add_section('VERSIONS')
         except configparser.DuplicateSectionError:
-            logger.debug("Versions section could not be added.")
+            print("Versions section could not be added.")
 
         try:
             config.add_section('PYWEATHER BOOT')
         except configparser.DuplicateSectionError:
-            logger.debug("PyWeather Boot section could not be added.")
+            print("PyWeather Boot section could not be added.")
 
         try:
             config.add_section('USER')
         except configparser.DuplicateSectionError:
-            logger.debug("User section could not be added.")
+            print("User section could not be added.")
         try:
             config.add_section('CACHE')
         except configparser.DuplicateSectionError:
-            logger.debug("Cache section could not be added.")
-            
+            print("Cache section could not be added.")
+
+        try:
+            config.add_section('RADAR GUI')
+        except configparser.DuplicateSectionError:
+            print("Radar GUI section could not be added.")
+
         config['SUMMARY']['sundata_summary'] = 'False'
         config['SUMMARY']['almanac_summary'] = 'False'
         config['VERBOSITY']['verbosity'] = 'False'
@@ -139,6 +144,8 @@ except:
         config['CACHE']['forecast_cachedtime'] = '60'
         config['CACHE']['almanac_cachedtime'] = '240'
         config['CACHE']['sundata_cachedtime'] = '480'
+        config['RADAR GUI']['radar_imagesize'] = 'normal'
+        config['RADAR GUI']['bypassconfirmation'] = 'False'
         try:
             with open('storage//config.ini', 'w') as configfile:
                 config.write(configfile)
@@ -280,7 +287,7 @@ def printException_loggerwarn():
         logger.warn(traceback.print_exc())
 
 
-logger = logging.getLogger(name='pyweather_setup_0.6.0.1beta')
+logger = logging.getLogger(name='pyweather_setup_0.6.1beta')
 logger.setLevel(logging.DEBUG)
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
@@ -303,65 +310,18 @@ print("Welcome to PyWeather setup.",
       "Running a few checks...", sep="\n")
 
 
-import requests
 import shutil
 import time
 import json
 import codecs
 
 
-buildnumber = 60.1
-buildversion = "0.6.0.1 beta"
+buildnumber = 61
+buildversion = "0.6.1 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
-print("Checking for updates...")
-try:
-    versioncheckurl = "https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json"
-    versioncheck = requests.get(versioncheckurl)
-    logger.debug("versioncheck: %s" % versioncheck)
-except:
-    logger.warn("Couldn't check for updates! Is there an internet connection?")
-    print("When attempting to check for updates, PyWeather Setup ran into an error.",
-          "If you're on a network with a firewall, make sure 'raw.githubusercontent.com'",
-          "Otherwise, make sure that you have an internet connection.", sep="\n")
-    printException()
 
-versionJSON = json.loads(versioncheck.text)
-if jsonVerbosity == True:
-    logger.debug("versionJSON: %s" % versionJSON)
-logger.debug("Loaded versionJSON")
-version_buildNumber = float(versionJSON['updater']['latestbuild'])
-version_latestVersion = versionJSON['updater']['latestversion']
-version_latestURL = versionJSON['updater']['latesturl']
-version_latestFileName = versionJSON['updater']['latestfilename']
-version_latestReleaseTag = versionJSON['updater']['latestversiontag']
-logger.debug("version_buildNumber: %s ; version_latestVersion: %s"
-             % (version_buildNumber, version_latestVersion))
-logger.debug("version_latestURL: %s ; verion_latestFileName: %s"
-             % (version_latestURL, version_latestFileName))
-logger.debug("version_latestReleaseTag: %s" % version_latestReleaseTag)
-version_latestReleaseDate = versionJSON['updater']['releasedate']
-logger.debug("version_latestReleaseDate: %s" % version_latestReleaseDate)
-if buildnumber >= version_buildNumber:
-    logger.info("PyWeather is up to date.")
-    logger.info("local build (%s) >= latest build (%s)"
-                % (buildnumber, version_buildNumber))
-    print("")
-    print("You're running PyWeather Setup for an up-to-date version of PyWeather.")
-    print("This setup script is designed for version " + buildversion
-          + ", and the latest PyWeather version is " + version_latestVersion)
-elif buildnumber < version_buildNumber:
-    logger.info("PyWeather is NOT up-to-date.")
-    logger.info("local build (%s) < latest build (%s)"
-                % (buildnumber, version_buildNumber))
-    print("You're running PyWeather Setup for an out-of-date version of PyWeather.")
-    print("This setup script is designed for version " + buildversion
-          + ", but the latest PyWeather version is " + version_latestVersion + ".")
-    print("You can download an up-to-date version of PyWeather at:",
-          version_latestURL + ".", sep="\n")
-
-# How to create a new line in 3 characters.
 print("","Before we get started, I want to confirm some permissions from you.",
       "Is it okay if I use 1-5 MB of data (downloading libraries), save a small",
       "text file called apikey.txt (> 2 KB), and automatically install Python",
@@ -482,6 +442,20 @@ except:
                  (appjarInstalled, neededLibraries))
 
 
+try:
+    import requests
+    requestsInstalled = True
+    logger.debug("requests is installed.")
+    logger.debug("requestsInstalled: %s" % requestsInstalled)
+except:
+    requestsInstalled = False
+    neededLibraries = neededLibraries + 1
+    logger.debug("requests is NOT isntalled.")
+    printException_loggerwarn()
+    logger.debug("requestsInstalled: %s ; neededLibraries: %s" %
+                 (requestsInstalled, neededLibraries))
+
+
 print("All done!")
 if neededLibraries == 0:
     logger.debug("All libraries are installed.")
@@ -495,6 +469,8 @@ else:
         print("- Geopy")
     if appjarInstalled == False:
         print("- appJar")
+    if requestsInstalled == False:
+        print("- Requests")
     print("If you want me to, I can automatically install these libraries.",
     "Would you like me to do such? Yes or No.", sep="\n")
     neededLibrariesConfirm = input("Input here: ").lower()
@@ -517,6 +493,9 @@ else:
         if appjarInstalled == False:
             print("Installing appJar...")
             pip.main(['install', 'appJar'])
+        if requestsInstalled == False:
+            print("Installing requests...")
+            pip.main(['install', 'requests'])
 
         logger.info("Running the double check on libraries...")
         print("Sweet! All libraries should be installed.",
@@ -659,7 +638,7 @@ else:
             "Yes or No.", sep="\n")
             appjar_lastresort = input("Input here: ").lower()
             logger.debug("appjar_lastresort: %s" % appjar_lastresort)
-            if geopy_lastresort == "yes":
+            if appjar_lastresort == "yes":
                 try:
                     print("Now executing `sudo -H pip3 install appjar`.",
                           "Please enter the password for sudo when the prompt",
@@ -710,12 +689,78 @@ else:
                 input()
                 sys.exit()
 
+        try:
+            import requests
+            logger.info("requests installed successfully.")
+        except ImportError:
+            logger.warning("Requests was not installed successfully.")
+            print("Hmm...requests didn't install properly.")
+            printException()
+            print("As a last resort, we can use sudo -H to install packages.",
+            "Do you want to use the shell option to install requests?",
+            "Yes or No.", sep="\n")
+            requests_lastresort = input("Input here: ").lower()
+            logger.debug("requests_lastresort: %s" % appjar_lastresort)
+            if requests_lastresort == "yes":
+                try:
+                    print("Now executing `sudo -H pip3 install requests`.",
+                          "Please enter the password for sudo when the prompt",
+                          "comes up. Press Control + C to cancel.",
+                          "Starting in 5 seconds...", sep="\n")
+                    time.sleep(5)
+                    try:
+                        subprocess.call(["sudo -H pip3 install requests"], shell=True)
+                        try:
+                            # Fun fact: This is inside THREE try/except things.
+                            print("Attempting to reimport requests.")
+                            import requests
+                            print("requests is FINALLY installed!")
+                        except:
+                            print("requests still wasn't successfully installed.",
+                                  "Cannot continue without requests.",
+                                  "Try doing a manual install of requests with PIP.", sep="\n")
+                            printException()
+                            print("Press enter to exit.")
+                            input()
+                            sys.exit()
+                    except:
+                        print("When running the command, an error occurred",
+                              "Try doing a manual install of requests with PIP.", sep="\n")
+                        printException()
+                        print("Press enter to exit.")
+                        input()
+                        sys.exit()
+                except KeyboardInterrupt:
+                    print("Command execution aborted.",
+                          "Cannot continue without appJar.",
+                          "Try and do a manual install of requests with PIP",
+                          "in a command line.", sep="\n")
+                    printException()
+                    print("Press enter to exit.")
+                    input()
+                    sys.exit()
+            elif requests_lastresort == "no":
+                print("Not installing appJar with a shell command.",
+                      "Cannot continue without requests.",
+                      "Press enter to exit.", sep="\n")
+                input()
+                sys.exit()
+            else:
+                print("Did not understand your input. Defaulting to not installing",
+                      "via the shell. Cannot continue without requests.",
+                      "Try installing requests with PIP.",
+                      "Press enter to exit.")
+                input()
+                sys.exit()
+
         print("","All libraries are good to go! Let's move on.", sep="\n")
     else:
         logger.warn("Input was not understood. Closing...")
         print("""I'm not sure what you said.
         As a precaution, I'm now closing.""")
         sys.exit()
+
+
 
 # Verbosity is not needed here.
 print("I'm now going to guide you through obtaining an API key.",
@@ -796,7 +841,7 @@ print("Next, click the 'Purchase Key' button, on top of your total (which",
 "processing?', answer No.",
 "Answer yes if you somehow are manufacturing mobile chip processing. I doubt",
 "you are, however.",
-"For the country that you are based in, put your location."
+"For the country that you are based in, put your location.",
 "Before we move on, fill out these forms, and press any key when you are done "
 "and ready.", sep="\n")
 input()
@@ -857,12 +902,18 @@ backup_APIkey = input("Input here: ").lower()
 if backup_APIkey == "yes":
     print("","Where would you want me to backup the key to?",
         "This is a directory. If I wanted my key at directory/backkey.txt,",
-          "You would enter 'directory//'. The default directory is 'backup//'.", sep="\n")
+          "You would enter 'directory'. The default directory is 'backup'.", sep="\n")
     # Doing a .lower() here to prevent case insensitiveness.
-    backup_APIkeydir = input("Input here: ").lower()
+    backup_APIkeydir = input("Input here: ").lower() + "//"
     try:
         folder_argument = backup_APIkeydir + "//backkey.txt"
         print("Creating a backup...")
+        try:
+            os.mkdir(backup_APIkeydir)
+        except (FileExistsError, OSError) as error:
+            logger.debug("Couldn't create directory %s: %s" %
+                         (backup_APIkeydir, error))
+
         open(folder_argument, 'w+').close()
         open(folder_argument, 'a').write(apikey_input)
         open(folder_argument).close()
@@ -882,6 +933,64 @@ if backup_APIkey == "yes":
         config['KEYBACKUP']['savelocation'] = 'backup//'
         logger.debug("Performed 3 ops. Overwrite backup//backkey.txt, write to backkey.txt" +
                      ", and close backkey.txt.")
+
+print("Before we configure PyWeather, I'll now validate your API key.")
+
+# Do an infinite loop of validation of the API key, so the user can reenter the API key
+# if it was wrong.
+
+while True:
+    apitest_URL = 'http://api.wunderground.com/api/' + apikey_input + '/conditions/q/NY/New_York.json'
+    testreader = codecs.getreader("utf-8")
+    logger.debug("apitest_URL: %s ; testreader: %s" %
+                (apitest_URL, testreader))
+
+    try:
+        testJSON = requests.get(apitest_URL)
+        logger.debug("testJSON: %s" % testJSON)
+    except:
+        logger.warn("Couldn't connect to Wunderground's API! No internet?")
+        print("When PyWeather Setup attempted to fetch the .json to validate your API key,",
+            "it ran into an error. If you're on a network with a filter, make sure that",
+            "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+            "connection.", sep="\n")
+        printException()
+        print("Press enter to exit.")
+        input()
+        sys.exit()
+
+    test_json = json.loads(testJSON.text)
+    if jsonVerbosity == True:
+        logger.debug("test_json: %s" % test_json)
+
+    try:
+        test_conditions = str(test_json['current_observation']['temp_f'])
+        logger.debug("test_conditions: %s" % test_conditions)
+        print("Hurray! Your API key is valid and works.")
+        break
+    except:
+        logger.warn("Error! Is the API key invalid?")
+        print("When attempting to validate the API key that you entered/confirmed,",
+              "PyWeather ran into an error. Would you like to reenter your API key to revalidate it?",
+              "Please note, that this error might be caused by WU's API being down, or another cause.",
+              "However, 90% of the time, this is due to a bad API key.",
+              "Yes or No.", sep='\n')
+        revalidateAPIkey = input("Input here: ").lower()
+        if revalidateAPIkey == "yes":
+            print("Enter in your API key below.")
+            apikey_input = input("Input here: ")
+            logger.debug("apikey_input: %s")
+            print("Revalidating your API key...")
+            continue
+        elif revalidateAPIkey == "no":
+            print("Not revalidating your API key. You'll need a valid API key to continue.",
+                  "Press enter to exit.", sep="\n")
+            input()
+            sys.exit()
+        printException()
+        print("Press enter to exit.")
+        input()
+        sys.exit()
 
 print("Let's configure a few options for PyWeather.")
 logger.debug("config: %s" % config)
@@ -1383,43 +1492,7 @@ except:
 print("Hurray! All default libraries are available.",
       "Testing the API key, and it's validity...", sep="\n")
 
-apitest_URL = 'http://api.wunderground.com/api/' + apikey_input + '/conditions/q/NY/New_York.json'
-testreader = codecs.getreader("utf-8")
-logger.debug("apitest_URL: %s ; testreader: %s" %
-             (apitest_URL, testreader))
 
-try:
-    testJSON = requests.get(apitest_URL)
-    logger.debug("testJSON: %s" % testJSON)
-except:
-    logger.warn("Couldn't connect to Wunderground's API! No internet?")
-    print("When PyWeather Setup attempted to fetch the .json to validate your API key,",
-          "it ran into an error. If you're on a network with a filter, make sure that",
-          "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
-          "connection.", sep="\n")
-    printException()
-    print("Press enter to exit.")
-    input()
-    sys.exit()
-
-test_json = json.loads(testJSON.text)
-if jsonVerbosity == True:
-    logger.debug("test_json: %s" % test_json)
-
-try:
-    test_conditions = str(test_json['current_observation']['temp_f'])
-    logger.debug("test_conditions: %s" % test_conditions)
-    print("Hurray! Your API key is valid and works.")
-except:
-    logger.warn("Error! Is the API key invalid?")
-    print("When attempting to validate the API key that you entered/confirmed,",
-          "PyWeather ran into an error. Try rerunning this setup script, and make",
-          "sure that you're entering in your API key correctly. If you're doing this,",
-          "enable setup_tracebacks in the config.ini file, and report the error to GitHub.", sep="\n")
-    printException()
-    print("Press enter to exit.")
-    input()
-    sys.exit()
 
 print("Testing the connection to Google's geocoder...")
 
