@@ -1,8 +1,7 @@
-# PyWeather - version 0.6.0.1 beta
+    # PyWeather - version 0.6.0.1 beta
 # (c) 2017 o355, GNU GPL 3.0.
 
 
-# 1382
 
 
 # ==============
@@ -12,6 +11,8 @@
 # (if you find any of those small bugs)
 # (but don't report the intentionally hidden bugs)
 # (but the intentionally hidden bugs are no more)
+# (Added some in to annoy users... "Cue crazy evil laughing")
+# I'm kidding of course there aren't any...
 
 # <---- Preload starts here ---->
 
@@ -1107,17 +1108,20 @@ while True:
         continue
 
     elif moreoptions == "1":
-        yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
+        yesterday_loops = 0
+        yesterday_totalloops = 0
+        logger.debug("yesterday_loops: %s ; yesterday_totalloops: %s"
+                     % (yesterday_loops, yesterday_totalloops))
+        yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday' + '/q/' + latstr + "," + lonstr + '.json'
         logger.debug("yesterdayurl: %s" % yesterdayurl)
         try:
             yesterdayJSON = requests.get(yesterdayurl)
         except:
-            print("When attempting to fetch the previous day's data, Pyweather",
-                    "ran into an error. If you're on a network with a filter make",
-                    "sure that 'api.wunderground.com' is unblocked. Otherwise, ",
-                    "make sure that you have an internet connection, and that",
-                    "your Power Glove works.",
-                    sep="\n")
+            print("When attempting to fetch yesterday's data, PyWeather ran into",
+                  "an error. If you're on a network with a filter make sure that",
+                  "'api.wunderground.com' is unblocked. Otherwise, make sure that",
+                  "you have an internet connection, and that your Sega Megadrive works.",
+                  sep="\n")
             printException()
             print("Press enter to continue.")
             input()
@@ -1128,84 +1132,86 @@ while True:
         if jsonVerbosity == True:
             logger.debug("yesterday_json: %s" % yesterday_json)
         else:
-            logger.debug("Loaded 1 JSON")
-        print(Fore.RED + "Loading...")
-        print("")
+            logger.debug("Loaded 1 JSON.")
         yesterday_date = yesterday_json['history']['date']['pretty']
-        print("Here is the weather for the previous day " + Fore.CYAN + str(location) +
-                Fore.YELLOW + " on "
-                + Fore.CYAN + yesterday_date)
+        print(Fore.YELLOW + "Here's yesterday's weather for " + Fore.CYAN +
+              str(location) + Fore.YELLOW + " on "
+              + Fore.CYAN + yesterday_date)
         logger.debug("yesterday_date: %s" % yesterday_date)
-
         for data in yesterday_json['history']['dailysummary']:
             print("")
-            yesterdays_avgTempF = str(data['meantempi'])
-            yesterdays_avgTempC = str(data['meantempm'])
-            yesterdays_avgDewPointF = str(data['meandewpti'])
-            yesterdays_avgDewPointC = str(data['meandewptm'])
-            logger.debug("yesterdays_avgTempF: %s ; yesterdays_avgTempC: %s" %
-                        (yesterdays_avgTempF, yesterdays_avgTempC))
-            logger.debug("yesterdays_avgDewPointF: %s ; yesterdays_avgDewPointC: %s" %
-                        (yesterdays_avgDewPointF, yesterdays_avgDewPointC))
-            yesterdays_avgPressureMB = str(data['meanpressurem'])
-            yesterdays_avgPressureInHg = str(data['meanpressurei'])
-            yesterdays_avgWindSpeedMPH = str(data['meanwindspdi'])
-            yesterdays_avgWindSpeedKPH = str(data['meanwindspdm'])
-            logger.debug("yesterdays_avgPressureMB: %s ; yesterdays_avgPressureInHg: %s" %
-                        (yesterdays_avgPressureMB, yesterdays_avgPressureInHg))
-            logger.debug("yesterdays_avgWindSpeedMPH: %s ; yesterdays_avgWindSpeedKPH: %s" %
-                        (yesterdays_avgWindSpeedMPH, yesterdays_avgWindSpeedKPH))
-            yesterdays_avgWindDegrees = str(data['meanwdird'])
-            yesterdays_avgWindDirection = str(data['meanwdire'])
-            yesterdays_avgVisibilityMI = str(data['meanvisi'])
-            yesterdays_avgVisibilityKM = str(data['meanvism'])
-            logger.debug("yesterdays_avgWindDegrees: %s ; yesterdays_avgWindDirection: %s" %
-                        (yesterdays_avgWindDegrees, yesterdays_avgWindDirection))
-            logger.debug("yesterdays_avgVisibilityMI: %s ; yesterdays_avgVisibilityKM: %s" %
-                        (yesterdays_avgVisibilityMI, yesterdays_avgVisibilityKM))
-            yesterdays_maxHumidity = int(data['maxhumidity'])
-            yesterdays_minHumidity = int(data['minhumidity'])
-            logger.debug("yesterdays_maxHumidity: %s ; yesterdays_minHumidity: %s" %
-                        (yesterdays_maxHumidity, yesterdays_minHumidity))
-            yesterdays_sumHumidity = (yesterdays_maxHumidity +
-                                      yesterdays_minHumidity)
-            yesterdays_avgHumidity = (yesterdays_sumHumidity / 2)
-            logger.debug("yesterdays_avgHumidity: %s" % yesterdays_avgHumidity)
-            yesterdays_maxHumidity = str(data['maxhumidity'])
-            yesterdays_minHumidity = str(data['minhumidity'])
-            yesterdays_avgHumidity = str(yesterdays_avgHumidity)
-            logger.info("Converted 3 vars to str")
-            yesterdays_maxTempF = str(data['maxtempi'])
-            yesterdays_maxTempC = str(data['maxtempm'])
-            yesterdays_minTempF = str(data['mintempi'])
-            yesterdays_minTempC = str(data['mintempm'])
-            logger.debug("yesterdays_maxTempF: %s ; yesterdays_maxTempC: %s" %
-                        (yesterdays_maxTempF, yesterdays_maxTempC))
-            logger.debug("yesterdays_minTempF: %s ; yesterdays_minTempC: %s" %
-                        (yesterdays_minTempF, yesterdays_minTempC))
+            # yesterday: yesterday Summary
+            #                         ^
+            yesterday_avgTempF = str(data['meantempi'])
+            yesterday_avgTempC = str(data['meantempm'])
+            yesterday_avgDewpointF = str(data['meandewpti'])
+            yesterday_avgDewpointC = str(data['meandewptm'])
+            logger.debug("yesterday_avgTempF: %s ; yesterday_avgTempC: %s" %
+                         (yesterday_avgTempF, yesterday_avgTempC))
+            logger.debug("yesterday_avgDewpointF: %s ; yesterday_avgDewpointC: %s" %
+                         (yesterday_avgDewpointF, yesterday_avgDewpointC))
+            yesterday_avgPressureMB = str(data['meanpressurem'])
+            yesterday_avgPressureInHg = str(data['meanpressurei'])
+            yesterday_avgWindSpeedMPH = str(data['meanwindspdi'])
+            yesterday_avgWindSpeedKPH = str(data['meanwindspdm'])
+            logger.debug("yesterday_avgPressureMB: %s ; yesterday_avgPressureInHg: %s" %
+                         (yesterday_avgPressureMB, yesterday_avgPressureInHg))
+            logger.debug("yesterday_avgWindSpeedMPH: %s ; yesterday_avgWindSpeedKPH: %s" %
+                         (yesterday_avgWindSpeedMPH, yesterday_avgWindSpeedKPH))
+            yesterday_avgWindDegrees = str(data['meanwdird'])
+            yesterday_avgWindDirection = str(data['meanwdire'])
+            yesterday_avgVisibilityMI = str(data['meanvisi'])
+            yesterday_avgVisibilityKM = str(data['meanvism'])
+            logger.debug("yesterday_avgWindDegrees: %s ; yesterday_avgWindDirection: %s" % 
+                         (yesterday_avgWindDegrees, yesterday_avgWindDirection))
+            logger.debug("yesterday_avgVisibilityMI: %s ; yesterday_avgVisibilityKM: %s" %
+                         (yesterday_avgVisibilityMI, yesterday_avgVisibilityKM))
+            yesterday_maxHumidity = int(data['maxhumidity'])
+            yesterday_minHumidity = int(data['minhumidity'])
+            logger.debug("yesterday_maxHumidity: %s ; yesterday_minHumidity: %s" %
+                         (yesterday_maxHumidity, yesterday_minHumidity))
+            # This is a really nieve way of calculating the average humidity. Sue me.
+            # In reality, WU spits out nothing for average humidity.
+            yesterday_avgHumidity = (yesterday_maxHumidity +
+                                       yesterday_minHumidity)
+            yesterday_avgHumidity = (yesterday_avgHumidity / 2)
+            logger.debug("yesterday_avgHumidity: %s" % yesterday_avgHumidity)
+            yesterday_maxHumidity = str(data['maxhumidity'])
+            yesterday_minHumidity = str(data['minhumidity'])
+            yesterday_avgHumidity = str(yesterday_avgHumidity)
+            logger.info("Converted 3 vars to str.")
+            yesterday_maxTempF = str(data['maxtempi'])
+            yesterday_maxTempC = str(data['maxtempm'])
+            yesterday_minTempF = str(data['mintempi'])
+            yesterday_minTempC = str(data['mintempm'])
+            logger.debug("yesterday_maxTempF: %s ; yesterday_maxTempC: %s" %
+                         (yesterday_maxTempF, yesterday_maxTempC))
+            logger.debug("yesterday_minTempF: %s ; yesterday_minTempC: %s" %
+                         (yesterday_minTempF, yesterday_minTempC))
             yesterday_maxDewpointF = str(data['maxdewpti'])
             yesterday_maxDewpointC = str(data['maxdewptm'])
             yesterday_minDewpointF = str(data['mindewpti'])
             yesterday_minDewpointC = str(data['mindewptm'])
             logger.debug("yesterday_maxDewpointF: %s ; yesterday_maxDewpointC: %s" %
-                        (yesterday_maxDewpointF, yesterday_maxDewpointC))
+                         (yesterday_maxDewpointF, yesterday_maxDewpointC))
             logger.debug("yesterday_minDewpointF: %s ; yesterday_minDewpointC: %s" %
-                        (yesterday_minDewpointF, yesterday_minDewpointC))
+                         (yesterday_minDewpointF, yesterday_minDewpointC))
             yesterday_maxPressureInHg = str(data['maxpressurei'])
             yesterday_maxPressureMB = str(data['maxpressurem'])
             yesterday_minPressureInHg = str(data['minpressurei'])
             yesterday_minPressureMB = str(data['minpressurem'])
             logger.debug("yesterday_maxPressureInHg: %s ; yesterday_maxPressureMB: %s" %
-                        (yesterday_maxPressureInHg, yesterday_maxPressureMB))
+                         (yesterday_maxPressureInHg, yesterday_maxPressureMB))
             logger.debug("yesterday_minPressureInHg: %s ; yesterday_minPressureMB: %s" %
-                        (yesterday_minPressureInHg, yesterday_minPressureMB))
+                         (yesterday_minPressureInHg, yesterday_minPressureMB))
             yesterday_maxWindMPH = str(data['maxwspdi'])
             yesterday_maxWindKPH = str(data['maxwspdm'])
             yesterday_minWindMPH = str(data['minwspdi'])
             yesterday_minWindKPH = str(data['minwspdm'])
             logger.debug("yesterday_maxWindMPH: %s ; yesterday_maxWindKPH: %s" %
-                        (yesterday_maxWindMPH, yesterday_maxWindKPH))    # 2639
-
+                         (yesterday_maxWindMPH, yesterday_maxWindMPH))
+            logger.debug("yesterday_minWindMPH: %s ; yesterday_minWindKPH: %s" %
+                         (yesterday_minWindMPH, yesterday_minWindKPH))
             yesterday_maxVisibilityMI = str(data['maxvisi'])
             yesterday_maxVisibilityKM = str(data['maxvism'])
             yesterday_minVisibilityMI = str(data['minvisi'])
@@ -1219,117 +1225,115 @@ while True:
             logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s" %
                          (yesterday_precipMM, yesterday_precipIN))
             print(Fore.YELLOW + "Here's the summary for the day.")
-            print(Fore.YELLOW + "Minimum Temperature: " + Fore.CYAN + yesterdays_minTempF
-                  + "°F (" + yesterdays_minTempC + "°C)")
-            print(Fore.YELLOW + "Average Temperature: " + Fore.CYAN + yesterdays_avgTempF
-                  + "°F (" + yesterdays_avgTempC + "°C)")
-            print(Fore.YELLOW + "Maxmimum Temperature: " + Fore.CYAN + yesterdays_maxTempF
-                  + "°F (" + yesterdays_maxTempC + "°C)")
+            print(Fore.YELLOW + "Minimum Temperature: " + Fore.CYAN + yesterday_minTempF
+                  + "°F (" + yesterday_minTempC + "°C)")
+            print(Fore.YELLOW + "Average Temperature: " + Fore.CYAN + yesterday_avgTempF
+                  + "°F (" + yesterday_avgTempC + "°C)")
+            print(Fore.YELLOW + "Maxmimum Temperature: " + Fore.CYAN + yesterday_maxTempF
+                  + "°F (" + yesterday_maxTempC + "°C)")
             print(Fore.YELLOW + "Minimum Dew Point: " + Fore.CYAN + yesterday_minDewpointF
                   + "°F (" + yesterday_minDewpointC + "°C)")
-            print(Fore.YELLOW + "Average Dew Point: " + Fore.CYAN + yesterdays_avgDewPointF
-                  + "°F (" + yesterdays_avgDewPointC + "°C)")
+            print(Fore.YELLOW + "Average Dew Point: " + Fore.CYAN + yesterday_avgDewpointF
+                  + "°F (" + yesterday_avgDewpointC + "°C)")
             print(Fore.YELLOW + "Maximum Dew Point: " + Fore.CYAN + yesterday_maxDewpointF
                   + "°F (" + yesterday_maxDewpointC + "°C)")
-            print(Fore.YELLOW + "Minimum Humidity: " + Fore.CYAN + yesterdays_minHumidity
+            print(Fore.YELLOW + "Minimum Humidity: " + Fore.CYAN + yesterday_minHumidity
                   + "%")
-            print(Fore.YELLOW + "Average Humidity: " + Fore.CYAN + yesterdays_avgHumidity
+            print(Fore.YELLOW + "Average Humidity: " + Fore.CYAN + yesterday_avgHumidity
                   + "%")
-            print(Fore.YELLOW + "Maximum Humidity: " + Fore.CYAN + yesterdays_maxHumidity
+            print(Fore.YELLOW + "Maximum Humidity: " + Fore.CYAN + yesterday_maxHumidity
                   + "%")
             print(Fore.YELLOW + "Minimum Wind Speed: " + Fore.CYAN + yesterday_minWindMPH
                   + " mph (" + yesterday_minWindKPH + " kph)")
-            print(Fore.YELLOW + "Average Wind Speed: " + Fore.CYAN + yesterdays_avgWindSpeedMPH
-                  + " mph (" + yesterdays_avgWindSpeedKPH + " kph)")
+            print(Fore.YELLOW + "Average Wind Speed: " + Fore.CYAN + yesterday_avgWindSpeedMPH
+                  + " mph (" + yesterday_avgWindSpeedKPH + " kph)")
             print(Fore.YELLOW + "Maximum Wind Speed: " + Fore.CYAN + yesterday_maxWindMPH
                   + " mph (" + yesterday_maxWindKPH + " kph)")
             print(Fore.YELLOW + "Minimum Visibility: " + Fore.CYAN + yesterday_minVisibilityMI
                   + " mi (" + yesterday_minVisibilityKM + " kph)")
-            print(Fore.YELLOW + "Average Visibility: " + Fore.CYAN + yesterdays_avgVisibilityMI
-                  + " mi (" + yesterdays_avgVisibilityKM + " kph)")
+            print(Fore.YELLOW + "Average Visibility: " + Fore.CYAN + yesterday_avgVisibilityMI
+                  + " mi (" + yesterday_avgVisibilityKM + " kph)")
             print(Fore.YELLOW + "Maximum Visibility: " + Fore.CYAN + yesterday_maxVisibilityMI
                   + " mi (" + yesterday_maxVisibilityKM + " kph)")
             print(Fore.YELLOW + "Minimum Pressure: " + Fore.CYAN + yesterday_minPressureInHg
                   + " inHg (" + yesterday_minPressureMB + " mb)")
-            print(Fore.YELLOW + "Average Pressure: " + Fore.CYAN + yesterdays_avgPressureInHg
-                  + " inHg (" + yesterdays_avgPressureMB + " mb)")
+            print(Fore.YELLOW + "Average Pressure: " + Fore.CYAN + yesterday_avgPressureInHg
+                  + " inHg (" + yesterday_avgPressureMB + " mb)")
             print(Fore.YELLOW + "Maximum Pressure: " + Fore.CYAN + yesterday_maxPressureInHg
                   + " inHg (" + yesterday_maxPressureMB + " mb)")
             print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + yesterday_precipIN
                   + " in (" + yesterday_precipMM + "mb)")
-
             try:
-                print(Fore.RED + "To view hourly data for yesterday's weather, please press enter.")
+                print(Fore.RED + "To view hourly data fo yesterday's weather, please press enter.")
                 print(Fore.RED + "If you want to return to the main menu, press Control + C.")
                 input()
             except KeyboardInterrupt:
-                    continue
-            yesterdayhourlyLoops = 0
-            yesterday_totalloops = 0
-            for data in yesterday_json['history']['observations']:
-                yesterday_tempF = str(data['tempi'])
-                yesterdayhourlyLoops += 1  # Another, more efficient way, of using yesterdayhourlyloops = yesterdayhourlyloops + 1
+                continue
+        # Start the pre-loop to see how many times we're looping.
+        yesterdayhourlyLoops = 0
+        for data in yesterday_json['history']['observations']:
+            yesterday_tempF = str(data['tempi'])
+            yesterdayhourlyLoops = yesterdayhourlyLoops + 1
 
-            for data in yesterday_json['history']['observations']:
-                logger.info("We're on iteration %s %s. User iteration limit: %s."
-                            % (yesterday_totalloops, yesterdayhourlyLoops, user_loopIterations))
-                yesterday_time = data['date']['pretty']
-                yesterday_tempF = str(data['tempi'])
-                yesterday_tempC = str(data['tempm'])
-                yesterday_dewpointF = str(data['dewpti'])
-                logger.debug("yesterday_time: %s ; yesterday_tempF: %s"
-                            % (yesterday_time, yesterday_tempF))
-                logger.debug("yesterday_tempC: %s ; yesterday_dewpointF: %s"
-                            % (yesterday_tempC, yesterday_dewpointF))
-                yesterday_dewpointC = str(data['dewptm'])
-                yesterday_windspeedKPH = str(data['wspdm'])
-                yesterday_windspeedMPH = str(data['wspdi'])
-                try:
-                    yesterday_gustcheck = float(data['wgustm'])
-                except ValueError:
-                    printException_loggerwarn()
-                    yesterday_gustcheck = -9999
-
-                logger.debug("yesterday_dewpointC: %s ; yesterday_windspeedKPH: %s"
-                            % (yesterday_dewpointC, yesterday_windspeedKPH))
-                logger.debug("yesterday_windspeedMPH: %s ; yesterday_gustcheck: %s"
-                            % (yesterday_windspeedMPH, yesterday_gustcheck))
-                if yesterday_gustcheck == -9999:
-                    yesterday_windgustdata = False
-                    logger.warn("Wind gust data is not present! yesterday_windgustdata: %s"
-                                % yesterday_windgustdata)
-                else:
-                    yesterday_windgustdata = True
-                    yesterday_windgustKPH = str(data['wgustm'])
-                    yesterday_windgustMPH = str(data['wgusti'])
-                    logger.info("Wind gust data is present.")
-                    logger.debug("yesterday_windgustKPH: %s ; yesterday_windgustMPH: %s"
-                                % (yesterday_windgustKPH, yesterday_windgustMPH))
-                yesterday_windDegrees = str(data['wdird'])
-                yesterday_windDirection = str(data['wdire'])
-                yesterday_visibilityKM = str(data['vism'])
-                yesterday_visibilityMI = str(data['visi'])
-                logger.debug("yesterday_windDegrees: %s ; yesterday_windDirection: %s"
-                            % (yesterday_windDegrees, yesterday_windDirection))
-                logger.debug("yesterday_visibilityKM: %s ; yesterday_visibilityMI: %s"
-                            % (yesterday_visibilityKM, yesterday_visibilityMI))
-                yesterday_pressureMB = str(data['pressurem'])
-                yesterday_pressureInHg = str(data['pressurei'])
-                yesterday_windchillcheck = float(data['windchillm'])
-                logger.debug("yesterday_pressureMB: %s ; yesterday_pressureInHg: %s"
-                            % (yesterday_pressureMB, yesterday_pressureInHg))
-                logger.debug("yesterday_windchillcheck: %s" % yesterday_windchillcheck)
-                if yesterday_windchillcheck == -999:
-                    yesterday_windchilldata = False
-                    logger.warn("Wind chill data is not present! yesterday_windchilldata: %s"
-                                % yesterday_windchilldata)
-                else:
-                    yesterday_windchilldata = True
-                    yesterday_windchillC = str(data['windchillm'])
-                    yesterday_windchillF = str(data['windchilli'])
-                    logger.info("Wind chill data is present.")
-                    logger.debug("history_windchillC: %s ; yesterday_windchillF: %s"
-                                % (yesterday_windchillC, yesterday_windchillF))
+        for data in yesterday_json['history']['observations']:
+            logger.info("We're on iteration %s/%s. User iteration limit: %s."
+                        % (yesterday_totalloops, yesterdayhourlyLoops, user_loopIterations))
+            yesterday_time = data['date']['pretty']
+            yesterday_tempF = str(data['tempi'])
+            yesterday_tempC = str(data['tempm'])
+            yesterday_dewpointF = str(data['dewpti'])
+            logger.debug("yesterday_time: %s ; yesterday_tempF: %s"
+                         % (yesterday_time, yesterday_tempF))
+            logger.debug("yesterday_tempC: %s ; yesterday_dewpointF: %s"
+                         % (yesterday_tempC, yesterday_dewpointF))
+            yesterday_dewpointC = str(data['dewptm'])
+            yesterday_windspeedKPH = str(data['wspdm'])
+            yesterday_windspeedMPH = str(data['wspdi'])
+            try:
+                yesterday_gustcheck = float(data['wgustm'])
+            except ValueError:
+                printException_loggerwarn()
+                yesterday_gustcheck = -9999
+            logger.debug("yesterday_dewpointC: %s ; yesterday_windspeedKPH: %s"
+                         % (yesterday_dewpointC, yesterday_windspeedKPH))
+            logger.debug("yesterday_windspeedMPH: %s ; yesterday_gustcheck: %s"
+                         % (yesterday_windspeedMPH, yesterday_gustcheck))
+            if yesterday_gustcheck == -9999:
+                yesterday_windgustdata = False
+                logger.warn("Wind gust data is not present! yesterday_windgustdata: %s"
+                            % yesterday_windgustdata)
+            else:
+                yesterday_windgustdata = True
+                yesterday_windgustKPH = str(data['wgustm'])
+                yesterday_windgustMPH = str(data['wgusti'])
+                logger.info("Wind gust data is present.")
+                logger.debug("yesterday_windgustKPH: %s ; yesterday_windgustMPH: %s"
+                             % (yesterday_windgustKPH, yesterday_windgustMPH))
+            yesterday_windDegrees = str(data['wdird'])
+            yesterday_windDirection = data['wdire']
+            yesterday_visibilityKM = str(data['vism'])
+            yesterday_visibilityMI = str(data['visi'])
+            logger.debug("yesterday_windDegrees: %s ; yesterday_windDirection: %s"
+                         % (yesterday_windDegrees, yesterday_windDirection))
+            logger.debug("yesterday_visibilityKM: %s ; yesterday_visibilityMI: %s"
+                         % (yesterday_visibilityKM, yesterday_visibilityMI))
+            yesterday_pressureMB = str(data['pressurem'])
+            yesterday_pressureInHg = str(data['pressurei'])
+            yesterday_windchillcheck = float(data['windchillm'])
+            logger.debug("yesterday_pressureMB: %s ; yesterday_pressureInHg: %s"
+                         % (yesterday_pressureMB, yesterday_pressureInHg))
+            logger.debug("yesterday_windchillcheck: %s" % yesterday_windchillcheck)
+            if yesterday_windchillcheck == -999:
+                yesterday_windchilldata = False
+                logger.warn("Wind chill data is not present! yesterday_windchilldata: %s"
+                            % yesterday_windchilldata)
+            else:
+                yesterday_windchilldata = True
+                yesterday_windchillC = str(data['windchillm'])
+                yesterday_windchillF = str(data['windchilli'])
+                logger.info("Wind chill data is present.")
+                logger.debug("yesterday_windchillC: %s ; yesterday_windchillF: %s"
+                             % (yesterday_windchillC, yesterday_windchillF))
             yesterday_heatindexcheck = float(data['heatindexm'])
             logger.debug("yesterday_heatindexcheck: %s" % yesterday_heatindexcheck)
             if yesterday_heatindexcheck == -9999:
@@ -1342,7 +1346,7 @@ while True:
                 yesterday_heatindexF = str(data['heatindexi'])
                 logger.info("Heat index data is present.")
                 logger.debug("yesterday_heatindexC: %s ; yesterday_heatindexF: %s"
-                            % (yesterday_heatindexC, yesterday_heatindexF))
+                             % (yesterday_heatindexC, yesterday_heatindexF))
             try:
                 yesterday_precipMM = float(data['precipm'])
                 yesterday_precipIN = float(data['precipi'])
@@ -1351,7 +1355,7 @@ while True:
                 yesterday_precipMM = -9999
                 yesterday_precipIN = -9999
             logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s"
-                        % (yesterday_precipMM, yesterday_precipIN))
+                         % (yesterday_precipMM, yesterday_precipIN))
             if yesterday_precipMM == -9999:
                 yesterday_precipMM = "0.0"
                 logger.warn("yesterday_precipMM was -9999. It's now: %s"
@@ -1360,16 +1364,16 @@ while True:
                 yesterday_precipMM = str(yesterday_precipMM)
                 logger.info("yesterday_precipMM converted to str. It's now: %s"
                             % yesterday_precipMM)
-
+            
             if yesterday_precipIN == -9999:
                 yesterday_precipIN = "0.0"
                 logger.warn("yesterday_precipIN was -9999. It's now: %s"
                             % yesterday_precipIN)
             else:
-                yesterday_precipIN = str(yesterday_precipIn)
-                logger.info("yesterday_precipIn converted to str. It's now: %s"
-                            % yesterday_precipIn)
-
+                yesterday_precipIN = str(yesterday_precipIN)
+                logger.info("yesterday_precipIN converted to str. It's now: %s"
+                            % yesterday_precipIN)
+            
             yesterday_condition = str(data['conds'])
             logger.debug("yesterday_condition: %s" % yesterday_condition)
             logger.info("Now printing weather data...")
@@ -1377,11 +1381,11 @@ while True:
             print(Fore.YELLOW + yesterday_time + ":")
             print(Fore.YELLOW + "Conditions: " + Fore.CYAN + yesterday_condition)
             print(Fore.YELLOW + "Temperature: " + Fore.CYAN + yesterday_tempF
-                    + "°F (" + yesterday_tempC + "°C)")
+                  + " °F (" + yesterday_tempC + " °C)")
             print(Fore.YELLOW + "Dew point: " + Fore.CYAN + yesterday_dewpointF
-                    + "°F (" + yesterday_dewpointC + "°C)")
+                  + " °F (" + yesterday_dewpointC + " °C)")
             print(Fore.YELLOW + "Wind speed: " + Fore.CYAN + yesterday_windspeedMPH
-                    + "mph (" + yesterday_windspeedKPH + "kph)")
+                  + " mph (" + yesterday_windspeedKPH + " kph)") 
             if yesterday_windgustdata == True:
                 print(Fore.YELLOW + "Wind gusts: " + Fore.CYAN + yesterday_windgustMPH
                       + " mph (" + yesterday_windgustKPH + " kph)")
@@ -1394,34 +1398,332 @@ while True:
             print(Fore.YELLOW + "Precipitation: " + Fore.CYAN + yesterday_precipIN
                   + " in (" + yesterday_precipMM + " mm)")
 
-# 2990
 
 
-
-
-#        print(Fore.RED + "Loading...")
-#        logger.info("Selected view more currently...")
-#        print("Here's the detailed previous weather for: " + Fore.CYAN + str(location))
-#        print(Fore.YELLOW + "Yesterday's temperature: " + Fore.CYAN + yesterday_tempF
-#                + "°F (" + yesterday_tempC + "°C)")
-#        print(Fore.YELLOW + "Yesterday's dewpoint: " + Fore.CYAN + yesterday_dewPointF
-#                + "°F (" + yesterday_dewPointC + "°C)")
-#        print(Fore.YELLOW + "Yesterday's windspeed: " + Fore.CYAN + yesterday_windkph
-#                    + "kph (" + yesterday_windmph + "mph)")
-#        print(Fore.YELLOW + "Yesterday's wind direction: " +  Fore.CYAN + yesterday_windCompassPoint
-#                    + "° (" + yesterday_windDescription + ")" )
-#        if windChillAvailable == True:
-#            print(Fore.YELLOW + "Yesterday's windchill: " + Fore.CYAN + yesterday_windChillF
-#                    + "°F (" + yesterday_windChillC + "°C)")
-#        elif windChillAvailable == False:
-#            print("Wind chill data unavailable...")
+#    elif moreoptions == "1":
 #
-#        print(Fore.YELLOW + "Yesterday's humidity percentage: " + Fore.CYAN + yesterday_humidity + "%")
-#        print(Fore.YELLOW + "Yesterday's pressure: " + Fore.CYAN + yesterday_pressureHg
-#                + "Hg (" + yesterday_pressuremBar + "mBar)")
-#        print(Fore.YELLOW + "Yesterday's visibility: " + Fore.CYAN + yesterday_visibilityKph
-#                + "kph (" + yesterday_visibilityMph + "mph)")
-# Comment's made for future reference...
+#        yesterday_loops = 0
+#        yesterday_totalloops = 0
+#        logger.debug("yesterday_loops: %s ; yesterday_totalloops: %s"
+#                    % (yesterday_loops, yesterday_totalloops))
+#        yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
+#        logger.debug("yesterdayurl: %s" % yesterdayurl)
+#        try:
+#            yesterdayJSON = requests.get(yesterdayurl)
+#        except:
+#            print("When attempting to fetch the previous day's data, Pyweather",
+#                    "ran into an error. If you're on a network with a filter make",
+#                    "sure that 'api.wunderground.com' is unblocked. Otherwise, ",
+#                    "make sure that you have an internet connection, and that",
+#                    "your Power Glove works.",
+#                    sep="\n")
+#            printException()
+#            print("Press enter to continue.")
+#            input()
+#            continue
+#
+#        logger.debug("yesterdayJSON loaded with: %s" % yesterdayJSON)
+#        yesterday_json = json.loads(yesterdayJSON.text)
+#        if jsonVerbosity == True:
+#            logger.debug("yesterday_json: %s" % yesterday_json)
+#        else:
+#            logger.debug("Loaded 1 JSON")
+#        print(Fore.RED + "Loading...")
+#        print("")
+#        yesterday_date = yesterday_json['history']['date']['pretty']
+#        print("Here is the weather for the previous day " + Fore.CYAN + str(location) +
+#                Fore.YELLOW + " on "
+#                + Fore.CYAN + yesterday_date)
+#        logger.debug("yesterday_date: %s" % yesterday_date)
+#
+#        for data in yesterday_json['history']['dailysummary']:
+#            print("")
+#            yesterdays_avgTempF = str(data['meantempi'])
+#            yesterdays_avgTempC = str(data['meantempm'])
+#            yesterdays_avgDewPointF = str(data['meandewpti'])
+#            yesterdays_avgDewPointC = str(data['meandewptm'])
+#            logger.debug("yesterdays_avgTempF: %s ; yesterdays_avgTempC: %s" %
+#                        (yesterdays_avgTempF, yesterdays_avgTempC))
+#            logger.debug("yesterdays_avgDewPointF: %s ; yesterdays_avgDewPointC: %s" %
+#                        (yesterdays_avgDewPointF, yesterdays_avgDewPointC))
+#            yesterdays_avgPressureMB = str(data['meanpressurem'])
+#            yesterdays_avgPressureInHg = str(data['meanpressurei'])
+#            yesterdays_avgWindSpeedMPH = str(data['meanwindspdi'])
+#            yesterdays_avgWindSpeedKPH = str(data['meanwindspdm'])
+#            logger.debug("yesterdays_avgPressureMB: %s ; yesterdays_avgPressureInHg: %s" %
+#                        (yesterdays_avgPressureMB, yesterdays_avgPressureInHg))
+#            logger.debug("yesterdays_avgWindSpeedMPH: %s ; yesterdays_avgWindSpeedKPH: %s" %
+#                        (yesterdays_avgWindSpeedMPH, yesterdays_avgWindSpeedKPH))
+#            yesterdays_avgWindDegrees = str(data['meanwdird'])
+#            yesterdays_avgWindDirection = str(data['meanwdire'])
+#            yesterdays_avgVisibilityMI = str(data['meanvisi'])
+#            yesterdays_avgVisibilityKM = str(data['meanvism'])
+#            logger.debug("yesterdays_avgWindDegrees: %s ; yesterdays_avgWindDirection: %s" %
+#                        (yesterdays_avgWindDegrees, yesterdays_avgWindDirection))
+#            logger.debug("yesterdays_avgVisibilityMI: %s ; yesterdays_avgVisibilityKM: %s" %
+#                        (yesterdays_avgVisibilityMI, yesterdays_avgVisibilityKM))
+#            yesterdays_maxHumidity = int(data['maxhumidity'])
+#            yesterdays_minHumidity = int(data['minhumidity'])
+#            logger.debug("yesterdays_maxHumidity: %s ; yesterdays_minHumidity: %s" %
+#                        (yesterdays_maxHumidity, yesterdays_minHumidity))
+#            yesterdays_sumHumidity = (yesterdays_maxHumidity +
+#                                      yesterdays_minHumidity)
+#            yesterdays_avgHumidity = (yesterdays_sumHumidity / 2)
+#            logger.debug("yesterdays_avgHumidity: %s" % yesterdays_avgHumidity)
+#            yesterdays_maxHumidity = str(data['maxhumidity'])
+#            yesterdays_minHumidity = str(data['minhumidity'])
+#            yesterdays_avgHumidity = str(yesterdays_avgHumidity)
+#            logger.info("Converted 3 vars to str")
+#            yesterdays_maxTempF = str(data['maxtempi'])
+#            yesterdays_maxTempC = str(data['maxtempm'])
+#            yesterdays_minTempF = str(data['mintempi'])
+#            yesterdays_minTempC = str(data['mintempm'])
+#            logger.debug("yesterdays_maxTempF: %s ; yesterdays_maxTempC: %s" %
+#                        (yesterdays_maxTempF, yesterdays_maxTempC))
+#            logger.debug("yesterdays_minTempF: %s ; yesterdays_minTempC: %s" %
+#                        (yesterdays_minTempF, yesterdays_minTempC))
+#            yesterday_maxDewpointF = str(data['maxdewpti'])
+#            yesterday_maxDewpointC = str(data['maxdewptm'])
+#            yesterday_minDewpointF = str(data['mindewpti'])
+#            yesterday_minDewpointC = str(data['mindewptm'])
+#            logger.debug("yesterday_maxDewpointF: %s ; yesterday_maxDewpointC: %s" %
+#                        (yesterday_maxDewpointF, yesterday_maxDewpointC))
+#            logger.debug("yesterday_minDewpointF: %s ; yesterday_minDewpointC: %s" %
+#                        (yesterday_minDewpointF, yesterday_minDewpointC))
+#            yesterday_maxPressureInHg = str(data['maxpressurei'])
+#            yesterday_maxPressureMB = str(data['maxpressurem'])
+#            yesterday_minPressureInHg = str(data['minpressurei'])
+#            yesterday_minPressureMB = str(data['minpressurem'])
+#            logger.debug("yesterday_maxPressureInHg: %s ; yesterday_maxPressureMB: %s" %
+#                        (yesterday_maxPressureInHg, yesterday_maxPressureMB))
+#            logger.debug("yesterday_minPressureInHg: %s ; yesterday_minPressureMB: %s" %
+#                        (yesterday_minPressureInHg, yesterday_minPressureMB))
+#            yesterday_maxWindMPH = str(data['maxwspdi'])
+#            yesterday_maxWindKPH = str(data['maxwspdm'])
+#            yesterday_minWindMPH = str(data['minwspdi'])
+#            yesterday_minWindKPH = str(data['minwspdm'])
+#            logger.debug("yesterday_maxWindMPH: %s ; yesterday_maxWindKPH: %s" %
+#                        (yesterday_maxWindMPH, yesterday_maxWindKPH))    # 2639
+#
+#            yesterday_maxVisibilityMI = str(data['maxvisi'])
+#            yesterday_maxVisibilityKM = str(data['maxvism'])
+#            yesterday_minVisibilityMI = str(data['minvisi'])
+#            yesterday_minVisibilityKM = str(data['minvism'])
+#            logger.debug("yesterday_maxVisibilityMI: %s ; yesterday_maxVisibilityKM: %s" %
+#                         (yesterday_maxVisibilityMI, yesterday_maxVisibilityKM))
+#            logger.debug("yesterday_minVisibilityMI: %s ; yesterday_minVisibilityKM: %s" %
+#                         (yesterday_minVisibilityMI, yesterday_minVisibilityKM))
+#            yesterday_precipMM = str(data['precipm'])
+#            yesterday_precipIN = str(data['precipi'])
+#            logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s" %
+#                         (yesterday_precipMM, yesterday_precipIN))
+#            print(Fore.YELLOW + "Here's the summary for the day.")
+#            print(Fore.YELLOW + "Minimum Temperature: " + Fore.CYAN + yesterdays_minTempF
+#                  + "°F (" + yesterdays_minTempC + "°C)")
+#            print(Fore.YELLOW + "Average Temperature: " + Fore.CYAN + yesterdays_avgTempF
+#                  + "°F (" + yesterdays_avgTempC + "°C)")
+#            print(Fore.YELLOW + "Maxmimum Temperature: " + Fore.CYAN + yesterdays_maxTempF
+#                  + "°F (" + yesterdays_maxTempC + "°C)")
+#            print(Fore.YELLOW + "Minimum Dew Point: " + Fore.CYAN + yesterday_minDewpointF
+#                  + "°F (" + yesterday_minDewpointC + "°C)")
+#            print(Fore.YELLOW + "Average Dew Point: " + Fore.CYAN + yesterdays_avgDewPointF
+#                  + "°F (" + yesterdays_avgDewPointC + "°C)")
+#            print(Fore.YELLOW + "Maximum Dew Point: " + Fore.CYAN + yesterday_maxDewpointF
+#                  + "°F (" + yesterday_maxDewpointC + "°C)")
+#            print(Fore.YELLOW + "Minimum Humidity: " + Fore.CYAN + yesterdays_minHumidity
+#                  + "%")
+#            print(Fore.YELLOW + "Average Humidity: " + Fore.CYAN + yesterdays_avgHumidity
+#                  + "%")
+#            print(Fore.YELLOW + "Maximum Humidity: " + Fore.CYAN + yesterdays_maxHumidity
+#                  + "%")
+#            print(Fore.YELLOW + "Minimum Wind Speed: " + Fore.CYAN + yesterday_minWindMPH
+#                  + " mph (" + yesterday_minWindKPH + " kph)")
+#            print(Fore.YELLOW + "Average Wind Speed: " + Fore.CYAN + yesterdays_avgWindSpeedMPH
+#                  + " mph (" + yesterdays_avgWindSpeedKPH + " kph)")
+#            print(Fore.YELLOW + "Maximum Wind Speed: " + Fore.CYAN + yesterday_maxWindMPH
+#                  + " mph (" + yesterday_maxWindKPH + " kph)")
+#            print(Fore.YELLOW + "Minimum Visibility: " + Fore.CYAN + yesterday_minVisibilityMI
+#                  + " mi (" + yesterday_minVisibilityKM + " kph)")
+#            print(Fore.YELLOW + "Average Visibility: " + Fore.CYAN + yesterdays_avgVisibilityMI
+#                  + " mi (" + yesterdays_avgVisibilityKM + " kph)")
+#            print(Fore.YELLOW + "Maximum Visibility: " + Fore.CYAN + yesterday_maxVisibilityMI
+#                  + " mi (" + yesterday_maxVisibilityKM + " kph)")
+#            print(Fore.YELLOW + "Minimum Pressure: " + Fore.CYAN + yesterday_minPressureInHg
+#                  + " inHg (" + yesterday_minPressureMB + " mb)")
+#            print(Fore.YELLOW + "Average Pressure: " + Fore.CYAN + yesterdays_avgPressureInHg
+#                  + " inHg (" + yesterdays_avgPressureMB + " mb)")
+#            print(Fore.YELLOW + "Maximum Pressure: " + Fore.CYAN + yesterday_maxPressureInHg
+#                  + " inHg (" + yesterday_maxPressureMB + " mb)")
+#            print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + yesterday_precipIN
+#                  + " in (" + yesterday_precipMM + "mb)")
+#
+#            try:
+#                print(Fore.RED + "To view hourly data for yesterday's weather, please press enter.")
+#                print(Fore.RED + "If you want to return to the main menu, press Control + C.")
+#                input()
+#            except KeyboardInterrupt:
+#                    continue
+#            yesterdayhourlyLoops = 0
+#            for data in yesterday_json['history']['observations']:
+#                yesterday_tempF = str(data['tempi'])
+#                yesterdayhourlyLoops = yesterdayhourlyLoops + 1
+#
+#            for data in yesterday_json['history']['observations']:
+#                logger.info("We're on iteration %s %s. User iteration limit: %s."
+#                            % (yesterday_totalloops, yesterdayhourlyLoops, user_loopIterations))
+#                yesterday_time = data['date']['pretty']
+#                yesterday_tempF = str(data['tempi'])
+#                yesterday_tempC = str(data['tempm'])
+#                yesterday_dewpointF = str(data['dewpti'])
+#                logger.debug("yesterday_time: %s ; yesterday_tempF: %s"
+#                            % (yesterday_time, yesterday_tempF))
+#                logger.debug("yesterday_tempC: %s ; yesterday_dewpointF: %s"
+#                            % (yesterday_tempC, yesterday_dewpointF))
+#                yesterday_dewpointC = str(data['dewptm'])
+#                yesterday_windspeedKPH = str(data['wspdm'])
+#                yesterday_windspeedMPH = str(data['wspdi'])
+#                try:
+#                    yesterday_gustcheck = float(data['wgustm'])
+#                except ValueError:
+#                    printException_loggerwarn()
+#                    yesterday_gustcheck = -9999
+#
+#                logger.debug("yesterday_dewpointC: %s ; yesterday_windspeedKPH: %s"
+#                            % (yesterday_dewpointC, yesterday_windspeedKPH))
+#                logger.debug("yesterday_windspeedMPH: %s ; yesterday_gustcheck: %s"
+#                            % (yesterday_windspeedMPH, yesterday_gustcheck))
+#                if yesterday_gustcheck == -9999:
+#                    yesterday_windgustdata = False
+#                    logger.warn("Wind gust data is not present! yesterday_windgustdata: %s"
+#                                % yesterday_windgustdata)
+#                else:
+#                    yesterday_windgustdata = True
+#                    yesterday_windgustKPH = str(data['wgustm'])
+#                    yesterday_windgustMPH = str(data['wgusti'])
+#                    logger.info("Wind gust data is present.")
+#                    logger.debug("yesterday_windgustKPH: %s ; yesterday_windgustMPH: %s"
+#                                % (yesterday_windgustKPH, yesterday_windgustMPH))
+#                yesterday_windDegrees = str(data['wdird'])
+#                yesterday_windDirection = str(data['wdire'])
+#                yesterday_visibilityKM = str(data['vism'])
+#                yesterday_visibilityMI = str(data['visi'])
+#                logger.debug("yesterday_windDegrees: %s ; yesterday_windDirection: %s"
+#                            % (yesterday_windDegrees, yesterday_windDirection))
+#                logger.debug("yesterday_visibilityKM: %s ; yesterday_visibilityMI: %s"
+#                            % (yesterday_visibilityKM, yesterday_visibilityMI))
+#                yesterday_pressureMB = str(data['pressurem'])
+#                yesterday_pressureInHg = str(data['pressurei'])
+#                yesterday_windchillcheck = float(data['windchillm'])
+#                logger.debug("yesterday_pressureMB: %s ; yesterday_pressureInHg: %s"
+#                            % (yesterday_pressureMB, yesterday_pressureInHg))
+#                logger.debug("yesterday_windchillcheck: %s" % yesterday_windchillcheck)
+#                if yesterday_windchillcheck == -999:
+#                    yesterday_windchilldata = False
+#                    logger.warn("Wind chill data is not present! yesterday_windchilldata: %s"
+#                                % yesterday_windchilldata)
+#                else:
+#                    yesterday_windchilldata = True
+#                    yesterday_windchillC = str(data['windchillm'])
+#                    yesterday_windchillF = str(data['windchilli'])
+#                    logger.info("Wind chill data is present.")
+#                    logger.debug("history_windchillC: %s ; yesterday_windchillF: %s"
+#                                % (yesterday_windchillC, yesterday_windchillF))
+#            yesterday_heatindexcheck = float(data['heatindexm'])
+#            logger.debug("yesterday_heatindexcheck: %s" % yesterday_heatindexcheck)
+#            if yesterday_heatindexcheck == -9999:
+#                yesterday_heatindexdata = False
+#                logger.warn("Heat index data is not present! yesterday_heatindexdata: %s"
+#                            % yesterday_heatindexdata)
+#            else:
+#                yesterday_heatindexdata = True
+#                yesterday_heatindexC = str(data['heatindexm'])
+#                yesterday_heatindexF = str(data['heatindexi'])
+#                logger.info("Heat index data is present.")
+#                logger.debug("yesterday_heatindexC: %s ; yesterday_heatindexF: %s"
+#                            % (yesterday_heatindexC, yesterday_heatindexF))
+#            try:
+#                yesterday_precipMM = float(data['precipm'])
+#                yesterday_precipIN = float(data['precipi'])
+#            except ValueError:
+#                printException_loggerwarn()
+#                yesterday_precipMM = -9999
+#                yesterday_precipIN = -9999
+#            logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s"
+#                        % (yesterday_precipMM, yesterday_precipIN))
+#            if yesterday_precipMM == -9999:
+#                yesterday_precipMM = "0.0"
+#                logger.warn("yesterday_precipMM was -9999. It's now: %s"
+#                            % yesterday_precipMM)
+#            else:
+#                yesterday_precipMM = str(yesterday_precipMM)
+#                logger.info("yesterday_precipMM converted to str. It's now: %s"
+#                            % yesterday_precipMM)
+#
+#            if yesterday_precipIN == -9999:
+#                yesterday_precipIN = "0.0"
+#                logger.warn("yesterday_precipIN was -9999. It's now: %s"
+#                            % yesterday_precipIN)
+#            else:
+#                yesterday_precipIN = str(yesterday_precipIn)
+#                logger.info("yesterday_precipIn converted to str. It's now: %s"
+#                            % yesterday_precipIn)
+#
+#            yesterday_condition = str(data['conds'])
+#            logger.debug("yesterday_condition: %s" % yesterday_condition)
+#            logger.info("Now printing weather data...")
+#            print("")
+#            print(Fore.YELLOW + yesterday_time + ":")
+#            print(Fore.YELLOW + "Conditions: " + Fore.CYAN + yesterday_condition)
+#            print(Fore.YELLOW + "Temperature: " + Fore.CYAN + yesterday_tempF
+#                    + "°F (" + yesterday_tempC + "°C)")
+#            print(Fore.YELLOW + "Dew point: " + Fore.CYAN + yesterday_dewpointF
+#                    + "°F (" + yesterday_dewpointC + "°C)")
+#            print(Fore.YELLOW + "Wind speed: " + Fore.CYAN + yesterday_windspeedMPH
+#                    + "mph (" + yesterday_windspeedKPH + "kph)")
+#            if yesterday_windgustdata == True:
+#                print(Fore.YELLOW + "Wind gusts: " + Fore.CYAN + yesterday_windgustMPH
+#                      + " mph (" + yesterday_windgustKPH + " kph)")
+#            if yesterday_windchilldata == True:
+#                print(Fore.YELLOW + "Wind chill: " + Fore.CYAN + yesterday_windchillF
+#                      + " °F (" + yesterday_windchillC + " kph)")
+#            if yesterday_heatindexdata == True:
+#                print(Fore.YELLOW + "Heat index: " + Fore.CYAN + yesterday_heatindexF
+#                      + " °F (" + yesterday_heatindexC + " °C)")
+#            print(Fore.YELLOW + "Precipitation: " + Fore.CYAN + yesterday_precipIN
+#                  + " in (" + yesterday_precipMM + " mm)")
+#
+            yesterday_loops = yesterday_loops + 1
+            yesterday_totalloops = yesterday_totalloops + 1
+            logger.debug("yesterday_loops: %s ; yesterday_totalloops: %s"
+                         % (yesterday_loops, yesterday_totalloops))
+                         
+            if yesterday_totalloops == yesterdayhourlyLoops:
+                logger.debug("Iterations now %s. Total iterations %s. Breaking..."
+                             % (yesterday_totalloops, yesterdayhourlyLoops))
+                             
+            if user_showCompletedIterations == True:
+                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s"
+                      % (yesterday_totalloops, yesterdayhourlyLoops))
+                print(Fore.RESET)
+                
+            if user_enterToContinue == True:
+                if yesterday_loops == user_loopIterations:
+                    logger.info("Asking user to continue.")
+                    try:
+                        print(Fore.RED + "Press enter to view the next", user_loopIterations
+                              , "iterations of yesterday weather information.")
+                        print("Otherwise, press Control + C to get back to the main menu.")
+                        input()
+                        yesterday_loops = 0
+                        logger.info("Printing more weather data. yesterday_loops is now: %s"
+                                    % yesterday_loops)
+                    except KeyboardInterrupt:
+                        logger.info("Breaking to main menu, user issued KeyboardInterrupt")
+                        break        
+
+
+
+
 
     elif moreoptions == "2":
         # Or condition will sort out 3 potential conditions.
@@ -2894,7 +3196,7 @@ while True:
         for data in historical_json['history']['observations']:
             historical_tempF = str(data['tempi'])
             historicalhourlyLoops = historicalhourlyLoops + 1
-            
+
         for data in historical_json['history']['observations']:
             logger.info("We're on iteration %s/%s. User iteration limit: %s."
                         % (historical_totalloops, historicalhourlyLoops, user_loopIterations))
@@ -3017,6 +3319,7 @@ while True:
                       + " °F (" + historical_heatindexC + " °C)")
             print(Fore.YELLOW + "Precipitation: " + Fore.CYAN + historical_precipIN
                   + " in (" + historical_precipMM + " mm)")
+
             historical_loops = historical_loops + 1
             historical_totalloops = historical_totalloops + 1
             logger.debug("historical_loops: %s ; historical_totalloops: %s"
