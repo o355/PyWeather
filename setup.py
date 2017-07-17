@@ -112,6 +112,7 @@ except:
 
         config['SUMMARY']['sundata_summary'] = 'False'
         config['SUMMARY']['almanac_summary'] = 'False'
+        config['SUMMARY']['showalertsonsummary'] = 'True'
         config['VERBOSITY']['verbosity'] = 'False'
         config['VERBOSITY']['json_verbosity'] = 'False'
         config['VERBOSITY']['setup_verbosity'] = 'False'
@@ -128,6 +129,8 @@ except:
         config['UI']['detailedinfoloops'] = '6'
         config['UI']['forecast_detailedinfoloops'] = '5'
         config['UI']['show_completediterations'] = 'False'
+        config['UI']['alerts_usiterations'] = '1'
+        config['UI']['alerts_euiterations'] = '2'
         config['HOURLY']['10dayfetch_atboot'] = 'False'
         config['UPDATER']['autocheckforupdates'] = 'False'
         config['UPDATER']['show_updaterreleasetag'] = 'False'
@@ -184,19 +187,68 @@ except:
     else:
         print("Couldn't understand your input. By default, I'm going to provision",
               "your config. Beginning now...", sep="\n")
-        config.add_section('SUMMARY')
-        config.add_section('VERBOSITY')
-        config.add_section('TRACEBACK')
-        config.add_section('UI')
-        config.add_section('HOURLY')
-        config.add_section('UPDATER')
-        config.add_section('KEYBACKUP')
-        config.add_section('VERSIONS')
-        config.add_section('PYWEATHER BOOT')
-        config.add_section('USER')
-        config.add_section('CACHE')
+        try:
+            config.add_section('SUMMARY')
+        except configparser.DuplicateSectionError:
+            print("Cache section could not be added.")
+
+        try:
+            config.add_section('VERBOSITY')
+        except configparser.DuplicateSectionError:
+            print("Verbosity section could not be added.")
+
+        try:
+            config.add_section('TRACEBACK')
+        except configparser.DuplicateSectionError:
+            print("Traceback section could not be added.")
+
+        try:
+            config.add_section('UI')
+        except configparser.DuplicateSectionError:
+            print("UI section could not be added.")
+
+        try:
+            config.add_section('HOURLY')
+        except configparser.DuplicateSectionError:
+            print("Hourly section could not be added.")
+
+        try:
+            config.add_section('UPDATER')
+        except configparser.DuplicateSectionError:
+            print("Updater section could not be added.")
+
+        try:
+            config.add_section('KEYBACKUP')
+        except configparser.DuplicateSectionError:
+            print("Key Backup section could not be added.")
+
+        try:
+            config.add_section('VERSIONS')
+        except configparser.DuplicateSectionError:
+            print("Versions section could not be added.")
+
+        try:
+            config.add_section('PYWEATHER BOOT')
+        except configparser.DuplicateSectionError:
+            print("PyWeather Boot section could not be added.")
+
+        try:
+            config.add_section('USER')
+        except configparser.DuplicateSectionError:
+            print("User section could not be added.")
+        try:
+            config.add_section('CACHE')
+        except configparser.DuplicateSectionError:
+            print("Cache section could not be added.")
+
+        try:
+            config.add_section('RADAR GUI')
+        except configparser.DuplicateSectionError:
+            print("Radar GUI section could not be added.")
+
         config['SUMMARY']['sundata_summary'] = 'False'
         config['SUMMARY']['almanac_summary'] = 'False'
+        config['SUMMARY']['showalertsonsummary'] = 'True'
         config['VERBOSITY']['verbosity'] = 'False'
         config['VERBOSITY']['json_verbosity'] = 'False'
         config['VERBOSITY']['setup_verbosity'] = 'False'
@@ -213,6 +265,8 @@ except:
         config['UI']['detailedinfoloops'] = '6'
         config['UI']['forecast_detailedinfoloops'] = '5'
         config['UI']['show_completediterations'] = 'False'
+        config['UI']['alerts_usiterations'] = '1'
+        config['UI']['alerts_euiterations'] = '2'
         config['HOURLY']['10dayfetch_atboot'] = 'False'
         config['UPDATER']['autocheckforupdates'] = 'False'
         config['UPDATER']['show_updaterreleasetag'] = 'False'
@@ -230,6 +284,8 @@ except:
         config['CACHE']['forecast_cachedtime'] = '60'
         config['CACHE']['almanac_cachedtime'] = '240'
         config['CACHE']['sundata_cachedtime'] = '480'
+        config['RADAR GUI']['radar_imagesize'] = 'normal'
+        config['RADAR GUI']['bypassconfirmation'] = 'False'
         try:
             with open('storage//config.ini', 'w') as configfile:
                 config.write(configfile)
@@ -284,8 +340,8 @@ def printException():
 
 def printException_loggerwarn():
     if verbosity == True:
-        logger.warn("Oh snap! We ran into a non-critical error. Here's the traceback.")
-        logger.warn(traceback.print_exc())
+        logger.warning("Oh snap! We ran into a non-critical error. Here's the traceback.")
+        traceback.print_exc()
 
 
 logger = logging.getLogger(name='pyweather_setup_0.6.1beta')
@@ -912,8 +968,12 @@ if backup_APIkey == "yes":
                  (backup_APIkeydirectory, backup_APIkeydirectory2))
     logger.debug("folder_argument: %s" % folder_argument)
     print("Creating a backup...")
-    os.mkdir(backup_APIkeydirectory2)
-    open(folder_argument, 'w+').close()
+    try:
+        os.mkdir(backup_APIkeydirectory2)
+    except:
+        printException_loggerwarn()
+        print("Couldn't make the directory, does it exist?")
+    open(folder_argument, 'w').close()
     open(folder_argument, 'a').write(apikey_input)
     open(folder_argument).close()
     config['KEYBACKUP']['savedirectory'] = backup_APIkeydirectory2
@@ -1029,11 +1089,11 @@ print("", "(3/24)", "On the summary screen, would you like to show alerts data?"
 alertsdata_Summary = input("Input here: ").lower()
 logger.debug("alertsdata_Summary: %s" % alertsdata_Summary)
 if alertsdata_Summary == "yes":
-    config['SUMMARY']['showAlertsOnSummary'] = 'True'
+    config['SUMMARY']['showalertsonsummary'] = 'True'
     print("Changes saved.")
     logger.debug("Alerts on the summary is now ENABLED.")
 elif alertsdata_Summary == "no":
-    config['SUMMARY']['showAlertsOnSummary'] = 'False'
+    config['SUMMARY']['showalertsonsummary'] = 'False'
     print("Changes saved.")
     logger.debug("Alerts on the summary is now DISABLED.")
 else:

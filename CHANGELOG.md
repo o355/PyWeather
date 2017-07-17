@@ -1,13 +1,13 @@
 # PyWeather changelog
 
-Quick note: I generally use the changelog (thanks Eclipse for supporting MD files!) as a to-do list, and to see what I've done. I also type up what I'm probably going to do in future versions. So, that's why you'll see stuff like "- Done, and tested!", or "Should by finished by (date)".
+The changelog will now NOT BE used for tracking what needs to get done, and not done. GitHub issues will now be used.
 
 ## version 0.6.3 beta - Should be released late August:
 * Adds rounding in PyWeather (fixing a major bug with Termux)
 
 ## version 0.6.2 beta - Should be released 8/3/2017
 * Adds the yesterday's weather feature. - ModoUnreal is coding this in, ETA is TBD.
-* Adds the ability to read PyWeather's development news posts in PyWeather - Should be finished by 7/17.
+* Adds the ability to read PyWeather's development news posts in PyWeather - "Scrapped"
 * Adds the option to turn on a custom user agent. Cool, right? - Should be finished by 7/19
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Should be finished by 7/19
 * Adds caching to the radar - Should be finished by 7/27
@@ -15,6 +15,7 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
     * Radar placeholder gifs going into a /radar folder
     * Getting a separate /config folder for the uh, config file.
     * Docs folder for uh, documents.
+* Adds the option to force a scheme on Geopy (HTTP or HTTPS)
 
 ## version 0.6.1 beta - Should be released on 7/21/2017
 **NEW FEATURES/REMOVALS**
@@ -24,13 +25,12 @@ Quick note: I generally use the changelog (thanks Eclipse for supporting MD file
 * Loading times have been increased by about 0.2 seconds, due to the removal of the unnecessary second geocoder.
 * Added the last-resort option when installing Colorama in the setup file.
 * Adds an experimental radar to PyWeather.
-* Adds error checking for imports on all scripts (non-standard libraries) - 0% done
+* Adds error checking for imports on all scripts (non-standard libraries) - 20% done
 * Adds a progress indicator during setup configuration.
 * Adds requests as a necessary library to setup
 * PyWeather Setup now validates your API key after you input it (and after the backup)
-* The PyWeather updater will now try each command. This helps in determining if a user can still update PyWeather using the .zip method. - 0% done, Should be finished by 7/5
-* Updates config_README for the latest options, and detailed "when did each option appear" analysis (using previous releases.) - 0% done, Should be finished by 7/9
-* PyWeather Setup will now update PIP packages with user approval. - 0% done, should be finished by 7/10 
+* PyWeather Setup will now update PIP packages with user approval. - 0% done, should be finished by 7/10
+* Geopy's scheme was changed to HTTP due to issues on OS X.
 
 **BUG FIXES**
 * Fixed a major bug where the PyWeather Git updater wouldn't, uh, fully update.

@@ -1,13 +1,10 @@
 # PyWeather - version 0.6.1 beta
 # (c) 2017 o355, GNU GPL 3.0.
-
+#
 # ==============
-# This is beta code. It's not pretty, and I'm not using proper naving conventions.
-# That will get cleaned up in later betas. I think it will. I hope it will.
-# Also, this is beta code. Bugs are bound to occur. Report issues on GitHub.
-# (if you find any of those small bugs)
-# (but don't report the intentionally hidden bugs)
-# (but the intentionally hidden bugs are no more)
+# This is beta code. It's not pretty, and I'm not following PEP 8
+# guidelines. There will be bugs in this code. I will be attempting to
+# follow proper guidelines later down the road.
 
 # <---- Preload starts here ---->
 
@@ -16,16 +13,48 @@ import configparser
 import subprocess
 import traceback
 import sys
-import requests
+try:
+    import requests
+except ImportEror:
+    print("When attempting to import the library requests, we ran into an import error.",
+          "Please make sure that requests is installed.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
 import json
 import time
 import shutil
-from colorama import init, Fore, Style
+try:
+    from colorama import init, Fore, Style
+except ImportError:
+    print("When attempting to import the library colorama, we ran into an import error.",
+          "Please make sure that colorama is installed.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
 import codecs
 import os
 from random import randint
-from geopy import GoogleV3
-geolocator = GoogleV3()
+try:
+    from geopy import GoogleV3
+except:
+    print("When attempting to import the library geopy, we ran into an import error.",
+          "Please make sure that geopy is installed.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+
+try:
+    from appJar import gui
+except:
+    print("When attempting to import the library appJar, we ran into an import error.",
+          "Please make sure that appJar is installed.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+
+# I had issues on OS X 10.12.5 with SSL certs, so HTTP is used instead.
+geolocator = GoogleV3(scheme='http')
 
 # Try loading the versioninfo.txt file. If it isn't around, create the file with
 # the present version info.
@@ -186,6 +215,8 @@ logger.debug("cache_almanactime: %s ; cache_sundatatime: %s" %
              (cache_almanactime, cache_sundatatime))
 logger.debug("user_alertsUSiterations: %s ; user_alertsEUiterations: %s" %
              (user_alertsUSiterations, user_alertsEUiterations))
+logger.debug("user_radarImagesize: %s ; radar_bypassconfirmation: %s" %
+             (user_radarImageSize, radar_bypassconfirmation))
 
 logger.info("Setting gif x and y resolution for radar...")
 # Set the size of the radar window.
@@ -220,8 +251,8 @@ def printException_loggerwarn():
     # Same idea. If the print_exc was in just logger.warn, it'd print even
     # if verbosity was disabled.
     if verbosity == True:
-        logger.warn("Snap! We hit a non-critical error. Here's the traceback.")
-        logger.warn(traceback.print_exc())
+        logger.warning("Snap! We hit a non-critical error. Here's the traceback.")
+        traceback.print_exc()
         
 def radar_clearImages():
     logger.debug("clearing temporary images...")
@@ -255,22 +286,12 @@ def radar_clearImages():
         os.remove("temp//r100.gif")
     except:
         printException_loggerwarn()
-        
-# down the road
-def logvars(var1, var2, var3=None, var4=None):
-    if var3 and var4 is None:
-        varcount = 2
-    elif var3 is not None and var4 is None:
-        varcount = 3
-    elif var3 is not None and var4 is not None:
-        varcount = 4
+
 
         
 logger.info("Defining requests classes...")
 
-# It'll eventually come as an optional "show your support for PyWeather with
-# a custom user agent" sorta thing later.
-urlheader = {'user-agent': 'pyweather-0.6beta/apifetcher'}
+urlheader = {'user-agent': 'pyweather-0.6.1beta/apifetcher'}
 
 # Declare historical cache dictionary
 historical_cache = {}
@@ -329,8 +350,8 @@ logger.debug("apikey = %s" % apikey)
 
 # Version info gets defined here.
 
-buildnumber = 60.1
-buildversion = '0.6.0.1 beta'
+buildnumber = 61
+buildversion = '0.6.1 beta'
 
 # Refresh flag variables go here.
 refresh_currentflagged = False
@@ -352,12 +373,9 @@ logger.debug("refresh_sundataflagged: %s" % refresh_sundataflagged)
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")
     try:
-        # Request the version JSON.
-        versioncheck = requests.get("https://raw.githubusercontent.c"
-                                              + "om/o355/pyweather/master/upda"
-                                              + "ter/versioncheck.json")
+        versioncheck = requests.get("https://raw.githubusercontent.com/o355/"
+                                + "pyweater/master/updater/versioncheck.json")
     except:
-        # Error? Whoops.
         print("When attempting to check for updates, PyWeather couldn't",
               "fetch the .json for parsing. If you're on a network with a",
               "filter, try asking your IT admin to unblock:",
@@ -392,8 +410,8 @@ if checkforUpdates == True:
 
 # Define about variables here.
 logger.info("Defining about variables...")
-about_buildnumber = "60.1"
-about_version = "0.6.0.1 beta"
+about_buildnumber = "61"
+about_version = "0.6.1 beta"
 about_releasedate = "May 29, 2017"
 about_maindevelopers = "o355"
 logger.debug("about_buildnumber: %s ; about_version: %s" %
@@ -1016,11 +1034,11 @@ while True:
     print(Fore.YELLOW + "- View the almanac for today - Enter " + Fore.CYAN + "5")
     print(Fore.YELLOW + "- View historical weather data - Enter " + Fore.CYAN + "6")
     print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Enter " + Fore.CYAN + "7")
-    print(Fore.YELLOW + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + "8")
-    print(Fore.YELLOW + "- Check for PyWeather updates - Enter " + Fore.CYAN + "9")
-    print(Fore.YELLOW + "- View the about page for PyWeather - Enter " + Fore.CYAN + "10")
-    print(Fore.YELLOW + "- Close PyWeather - Enter " + Fore.CYAN + "11" + Fore.YELLOW)
-    print(Fore.YELLOW + "- Restart PyWeather (in beta) - Enter " + Fore.CYAN + "12" + Fore.YELLOW)
+    print(Fore.YELLOW + "- Launch PyWeather's experimental radar - Enter " + Fore.CYAN + "8")
+    print(Fore.YELLOW + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + "9")
+    print(Fore.YELLOW + "- Check for PyWeather updates - Enter " + Fore.CYAN + "10")
+    print(Fore.YELLOW + "- View the about page for PyWeather - Enter " + Fore.CYAN + "11")
+    print(Fore.YELLOW + "- Close PyWeather - Enter " + Fore.CYAN + "12" + Fore.YELLOW)
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
@@ -1837,7 +1855,27 @@ while True:
                         logger.info("Exiting to the main menu.")
 
 
-    elif moreoptions == "radar":
+    elif moreoptions == "8":
+        if radar_bypassconfirmation == False:
+            print(Fore.RED + "The radar feature is experimental, and may not work properly.",
+                  "PyWeather may crash when in this feature, and other unexpected",
+                  "behavior may occur. Despite the radar feature being experimental,",
+                  "would you like to use the radar?" + Fore.RESET, sep="\n")
+            radar_confirmedusage = input("Input here: ").lower()
+            if radar_confirmedusage == "yes":
+                print("The radar is now launching.",
+                      "If you want to bypass this confirmation message when",
+                      "launching the radar feature, in config.ini, set bypassconfirmation",
+                      "under the RADAR GUI section to True.", sep="\n")
+            elif radar_confirmedusage == "no":
+                print("Not launching the radar.")
+                continue
+            else:
+                print("Could not understand your input. As such, the radar will not",
+                      "be launched.", sep="\n")
+                continue
+
+
         try:
             os.mkdir("temp")
         except:
@@ -1846,7 +1884,6 @@ while True:
         print(Fore.YELLOW + "Loading the GUI. This should take around 5 seconds.")
         radar_clearImages()
         try:
-            from appJar import gui
             frontend = gui()
         except:
             print(Fore.RED + "Cannot launch a GUI on this platform. If you don't have",
@@ -2009,7 +2046,7 @@ while True:
                     frontend.setStatusbar("Status: Idle", 1)
                     r40cached = True
                     radar_zoomlevel = "40 km"
-                    logger.debug("r40cached: %s ; radar_zoomlevel: %s"
+                    logger.debug("r40cached: %s ; radar_zoomlevel: %s" %
                                  (r40cached, radar_zoomlevel))
                 elif r40cached == True:
                     logger.debug("r40cached is true, fetching from cache...")
@@ -2410,9 +2447,9 @@ while True:
         frontend.setStatusbar("Zoom: Not selected", 0)
         frontend.setStatusbar("Status: Idle", 1)
         frontend.go()
-    elif moreoptions == "11":
+    elif moreoptions == "12":
         sys.exit()
-    elif moreoptions == "9":
+    elif moreoptions == "10":
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
                     (buildnumber, buildversion))
@@ -3247,7 +3284,7 @@ while True:
                     except KeyboardInterrupt:
                         logger.info("Breaking to main menu, user issued KeyboardInterrupt")
                         break         
-    elif moreoptions == "10":
+    elif moreoptions == "11":
         print("", Fore.YELLOW + "-=-=- " + Fore.CYAN + "PyWeather" + Fore.YELLOW + " -=-=-",
               Fore.CYAN + "version " + about_version, "",
               Fore.YELLOW + "Build Number: " + Fore.CYAN + about_buildnumber,
@@ -3323,7 +3360,7 @@ while True:
                     sys.exit()
                 except:
                     print("Can't relaunch PyWeather!")
-    elif moreoptions == "8":
+    elif moreoptions == "9":
         print(Fore.RESET + "Flagging all data types to be refreshed when they are next",
               "launched.", sep="\n")
         refresh_alertsflagged = True

@@ -8,6 +8,7 @@
 import sys
 import configparser
 import traceback
+import os
 
 versioninfo = open("updater//versioninfo.txt")
 versioninfo2 = versioninfo.read()
@@ -58,6 +59,7 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     except:
         print("Couldn't update your config file! A full error will be printed below.")
         traceback.print_exc()
+        open("updater//versioninfo.txt", 'w').close()
         with open("updater//versioninfo.txt", 'a') as out:
             out.write("0.6.1 beta")
             out.close()
@@ -65,6 +67,7 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
               "the full error. Along with that, please manually add the configuration entries",
               "as listed above, with their default values in your configuration file.",
               "Press enter to exit.")
+    open("updater//versioninfo.txt", 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
         out.write("0.6.1 beta")
         out.close()
