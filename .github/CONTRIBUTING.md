@@ -96,4 +96,51 @@ Shabang.
 As stated above, I'll get back to you within 24-48 hours, and add it to the wiki, if you have all your detail. If you miss out on some detail, I'll notify you.
 
 ## Pull Requests
-writing this later
+I'm not the best at pull requests, and I sometimes mess up PyWeather (thanks ModoUnreal for bearing with my git stupidity). However, try to follow these general "recommendations" for working on new PyWeather features.
+
+* Submit your PR when you're done with your code. I update Git like a ninja (get it, my domain name is owenthe dot ninja), so try your best to not submit your PR until you're done.
+* I have a to-do list of things to do. If you have enough free time on your hands, you can code in those features. Make sure it isn't a feature that I'll be working on soon (e.x. don't code in a feature that i'll code for 0.6.2 beta when I'm working on 0.6.2 beta).
+* You can easily base your code from other PyWeather functions. A solid amount of code in PyWeather is copy and paste, just with changes. If you go this method, you can forgo adding logger functionality.
+
+However, please keep in mind these requirements when coding in something for PyWeather:
+* Make sure that your code addition has a logger, if necessary. Changing a variable? Log it. Loggers begin with `logger`.
+* If you are adding a new option to PyWeather, set the menu number as something <15. I'll do another commit which brings the menu item to the proper number.
+* I'll handle logistics, you code.
+* If worse comes to worse, and we both mess up, you do agree that I can copy & paste in your code from a PR, and "accept" your PR. I'll still give you credit and all that fun stuff.
+
+In return, you'll get credit for your work, in the changelog.
+
+## Wiki
+
+## Rules
+
+## Translating PyWeather
+I'd like PyWeather to be accessible in all languages, not just English.
+
+**Please note: The process of translating PyWeather has not been fully worked out. I'm writing this down here for future reference.**
+
+If you'd like to translate PyWeather to a different language, please acknowledge the following requirements:
+* You must be able to speak well enough in English. I only speak English.
+* You must be able to see where you'll be making translation changes, namely all `print()` statements. Basic Python experience is recommended.
+* You must be proficient in the language you're translating. The language does not need to be native to you (if you took Spanish in High School, and you're proficient, that's fine), but having native speaking experience is nice to have.
+* You cannot use online translators. Here's why: https://www.youtube.com/watch?v=rwOH3YsraNs
+* You'll agree to at least update every major version of PyWeather to your language.
+
+Here's how you'll translate PyWeather to your language.
+
+* Send me a message (GitHub issues, or on reddit, /u/o355) that you'll be planning to translate PyWeather, and if you intend to translate each minor or major version of PyWeather. I should get back to you, and create a branch with your language you intend to translate (e.g. `0.6.1-spanish`, or `0.7.0-spanish`, depending on if you intend to translate each major or minor version.
+* Fork PyWeather, 
+* Work your translate magic. Make sure you hit every file, and translate it. Yes, that also includes the changelog.
+* For each new release, I'll need this properly translated text for the top and bottom:
+  * "Hey there <language> users! PyWeather <version> has been released for your language. Here are the changes for this version."
+  * "As always, download with the .zip, or use git. 
+* Make a PR request to merge your translated branch into the master translated branch. 
+* I'll run a translator check, just to see if things mostly check out.
+* The PR will be merged, and you can delete your local PyWeather branch. I'll release a release for your version of PyWeather.
+* Repeat this process for each new minor or major version.
+
+## Contributing Rewards
+In return for contributing to PyWeather, I'll acknowledge how much of a cool person you are through acknowledgements and contributing levels.
+
+### Acknowledgements
+Any contributors will be acknowledged through the about page in PyWeather, and soon on the readme file.
