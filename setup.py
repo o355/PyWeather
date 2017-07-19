@@ -862,26 +862,6 @@ else:
           "Defaulting to 'True'", sep="\n")
     config['SUMMARY']['showAlertsOnSummary'] = 'True'
 
-
-print("","On boot, would you like Pyweather to give a summary of yesterday's weather?",
-      "By default, this is disabled",
-      "Yes or No.", sep="\n")
-yesterday_Summary = input("Input here: ").lower()
-logger.debug("yesterday_Summary: %s" % yesterday_Summary)
-if yesterday_Summary == "yes":
-    config['SUMMARY']['showYesterdayOnSummary'] = 'True'
-    print("Changes saved.")
-    logger.debug("Yesterday's weather can now be viewed on boot.")
-elif yesterday_Summary == "no":
-    config['SUMMARY']['showYesterdayOnSummary'] = 'False'
-    print("Changes saved.")
-    logger.debug("Yesterday's weather is now not shown on boot.")
-else:
-    print("Could not understand what you inputted.",
-          "Defaulting to 'False'", sep="\n")
-    config['SUMMARY']['showYesterdayOnSummary'] = 'False'
-
-
 print("","On boot, would you like PyWeather to check for updates?",
       "By default, this is disabled, due to a load time increase of ~2-5 seconds.",
       "Yes or No.", sep="\n")
