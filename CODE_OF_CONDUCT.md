@@ -1,5 +1,5 @@
 # PyWeather Contributor Covenant Code of Conduct
-Last updated: June 14, 2017
+Last updated: July 20, 2017
 
 ## Our Pledge
 
@@ -14,7 +14,8 @@ Examples of behavior that contributes to creating a positive environment include
 * Gracefully accepting constructive criticism
 * Focusing on what is best for the community
 * Showing empathy towards other community members
-* Giving each other helpful tips, etc.
+* Helping to clear up confusion between community members
+* Giving other community members "tips", and other helpful advice.
 
 Examples of unacceptable behavior by participants include:
 
@@ -46,3 +47,8 @@ This Code of Conduct is adapted from the [Contributor Covenant][homepage], versi
 
 [homepage]: http://contributor-covenant.org
 [version]: http://contributor-covenant.org/version/1/4/
+
+## Changes
+**July 20 Changes:**
+* Added 2 new tips to examples of positive behavior
+* Added the changes section

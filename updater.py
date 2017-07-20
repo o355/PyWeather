@@ -1,10 +1,18 @@
-# PyWeather Updater - version 0.6.0.1 beta
+# PyWeather Updater - version 0.6.1 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 
 import sys
 import json
-import requests
+try:
+    import requests
+except ImportError:
+    print("When attempting to import the library requests, we ran into an import error.",
+          "Please make sure that requests is installed.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+
 import codecs
 import shutil
 import configparser
@@ -12,7 +20,15 @@ import traceback
 import subprocess
 from platform import release
 reader = codecs.getreader("utf-8")
-from colorama import Fore, Style, init
+try:
+    from colorama import Fore, Style, init
+except ImportError:
+    print("When attempting to import the library colorama, we ran into an import error.",
+          "Please make sure that colorama is installed.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+
 init()
 
 config = configparser.ConfigParser()
@@ -26,7 +42,7 @@ try:
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.0.1 beta")
+        out.write("0.6.1 beta")
         out.close()
         
 # See if the config is "provisioned". If it isn't, a KeyError will occur,

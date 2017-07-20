@@ -810,14 +810,15 @@ else:
                 input()
                 sys.exit()
 
-        print("","All libraries are good to go! Let's move on.", sep="\n")
+        print("","All libraries are installed!", sep="\n")
     else:
         logger.warn("Input was not understood. Closing...")
-        print("""I'm not sure what you said.
-        As a precaution, I'm now closing.""")
+        print("I'm not sure what you said.",
+        "As a precaution, I'm now closing.", sep="\n")
         sys.exit()
 
-
+#print("", "Would you like PyWeather to update all your PIP packages?",
+#      "If you had ")
 
 # Verbosity is not needed here.
 print("I'm now going to guide you through obtaining an API key.",
@@ -973,6 +974,7 @@ if backup_APIkey == "yes":
     except:
         printException_loggerwarn()
         print("Couldn't make the directory, does it exist?")
+    # Overwrite the file, if it exists.
     open(folder_argument, 'w').close()
     open(folder_argument, 'a').write(apikey_input)
     open(folder_argument).close()

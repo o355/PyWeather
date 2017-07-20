@@ -25,7 +25,7 @@ The changelog will now NOT BE used for tracking what needs to get done, and not 
 * Loading times have been increased by about 0.2 seconds, due to the removal of the unnecessary second geocoder.
 * Added the last-resort option when installing Colorama in the setup file.
 * Adds an experimental radar to PyWeather.
-* Adds error checking for imports on all scripts (non-standard libraries) - 20% done
+* Adds error checking for imports on all scripts (non-standard libraries)
 * Adds a progress indicator during setup configuration.
 * Adds requests as a necessary library to setup
 * PyWeather Setup now validates your API key after you input it (and after the backup)
