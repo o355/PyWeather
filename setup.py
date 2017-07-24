@@ -704,6 +704,8 @@ else:
             printException()
             print("As a last resort, we can use sudo -H to install packages.",
             "Do you want to use the shell option to install appJar?",
+            "WARNING: Using the last-resort method may screw up PIP, and",
+            "may require you to reinstall PIP on your machine."
             "Yes or No.", sep="\n")
             appjar_lastresort = input("Input here: ").lower()
             logger.debug("appjar_lastresort: %s" % appjar_lastresort)
@@ -767,6 +769,8 @@ else:
             printException()
             print("As a last resort, we can use sudo -H to install packages.",
             "Do you want to use the shell option to install requests?",
+            "WARNING: Using the last-resort method may screw up PIP, and",
+            "may require you to reinstall PIP on your machine."
             "Yes or No.", sep="\n")
             requests_lastresort = input("Input here: ").lower()
             logger.debug("requests_lastresort: %s" % appjar_lastresort)
