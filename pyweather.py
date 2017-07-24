@@ -44,14 +44,6 @@ except:
     input()
     sys.exit()
 
-try:
-    from appJar import gui
-except:
-    print("When attempting to import the library appJar, we ran into an import error.",
-          "Please make sure that appJar is installed.",
-          "Press enter to exit.", sep="\n")
-    input()
-    sys.exit()
 
 # I had issues on OS X 10.12.5 with SSL certs, so HTTP is used instead.
 geolocator = GoogleV3(scheme='http')
@@ -1884,13 +1876,21 @@ while True:
         print(Fore.YELLOW + "Loading the GUI. This should take around 5 seconds.")
         radar_clearImages()
         try:
+            from appJar import gui
             frontend = gui()
-        except:
+        except ImportError:
             print(Fore.RED + "Cannot launch a GUI on this platform. If you don't have",
                   "a GUI on Linux, this is expected. Otherwise, investigate into why",
                   "tkinter won't launch.", sep="\n" + Fore.RESET)
             printException()
             continue
+        except:
+            printException()
+            print(Fore.RED + "Cannot launch the radar GUI. If this issue can be reproduced,",
+                  "please report this issue on GitHub, and enable tracebacks in the configuration",
+                  "file.", sep="\n" + Fore.RESET)
+            continue
+            
         print(Fore.YELLOW + "Defining variables...")
         # A quick note about cache variables.
         # The syntax goes like this:
