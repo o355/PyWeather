@@ -29,7 +29,7 @@ The changelog will now NOT BE used for tracking what needs to get done, and not 
 * Adds a progress indicator during setup configuration.
 * Adds requests as a necessary library to setup
 * PyWeather Setup now validates your API key after you input it (and after the backup)
-* PyWeather Setup will now update PIP packages with user approval. - 0% done, should be finished by 7/10
+* PyWeather Setup will now update PIP packages with user approval.
 * Geopy's scheme was changed to HTTP due to issues on OS X.
 
 **BUG FIXES**

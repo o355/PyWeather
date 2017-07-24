@@ -486,7 +486,7 @@ except ImportError:
                  % (geopyInstalled, neededLibraries))
 
 try:
-    import appJar
+    from appJar import gui
     appjarInstalled = True
     logger.info("appjar is installed.")
     logger.debug("appjarInstalled: %s" % appjarInstalled)
@@ -684,7 +684,7 @@ else:
                 sys.exit()
 
         try:
-            import appJar
+            from appJar import gui
             logger.info("appjar installed successfully.")
         except ImportError:
             logger.warning("appjar was not installed successfully.")
@@ -817,8 +817,31 @@ else:
         "As a precaution, I'm now closing.", sep="\n")
         sys.exit()
 
-#print("", "Would you like PyWeather to update all your PIP packages?",
-#      "If you had ")
+print("", "Would you like PyWeather to update all your PIP packages?",
+      "If you had necessary libraries previously installed, it's best",
+      "to update your PIP packages. Please note: This may not work",
+      "on all platforms.", sep="\n")
+confirm_updatepip = input("Input here: ").lower()
+logger.debug("confirm_updatepip: %s" % confirm_updatepip)
+if confirm_updatepip == "yes":
+    print("Updating PIP packages.")
+    totalpackages = 0
+    updatecount = 1
+    for pkgname in pip.get_installed_distributions():
+        totalpackages = totalpackages + 1
+        logger.debug("total package count now: %s" % totalpackages)
+
+    for pkgname in pip.get_installed_distributions():
+        print("Now updating package: %s (Update %s/%s)" %
+              (pkgname, updatecount, totalpackages))
+        pip.main(['install', '--upgrade', '%s' % pkgname])
+        updatecount = updatecount + 1
+elif confirm_updatepip == "no":
+    print("Not updating PIP packages. You may run into issues with non-updated",
+          "packages in future versions of PyWeather.")
+else:
+    print("Input not understood, not updating PIP packages. You may run into",
+          "issues with non-updated packages in future versions of PyWeather.")
 
 # Verbosity is not needed here.
 print("I'm now going to guide you through obtaining an API key.",
