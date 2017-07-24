@@ -455,6 +455,14 @@ except ImportError:
         "Press enter to exit.", sep="\n")
         input()
         sys.exit()
+except PermissionError:
+    traceback.print_exc()
+    print("PIP has incorrect permissions on your machine. Please attempt to fix",
+          "permissions on the folder that is listed in the traceback.",
+          "Linux users: Use chown -R <yourusername> <folder>, this should fix the issue.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
 
 neededLibraries = 0
 
@@ -566,6 +574,8 @@ else:
             printException()
             print("As a last resort, we can use sudo -H to install packages.",
             "Do you want to use the shell option to install colorama?",
+            "WARNING: Using the last-resort method may screw up PIP, and",
+            "may require you to reinstall PIP on your machine."
             "Yes or No.", sep="\n")
             colorama_lastresort = input("Input here: ").lower()
             logger.debug("colorama_lastresort: %s" % colorama_lastresort)
@@ -629,6 +639,8 @@ else:
             printException()
             print("As a last resort, we can use sudo -H to install packages.",
             "Do you want to use the shell option to install geopy?",
+            "WARNING: Using the last-resort method may screw up PIP, and",
+            "may require you to reinstall PIP on your machine."
             "Yes or No.", sep="\n")
             geopy_lastresort = input("Input here: ").lower()
             logger.debug("geopy_lastresort: %s" % geopy_lastresort)
