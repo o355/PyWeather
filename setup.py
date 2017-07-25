@@ -499,8 +499,7 @@ try:
     logger.info("appjar is installed.")
     logger.debug("appjarInstalled: %s" % appjarInstalled)
 except ImportError as e:
-    print("e")
-    if e == "ImportError: No module named '_tkinter', please install the python3-tk package":
+    if e == "No module named '_tkinter', please install the python3-tk package":
         print("appJar cannot run on this platform. Skipping installation...")
         appjarInstalled = True
         logger.debug("appjarInstalled: %s" % appjarInstalled)
