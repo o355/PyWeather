@@ -498,13 +498,18 @@ try:
     appjarInstalled = True
     logger.info("appjar is installed.")
     logger.debug("appjarInstalled: %s" % appjarInstalled)
-except:
-    appjarInstalled = False
-    neededLibraries = neededLibraries + 1
-    logger.debug("appJar is NOT installed.")
-    printException_loggerwarn()
-    logger.debug("appjarInstalled: %s ; neededLibraries: %s" %
-                 (appjarInstalled, neededLibraries))
+except () as e:
+    if e == "ImportError: No module named '_tkinter', please install the python3-tk package":
+        print("appJar cannot run on this platform. Skipping installation...")
+        appjarInstalled = True
+        logger.debug("appjarInstalled: %s" % appjarInstalled)
+    else:
+        appjarInstalled = False
+        neededLibraries = neededLibraries + 1
+        logger.debug("appJar is NOT installed.")
+        printException_loggerwarn()
+        logger.debug("appjarInstalled: %s ; neededLibraries: %s" %
+                     (appjarInstalled, neededLibraries))
 
 
 try:
@@ -943,11 +948,12 @@ if backup_APIkey == "yes":
                  (backup_APIkeydirectory, backup_APIkeydirectory2))
     logger.debug("folder_argument: %s" % folder_argument)
     print("Creating a backup...")
-    try:
-        os.mkdir(backup_APIkeydirectory2)
-    except:
-        printException_loggerwarn()
-        print("Couldn't make the directory, does it exist?")
+    if backup_APIkeydirectory != "backup":
+        try:
+            os.mkdir(backup_APIkeydirectory2)
+        except:
+            printException_loggerwarn()
+            print("Couldn't make the directory, does it exist?")
     # Overwrite the file, if it exists.
     open(folder_argument, 'w').close()
     open(folder_argument, 'a').write(apikey_input)
