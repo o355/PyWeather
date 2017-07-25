@@ -785,7 +785,7 @@ if confirm_updatepip == "yes":
     for pkgname in pip.get_installed_distributions():
         print("Now updating package: %s (Update %s/%s)" %
               (pkgname, updatecount, totalpackages))
-        pip.main(['install', '--upgrade', '%s' % pkgname])
+        pip.main(['install', '--upgrade', '%s' % pkgname.project_name])
         updatecount = updatecount + 1
 elif confirm_updatepip == "no":
     print("Not updating PIP packages. You may run into issues with non-updated",
