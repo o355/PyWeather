@@ -15,7 +15,7 @@ import traceback
 import sys
 try:
     import requests
-except ImportEror:
+except ImportError:
     print("When attempting to import the library requests, we ran into an import error.",
           "Please make sure that requests is installed.",
           "Press enter to exit.", sep="\n")
@@ -1040,7 +1040,7 @@ while True:
         logger.info("Selected view more currently...")
         logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
                     (refresh_currentflagged, time.time() - cachetime_current))
-        if (time.time() - cachetime_current >= cache_currenttime
+        if (time.time() - cachetime_current >= cache_currenttime and cache_enabled == True
             or refresh_currentflagged == True):
             print(Fore.RED + "Refreshing current data...")
             try:

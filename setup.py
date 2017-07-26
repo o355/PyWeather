@@ -948,7 +948,9 @@ if backup_APIkey == "yes":
                  (backup_APIkeydirectory, backup_APIkeydirectory2))
     logger.debug("folder_argument: %s" % folder_argument)
     print("Creating a backup...")
-    if backup_APIkeydirectory != "backup":
+    if backup_APIkeydirectory == "backup":
+        logger.debug("Using the default directory.")
+    elif backup_APIkeydirectory != "backup":
         try:
             os.mkdir(backup_APIkeydirectory2)
         except:
@@ -1211,7 +1213,7 @@ else:
           "certain types of data, before a data refresh is automatically requested.",
           "If you want to leave cache values to their defaults, press enter at any prompt.", sep="\n")
 
-    print("", "(10/24)", "Please enter the cache time for alerts data in minutes (default = 5)")
+    print("", "(10/24)", "Please enter the cache time for alerts data in minutes (default = 5)", sep="\n")
     alertscachetime = input("Input here: ").lower()
     try:
         alertscachetime = int(alertscachetime)
@@ -1221,11 +1223,11 @@ else:
         logger.debug("Alerts cache time now %s minutes." % alertscachetime)
     except:
         print("", "Your input couldn't be converted into a number. Setting alerts",
-              "cache time to it's default value of '5'.")
+              "cache time to it's default value of '5'.", sep="\n")
         config['CACHE']['alerts_cachedtime'] = '5'
         logger.debug("Alerts cache time now 5 minutes.")
 
-    print("", "(11/24)", "Please enter the cache time for current data in minutes (default = 10)")
+    print("", "(11/24)", "Please enter the cache time for current data in minutes (default = 10)", sep="\n")
     currentcachetime = input("Input here: ").lower()
     try:
         currentcachetime = int(currentcachetime)
@@ -1235,11 +1237,11 @@ else:
         logger.debug("Current cache time now %s minutes." % alertscachetime)
     except:
         print("", "Your input couldn't be converted into a number. Setting current",
-              "cache time to it's default value of '10'.")
+              "cache time to it's default value of '10'.", sep="\n")
         config['CACHE']['current_cachedtime'] = '10'
         logger.debug("Current cache time now 10 minutes.")
 
-    print("", "(12/24)", "Please enter the cache time for hourly data in minutes (default = 60)")
+    print("", "(12/24)", "Please enter the cache time for hourly data in minutes (default = 60)", sep="\n")
     hourlycachetime = input("Input here: ").lower()
     try:
         hourlycachetime = int(hourlycachetime)
@@ -1249,11 +1251,11 @@ else:
         logger.debug("Hourly cache time now %s minutes." % hourlycachetime)
     except:
         print("", "Your input couldn't be converted into a number. Setting hourly",
-              "cache time to it's default value of '60'.")
+              "cache time to it's default value of '60'.", sep="\n")
         config['CACHE']['hourly_cachedtime'] = '60'
         logger.debug("Hourly cache time now 60 minutes.")
 
-    print("", "(13/24)", "Please enter the cache time for forecast data in minutes (default = 60)")
+    print("", "(13/24)", "Please enter the cache time for forecast data in minutes (default = 60)", sep="\n")
     forecastcachetime = input("Input here: ").lower()
     try:
         forecastcachetime = int(forecastcachetime)
@@ -1263,11 +1265,11 @@ else:
         logger.debug("Forecast cache time now %s minutes." % forecastcachetime)
     except:
         print("", "Your input couldn't be converted into a number. Setting forecast",
-              "cache time to it's default value of '60'.")
+              "cache time to it's default value of '60'.", sep="\n")
         config['CACHE']['forecast_cachedtime'] = '60'
         logger.debug("Forecast cache time now 60 minutes.")
 
-    print("", "(14/24)", "Please enter the cache time for almanac data in minutes (default = 240)")
+    print("", "(14/24)", "Please enter the cache time for almanac data in minutes (default = 240)", sep="\n")
     almanaccachetime = input("Input here: ").lower()
     try:
         almanaccachetime = int(almanaccachetime)
@@ -1277,11 +1279,11 @@ else:
         logger.debug("Almanac cache time now %s minutes." % almanaccachetime)
     except:
         print("", "Your input couldn't be converted into a number. Setting almanac",
-              "cache time to it's default value of '240'.")
+              "cache time to it's default value of '240'.", sep="\n")
         config['CACHE']['almanac_cachedtime'] = '240'
         logger.debug("Almanac cache time now 240 minutes.")
 
-    print("", "(15/24)", "Please enter the cache time for sun data in minutes (default = 480)")
+    print("", "(15/24)", "Please enter the cache time for sun data in minutes (default = 480)", sep="\n")
     sundatacachetime = input("Input here: ").lower()
     try:
         sundatacachetime = int(sundatacachetime)
@@ -1291,7 +1293,7 @@ else:
         logger.debug("Sun data cache time now %s minutes." % sundatacachetime)
     except:
         print("", "Your input couldn't be converted into a number. Setting sun data",
-              "cache time to it's default value of '480'.")
+              "cache time to it's default value of '480'.", sep="\n")
         config['CACHE']['sundata_cachedtime'] = '480'
         logger.debug("Sun data cache time now 480 minutes.")
 
