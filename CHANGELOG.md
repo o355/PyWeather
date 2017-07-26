@@ -17,7 +17,7 @@ The changelog will now NOT BE used for tracking what needs to get done, and not 
     * Docs folder for uh, documents.
 * Adds the option to force a scheme on Geopy (HTTP or HTTPS)
 
-## version 0.6.1 beta - Should be released on 7/21/2017
+## version 0.6.1 beta - Performing QA - Should be released by 7/31/2017
 **NEW FEATURES/REMOVALS**
 * Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache.
 * Removed the dependency on geocoder, and by extension, removed the unnecessary reverse geocoder, and 
