@@ -105,17 +105,17 @@ try:
     showUpdaterReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
     cache_enabled = config.getboolean('CACHE', 'enabled')
-    cache_alertstime = config.getint('CACHE', 'alerts_cachedtime')
+    cache_alertstime = config.getfloat('CACHE', 'alerts_cachedtime')
     cache_alertstime = cache_alertstime * 60
-    cache_currenttime = config.getint('CACHE', 'current_cachedtime')
+    cache_currenttime = config.getfloat('CACHE', 'current_cachedtime')
     cache_currenttime = cache_currenttime * 60
-    cache_hourlytime = config.getint('CACHE', 'hourly_cachedtime')
+    cache_hourlytime = config.getfloat('CACHE', 'hourly_cachedtime')
     cache_hourlytime = cache_hourlytime * 60
-    cache_forecasttime = config.getint('CACHE', 'forecast_cachedtime')
+    cache_forecasttime = config.getfloat('CACHE', 'forecast_cachedtime')
     cache_forecasttime = cache_forecasttime * 60
-    cache_almanactime = config.getint('CACHE', 'almanac_cachedtime')
+    cache_almanactime = config.getfloat('CACHE', 'almanac_cachedtime')
     cache_almanactime = cache_almanactime * 60
-    cache_sundatatime = config.getint('CACHE', 'sundata_cachedtime')
+    cache_sundatatime = config.getfloat('CACHE', 'sundata_cachedtime')
     cache_sundatatime = cache_sundatatime * 60
     user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
     user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
@@ -1133,7 +1133,7 @@ while True:
         # Or condition will sort out 3 potential conditions.
         logger.debug("alertsPrefetched: %s ; alerts cache time: %s" % 
                          (alertsPrefetched, time.time() - cachetime_alerts))
-        if (alertsPrefetched == False or time.time() - cachetime_alerts >= cache_alertstime
+        if (alertsPrefetched == False or time.time() - cachetime_alerts >= cache_alertstime and cache_enabled == True
             or refresh_alertsflagged == True):
             print(Fore.RED + "Alerts wasn't prefetched, the cache expired, or alerts was flagged", 
                   " for a refresh. Refreshing...", sep="\n")
@@ -1299,7 +1299,8 @@ while True:
                   "for the alert data type involved.",
                   "For error reporting, this is what the variable 'alerts_type' is currently storing.",
                   "alerts_type: %s" % alerts_type, sep="\n" + Fore.RESET)  
-# <----------- Detailed Currently is above, Detailed Hourly is below -------->
+
+# <----- Alerts is above | 36-hour hourly is below ---->
     
     elif moreoptions == "2":
         print(Fore.RED + "Loading...")
@@ -1307,7 +1308,8 @@ while True:
         logger.debug("refresh_hourly36flagged: %s ; hourly36 cache time: %s" %
                     (refresh_hourly36flagged, time.time() - cachetime_hourly36))
         logger.info("Selected view more hourly...")
-        if (refresh_hourly36flagged == True or time.time() - cachetime_hourly36 >= cache_hourlytime):
+        if (refresh_hourly36flagged == True or
+                        time.time() - cachetime_hourly36 >= cache_hourlytime and cache_enabled == True):
             print(Fore.RED + "Refreshing 3 day hourly data...")
             try:
                 hourly36JSON = requests.get(hourlyurl)
@@ -1456,12 +1458,14 @@ while True:
         totaldetailedHourly10Iterations = 0
         logger.debug("tenday_prefetched: %s ; refresh_hourly10flagged: %s" %
                     (tenday_prefetched, refresh_hourly10flagged))
+        # We try to display the hourly 10 cache time, if the user has fetch 10 day hourly on startup enabled.
+        # If the user does not have it displayed, display nothing but a slightly informative message.
         try:
             logger.debug("hourly 10 cache time: %s" % time.time() - cachetime_hourly10)
         except:
             logger.debug("no hourly 10 cache time")
         if (tenday_prefetched == False or refresh_hourly10flagged == True or
-            time.time() - cachetime_hourly10 >= cache_hourlytime):
+            time.time() - cachetime_hourly10 >= cache_hourlytime and cache_enabled == True):
             print(Fore.RED + "Refreshing (or fetching for the first time) 10 day hourly data...")
             try:
                 tendayJSON = requests.get(tendayurl)
@@ -1615,7 +1619,8 @@ while True:
         print("")
         logger.debug("refresh_forecastflagged: %s ; forecast cache time: %s" %
                     (refresh_forecastflagged, time.time() - cachetime_forecast))
-        if (refresh_forecastflagged == True or time.time() - cachetime_forecast >= cache_hourlytime):
+        if (refresh_forecastflagged == True 
+            or time.time() - cachetime_forecast >= cache_hourlytime and cache_enabled == True):
             print(Fore.RED + "Refreshing forecast data...")
             try:
                 forecast10JSON = requests.get(f10dayurl)
