@@ -3349,24 +3349,6 @@ while True:
         elif jokenum == 12:
             print("What did the hurricane say to the other hurricane?",
                   "I have my eye on you.", sep="\n")
-    elif moreoptions == "12":
-        print(Fore.RESET + "Attempting to relaunch PyWeather...")
-        try:
-            os.system("python3 pyweather.py")
-            print("")
-            sys.exit()
-        except:
-            try:
-                os.system("python pyweather.py")
-                print("")
-                sys.exit()
-            except:
-                try:
-                    os.system("pyweather.py")
-                    print("")
-                    sys.exit()
-                except:
-                    print("Can't relaunch PyWeather!")
     elif moreoptions == "9":
         print(Fore.RESET + "Flagging all data types to be refreshed when they are next",
               "launched.", sep="\n")

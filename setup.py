@@ -23,6 +23,7 @@ import traceback
 import subprocess
 import logging
 import os
+import urllib
 
 # Try loading the versioninfo.txt file. If it isn't around, create the file with
 # the present version info.
@@ -429,25 +430,25 @@ except ImportError:
         "I'll start in a few seconds.", sep="\n")
         time.sleep(3)
         print("Downloading the installer...")
+        # We use the built-in
         try:
-            # Experimental code. Never have dealt with doing this stuff.
-            pipurl = "https://bootstrap.pypa.io/get-pip.py"
-            pipinstaller = requests.get(pipurl, stream=True)
-            pipfilename = "get-pip.py"
-            with open(pipfilename, 'wb') as fw:
-                for chunk in pipurl.iter_content(chunk_size=128):
-                    fw.write(chunk)
-                fw.close()
+            with urllib.request.urlopen('https://bootstrap.pypa.io/get-pip.py') as update_response, open('get-pip.py',
+                                                                                                         'wb') as update_out_file:
+                logger.debug("update_response: %s ; update_out_file: %s"
+                             % (update_response, update_out_file))
+                shutil.copyfileobj(update_response, update_out_file)
         except:
-            print("Can't download the PIP installer.",
-                  "Make sure bootstrap.pypa.io is unblocked.", sep="\n")
+            print("Couldn't download the PIP installer, either due to no internet connection, or the library that fetches",
+                  "files has failed. As an alternative, you can download the installer yourself.",
+                  "Please download this file: 'https://bootstrap.pypa.io/get-pip.py', and place it in PyWeather's base directory.",
+                  "Afterwards, press enter to execute the installer. Press Control + C to exit.", sep="\n")
             printException()
-            print("Press enter to exit.")
             input()
-            sys.exit()
+
         print("Running the installer...")
-        logger.debug("Executing get-pip.py...")
+        logger.debug("Executing get-pip.py. If this script exits, please restart the setup script.")
         exec(open("get-pip.py").read())
+
     else:
         logger.warn("Couldn't understand the input. Closing...")
         print("","I didn't understand what you said.",
@@ -463,6 +464,13 @@ except PermissionError:
           "Press enter to exit.", sep="\n")
     input()
     sys.exit()
+
+print("Deleting the PIP installer file (if it exists)")
+try:
+    os.remove("get-pip.py")
+except:
+    printException_loggerwarn()
+    print("The file get-pip.py didn't exist, or we had wrong permissions.")
 
 neededLibraries = 0
 
@@ -713,7 +721,7 @@ else:
             "may require you to reinstall PIP on your machine."
             "Yes or No.", sep="\n")
             requests_lastresort = input("Input here: ").lower()
-            logger.debug("requests_lastresort: %s" % appjar_lastresort)
+            logger.debug("requests_lastresort: %s" % requests_lastresort)
             if requests_lastresort == "yes":
                 try:
                     print("Now executing `sudo -H pip3 install requests`.",
