@@ -43,7 +43,8 @@ The changelog will now NOT BE used for tracking what needs to get done, and not 
 * Fixed a super tiny bug where a logger.info statement would not print in the setup file, unless Geopy was not installed.
 * Fixed a bug in the setup file, in which if sections were already added to a config file without the configprovisioned flag, PyWeather Setup would not run.
 * Fixed a bug in which custom directories really didn't work for the backup API key in the setup script
-* Fixing a bug in which PyWeather wasn't properly parsing wind data shown as "Variable". UI changes have been made to accommodate this data type
+* Fixed a bug in which PyWeather wasn't properly parsing wind data shown as "Variable". UI changes have been made to accommodate this data type
+* Fixed many bugs in which PyWeather was unable to properly catch errors when parsing historical data, and wrong dates.
 
 **OTHER CHANGES**
 * Geocoder dependency was removed, as noted above.

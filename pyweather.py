@@ -3015,7 +3015,6 @@ while True:
         historical_input = input("Input here: ").lower()
         logger.debug("historical_input: %s" % historical_input)
         print(Fore.RED + "Loading...")
-        print("")
         historical_loops = 0
         historical_totalloops = 0
         logger.debug("historical_loops: %s ; historical_totalloops: %s"
@@ -3057,8 +3056,13 @@ while True:
                 input()
                 continue
         
-        
-            historical_json = json.loads(historicalJSON.text)
+            try:
+                historical_json = json.loads(historicalJSON.text)
+            except json.decoder.JSONDecodeError:
+                print(Fore.RED + "There was an issue parsing the data for the date requested. Try requesting another date."
+                      + Fore.RESET)
+                continue
+
             historical_cache[historical_input] = historical_json
             logger.debug("Appended new key to historal cache: %s with value historical json"
                          % historical_input)
@@ -3067,7 +3071,12 @@ while True:
             else:
                 logger.debug("Loaded 1 JSON.")
         historical_date = historical_json['history']['date']['pretty']
-        print(Fore.YELLOW + "Here's the historical weather for " + Fore.CYAN + 
+        if historical_date == "":
+            print(Fore.RED + "The date you entered was invalid. Please try selecting another date."
+                  + Fore.RESET)
+            continue
+        print("")
+        print(Fore.YELLOW + "Here's the historical weather for " + Fore.CYAN +
               str(location) + Fore.YELLOW + " on "
               + Fore.CYAN + historical_date)
         logger.debug("historical_date: %s" % historical_date)
