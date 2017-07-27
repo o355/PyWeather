@@ -959,7 +959,10 @@ print(Fore.YELLOW + "And it feels like: " + Fore.CYAN + summary_feelslikef
 print(Fore.YELLOW + "Current dew point: " + Fore.CYAN + summary_dewPointF
       + "°F (" + summary_dewPointC + "°C)")
 if winddata == True:
-    print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
+    if summary_winddir == "Variable":
+        print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing in variable directions.")
+    else:
+        print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
 else:
     print(Fore.YELLOW + "Wind data is not available for this location.")
 print(Fore.YELLOW + "Current humidity: " + Fore.CYAN + summary_humidity)
@@ -1063,6 +1066,49 @@ while True:
                 logger.debug("current_json loaded with: %s" % current_json)
                    
         print("")
+        # Parse extra stuff. Variable names are kept the same for the sake of sanity.
+        # If the user hasn't refetched, this works out. Vars stay the same.
+        summary_overall = current_json['current_observation']['weather']
+        summary_lastupdated = current_json['current_observation']['observation_time']
+        summary_tempf = str(current_json['current_observation']['temp_f'])
+        summary_tempc = str(current_json['current_observation']['temp_c'])
+        summary_humidity = str(current_json['current_observation']['relative_humidity'])
+        logger.debug("summary_overall: %s ; summary_lastupdated: %s"
+                     % (summary_overall, summary_lastupdated))
+        logger.debug("summary_tempf: %s ; summary_tempc: %s"
+                     % (summary_tempf, summary_tempc))
+        summary_winddir = current_json['current_observation']['wind_dir']
+        summary_windmph = current_json['current_observation']['wind_mph']
+        summary_windmphstr = str(summary_windmph)
+        summary_windkph = current_json['current_observation']['wind_kph']
+        logger.debug("summary_winddir: %s ; summary_windmph: %s"
+                     % (summary_winddir, summary_windmph))
+        logger.debug("summary_windmphstr: %s ; summary_windkph: %s"
+                     % (summary_windmphstr, summary_windkph))
+        summary_windkphstr = str(summary_windkph)
+        logger.debug("summary_windkphstr: %s" % summary_windkphstr)
+        windcheck = float(summary_windmph)
+        windcheck2 = float(summary_windkph)
+        logger.debug("windcheck: %s ; windcheck2: %s"
+                     % (windcheck, windcheck2))
+        if windcheck == -9999:
+            winddata = False
+            logger.warn("No wind data available!")
+        elif windcheck2 == -9999:
+            winddata = False
+            logger.warn("No wind data available!")
+        else:
+            winddata = True
+            logger.info("Wind data is available.")
+
+        summary_feelslikef = str(current_json['current_observation']['feelslike_f'])
+        summary_feelslikec = str(current_json['current_observation']['feelslike_c'])
+        summary_dewPointF = str(current_json['current_observation']['dewpoint_f'])
+        summary_dewPointC = str(current_json['current_observation']['dewpoint_c'])
+        logger.debug("summary_feelslikef: %s ; summary_feelslikec: %s"
+                     % (summary_feelslikef, summary_feelslikec))
+        logger.debug("summary_dewPointF: %s ; summary_dewPointC: %s"
+                     % (summary_dewPointF, summary_dewPointC))
         current_pressureInHg = str(current_json['current_observation']['pressure_in'])
         current_pressureMb = str(current_json['current_observation']['pressure_mb'])
         logger.debug("current_pressureInHg: %s ; current_pressureMb: %s"
@@ -1111,9 +1157,13 @@ while True:
         print(Fore.YELLOW + "Current dew point: " + Fore.CYAN + summary_dewPointF
               + "°F (" + summary_dewPointC + "°C)")
         if winddata == True:
-            print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + 
-                  " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir 
-                  + " (" + current_windDegrees + " degrees)")
+            if summary_winddir == "Variable":
+                print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr +
+                    " mph (" + summary_windkphstr + " kph), blowing in variable directions.")
+            else:
+                print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr +
+                      " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir
+                      + " (" + current_windDegrees + " degrees)")
         else:
             print(Fore.YELLOW + "Wind data is not available for this location.")
         print(Fore.YELLOW + "Current humidity: " + Fore.CYAN + summary_humidity)
@@ -1406,9 +1456,14 @@ while True:
                   + "°F (" + hourly_feelsLikeC + "°C)")
             print(Fore.YELLOW + "Dew Point: " + Fore.CYAN + hourly_dewpointF
                   + "°F (" + hourly_dewpointC + "°C)")
-            print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly_windMPH
-                  + " mph (" + hourly_windKPH + " kph) blowing to the " +
-                  hourly_windDir + " (" + hourly_windDegrees + "°)")
+            if hourly_windDir == "Variable":
+                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly_windMPH
+                    + " mph (" + hourly_windKPH + " kph) blowing in " +
+                    "variable directions.")
+            else:
+                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly_windMPH
+                      + " mph (" + hourly_windKPH + " kph) blowing to the " +
+                      hourly_windDir + " (" + hourly_windDegrees + "°)")
             print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly_humidity + "%")
             if hourly_snowData == False:
                 print(Fore.YELLOW + "Rain for the hour: " + Fore.CYAN +
