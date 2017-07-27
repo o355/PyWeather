@@ -2714,8 +2714,9 @@ while True:
             
         logger.debug("refresh_sundataflagged: %s" % refresh_sundataflagged)
         logger.info("Selected option - Sun/moon data")
-        if (sundata_prefetched == False or time.time() - cachetime_sundata >= cache_sundatatime
-            or refresh_sundataflagged == True):
+        if (sundata_prefetched is False or
+            time.time() - cachetime_sundata >= cache_sundatatime and cache_enabled == True or
+                refresh_sundataflagged == True):
             print(Fore.RED + "Fetching (or refreshing) sun/moon data...")
             try:
                 sundataJSON = requests.get(astronomyurl)
@@ -2957,7 +2958,8 @@ while True:
         
         historical_skipfetch = False
         logger.debug("historical_skipfetch: %s" % historical_skipfetch)
-        
+
+        # Don't get scared. Payload is the cached data.
         for historical_cacheddate, payload in historical_cache.items():
             logger.debug("historical_cacheddate: %s")
             if historical_cacheddate == historical_input:
@@ -3382,6 +3384,8 @@ while True:
                      (refresh_hourly10flagged, refresh_hourly36flagged))
         refresh_sundataflagged = True
         logger.debug("refresh_sundataflagged: %s" % refresh_sundataflagged)
+    elif moreoptions == "when does the emoji movie come out":
+        print("July 28, 2017")
     else:
         logger.warn("Input could not be understood!")
         print(Fore.RED + "Not a valid option.")
