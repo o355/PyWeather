@@ -32,6 +32,7 @@ The changelog will now NOT BE used for tracking what needs to get done, and not 
 * PyWeather Setup will now update PIP packages with user approval.
 * Geopy's scheme was changed to HTTP due to issues on OS X.
 * Added the ability to back up your API key to a specific directory in the keybackup.py script. - 0% done
+* Adds wind direction data to historical hourly.
 
 **BUG FIXES**
 * Fixed a major bug where the PyWeather Git updater wouldn't, uh, fully update.
@@ -42,7 +43,7 @@ The changelog will now NOT BE used for tracking what needs to get done, and not 
 * Fixed a super tiny bug where a logger.info statement would not print in the setup file, unless Geopy was not installed.
 * Fixed a bug in the setup file, in which if sections were already added to a config file without the configprovisioned flag, PyWeather Setup would not run.
 * Fixed a bug in which custom directories really didn't work for the backup API key in the setup script
-* Fixing a bug in which PyWeather wasn't properly parsing wind data shown as "Variable". UI changes have been made to accommodate this data type - 0% done
+* Fixing a bug in which PyWeather wasn't properly parsing wind data shown as "Variable". UI changes have been made to accommodate this data type
 
 **OTHER CHANGES**
 * Geocoder dependency was removed, as noted above.

@@ -24,7 +24,7 @@ except:
 # why should I code it in?
 
 print("Would you like me to set up PyWeather's config?",
-      "Yes or No.", sep=="\n")
+      "Yes or No.", sep="\n")
 cd_confirmation = input("Input here: ").lower()
 if cd_confirmation == "yes":
     try:
@@ -136,6 +136,8 @@ if cd_confirmation == "yes":
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['CACHE']['enabled'] = 'True'
+    config['UI']['alerts_usiterations'] = '1'
+    config['UI']['alerts_euiterations'] = '2'
     print("Committing changes...")
     try:
         with open('storage//config.ini', 'w') as configfile:

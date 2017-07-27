@@ -1625,9 +1625,14 @@ while True:
                   + "°F (" + hourly10_feelsLikeC + "°C)")
             print(Fore.YELLOW + "Dew Point: " + Fore.CYAN + hourly10_dewpointF
                   + "°F (" + hourly10_dewpointC + "°C)")
-            print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly10_windMPH
-                  + " mph (" + hourly10_windKPH + " kph) blowing to the " +
-                  hourly10_windDir + " (" + hourly10_windDegrees + "°)")
+            if hourly10_windDir == "Variable":
+                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly10_windMPH
+                    + " mph (" + hourly10_windKPH + " kph) blowing in " +
+                    "variable directions.")
+            else:
+                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly10_windMPH
+                      + " mph (" + hourly10_windKPH + " kph) blowing to the " +
+                      hourly10_windDir + " (" + hourly10_windDegrees + "°)")
             print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly10_humidity + "%")
             if hourly10_snowData == False:
                 print(Fore.YELLOW + "Rain for the hour: " + Fore.CYAN +
@@ -1873,13 +1878,20 @@ while True:
             else:
                 print(Fore.YELLOW + "Rain for the night: " + Fore.CYAN + forecast10_precipNightIn
                       + " in (" + forecast10_precipNightMm + " mm)")
-                
-            print(Fore.YELLOW + "Winds: " + Fore.CYAN + 
-                  forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
-                  + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
-                  + forecast10_maxWindKPH + " kph), "
-                  + "and blowing " + forecast10_avgWindDir +
-                  " (" + forecast10_avgWindDegrees + "°)")
+
+            if forecast10_avgWindDir == "Variable":
+                print(Fore.YELLOW + "Winds: " + Fore.CYAN +
+                    forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
+                    + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
+                    + forecast10_maxWindKPH + " kph), "
+                    + "and blowing in variable directions.")
+            else:
+                print(Fore.YELLOW + "Winds: " + Fore.CYAN +
+                      forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
+                      + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
+                      + forecast10_maxWindKPH + " kph), "
+                      + "and blowing " + forecast10_avgWindDir +
+                      " (" + forecast10_avgWindDegrees + "°)")
             print(Fore.YELLOW + "Humidity: " + Fore.CYAN +
                   forecast10_avgHumidity + "%")
             detailedForecastIterations = detailedForecastIterations + 1
@@ -3306,7 +3318,12 @@ while True:
             print(Fore.YELLOW + "Dew point: " + Fore.CYAN + historical_dewpointF
                   + " °F (" + historical_dewpointC + " °C)")
             print(Fore.YELLOW + "Wind speed: " + Fore.CYAN + historical_windspeedMPH
-                  + " mph (" + historical_windspeedKPH + " kph)") 
+                  + " mph (" + historical_windspeedKPH + " kph)")
+            if historical_windDirection == "Variable":
+                print(Fore.YELLOW + "Wind direction: " + Fore.CYAN + "Variable directions")
+            else:
+                print(Fore.YELLOW + "Wind direction: " + Fore.CYAN + historical_windDirection
+                      + " (" + historical_windDegrees + "°)")
             if historical_windgustdata == True:
                 print(Fore.YELLOW + "Wind gusts: " + Fore.CYAN + historical_windgustMPH
                       + " mph (" + historical_windgustKPH + " kph)")
