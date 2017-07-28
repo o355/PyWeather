@@ -2,10 +2,12 @@
 ## Welcome to PyWeather (0.6.0.1 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
-## PyWeather 0.6.1 has been delayed :(
-I've been slacking off recently, so PyWeather 0.6.1 beta has been delayed by at least a week or so.
+## PyWeather 0.6.1 update
+PyWeather 0.6.1 has been in the making for two months, and is almost done. I'm doing extensive QA, and as such, I'm finding bugs and other issues I need to fix.
 
-I'm also finding LOTS of bugs, and adding new features on the fly.
+PyWeather 0.6.1 has about a 95% chance of being released by 7/31/2017, so hang tight. Right now, the indev branch is pretty stable, all things considered, if you don't like waiting.
+
+Thanks for your patience!
 
 ## Beta Notice
 If you haven't noticed, PyWeather is in beta. At this point, essential features mostly work.

@@ -963,7 +963,10 @@ print(Fore.YELLOW + "And it feels like: " + Fore.CYAN + summary_feelslikef
 print(Fore.YELLOW + "Current dew point: " + Fore.CYAN + summary_dewPointF
       + "°F (" + summary_dewPointC + "°C)")
 if winddata == True:
-    print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
+    if summary_winddir == "Variable":
+        print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing in variable directions.")
+    else:
+        print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
 else:
     print(Fore.YELLOW + "Wind data is not available for this location.")
 print(Fore.YELLOW + "Current humidity: " + Fore.CYAN + summary_humidity)
@@ -1068,6 +1071,49 @@ while True:
                 logger.debug("current_json loaded with: %s" % current_json)
                    
         print("")
+        # Parse extra stuff. Variable names are kept the same for the sake of sanity.
+        # If the user hasn't refetched, this works out. Vars stay the same.
+        summary_overall = current_json['current_observation']['weather']
+        summary_lastupdated = current_json['current_observation']['observation_time']
+        summary_tempf = str(current_json['current_observation']['temp_f'])
+        summary_tempc = str(current_json['current_observation']['temp_c'])
+        summary_humidity = str(current_json['current_observation']['relative_humidity'])
+        logger.debug("summary_overall: %s ; summary_lastupdated: %s"
+                     % (summary_overall, summary_lastupdated))
+        logger.debug("summary_tempf: %s ; summary_tempc: %s"
+                     % (summary_tempf, summary_tempc))
+        summary_winddir = current_json['current_observation']['wind_dir']
+        summary_windmph = current_json['current_observation']['wind_mph']
+        summary_windmphstr = str(summary_windmph)
+        summary_windkph = current_json['current_observation']['wind_kph']
+        logger.debug("summary_winddir: %s ; summary_windmph: %s"
+                     % (summary_winddir, summary_windmph))
+        logger.debug("summary_windmphstr: %s ; summary_windkph: %s"
+                     % (summary_windmphstr, summary_windkph))
+        summary_windkphstr = str(summary_windkph)
+        logger.debug("summary_windkphstr: %s" % summary_windkphstr)
+        windcheck = float(summary_windmph)
+        windcheck2 = float(summary_windkph)
+        logger.debug("windcheck: %s ; windcheck2: %s"
+                     % (windcheck, windcheck2))
+        if windcheck == -9999:
+            winddata = False
+            logger.warn("No wind data available!")
+        elif windcheck2 == -9999:
+            winddata = False
+            logger.warn("No wind data available!")
+        else:
+            winddata = True
+            logger.info("Wind data is available.")
+
+        summary_feelslikef = str(current_json['current_observation']['feelslike_f'])
+        summary_feelslikec = str(current_json['current_observation']['feelslike_c'])
+        summary_dewPointF = str(current_json['current_observation']['dewpoint_f'])
+        summary_dewPointC = str(current_json['current_observation']['dewpoint_c'])
+        logger.debug("summary_feelslikef: %s ; summary_feelslikec: %s"
+                     % (summary_feelslikef, summary_feelslikec))
+        logger.debug("summary_dewPointF: %s ; summary_dewPointC: %s"
+                     % (summary_dewPointF, summary_dewPointC))
         current_pressureInHg = str(current_json['current_observation']['pressure_in'])
         current_pressureMb = str(current_json['current_observation']['pressure_mb'])
         logger.debug("current_pressureInHg: %s ; current_pressureMb: %s"
@@ -1116,9 +1162,13 @@ while True:
         print(Fore.YELLOW + "Current dew point: " + Fore.CYAN + summary_dewPointF
               + "°F (" + summary_dewPointC + "°C)")
         if winddata == True:
-            print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + 
-                  " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir 
-                  + " (" + current_windDegrees + " degrees)")
+            if summary_winddir == "Variable":
+                print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr +
+                    " mph (" + summary_windkphstr + " kph), blowing in variable directions.")
+            else:
+                print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr +
+                      " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir
+                      + " (" + current_windDegrees + " degrees)")
         else:
             print(Fore.YELLOW + "Wind data is not available for this location.")
         print(Fore.YELLOW + "Current humidity: " + Fore.CYAN + summary_humidity)
@@ -1736,9 +1786,14 @@ while True:
                   + "°F (" + hourly_feelsLikeC + "°C)")
             print(Fore.YELLOW + "Dew Point: " + Fore.CYAN + hourly_dewpointF
                   + "°F (" + hourly_dewpointC + "°C)")
-            print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly_windMPH
-                  + " mph (" + hourly_windKPH + " kph) blowing to the " +
-                  hourly_windDir + " (" + hourly_windDegrees + "°)")
+            if hourly_windDir == "Variable":
+                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly_windMPH
+                    + " mph (" + hourly_windKPH + " kph) blowing in " +
+                    "variable directions.")
+            else:
+                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly_windMPH
+                      + " mph (" + hourly_windKPH + " kph) blowing to the " +
+                      hourly_windDir + " (" + hourly_windDegrees + "°)")
             print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly_humidity + "%")
             if hourly_snowData == False:
                 print(Fore.YELLOW + "Rain for the hour: " + Fore.CYAN +
@@ -1900,9 +1955,14 @@ while True:
                   + "°F (" + hourly10_feelsLikeC + "°C)")
             print(Fore.YELLOW + "Dew Point: " + Fore.CYAN + hourly10_dewpointF
                   + "°F (" + hourly10_dewpointC + "°C)")
-            print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly10_windMPH
-                  + " mph (" + hourly10_windKPH + " kph) blowing to the " +
-                  hourly10_windDir + " (" + hourly10_windDegrees + "°)")
+            if hourly10_windDir == "Variable":
+                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly10_windMPH
+                    + " mph (" + hourly10_windKPH + " kph) blowing in " +
+                    "variable directions.")
+            else:
+                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly10_windMPH
+                      + " mph (" + hourly10_windKPH + " kph) blowing to the " +
+                      hourly10_windDir + " (" + hourly10_windDegrees + "°)")
             print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly10_humidity + "%")
             if hourly10_snowData == False:
                 print(Fore.YELLOW + "Rain for the hour: " + Fore.CYAN +
@@ -2148,13 +2208,20 @@ while True:
             else:
                 print(Fore.YELLOW + "Rain for the night: " + Fore.CYAN + forecast10_precipNightIn
                       + " in (" + forecast10_precipNightMm + " mm)")
-                
-            print(Fore.YELLOW + "Winds: " + Fore.CYAN + 
-                  forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
-                  + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
-                  + forecast10_maxWindKPH + " kph), "
-                  + "and blowing " + forecast10_avgWindDir +
-                  " (" + forecast10_avgWindDegrees + "°)")
+
+            if forecast10_avgWindDir == "Variable":
+                print(Fore.YELLOW + "Winds: " + Fore.CYAN +
+                    forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
+                    + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
+                    + forecast10_maxWindKPH + " kph), "
+                    + "and blowing in variable directions.")
+            else:
+                print(Fore.YELLOW + "Winds: " + Fore.CYAN +
+                      forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
+                      + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
+                      + forecast10_maxWindKPH + " kph), "
+                      + "and blowing " + forecast10_avgWindDir +
+                      " (" + forecast10_avgWindDegrees + "°)")
             print(Fore.YELLOW + "Humidity: " + Fore.CYAN +
                   forecast10_avgHumidity + "%")
             detailedForecastIterations = detailedForecastIterations + 1
@@ -3046,7 +3113,7 @@ while True:
         logger.info("Selected option - Sun/moon data")
         if (sundata_prefetched is False or
             time.time() - cachetime_sundata >= cache_sundatatime and cache_enabled == True or
-            refresh_sundataflagged == True):
+                refresh_sundataflagged == True):
             print(Fore.RED + "Fetching (or refreshing) sun/moon data...")
             try:
                 sundataJSON = requests.get(astronomyurl)
@@ -3278,7 +3345,6 @@ while True:
         historical_input = input("Input here: ").lower()
         logger.debug("historical_input: %s" % historical_input)
         print(Fore.RED + "Loading...")
-        print("")
         historical_loops = 0
         historical_totalloops = 0
         logger.debug("historical_loops: %s ; historical_totalloops: %s"
@@ -3320,8 +3386,13 @@ while True:
                 input()
                 continue
         
-        
-            historical_json = json.loads(historicalJSON.text)
+            try:
+                historical_json = json.loads(historicalJSON.text)
+            except json.decoder.JSONDecodeError:
+                print(Fore.RED + "There was an issue parsing the data for the date requested. Try requesting another date."
+                      + Fore.RESET)
+                continue
+
             historical_cache[historical_input] = historical_json
             logger.debug("Appended new key to historal cache: %s with value historical json"
                          % historical_input)
@@ -3330,7 +3401,12 @@ while True:
             else:
                 logger.debug("Loaded 1 JSON.")
         historical_date = historical_json['history']['date']['pretty']
-        print(Fore.YELLOW + "Here's the historical weather for " + Fore.CYAN + 
+        if historical_date == "":
+            print(Fore.RED + "The date you entered was invalid. Please try selecting another date."
+                  + Fore.RESET)
+            continue
+        print("")
+        print(Fore.YELLOW + "Here's the historical weather for " + Fore.CYAN +
               str(location) + Fore.YELLOW + " on "
               + Fore.CYAN + historical_date)
         logger.debug("historical_date: %s" % historical_date)
@@ -3581,7 +3657,12 @@ while True:
             print(Fore.YELLOW + "Dew point: " + Fore.CYAN + historical_dewpointF
                   + " °F (" + historical_dewpointC + " °C)")
             print(Fore.YELLOW + "Wind speed: " + Fore.CYAN + historical_windspeedMPH
-                  + " mph (" + historical_windspeedKPH + " kph)") 
+                  + " mph (" + historical_windspeedKPH + " kph)")
+            if historical_windDirection == "Variable":
+                print(Fore.YELLOW + "Wind direction: " + Fore.CYAN + "Variable directions")
+            else:
+                print(Fore.YELLOW + "Wind direction: " + Fore.CYAN + historical_windDirection
+                      + " (" + historical_windDegrees + "°)")
             if historical_windgustdata == True:
                 print(Fore.YELLOW + "Wind gusts: " + Fore.CYAN + historical_windgustMPH
                       + " mph (" + historical_windgustKPH + " kph)")
@@ -3679,25 +3760,6 @@ while True:
         elif jokenum == 12:
             print("What did the hurricane say to the other hurricane?",
                   "I have my eye on you.", sep="\n")
-
-    elif moreoptions == "13":
-        print(Fore.RESET + "Attempting to relaunch PyWeather...")
-        try:
-            os.system("python3 pyweather.py")
-            print("")
-            sys.exit()
-        except:
-            try:
-                os.system("python pyweather.py")
-                print("")
-                sys.exit()
-            except:
-                try:
-                    os.system("pyweather.py")
-                    print("")
-                    sys.exit()
-                except:
-                    print("Can't relaunch PyWeather!")
     elif moreoptions == "10":
         print(Fore.RESET + "Flagging all data types to be refreshed when they are next",
               "launched.", sep="\n")

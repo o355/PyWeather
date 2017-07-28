@@ -23,14 +23,16 @@ The changelog will now NOT BE used for tracking what needs to get done, and not 
 * Removed the dependency on geocoder, and by extension, removed the unnecessary reverse geocoder, and 
 * Added the dependency of appJar.
 * Loading times have been increased by about 0.2 seconds, due to the removal of the unnecessary second geocoder.
-* Added the last-resort option when installing Colorama in the setup file.
+* Added the last-resort option when installing Colorama in the setup file, and a warning to all last-resort options.
 * Adds an experimental radar to PyWeather.
 * Adds error checking for imports on all scripts (non-standard libraries)
 * Adds a progress indicator during setup configuration.
-* Adds requests as a necessary library to setup
+* Adds requests as a necessary library to setup.
 * PyWeather Setup now validates your API key after you input it (and after the backup)
 * PyWeather Setup will now update PIP packages with user approval.
 * Geopy's scheme was changed to HTTP due to issues on OS X.
+* Added the ability to back up your API key to a specific directory in the keybackup.py script. - 0% done
+* Adds wind direction data to historical hourly.
 
 **BUG FIXES**
 * Fixed a major bug where the PyWeather Git updater wouldn't, uh, fully update.
@@ -40,7 +42,13 @@ The changelog will now NOT BE used for tracking what needs to get done, and not 
 * Fixed a major bug where alerts wouldn't iterate, due to a non-defined config variable.
 * Fixed a super tiny bug where a logger.info statement would not print in the setup file, unless Geopy was not installed.
 * Fixed a bug in the setup file, in which if sections were already added to a config file without the configprovisioned flag, PyWeather Setup would not run.
-* Fixing a bug in which custom directories really didn't work for the backup API key in the setup script - 60% done, need to add error catching
+* Fixed a bug in which custom directories really didn't work for the backup API key in the setup script
+* Fixed a bug in which PyWeather wasn't properly parsing wind data shown as "Variable". UI changes have been made to accommodate this data type
+* Fixed many bugs in which PyWeather was unable to properly catch errors when parsing historical data, and wrong dates.
+
+**OTHER CHANGES**
+* Geocoder dependency was removed, as noted above.
+* The PIP installer during setup now uses urllib, which is unreliable. An option was added for a user to manually download necessary files.
 
 ## version 0.6.0.1 beta - Released on 5/29/2017
 * Fixes a critical bug where a user couldn't provision their config file when they first downloaded the program.
