@@ -1,13 +1,6 @@
 
-## Welcome to PyWeather (0.6.0.1 beta)!
+## Welcome to PyWeather (0.6.1 beta)!
 Viewing the weather in a terminal has never been so much fun.
-
-## PyWeather 0.6.1 update
-PyWeather 0.6.1 has been in the making for two months, and is almost done. I'm doing extensive QA, and as such, I'm finding bugs and other issues I need to fix.
-
-PyWeather 0.6.1 has about a 95% chance of being released by 7/31/2017, so hang tight. Right now, the indev branch is pretty stable, all things considered, if you don't like waiting.
-
-Thanks for your patience!
 
 ## Beta Notice
 If you haven't noticed, PyWeather is in beta. At this point, essential features mostly work.
@@ -21,7 +14,7 @@ You can also use git to download PyWeather, using the commands below.
 
 ```
 git clone https://github.com/o355/pyweather.git
-git checkout 0.6.0.1-beta
+git checkout 0.6.1-beta
 ```
 
 If you'd prefer to live on the bleeding edge of PyWeather updates, run these commands.
@@ -56,23 +49,23 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 	* Almanac information
 	* Astronomy (sunrise/sunset/moonrise/moonset + moon) information
 	* Historical weather information, including hourly weather for a historical date
+	* Radar information (experimental, for now)
 	
 * In addition, you'll soon be able to view these data types soon:
-	* Radar information (experimental, for now) - Coming in 0.6.1 beta
-	* Yesterday's weather - Coming sometime around 0.7 beta
-	* Webcam images (a big maybe on animated videos) - Coming in either 0.7.2 beta or 0.8 beta
-	* Tide data - Coming in 0.7 beta
-	* Hurricane data - Coming in 0.7 beta
-	* Some form of a historical planner - Coming in 0.7.1 beta
+	* Yesterday's weather - Coming in 0.6.2 beta
+	* Tide data - Coming in 0.6.2 beta
+	* Hurricane data - Coming in 0.6.2 beta
+	* Webcam images (a big maybe on animated videos) - Coming in 0.7 beta
+	* Some form of a historical planner - Coming in 0.7 beta, or 0.7.1 beta
 * PyWeather is pretty modular. As I said earlier with the super-configurable config file, this also translates into modularity. PyWeather's features can be turned on and off at will.
 * PyWeather has a built-in updater, provided you have git installed. I hope to eventually incorporate a universal "download the zip and unzip it" system down the road.
 * PyWeather has a robust built-in debugger/logger. When turned on, it'll spam your console with verbosityness, or whatever that's called.
 * PyWeather has colors. I made the program colorful.
 
 In addition, these features will soon be coming to PyWeather:
-* PyWeather will soon be able to get weather for your current location, as would be provided by an IP Geolocator. It will be inaccurate on cellular connections, but should be of good accuracy otherwise - Coming in 0.8 beta
-* PyWeather will soon be able to get weather from individual personal weather stations. - Coming in 0.8.1 beta
-* PyWeather **MAY** soon be able to get weather easily for your favorite locations. I'm not 100% sure about how I would go about doing this. - Possibly coming in 0.9 beta
+* PyWeather will soon be able to get weather for your current location, as would be provided by an IP Geolocator. It will be inaccurate on cellular connections, but should be of good accuracy otherwise - Coming in 0.7.2 beta
+* PyWeather will soon be able to get weather from individual personal weather stations. - Coming in 0.7.3 beta
+* PyWeather **MAY** soon be able to get weather easily for your favorite locations. I'm not 100% sure about how I would go about doing this. - 50% chance of this coming in 0.8 beta.
 
 ## Why actually use PyWeather over Wunderground, or other apps?
 PyWeather has lots of advantages over using websites on your desktop, or even weather apps on mobile (PyWeather is compatible with Termux for Android, and other SSH apps of course)
