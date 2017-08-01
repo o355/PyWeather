@@ -123,5 +123,4 @@ storage/config.ini
 storage/versioninfo.txt
 
 # DS Store file
-.DS_Store
 *.DS_Store
