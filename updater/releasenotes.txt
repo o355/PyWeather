@@ -1,3 +1,5 @@
+**THE UPDATER IS BROKEN. PLEASE FOLLOW INSTRUCTIONS TO UPDATE AT https://github.com/o355/PyWeather/releases**
+
 **NEW FEATURES/REMOVALS**
 * Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache.
 * Removed the dependency on geocoder, and by extension, removed the unnecessary reverse geocoder, and 
