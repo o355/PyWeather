@@ -1,4 +1,4 @@
-# PyWeather Setup - version 0.6.0.1 beta
+# PyWeather Setup - version 0.6.1 beta
 # (c) 2017, o355, licensed under GNU GPL v3
 
 # Same deal as the main script.
@@ -33,7 +33,7 @@ try:
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.0.1 beta")
+        out.write("0.6.1 beta")
         out.close()
 
 config = configparser.ConfigParser()
@@ -430,7 +430,7 @@ except ImportError:
         "I'll start in a few seconds.", sep="\n")
         time.sleep(3)
         print("Downloading the installer...")
-        # We use the built-in
+        # We use the built-in urllib library, as some Python installs don't include requests.
         try:
             with urllib.request.urlopen('https://bootstrap.pypa.io/get-pip.py') as update_response, open('get-pip.py',
                                                                                                          'wb') as update_out_file:

@@ -119,8 +119,8 @@ logger.debug("showReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: %s" %
 logger.debug("showReleaseNotes: %s" %
              (showReleaseNotes))
 
-buildnumber = 60.1
-buildversion = "0.6.0.1 beta"
+buildnumber = 61
+buildversion = "0.6.1 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))

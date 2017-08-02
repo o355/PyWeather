@@ -163,7 +163,7 @@ except:
 
 # Import logging, and set up the logger.
 import logging
-logger = logging.getLogger(name='pyweather_0.6beta')
+logger = logging.getLogger(name='pyweather_0.6.1beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
@@ -177,7 +177,7 @@ else:
     logger.setLevel(logging.CRITICAL)
     
 # List config options for those who have verbosity enabled.    
-logger.info("PyWeather 0.6 indev now starting.")
+logger.info("PyWeather 0.6.1 beta now starting.")
 logger.info("Configuration options are as follows: ")
 logger.debug("sundata_summary: %s ; almanac_summary: %s" %
              (sundata_summary, almanac_summary))
@@ -404,7 +404,7 @@ if checkforUpdates == True:
 logger.info("Defining about variables...")
 about_buildnumber = "61"
 about_version = "0.6.1 beta"
-about_releasedate = "May 29, 2017"
+about_releasedate = "July 31, 2017"
 about_maindevelopers = "o355"
 logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))

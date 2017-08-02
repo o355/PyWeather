@@ -17,7 +17,7 @@ The changelog will now NOT BE used for tracking what needs to get done, and not 
     * Docs folder for uh, documents.
 * Adds the option to force a scheme on Geopy (HTTP or HTTPS)
 
-## version 0.6.1 beta - Performing QA - Should be released by 7/31/2017
+## version 0.6.1 beta - Released on 7/31/2017
 **NEW FEATURES/REMOVALS**
 * Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache.
 * Removed the dependency on geocoder, and by extension, removed the unnecessary reverse geocoder, and 
@@ -31,8 +31,8 @@ The changelog will now NOT BE used for tracking what needs to get done, and not 
 * PyWeather Setup now validates your API key after you input it (and after the backup)
 * PyWeather Setup will now update PIP packages with user approval.
 * Geopy's scheme was changed to HTTP due to issues on OS X.
-* Added the ability to back up your API key to a specific directory in the keybackup.py script. - 0% done
 * Adds wind direction data to historical hourly.
+* Removed the keybackup script.
 
 **BUG FIXES**
 * Fixed a major bug where the PyWeather Git updater wouldn't, uh, fully update.

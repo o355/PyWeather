@@ -1,20 +1,29 @@
-0.6.0.1 beta:
-- Fixes a critical bug where a user couldn't provision their config file 
-when they first downloaded the program.
-- Fixes a critical bug where if a user attempted to use the configuration 
-defaults program, the program didn't properly reset their config file.
+**THE UPDATER IS BROKEN. PLEASE FOLLOW INSTRUCTIONS TO UPDATE AT https://github.com/o355/PyWeather/releases**
 
-0.6 beta:
-- Adds an about page was added to PyWeather.
-- Adds alerts information to PyWeather, but it's only available for
-US/EU locations.
-- Adds the option to show release notes in the updater.
-- Adds the option to show when a new version of PyWeather should be
-releasing in the updater. (trying to avoid an Android Wear 2.0)
-- The "What would you like to do now" menu is now number-based now.
-- A lot of under the hood changes for those using Git for updating,
-and in general. The default config.ini file isn't bundled with PyWeather
-now to avoid Git conflicts.
-- Removed support for overriding version info.
-- Adds error catching for a bad reverse geolocator fetch.
-- Minor UI changes.
+**NEW FEATURES/REMOVALS**
+* Adds caching and refreshing to PyWeather. After a user-defined amount of time, a cache will expire for certain components of PyWeather, prompting a re-fetch of data. A manual refresh option will also get added, in which a flag is enabled to refresh the cache.
+* Removed the dependency on geocoder, and by extension, removed the unnecessary reverse geocoder, and 
+* Added the dependency of appJar.
+* Loading times have been increased by about 0.2 seconds, due to the removal of the unnecessary second geocoder.
+* Added the last-resort option when installing Colorama in the setup file, and a warning to all last-resort options.
+* Adds an experimental radar to PyWeather.
+* Adds error checking for imports on all scripts (non-standard libraries)
+* Adds a progress indicator during setup configuration.
+* Adds requests as a necessary library to setup.
+* PyWeather Setup now validates your API key after you input it (and after the backup)
+* PyWeather Setup will now update PIP packages with user approval.
+* Geopy's scheme was changed to HTTP due to issues on OS X.
+* Adds wind direction data to historical hourly.
+* Removed the keybackup script.
+
+**BUG FIXES**
+* Fixed a major bug where the PyWeather Git updater wouldn't, uh, fully update.
+* Fixed a bug where configsetup's directory checking wasn't 100% compatible with Windows.
+* Fixed a bug where if the sunrise/sunset/moonrise/moonset hour was 0, PyWeather wasn't correcting it to a 12.
+* Fixed a bug where if you entered a weird name to check the weather for, an encoding error would occur.
+* Fixed a major bug where alerts wouldn't iterate, due to a non-defined config variable.
+* Fixed a super tiny bug where a logger.info statement would not print in the setup file, unless Geopy was not installed.
+* Fixed a bug in the setup file, in which if sections were already added to a config file without the configprovisioned flag, PyWeather Setup would not run.
+* Fixed a bug in which custom directories really didn't work for the backup API key in the setup script
+* Fixed a bug in which PyWeather wasn't properly parsing wind data shown as "Variable". UI changes have been made to accommodate this data type
+* Fixed many bugs in which PyWeather was unable to properly catch errors when parsing historical data, and wrong dates.

@@ -30,7 +30,7 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     except:
         print("Failed to add the cache section. Does it exist?")
         
-    print("7 new configuration options have been added.",
+    print("9 new configuration options have been added.",
           "Details:",
           "- CACHE/alerts_cachedtime - Sets the cache time on alert data - Defaults to 5",
           "- CACHE/current_cachedtime - Sets the cache time on current data - Defaults to 10",
@@ -67,6 +67,9 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
               "the full error. Along with that, please manually add the configuration entries",
               "as listed above, with their default values in your configuration file.",
               "Press enter to exit.")
+        input()
+        sys.exit()
+
     open("updater//versioninfo.txt", 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
         out.write("0.6.1 beta")

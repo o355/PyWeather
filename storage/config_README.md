@@ -231,10 +231,10 @@ When doing this, custom changes to your config file will be overwritten. PyWeath
 **Default option: False**
 
 ## RADAR GUI section
-**Available in PyWeather 0.6 indev, and PyWeather 0.6.1 beta and above**
+**Available in PyWeather 0.6.1 beta and above**
 This section controls the GUI for displaying radar and other images.
 
-### gifsize
+### radar_imagesize
 This option allows you to control the size of the .gif image that is to be displayed.
 This option will only accept 5 sizes, as defined below
 (can't imagine how hard it'd be to code in every size ever. This is simpler, too)
@@ -250,6 +250,13 @@ The default option is 640x480, it's a nice balance between size of the GUI and s
 Of course, on newer laptops with FHD screens, you can increase the resolution of the image. Note, the higher the image size, the longer it takes to fetch the .gif.
 
 **Default option: normal**
+
+## bypassconfirmation
+This option allows you to control if the warning about the radar being experimental can be bypassed.
+
+When this option is True, the confirmation is bypassed.
+
+**Default option: False**
 
 ## KEYBACKUP section
 This section allows you to control parts of the Key Backup script.
@@ -290,7 +297,7 @@ v1.1 = 110
 
 And so on and so forth.
 
-If a criticial hotfix needs to be applied (e.g. 0.5.2.1), the build number in such case would become 52.1.
+If a critical hotfix needs to be applied (e.g. 0.5.2.1), the build number in such case would become 52.1.
 
 **Default option: 52.1**
 
@@ -310,3 +317,57 @@ This option controls if your config file is provisioned. This mainly does nothin
 Changing this should do nothing, but keep it True just to be safe.
 
 **Default option: True**
+
+## CACHE section
+**Available in PyWeather 0.6.1 beta and above**
+
+This section lets you control cache times for the new caching system, and a master switch.
+
+### enabled
+This option lets you control if the cache is enabled (True), or disabled (False)
+
+**Default option: True**
+
+### alerts_cachedtime
+This option lets you control how many minutes will pass until alerts data is refreshed.
+
+This option must be an integer or float.
+
+**Default option: 5**
+
+### current_cachedtime
+This option lets you control how many minutes will pass until current "currently" weather data is refreshed.
+
+This option must be an integer or float.
+
+**Default option: 10**
+
+### hourly_cachedtime
+This option lets you control how many minutes will pass until hourly weather data is refreshed.
+
+This option must be an integer or float.
+
+**Default option: 60**
+
+### forecast_cachedtime
+This option lets you control how many minutes will pass until forecast weather data is refreshed.
+
+Keeping this option at 60 is recommended, since forecasts can change rapidly.
+
+This option must be an integer or float.
+
+**Default option: 60**
+
+### almanac_cachedtime
+This option lets you control how many minutes will pass until almanac data is refreshed.
+
+This option must be an integer or float.
+
+**Default option: 240**
+
+### sundata_cachedtime
+This option lets you control how many minutes will pass until sunrise/sunset data is refreshed.
+
+This option must be an integer or float.
+
+**Default option: 480**

@@ -119,9 +119,11 @@ temp/*.gif
 # Config file
 storage/config.ini
 
-# Version information file
+# Version information file (>0.6.1 beta)
 storage/versioninfo.txt
 
+# Version information file (<0.6.1 beta)
+updater/versioninfo.txt
+
 # DS Store file
-.DS_Store
 *.DS_Store
