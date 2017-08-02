@@ -410,7 +410,7 @@ logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))
 logger.debug("about_releasedate: %s ; about_maindevelopers: %s" %
              (about_releasedate, about_maindevelopers))
-about_contributors = "gsilvapt, ModoUnreal"
+about_contributors = "gsilvapt, ModoUnreal" # Oh look I'm on TV, HI MOM!!!!
 about_releasetype = "beta"
 about_librariesinuse = "Colorama, Geopy, Requests"
 logger.debug("about_contributors: %s ; about_releasetype: %s" %
