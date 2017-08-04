@@ -410,12 +410,14 @@ logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))
 logger.debug("about_releasedate: %s ; about_maindevelopers: %s" %
              (about_releasedate, about_maindevelopers))
-about_contributors = "gsilvapt, ModoUnreal" # Oh look I'm on TV, HI MOM!!!!
+about_awesomecontributors = "ModoUnreal, who is very proud to be on TV, and says hi to his mom." # Oh look I'm on TV, HI MOM!!!!
+about_contributors = "gsilvapt"
 about_releasetype = "beta"
 about_librariesinuse = "Colorama, Geopy, Requests"
 logger.debug("about_contributors: %s ; about_releasetype: %s" %
              (about_contributors, about_releasetype))
-logger.debug("about_librariesinuse: %s" % about_librariesinuse)
+logger.debug("about_librariesinuse: %s ; about_awesomecontributors: %s" % 
+            (about_librariesinuse, about_awesomecontributors))
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
@@ -3713,6 +3715,7 @@ while True:
               Fore.YELLOW + "Release Type: " + Fore.CYAN + about_releasetype,
               "",
               Fore.YELLOW + "Created, and mostly coded by: " + Fore.CYAN + about_maindevelopers,
+              Fore.YELLOW + "Awesome contributors: " + Fore.CYAN + about_awesomecontributors,
               Fore.YELLOW + "Contributors: " + Fore.CYAN + about_contributors,
               Fore.YELLOW + "A special thanks to the developers of these libraries",
               "that are used in PyWeather: " + Fore.CYAN,
