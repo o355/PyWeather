@@ -6,7 +6,8 @@ The changelog will now NOT BE used for tracking what needs to get done, and not 
 * Adds rounding in PyWeather (fixing a major bug with Termux)
 
 ## version 0.6.2 beta - Should be released 8/3/2017
-* Adds the yesterday's weather feature. - ModoUnreal is coding this in, ETA is TBD.
+**NEW FEATURES/REMOVALS**
+* @ModoUnreal added the ability to view yesterday's weather!
 * Adds the ability to read PyWeather's development news posts in PyWeather - "Scrapped"
 * Adds the option to turn on a custom user agent. Cool, right? - Should be finished by 7/19
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Should be finished by 7/19
@@ -16,6 +17,12 @@ The changelog will now NOT BE used for tracking what needs to get done, and not 
     * Getting a separate /config folder for the uh, config file.
     * Docs folder for uh, documents.
 * Adds the option to force a scheme on Geopy (HTTP or HTTPS)
+
+**BUG FIXES**
+* Fixed a bug where I forgot to globalize variables relating to emptying the radar cache.
+
+**OTHER CHANGES**
+* ModoUnreal is now an awesome contributor!
 
 ## version 0.6.1 beta - Released on 7/31/2017
 **NEW FEATURES/REMOVALS**
