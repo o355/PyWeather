@@ -1493,7 +1493,10 @@ while True:
                 print(Fore.RESET)
                 
             if user_enterToContinue == True:
-                if yesterday_loops == user_loopIterations:
+                if yesterday_totalloops = yesterday_hourlyLoops:
+                    logger.debug("yesterday_totalloops = yesterday_hourlyLoops. breaking...")
+                    break
+                elif yesterday_loops == user_loopIterations:
                     logger.info("Asking user to continue.")
                     try:
                         print(Fore.RED + "Press enter to view the next", user_loopIterations
