@@ -1,22 +1,18 @@
 # PyWeather changelog
 
-The changelog will now NOT BE used for tracking what needs to get done, and not done. GitHub issues will now be used.
-
 ## version 0.6.3 beta - Should be released late August:
-* Adds rounding in PyWeather (fixing a major bug with Termux)
 
 ## version 0.6.2 beta - Should be released 8/3/2017
 **NEW FEATURES/REMOVALS**
 * @ModoUnreal added the ability to view yesterday's weather!
-* Adds the ability to read PyWeather's development news posts in PyWeather - "Scrapped"
-* Adds the option to turn on a custom user agent. Cool, right? - Should be finished by 7/19
-* Adds the manual configuration of 3-day and 10-day hourly cache times - Should be finished by 7/19
-* Adds caching to the radar - Should be finished by 7/27
-* Restructures the filesystem (as was planned in 0.6.1 beta). Changes include:
+* Adds the ability to view hurricane data in PyWeather - Should be finished by 8/8
+* Adds the ability to view tide data in PyWeather - Should be finished by 8/13
+* Adds the manual configuration of 3-day and 10-day hourly cache times - Should be finished by 8/15
+* Restructures the filesystem (as was planned in 0.6.1 beta). Changes include (should be finished by 8/19):
     * Radar placeholder gifs going into a /radar folder
     * Getting a separate /config folder for the uh, config file.
     * Docs folder for uh, documents.
-* Adds the option to force a scheme on Geopy (HTTP or HTTPS)
+* Adds the option to force a scheme on Geopy (HTTP or HTTPS) - Should be finished by 8/22
 
 **BUG FIXES**
 * Fixed a bug where I forgot to globalize variables relating to emptying the radar cache.
