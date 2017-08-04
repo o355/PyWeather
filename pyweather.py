@@ -1495,7 +1495,7 @@ while True:
                 print(Fore.RESET)
                 
             if user_enterToContinue == True:
-                if yesterday_totalloops = yesterday_hourlyLoops:
+                if yesterday_totalloops == yesterday_hourlyLoops:
                     logger.debug("yesterday_totalloops = yesterday_hourlyLoops. breaking...")
                     break
                 elif yesterday_loops == user_loopIterations:
