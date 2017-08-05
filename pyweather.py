@@ -1346,7 +1346,7 @@ while True:
             print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + yesterday_precipIN
                   + " in (" + yesterday_precipMM + "mb)")
             try:
-                print(Fore.RED + "To view hourly data fo yesterday's weather, please press enter.")
+                print(Fore.RED + "To view hourly data for yesterday's weather, please press enter.")
                 print(Fore.RED + "If you want to return to the main menu, press Control + C.")
                 input()
             except KeyboardInterrupt:
@@ -1495,8 +1495,8 @@ while True:
                 print(Fore.RESET)
                 
             if user_enterToContinue == True:
-                if yesterday_totalloops == yesterday_hourlyLoops:
-                    logger.debug("yesterday_totalloops = yesterday_hourlyLoops. breaking...")
+                if yesterday_totalloops == yesterdayhourlyLoops:
+                    logger.debug("yesterday_totalloops = yesterdayhourlyLoops. breaking...")
                     break
                 elif yesterday_loops == user_loopIterations:
                     logger.info("Asking user to continue.")
