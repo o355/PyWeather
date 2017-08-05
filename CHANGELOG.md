@@ -1,3 +1,4 @@
+
 # PyWeather changelog
 
 ## version 0.6.3 beta - Should be released late August:
@@ -6,7 +7,7 @@
 **NEW FEATURES/REMOVALS**
 * @ModoUnreal added the ability to view yesterday's weather!
 * Adds the ability to view hurricane data in PyWeather - Should be finished by 8/8
-* Adds the ability to view tide data in PyWeather - Should be finished by 8/13
+* Adds the ability to view tide data in PyWeather - 25% done
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Should be finished by 8/15
 * Restructures the filesystem (as was planned in 0.6.1 beta). Changes include (should be finished by 8/19):
     * Radar placeholder gifs going into a /radar folder

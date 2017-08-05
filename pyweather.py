@@ -121,6 +121,7 @@ try:
     user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
     user_radarImageSize = config.get('RADAR GUI', 'radar_imagesize')
     radar_bypassconfirmation = config.getboolean('RADAR GUI', 'bypassconfirmation')
+    showTideOnSummary = config.getboolean('SUMMARY', 'showtideonsummary')
     
 except:
     # If it fails (typo or code error), we set all options to default.
@@ -160,6 +161,7 @@ except:
     user_alertsUSiterations = 1
     user_radarImageSize = "normal"
     radar_bypassconfirmation = False
+    showTideOnSummary = False
 
 # Import logging, and set up the logger.
 import logging
@@ -209,6 +211,7 @@ logger.debug("user_alertsUSiterations: %s ; user_alertsEUiterations: %s" %
              (user_alertsUSiterations, user_alertsEUiterations))
 logger.debug("user_radarImagesize: %s ; radar_bypassconfirmation: %s" %
              (user_radarImageSize, radar_bypassconfirmation))
+logger.debug("showTideOnSummary: %s" % showTideOnSummary)
 
 logger.info("Setting gif x and y resolution for radar...")
 # Set the size of the radar window.
@@ -353,6 +356,7 @@ refresh_hourly10flagged = False
 refresh_forecastflagged = False
 refresh_almanacflagged = False
 refresh_sundataflagged = False
+refresh_tidedataflagged = False
 
 logger.debug("refresh_currentflagged: %s ; refresh_alertsflagged: %s" %
              (refresh_currentflagged, refresh_alertsflagged))
@@ -360,7 +364,8 @@ logger.debug("refresh_hourly36flagged: %s ; refresh_hourly10flagged: %s" %
              (refresh_hourly36flagged, refresh_hourly10flagged))
 logger.debug("refresh_forecastflagged: %s ; refresh_almanacflagged: %s" %
              (refresh_forecastflagged, refresh_almanacflagged))
-logger.debug("refresh_sundataflagged: %s" % refresh_sundataflagged)
+logger.debug("refresh_sundataflagged: %s ; refresh_tidedataflagged: %s" %
+             (refresh_sundataflagged, refresh_tidedataflagged))
  
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")
@@ -377,7 +382,7 @@ if checkforUpdates == True:
         print("Press enter to continue.")
         input()
         sys.exit()
-    # Parse all the lovely .json info.
+
     versionJSON = json.loads(versioncheck.text)
     version_buildNumber = float(versionJSON['updater']['latestbuild'])
     logger.debug("reader2: %s ; versioncheck: %s" %
@@ -482,6 +487,7 @@ astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + l
 almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
 alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + latstr + ',' + lonstr + '.json'
 yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
+tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
 
 if verbosity == False:
     print("[##--------] | 6% |", round(time.time() - firstfetch,1), "seconds", end="\r")
@@ -491,6 +497,8 @@ logger.debug("hourlyurl: %s" % hourlyurl)
 logger.debug("tendayurl: %s" % tendayurl)
 logger.debug("astronomyurl: %s" % astronomyurl)
 logger.debug("almanacurl: %s" % almanacurl)
+logger.debug("yesterdayurl: %s" % yesterdayurl)
+logger.debug("tideurl: %s" % tideurl)
 logger.info("End API var declare...")
 logger.info("Start codec change...")
 
@@ -572,6 +580,7 @@ if validateAPIKey == False and backupKeyLoaded == True:
                 astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
                 almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
                 yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
+                tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
 
                 logger.debug("currenturl: %s ; f10dayurl: %s" %
                              (currenturl, f10dayurl))
@@ -579,7 +588,8 @@ if validateAPIKey == False and backupKeyLoaded == True:
                              (hourlyurl, tendayurl))
                 logger.debug("astronomyurl: %s ; almanacurl: %s" %
                              (astronomyurl, almanacurl))
-                logger.debug("yesterdayurl: %s" % yesterdayurl)
+                logger.debug("yesterdayurl: %s ; tideurl: %s" %
+                             (yesterdayurl, tideurl))
             except:
                 logger.warn("Backup API key could not be validated!")
                 print("Your primary and backup API key(s) could not be validated.",
@@ -664,6 +674,19 @@ try:
         logger.debug("Acquired alerts JSON, end result: %s" % alertsJSON)
     else:
         alertsPrefetched = False
+    logger.debug("alertsPrefetched: %s" % alertsPrefetched)
+    if showTideOnSummary == True:
+        tideJSON = requests.get(tideurl)
+        cachetime_tide = time.time()
+        tidePrefetched = True
+        if verbosity == False:
+            print("[#####-----] | 55% | ", round(time.time() - firstfetch,1), "seconds", end="\r")
+        logger.debug("Acquired tide JSON, end result: %s" % tideJSON)
+    else:
+        tidePrefetched = False
+    logger.debug("tidePrefetched: %s" % tidePrefetched)
+
+
 except:
     logger.warn("No connection to the API!! Is the connection offline?")
     print("When PyWeather attempted to fetch the .json files to show you the weather,",
@@ -679,7 +702,7 @@ except:
 logger.info("End API fetch...")
 logger.info("Start JSON load...")
 if verbosity == False:
-    print("[#####-----] | 55% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    print("[######----] | 60% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 current_json = json.loads(summaryJSON.text)
 if jsonVerbosity == True:
     logger.debug("current_json loaded with: %s" % current_json)
@@ -721,6 +744,13 @@ if showAlertsOnSummary == True:
         print("[#########-] | 90% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("alerts_json loaded with: %s" % alerts_json)
+if showTideOnSummary == True:
+    tide_json = json.loads(tideJSON.text)
+    if verbosity == False:
+        print("[#########-] | 92% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    if jsonVerbosity == True:
+        logger.debug("tide_json loaded with: %s" % tide_json)
+
 logger.info("Some amount of JSONs loaded...")
 
 # The 2nd geocoder was removed, as geopy can also do reverse information.
@@ -901,6 +931,40 @@ if almanac_summary == True:
     logger.debug("almanac_recordLowYear: %s ; almanac_prefetched: %s"
                  % (almanac_recordLowYear, almanac_prefetched))
 
+# <---- Tide data gets parsed here for the summary. ---->
+
+if showTideOnSummary == True:
+    for data in tide_json['tide']['tideInfo']:
+        tide_site = data['tideSite']
+
+    if tide_site != "":
+        tide_dataavailable = True
+        tide_hightideacq = False
+        tide_lowtideacq = False
+        logger.debug("tide_dataavailable: %s ; tide_site: %s" %
+                     (tide_dataavailable, tide_site))
+        logger.debug("tide_hightideacq: %s ; tide_lowtideacq: %s" %
+                     (tide_hightideacq, tide_lowtideacq))
+        for data in tide_json['tide']['tideSummary']:
+            if data['data']['type'] == "Low Tide" and tide_lowtideacq == False:
+                tide_lowtidetime = data['date']['pretty']
+                tide_lowtideheight = data['data']['height']
+                tide_lowtideacq = True
+                logger.debug("tide_lowtidetime: %s ; tide_lowtideheight: %s" %
+                             (tide_lowtidetime, tide_lowtideheight))
+                logger.debug("tide_lowtideacq: %s" % tide_lowtideacq)
+            elif data['data']['type'] == "High Tide" and tide_hightideacq == False:
+                tide_hightidetime = data['date']['pretty']
+                tide_hightideheight = data['data']['height']
+                tide_hightideacq = True
+                logger.debug("tide_hightidetime: %s ; tide_hightideheight: %s" %
+                             (tide_hightidetime, tide_hightideheight))
+                logger.debug("tide_hightideacq: %s" % tide_hightideacq)
+    else:
+        tide_dataavailable = False
+        logger.debug("tide_dataavailable: %s" % tide_dataavailable)
+
+
 logger.info("Initalize color...")
 init()
 if verbosity == False:
@@ -973,11 +1037,7 @@ else:
     print(Fore.YELLOW + "Wind data is not available for this location.")
 print(Fore.YELLOW + "Current humidity: " + Fore.CYAN + summary_humidity)
 print("")
-if sundata_summary == True:
-    print(Fore.YELLOW + "The sunrise and sunset:")
-    print(Fore.YELLOW + "Sunrise: " + Fore.CYAN + sunrise_time)
-    print(Fore.YELLOW + "Sunset: " + Fore.CYAN + sunset_time)
-    print("")
+
 print(Fore.YELLOW + "The hourly forecast:")
 
 for hour in hourly36_json['hourly_forecast']:
@@ -1021,6 +1081,27 @@ if almanac_summary == True:
     print(Fore.YELLOW + "Record low for today: " + Fore.CYAN + almanac_recordLowF
           + "°F (" + almanac_recordLowC + "°C)")
     print(Fore.YELLOW + "It was set in: " + Fore.CYAN + almanac_recordLowYear)
+
+if sundata_summary == True:
+    print("")
+    print(Fore.YELLOW + "The sunrise and sunset:")
+    print(Fore.YELLOW + "Sunrise: " + Fore.CYAN + sunrise_time)
+    print(Fore.YELLOW + "Sunset: " + Fore.CYAN + sunset_time)
+
+if showTideOnSummary == True and tide_dataavailable == True:
+    print("")
+    print(Fore.YELLOW + "The tide for " + Fore.CYAN + tide_site + Fore.YELLOW + " (the closest site to you):")
+    print("")
+    print(Fore.YELLOW + "Low tide:")
+    print(Fore.YELLOW + "Time: " + Fore.CYAN + tide_lowtidetime)
+    print(Fore.YELLOW + "Height: " + Fore.CYAN + tide_lowtideheight)
+    print("")
+    print(Fore.YELLOW + "High tide:")
+    print(Fore.YELLOW + "Time: " + Fore.CYAN + tide_hightidetime)
+    print(Fore.YELLOW + "Height: " + Fore.CYAN + tide_hightideheight)
+elif showTideOnSummary == True and tide_dataavailable == False:
+    print(Fore.YELLOW + "** Tide data is not available for the location you entered. **" + Fore.RESET)
+
 # In this part of PyWeather, you'll find comments indicating where things end/begin.
 # This is to help when coding, and knowing where things are.
 
