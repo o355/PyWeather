@@ -2,6 +2,9 @@
 ## Welcome to PyWeather (0.6.1 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
+## 0.6.2 beta status update
+Life's been busy, but I'll be back to developing by August 12th. ETA for 0.6.2 beta is late August, maybe early September.
+
 ## Beta Notice
 If you haven't noticed, PyWeather is in beta. At this point, essential features mostly work.
 
