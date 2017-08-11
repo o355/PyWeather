@@ -30,7 +30,7 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     except:
         print("Failed to add the cache section. Does it exist?")
         
-    print("9 new configuration options have been added.",
+    print("11 new configuration options have been added.",
           "Details:",
           "- CACHE/alerts_cachedtime - Sets the cache time on alert data - Defaults to 5",
           "- CACHE/current_cachedtime - Sets the cache time on current data - Defaults to 10",
@@ -51,28 +51,52 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['CACHE']['enabled'] = 'True'
-    
+elif versioninfo2 == "0.6.1 beta":
     try:
-        with open('storage//config.ini', 'w') as configfile:
-                config.write(configfile)
-        print("Configuration options committed successfully!")
+        config.add_section("GEOCODER")
     except:
-        print("Couldn't update your config file! A full error will be printed below.")
-        traceback.print_exc()
+        print("Failed to add the geocoder section. Does it exist?")
+
+    print("3 new configuration options have been added.",
+          "Details:",
+          "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
+          "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
+          "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https", sep="\n")
+
+    config['CACHE']['tide_cachedtime'] = '480'
+    config['SUMMARY']['showtideonsumary'] = 'False'
+    config['GEOCODER']['scheme'] = 'https'
+
+
+
+try:
+    with open('storage//config.ini', 'w') as configfile:
+            config.write(configfile)
+    print("Configuration options committed successfully!")
+except:
+    print("Couldn't update your config file! A full error will be printed below.")
+    traceback.print_exc()
+    print("Please report this bug to GitHub (github.com/o355/pyweather), along with",
+          "the full error. Along with that, please manually add the configuration entries",
+          "as listed above, with their default values in your configuration file.",
+          "Press enter to exit.")
+    input()
+    try:
         open("updater//versioninfo.txt", 'w').close()
         with open("updater//versioninfo.txt", 'a') as out:
-            out.write("0.6.1 beta")
+            out.write("0.6.2 beta")
             out.close()
-        print("Please report this bug to GitHub (github.com/o355/pyweather), along with",
-              "the full error. Along with that, please manually add the configuration entries",
-              "as listed above, with their default values in your configuration file.",
-              "Press enter to exit.")
-        input()
-        sys.exit()
-
+    except:
+        print("Could not write out an updated versioninfo text file. Please",
+              "modify 'updater/versioninfo.txt' to display '0.6.2 beta'.", sep="\n")
+    sys.exit()
+try:
     open("updater//versioninfo.txt", 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.1 beta")
+        out.write("0.6.2 beta")
         out.close()
+except:
+    print("Could not write out an updated versioninfo text file. Please",
+          "modify 'updater/versioninfo.txt' to display '0.6.2 beta'.", sep="\n")
     
     

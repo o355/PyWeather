@@ -117,6 +117,8 @@ try:
     cache_almanactime = cache_almanactime * 60
     cache_sundatatime = config.getfloat('CACHE', 'sundata_cachedtime')
     cache_sundatatime = cache_sundatatime * 60
+    cache_tidetime = config.getfloat('CACHE', 'tide_cachedtime')
+    cache_tidetime = cache_tidetime * 60
     user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
     user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
     user_radarImageSize = config.get('RADAR GUI', 'radar_imagesize')
@@ -151,12 +153,14 @@ except:
     showUpdaterReleaseNotes_uptodate = False
     showNewVersionReleaseDate = True
     cache_enabled = True
-    cache_alertstime = 5
-    cache_currenttime = 10
-    cache_hourlytime = 60
-    cache_forecasttime = 60
-    cache_almanactime = 240
-    cache_sundatatime = 480
+    # Values listed here are seconds for refresh times, not minutes.
+    cache_alertstime = 300
+    cache_currenttime = 600
+    cache_hourlytime = 3600
+    cache_forecasttime = 3600
+    cache_almanactime = 14400
+    cache_sundatatime = 28800
+    cache_tidetime = 28800
     user_alertsEUiterations = 2
     user_alertsUSiterations = 1
     user_radarImageSize = "normal"
@@ -934,6 +938,8 @@ if almanac_summary == True:
 # <---- Tide data gets parsed here for the summary. ---->
 
 if showTideOnSummary == True:
+    tidedata_prefetched = True
+    logger.debug("tidedata_prefetched: %s" % tidedata_prefetched)
     for data in tide_json['tide']['tideInfo']:
         tide_site = data['tideSite']
 
@@ -963,6 +969,9 @@ if showTideOnSummary == True:
     else:
         tide_dataavailable = False
         logger.debug("tide_dataavailable: %s" % tide_dataavailable)
+else:
+    tidedata_prefetched = False
+    logger.debug("tidedata_prefetched: %s" % tidedata_prefetched)
 
 
 logger.info("Initalize color...")
@@ -3787,7 +3796,100 @@ while True:
                                     % historical_loops)
                     except KeyboardInterrupt:
                         logger.info("Breaking to main menu, user issued KeyboardInterrupt")
-                        break         
+                        break
+    elif moreoptions == "14":
+        print(Fore.RED + "Loading, please wait a few seconds...")
+        print("")
+        try:
+            logger.debug("tidedata_prefetched: %s ; tide data cache time: %s" %
+                         (tidedata_prefetched, time.time() - cachetime_tide))
+        except:
+            logger.debug("tidedata_prefetched: %s" % sundata_prefetched)
+
+        logger.debug("refresh_tidedataflagged: %s" % refresh_tidedataflagged)
+        if (tidedata_prefetched is False or
+                            time.time() - cachetime_tide >= cache_tidetime and cache_enabled == True or
+                    refresh_tidedataflagged == True):
+            print(Fore.RED + "Fetching (or refreshing) tide data...")
+            try:
+                tideJSON = requests.get(tideurl)
+                logger.debug("Retrieved tide JSON with response: %s" % tideJSON)
+                cachetime_tide = time.time()
+            except:
+                print("When attempting to fetch tide data from Wunderground,",
+                      "PyWeather ran into an error. If you're on a network with",
+                      "a filter, make sure 'api.wunderground.com' is unblocked.",
+                      "Otherwise, make sure you have an internet connection.", sep="\n")
+                printException()
+                print("Press enter to continue.")
+                input()
+                continue
+
+            tidedata_prefetched = True
+            refresh_tidedataflagged = False
+            logger.debug("tidedata_prefetched: %s ; refresh_tidedataflagged: %s" %
+                         (tidedata_prefetched, refresh_tidedataflagged))
+
+            tide_json = json.loads(tideJSON.text)
+            if jsonVerbosity == True:
+                logger.debug("tide_json: %s" % astronomy_json)
+            else:
+                logger.debug("tide json loaded.")
+
+        for data in tide_json['tide']['tideInfo']:
+            tide_site = data['tideSite']
+
+        if tide_site == "":
+            print(Fore.RED + "Tide data is not available for this location." + Fore.RESET)
+            continue
+
+        # Get the iteration count
+        # Total iterations is the actual number of iterations, completed is how many have been completed
+        # Current is how many have been completed without interruption.
+        tide_totaliterations = 0
+        tide_completediterations = 0
+        tide_currentiterations = 0
+        logger.debug("tide_totaliterations: %s ; tide_currentiterations: %s" %
+                     (tide_totaliterations, tide_currentiterations))
+
+        for data in tide_json['tide']['tideSummary']:
+            tide_totaliterations = tide_totaliterations + 1
+        logger.debug("tide_totaliterations: %s" % tide_totaliterations)
+
+        for data in tide_json['tide']['tideSummary']:
+            tide_date = data['date']['pretty']
+            tide_type = data['data']['type']
+            logger.debug("tide_date: %s ; tide_type: %s" % (tide_date, tide_type))
+            print(Fore.YELLOW + tide_date + ":")
+            print(Fore.YELLOW + "Event: " + Fore.CYAN + tide_type)
+            if tide_type == "Low Tide" or tide_type == "High Tide":
+                tide_height = data['data']['height']
+                logger.debug("tide_height: %s" % tide_height)
+                print(Fore.YELLOW + "Height: " + Fore.CYAN + tide_height)
+            if user_showCompletedIterations == True:
+                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s"
+                      % (tide_completediterations, tide_totaliterations))
+                print(Fore.RESET)
+            print("")
+            tide_currentiterations = tide_currentiterations + 1
+            tide_completediterations = tide_completediterations + 1
+            logger.debug("tide_currentiterations: %s ; tide_completediterations: %s" %
+                         (tide_currentiterations, tide_completediterations))
+            if user_enterToContinue == True:
+                if tide_currentiterations == user_loopIterations:
+                    print("")
+                    try:
+                        print(Fore.RED + "Press enter to view the next %s iterations of tide data." % user_loopIterations,
+                            "Otherwise, press Control + C to head back to the main menu.", sep="\n")
+                        input()
+                        tide_currentiterations = 0
+                        logger.debug("tide_currentiterations: %s" % tide_currentiterations)
+                    except KeyboardInterrupt:
+                        break
+            elif tide_completediterations == tide_totaliterations:
+                logger.debug("tide_completediterations is equal to tide_totaliterations. Breaking.")
+                break
+
     elif moreoptions == "12":
         print("", Fore.YELLOW + "-=-=- " + Fore.CYAN + "PyWeather" + Fore.YELLOW + " -=-=-",
               Fore.CYAN + "version " + about_version, "",
@@ -3864,8 +3966,6 @@ while True:
                      (refresh_hourly10flagged, refresh_hourly36flagged))
         refresh_sundataflagged = True
         logger.debug("refresh_sundataflagged: %s" % refresh_sundataflagged)
-    elif moreoptions == "when does the emoji movie come out":
-        print("July 28, 2017") # 10/10, film of the year
     else:
         logger.warn("Input could not be understood!")
         print(Fore.RED + "Not a valid option.")

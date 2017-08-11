@@ -7,7 +7,7 @@
 **NEW FEATURES/REMOVALS**
 * @ModoUnreal added the ability to view yesterday's weather!
 * Adds the ability to view hurricane data in PyWeather - Should be finished by 8/8
-* Adds the ability to view tide data in PyWeather - 25% done
+* Adds the ability to view tide data in PyWeather - 75% done (need to add config/setup options)
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Should be finished by 8/15
 * Restructures the filesystem (as was planned in 0.6.1 beta). Changes include (should be finished by 8/19):
     * Radar placeholder gifs going into a /radar folder
@@ -17,6 +17,7 @@
 
 **BUG FIXES**
 * Fixed a bug where I forgot to globalize variables relating to emptying the radar cache.
+* Fixed a bug where if your configuration file failed to load, cache times were set insanely high (5 seconds for alert data, etc)
 
 **OTHER CHANGES**
 * ModoUnreal is now an awesome contributor!
