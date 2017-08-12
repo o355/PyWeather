@@ -1221,6 +1221,21 @@ else:
           "certain types of data, before a data refresh is automatically requested.",
           "If you want to leave cache values to their defaults, press enter at any prompt.", sep="\n")
 
+
+    print("", "(10/24)", "Would you like me to save your location in the cache,", 
+            "so you don't have to input it when Pyweather boots up?", 
+            "This is enabled by default. Yes or No", sep="\n")
+    enablelocation = input("Input here: ").lower()
+    if enablelocation == "no":
+        print("Location will not be saved to the cache.")
+        config['CACHE']['location'] = 'False'
+        print("Changes saved.")
+    else:
+        print("Which location would you like to save as a default?")
+        location = input("Input here: ")
+        config['CACHE']["location"] = location
+
+
     print("", "(10/24)", "Please enter the cache time for alerts data in minutes (default = 5)", sep="\n")
     alertscachetime = input("Input here: ").lower()
     try:
@@ -1475,11 +1490,11 @@ print("", "(24/24)", "PyWeather's radar feature is unfortunately experimental as
       "By default, bypassing the confirmation message is disabled. Yes or No.", sep="\n")
 radar_bypassconfinput = input("Input here: ").lower()
 if radar_bypassconfinput == "yes":
-    config['RADAR GUI']['bypassconfirmation'] = True
+    config['RADAR GUI']['bypassconfirmation'] = "True" 
     logger.debug("RADAR GUI/bypassconfirmation is now TRUE")
     print("Changes saved.")
 elif radar_bypassconfinput == "no":
-    config['RADAR GUI']['bypassconfirmation'] = False
+    config['RADAR GUI']['bypassconfirmation'] = "False"
     logger.debug("RADAR GUI/bypassconfirmation is now FALSE")
     print("Changes saved.")
 
