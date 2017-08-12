@@ -105,6 +105,7 @@ try:
     showUpdaterReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
     cache_enabled = config.getboolean('CACHE', 'enabled')
+    cache_location = config.get('CACHE', 'location')
     cache_alertstime = config.getfloat('CACHE', 'alerts_cachedtime')
     cache_alertstime = cache_alertstime * 60
     cache_currenttime = config.getfloat('CACHE', 'current_cachedtime')
@@ -205,6 +206,7 @@ logger.debug("showUpdaterReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: 
              % (showUpdaterReleaseNotes_uptodate, showNewVersionReleaseDate))
 logger.debug("showUpdaterReleaseNotes: %s ; cache_enabled: %s" %
              (showUpdaterReleaseNotes, cache_enabled))
+logger.debug("cache_location: %s" % cache_location)
 logger.debug("cache_alertstime: %s ; cache_currenttime: %s" %
              (cache_alertstime, cache_currenttime))
 logger.debug("cache_hourlytime: %s ; cache_forecasttime: %s" %
@@ -431,8 +433,11 @@ logger.debug("about_librariesinuse: %s ; about_awesomecontributors: %s" %
 # Can't do much in a terminal.
 
 print("Hey, welcome to PyWeather!")
-print("Below, enter a location to check the weather for that location!")
-locinput = input("Input here: ")
+if cache_location == False:
+    print("Below, enter a location to check the weather for that location!")
+    locinput = input("Input here: ")
+else:
+    locinput = cache_location
 print("Checking the weather, it'll take a few seconds!")
 
 
