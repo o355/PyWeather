@@ -1299,8 +1299,8 @@ else:
     threedayhourly_cachedtime = input("Input here: ").lower()
 
     try:
-        threedayhourly = int(threedayhourly_cachedtime) 
-        threedayhourly = str(threedayhourly_cachedtime) 
+        threedayhourly = int(threedayhourly_cachedtime)
+        threedayhourly = str(threedayhourly_cachedtime)
         config['CACHE']['threedayhourly_cachedtime'] = threedayhourly_cachedtime
         print("Changes saved.")
         logger.debug("3 day hourly cache time now %s minutes." % threedayhourly_cachedtime)
