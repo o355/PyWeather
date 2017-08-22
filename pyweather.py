@@ -1,5 +1,7 @@
 # PyWeather - version 0.6.1 beta
 # (c) 2017 o355, GNU GPL 3.0.
+
+# This line of code was typed in during the solar eclipse, in Eclipse.
 #
 # ==============
 # This is beta code. It's not pretty, and I'm not following PEP 8
@@ -187,7 +189,7 @@ else:
     logger.setLevel(logging.CRITICAL)
     
 # List config options for those who have verbosity enabled.    
-logger.info("PyWeather 0.6.1 beta now starting.")
+logger.info("PyWeather 0.6.2 beta now starting.")
 logger.info("Configuration options are as follows: ")
 logger.debug("sundata_summary: %s ; almanac_summary: %s" %
              (sundata_summary, almanac_summary))
@@ -217,6 +219,9 @@ logger.debug("cache_almanactime: %s ; cache_threedayhourly: %s" %
              (cache_almanactime, cache_threedayhourly))
 logger.debug("cache_tendayhourly: %s ; cache_sundatatime: %s" %
              (cache_tendayhourly, cache_sundatatime))
+# Coded during 70% totality of the 2017 eclipse, max for my location then
+logger.debug("cache_tidetime: %s" % cache_tidetime)
+# Please don't touch this line kthxbye
 logger.debug("user_alertsUSiterations: %s ; user_alertsEUiterations: %s" %
              (user_alertsUSiterations, user_alertsEUiterations))
 logger.debug("user_radarImagesize: %s ; radar_bypassconfirmation: %s" %

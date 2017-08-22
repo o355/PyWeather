@@ -21,6 +21,8 @@
 
 **OTHER CHANGES**
 * ModoUnreal is now an awesome contributor!
+* Fixed some code where for 2 setup options, a config variable was not being set. This didn't matter, since the configuration was being provisioned with those default options at the top of the script.
+Even if a user denied configuration provisioning, PyWeather would catch the error, and set the options back to normal. Not a bug, in my opinion.
 
 ## version 0.6.1 beta - Released on 7/31/2017
 **NEW FEATURES/REMOVALS**
