@@ -39,6 +39,140 @@ except:
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
 
+def configprovision():
+    try:
+        config.add_section('SUMMARY')
+    except configparser.DuplicateSectionError:
+        print("Cache section could not be added.")
+
+    try:
+        config.add_section('VERBOSITY')
+    except configparser.DuplicateSectionError:
+        print("Verbosity section could not be added.")
+
+    try:
+        config.add_section('TRACEBACK')
+    except configparser.DuplicateSectionError:
+        print("Traceback section could not be added.")
+
+    try:
+        config.add_section('UI')
+    except configparser.DuplicateSectionError:
+        print("UI section could not be added.")
+
+    try:
+        config.add_section('HOURLY')
+    except configparser.DuplicateSectionError:
+        print("Hourly section could not be added.")
+
+    try:
+        config.add_section('UPDATER')
+    except configparser.DuplicateSectionError:
+        print("Updater section could not be added.")
+
+    try:
+        config.add_section('KEYBACKUP')
+    except configparser.DuplicateSectionError:
+        print("Key Backup section could not be added.")
+
+    try:
+        config.add_section('PYWEATHER BOOT')
+    except configparser.DuplicateSectionError:
+        print("PyWeather Boot section could not be added.")
+
+    try:
+        config.add_section('USER')
+    except configparser.DuplicateSectionError:
+        print("User section could not be added.")
+    try:
+        config.add_section('CACHE')
+    except configparser.DuplicateSectionError:
+        print("Cache section could not be added.")
+
+    try:
+        config.add_section('RADAR GUI')
+    except configparser.DuplicateSectionError:
+        print("Radar GUI section could not be added.")
+
+    try:
+        config.add_section('GEOCODER')
+    except configparser.DuplicateSectionError:
+        print("Geocoder section could not be added.")
+
+    config['SUMMARY']['sundata_summary'] = 'False'
+    config['SUMMARY']['almanac_summary'] = 'False'
+    config['SUMMARY']['showalertsonsummary'] = 'True'
+    config['SUMMARY']['showtideonsummary'] = 'False'
+    config['VERBOSITY']['verbosity'] = 'False'
+    config['VERBOSITY']['json_verbosity'] = 'False'
+    config['VERBOSITY']['setup_verbosity'] = 'False'
+    config['VERBOSITY']['setup_jsonverbosity'] = 'False'
+    config['VERBOSITY']['updater_verbosity'] = 'False'
+    config['VERBOSITY']['updater_jsonverbosity'] = 'False'
+    config['VERBOSITY']['keybackup_verbosity'] = 'False'
+    config['VERBOSITY']['configdefault_verbosity'] = 'False'
+    config['TRACEBACK']['tracebacks'] = 'False'
+    config['TRACEBACK']['setup_tracebacks'] = 'False'
+    config['TRACEBACK']['updater_tracebacks'] = 'False'
+    config['TRACEBACK']['configdefault_tracebacks'] = 'False'
+    config['UI']['show_entertocontinue'] = 'True'
+    config['UI']['detailedinfoloops'] = '6'
+    config['UI']['forecast_detailedinfoloops'] = '5'
+    config['UI']['show_completediterations'] = 'False'
+    config['UI']['alerts_usiterations'] = '1'
+    config['UI']['alerts_euiterations'] = '2'
+    config['HOURLY']['10dayfetch_atboot'] = 'False'
+    config['UPDATER']['autocheckforupdates'] = 'False'
+    config['UPDATER']['show_updaterreleasetag'] = 'False'
+    config['KEYBACKUP']['savedirectory'] = 'backup//'
+    config['UPDATER']['allowGitForUpdating'] = 'False'
+    config['PYWEATHER BOOT']['validateapikey'] = 'True'
+    config['UPDATER']['showReleaseNotes'] = 'True'
+    config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
+    config['UPDATER']['showNewVersionReleaseDate'] = 'True'
+    config['USER']['configprovisioned'] = 'True'
+    config['CACHE']['enabled'] = 'True'
+    config['CACHE']['alerts_cachedtime'] = '5'
+    config['CACHE']['current_cachedtime'] = '10'
+    config['CACHE']['hourly_cachedtime'] = '60'
+    config['CACHE']['forecast_cachedtime'] = '60'
+    config['CACHE']['almanac_cachedtime'] = '240'
+    config['CACHE']['sundata_cachedtime'] = '480'
+    config['CACHE']['tide_cachedtime'] = '480'
+    config['RADAR GUI']['radar_imagesize'] = 'normal'
+    config['RADAR GUI']['bypassconfirmation'] = 'False'
+    config['GEOCODER']['scheme'] = 'https'
+    try:
+        with open('storage//config.ini', 'w') as configfile:
+            config.write(configfile)
+    except:
+        print("Hmmf...an odd error occurred. A full traceback will be",
+              "printed below. Please report this issue on GitHub",
+              "(github.com/o355/pyweather), as that would be greatly appreciated",
+              "for trying to fix the bug that you just encountered!", sep="\n")
+        traceback.print_exc()
+        # Giving users choice, unlike Microsoft.
+        print("Would you like to continue using PyWeather with an unprovisioned config?",
+              "It's highly recommended you don't continue, as you may encounter",
+              "unexpected errors and issues with using PyWeather. Yes or No.", sep="\n")
+        provisionfailed_continue = input("Input here: ").lower()
+        if provisionfailed_continue == "yes":
+            print("Continuing with PyWeather Setup. Please remember, you may encounter",
+                  "unexpected errors and issues. You can always retry provisioning your config",
+                  "by using the configsetup.py script in the storage folder.", sep="\n")
+        elif provisionfailed_continue == "no":
+            print("Stopping PyWeather Setup. You can retry to provision your config by using",
+                  "the configsetup.py script in the storage folder.",
+                  "Press enter to exit.", sep="\n")
+            input()
+            sys.exit()
+        else:
+            print("Couldn't understand your input. By default, PyWeather Setup is stopping.",
+                  "You can retry to provision your config by using the configsetup.py script",
+                  "in the storage folder. Press enter to exit.", sep="\n")
+            input()
+            sys.exit()
+
 # See if the config is "provisioned". If it isn't, a KeyError will occur,
 # because it's not created. Here, we set up the config to defaults if it's not
 # provisioned.
@@ -52,135 +186,7 @@ except:
     provisionconfig = input("Input here: ").lower()
     if provisionconfig == "yes":
         print("Provisioning your config.")
-        try:
-            config.add_section('SUMMARY')
-        except configparser.DuplicateSectionError:
-            print("Cache section could not be added.")
-
-        try:
-            config.add_section('VERBOSITY')
-        except configparser.DuplicateSectionError:
-            print("Verbosity section could not be added.")
-
-        try:
-            config.add_section('TRACEBACK')
-        except configparser.DuplicateSectionError:
-            print("Traceback section could not be added.")
-
-        try:
-            config.add_section('UI')
-        except configparser.DuplicateSectionError:
-            print("UI section could not be added.")
-
-        try:
-            config.add_section('HOURLY')
-        except configparser.DuplicateSectionError:
-            print("Hourly section could not be added.")
-
-        try:
-            config.add_section('UPDATER')
-        except configparser.DuplicateSectionError:
-            print("Updater section could not be added.")
-
-        try:
-            config.add_section('KEYBACKUP')
-        except configparser.DuplicateSectionError:
-            print("Key Backup section could not be added.")
-
-        try:
-            config.add_section('VERSIONS')
-        except configparser.DuplicateSectionError:
-            print("Versions section could not be added.")
-
-        try:
-            config.add_section('PYWEATHER BOOT')
-        except configparser.DuplicateSectionError:
-            print("PyWeather Boot section could not be added.")
-
-        try:
-            config.add_section('USER')
-        except configparser.DuplicateSectionError:
-            print("User section could not be added.")
-        try:
-            config.add_section('CACHE')
-        except configparser.DuplicateSectionError:
-            print("Cache section could not be added.")
-
-        try:
-            config.add_section('RADAR GUI')
-        except configparser.DuplicateSectionError:
-            print("Radar GUI section could not be added.")
-
-        config['SUMMARY']['sundata_summary'] = 'False'
-        config['SUMMARY']['almanac_summary'] = 'False'
-        config['SUMMARY']['showalertsonsummary'] = 'True'
-        config['VERBOSITY']['verbosity'] = 'False'
-        config['VERBOSITY']['json_verbosity'] = 'False'
-        config['VERBOSITY']['setup_verbosity'] = 'False'
-        config['VERBOSITY']['setup_jsonverbosity'] = 'False'
-        config['VERBOSITY']['updater_verbosity'] = 'False'
-        config['VERBOSITY']['updater_jsonverbosity'] = 'False'
-        config['VERBOSITY']['keybackup_verbosity'] = 'False'
-        config['VERBOSITY']['configdefault_verbosity'] = 'False'
-        config['TRACEBACK']['tracebacks'] = 'False'
-        config['TRACEBACK']['setup_tracebacks'] = 'False'
-        config['TRACEBACK']['updater_tracebacks'] = 'False'
-        config['TRACEBACK']['configdefault_tracebacks'] = 'False'
-        config['UI']['show_entertocontinue'] = 'True'
-        config['UI']['detailedinfoloops'] = '6'
-        config['UI']['forecast_detailedinfoloops'] = '5'
-        config['UI']['show_completediterations'] = 'False'
-        config['UI']['alerts_usiterations'] = '1'
-        config['UI']['alerts_euiterations'] = '2'
-        config['HOURLY']['10dayfetch_atboot'] = 'False'
-        config['UPDATER']['autocheckforupdates'] = 'False'
-        config['UPDATER']['show_updaterreleasetag'] = 'False'
-        config['KEYBACKUP']['savedirectory'] = 'backup//'
-        config['UPDATER']['allowGitForUpdating'] = 'False'
-        config['PYWEATHER BOOT']['validateapikey'] = 'True'
-        config['UPDATER']['showReleaseNotes'] = 'True'
-        config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
-        config['UPDATER']['showNewVersionReleaseDate'] = 'True'
-        config['USER']['configprovisioned'] = 'True'
-        config['CACHE']['enabled'] = 'True'
-        config['CACHE']['alerts_cachedtime'] = '5'
-        config['CACHE']['current_cachedtime'] = '10'
-        config['CACHE']['hourly_cachedtime'] = '60'
-        config['CACHE']['forecast_cachedtime'] = '60'
-        config['CACHE']['almanac_cachedtime'] = '240'
-        config['CACHE']['sundata_cachedtime'] = '480'
-        config['RADAR GUI']['radar_imagesize'] = 'normal'
-        config['RADAR GUI']['bypassconfirmation'] = 'False'
-        try:
-            with open('storage//config.ini', 'w') as configfile:
-                config.write(configfile)
-        except:
-            print("Hmmf...an odd error occurred. A full traceback will be",
-                  "printed below. Please report this issue on GitHub",
-                  "(github.com/o355/pyweather), as that would be greatly appreciated",
-                  "for trying to fix the bug that you just encountered!", sep="\n")
-            traceback.print_exc()
-            # Giving users choice, unlike Microsoft.
-            print("Would you like to continue using PyWeather with an unprovisioned config?",
-                  "It's highly recommended you don't continue, as you may encounter",
-                  "unexpected errors and issues with using PyWeather. Yes or No.", sep="\n")
-            provisionfailed_continue = input("Input here: ").lower()
-            if provisionfailed_continue == "yes":
-                print("Continuing with PyWeather Setup. Please remember, you may encounter",
-                      "unexpected errors and issues. You can always retry provisioning your config",
-                      "by using the configsetup.py script in the storage folder.", sep="\n")
-            elif provisionfailed_continue == "no":
-                print("Stopping PyWeather Setup. You can retry to provision your config by using",
-                      "the configsetup.py script in the storage folder.",
-                      "Press enter to exit.", sep="\n")
-                input()
-                sys.exit()
-            else:
-                print("Couldn't understand your input. By default, PyWeather Setup is stopping.",
-                      "You can retry to provision your config by using the configsetup.py script",
-                      "in the storage folder. Press enter to exit.", sep="\n")
-                input()
-                sys.exit()
+        configprovision()
         print("Config file provisioned successfully! Moving on with PyWeather setup...")
     elif provisionconfig == "no":
         print("Not provisioning your config. You may encounter unexpected errors",
@@ -188,135 +194,7 @@ except:
     else:
         print("Couldn't understand your input. By default, I'm going to provision",
               "your config. Beginning now...", sep="\n")
-        try:
-            config.add_section('SUMMARY')
-        except configparser.DuplicateSectionError:
-            print("Cache section could not be added.")
-
-        try:
-            config.add_section('VERBOSITY')
-        except configparser.DuplicateSectionError:
-            print("Verbosity section could not be added.")
-
-        try:
-            config.add_section('TRACEBACK')
-        except configparser.DuplicateSectionError:
-            print("Traceback section could not be added.")
-
-        try:
-            config.add_section('UI')
-        except configparser.DuplicateSectionError:
-            print("UI section could not be added.")
-
-        try:
-            config.add_section('HOURLY')
-        except configparser.DuplicateSectionError:
-            print("Hourly section could not be added.")
-
-        try:
-            config.add_section('UPDATER')
-        except configparser.DuplicateSectionError:
-            print("Updater section could not be added.")
-
-        try:
-            config.add_section('KEYBACKUP')
-        except configparser.DuplicateSectionError:
-            print("Key Backup section could not be added.")
-
-        try:
-            config.add_section('VERSIONS')
-        except configparser.DuplicateSectionError:
-            print("Versions section could not be added.")
-
-        try:
-            config.add_section('PYWEATHER BOOT')
-        except configparser.DuplicateSectionError:
-            print("PyWeather Boot section could not be added.")
-
-        try:
-            config.add_section('USER')
-        except configparser.DuplicateSectionError:
-            print("User section could not be added.")
-        try:
-            config.add_section('CACHE')
-        except configparser.DuplicateSectionError:
-            print("Cache section could not be added.")
-
-        try:
-            config.add_section('RADAR GUI')
-        except configparser.DuplicateSectionError:
-            print("Radar GUI section could not be added.")
-
-        config['SUMMARY']['sundata_summary'] = 'False'
-        config['SUMMARY']['almanac_summary'] = 'False'
-        config['SUMMARY']['showalertsonsummary'] = 'True'
-        config['VERBOSITY']['verbosity'] = 'False'
-        config['VERBOSITY']['json_verbosity'] = 'False'
-        config['VERBOSITY']['setup_verbosity'] = 'False'
-        config['VERBOSITY']['setup_jsonverbosity'] = 'False'
-        config['VERBOSITY']['updater_verbosity'] = 'False'
-        config['VERBOSITY']['updater_jsonverbosity'] = 'False'
-        config['VERBOSITY']['keybackup_verbosity'] = 'False'
-        config['VERBOSITY']['configdefault_verbosity'] = 'False'
-        config['TRACEBACK']['tracebacks'] = 'False'
-        config['TRACEBACK']['setup_tracebacks'] = 'False'
-        config['TRACEBACK']['updater_tracebacks'] = 'False'
-        config['TRACEBACK']['configdefault_tracebacks'] = 'False'
-        config['UI']['show_entertocontinue'] = 'True'
-        config['UI']['detailedinfoloops'] = '6'
-        config['UI']['forecast_detailedinfoloops'] = '5'
-        config['UI']['show_completediterations'] = 'False'
-        config['UI']['alerts_usiterations'] = '1'
-        config['UI']['alerts_euiterations'] = '2'
-        config['HOURLY']['10dayfetch_atboot'] = 'False'
-        config['UPDATER']['autocheckforupdates'] = 'False'
-        config['UPDATER']['show_updaterreleasetag'] = 'False'
-        config['KEYBACKUP']['savedirectory'] = 'backup//'
-        config['UPDATER']['allowGitForUpdating'] = 'False'
-        config['PYWEATHER BOOT']['validateapikey'] = 'True'
-        config['UPDATER']['showReleaseNotes'] = 'True'
-        config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
-        config['UPDATER']['showNewVersionReleaseDate'] = 'True'
-        config['USER']['configprovisioned'] = 'True'
-        config['CACHE']['enabled'] = 'True'
-        config['CACHE']['alerts_cachedtime'] = '5'
-        config['CACHE']['current_cachedtime'] = '10'
-        config['CACHE']['hourly_cachedtime'] = '60'
-        config['CACHE']['forecast_cachedtime'] = '60'
-        config['CACHE']['almanac_cachedtime'] = '240'
-        config['CACHE']['sundata_cachedtime'] = '480'
-        config['RADAR GUI']['radar_imagesize'] = 'normal'
-        config['RADAR GUI']['bypassconfirmation'] = 'False'
-        try:
-            with open('storage//config.ini', 'w') as configfile:
-                config.write(configfile)
-        except:
-            print("Hmmf...an odd error occurred. A full traceback will be",
-                  "printed below. Please report this issue on GitHub",
-                  "(github.com/o355/pyweather), as that would be greatly appreciated",
-                  "for trying to fix the bug that you just encountered!", sep="\n")
-            traceback.print_exc()
-            # Giving users choice, unlike Microsoft.
-            print("Would you like to continue using PyWeather with an unprovisioned config?",
-                  "It's highly recommended you don't continue, as you may encounter",
-                  "unexpected errors and issues with using PyWeather. Yes or No.", sep="\n")
-            provisionfailed_continue = input("Input here: ").lower()
-            if provisionfailed_continue == "yes":
-                print("Continuing with PyWeather Setup. Please remember, you may encounter",
-                      "unexpected errors and issues. You can always retry provisioning your config",
-                      "by using the configsetup.py script in the storage folder.", sep="\n")
-            elif provisionfailed_continue == "no":
-                print("Stopping PyWeather Setup. You can retry to provision your config by using",
-                      "the configsetup.py script in the storage folder.",
-                      "Press enter to exit.", sep="\n")
-                input()
-                sys.exit()
-            else:
-                print("Couldn't understand your input. By default, PyWeather Setup is stopping.",
-                      "You can retry to provision your config by using the configsetup.py script",
-                      "in the storage folder. Press enter to exit.", sep="\n")
-                input()
-                sys.exit()
+        configprovision()
         print("Config file provisioned successfully! Moving on with PyWeather setup...")
 
 
@@ -460,7 +338,7 @@ except PermissionError:
     traceback.print_exc()
     print("PIP has incorrect permissions on your machine. Please attempt to fix",
           "permissions on the folder that is listed in the traceback.",
-          "Linux users: Use chown -R <yourusername> <folder>, this should fix the issue.",
+          "Linux users: Use sudo chown -R <yourusername> <folder>, this should fix the issue.",
           "Press enter to exit.", sep="\n")
     input()
     sys.exit()
@@ -1034,7 +912,7 @@ while True:
 print("Let's configure PyWeather to your liking.")
 logger.debug("config: %s" % config)
 
-print("", "(1/24)","On the summary screen, would you like to show sunrise/sunset times?",
+print("", "(1/27)","On the summary screen, would you like to show sunrise/sunset times?",
       "By default, this is disabled.",
       "Yes or No.", sep="\n")
 sundata_Summary = input("Input here: ").lower()
@@ -1054,7 +932,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("", "(2/24)","On the summary screen, would you like to show almanac data?",
+print("", "(2/27)","On the summary screen, would you like to show almanac data?",
       "By default, this is disabled.",
       "Yes or no:", sep="\n")
 almanacdata_Summary = input("Input here: ").lower()
@@ -1074,7 +952,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("", "(3/24)", "On the summary screen, would you like to show alerts data?",
+print("", "(3/27)", "On the summary screen, would you like to show alerts data?",
       "By default, this is enabled. Please note, Wunderground",
       "only supports alert data in the US and EU at this time.",
       "Yes or No.", sep="\n")
@@ -1093,7 +971,7 @@ else:
           "Defaulting to 'True'", sep="\n")
     config['SUMMARY']['showAlertsOnSummary'] = 'True'
 
-print("", "(4/24)","On boot, would you like PyWeather to check for updates?",
+print("", "(4/27)","On boot, would you like PyWeather to check for updates?",
       "By default, this is disabled, due to a load time increase of ~2-5 seconds.",
       "Yes or No.", sep="\n")
 checkForUpdates = input("Input here: ").lower()
@@ -1113,7 +991,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("", "(5/24)","When an error occurs, would you like PyWeather to show the full error?",
+print("", "(5/27)","When an error occurs, would you like PyWeather to show the full error?",
       "When enabled, you'll have easier access to the full error for reporting",
       "the bug on GitHub.",
       "By default, this is disabled, as errors look less pretty when enabled.",
@@ -1146,7 +1024,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(6/24)", "When booting PyWeather up initially, would you like PyWeather to",
+print("", "(6/27)", "When booting PyWeather up initially, would you like PyWeather to",
       "fetch the 10-day hourly forecast, instead of the 3-day forecast?",
       "This is disabled by default. When enabled, initial loading times are",
       "increased. However, when you view the 10-day hourly forecast, you won't",
@@ -1168,7 +1046,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(7/24)", "When viewing detailed hourly, 10-day hourly, and historical hourly,",
+print("", "(7/27)", "When viewing detailed hourly, 10-day hourly, and historical hourly,",
       "detailed information, how many iterations should PyWeather go through",
       "before asking you to continue?",
       "By default, this is 6. An input above 10",
@@ -1187,7 +1065,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed info loops now 6.")
 
-print("", "(8/24)", "When viewing detailed 10-day forecast information, how many",
+print("", "(8/27)", "When viewing detailed 10-day forecast information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
       "By default, this is 5. An input above 10 will not prompt",
@@ -1206,7 +1084,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed forecast info loops now 5.")
 
-print("", "(9/24)", "PyWeather has a caching system, in which if you're gone for some time",
+print("", "(9/27)", "PyWeather has a caching system, in which if you're gone for some time",
       "data will automatically refresh. Would you like to turn this on?",
       "This is enabled by default. Yes or No.", sep="\n")
 enablecache = input("Input here: ").lower()
@@ -1221,7 +1099,7 @@ else:
           "certain types of data, before a data refresh is automatically requested.",
           "If you want to leave cache values to their defaults, press enter at any prompt.", sep="\n")
 
-    print("", "(10/24)", "Please enter the cache time for alerts data in minutes (default = 5)", sep="\n")
+    print("", "(10/27)", "Please enter the cache time for alerts data in minutes (default = 5)", sep="\n")
     alertscachetime = input("Input here: ").lower()
     try:
         alertscachetime = int(alertscachetime)
@@ -1235,10 +1113,10 @@ else:
         config['CACHE']['alerts_cachedtime'] = '5'
         logger.debug("Alerts cache time now 5 minutes.")
 
-    print("", "(11/24)", "Please enter the cache time for current data in minutes (default = 10)", sep="\n")
+    print("", "(11/27)", "Please enter the cache time for current data in minutes (default = 10)", sep="\n")
     currentcachetime = input("Input here: ").lower()
     try:
-        currentcachetime = int(currentcachetime)
+        currentcachetime = float(currentcachetime)
         currentcachetime = str(currentcachetime)
         config['CACHE']['current_cachedtime'] = currentcachetime
         print("Changes saved.")
@@ -1249,10 +1127,10 @@ else:
         config['CACHE']['current_cachedtime'] = '10'
         logger.debug("Current cache time now 10 minutes.")
 
-    print("", "(12/24)", "Please enter the cache time for hourly data in minutes (default = 60)", sep="\n")
+    print("", "(12/27)", "Please enter the cache time for hourly data in minutes (default = 60)", sep="\n")
     hourlycachetime = input("Input here: ").lower()
     try:
-        hourlycachetime = int(hourlycachetime)
+        hourlycachetime = float(hourlycachetime)
         hourlycachetime = str(hourlycachetime)
         config['CACHE']['hourly_cachedtime'] = hourlycachetime
         print("Changes saved.")
@@ -1263,10 +1141,10 @@ else:
         config['CACHE']['hourly_cachedtime'] = '60'
         logger.debug("Hourly cache time now 60 minutes.")
 
-    print("", "(13/24)", "Please enter the cache time for forecast data in minutes (default = 60)", sep="\n")
+    print("", "(13/27)", "Please enter the cache time for forecast data in minutes (default = 60)", sep="\n")
     forecastcachetime = input("Input here: ").lower()
     try:
-        forecastcachetime = int(forecastcachetime)
+        forecastcachetime = float(forecastcachetime)
         forecastcachetime = str(forecastcachetime)
         config['CACHE']['forecast_cachedtime'] = forecastcachetime
         print("Changes saved.")
@@ -1277,10 +1155,10 @@ else:
         config['CACHE']['forecast_cachedtime'] = '60'
         logger.debug("Forecast cache time now 60 minutes.")
 
-    print("", "(14/24)", "Please enter the cache time for almanac data in minutes (default = 240)", sep="\n")
+    print("", "(14/27)", "Please enter the cache time for almanac data in minutes (default = 240)", sep="\n")
     almanaccachetime = input("Input here: ").lower()
     try:
-        almanaccachetime = int(almanaccachetime)
+        almanaccachetime = float(almanaccachetime)
         almanaccachetime = str(almanaccachetime)
         config['CACHE']['almanac_cachedtime'] = almanaccachetime
         print("Changes saved.")
@@ -1291,10 +1169,10 @@ else:
         config['CACHE']['almanac_cachedtime'] = '240'
         logger.debug("Almanac cache time now 240 minutes.")
 
-    print("", "(15/24)", "Please enter the cache time for sun data in minutes (default = 480)", sep="\n")
+    print("", "(15/27)", "Please enter the cache time for sun data in minutes (default = 480)", sep="\n")
     sundatacachetime = input("Input here: ").lower()
     try:
-        sundatacachetime = int(sundatacachetime)
+        sundatacachetime = float(sundatacachetime)
         sundatacachetime = str(sundatacachetime)
         config['CACHE']['sundata_cachedtime'] = forecastcachetime
         print("Changes saved.")
@@ -1304,9 +1182,22 @@ else:
               "cache time to it's default value of '480'.", sep="\n")
         config['CACHE']['sundata_cachedtime'] = '480'
         logger.debug("Sun data cache time now 480 minutes.")
+    print("", "(16/27)", "Please enter the cache time for tide data in minutes (default = 480)", sep="\n")
+    tidecachetime = input("Input here: ").lower()
+    try:
+        tidecachetime = float(tidecachetime)
+        tidecachetime = str(tidecachetime)
+        config['CACHE']['tide_cachedtime'] = tidecachetime
+        print("Changes saved.")
+        logger.debug("Tide cache time now %s minutes." % tidecachetime)
+    except:
+        print("", "Your input couldn't be converted into a number. Setting tide data",
+              "cache time to it's default value of '480'.", sep="\n")
+        config['CACHE']['tide_cachedtime'] = '480'
+        logger.debug("Tide data cache time now 480 minutes.")
 
 
-print("", "(16/24)", "When viewing detailed EU alerts information, how many",
+print("", "(17/27)", "When viewing detailed EU alerts information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
       "By default, this is 2.", sep="\n")
@@ -1324,7 +1215,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed EU alert iterations now 2.")
 
-print("", "(17/24)", "When viewing detailed US alerts information, how many",
+print("", "(18/27)", "When viewing detailed US alerts information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
       "By default, this is 1.", sep="\n")
@@ -1342,7 +1233,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed US alert iterations now 1.")
 
-print("", "(18/24)","When PyWeather is going through detailed information, it can show",
+print("", "(19/27)","When PyWeather is going through detailed information, it can show",
       "how many iterations are completed.",
       "By default, this is disabled.",
       "Yes or No.", sep="\n")
@@ -1362,7 +1253,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(19/24)", "When PyWeather is going through detailed information, would",
+print("", "(20/27)", "When PyWeather is going through detailed information, would",
       "you like the 'Enter to Continue' prompts to pop up?",
       "By default, this is enabled.",
       "Yes or No.", sep="\n")
@@ -1382,7 +1273,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to ENABLED.")
 
-print("", "(20/24)", "In the PyWeather Updater, the updater can show the release tag",
+print("", "(21/27)", "In the PyWeather Updater, the updater can show the release tag",
       "associated with the latest release. Helpful for those using Git to",
       "update PyWeather. By default, this is disabled.",
       "Yes or No.", sep="\n")
@@ -1402,7 +1293,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(21/24)", "When you check for updates, and PyWeather notices",
+print("", "(22/27)", "When you check for updates, and PyWeather notices",
       "a new version is out, PyWeather can use Git to update",
       "itself. Make sure you have Git installed if you enable this.",
       "By default, this is disabled. Keep this disabled if you're unsure",
@@ -1424,7 +1315,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(22/24)", "When PyWeather boots, it can validate your API key. If PyWeather",
+print("", "(23/27)", "When PyWeather boots, it can validate your API key. If PyWeather",
       "finds your primary API key is invalid, it'll attempt to validate your",
       "backup key, and load that if it's validated successfully.",
       "By default, this is enabled, as it's well worth the 1 API call to make",
@@ -1446,7 +1337,7 @@ else:
     config['PYWEATHER BOOT']['validateAPIKey'] = 'False'
     logger.debug("Could not understand input. Defaulting to ENABLED.")
 
-print("", "(23/24)", "PyWeather now has a radar feature, which opens up a GUI on supported",
+print("", "(24/27)", "PyWeather now has a radar feature, which opens up a GUI on supported",
       "platforms. Depending on your screen resolution, you'll have to set how large",
       "the radar picture is when rendered. In the prompt below, enter one of five sizes.",
       "extrasmall - 320x240 window",
@@ -1468,12 +1359,15 @@ for x in range(0, 4):
     # This works by design. If x = 4 (extralarge), the if would catch first.
     elif x == 4:
         print("Could not understand what you inputted. Defaulting to 'normal'.")
+        config['RADAR GUI']['radar_imagesize'] = 'normal'
+        print("Changes saved.")
 
-print("", "(24/24)", "PyWeather's radar feature is unfortunately experimental as of PyWeather 0.6.1 beta.",
+print("", "(25/27)", "PyWeather's radar feature is unfortunately experimental as of PyWeather 0.6.1 beta.",
       "By default, a confirmation message will always appear when attempting to launch the radar.",
       "However, this can be turned off, if you plan to use the experimental radar on a regular basis.",
       "By default, bypassing the confirmation message is disabled. Yes or No.", sep="\n")
 radar_bypassconfinput = input("Input here: ").lower()
+logger.debug("radar_bypassconfinput: %s" % radar_bypassconfinput)
 if radar_bypassconfinput == "yes":
     config['RADAR GUI']['bypassconfirmation'] = True
     logger.debug("RADAR GUI/bypassconfirmation is now TRUE")
@@ -1482,7 +1376,50 @@ elif radar_bypassconfinput == "no":
     config['RADAR GUI']['bypassconfirmation'] = False
     logger.debug("RADAR GUI/bypassconfirmation is now FALSE")
     print("Changes saved.")
+else:
+    print("Could not understand what you inputted. Defaulting to 'False'.")
+    config['RADAR GUI']['bypassconfirmation'] = False
+    logger.debug("RADAR GUI/bypassconfirmation is now FALSE")
+    print("Changes saved.")
 
+
+
+print("", "(26/27)", "On the summary screen, would you like tide data to be shown?",
+      "This uses an extra API call when enabled. Buy default, this is disabled.",
+      "Yes or No.", sep="\n")
+tideonsummary = input("Input here: ").lower()
+logger.debug("tideonsummary: %s" % tideonsummary)
+if tideonsummary == "yes":
+    config['SUMMARY']['showtideonsummary'] = True
+    logger.debug("SUMMARY/showtideonsummary is now TRUE")
+    print("Changes saved.")
+elif tideonsummary == "no":
+    config['SUMMARY']['showtideonsummary'] = False
+    logger.debug("SUMMARY/showtideonsummary is now FALSE")
+    print("Changes saved.")
+else:
+    print("Could not understand what you inputted. Defaulting to 'False'.")
+    config['SUMMARY']['showtideonsummary'] = False
+    logger.debug("SUMMARY/showtideonsummary is now FALSE")
+    print("Changes saved.")
+
+print("", "(27/27)", "PyWeather's geocoder usually uses https, but issues have been discovered",
+      "on some platforms, where the geocoder cannot operate in the https mode. If you press enter",
+      "PyWeather will automatically detect which scheme to use. If you are an advanced user, and want",
+      "to configure the scheme yourself, enter advancedconfig at the prompt below.", sep="\n")
+configuregeopyscheme = input("Input here: ").lower()
+logger.debug("configuregeopyscheme: %s" % configuregeopyscheme)
+if configuregeopyscheme == "advancedconfig":
+    print("Which geopy scheme would you like to use? 'https' works on most platforms",
+          "but 'http' is needed on some platforms (OS X, as an example). Please input",
+          "'https' or 'http' below.")
+    geopyschemetype = input("Input here: ").lower()
+    logger.debug("geopyschemetype: %s" % geopyschemetype)
+    if geopyschemetype == "https":
+        config['GEOCDER']['scheme'] = 'https'
+        logger.debug("GEOCODER/scheme is now 'https'")
+        print("Changes saved. Geocoder settings will not be validated.")
+    
 
 
 print("","That's it! Now commiting config changes...", sep="\n")
