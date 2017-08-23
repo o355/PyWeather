@@ -842,6 +842,14 @@ if backup_APIkey == "yes":
         except:
             printException_loggerwarn()
             print("Couldn't make the directory, does it exist?")
+
+    if backup_APIkeydirectory == "":
+        print("You didn't input a directory, the backup key will be stored in the 'backup' directory.")
+        logger.debug("No input seen, backup key will be stored in the default 'backup' directory.")
+        backup_APIkeydirectory = "backup"
+        backup_APIkeydirectory2 = "backup//"
+        folder_argument = backup_APIkeydirectory + "//backkey.txt"
+
     # Overwrite the file, if it exists.
     open(folder_argument, 'w').close()
     open(folder_argument, 'a').write(apikey_input)
@@ -850,6 +858,7 @@ if backup_APIkey == "yes":
     print("The API key was backed up successfully!")
     logger.debug("Performed 3 ops. Overwrite "+ folder_argument + "backkey.txt, write to backkey.txt" +
                 ", and close backkey.txt.")
+
 
 print("Before we configure PyWeather, I'll now validate your API key.")
 
