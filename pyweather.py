@@ -117,6 +117,8 @@ try:
     cache_forecasttime = cache_forecasttime * 60
     cache_almanactime = config.getfloat('CACHE', 'almanac_cachedtime')
     cache_almanactime = cache_almanactime * 60
+    cache_threedayhourly = config.getfloat('CACHE', 'threedayhourly_cachedtime')
+    cache_tendayhourly = config.getfloat('CACHE', 'tendayhourly_cachedtime')
     cache_sundatatime = config.getfloat('CACHE', 'sundata_cachedtime')
     cache_sundatatime = cache_sundatatime * 60
     cache_tidetime = config.getfloat('CACHE', 'tide_cachedtime')
@@ -161,6 +163,8 @@ except:
     cache_hourlytime = 3600
     cache_forecasttime = 3600
     cache_almanactime = 14400
+    cache_threedayhourly = 3600
+    cache_tendayhourly = 3600
     cache_sundatatime = 28800
     cache_tidetime = 28800
     user_alertsEUiterations = 2
@@ -211,8 +215,10 @@ logger.debug("cache_alertstime: %s ; cache_currenttime: %s" %
              (cache_alertstime, cache_currenttime))
 logger.debug("cache_hourlytime: %s ; cache_forecasttime: %s" %
              (cache_hourlytime, cache_forecasttime))
-logger.debug("cache_almanactime: %s ; cache_sundatatime: %s" %
-             (cache_almanactime, cache_sundatatime))
+logger.debug("cache_almanactime: %s ; cache_threedayhourly: %s" %
+             (cache_almanactime, cache_threedayhourly))
+logger.debug("cache_tendayhourly: %s ; cache_sundatatime: %s" %
+             (cache_tendayhourly, cache_sundatatime))
 # Coded during 70% totality of the 2017 eclipse, max for my location then
 logger.debug("cache_tidetime: %s" % cache_tidetime)
 # Please don't touch this line kthxbye
@@ -652,7 +658,7 @@ try:
         hourly10JSON = requests.get(tendayurl)
         # Special situation: We separate the 3-day/10-day hourly caches, but
         # they use the same cache timer. 
-        cachetime_hourly10 = time.time()
+        cachetime_hourly10 = tendayhourly_cachedtime
         logger.info("Acquiring the 10 day hourly JSON, as specified.")
         tenday_prefetched = True
         logger.debug("tenday_prefetched: %s" % tenday_prefetched)
@@ -1955,7 +1961,7 @@ while True:
             try:
                 tendayJSON = requests.get(tendayurl)
                 logger.debug("Retrieved hourly 10 JSON with end result: %s" % tendayJSON)
-                cachetime_hourly10 = time.time()
+                cachetime_hourly10 = tendayhourly_cachedtime
             except:
                 print("When attempting to fetch the 10-day hourly forecast data, PyWeather ran",
                       "info an error. If you're on a network with a filter, make sure that",
