@@ -836,6 +836,7 @@ if backup_APIkey == "yes":
     print("Creating a backup...")
     if backup_APIkeydirectory == "backup" or backup_APIkeydirectory == "":
         print("Using the default directory of //backup.")
+        folder_argument == "backup//backkey.txt"
     elif backup_APIkeydirectory != "backup":
         try:
             os.mkdir(backup_APIkeydirectory2)
