@@ -834,8 +834,8 @@ if backup_APIkey == "yes":
                  (backup_APIkeydirectory, backup_APIkeydirectory2))
     logger.debug("folder_argument: %s" % folder_argument)
     print("Creating a backup...")
-    if backup_APIkeydirectory == "backup":
-        logger.debug("Using the default directory.")
+    if backup_APIkeydirectory == "backup" or backup_APIkeydirectory == "":
+        print("Using the default directory of //backup.")
     elif backup_APIkeydirectory != "backup":
         try:
             os.mkdir(backup_APIkeydirectory2)
