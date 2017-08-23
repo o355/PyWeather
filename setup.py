@@ -828,22 +828,25 @@ if backup_APIkey == "yes":
           "You would enter 'directory'. The default directory is 'backup'.", sep="\n")
     # Doing a .lower() here to prevent case insensitiveness.
     backup_APIkeydirectory = input("Input here: ").lower()
-    backup_APIkeydirectory2 = backup_APIkeydirectory + "//"
     folder_argument = backup_APIkeydirectory + "//backkey.txt"
+    backup_APIkeydirectory2 = backup_APIkeydirectory + "//"
     logger.debug("backup_APIkeydirectory: %s ; backup_APIkeydirectory2: %s" %
                  (backup_APIkeydirectory, backup_APIkeydirectory2))
     logger.debug("folder_argument: %s" % folder_argument)
-    print("Creating a backup...")
+    # These two variables will get reset if the directory is backup, or empty.
     if backup_APIkeydirectory == "backup" or backup_APIkeydirectory == "":
         print("Using the default directory of //backup.")
-        folder_argument == "backup//backkey.txt"
-        logger.debug("folder_argument: %s" % folder_argument)
+        folder_argument = "backup//backkey.txt"
+        backup_APIkeydirectory2 = "backup//"
+        logger.debug("folder_argument: %s ; backup_APIkeydirectory2: %s" %
+                     (folder_argument, backup_APIkeydirectory2))
     elif backup_APIkeydirectory != "backup":
         try:
             os.mkdir(backup_APIkeydirectory2)
         except:
             printException_loggerwarn()
             print("Couldn't make the directory, does it exist?")
+    print("Creating a backup...")
     # Overwrite the file, if it exists.
     open(folder_argument, 'w').close()
     open(folder_argument, 'a').write(apikey_input)
