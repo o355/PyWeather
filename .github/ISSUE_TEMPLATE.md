@@ -5,6 +5,7 @@ It's simply impossible for me to catch every bug in PyWeather, so you can help! 
 * Make sure your issue isn't on the list of known issues. The page is available in the wiki, [here](https://github.com/o355/PyWeather/wiki/Known-Issues).
 * Make sure you've properly set up PyWeather, so no import errors (unless I made a typo), etc. If you're unsure, report the issue anyways. 
 * If your issue can be replicated, turn on tracebacks in the config file for the script it occurs in. If your issue occurs in the setup script, make setup_tracebacks true, and so on and so forth.
+* Do not report issues that are based off of indev code. I'll sometimes leave code broken when I push to GitHub.
 
 Done with the list? Here's what you'll need for a report.
 * The full traceback provided by the Python interpreter.
