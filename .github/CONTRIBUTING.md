@@ -113,34 +113,27 @@ In return, you'll get credit for your work, in the changelog.
 ## Wiki
 
 ## Rules
+Please have a look at the CODE_OF_CONDUCT.md file located in the master branch for details on the code of conduct.
 
 ## Translating PyWeather
-I'd like PyWeather to be accessible in all languages, not just English.
+Translating PyWeather is not available yet.
 
-**Please note: The process of translating PyWeather has not been fully worked out. I'm writing this down here for future reference.**
+## Contributing Rewards/Acknowledgements
+In return for contributing to PyWeather, I'll acknowledge how much of a cool person you are through acknowledgements and contributing levels. The levels are as follows:
 
-If you'd like to translate PyWeather to a different language, please acknowledge the following requirements:
-* You must be able to speak well enough in English. I only speak English.
-* You must be able to see where you'll be making translation changes, namely all `print()` statements. Basic Python experience is recommended.
-* You must be proficient in the language you're translating. The language does not need to be native to you (if you took Spanish in High School, and you're proficient, that's fine), but having native speaking experience is nice to have.
-* You cannot use online translators. Here's why: https://www.youtube.com/watch?v=rwOH3YsraNs
-* You'll agree to at least update every major version of PyWeather to your language.
+* Contributor: You've reported at least 1 issue that required code changes, and/or made 1 pull request.
+* Awesome Contributor: You've reported 3 issues that required code changes, and/or made 3 pull requests.
+* Ultra Contributor: You've reported 10 issues that required code changes, and/or made 6 pull requests.
+* Is PyWeather your side job? You've reported 20 issues that required code changes, and/or made 12 pull requests.
+* Bug Snatcher: You've reported 40 issues that required code changes.
+* Senior Reporter: You've reported 60 issues that required code changes.
+* PR master: You've made 16 pull requests.
+* PR legend: You've made 24 pull requests.
+* Secondary developer: ~15% of PyWeather's codebase is code that you've provided.
+* Main developer: ~25% of PyWeather's codebase is code that you've provided.
+* Feature developer: You've coded in at least 3 features into PyWeather.
+* Data type developer: You've coded in at least 3 data types into PyWeather.
 
-Here's how you'll translate PyWeather to your language.
+Contributors are acknowledged in the about page of PyWeather (updated each new release), and are updated on an as-needed basis in the readme file.
 
-* Send me a message (GitHub issues, or on reddit, /u/o355) that you'll be planning to translate PyWeather, and if you intend to translate each minor or major version of PyWeather. I should get back to you, and create a branch with your language you intend to translate (e.g. `0.6.1-spanish`, or `0.7.0-spanish`, depending on if you intend to translate each major or minor version.
-* Fork PyWeather, 
-* Work your translate magic. Make sure you hit every file, and translate it. Yes, that also includes the changelog.
-* For each new release, I'll need this properly translated text for the top and bottom:
-  * "Hey there <language> users! PyWeather <version> has been released for your language. Here are the changes for this version."
-  * "As always, download with the .zip, or use git. 
-* Make a PR request to merge your translated branch into the master translated branch. 
-* I'll run a translator check, just to see if things mostly check out.
-* The PR will be merged, and you can delete your local PyWeather branch. I'll release a release for your version of PyWeather.
-* Repeat this process for each new minor or major version.
-
-## Contributing Rewards
-In return for contributing to PyWeather, I'll acknowledge how much of a cool person you are through acknowledgements and contributing levels.
-
-### Acknowledgements
-Any contributors will be acknowledged through the about page in PyWeather, and soon on the readme file.
+Anything that a contributor has done (report an issue, code in a new feature) will be given full acknowldegement in the changelog for each new release.
