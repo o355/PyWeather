@@ -1,4 +1,4 @@
-# PyWeather - version 0.6.1 beta
+# PyWeather - version 0.6.2 beta
 # (c) 2017 o355, GNU GPL 3.0.
 
 # This line of code was typed in during the solar eclipse, in Eclipse.
@@ -47,9 +47,6 @@ except:
     sys.exit()
 
 
-# I had issues on OS X 10.12.5 with SSL certs, so HTTP is used instead.
-geolocator = GoogleV3(scheme='http')
-
 # Try loading the versioninfo.txt file. If it isn't around, create the file with
 # the present version info.
 
@@ -58,7 +55,7 @@ try:
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.1 beta")
+        out.write("0.6.2 beta")
         out.close()
 
 
@@ -118,7 +115,9 @@ try:
     cache_almanactime = config.getfloat('CACHE', 'almanac_cachedtime')
     cache_almanactime = cache_almanactime * 60
     cache_threedayhourly = config.getfloat('CACHE', 'threedayhourly_cachedtime')
+    cache_threedayhourly = cache_threedayhourly * 60
     cache_tendayhourly = config.getfloat('CACHE', 'tendayhourly_cachedtime')
+    cache_tendayhourly = cache_tendayhourly * 60
     cache_sundatatime = config.getfloat('CACHE', 'sundata_cachedtime')
     cache_sundatatime = cache_sundatatime * 60
     cache_tidetime = config.getfloat('CACHE', 'tide_cachedtime')
@@ -128,6 +127,7 @@ try:
     user_radarImageSize = config.get('RADAR GUI', 'radar_imagesize')
     radar_bypassconfirmation = config.getboolean('RADAR GUI', 'bypassconfirmation')
     showTideOnSummary = config.getboolean('SUMMARY', 'showtideonsummary')
+    geopyScheme = config.get('GEOCODER', 'scheme')
     
 except:
     # If it fails (typo or code error), we set all options to default.
@@ -160,7 +160,6 @@ except:
     # Values listed here are seconds for refresh times, not minutes.
     cache_alertstime = 300
     cache_currenttime = 600
-    cache_hourlytime = 3600
     cache_forecasttime = 3600
     cache_almanactime = 14400
     cache_threedayhourly = 3600
@@ -172,10 +171,11 @@ except:
     user_radarImageSize = "normal"
     radar_bypassconfirmation = False
     showTideOnSummary = False
+    geopyScheme = 'https'
 
 # Import logging, and set up the logger.
 import logging
-logger = logging.getLogger(name='pyweather_0.6.1beta')
+logger = logging.getLogger(name='pyweather_0.6.2beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
@@ -213,8 +213,8 @@ logger.debug("showUpdaterReleaseNotes: %s ; cache_enabled: %s" %
              (showUpdaterReleaseNotes, cache_enabled))
 logger.debug("cache_alertstime: %s ; cache_currenttime: %s" %
              (cache_alertstime, cache_currenttime))
-logger.debug("cache_hourlytime: %s ; cache_forecasttime: %s" %
-             (cache_hourlytime, cache_forecasttime))
+logger.debug("cache_forecasttime: %s" %
+             (cache_forecasttime))
 logger.debug("cache_almanactime: %s ; cache_threedayhourly: %s" %
              (cache_almanactime, cache_threedayhourly))
 logger.debug("cache_tendayhourly: %s ; cache_sundatatime: %s" %
@@ -226,7 +226,8 @@ logger.debug("user_alertsUSiterations: %s ; user_alertsEUiterations: %s" %
              (user_alertsUSiterations, user_alertsEUiterations))
 logger.debug("user_radarImagesize: %s ; radar_bypassconfirmation: %s" %
              (user_radarImageSize, radar_bypassconfirmation))
-logger.debug("showTideOnSummary: %s" % showTideOnSummary)
+logger.debug("showTideOnSummary: %s ; geopyScheme: %s" %
+             (showTideOnSummary, geopyScheme))
 
 logger.info("Setting gif x and y resolution for radar...")
 # Set the size of the radar window.
@@ -303,6 +304,19 @@ logger.info("Defining requests classes...")
 
 urlheader = {'user-agent': 'pyweather-0.6.1beta/apifetcher'}
 
+logger.info("Declaring geocoder type...")
+if geopyScheme == "https":
+    geolocator = GoogleV3(scheme='https')
+    logger.debug("geocoder scheme is now https.")
+elif geopyScheme == "http":
+    geolocator = GoogleV3(scheme='http')
+    logger.debug("geocoder scheme is now http.")
+else:
+    print("Geocoder scheme variable couldn't be understood.",
+          "Defaulting to the https scheme.", sep="\n")
+    geolocator = GoogleV3(scheme='https')
+    logger.debug("geocoder scheme is now https.")
+
 # Declare historical cache dictionary
 historical_cache = {}
 logger.debug("historical_cache: %s" % historical_cache)
@@ -360,8 +374,8 @@ logger.debug("apikey = %s" % apikey)
 
 # Version info gets defined here.
 
-buildnumber = 61
-buildversion = '0.6.1 beta'
+buildnumber = 62
+buildversion = '0.6.2 beta'
 
 # Refresh flag variables go here.
 refresh_currentflagged = False
@@ -422,8 +436,8 @@ if checkforUpdates == True:
 
 # Define about variables here.
 logger.info("Defining about variables...")
-about_buildnumber = "61"
-about_version = "0.6.1 beta"
+about_buildnumber = "62"
+about_version = "0.6.2 beta"
 about_releasedate = "July 31, 2017"
 about_maindevelopers = "o355"
 logger.debug("about_buildnumber: %s ; about_version: %s" %
@@ -431,7 +445,7 @@ logger.debug("about_buildnumber: %s ; about_version: %s" %
 logger.debug("about_releasedate: %s ; about_maindevelopers: %s" %
              (about_releasedate, about_maindevelopers))
 about_awesomecontributors = "ModoUnreal, who is very proud to be on TV, and says hi to his mom." # Oh look I'm on TV, HI MOM!!!!
-about_contributors = "gsilvapt"
+about_contributors = "gsilvapt, creepersbane"
 about_releasetype = "beta"
 about_librariesinuse = "Colorama, Geopy, Requests"
 logger.debug("about_contributors: %s ; about_releasetype: %s" %
@@ -658,7 +672,7 @@ try:
         hourly10JSON = requests.get(tendayurl)
         # Special situation: We separate the 3-day/10-day hourly caches, but
         # they use the same cache timer. 
-        cachetime_hourly10 = tendayhourly_cachedtime
+        cachetime_hourly10 = time.time()
         logger.info("Acquiring the 10 day hourly JSON, as specified.")
         tenday_prefetched = True
         logger.debug("tenday_prefetched: %s" % tenday_prefetched)
@@ -1795,7 +1809,7 @@ while True:
                     (refresh_hourly36flagged, time.time() - cachetime_hourly36))
         logger.info("Selected view more hourly...")
         if (refresh_hourly36flagged == True or
-                        time.time() - cachetime_hourly36 >= cache_hourlytime and cache_enabled == True):
+                        time.time() - cachetime_hourly36 >= cache_threedayhourly and cache_enabled == True):
             print(Fore.RED + "Refreshing 3 day hourly data...")
             try:
                 hourly36JSON = requests.get(hourlyurl)
@@ -1956,12 +1970,12 @@ while True:
         except:
             logger.debug("no hourly 10 cache time")
         if (tenday_prefetched == False or refresh_hourly10flagged == True or
-            time.time() - cachetime_hourly10 >= cache_hourlytime and cache_enabled == True):
+            time.time() - cachetime_hourly10 >= cache_tendayhourly and cache_enabled == True):
             print(Fore.RED + "Refreshing (or fetching for the first time) 10 day hourly data...")
             try:
                 tendayJSON = requests.get(tendayurl)
                 logger.debug("Retrieved hourly 10 JSON with end result: %s" % tendayJSON)
-                cachetime_hourly10 = tendayhourly_cachedtime
+                cachetime_hourly10 = time.time()
             except:
                 print("When attempting to fetch the 10-day hourly forecast data, PyWeather ran",
                       "info an error. If you're on a network with a filter, make sure that",

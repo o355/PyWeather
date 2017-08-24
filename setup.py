@@ -1,10 +1,6 @@
 # PyWeather Setup - version 0.6.1 beta
 # (c) 2017, o355, licensed under GNU GPL v3
 
-# Same deal as the main script.
-# Verbosity turns on verbosity, jsonVerbosity outputs full JSONs.
-# Because I'm cool, you can have verbosity off, but JSON verbosity on.
-
 import sys
 if sys.version_info < (3, 0, 0):
     print("You'll need Python 3 to run PyWeather.",
@@ -134,7 +130,8 @@ def configprovision():
     config['CACHE']['enabled'] = 'True'
     config['CACHE']['alerts_cachedtime'] = '5'
     config['CACHE']['current_cachedtime'] = '10'
-    config['CACHE']['hourly_cachedtime'] = '60'
+    config['CACHE']['threedayhourly_cachedtime'] = '60'
+    config['CACHE']['tendayhourly_cachedtime'] = '60'
     config['CACHE']['forecast_cachedtime'] = '60'
     config['CACHE']['almanac_cachedtime'] = '240'
     config['CACHE']['sundata_cachedtime'] = '480'
@@ -186,7 +183,7 @@ except:
     provisionconfig = input("Input here: ").lower()
     if provisionconfig == "yes":
         print("Provisioning your config.")
-
+        configprovision()
         print("Config file provisioned successfully! Moving on with PyWeather setup...")
     elif provisionconfig == "no":
         print("Not provisioning your config. You may encounter unexpected errors",
@@ -1456,7 +1453,40 @@ if configuregeopyscheme == "advancedconfig":
         config['GEOCDER']['scheme'] = 'https'
         logger.debug("GEOCODER/scheme is now 'https'")
         print("Changes saved. Geocoder settings will not be validated.")
-    
+    elif geopyschemetype == "http":
+        config['GEOCODER']['scheme'] = 'http'
+        logger.debug("GEOCODER/scheme is now 'http'")
+        print("Changes saved. Geocoder settings will not be validated.")
+    else:
+        print("Your input could not be understood. Defaulting to 'https'.")
+        logger.debug("GEOCODER/scheme is now 'https'")
+        print("Changes saved. Geocoder settings will not be validated.")
+else:
+    print("Now automatically configuring your geopy scheme.")
+    # HTTPS validation
+    from geopy import GoogleV3
+    geocoder = GoogleV3(scheme='https')
+    try:
+        location = geocoder.geocode("123 5th Avenue, New York, NY")
+        print("The geocoder can operate with HTTPS enabled on your OS. Saving these changes...")
+        config['GEOCDOER']['scheme'] = 'https'
+        logger.debug("GEOCODER/scheme is now 'https'")
+        print("Changes saved.")
+    except geopy.exc.GeocoderServiceError:
+        print("Geopy probably can't run without HTTPS (or your internet went down). Trying HTTP as the scheme...")
+        geocoder = GoogleV3(scheme='http')
+        try:
+            location = geocoder.geocode("123 5th Avenue, New York, NY")
+            print("The geocoder can operate, but without HTTPS enabled on your OS. Saving these changes...")
+            config['GEOCODER']['scheme'] = 'http'
+            logger.debug("GEOCODER/scheme is now 'http'")
+            print("Changes saved.")
+        except geopy.exc.GeocoderServiceError:
+            print("You probably don't have an internet connection, as HTTPS and HTTP validation both failed.",
+                  "Defaulting to HTTP as the geopy scheme...", sep="\n")
+            config['GEOCODER']['scheme'] = 'http'
+            logger.debug("GEOCODER/scheme is now 'http'")
+            print("Changes saved.")
 
 
 print("","That's it! Now commiting config changes...", sep="\n")
@@ -1469,63 +1499,6 @@ try:
 except:
     print("The config file couldn't be written to.",
           "Make sure the config file can be written to.", sep="\n")
-    printException()
-    print("Press enter to exit.")
-    input()
-    sys.exit()
-
-
-print("We're wrapping up, and making sure everything works.",
-      "Checking for default libraries...", sep="\n")
-try:
-    import json
-    logger.debug("json is available.")
-except:
-    logger.warn("json isn't available...that's odd.")
-    print("json is not available. This is odd, it's a default library.",
-    "Try installing a usual Python install.", sep="\n")
-    printException()
-    print("Press enter to exit.")
-    input()
-    sys.exit()
-try:
-    import codecs
-    logger.debug("codecs is available.")
-except:
-    logger.warn("codecs isn't available. Here's the traceback:")
-    printException_loggerwarn()
-    print("codecs is not available. This is odd, it's a default library.",
-    "Try installing a usual Python install.", sep="\n")
-    printException()
-    print("Press enter to exit.")
-    input()
-    sys.exit()
-
-
-print("Hurray! All default libraries are available.",
-      "Testing the API key, and it's validity...", sep="\n")
-
-
-
-print("Testing the connection to Google's geocoder...")
-
-from geopy import GoogleV3
-
-geolocator = GoogleV3()
-logger.debug("geolocator: %s" % geolocator)
-
-try:
-    testlocation = geolocator.geocode("New York, NY", language="en")
-    logger.debug("testlocation: %s" % testlocation)
-    logger.debug("testlocation.latitude: %s ; testlocation.longitude: %s" %
-                 (testlocation.latitude, testlocation.longitude))
-    print("Hurray! The connection to Google's geocoder works.")
-except:
-    logger.warn("Couldn't connect to Google's geocoder. No internet?")
-    print("When attempting to test the conection to Google's geocoder,",
-          "PyWeather Setup ran into an error. If you're on a network with",
-          "a filter, make sure that Google's geocoder is unblocked. Otherwise",
-          "make sure that you have an internet connection.", sep="\n")
     printException()
     print("Press enter to exit.")
     input()

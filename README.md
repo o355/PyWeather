@@ -21,11 +21,9 @@ You can also use git to download PyWeather, using the commands below.
 
 ```
 git clone https://github.com/o355/pyweather.git
-<please perform the checkout command once, depending on the version you intend to use>
-git checkout 0.6.1-beta-https (HTTPS version)
-git checkout 0.6.1-beta (non-HTTPS version)
+git checkout 0.6.1-beta (HTTP version)
 ```
- 
+You cannot use Git to install the HTTPS version. The tag does not include the HTTPS-based code.
 
 If you'd prefer to live on the bleeding edge of PyWeather updates, run these commands.
 
@@ -60,13 +58,11 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 	* Astronomy (sunrise/sunset/moonrise/moonset + moon) information
 	* Historical weather information, including hourly weather for a historical date
 	* Radar information (experimental, for now)
+	* Yesterday's weather
+	* Tide data
 	
 * In addition, you'll soon be able to view these data types soon:
-	* Yesterday's weather - Coming in 0.6.2 beta
-	* Tide data - Coming in 0.6.2 beta
 	* Hurricane data - Coming in 0.6.2 beta
-	* Webcam images (a big maybe on animated videos) - Coming in 0.7 beta
-	* Some form of a historical planner - Coming in 0.7 beta, or 0.7.1 beta
 * PyWeather is pretty modular. As I said earlier with the super-configurable config file, this also translates into modularity. PyWeather's features can be turned on and off at will.
 * PyWeather has a built-in updater, provided you have git installed. I hope to eventually incorporate a universal "download the zip and unzip it" system down the road.
 * PyWeather has a robust built-in debugger/logger. When turned on, it'll spam your console with verbosityness, or whatever that's called.

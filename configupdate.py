@@ -1,4 +1,5 @@
-# PyWeather Config Update - version 0.6.1
+# PyWeather Config Update - version 0.6.2 beta
+# (c) 2017, licensed under the GNU GPL v3
 
 # This script is empty. With the improved 0.6 updater, there is no
 # update from 0.6 to 0.6.
@@ -29,8 +30,13 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
         config.add_section("RADAR GUI")
     except:
         print("Failed to add the cache section. Does it exist?")
+
+    try:
+        config.add_section("GEOCODER")
+    except:
+        print("Failed to add the geocoder section. Does it exist?")
         
-    print("11 new configuration options have been added.",
+    print("12 new configuration options have been added.",
           "Details:",
           "- CACHE/alerts_cachedtime - Sets the cache time on alert data - Defaults to 5",
           "- CACHE/current_cachedtime - Sets the cache time on current data - Defaults to 10",
@@ -40,7 +46,10 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
           "- CACHE/sundata_cachedtime - Sets the cache time on sunrise data - Defaults to 480",
           "- CACHE/enabled - Enables or disables the new cache system - Defaults to True",
           "- RADAR GUI/radar_imagesize - Sets the image size of radar animations - Defaults to normal", 
-          "- RADAR GUI/bypassconfirmation - Sets if the experimental warning can be bypassed - Defaults to False", sep="\n")
+          "- RADAR GUI/bypassconfirmation - Sets if the experimental warning can be bypassed - Defaults to False",
+          "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
+          "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
+          "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https", sep="\n")
     
     config['CACHE']['alerts_cachedtime'] = '5'
     config['CACHE']['current_cachedtime'] = '10'
@@ -51,6 +60,10 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['CACHE']['enabled'] = 'True'
+    config['CACHE']['tide_cachedtime'] = '480'
+    config['SUMMARY']['showtideonsumary'] = 'False'
+    config['GEOCODER']['scheme'] = 'https'
+
 elif versioninfo2 == "0.6.1 beta":
     try:
         config.add_section("GEOCODER")
