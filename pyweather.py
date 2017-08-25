@@ -2,6 +2,7 @@
 # (c) 2017 o355, GNU GPL 3.0.
 
 # This line of code was typed in during the solar eclipse, in Eclipse.
+# And this line of code was typed on linux's birthday, on a windows laptop.......................I'm  a terrible person.
 #
 # ==============
 # This is beta code. It's not pretty, and I'm not following PEP 8
