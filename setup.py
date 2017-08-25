@@ -84,7 +84,10 @@ def configprovision():
         config.add_section('CACHE')
     except configparser.DuplicateSectionError:
         print("Cache section could not be added.")
-
+    try:
+        config.add_section('HISTORY')
+    except configparser.DuplicateSectionError:
+        print("History section could not be added.")
     try:
         config.add_section('RADAR GUI')
     except configparser.DuplicateSectionError:
@@ -127,6 +130,7 @@ def configprovision():
     config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
     config['UPDATER']['showNewVersionReleaseDate'] = 'True'
     config['USER']['configprovisioned'] = 'True'
+    config['HISTORY']['show_history'] = 'True'
     config['CACHE']['enabled'] = 'True'
     config['CACHE']['alerts_cachedtime'] = '5'
     config['CACHE']['current_cachedtime'] = '10'
@@ -1087,6 +1091,23 @@ except:
     print("Changes saved.")
     logger.debug("Detailed forecast info loops now 5.")
 
+# WRITE HISTORY STUFF HERE
+print("", "(9/29)", "Pyweather can keep a list of your past searches, so that you can",
+        "see your previous search history.",
+        "This is enabled by default.", sep="\n")
+showhistory = input("Input here: ").lower()
+if showhistory == "no":
+    print("Search history will not be recorded.")
+    config['HISTORY']['show_history'] = 'False'
+    print("Changes saved.")
+else:
+    config['HISTORY']['show_history'] = 'True'
+    print("You entered yes, or your input wasn't understood (yes is the default.)",
+            "Now making 'history.txt...'")
+    history_location = "storage//history.txt"
+    print("history.txt has been made successfully!")
+
+
 print("", "(9/29)", "PyWeather has a caching system, in which if you're gone for some time",
       "data will automatically refresh. Would you like to turn this on?",
       "This is enabled by default. Yes or No.", sep="\n")
@@ -1469,7 +1490,7 @@ else:
     try:
         location = geocoder.geocode("123 5th Avenue, New York, NY")
         print("The geocoder can operate with HTTPS enabled on your OS. Saving these changes...")
-        config['GEOCDOER']['scheme'] = 'https'
+        config['GEOCODER']['scheme'] = 'https' # Misspelling is fun
         logger.debug("GEOCODER/scheme is now 'https'")
         print("Changes saved.")
     except geopy.exc.GeocoderServiceError:
