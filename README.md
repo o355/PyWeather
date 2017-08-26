@@ -35,6 +35,13 @@ git clone https://github.com/o355/pyweather.git
 
 After that, run `setup.py`, and the setup file will guide you through setting up PyWeather. After that, run `pyweather.py`, and enjoy the magic of PyWeather! It's as easy as that.
 
+## Disclaimer
+PyWeather **should not** be used during severe weather conditions, and should not be used to tell the public about weather conditions during a severe weather event.
+
+Please listen to local authorities, and your country's weather service (NWS in the US, EC in Canada) during a severe storm.
+
+I am not responsible for injury or death in part or directly by using PyWeather.
+
 ## What's PyWeather?
 PyWeather is a Python script that fetches the weather using Wunderground's API. I made PyWeather as a solution to a few things:
 * The lack of script-based weather software that was coded in Python, and that relied on a decent enough API
