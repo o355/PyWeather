@@ -2,6 +2,7 @@
 # (c) 2017 o355, GNU GPL 3.0.
 
 # This line of code was typed in during the solar eclipse, in Eclipse.
+# And this line of code was typed on linux's birthday, on a windows laptop.......................I'm  a terrible person.
 #
 # ==============
 # This is beta code. It's not pretty, and I'm not following PEP 8
@@ -103,6 +104,7 @@ try:
     showUpdaterReleaseNotes = config.getboolean('UPDATER', 'showReleaseNotes')
     showUpdaterReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
+    history_enabled = config.getboolean('HISTORY', 'show_history')
     cache_enabled = config.getboolean('CACHE', 'enabled')
     cache_alertstime = config.getfloat('CACHE', 'alerts_cachedtime')
     cache_alertstime = cache_alertstime * 60
@@ -460,6 +462,20 @@ print("Below, enter a location to check the weather for that location!")
 locinput = input("Input here: ")
 print("Checking the weather, it'll take a few seconds!")
 
+if history_enabled == True:
+    try:
+        history_load = open("storage//history.txt", "a")
+        logger.debug("history_load: %s" % history_load)
+        history_load.write("\n" + locinput)
+        logger.debug("Location history for user recorded.")
+    except FileNotFoundError:
+        print("When trying to write your search history, Pyweather ran into",
+                "an error. Make sure that your 'history.txt' file is accessible",
+                "(wrong permissions and the file not existing are common issues.)", sep="\n")
+        logger.warning("Couldn't load history file! Does it exist?")
+
+else:
+    pass # Does nothing basically.
 
 # Start the geocoder. If we don't have a connection, exit nicely.
 # After we get location data, store it in latstr and lonstr, and store
