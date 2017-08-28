@@ -146,7 +146,7 @@ except:
     tracebacksEnabled = False
     prefetch10Day_atStart = False
     user_loopIterations = 6
-    user_enterToContinue = False
+    user_enterToContinue = True
     user_showCompletedIterations = False
     user_forecastLoopIterations = 5
     user_showUpdaterReleaseTag = False

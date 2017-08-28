@@ -16,6 +16,7 @@
 * Fixed a bug where I forgot to globalize variables relating to emptying the radar cache.
 * Fixed a bug where if your configuration file failed to load, cache times were set insanely high (5 seconds for alert data, etc)
 * Fixed a bug where if you entered nothing for the backup key directory, an error would occur. Thanks to @creepersbane for reporting the error!
+* Fixed a bug where if your configuration file failed to load, enter to continue prompts were disabled by default.
 
 **OTHER CHANGES**
 * ModoUnreal is now an awesome contributor!
