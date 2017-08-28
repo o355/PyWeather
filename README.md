@@ -70,38 +70,44 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 	* Astronomy (sunrise/sunset/moonrise/moonset + moon) information
 	* Historical weather information, including hourly weather for a historical date
 	* Radar information (experimental, for now)
-	* Yesterday's weather
-	* Tide data
 	
 * In addition, you'll soon be able to view these data types soon:
+	* Yesterday's weather - Coming in 0.6.2 beta (the code is done if you'd like to try!)
+	* Tide data - Coming in 0.6.2 beta (the code is done if you'd like to try!)
 	* Hurricane data - Coming in 0.6.2 beta
+	
 * PyWeather is pretty modular. As I said earlier with the super-configurable config file, this also translates into modularity. PyWeather's features can be turned on and off at will.
 * PyWeather has a built-in updater, provided you have git installed. I hope to eventually incorporate a universal "download the zip and unzip it" system down the road.
 * PyWeather has a robust built-in debugger/logger. When turned on, it'll spam your console with verbosityness, or whatever that's called.
 * PyWeather has colors. I made the program colorful.
 
 In addition, these features will soon be coming to PyWeather:
-* PyWeather will soon be able to get weather for your current location, as would be provided by an IP Geolocator. It will be inaccurate on cellular connections, but should be of good accuracy otherwise - Coming in 0.7.2 beta
-* PyWeather will soon be able to get weather from individual personal weather stations. - Coming in 0.7.3 beta
-* PyWeather **MAY** soon be able to get weather easily for your favorite locations. I'm not 100% sure about how I would go about doing this. - 50% chance of this coming in 0.8 beta.
+* PyWeather will soon be able to store 5 favorite locations of yours, and you can easily call your favorite locations when you boot up PyWeather. - Coming in 0.6.3 beta
+* PyWeather will soon be able to tell the user the closest city that a tropical system is to (up to 300km) - Coming in 0.6.3 beta
+* PyWeather will soon be able to show you the 5 previous locations you entered. - Coming in either 0.6.3 beta or 0.6.4 beta
+* PyWeather will soon be able to automatically detect your location, so you can get the weather information for your location faster. Sadly, this may not be 100% accurate, as a GeoIP service would have to be used, since there isn't a known way to get a device's location using Python. - Coming in 0.6.4 beta
+* PyWeather will soon be able to show weather data for individual Wunderground PWSes (Personal Weather Stations). This should be useful for those who run their own PWS. Along with this, you'll be able to add PWSes to your favorite locations. - Coming in 0.7 beta
+* PyWeather will soon have a universal updater that's not reliant on Git. This should increase the reliability of the updater, and will let Windows users be able to have an automatic updater. - Coming in 0.7.1 beta
+* PyWeather will soon have rounding enabled on all data type variables, to fix a major bug on some platforms where rounding issues occur on. - Coming sometime soon.
 
 ## Why actually use PyWeather over Wunderground, or other apps?
 PyWeather has lots of advantages over using websites on your desktop, or even weather apps on mobile (PyWeather is compatible with Termux for Android, and other SSH apps of course)
 
 **On a desktop:**
-* If you have a desktop shortcut to the homepage of wunderground.com, or weather.com, PyWeather (given a shortcut on your desktop) can be faster than visiting Wunderground, and much faster than visiting weather.com
+* If you have a desktop shortcut to the homepage of wunderground.com, or weather.com, PyWeather (given a shortcut on your desktop) can be faster than visiting Wunderground or weather.com, given you don't have the shortcut point to a specific location. However, when I code in favorite locations, PyWeather begins to compete with direct shortcuts on your desktop.
 * PyWeather has no ads (or annoying articles), so you get distraction-free weather.
-* PyWeather has the essential features other sites have, and more features are coming in future versions.
+* PyWeather has the essential data types that other sites have, and has easy access to other hidden (or non-existant) features on other sites.
 * PyWeather "gets to the point". It just shows you the weather, nothing else.
 
 **On a phone:**
 * PyWeather when paired with Termux, or an SSH client uses A LOT less battery (my GS7 reported Wunderground's app using 4% of battery power/hour!)
 * PyWeather can easily save mobile data with default settings versus other weather apps, since ads aren't being loaded. If you more carefully tune PyWeather's settings, you can save even more data.
-* PyWeather may be slower than opening apps, and having direct access (Termux users, if you pay $1.99 for the widgets, it begins to compete with weather apps, and will get better with favorite locations in 0.9 beta) to the weather, but PyWeather fetches data that most apps don't include (like the almanac, yesterday's weather, etc)
+* PyWeather may be slower than opening apps, (Termux users, if you pay $1.99 for the widgets, it begins to compete with weather apps, and will get better with favorite locations coming soon) but PyWeather fetches data that most apps don't include (like the almanac, yesterday's weather, etc).
 
 **Other advantages:**
-* PyWeather is open-source, and uses completely open-source libraries, AND PyWeather is licensed under GNU's GPL v3 license! Richard Stallman would approve.
+* PyWeather is free open source software, uses completely open-source libraries, and PyWeather is licensed under GNU's GPL v3 license! Richard Stallman would approve.
 * You'll look cool being that one person using a terminal to check your weather like it's the 80s. 
+* PyWeather **doesn't track you!** I don't even know how many people are using PyWeather on a daily basis. I don't have code that "phones home", and I don't have code that relays back **any usage data**. However, do note that Wunderground does likely know your IP and basic system information about you from requesting their API, and the same goes for Google's geocoder that PyWeather uses. In the end, the amount of data you're giving to Wunderground and Google's geocoder by using PyWeather is much less than what you give to advertisers and trackers when visiting other weather sites.
 
 
 ## What's the current status of PyWeather?
@@ -114,12 +120,7 @@ Since I don't have all the time in the world to work on PyWeather, contributing 
 
 Bug reports, pull requests, feature suggestions, all that fun stuff can help me out with my limited time I have to code PyWeather. Read over CONTRIBUTING.md in the .github folder, to see how things work.
 
-## Staying up to date
-From time-to-time, I'll release development news on how PyWeather is coming along on my website, here: https://owenthe.ninja/category/pyweather-news/
-
-You'll find news on how new versions of PyWeather are coming along, among other things. It's the best way to stay updated on what's going on with PyWeather.
-
 ## Sharing
 I've, among others have poured in hundreds of hours into making PyWeather what it is, and I plan to spend hundreds of more hours refining PyWeather.
 
-If you'd like, please consider telling your friends, social media followers, whomever about PyWeather. It'll only motivate me more to keep working on PyWeather.
+If you'd like, please consider telling your friends, social media followers, whomever about PyWeather. Every star, fork, and user keeps me motivated to keep working on PyWeather.
