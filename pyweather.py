@@ -3944,15 +3944,29 @@ while True:
         print(Fore.YELLOW + "Here are the active hurricanes around the world:")
         for data in hurricane_json['currenthurricane']:
             stormname = data['stormInfo']['stormName_Nice']
-            stormlat = data['Current']['lat']
-            logger.debug("stormname: %s ; stormlat: %s" %
-                         (stormname, stormlat))
-            stormlon = data['Current']['lon']
+            logger.debug("stormname: %s" % stormname)
+            stormlat = float(data['Current']['lat'])
+            stormlon = float(data['Current']['lon'])
+            logger.debug("stormlat: %s ; stormlon: %s" %
+                         (stormlat, stormlon))
+            # Prefix direction cardinals to the lat/lon
+            if stormlat >= 0:
+                stormlat = str(stormlat) + "° N"
+            elif stormlat <= 0:
+                abs(stormlat)
+                stormlat = str(stormlat) + "° S"
+            if stormlon >= 0:
+                stormlon = str(stormlon) + "° E"
+            elif stormlon <= 0:
+                abs(stormlon)
+                stormlon = str(stormlon) + "° W"
+
+            logger.debug("stormlat: %s ; stormlon: %s" %
+                         (stormlat, stormlon))
             stormtype = data['Current']['Category']
-            logger.debug("stormlon: %s ; stormtype: %s" %
-                         (stormlon, stormtype))
             stormcat = data['Current']['SaffirSimpsonCategory']
-            logger.debug("stormcat: %s" % stormcat)
+            logger.debug("stormtype: %s ; stormcat: %s" %
+                         (stormtype, stormcat))
             # Instead of the category being "Hurricane", make it "Category x hurricane"
             if stormtype == "Hurricane":
                 logger.info("Storm type is 'Hurricane'. Making some modifications...")
@@ -3961,7 +3975,7 @@ while True:
                     logger.debug("x: %s" % x)
                     if x == stormcat:
                         logger.info("We found a match. x equaled stormcat.")
-                        stormtype = "Category " + x + " Hurricane"
+                        stormtype = "Category " + str(x) + " Hurricane"
                         logger.debug("stormtype: %s" % stormtype)
             stormtime = data['Current']['Time']['pretty']
             stormwindspeedmph = str(data['Current']['WindSpeed']['Mph'])
@@ -3975,7 +3989,7 @@ while True:
             stormgustspeedkph = str(data['Current']['WindGust']['Kph'])
             logger.debug("stormgustspeedmph: %s ; stormgustspeedkph: %s" %
                          (stormgustspeedmph, stormgustspeedkph))
-            stormgustspeedkts = str(['Current']['WindGust']['Kts'])
+            stormgustspeedkts = str(data['Current']['WindGust']['Kts'])
             stormdirectionmph = str(data['Current']['Fspeed']['Mph'])
             logger.debug("stormgustspeedkts: %s ; stormdirectionmph: %s" %
                          (stormgustspeedkts, stormdirectionmph))
@@ -3983,7 +3997,7 @@ while True:
             stormdirectionkts = str(data['Current']['Fspeed']['Kts'])
             logger.debug("stormdirectionkph: %s ; stormdirectionkts: %s" %
                          (stormdirectionkph, stormdirectionkts))
-            stormdirection = data['Current']['Movement']['Text'])
+            stormdirection = data['Current']['Movement']['Text']
             stormdirectiondegrees = str(data['Current']['Movement']['Degrees'])
             logger.debug("stormdirection: %s ; stormdirectiondegrees: %s" %
                          (stormdirection, stormdirectiondegrees))
@@ -3991,6 +4005,12 @@ while True:
             stormpressureinches = str(data['Current']['Pressure']['inches'])
             logger.debug("stormpressuremb: %s ; stormpressureinches: %s" %
                          (stormpressuremb, stormpressureinches))
+            if stormpressuremb == "None":
+                stormpressuredataavail = False
+                logger.warning("No pressure data is available.")
+            else:
+                stormpressuredataavail = True
+            logger.debug("stormpressuredataavail: %s" % stormpressuredataavail)
             print(Fore.YELLOW + stormname + ":")
             print(Fore.YELLOW + "Last updated: " + Fore.CYAN + stormtime)
             print(Fore.YELLOW + "Type: " + Fore.CYAN + stormtype)
@@ -4001,8 +4021,9 @@ while True:
             print(Fore.YELLOW + "Storm movement: " + Fore.CYAN + "Moving to the " +
                   stormdirection + " (" + stormdirectiondegrees + "°) at " + stormdirectionmph + " mph ("
                   + stormdirectionkph + " kph, " + stormdirectionkts + " kts)")
-            print(Fore.YELLOW + "Pressure: " + Fore.CYAN + stormpressuremb + " mb ("
-                  + stormpressureinches + " inHg)")
+            if stormpressuredataavail == True:
+                print(Fore.YELLOW + "Pressure: " + Fore.CYAN + stormpressuremb + " mb ("
+                      + stormpressureinches + " inHg)")
             print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
             currentstormiterations += 1
             logger.debug("currentstormiterations: %s" % currentstormiterations)
@@ -4019,7 +4040,7 @@ while True:
                     logger.info("Breaking to main menu...")
                     break
 
-                if selection == "next":
+                if selection == "nextstorm":
                     continue
                 else:
                     if selection != "":
