@@ -90,7 +90,8 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
           "Details:",
           "- CACHE/alerts_cachedtime - Sets the cache time on alert data - Defaults to 5",
           "- CACHE/current_cachedtime - Sets the cache time on current data - Defaults to 10",
-          "- CACHE/hourly_cachedtime - Sets the cache time on hourly data - Defaults to 60",
+          "- CACHE/threedayhourly_cachedtime - Sets the cache time on 1.5 day hourly data - Defaults to 60",
+          "- CACHE/tendayhourly_cachedtime - Sets the cache time on 10 day hourly data - Defaults to 60",
           "- CACHE/forecast_cachedtime - Sets the cache time on forecast data - Defaults to 60",
           "- CACHE/almanac_cachedtime - Sets the cache time on almanac data - Defaults to 240",
           "- CACHE/sundata_cachedtime - Sets the cache time on sunrise data - Defaults to 480",
@@ -103,7 +104,8 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     
     config['CACHE']['alerts_cachedtime'] = '5'
     config['CACHE']['current_cachedtime'] = '10'
-    config['CACHE']['hourly_cachedtime'] = '60'
+    config['CACHE']['threedayhourly_cachedtime'] = '60'
+    config['CACHE']['tendayhourly_cachedtime'] = '60'
     config['CACHE']['forecast_cachedtime'] = '60'
     config['CACHE']['almanac_cachedtime'] = '240'
     config['CACHE']['sundata_cachedtime'] = '480'
@@ -124,10 +126,14 @@ elif versioninfo2 == "0.6.1 beta":
           "Details:",
           "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
           "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
+          "- CACHE/threedayhourly_cachedtime - Sets the cache time on 1.5 day hourly data - Defaults to 60",
+          "- CACHE/tendayhourly_cachedtime - Sets the cache time on the 10 day hourly data - Defaults to 60",
           "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https", sep="\n")
 
     config['CACHE']['tide_cachedtime'] = '480'
     config['SUMMARY']['showtideonsumary'] = 'False'
+    config['CACHE']['threedayhourly_cachedtime'] = '60'
+    config['CACHE']['tendayhourly_cachedtime'] = '60'
     geopycheck()
 
 

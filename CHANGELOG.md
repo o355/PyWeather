@@ -7,7 +7,7 @@
 **NEW FEATURES/REMOVALS**
 * Adds the ability to view yesterday's weather - Thanks to @ModoUnreal for coding this in!
 * Adds the ability to view hurricane data in PyWeather - Should be finished by 8/8
-* Adds the ability to view tide data in PyWeather - 75% done (need to add config/setup options)
+* Adds the ability to view tide data in PyWeather - 100% done, needs QA testing
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Thanks to @ModoUnreal for coding this in! 95% done (need to add remaining config stuff), should be finished by 8/28
 * Restructures the filesystem - Scrapped. There's going to be some hidden code that I won't validate that screws everything up. I may think about a filesystem restructure later in time.
 * Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS. - 100% done, needs QA testing.

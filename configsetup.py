@@ -45,62 +45,67 @@ if cd_confirmation == "yes":
     
     try:
         config.add_section('SUMMARY')
-    except:
-        print("Couldn't add the summary section.")
-    
+    except configparser.DuplicateSectionError:
+        print("Cache section could not be added.")
+
     try:
         config.add_section('VERBOSITY')
-    except:
-        print("Couldn't add the verbosity section.")
-        
+    except configparser.DuplicateSectionError:
+        print("Verbosity section could not be added.")
+
     try:
         config.add_section('TRACEBACK')
-    except:
-        print("Couldn't add the traceback section.")
-        
+    except configparser.DuplicateSectionError:
+        print("Traceback section could not be added.")
+
     try:
         config.add_section('UI')
-    except:
-        print("Couldn't add the UI section.")
-        
+    except configparser.DuplicateSectionError:
+        print("UI section could not be added.")
+
     try:
         config.add_section('HOURLY')
-    except:
-        print("Couldn't add the hourly section.")
-        
+    except configparser.DuplicateSectionError:
+        print("Hourly section could not be added.")
+
     try:
         config.add_section('UPDATER')
-    except:
-        print("Couldn't add the updater section.")
-        
+    except configparser.DuplicateSectionError:
+        print("Updater section could not be added.")
+
     try:
         config.add_section('KEYBACKUP')
-    except:
-        print("Couldn't add the keybackup section.")
-    
+    except configparser.DuplicateSectionError:
+        print("Key Backup section could not be added.")
+
     try:
         config.add_section('PYWEATHER BOOT')
-    except:
-        print("Couldn't add the pyweather boot section.")
-        
+    except configparser.DuplicateSectionError:
+        print("PyWeather Boot section could not be added.")
+
     try:
         config.add_section('USER')
-    except:
-        print("Couldn't add the user section.")
-        
+    except configparser.DuplicateSectionError:
+        print("User section could not be added.")
     try:
         config.add_section('CACHE')
-    except:
-        print("Couldn't add the cache section.")
-        
+    except configparser.DuplicateSectionError:
+        print("Cache section could not be added.")
+
     try:
         config.add_section('RADAR GUI')
-    except:
-        print("Couldn't add the radar gui section.")
-        
+    except configparser.DuplicateSectionError:
+        print("Radar GUI section could not be added.")
+
+    try:
+        config.add_section('GEOCODER')
+    except configparser.DuplicateSectionError:
+        print("Geocoder section could not be added.")
+
     config['SUMMARY']['sundata_summary'] = 'False'
     config['SUMMARY']['almanac_summary'] = 'False'
     config['SUMMARY']['showalertsonsummary'] = 'True'
+    config['SUMMARY']['showtideonsummary'] = 'False'
     config['VERBOSITY']['verbosity'] = 'False'
     config['VERBOSITY']['json_verbosity'] = 'False'
     config['VERBOSITY']['setup_verbosity'] = 'False'
@@ -117,6 +122,8 @@ if cd_confirmation == "yes":
     config['UI']['detailedinfoloops'] = '6'
     config['UI']['forecast_detailedinfoloops'] = '5'
     config['UI']['show_completediterations'] = 'False'
+    config['UI']['alerts_usiterations'] = '1'
+    config['UI']['alerts_euiterations'] = '2'
     config['HOURLY']['10dayfetch_atboot'] = 'False'
     config['UPDATER']['autocheckforupdates'] = 'False'
     config['UPDATER']['show_updaterreleasetag'] = 'False'
@@ -127,18 +134,18 @@ if cd_confirmation == "yes":
     config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
     config['UPDATER']['showNewVersionReleaseDate'] = 'True'
     config['USER']['configprovisioned'] = 'True'
+    config['CACHE']['enabled'] = 'True'
     config['CACHE']['alerts_cachedtime'] = '5'
     config['CACHE']['current_cachedtime'] = '10'
-    config['CACHE']['hourly_cachedtime'] = '60'
+    config['CACHE']['threedayhourly_cachedtime'] = '60'
+    config['CACHE']['tendayhourly_cachedtime'] = '60'
     config['CACHE']['forecast_cachedtime'] = '60'
     config['CACHE']['almanac_cachedtime'] = '240'
     config['CACHE']['sundata_cachedtime'] = '480'
+    config['CACHE']['tide_cachedtime'] = '480'
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
-    config['CACHE']['enabled'] = 'True'
-    config['UI']['alerts_usiterations'] = '1'
-    config['UI']['alerts_euiterations'] = '2'
-    print("Committing changes...")
+    config['GEOCODER']['scheme'] = 'https'
     try:
         with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)

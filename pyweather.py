@@ -387,6 +387,7 @@ refresh_forecastflagged = False
 refresh_almanacflagged = False
 refresh_sundataflagged = False
 refresh_tidedataflagged = False
+refresh_hurricanedataflagged = False
 
 logger.debug("refresh_currentflagged: %s ; refresh_alertsflagged: %s" %
              (refresh_currentflagged, refresh_alertsflagged))
@@ -396,6 +397,7 @@ logger.debug("refresh_forecastflagged: %s ; refresh_almanacflagged: %s" %
              (refresh_forecastflagged, refresh_almanacflagged))
 logger.debug("refresh_sundataflagged: %s ; refresh_tidedataflagged: %s" %
              (refresh_sundataflagged, refresh_tidedataflagged))
+logger.debug("refresh_hurricanedataflagged: %s" % refresh_hurricanedataflagged)
  
 if checkforUpdates == True:
     reader2 = codecs.getreader("utf-8")
@@ -528,6 +530,7 @@ almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latst
 alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + latstr + ',' + lonstr + '.json'
 yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
 tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
+hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
 
 if verbosity == False:
     print("[##--------] | 6% |", round(time.time() - firstfetch,1), "seconds", end="\r")
@@ -539,6 +542,7 @@ logger.debug("astronomyurl: %s" % astronomyurl)
 logger.debug("almanacurl: %s" % almanacurl)
 logger.debug("yesterdayurl: %s" % yesterdayurl)
 logger.debug("tideurl: %s" % tideurl)
+logger.debug("hurricaneurl: %s" % hurricaneurl)
 logger.info("End API var declare...")
 logger.info("Start codec change...")
 
@@ -3925,6 +3929,105 @@ while True:
             elif tide_completediterations == tide_totaliterations:
                 logger.debug("tide_completediterations is equal to tide_totaliterations. Breaking.")
                 break
+    elif moreoptions == "20":
+        print(Fore.RED + "Loading...")
+        hurricaneJSON = requests.get(hurricaneurl)
+        hurricane_json = json.loads(hurricaneJSON.text)
+        activestorms = 0
+        currentstormiterations = 0
+        logger.debug("activestorms: %s ; currentstormiterations: %s" %
+                     (activestorms, currentstormiterations))
+        for data in hurricane_json['currenthurricane']:
+            activestorms += 1
+        logger.debug("activestorms: %s" % activestorms)
+
+        print(Fore.YELLOW + "Here are the active hurricanes around the world:")
+        for data in hurricane_json['currenthurricane']:
+            stormname = data['stormInfo']['stormName_nice']
+            stormlat = data['Current']['lat']
+            logger.debug("stormname: %s ; stormlat: %s" %
+                         (stormname, stormlat))
+            stormlon = data['Current']['lon']
+            stormtype = data['Current']['Category']
+            logger.debug("stormlon: %s ; stormtype: %s" %
+                         (stormlon, stormtype))
+            stormcat = data['Current']['SaffirSimpsonCategory']
+            logger.debug("stormcat: %s" % stormcat)
+            # Instead of the category being "Hurricane", make it "Category x hurricane"
+            if stormtype == "Hurricane":
+                logger.info("Storm type is 'Hurricane'. Making some modifications...")
+                stormcat = int(stormcat)
+                for x in range(1,5):
+                    logger.debug("x: %s" % x)
+                    if x == stormcat:
+                        logger.info("We found a match. x equaled stormcat.")
+                        stormtype = "Category " + x + " Hurricane"
+                        logger.debug("stormtype: %s" % stormtype)
+            stormtime = data['Time']['pretty']
+            stormwindspeedmph = data['WindSpeed']['mph']
+            logger.debug("stormtime: %s ; stormwindspeedmph: %s" %
+                         (stormtime, stormwindspeedmph))
+            stormwindspeedkph = data['WindSpeed']['kph']
+            stormwindspeedkts = data['WindSpeed']['kts']
+            logger.debug("stormwindspeedkph: %s ; stormwindspeedkts: %s" %
+                         (stormwindspeedkph, stormwindspeedkts))
+            stormpressuremb = data['Pressure']['mb']
+            stormpressureinches = data['Pressure']['inches']
+            logger.debug("stormpressuremb: %s ; stormpressureinches: %s" %
+                         (stormpressuremb, stormpressureinches))
+            print(Fore.YELLOW + stormname + ":")
+            print(Fore.YELLOW + "Last updated: " + Fore.CYAN + stormtime)
+            print(Fore.YELLOW + "Type: " + Fore.CYAN + stormtype)
+            print(Fore.YELLOW + "Wind speed: " + Fore.CYAN + stormwindspeedmph + " mph ("
+                  + stormwindspeedkph + " kph, " + stormwindspeedkts + " kts)")
+            print(Fore.YELLOW + "Pressure: " + Fore.CYAN + stormpressuremb + " mb ("
+                  + stormpressureinches + " inHg)")
+            print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
+            currentstormiterations += 1
+            logger.debug("currentstormiterations: %s" % currentstormiterations)
+
+            if activestorms > 1 and currentstormiterations != activestorms:
+                logger.info("activestorms > 1 and currentstormiterations != activestorms.")
+                print("")
+                print(Fore.RED + "Press enter to view forecast data for " + stormname + ".",
+                      "Enter 'nextstorm' to view data for the next storm. Press Control + C to exit",
+                      "to the main menu.", sep="\n")
+                try:
+                    selection = input("Input here: ").lower()
+                except KeyboardInterrupt:
+                    logger.info("Breaking to main menu...")
+                    break
+
+                if selection == "next":
+                    continue
+                else:
+                    if selection != "":
+                        print("Couldn't understand your input. Listing forecast data...")
+                        selection = ""
+            elif activestorms == 1 or currentstormiterations == activestorms:
+                logger.info("activestorms is 1 or currentstormiterations is activestorms.")
+                print("")
+                print(Fore.RED + "Press enter to view forecast data for " + stormname + ".",
+                      "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep="\n")
+                try:
+                    selection = input("Input here: ").lower()
+                except KeyboardInterrupt:
+                    logger.info("Breaking to the main menu...")
+                    break
+
+                if selection == "exit":
+                    break
+                else:
+                    if selection != "":
+                        print("Couldn't understand your input. Listing forecast data...")
+                        selection = ""
+
+            if selection == "":
+                print("Forecast data woooo")
+
+
+
+
 
     elif moreoptions == "12":
         print("", Fore.YELLOW + "-=-=- " + Fore.CYAN + "PyWeather" + Fore.YELLOW + " -=-=-",
@@ -4001,7 +4104,9 @@ while True:
         logger.debug("refresh_hourly10flagged: %s ; refresh_hourly36flagged: %s" %
                      (refresh_hourly10flagged, refresh_hourly36flagged))
         refresh_sundataflagged = True
-        logger.debug("refresh_sundataflagged: %s" % refresh_sundataflagged)
+        refresh_tidedataflagged = True
+        logger.debug("refresh_sundataflagged: %s ; refresh_tidedataflagged: %s" %
+                     (refresh_sundataflagged, refresh_tidedataflagged))
     else:
         logger.warn("Input could not be understood!")
         print(Fore.RED + "Not a valid option.")

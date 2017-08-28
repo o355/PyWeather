@@ -1172,8 +1172,7 @@ else:
         config['CACHE']['almanac_cachedtime'] = '240'
         logger.debug("Almanac cache time now 240 minutes.")
 
-###<<<HEAD WAS HERE
-    print("", "(15/29)", "Please enter the cache time for the three day hourly data in minutes ( default = 60)", sep="\n")
+    print("", "(15/29)", "Please enter the cache time for 1.5 day hourly data in minutes (default = 60)", sep="\n")
     threedayhourly_cachedtime = input("Input here: ").lower()
 
     try:
