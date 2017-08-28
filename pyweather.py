@@ -3964,15 +3964,31 @@ while True:
                         stormtype = "Category " + x + " Hurricane"
                         logger.debug("stormtype: %s" % stormtype)
             stormtime = data['Current']['Time']['pretty']
-            stormwindspeedmph = data['Current']['WindSpeed']['mph']
+            stormwindspeedmph = str(data['Current']['WindSpeed']['Mph'])
             logger.debug("stormtime: %s ; stormwindspeedmph: %s" %
                          (stormtime, stormwindspeedmph))
-            stormwindspeedkph = data['Current']['WindSpeed']['kph']
-            stormwindspeedkts = data['Current']['WindSpeed']['kts']
+            stormwindspeedkph = str(data['Current']['WindSpeed']['Kph'])
+            stormwindspeedkts = str(data['Current']['WindSpeed']['Kts'])
             logger.debug("stormwindspeedkph: %s ; stormwindspeedkts: %s" %
                          (stormwindspeedkph, stormwindspeedkts))
-            stormpressuremb = data['Current']['Pressure']['mb']
-            stormpressureinches = data['Current']['Pressure']['inches']
+            stormgustspeedmph = str(data['Current']['WindGust']['Mph'])
+            stormgustspeedkph = str(data['Current']['WindGust']['Kph'])
+            logger.debug("stormgustspeedmph: %s ; stormgustspeedkph: %s" %
+                         (stormgustspeedmph, stormgustspeedkph))
+            stormgustspeedkts = str(['Current']['WindGust']['Kts'])
+            stormdirectionmph = str(data['Current']['Fspeed']['Mph'])
+            logger.debug("stormgustspeedkts: %s ; stormdirectionmph: %s" %
+                         (stormgustspeedkts, stormdirectionmph))
+            stormdirectionkph = str(data['Current']['Fspeed']['Kph'])
+            stormdirectionkts = str(data['Current']['Fspeed']['Kts'])
+            logger.debug("stormdirectionkph: %s ; stormdirectionkts: %s" %
+                         (stormdirectionkph, stormdirectionkts))
+            stormdirection = data['Current']['Movement']['Text'])
+            stormdirectiondegrees = str(data['Current']['Movement']['Degrees'])
+            logger.debug("stormdirection: %s ; stormdirectiondegrees: %s" %
+                         (stormdirection, stormdirectiondegrees))
+            stormpressuremb = str(data['Current']['Pressure']['mb'])
+            stormpressureinches = str(data['Current']['Pressure']['inches'])
             logger.debug("stormpressuremb: %s ; stormpressureinches: %s" %
                          (stormpressuremb, stormpressureinches))
             print(Fore.YELLOW + stormname + ":")
@@ -3980,6 +3996,11 @@ while True:
             print(Fore.YELLOW + "Type: " + Fore.CYAN + stormtype)
             print(Fore.YELLOW + "Wind speed: " + Fore.CYAN + stormwindspeedmph + " mph ("
                   + stormwindspeedkph + " kph, " + stormwindspeedkts + " kts)")
+            print(Fore.YELLOW + "Wind gust: " + Fore.CYAN + stormgustspeedmph + " mph ("
+                  + stormgustspeedkph + " kph, " + stormgustspeedkts + " kts)")
+            print(Fore.YELLOW + "Storm movement: " + Fore.CYAN + "Moving to the " +
+                  stormdirection + " (" + stormdirectiondegrees + "°) at " + stormdirectionmph + " mph ("
+                  + stormdirectionkph + " kph, " + stormdirectionkts + " kts)")
             print(Fore.YELLOW + "Pressure: " + Fore.CYAN + stormpressuremb + " mb ("
                   + stormpressureinches + " inHg)")
             print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
