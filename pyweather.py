@@ -3943,7 +3943,7 @@ while True:
 
         print(Fore.YELLOW + "Here are the active hurricanes around the world:")
         for data in hurricane_json['currenthurricane']:
-            stormname = data['stormInfo']['stormName_nice']
+            stormname = data['stormInfo']['stormName_Nice']
             stormlat = data['Current']['lat']
             logger.debug("stormname: %s ; stormlat: %s" %
                          (stormname, stormlat))
@@ -3963,16 +3963,16 @@ while True:
                         logger.info("We found a match. x equaled stormcat.")
                         stormtype = "Category " + x + " Hurricane"
                         logger.debug("stormtype: %s" % stormtype)
-            stormtime = data['Time']['pretty']
-            stormwindspeedmph = data['WindSpeed']['mph']
+            stormtime = data['Current']['Time']['pretty']
+            stormwindspeedmph = data['Current']['WindSpeed']['mph']
             logger.debug("stormtime: %s ; stormwindspeedmph: %s" %
                          (stormtime, stormwindspeedmph))
-            stormwindspeedkph = data['WindSpeed']['kph']
-            stormwindspeedkts = data['WindSpeed']['kts']
+            stormwindspeedkph = data['Current']['WindSpeed']['kph']
+            stormwindspeedkts = data['Current']['WindSpeed']['kts']
             logger.debug("stormwindspeedkph: %s ; stormwindspeedkts: %s" %
                          (stormwindspeedkph, stormwindspeedkts))
-            stormpressuremb = data['Pressure']['mb']
-            stormpressureinches = data['Pressure']['inches']
+            stormpressuremb = data['Current']['Pressure']['mb']
+            stormpressureinches = data['Current']['Pressure']['inches']
             logger.debug("stormpressuremb: %s ; stormpressureinches: %s" %
                          (stormpressuremb, stormpressureinches))
             print(Fore.YELLOW + stormname + ":")
