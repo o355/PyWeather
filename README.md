@@ -11,27 +11,35 @@ If you haven't noticed, PyWeather is in beta. At this point, essential features 
 However, newer or more complex features may not work as expected. It's also up to you to report bugs that you find, as it makes every new PyWeather release better.
 
 ## Download/Setup
-**HTTP/HTTPS versions notice**
+The instructions for downloading PyWeather are somewhat awkward just for 0.6.1 beta. Basically, the geocoder that I use had an issue on Mac OS X, in which it could only run with the scheme set to http. This issue has been fixed in 0.6.2 beta, and I coded in automatic detection for what scheme your OS can run.
 
-Due to a Geopy issue on Mac OS X, there is a standard release of 0.6.1 beta, and a HTTPS release of 0.6.1 beta, the only change being which scheme the geocoder uses. It's highly recommended to use the HTTPS-enabled build, but if you're running Mac OS X, or run into geocoder issues during setup (given a valid internet connection), you'll need to use the HTTP-enabled build. 
+For PyWeather 0.6.1 beta, the default release has the geocoder set to run in http mode. There is another release, that changes the geocoder to run in https mode. For 95% of users, using the https release should work, but might not work for some users. If you run into geocoder issues in the setup process (given a working internet connection), you'll have to use the http release.
 
-You can download PyWeather by visiting the releases tab, and getting the latest zip.
+**Please note: In the http release, I didn't change the setup's geocoder to run in http mode. Getting a geocoder error during setup (given a working internet connection) 99% of the time just means that the geocoder couldn't run with https enabled.**
 
-You can also use git to download PyWeather, using the commands below.
+You can download the standard HTTP and HTTPS releases of PyWeather in the releases tab.
 
-```
-git clone https://github.com/o355/pyweather.git
-git checkout 0.6.1-beta (HTTP version)
-```
-You cannot use Git to install the HTTPS version. The tag does not include the HTTPS-based code.
-
-If you'd prefer to live on the bleeding edge of PyWeather updates, run these commands.
+If you want to use Git to download the HTTP release of PyWeather (the https tag does NOT contain the code to run in https mode), use the commands below:
 
 ```
-git clone https://github.com/o355/pyweather.git
+git clone https://github.com/o355/pyweather.git --depth=1
+cd pyweather
+git checkout 0.6.1-beta
 ```
 
-(please note: indev code is subject to work on some nights, and not on other nights. indev code is also indev code, so there will be bugs!)
+Both the http and https version of PyWeather will be able to update to 0.6.2 beta when the time comes, and I've configured the config updater to automatically detect what mode the geocoder can operate on your OS.
+
+If you want the latest and greatest bleeding edge code on a nightly basis, use this code:
+
+```
+git clone https://github.com/o355/pyweather.git --depth=`
+cd pyweather
+```
+
+Make sure you run `git pull` on a nightly basis :)
+
+**Please note: Only use the indev code if you really want the latest features. However, indev code is indev code, and I'll sometimes push broken code that will basically break PyWeather, or push out incomplete features.**
+
 
 After that, run `setup.py`, and the setup file will guide you through setting up PyWeather. After that, run `pyweather.py`, and enjoy the magic of PyWeather! It's as easy as that.
 
