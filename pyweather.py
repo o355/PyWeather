@@ -38,6 +38,7 @@ import codecs
 import os
 from random import randint
 try:
+    import geopy
     from geopy import GoogleV3
 except:
     print("When attempting to import the library geopy, we ran into an import error.",
@@ -475,8 +476,18 @@ try:
     if verbosity == False:
         print("[#---------] | 1% |", round(time.time() - firstfetch,1), 
               "seconds", end="\r")
+except geopy.exc.GeocoderServiceError:
+    logger.warning("Service error from geopy. SSL issue most likely?")
+    print("When attempting to access Google's geocoder, a service error occurred.",
+          "99% of the time, this is due to the geocoder operating in HTTPS mode,",
+          "but not being able to properly operate on your OS in such mode. To fix this",
+          "issue, in the configuration file, change the GEOCODER/scheme option to 'http'.", sep="\n")
+    printException()
+    print("Press enter to continue.")
+    input()
+    sys.exit()
 except:
-    logger.warn("No connection to Google's geocoder!")
+    logger.warning("No connection to Google's geocoder!")
     print("When attempting to access Google's geocoder, PyWeather ran into an error.",
           "A few things could of happened. If you're on a filter, make sure Google's",
           "geocoder is unblocked. Otherwise, Make sure your internet connection is online.",

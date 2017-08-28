@@ -18,6 +18,56 @@ versioninfo.close()
 config = configparser.ConfigParser()
 config.read("storage//config.ini")
 
+def geopycheck():
+    print("In version 0.6.2 beta and above, your geocoder scheme needs to get set, based on your OS.",
+          "PyWeather can automatically do this now, or you can manually define your scheme.",
+          "Type in 'automaticsetup' for the automatic setup, and 'manualsetup' for manual setup",
+          "in the prompt below.", sep="\n")
+    setupmethod = input("Input here: ").lower()
+    if setupmethod == "manualsetup":
+        print("Geopy's Google geocoder can work in HTTPS-enabled mode on 95% of platforms,",
+              "but has a tendancy to fail on OS X, or other platforms. In the prompt below,",
+              "enter 'https' for geopy to work in https mode, or 'http' for http mode.",
+              "Please note: Your settings will not be validated!", sep="\n")
+        geopymode = input("Input here: ").lower()
+        if geopymode == "https":
+            config['GEOCODER']['scheme'] = 'https'
+            print("Changes saved.")
+        else:
+            config['GEOCODER']['scheme'] = 'https'
+            if geopymode == "http":
+                print("Changes saved.")
+            else:
+                print("Couldn't understand your input. Defaulting to 'http'.")
+    else:
+        if setupmethod == "automaticsetup":
+            print("Starting automatic setup.")
+        else:
+            print("Couldn't understand your input. Defaulting to automatic setup.")
+
+        import geopy
+        from geopy import GoogleV3
+        geocoder = GoogleV3(scheme='https')
+        try:
+            location = geocoder.geocode("123 5th Avenue, New York, NY")
+            print("The geocoder can operate with HTTPS enabled on your OS. Saving these changes...")
+            config['GEOCODER']['scheme'] = 'https'
+            print("Changes saved.")
+        except geopy.exc.GeocoderServiceError:
+            print("Geopy probably can't run without HTTPS (or your internet went down). Trying HTTP as the scheme...")
+            geocoder = GoogleV3(scheme='http')
+            try:
+                location = geocoder.geocode("123 5th Avenue, New York, NY")
+                print("The geocoder can operate, but without HTTPS enabled on your OS. Saving these changes...")
+                config['GEOCODER']['scheme'] = 'http'
+                print("Changes saved.")
+            except geopy.exc.GeocoderServiceError:
+                print("You probably don't have an internet connection, as HTTPS and HTTP validation both failed.",
+                      "Defaulting to HTTP as the geopy scheme...", sep="\n")
+                config['GEOCODER']['scheme'] = 'http'
+                print("Changes saved.")
+
+
 if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     # A usual input() and sys.exit() isn't present here, as it's assumed this
     # is getting executed inside of the updater.
@@ -62,7 +112,7 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     config['CACHE']['enabled'] = 'True'
     config['CACHE']['tide_cachedtime'] = '480'
     config['SUMMARY']['showtideonsumary'] = 'False'
-    config['GEOCODER']['scheme'] = 'https'
+    geopycheck()
 
 elif versioninfo2 == "0.6.1 beta":
     try:
@@ -78,7 +128,7 @@ elif versioninfo2 == "0.6.1 beta":
 
     config['CACHE']['tide_cachedtime'] = '480'
     config['SUMMARY']['showtideonsumary'] = 'False'
-    config['GEOCODER']['scheme'] = 'https'
+    geopycheck()
 
 
 
