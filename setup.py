@@ -1411,7 +1411,7 @@ elif radar_bypassconfinput == "no":
     print("Changes saved.")
 else:
     print("Could not understand what you inputted. Defaulting to 'False'.")
-    config['RADAR GUI']['bypassconfirmation'] = False
+    config['RADAR GUI']['bypassconfirmation'] = 'False'
     logger.debug("RADAR GUI/bypassconfirmation is now FALSE")
     print("Changes saved.")
 

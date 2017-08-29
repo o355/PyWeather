@@ -17,11 +17,10 @@
 * Fixed a bug where if your configuration file failed to load, cache times were set insanely high (5 seconds for alert data, etc)
 * Fixed a bug where if you entered nothing for the backup key directory, an error would occur. Thanks to @creepersbane for reporting the error!
 * Fixed a bug where if your configuration file failed to load, enter to continue prompts were disabled by default.
+* Fixed a bug where the last step in the setup process (bypassing radar confirmation) didn't have proper else catching, and if a "yes" or "no" was entered, PyWeather setup would crash.
 
 **OTHER CHANGES**
 * ModoUnreal is now an awesome contributor!
-* Fixed some code where for 2 setup options, a config variable was not being set. This didn't matter, since the configuration was being provisioned with those default options at the top of the script.
-Even if a user denied configuration provisioning, PyWeather would catch the error, and set the options back to normal. Not a bug, in my opinion.
 
 ## version 0.6.1 beta - Released on 7/31/2017
 **NEW FEATURES/REMOVALS**
