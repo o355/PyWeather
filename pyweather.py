@@ -4091,7 +4091,7 @@ while True:
                         hurricaneforecasttime = "24 hours ahead"
                     elif hurricaneforecasttime == "36HR":
                         hurricaneforecasttime = "36 hours ahead"
-                    elif hurricaneforecattime == "48HR":
+                    elif hurricaneforecasttime == "48HR":
                         hurricaneforecasttime = "48 hours ahead"
 
                     logger.debug("hurricaneforecasttime: %s" % hurricaneforecasttime)
@@ -4139,16 +4139,16 @@ while True:
                         hurricaneforecast_type = "Remnants"
                     logger.debug("hurricaneforecast_type: %s" % hurricaneforecast_type)
 
-                    hurricaneforecast_windmph = forecast['WindSpeed']['Mph']
-                    hurricaneforecast_windkph = forecast['WindSpeed']['Kph']
+                    hurricaneforecast_windmph = str(forecast['WindSpeed']['Mph'])
+                    hurricaneforecast_windkph = str(forecast['WindSpeed']['Kph'])
                     logger.debug("hurricaneforecast_windmph: %s ; hurricaneforecast_windkph: %s" %
                                  (hurricaneforecast_windmph, hurricaneforecast_windkph))
-                    hurricaneforecast_windkts = forecast['WindSpeed']['Kts']
-                    hurricaneforecast_gustmph = forecast['WindGust']['Mph']
+                    hurricaneforecast_windkts = str(forecast['WindSpeed']['Kts'])
+                    hurricaneforecast_gustmph = str(forecast['WindGust']['Mph'])
                     logger.debug("hurricaneforecast_windkts: %s ; hurricaneforecast_gustmph: %s" %
                                  (hurricaneforecast_windkts, hurricaneforecast_gustmph))
-                    hurricaneforecast_gustkph = forecast['WindGust']['Kph']
-                    hurricaneforecast_gustkts = forecast['WindGust']['Kts']
+                    hurricaneforecast_gustkph = str(forecast['WindGust']['Kph'])
+                    hurricaneforecast_gustkts = str(forecast['WindGust']['Kts'])
                     logger.debug("hurricaneforecast_gustkph: %s ; hurricaneforecast_gustkts: %s" %
                                  (hurricaneforecast_gustkph, hurricaneforecast_gustkts))
 
