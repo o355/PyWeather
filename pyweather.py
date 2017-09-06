@@ -4070,15 +4070,6 @@ while True:
 
             if selection == "":
                 # Do the classic "how many iterations?"
-                hurricaneforecast_iterations = 0
-                hurricaneforecast_currentiterations = 0
-                hurricaneforecast_totaliterations = 0
-                logger.debug("hurricaneforecast_iterations: %s ; hurricaneforecast_currentiterations: %s" %
-                             (hurricaneforecast_iterations, hurricaneforecast_currentiterations))
-                logger.debug("hurricaneforecast_totaliterations: %s" % hurricaneforecast_totaliterations)
-                for forecast in data['forecast']:
-                    hurricaneforecast_iterations += 1
-                logger.debug("hurricaneforecast_iterations: %s" % hurricaneforecast_iterations)
                 print(Fore.YELLOW + "Here's the forecast for " + stormname + ".")
                 for forecast in data['forecast']:
                     print("")
@@ -4093,6 +4084,8 @@ while True:
                         hurricaneforecasttime = "36 hours ahead"
                     elif hurricaneforecasttime == "48HR":
                         hurricaneforecasttime = "48 hours ahead"
+                    elif hurricaneforecasttime == "72HR":
+                        hurricaneforecasttime = "72 hours ahead"
 
                     logger.debug("hurricaneforecasttime: %s" % hurricaneforecasttime)
                     hurricaneforecasttime_detail = forecast['Time']['pretty']
@@ -4153,15 +4146,130 @@ while True:
                                  (hurricaneforecast_gustkph, hurricaneforecast_gustkts))
 
                     print(Fore.YELLOW + hurricaneforecasttime_detail + " (" + hurricaneforecasttime + ")")
-                    print(Fore.YELLOW + "Storm Type: " + hurricaneforecast_type)
-                    print(Fore.YELLOW + "Wind Speed: " + hurricaneforecast_windmph + " (" + hurricaneforecast_windkph + " kph, "
+                    print(Fore.YELLOW + "Storm Type: " + Fore.CYAN + hurricaneforecast_type)
+                    print(Fore.YELLOW + "Wind Speed: " + Fore.CYAN + hurricaneforecast_windmph + " (" + hurricaneforecast_windkph + " kph, "
                           + hurricaneforecast_windkts + " kts)")
-                    print(Fore.YELLOW + "Wind Gusts: " + hurricaneforecast_gustmph + " (" + hurricaneforecast_gustkph + " kph, "
+                    print(Fore.YELLOW + "Wind Gusts: " + Fore.CYAN + hurricaneforecast_gustmph + " (" + hurricaneforecast_gustkph + " kph, "
                           + hurricaneforecast_gustkts + " kts)")
-                    print(Fore.YELLOW + "Location: " + hurricaneforecast_lat + ", " + hurricaneforecast_lon)
+                    print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneforecast_lat + ", " + hurricaneforecast_lon)
 
+                    if activestorms > 1 and currentstormiterations != activestorms:
+                        print("")
+                        print(Fore.RED + "Press enter to view the extended forecast for " + stormname + ".",
+                              "Enter 'nextstorm' to view details about the next storm.",
+                              "Otherwise, press Control + C to exit to the main menu.", sep="\n")
 
+                        try:
+                            forecastselection = input("Input here: ").lower()
+                            logger.debug("forecastselection: %s" % forecastselection)
+                            print("")
+                        except KeyboardInterrupt:
+                            logger.debug("Breaking to the main menu.")
+                            print("")
+                            break
 
+                        if forecastselection == "nextstorm":
+                            continue
+                        else:
+                            if forecastselection != "":
+                                print("Your input couldn't be understood. Listing extended forecast data.")
+                                forecastselection = ""
+
+                        if forecastselection == "":
+                            extendedforecastloops = 0
+                            for extforecast in data['ExtendedForecast']:
+                                extendedforecastloops += 1
+                            if extendedforecastloops == 0:
+                                print(Fore.RED + "Extended forecast data is not available for" + stormname + ".",
+                                      "Press enter to view data for the next storm. Press Control + C to exit to the main menu.", sep="\n")
+                                try:
+                                    extnodata = input("Input here: ").lower()
+                                    print("")
+                                    logger.debug("extnodata: %s" % extnodata)
+                                except KeyboardInterrupt:
+                                    logger.debug("Breaking to main menu.")
+                                    print("")
+                                    break
+
+                            for extforecast in data['ExtendedForecast']:
+                                print("")
+                                hurricaneextforecasttime = forecast['ForecastHour']
+                                logger.debug("hurricaneextforecasttime: %s" % hurricaneextforecasttime)
+                                # Properly parse the time
+                                if hurricaneextforecasttime == "4DAY":
+                                    hurricaneextforecasttime = "4 days ahead"
+                                elif hurricaneextforecasttime == "5DAY":
+                                    hurricaneextforecasttime = "5 days ahead"
+
+                                logger.debug("hurricaneextforecasttime: %s" % hurricaneextforecasttime)
+                                hurricaneextforecasttime_detail = forecast['Time']['pretty']
+                                hurricaneextforecast_lat = float(forecast['lat'])
+                                hurricaneextforecast_lon = float(forecast['lon'])
+                                logger.debug("hurricaneextforecasttime_detail: %s ; hurricaneextforecast_lat: %s" %
+                                             (hurricaneextforecasttime_detail, hurricaneextforecast_lat))
+                                logger.debug("hurricaneextforecast_lon: %s" % hurricaneextforecast_lon)
+
+                                if hurricaneextforecast_lat >= 0:
+                                    hurricaneextforecast_lat = str(hurricaneextforecast_lat) + "° N"
+                                elif hurricaneextforecast_lat <= 0:
+                                    hurricaneextforecast_lat = abs(hurricaneextforecast_lat)
+                                    hurricaneextforecast_lat = str(hurricaneextforecast_lat) + "° S"
+                                if hurricaneextforecast_lon >= 0:
+                                    hurricaneextforecast_lon = str(hurricaneextforecast_lon) + "° E"
+                                elif hurricaneextforecast_lon <= 0:
+                                    hurricaneextforecast_lon = abs(hurricaneextforecast_lon)
+                                    hurricaneextforecast_lon = str(hurricaneextforecast_lon) + "° W"
+
+                                logger.debug("hurricaneextforecast_lat: %s ; hurricaneextforecast_lon: %s" %
+                                             (hurricaneextforecast_lat, hurricaneextforecast_lon))
+                                hurricaneextforecast_category = int(forecast['SaffirSimpsonCategory'])
+                                logger.debug("hurricaneextforecast_category: %s" % hurricaneextforecast_category)
+                                if hurricaneextforecast_category >= 1:
+                                    logger.info("Category is above 1. Making storm type pretty...")
+                                    # Totally unnecessary, but it works.
+                                    for x in range(1, 6):
+                                        logger.debug("x: %s" % x)
+                                        if x == hurricaneextforecast_category:
+                                            logger.info("We found a match. x equaled stormcat.")
+                                            hurricaneextforecast_type = "Category " + str(x) + " Hurricane"
+                                elif hurricaneextforecast_category == 0:
+                                    hurricaneextforecast_type = "Tropical Storm"
+                                elif hurricaneextforecast_category == -1:
+                                    hurricaneextforecast_type = "Subtropical Storm"
+                                elif hurricaneextforecast_category == -2:
+                                    hurricaneextforecast_type = "Tropical Depression"
+                                elif hurricaneextforecast_category == -3:
+                                    hurricaneextforecast_type = "Extratropical"
+                                elif hurricaneextforecast_category == -4:
+                                    hurricaneextforecast_type = "Invest"
+                                elif hurricaneextforecast_category == -5:
+                                    hurricaneextforecast_type = "Remnants"
+                                logger.debug("hurricaneextforecast_type: %s" % hurricaneextforecast_type)
+
+                                hurricaneextforecast_windmph = str(forecast['WindSpeed']['Mph'])
+                                hurricaneextforecast_windkph = str(forecast['WindSpeed']['Kph'])
+                                logger.debug("hurricaneextforecast_windmph: %s ; hurricaneextforecast_windkph: %s" %
+                                             (hurricaneextforecast_windmph, hurricaneextforecast_windkph))
+                                hurricaneextforecast_windkts = str(forecast['WindSpeed']['Kts'])
+                                hurricaneextforecast_gustmph = str(forecast['WindGust']['Mph'])
+                                logger.debug("hurricaneextforecast_windkts: %s ; hurricaneextforecast_gustmph: %s" %
+                                             (hurricaneextforecast_windkts, hurricaneextforecast_gustmph))
+                                hurricaneextforecast_gustkph = str(forecast['WindGust']['Kph'])
+                                hurricaneextforecast_gustkts = str(forecast['WindGust']['Kts'])
+                                logger.debug("hurricaneextforecast_gustkph: %s ; hurricaneextforecast_gustkts: %s" %
+                                             (hurricaneextforecast_gustkph, hurricaneextforecast_gustkts))
+
+                                print(Fore.YELLOW + hurricaneextforecasttime_detail + " (" + hurricaneextforecasttime + ")")
+                                print(Fore.YELLOW + "Storm Type: " + Fore.CYAN + hurricaneextforecast_type)
+                                print(
+                                    Fore.YELLOW + "Wind Speed: " + Fore.CYAN + hurricaneextforecast_windmph + " (" + hurricaneextforecast_windkph + " kph, "
+                                    + hurricaneextforecast_windkts + " kts)")
+                                print(
+                                    Fore.YELLOW + "Wind Gusts: " + Fore.CYAN + hurricaneextforecast_gustmph + " (" + hurricaneextforecast_gustkph + " kph, "
+                                    + hurricaneextforecast_gustkts + " kts)")
+                                print(
+                                    Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneextforecast_lat + ", " + hurricaneextforecast_lon)
+                            
     elif moreoptions == "12":
         print("", Fore.YELLOW + "-=-=- " + Fore.CYAN + "PyWeather" + Fore.YELLOW + " -=-=-",
               Fore.CYAN + "version " + about_version, "",
