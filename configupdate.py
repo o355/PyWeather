@@ -85,8 +85,13 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
         config.add_section("GEOCODER")
     except:
         print("Failed to add the geocoder section. Does it exist?")
+
+    try:
+        config.add_section("PREFETCH")
+    except:
+        print("Failed to add the prefetch section. Does it exist?")
         
-    print("12 new configuration options have been added.",
+    print("New configuration options have been added.",
           "Details:",
           "- CACHE/alerts_cachedtime - Sets the cache time on alert data - Defaults to 5",
           "- CACHE/current_cachedtime - Sets the cache time on current data - Defaults to 10",
@@ -100,7 +105,16 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
           "- RADAR GUI/bypassconfirmation - Sets if the experimental warning can be bypassed - Defaults to False",
           "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
           "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
-          "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https", sep="\n")
+          "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https",
+          "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False", sep="\n")
+
+    print("")
+    print("2 old configuration options, and 2 sections have been deleted.",
+          "Details:",
+          "- CACHE/hourly_cachedtime - Used to set the global hourly cache time - Now removed",
+          "- HOURLY/10dayhourly_atboot - Used to set if PyWeather should fetch 10-day hourly at boot - Now removed",
+          "- HOURLY section - No longer in use for any configuration options.",
+          "- CHANGELOG section - No longer in use for any configuration options.", sep="\n")
     
     config['CACHE']['alerts_cachedtime'] = '5'
     config['CACHE']['current_cachedtime'] = '10'
@@ -122,13 +136,22 @@ elif versioninfo2 == "0.6.1 beta":
     except:
         print("Failed to add the geocoder section. Does it exist?")
 
-    print("3 new configuration options have been added.",
+    print("New configuration options have been added.",
           "Details:",
           "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
           "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
           "- CACHE/threedayhourly_cachedtime - Sets the cache time on 1.5 day hourly data - Defaults to 60",
           "- CACHE/tendayhourly_cachedtime - Sets the cache time on the 10 day hourly data - Defaults to 60",
-          "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https", sep="\n")
+          "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https",
+          "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False", sep="\n")
+
+    print("")
+    print("2 old configuration options, and 2 sections have been deleted.",
+          "Details:",
+          "- CACHE/hourly_cachedtime - Used to set the global hourly cache time - Now removed",
+          "- HOURLY/10dayhourly_atboot - Used to set if PyWeather should fetch 10-day hourly at boot - Now removed",
+          "- HOURLY section - No longer in use for any configuration options.",
+          "- CHANGELOG section - No longer in use for any configuration options.", sep="\n")
 
     config['CACHE']['tide_cachedtime'] = '480'
     config['SUMMARY']['showtideonsumary'] = 'False'

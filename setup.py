@@ -117,7 +117,7 @@ def configprovision():
     config['UI']['show_completediterations'] = 'False'
     config['UI']['alerts_usiterations'] = '1'
     config['UI']['alerts_euiterations'] = '2'
-    config['HOURLY']['10dayfetch_atboot'] = 'False'
+    config['PREFETCH']['10dayfetch_atboot'] = 'False'
     config['UPDATER']['autocheckforupdates'] = 'False'
     config['UPDATER']['show_updaterreleasetag'] = 'False'
     config['KEYBACKUP']['savedirectory'] = 'backup//'
@@ -1035,17 +1035,17 @@ print("", "(6/29)", "When booting PyWeather up initially, would you like PyWeath
       "Yes or No.", sep="\n")
 tenday_onboot = input("Input here: ").lower()
 if tenday_onboot == "yes":
-    config['HOURLY']['10dayfetch_atboot'] = 'True'
+    config['PREFETCH']['10dayfetch_atboot'] = 'True'
     print("Changes saved.")
     logger.debug("Fetching 10 day JSON at boot is ENABLED.")
 elif tenday_onboot == "no":
-    config['HOURLY']['10dayfetch_atboot'] = 'False'
+    config['PREFETCH']['10dayfetch_atboot'] = 'False'
     print("Changes saved.")
     logger.debug("Fetching 10 day JSON at boot is DISABLED.")
 else:
     print("Couldn't understand what you inputted.",
           "Defaulting to the default value 'False'", sep="\n")
-    config['HOURLY']['10dayfetch_atboot'] = 'False'
+    config['PREFETCH']['10dayfetch_atboot'] = 'False'
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
@@ -1418,7 +1418,7 @@ else:
 
 
 print("", "(28/29)", "On the summary screen, would you like tide data to be shown?",
-      "This uses an extra API call when enabled. Buy default, this is disabled.",
+      "This uses an extra API call when enabled. By default, this is disabled.",
       "Yes or No.", sep="\n")
 tideonsummary = input("Input here: ").lower()
 logger.debug("tideonsummary: %s" % tideonsummary)
@@ -1435,6 +1435,14 @@ else:
     config['SUMMARY']['showtideonsummary'] = "False"
     logger.debug("SUMMARY/showtideonsummary is now FALSE")
     print("Changes saved.")
+
+print("", "(29/30", "When PyWeather boots, would you like hurricane data to be fetched?",
+      "Initial loading times will increase when this is on, but hurricane data will load faster.",
+      "This can use an extra API call, especially when you fetch hurricane data but don't check it",
+      "in PyWeather. By default, this is disabled.",
+      "Yes or No.", sep="\n")
+hurricaneprefetch = input("Input here: ").lower()
+logger.debug("hurricaneprefetch: %s" % hurricaneprefetch)
 
 print("", "(29/29)", "PyWeather's geocoder usually uses https, but issues have been discovered",
       "on some platforms, where the geocoder cannot operate in the https mode. If you press enter",
