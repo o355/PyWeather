@@ -64,9 +64,9 @@ if cd_confirmation == "yes":
         print("UI section could not be added.")
 
     try:
-        config.add_section('HOURLY')
+        config.add_section('PREFETCH')
     except configparser.DuplicateSectionError:
-        print("Hourly section could not be added.")
+        print("Prefetch section could not be added.")
 
     try:
         config.add_section('UPDATER')
@@ -146,6 +146,8 @@ if cd_confirmation == "yes":
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['GEOCODER']['scheme'] = 'https'
+    config['PREFETCH']['hurricanedata_atboot']
+    config['CACHE']['hurricane_cachedtime'] = '180'
     try:
         with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)

@@ -109,8 +109,6 @@ try:
     cache_alertstime = cache_alertstime * 60
     cache_currenttime = config.getfloat('CACHE', 'current_cachedtime')
     cache_currenttime = cache_currenttime * 60
-    cache_hourlytime = config.getfloat('CACHE', 'hourly_cachedtime')
-    cache_hourlytime = cache_hourlytime * 60
     cache_forecasttime = config.getfloat('CACHE', 'forecast_cachedtime')
     cache_forecasttime = cache_forecasttime * 60
     cache_almanactime = config.getfloat('CACHE', 'almanac_cachedtime')
@@ -123,12 +121,15 @@ try:
     cache_sundatatime = cache_sundatatime * 60
     cache_tidetime = config.getfloat('CACHE', 'tide_cachedtime')
     cache_tidetime = cache_tidetime * 60
+    cache_hurricanetime = config.getfloat('CACHE', 'hurricane_cachedtime')
+    cache_hurricanetime = cache_hurricanetime * 60
     user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
     user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
     user_radarImageSize = config.get('RADAR GUI', 'radar_imagesize')
     radar_bypassconfirmation = config.getboolean('RADAR GUI', 'bypassconfirmation')
     showTideOnSummary = config.getboolean('SUMMARY', 'showtideonsummary')
     geopyScheme = config.get('GEOCODER', 'scheme')
+    prefetchHurricane_atboot = config.getboolean('PREFETCH', 'hurricanedata_atboot')
     
 except:
     # If it fails (typo or code error), we set all options to default.
@@ -167,12 +168,14 @@ except:
     cache_tendayhourly = 3600
     cache_sundatatime = 28800
     cache_tidetime = 28800
+    cache_hurricanetime = 10800
     user_alertsEUiterations = 2
     user_alertsUSiterations = 1
     user_radarImageSize = "normal"
     radar_bypassconfirmation = False
     showTideOnSummary = False
     geopyScheme = 'https'
+    prefetchHurricane_atboot = False
 
 # Import logging, and set up the logger.
 import logging
@@ -229,6 +232,8 @@ logger.debug("user_radarImagesize: %s ; radar_bypassconfirmation: %s" %
              (user_radarImageSize, radar_bypassconfirmation))
 logger.debug("showTideOnSummary: %s ; geopyScheme: %s" %
              (showTideOnSummary, geopyScheme))
+logger.debug("prefetchHurricane_atboot: %s ; cache_hurricanetime: %s" %
+             (prefetchHurricane_atboot, cache_hurricanetime))
 
 logger.info("Setting gif x and y resolution for radar...")
 # Set the size of the radar window.
@@ -3350,6 +3355,7 @@ while True:
               + " inHg (" + historicals_maxPressureMB + " mb)")
         print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + historicals_precipIN
               + " in (" + historicals_precipMM + "mb)")
+        print("")
         print(Fore.RED + "To view hourly historical data, please press enter.")
         print(Fore.RED + "If you want to return to the main menu, press Control + C.")
         try:
@@ -4236,6 +4242,7 @@ while True:
               + " inHg (" + yesterday_maxPressureMB + " mb)")
         print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + yesterday_precipIN
               + " in (" + yesterday_precipMM + "mb)")
+        print("")
         print(Fore.RED + "To view hourly data for yesterday's weather, please press enter.")
         print(Fore.RED + "If you want to return to the main menu, press Control + C.")
         try:

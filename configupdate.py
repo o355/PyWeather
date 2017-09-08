@@ -104,12 +104,14 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
           "- RADAR GUI/radar_imagesize - Sets the image size of radar animations - Defaults to normal", 
           "- RADAR GUI/bypassconfirmation - Sets if the experimental warning can be bypassed - Defaults to False",
           "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
+          "- CACHE/hurricane_cachedtime - Sets the cache time on hurricane data - Defaults to 180",
           "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
           "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https",
-          "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False", sep="\n")
+          "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False",
+          "- PREFETCH/hurricanedata_atboot - Sets if PyWeather should fetch hurricane data at boot - Defaults to False", sep="\n")
 
     print("")
-    print("2 old configuration options, and 2 sections have been deleted.",
+    print("2 old configuration options, and 2 sections are now unused. Please delete these options from your config file.",
           "Details:",
           "- CACHE/hourly_cachedtime - Used to set the global hourly cache time - Now removed",
           "- HOURLY/10dayhourly_atboot - Used to set if PyWeather should fetch 10-day hourly at boot - Now removed",
@@ -128,6 +130,9 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     config['CACHE']['enabled'] = 'True'
     config['CACHE']['tide_cachedtime'] = '480'
     config['SUMMARY']['showtideonsumary'] = 'False'
+    config['PREFETCH']['10dayfetch_atboot'] = 'False'
+    config['PREFETCH']['hurricanedata_atboot'] = 'False'
+    config['CACHE']['hurricane_cachedtime'] = '180'
     geopycheck()
 
 elif versioninfo2 == "0.6.1 beta":
@@ -142,8 +147,10 @@ elif versioninfo2 == "0.6.1 beta":
           "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
           "- CACHE/threedayhourly_cachedtime - Sets the cache time on 1.5 day hourly data - Defaults to 60",
           "- CACHE/tendayhourly_cachedtime - Sets the cache time on the 10 day hourly data - Defaults to 60",
+          "- CACHE/hurricane_cachedtime - Sets the cache time on hurricane data - Defaults to 180",
           "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https",
-          "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False", sep="\n")
+          "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False",
+          "- PREFETCH/hurricanedata_atboot - Sets if PyWeather should fetch hurricane data at boot - Defaults to False", sep="\n")
 
     print("")
     print("2 old configuration options, and 2 sections have been deleted.",
@@ -157,9 +164,14 @@ elif versioninfo2 == "0.6.1 beta":
     config['SUMMARY']['showtideonsumary'] = 'False'
     config['CACHE']['threedayhourly_cachedtime'] = '60'
     config['CACHE']['tendayhourly_cachedtime'] = '60'
+    config['PREFETCH']['10dayfetch_atboot'] = 'False'
+    config['PREFETCH']['hurricanedata_atboot'] = 'False'
+    config['CACHE']['hurricane_cachedtime'] = '180'
     geopycheck()
 
-
+elif versioninfo2 == "0.6.2 beta":
+    print("PyWeather is up-to-date. As such, we don't need to make any configuration changes.")
+    sys.exit()
 
 try:
     with open('storage//config.ini', 'w') as configfile:

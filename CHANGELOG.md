@@ -12,8 +12,8 @@
 
 ## version 0.6.2 beta - Should be released eventually!
 **NEW FEATURES/REMOVALS**
-* Adds the ability to view yesterday's weather - 95% done, need to add some fetch checking
-* Adds the ability to view hurricane data in PyWeather - 75% done, still need to add extra stuff in.
+* Adds the ability to view yesterday's weather - Done! Thanks to @ModoUnreal for coding this in!
+* Adds the ability to view hurricane data in PyWeather - 85% done, need to add fetching/caching stuff
 * Adds the ability to view tide data in PyWeather - Done!
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Thanks to @ModoUnreal for coding this in! 95% done (need to add remaining config stuff), should be finished by 8/28
 * Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS. - Done!
@@ -24,8 +24,8 @@
 * Fixed a bug where if you entered nothing for the backup key directory, an error would occur. Thanks to @creepersbane for reporting the error!
 * Fixed a bug where if your configuration file failed to load, enter to continue prompts were disabled by default.
 * Fixed a bug where the last step in the setup process (bypassing radar confirmation) didn't have proper else catching, and if a "yes" or "no" was entered, PyWeather setup would crash.
-* Fixing a bug where you weren't able to exit out of the summary screen when viewing historical hourly data. - 0% done
-* Fixing a bug where wind chill data in celsius in historical hourly displayed "kph" instead of a degree C symbol. - 0% done
+* Fixed a bug where you weren't able to exit out of the summary screen when viewing historical hourly data.
+* Fixed a bug where wind chill data in celsius in historical hourly displayed "kph" instead of a degree C symbol.
 
 **OTHER CHANGES**
 * ModoUnreal is now an awesome contributor!
