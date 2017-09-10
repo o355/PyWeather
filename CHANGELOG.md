@@ -13,7 +13,7 @@
 ## version 0.6.2 beta - Should be released eventually!
 **NEW FEATURES/REMOVALS**
 * Adds the ability to view yesterday's weather - Done! Thanks to @ModoUnreal for coding this in!
-* Adds the ability to view hurricane data in PyWeather - 85% done, need to add fetching/caching stuff
+* Adds the ability to view hurricane data in PyWeather - 100% done, needs final QA
 * Adds the ability to view tide data in PyWeather - Done!
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Thanks to @ModoUnreal for coding this in! 95% done (need to add remaining config stuff), should be finished by 8/28
 * Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS. - Done!

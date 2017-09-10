@@ -739,6 +739,17 @@ try:
         tidePrefetched = False
     logger.debug("tidePrefetched: %s" % tidePrefetched)
 
+    if prefetchHurricane_atboot == True:
+        hurricaneJSON = requests.get(hurricaneurl)
+        cachetime_hurricane = time.time()
+        hurricanePrefetched = True
+        if verbosity == False:
+            print("[######----] | 58% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+        logger.debug("Acquired hurricane JSON, end result: %s" % hurricaneJSON)
+    else:
+        hurricanePrefetched = False
+    logger.debug("hurricanePrefetched: %s" % hurricanePrefetched)
+
 
 except:
     logger.warn("No connection to the API!! Is the connection offline?")
@@ -803,7 +814,12 @@ if showTideOnSummary == True:
         print("[#########-] | 92% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("tide_json loaded with: %s" % tide_json)
-
+if prefetchHurricane_atboot == True:
+    hurricane_json = json.loads(hurricaneJSON.text)
+    if verbosity == True:
+        print("[#########-] | 94% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+    if jsonVerbosity == True:
+        logger.debug("hurricane_json loaded with: %s" % hurricane_json)
 logger.info("Some amount of JSONs loaded...")
 
 # The 2nd geocoder was removed, as geopy can also do reverse information.
@@ -3545,6 +3561,7 @@ while True:
                 tideJSON = requests.get(tideurl)
                 logger.debug("Retrieved tide JSON with response: %s" % tideJSON)
                 cachetime_tide = time.time()
+
             except:
                 print("When attempting to fetch tide data from Wunderground,",
                       "PyWeather ran into an error. If you're on a network with",
@@ -3622,8 +3639,25 @@ while True:
     elif moreoptions == "20":
         # Preload
         print(Fore.RED + "Loading...")
-        hurricaneJSON = requests.get(hurricaneurl)
-        hurricane_json = json.loads(hurricaneJSON.text)
+        if (hurricanePrefetched == False or refresh_hurricanedataflagged == True or time.time() - cache_hurricanetime >= cachetime_hurricane):
+            print(Fore.RED + "Fetching (or refreshing) hurricane data...")
+            try:
+                hurricaneJSON = requests.get(hurricaneurl)
+                hurricane_json = json.loads(hurricaneJSON.text)
+                if jsonVerbosity == "True":
+                    logger.debug("hurricane_json: %s" % hurricane_json)
+                else:
+                    logger.debug("hurricane_json loaded successfully.")
+                hurricanePrefetched = True
+                refresh_hurricanedataflagged = False
+            except:
+                print("When attempting to fetch hurricane data, PyWeather ran into an error.",
+                      "you have an internet connection, and that api.wunderground.com is unblocked",
+                      "on your network. Press enter to continue.", sep="\n")
+                printException()
+                input()
+                continue
+
         activestorms = 0
         currentstormiterations = 0
         logger.debug("activestorms: %s ; currentstormiterations: %s" %
