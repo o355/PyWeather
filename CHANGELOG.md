@@ -10,13 +10,14 @@
 * Adds the ability to view data through a PWS at boot.
 * MAYBE (if not in 0.6.4) adds the ability to have up to 5 favorite locations.
 
-## version 0.6.2 beta - Should be released eventually!
+## version 0.6.2 beta - Should be released September 18, 2017
 **NEW FEATURES/REMOVALS**
 * Adds the ability to view yesterday's weather - Done! Thanks to @ModoUnreal for coding this in!
-* Adds the ability to view hurricane data in PyWeather - 100% done, needs final QA
+* Adds the ability to view hurricane data in PyWeather - 100% done, needs final QA - should be finished by 9/11
 * Adds the ability to view tide data in PyWeather - Done!
-* Adds the manual configuration of 3-day and 10-day hourly cache times - Thanks to @ModoUnreal for coding this in! 95% done (need to add remaining config stuff), should be finished by 8/28
+* Adds the manual configuration of 3-day and 10-day hourly cache times - Thanks to @ModoUnreal for coding this in! 95% done (need to add remaining config stuff), should be finished by 9/12
 * Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS. - Done!
+* Final QA - 0% done (should be finished by 9/18)
 
 **BUG FIXES**
 * Fixed a bug where I forgot to globalize variables relating to emptying the radar cache.
