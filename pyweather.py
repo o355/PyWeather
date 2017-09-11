@@ -138,6 +138,20 @@ except:
           "in the code. Make sure there aren't any typos in the config file,",
           "and check the traceback below (report it to GitHub for extra internet",
           "points).", sep="\n")
+#    print("It could be because you haven't updated your config file.",
+#            "Would you like me to update your config file?", sep="\n")
+#    configupdate_input = input("Input here: ").lower()
+#    if configupdate_input == "yes":
+
+
+
+
+
+
+
+
+
+
     traceback.print_exc()
     sundata_summary = False
     almanac_summary = False
