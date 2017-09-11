@@ -3,7 +3,7 @@
 Viewing the weather in a terminal has never been so much fun.
 
 ## 0.6.2 beta status update
-Life's been busy, but I'll be back to developing by August 12th. ETA for 0.6.2 beta is late August, maybe early September.
+PyWeather 0.6.2 beta is now scheduled for release on September 18, 2017. However, this date is not completely set in stone, so PyWeather might get pushed back another week to add some additional features or fix bugs.
 
 ## Beta Notice
 If you haven't noticed, PyWeather is in beta. At this point, essential features mostly work.
