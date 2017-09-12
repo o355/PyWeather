@@ -4073,8 +4073,8 @@ while True:
                                     continue
 
 
-
-    elif moreoptions == "12":
+#<--- Hurricane is above | About is below --->
+    elif moreoptions == "14":
         print("", Fore.YELLOW + "-=-=- " + Fore.CYAN + "PyWeather" + Fore.YELLOW + " -=-=-",
               Fore.CYAN + "version " + about_version, "",
               Fore.YELLOW + "Build Number: " + Fore.CYAN + about_buildnumber,
@@ -4086,7 +4086,8 @@ while True:
               Fore.YELLOW + "Contributors: " + Fore.CYAN + about_contributors,
               Fore.YELLOW + "A special thanks to the developers of these libraries",
               "that are used in PyWeather: " + Fore.CYAN,
-              about_librariesinuse + Fore.RESET, sep="\n")        
+              about_librariesinuse + Fore.RESET, sep="\n")
+#<--- About is above, jokes are below --->
     elif moreoptions == "tell me a joke":
         logger.debug("moreoptions: %s" % moreoptions)
         # Jokes from searching "weather jokes" on DuckDuckGo (the first option)
@@ -4133,7 +4134,8 @@ while True:
         elif jokenum == 12:
             print("What did the hurricane say to the other hurricane?",
                   "I have my eye on you.", sep="\n")
-    elif moreoptions == "1":
+# <--- Jokes are above | Yesterday is below --->
+    elif moreoptions == "9":
         print(Fore.RED + "Loading...")
         yesterday_loops = 0
         yesterday_totalloops = 0

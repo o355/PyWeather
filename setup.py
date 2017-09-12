@@ -1107,7 +1107,7 @@ else:
     print("", "(10/31)", "Please enter the cache time for alerts data in minutes (default = 5)", sep="\n")
     alertscachetime = input("Input here: ").lower()
     try:
-        alertscachetime = int(alertscachetime)
+        alertscachetime = float(alertscachetime)
         alertscachetime = str(alertscachetime)
         config['CACHE']['alerts_cachedtime'] = alertscachetime
         print("Changes saved.")

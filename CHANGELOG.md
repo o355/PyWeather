@@ -10,14 +10,32 @@
 * Adds the ability to view data through a PWS at boot.
 * MAYBE (if not in 0.6.4) adds the ability to have up to 5 favorite locations.
 
-## version 0.6.2 beta - Should be released September 18, 2017
+## version 0.6.2 beta - Should be released on 9/18/2017 (Final QA in progress)
 **NEW FEATURES/REMOVALS**
 * Adds the ability to view yesterday's weather - Done! Thanks to @ModoUnreal for coding this in!
-* Adds the ability to view hurricane data in PyWeather - 100% done, needs final QA - should be finished by 9/11
+* Adds the ability to view hurricane data in PyWeather - Done!
 * Adds the ability to view tide data in PyWeather - Done!
-* Adds the manual configuration of 3-day and 10-day hourly cache times - Thanks to @ModoUnreal for coding this in! 95% done (need to add remaining config stuff), should be finished by 9/12
+* Adds the manual configuration of 3-day and 10-day hourly cache times - Done! Thanks to @ModoUnreal for coding this in!
 * Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS. - Done!
-* Final QA - 0% done (should be finished by 9/18)
+* Adds the ability to input decimal numbers into cache times during setup - Done!
+* Final QA:
+    * Windows: New install, all defaults - 0% done - Should be finished 9/12
+    * Windows: New install, random options - 0% done - Should be finished 9/12
+    * Windows: New 0.6.1-beta install, upgrade - 0% done - Should be finished 9/13
+    * Windows: New 0.6.1-beta-https install, upgrade - 0% done - Should be finished 9/13
+    * Linux (Ubuntu Server 16.04.3): New install, all defaults - 0% done - Should be finished 9/13
+    * Linux (Ubuntu Server 16.04.3): New install, random options - 0% done - Should be finished 9/14
+    * Linux (Ubuntu Server 16.04.3): New 0.6.1-beta install, upgrade - 0% done - Should be finished 9/14
+    * Linux (Ubuntu Server 16.04.3): New 0.6.1-beta-https install, upgrade - 0% done - Should be finished 9/14
+    * Mac OS X 10.12: New install, all defaults - 0% done - Should be finished 9/16
+    * Mac OS X 10.12: New install, random options - 0% done - Should be finished 9/17
+    * Mac OS X 10.12: New 0.6.1-beta install, upgrade - 0% done - Should be finished 9/17
+    * Mac OS X 10.12: New 0.6.1-beta-https install, upgrade - 0% done - Should be finished 9/17
+    * Raspbian 8: New install, all defaults - 0% done - Should be finished 9/15
+    * Raspbian 8: New install, random options - 0% done - Should be finished 9/15
+    * Raspbian 8: New 0.6.1-beta install, upgrade - 0% done - Should be finished 9/15
+    * Raspbian 8: New 0.6.1-beta-https install, upgrade - 0% done - Should be finished 9/16
+    * FreeNAS 11: New install, all defaults - 0% done - Should be finished 9/16
 
 **BUG FIXES**
 * Fixed a bug where I forgot to globalize variables relating to emptying the radar cache.
