@@ -124,7 +124,6 @@ if cd_confirmation == "yes":
     config['UI']['show_completediterations'] = 'False'
     config['UI']['alerts_usiterations'] = '1'
     config['UI']['alerts_euiterations'] = '2'
-    config['HOURLY']['10dayfetch_atboot'] = 'False'
     config['UPDATER']['autocheckforupdates'] = 'False'
     config['UPDATER']['show_updaterreleasetag'] = 'False'
     config['KEYBACKUP']['savedirectory'] = 'backup//'
@@ -146,6 +145,7 @@ if cd_confirmation == "yes":
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['GEOCODER']['scheme'] = 'https'
+    config['PREFETCH']['10dayfetch_atboot']= 'False'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['CACHE']['hurricane_cachedtime'] = '180'
     try:

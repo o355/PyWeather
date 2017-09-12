@@ -1189,19 +1189,21 @@ while True:
     print("")
     print(Fore.YELLOW + "What would you like to do now?")
     print(Fore.YELLOW + "- View detailed current data - Enter " + Fore.CYAN + "0")
-    print(Fore.YELLOW + "- View detailed data for previous day - Press " + Fore.CYAN + "1")
-    print(Fore.YELLOW + "- View detailed alerts data - Enter " + Fore.CYAN + "2")
-    print(Fore.YELLOW + "- View detailed hourly data - Enter " + Fore.CYAN + "3")
-    print(Fore.YELLOW + "- View the 10 day hourly forecast - Enter " + Fore.CYAN + "4")
-    print(Fore.YELLOW + "- View the 10 day forecast - Enter " + Fore.CYAN + "5")
-    print(Fore.YELLOW + "- View the almanac for today - Enter " + Fore.CYAN + "6")
-    print(Fore.YELLOW + "- View historical weather data - Enter " + Fore.CYAN + "7")
-    print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Enter " + Fore.CYAN + "8")
-    print(Fore.YELLOW + "- Launch PyWeather's experimental radar - Enter " + Fore.CYAN + "9")
-    print(Fore.YELLOW + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + "10")
-    print(Fore.YELLOW + "- Check for PyWeather updates - Enter " + Fore.CYAN + "11")
-    print(Fore.YELLOW + "- View the about page for PyWeather - Enter " + Fore.CYAN + "12")
-    print(Fore.YELLOW + "- Close PyWeather - Enter " + Fore.CYAN + "13" + Fore.YELLOW)
+    print(Fore.YELLOW + "- View detailed alerts data - Enter " + Fore.CYAN + "1")
+    print(Fore.YELLOW + "- View detailed hourly data - Enter " + Fore.CYAN + "2")
+    print(Fore.YELLOW + "- View the 10 day hourly forecast - Enter " + Fore.CYAN + "3")
+    print(Fore.YELLOW + "- View the 10 day forecast - Enter " + Fore.CYAN + "4")
+    print(Fore.YELLOW + "- View detailed hurricane data - Enter " + Fore.CYAN + "5")
+    print(Fore.YELLOW + "- View detailed tide data - Enter " + Fore.CYAN + "6")
+    print(Fore.YELLOW + "- View the almanac for today - Enter " + Fore.CYAN + "7")
+    print(Fore.YELLOW + "- View historical weather data - Enter " + Fore.CYAN + "8")
+    print(Fore.YELLOW + "- View yesterday's weather data - Enter " + Fore.CYAN + "9")
+    print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Enter " + Fore.CYAN + "10")
+    print(Fore.YELLOW + "- Launch PyWeather's experimental radar - Enter " + Fore.CYAN + "11")
+    print(Fore.YELLOW + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + "12")
+    print(Fore.YELLOW + "- Check for PyWeather updates - Enter " + Fore.CYAN + "13")
+    print(Fore.YELLOW + "- View the about page for PyWeather - Enter " + Fore.CYAN + "14")
+    print(Fore.YELLOW + "- Close PyWeather - Enter " + Fore.CYAN + "15" + Fore.YELLOW)
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
@@ -1348,7 +1350,7 @@ while True:
               + " mm)")
         continue
 
-    elif moreoptions == "2":
+    elif moreoptions == "1":
         # Or condition will sort out 3 potential conditions.
         logger.debug("alertsPrefetched: %s ; alerts cache time: %s" % 
                          (alertsPrefetched, time.time() - cachetime_alerts))
@@ -1521,7 +1523,7 @@ while True:
 
 # <----- Alerts is above | 36-hour hourly is below ---->
     
-    elif moreoptions == "3":
+    elif moreoptions == "2":
         print(Fore.RED + "Loading...")
         print("")
         logger.debug("refresh_hourly36flagged: %s ; hourly36 cache time: %s" %
@@ -1673,8 +1675,8 @@ while True:
                 if totaldetailedHourlyIterations == 36:
                     logger.debug("totalDetailedHourlyIterations is 36. Breaking...")
                     break
-                
-    elif moreoptions == "4":
+#<-- 36 hour hourly is above | 10 day hourly is below --->
+    elif moreoptions == "3":
         print(Fore.RED + "Loading...")
         print("")
         logger.info("Selected view more 10 day hourly...")
@@ -1842,7 +1844,8 @@ while True:
                 if totaldetailedHourly10Iterations == 240:
                     logger.info("detailedhourly10Iterations is 240. Breaking...")
                     break
-    elif moreoptions == "5":
+# <--- 10 day hourly is above | 10 day forecast is below --->
+    elif moreoptions == "4":
         print(Fore.RED + "Loading, please wait a few seconds.")
         logger.info("Selected view more 10 day...")
         print("")
@@ -2087,8 +2090,9 @@ while True:
                         break
                         logger.info("Exiting to the main menu.")
 
+#<-- 10 day hourly is above | radar is below --->
 
-    elif moreoptions == "9":
+    elif moreoptions == "11":
         if radar_bypassconfirmation == False:
             print(Fore.RED + "The radar feature is experimental, and may not work properly.",
                   "PyWeather may crash when in this feature, and other unexpected",
@@ -2688,9 +2692,13 @@ while True:
         frontend.setStatusbar("Zoom: Not selected", 0)
         frontend.setStatusbar("Status: Idle", 1)
         frontend.go()
-    elif moreoptions == "13":
+#<--- Radar is above | Exit PyWeather is below --->
+
+    elif moreoptions == "15":
         sys.exit()
-    elif moreoptions == "11":
+
+#<--- Exit PyWeather is above | Updater is below --->
+    elif moreoptions == "13":
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
                     (buildnumber, buildversion))
@@ -2860,9 +2868,10 @@ while True:
                   "not trying to travel through a wormhole with Cooper, and report",
                   "the error on GitHub, while it's around.", sep='\n')
             continue
-    elif moreoptions == "6":
+# <--- Updater is above | Almanac is below --->
+    elif moreoptions == "7":
         logger.info("Selected option: almanac")
-        print(Fore.RED + "Loading, please wait...")
+        print(Fore.RED + "Loading...")
         print("")
         try:
             logger.debug("almanac_prefetched: %s ; almanac cache time: %s" %
@@ -2939,8 +2948,9 @@ while True:
         print(Fore.YELLOW + "Normal Low: " + Fore.CYAN + almanac_normalLowF + "°F ("
               + almanac_normalLowC + "°C)")
         print("")
-    elif moreoptions == "8":
-        print(Fore.RED + "Loading, please wait a few seconds...")
+#<--- Almanac is above | Sundata is below --->
+    elif moreoptions == "10":
+        print(Fore.RED + "Loading...")
         print("")
         try:
             logger.debug("sundata_prefetched: %s ; sundata cache time: %s" %
@@ -3176,7 +3186,8 @@ while True:
               moon_age + " days")
         print(Fore.YELLOW + "Phase of the moon: " + Fore.CYAN +
               moon_phase)
-    elif moreoptions == "7":
+#<--- Sundata is above | Historical data is below --->
+    elif moreoptions == "8":
         print(Fore.RESET + "To show historical data for this location, please enter a date to show the data.")
         print("The date must be in the format YYYYMMDD.")
         print("E.g: If I wanted to see the weather for February 15, 2013, you'd enter 20130215.")
@@ -3547,8 +3558,9 @@ while True:
                     except KeyboardInterrupt:
                         logger.info("Breaking to main menu, user issued KeyboardInterrupt")
                         break
-    elif moreoptions == "14":
-        print(Fore.RED + "Loading, please wait a few seconds...")
+#<--- Historical is above | Tide is below --->
+    elif moreoptions == "6":
+        print(Fore.RED + "Loading...")
         print("")
         try:
             logger.debug("tidedata_prefetched: %s ; tide data cache time: %s" %
@@ -3640,7 +3652,8 @@ while True:
             elif tide_completediterations == tide_totaliterations:
                 logger.debug("tide_completediterations is equal to tide_totaliterations. Breaking.")
                 break
-    elif moreoptions == "20":
+#<--- Tide data is above | Hurricane data is below --->
+    elif moreoptions == "5":
         print(Fore.RED + "Loading...")
         if (hurricanePrefetched == False or refresh_hurricanedataflagged == True or time.time() - cachetime_hurricane >= cache_hurricanetime):
             print(Fore.RED + "Fetching (or refreshing) hurricane data...")
