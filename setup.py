@@ -1178,7 +1178,7 @@ else:
     threedayhourly_cachedtime = input("Input here: ").lower()
 
     try:
-        threedayhourly = int(threedayhourly_cachedtime)
+        threedayhourly = float(threedayhourly_cachedtime)
         threedayhourly = str(threedayhourly_cachedtime)
         config['CACHE']['threedayhourly_cachedtime'] = threedayhourly_cachedtime
         print("Changes saved.")
@@ -1192,7 +1192,7 @@ else:
     print("", "(16/31)", "Please enter the cache time for the ten day hourly data in minutes (default = 60)", sep="\n")
     tendayhourly_cachedtime = input("Input here: ").lower()
     try:
-        tendayhourly = int(tendayhourly_cachedtime) 
+        tendayhourly = float(tendayhourly_cachedtime)
         tendayhourly = str(tendayhourly_cachedtime) 
         config['CACHE']['tendayhourly_cachedtime'] = tendayhourly_cachedtime
         print("Changes saved.")

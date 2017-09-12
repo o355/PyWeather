@@ -146,7 +146,7 @@ if cd_confirmation == "yes":
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['GEOCODER']['scheme'] = 'https'
-    config['PREFETCH']['hurricanedata_atboot']
+    config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['CACHE']['hurricane_cachedtime'] = '180'
     try:
         with open('storage//config.ini', 'w') as configfile:

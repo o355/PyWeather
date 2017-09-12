@@ -1038,6 +1038,10 @@ else:
     tidedata_prefetched = False
     logger.debug("tidedata_prefetched: %s" % tidedata_prefetched)
 
+if tide_hightideacq == False and tide_lowtideacq == False:
+    tide_dataavailable = False
+    logger.debug("tide_dataavailable: %s")
+
 yesterday_prefetched = False
 logger.debug("yesterday_prefetched: %s" % yesterday_prefetched)
 
@@ -1176,7 +1180,7 @@ if showTideOnSummary == True and tide_dataavailable == True:
     print(Fore.YELLOW + "Time: " + Fore.CYAN + tide_hightidetime)
     print(Fore.YELLOW + "Height: " + Fore.CYAN + tide_hightideheight)
 elif showTideOnSummary == True and tide_dataavailable == False:
-    print(Fore.YELLOW + "** Tide data is not available for the location you entered. **" + Fore.RESET)
+    print(Fore.YELLOW + "** Low/High tide data is not available for the location you entered. **" + Fore.RESET)
 
 # In this part of PyWeather, you'll find comments indicating where things end/begin.
 # This is to help when coding, and knowing where things are.
@@ -3637,12 +3641,12 @@ while True:
                 logger.debug("tide_completediterations is equal to tide_totaliterations. Breaking.")
                 break
     elif moreoptions == "20":
-        # Preload
         print(Fore.RED + "Loading...")
-        if (hurricanePrefetched == False or refresh_hurricanedataflagged == True or time.time() - cache_hurricanetime >= cachetime_hurricane):
+        if (hurricanePrefetched == False or refresh_hurricanedataflagged == True or time.time() - cachetime_hurricane >= cache_hurricanetime):
             print(Fore.RED + "Fetching (or refreshing) hurricane data...")
             try:
                 hurricaneJSON = requests.get(hurricaneurl)
+                cachetime_hurricane = time.time()
                 hurricane_json = json.loads(hurricaneJSON.text)
                 if jsonVerbosity == "True":
                     logger.debug("hurricane_json: %s" % hurricane_json)
