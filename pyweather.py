@@ -3825,6 +3825,11 @@ while True:
                 for loops in data['forecast']:
                     hurricanetotaliterations += 1
                 logger.debug("hurricanetotaliterations: %s" % hurricanetotaliterations)
+                if hurricanetotaliterations <= 5:
+                    hurricane_hasExtDataInForecast = False
+                elif hurricanetotaliterations >= 6:
+                    hurricane_hasExtDataInForecast = True
+                    
                 print(Fore.YELLOW + "Here's the forecast for " + stormname + ".")
                 for forecast in data['forecast']:
                     print("")
@@ -3833,26 +3838,18 @@ while True:
                     # Properly parse the time
                     if hurricaneforecasttime == "12HR":
                         hurricaneforecasttime = "12 hours ahead"
-                        hurricane_hasExtDataInForecast = False
                     elif hurricaneforecasttime == "24HR":
                         hurricaneforecasttime = "24 hours ahead"
-                        hurricane_hasExtDataInForecast = False
                     elif hurricaneforecasttime == "36HR":
                         hurricaneforecasttime = "36 hours ahead"
-                        hurricane_hasExtDataInForecast = False
                     elif hurricaneforecasttime == "48HR":
                         hurricaneforecasttime = "48 hours ahead"
-                        hurricane_hasExtDataInForecast = False
                     elif hurricaneforecasttime == "72HR":
                         hurricaneforecasttime = "72 hours ahead"
-                        hurricane_hasExtDataInForecast = False
                     elif hurricaneforecasttime == "4DAY":
                         hurricaneforecasttime = "4 days ahead"
-                        hurricane_hasExtDataInForecast = True
-                        # hurricane_hasextendeddata (in the normal forecast)
                     elif hurricaneforecasttime == "5DAY":
                         hurricaneforecasttime = "5 days ahead"
-                        hurricane_hasExtDataInForecast = True
 
                     logger.debug("hurricaneforecasttime: %s ; hurricane_hasExtDataInForecast: %s" %
                                  (hurricaneforecasttime, hurricane_hasExtDataInForecast))
