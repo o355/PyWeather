@@ -3829,7 +3829,7 @@ while True:
                     hurricane_hasExtDataInForecast = False
                 elif hurricanetotaliterations >= 6:
                     hurricane_hasExtDataInForecast = True
-                    
+
                 print(Fore.YELLOW + "Here's the forecast for " + stormname + ".")
                 for forecast in data['forecast']:
                     print("")
@@ -3979,7 +3979,8 @@ while True:
                             print("yee")
 
                     else:
-                        forecastselection = ""
+                        # This has to be none for this entire thing to work.
+                        forecastselection = "none"
 
                     if forecastselection == "":
                         extendedforecastloops = 0
