@@ -3970,13 +3970,22 @@ while True:
                     # forecast data was not before the extended forecast, enter this dialogue.
                     elif (activestorms == 1 or currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations):
                         print("")
-                        print(Fore.RED + "Press enter to see extended forecast for " + stormname + ".",
-                        "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
-                        try:
-                            forecastselection = input("Input here: ").lower()
-                            logger.debug("forecastselection: %s" % forecastselection)
-                        except:
-                            print("yee")
+                        if hurricane_hasExtDataInForecast == True:
+                            print(Fore.RED + "Press enter to see extended forecast for " + stormname + ".",
+                            "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
+                            try:
+                                forecastselection = input("Input here: ").lower()
+                                logger.debug("forecastselection: %s" % forecastselection)
+                            except:
+                                logger.debug("Breaking to the main menu.")
+                                print("")
+                                break
+
+                            if forecastselection != "":
+                                print(Fore.RED + "Your input could not be understood. Listing extended forecast data.")
+
+                        elif hurricane_hasExtDataInForecast == False:
+                            break
 
                     else:
                         # This has to be none for this entire thing to work.
@@ -4089,25 +4098,27 @@ while True:
 
                             if extendedcurrentloops == extendedforecastloops:
                                 print("")
-                                print(Fore.RED + "Press enter to view data for the next storm.",
-                                      "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
+                                if currentstormiterations != activestorms:
+                                    print(Fore.RED + "Press enter to view data for the next storm.",
+                                          "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
 
-                                try:
-                                    extforecastinput = input("Input here: ").lower()
-                                except KeyboardInterrupt:
-                                    logger.debug("Breaking to main menu...")
-                                    print("")
+                                    try:
+                                        extforecastinput = input("Input here: ").lower()
+                                    except KeyboardInterrupt:
+                                        logger.debug("Breaking to main menu...")
+                                        print("")
+                                        break
+
+                                    if extforecastinput == "exit":
+                                        print(Fore.RED + "Exiting to the main menu...")
+                                        break
+                                    else:
+                                        if extforecastinput != "":
+                                            print(Fore.RED + "Your input could not be understood. Viewing data for the next storm...")
+                                        print("")
+                                        continue
+                                elif currentstormiterations == activestorms:
                                     break
-
-                                if extforecastinput == "exit":
-                                    print(Fore.RED + "Exiting to the main menu...")
-                                    break
-                                else:
-                                    if extforecastinput != "":
-                                        print(Fore.RED + "Your input could not be understood. Viewing data for the next storm...")
-                                    print("")
-                                    continue
-
 
 #<--- Hurricane is above | About is below --->
     elif moreoptions == "14":
