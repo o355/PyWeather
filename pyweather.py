@@ -3073,46 +3073,62 @@ while True:
         moon_percentIlluminated = str(astronomy_json['moon_phase']['percentIlluminated'])
         moon_age = str(astronomy_json['moon_phase']['ageOfMoon'])
         moon_phase = astronomy_json['moon_phase']['phaseofMoon']
-        MR_minute = int(astronomy_json['moon_phase']['moonrise']['minute'])
-        logger.debug("moon_percentIlluminated: %s ; moon_age: %s"
-                     % (moon_percentIlluminated, moon_age))
-        logger.debug("moon_phase: %s ; MR_minute: %s" %
-                     (moon_phase, MR_minute))
-        MR_hour = int(astronomy_json['moon_phase']['moonrise']['hour'])
-        logger.debug("MR_minute: %s" % MR_minute)
-           
-        if MR_hour == 0:
-            logger.debug("Moonrise hour is 0. Prefixing AM, and 12-hr correction...")
-            MR_hour = "12"
-            MR_minute = str(MR_minute).zfill(2)
-            moonrise_time = MR_hour + ":" + MR_minute + " AM" 
-            logger.debug("MR_hour: %s ; MR_minute: %s" %
-                         (MR_hour, MR_minute))
-            logger.debug("moonrise_time: %s" % moonrise_time)   
-        elif MR_hour > 12:
-            logger.debug("Moonrise hour > 12. Prefixing PM, 12-hr correction...")
-            MR_hour = MR_hour - 12
-            MR_hour = str(MR_hour)
-            MR_minute = str(MR_minute).zfill(2)
-            moonrise_time = MR_hour + ":" + MR_minute + " PM"
-            logger.debug("MR_hour: %s ; MR_minute: %s"
-                         % (MR_hour, MR_minute))
-            logger.debug("moonrise_time: %s" % moonrise_time)
-        elif MR_hour == 12:
-            logger.debug("Moonrise hour = 12. Prefixing PM...")
-            MR_hour = str(MR_hour)
-            MR_minute = str(MR_minute).zfill(2)
-            moonrise_time = MR_hour + ":" + MR_minute + " PM"
-            logger.debug("MR_hour: %s ; MR_minute: %s" %
-                         (MR_hour, MR_minute))
-            logger.debug("moonrise_time: %s" % moonrise_time)
+        try:
+            MR_minute = int(astronomy_json['moon_phase']['moonrise']['minute'])
+            moonrisedata = True
+            logger.debug("moon_percentIlluminated: %s ; moon_age: %s"
+                         % (moon_percentIlluminated, moon_age))
+            logger.debug("moon_phase: %s ; MR_minute: %s" %
+                         (moon_phase, MR_minute))
+        except ValueError:
+            logger.warning("Moonrise data is not available!")
+            moonrisedata = False
+
+        try:
+            MR_hour = int(astronomy_json['moon_phase']['moonrise']['hour'])
+            moonrisedata = True
+            logger.debug("MR_hour: %s" % MR_hour)
+        except ValueError:
+            logger.warning("Moonrise data is not available!")
+            moonrisedata = False
+
+        logger.debug("moonrisedata: %s" % moonrisedata)
+        if moonrisedata == True:
+            if MR_hour == 0:
+                logger.debug("Moonrise hour is 0. Prefixing AM, and 12-hr correction...")
+                MR_hour = "12"
+                MR_minute = str(MR_minute).zfill(2)
+                moonrise_time = MR_hour + ":" + MR_minute + " AM"
+                logger.debug("MR_hour: %s ; MR_minute: %s" %
+                             (MR_hour, MR_minute))
+                logger.debug("moonrise_time: %s" % moonrise_time)
+            elif MR_hour > 12:
+                logger.debug("Moonrise hour > 12. Prefixing PM, 12-hr correction...")
+                MR_hour = MR_hour - 12
+                MR_hour = str(MR_hour)
+                MR_minute = str(MR_minute).zfill(2)
+                moonrise_time = MR_hour + ":" + MR_minute + " PM"
+                logger.debug("MR_hour: %s ; MR_minute: %s"
+                             % (MR_hour, MR_minute))
+                logger.debug("moonrise_time: %s" % moonrise_time)
+            elif MR_hour == 12:
+                logger.debug("Moonrise hour = 12. Prefixing PM...")
+                MR_hour = str(MR_hour)
+                MR_minute = str(MR_minute).zfill(2)
+                moonrise_time = MR_hour + ":" + MR_minute + " PM"
+                logger.debug("MR_hour: %s ; MR_minute: %s" %
+                             (MR_hour, MR_minute))
+                logger.debug("moonrise_time: %s" % moonrise_time)
+            elif MR_hour < 12:
+                logger.debug("Moonrise hour < 12. Prefixing AM...")
+                MR_hour = str(MR_hour)
+                MR_minute = str(MR_minute).zfill(2)
+                moonrise_time = MR_hour + ":" + MR_minute + " AM"
+                logger.debug("MR_hour: %s ; MR_minute: %s" %
+                             (MR_hour, MR_minute))
+                logger.debug("moonrise_time: %s" % moonrise_time)
         else:
-            logger.debug("Moonrise hour < 12. Prefixing AM...")
-            MR_hour = str(MR_hour)
-            MR_minute = str(MR_minute).zfill(2)
-            moonrise_time = MR_hour + ":" + MR_minute + " AM"
-            logger.debug("MR_hour: %s ; MR_minute: %s" %
-                         (MR_hour, MR_minute))
+            moonrise_time = "Unavailable"
             logger.debug("moonrise_time: %s" % moonrise_time)
         
         try:    
@@ -3158,7 +3174,7 @@ while True:
                 logger.debug("MS_hour: %s ; MS_minute: %s"
                              % (MS_hour, MS_minute))
                 logger.debug("moonset_time: %s" % moonset_time)
-            elif MS_hour < 12 and MS_data == True:
+            elif MS_hour < 12:
                 logger.debug("Moonset hour < 12. Prefixing AM...")
                 MS_hour = str(MS_hour)
                 MS_minute = str(MS_minute).zfill(2)
@@ -3171,6 +3187,9 @@ while True:
                 moonset_time = "Unavailable"
                 logger.debug("MS_data: %s ; moonset_time: %s" %
                              (MS_data, moonset_time))
+        else:
+            moonset_time = "Unavailable"
+            logger.debug("moonset_time: %s" % moonset_time)
         
         logger.info("Printing data...")
         print(Fore.YELLOW + "Here's the detailed sun/moon data for: " +
@@ -4501,6 +4520,7 @@ while True:
                 elif yesterday_loops == user_loopIterations:
                     logger.info("Asking user to continue.")
                     try:
+                        print("")
                         print(Fore.RED + "Press enter to view the next", user_loopIterations
                               , "iterations of yesterday weather information.")
                         print("Otherwise, press Control + C to get back to the main menu.")
