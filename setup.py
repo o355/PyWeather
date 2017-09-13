@@ -856,7 +856,7 @@ if backup_APIkey == "yes":
                 ", and close backkey.txt.")
 
 
-print("Before we configure PyWeather, I'll now validate your API key.")
+print("", "Before we configure PyWeather, I'll now validate your API key.", sep="\n")
 
 # Do an infinite loop of validation of the API key, so the user can reenter the API key
 # if it was wrong.
@@ -888,7 +888,7 @@ while True:
     try:
         test_conditions = str(test_json['current_observation']['temp_f'])
         logger.debug("test_conditions: %s" % test_conditions)
-        print("", "Hurray! Your API key is valid and works.", sep="\n")
+        print("Hurray! Your API key is valid and works.")
         break
     except:
         logger.warn("Error! Is the API key invalid?")
@@ -1503,7 +1503,7 @@ else:
     try:
         geocoder.geocode("123 5th Avenue, New York, NY")
         print("The geocoder can operate with HTTPS enabled on your OS. Saving these changes...")
-        config['GEOCDOER']['scheme'] = 'https'
+        config['GEOCODER']['scheme'] = 'https'
         logger.debug("GEOCODER/scheme is now 'https'")
         print("Changes saved.")
     except geopy.exc.GeocoderServiceError:
