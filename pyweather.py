@@ -1031,6 +1031,10 @@ if showTideOnSummary == True:
                 logger.debug("tide_hightidetime: %s ; tide_hightideheight: %s" %
                              (tide_hightidetime, tide_hightideheight))
                 logger.debug("tide_hightideacq: %s" % tide_hightideacq)
+
+            if tide_hightideacq == False and tide_lowtideacq == False:
+                tide_dataavailable = False
+                logger.debug("tide_dataavailable: %s")
     else:
         tide_dataavailable = False
         logger.debug("tide_dataavailable: %s" % tide_dataavailable)
@@ -1038,9 +1042,7 @@ else:
     tidedata_prefetched = False
     logger.debug("tidedata_prefetched: %s" % tidedata_prefetched)
 
-if tide_hightideacq == False and tide_lowtideacq == False:
-    tide_dataavailable = False
-    logger.debug("tide_dataavailable: %s")
+
 
 yesterday_prefetched = False
 logger.debug("yesterday_prefetched: %s" % yesterday_prefetched)
