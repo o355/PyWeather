@@ -2624,6 +2624,12 @@ while True:
                     frontend.reloadImage("Viewer", "temp//r100.gif")
                     frontend.setStatusbar("Status: Idle", 1)
             elif btnName == "Empty Cache":
+                global r10cached
+                global r20cached
+                global r40cached
+                global r60cached
+                global r80cached
+                global r100cached
                 radar_confirmation = frontend.yesNoBox("Empty the cache?", 
                                                        "Would you like to empty the cache? If you do" +
                                                        ", you'll need to reselect a zoom level.")
@@ -2667,7 +2673,7 @@ while True:
             elif btnName == "Pause":
                 frontend.stopAnimation("Viewer")
         frontend.clearImageCache()       
-        frontend.setTitle("PyWeather Radar Viewer - version 0.6.1 beta")
+        frontend.setTitle("PyWeather Radar Viewer")
         frontend.setResizable(canResize=False)
         frontend.startLabelFrame("Viewer", column=0, row=0, colspan=3)
         # Placeholders are needed to start the viewer.
