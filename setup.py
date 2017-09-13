@@ -57,7 +57,7 @@ def configprovision():
         print("UI section could not be added.")
 
     try:
-        config.add_section('HOURLY')
+        config.add_section('PREFETCH')
     except configparser.DuplicateSectionError:
         print("Hourly section could not be added.")
 
