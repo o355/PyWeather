@@ -1680,7 +1680,6 @@ while True:
 #<-- 36 hour hourly is above | 10 day hourly is below --->
     elif moreoptions == "3":
         print(Fore.RED + "Loading...")
-        print("")
         logger.info("Selected view more 10 day hourly...")
         detailedHourly10Iterations = 0
         totaldetailedHourly10Iterations = 0
@@ -1854,7 +1853,7 @@ while True:
         logger.debug("refresh_forecastflagged: %s ; forecast cache time: %s" %
                     (refresh_forecastflagged, time.time() - cachetime_forecast))
         if (refresh_forecastflagged == True 
-            or time.time() - cachetime_forecast >= cache_hourlytime and cache_enabled == True):
+            or time.time() - cachetime_forecast >= cache_forecasttime and cache_enabled == True):
             print(Fore.RED + "Refreshing forecast data...")
             try:
                 forecast10JSON = requests.get(f10dayurl)

@@ -45,6 +45,7 @@
 * Fixed a bug where the last step in the setup process (bypassing radar confirmation) didn't have proper else catching, and if a "yes" or "no" was entered, PyWeather setup would crash.
 * Fixed a bug where you weren't able to exit out of the summary screen when viewing historical hourly data.
 * Fixed a bug where wind chill data in celsius in historical hourly displayed "kph" instead of a degree C symbol.
+* Fixed a bug where the 10 day forecast cache expire time was running off of the hourly cache time.
 
 **OTHER CHANGES**
 * ModoUnreal is now an awesome contributor!
