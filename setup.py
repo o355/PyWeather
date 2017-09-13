@@ -888,7 +888,7 @@ while True:
     try:
         test_conditions = str(test_json['current_observation']['temp_f'])
         logger.debug("test_conditions: %s" % test_conditions)
-        print("Hurray! Your API key is valid and works.")
+        print("", "Hurray! Your API key is valid and works.", sep="\n")
         break
     except:
         logger.warn("Error! Is the API key invalid?")
@@ -1501,7 +1501,7 @@ else:
     from geopy import GoogleV3
     geocoder = GoogleV3(scheme='https')
     try:
-        location = geocoder.geocode("123 5th Avenue, New York, NY")
+        geocoder.geocode("123 5th Avenue, New York, NY")
         print("The geocoder can operate with HTTPS enabled on your OS. Saving these changes...")
         config['GEOCDOER']['scheme'] = 'https'
         logger.debug("GEOCODER/scheme is now 'https'")
@@ -1510,7 +1510,7 @@ else:
         print("Geopy probably can't run without HTTPS (or your internet went down). Trying HTTP as the scheme...")
         geocoder = GoogleV3(scheme='http')
         try:
-            location = geocoder.geocode("123 5th Avenue, New York, NY")
+            geocoder.geocode("123 5th Avenue, New York, NY")
             print("The geocoder can operate, but without HTTPS enabled on your OS. Saving these changes...")
             config['GEOCODER']['scheme'] = 'http'
             logger.debug("GEOCODER/scheme is now 'http'")
