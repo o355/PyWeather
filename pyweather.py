@@ -2873,7 +2873,6 @@ while True:
     elif moreoptions == "7":
         logger.info("Selected option: almanac")
         print(Fore.RED + "Loading...")
-        print("")
         try:
             logger.debug("almanac_prefetched: %s ; almanac cache time: %s" %
                          (almanac_prefetched, time.time() - cachetime_almanac))
@@ -2884,6 +2883,7 @@ while True:
         if (almanac_prefetched == False or time.time() - cachetime_almanac >= cache_almanactime
             or refresh_almanacflagged == True):
             print(Fore.RED + "Fetching (or refreshing) almanac data...")
+            print("")
             try:
                 almanacJSON = requests.get(almanacurl)
                 logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
@@ -3562,7 +3562,6 @@ while True:
 #<--- Historical is above | Tide is below --->
     elif moreoptions == "6":
         print(Fore.RED + "Loading...")
-        print("")
         try:
             logger.debug("tidedata_prefetched: %s ; tide data cache time: %s" %
                          (tidedata_prefetched, time.time() - cachetime_tide))
@@ -3574,6 +3573,7 @@ while True:
                             time.time() - cachetime_tide >= cache_tidetime and cache_enabled == True or
                     refresh_tidedataflagged == True):
             print(Fore.RED + "Fetching (or refreshing) tide data...")
+            print("")
             try:
                 tideJSON = requests.get(tideurl)
                 logger.debug("Retrieved tide JSON with response: %s" % tideJSON)
