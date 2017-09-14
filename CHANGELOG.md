@@ -19,22 +19,18 @@
 * Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS. - Done!
 * Adds the ability to input decimal numbers into cache times during setup - Done!
 * Final QA:
-    * Windows: New install, all defaults - 0% done - Should be finished 9/12
+    * Windows: New install, all defaults - 50% done - Should be finished 9/12 (this is the first QA, so lots of bugs are being found.)
     * Windows: New install, random options - 0% done - Should be finished 9/12
     * Windows: New 0.6.1-beta install, upgrade - 0% done - Should be finished 9/13
-    * Windows: New 0.6.1-beta-https install, upgrade - 0% done - Should be finished 9/13
     * Linux (Ubuntu Server 16.04.3): New install, all defaults - 0% done - Should be finished 9/13
     * Linux (Ubuntu Server 16.04.3): New install, random options - 0% done - Should be finished 9/14
     * Linux (Ubuntu Server 16.04.3): New 0.6.1-beta install, upgrade - 0% done - Should be finished 9/14
-    * Linux (Ubuntu Server 16.04.3): New 0.6.1-beta-https install, upgrade - 0% done - Should be finished 9/14
     * Mac OS X 10.12: New install, all defaults - 0% done - Should be finished 9/16
     * Mac OS X 10.12: New install, random options - 0% done - Should be finished 9/17
     * Mac OS X 10.12: New 0.6.1-beta install, upgrade - 0% done - Should be finished 9/17
-    * Mac OS X 10.12: New 0.6.1-beta-https install, upgrade - 0% done - Should be finished 9/17
     * Raspbian 8: New install, all defaults - 0% done - Should be finished 9/15
     * Raspbian 8: New install, random options - 0% done - Should be finished 9/15
     * Raspbian 8: New 0.6.1-beta install, upgrade - 0% done - Should be finished 9/15
-    * Raspbian 8: New 0.6.1-beta-https install, upgrade - 0% done - Should be finished 9/16
     * FreeNAS 11: New install, all defaults - 0% done - Should be finished 9/16
 
 **BUG FIXES**

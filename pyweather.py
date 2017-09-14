@@ -2996,7 +2996,7 @@ while True:
                 logger.debug("astronomy_json: %s" % astronomy_json)
             else:
                 logger.debug("astronomy json loaded.")
-                
+
             SR_minute = int(astronomy_json['moon_phase']['sunrise']['minute'])
             SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
             logger.debug("SR_minute: %s ; SR_hour: %s" %
@@ -3079,26 +3079,21 @@ while True:
         moon_percentIlluminated = str(astronomy_json['moon_phase']['percentIlluminated'])
         moon_age = str(astronomy_json['moon_phase']['ageOfMoon'])
         moon_phase = astronomy_json['moon_phase']['phaseofMoon']
+        logger.debug("moon_percentIlluminated: %s ; moon_age: %s" %
+                     (moon_percentIlluminated, moon_age))
+        logger.debug("moon_phase: %s" % moon_phase)
         try:
             MR_minute = int(astronomy_json['moon_phase']['moonrise']['minute'])
-            moonrisedata = True
-            logger.debug("moon_percentIlluminated: %s ; moon_age: %s"
-                         % (moon_percentIlluminated, moon_age))
-            logger.debug("moon_phase: %s ; MR_minute: %s" %
-                         (moon_phase, MR_minute))
-        except ValueError:
-            logger.warning("Moonrise data is not available!")
-            moonrisedata = False
-
-        try:
             MR_hour = int(astronomy_json['moon_phase']['moonrise']['hour'])
             moonrisedata = True
-            logger.debug("MR_hour: %s" % MR_hour)
+            logger.debug("MR_minute: %s ; MR_hour: %s" % (MR_minute, MR_hour))
         except ValueError:
             logger.warning("Moonrise data is not available!")
             moonrisedata = False
 
         logger.debug("moonrisedata: %s" % moonrisedata)
+
+
         if moonrisedata == True:
             if MR_hour == 0:
                 logger.debug("Moonrise hour is 0. Prefixing AM, and 12-hr correction...")
