@@ -1,7 +1,7 @@
 
 # PyWeather changelog
 
-## version 0.6.3 beta - Should be released idk:
+## version 0.6.3 beta - Should be released late October/early November 2017:
 * Adds a nearby location feature to hurricane data (300km out)
 * Adds the ability to prefetch yesterday's weather at boot
 * Adds a caching system for yesterday's weather (12hrs by default)
@@ -18,20 +18,7 @@
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Done! Thanks to @ModoUnreal for coding this in!
 * Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS. - Done!
 * Adds the ability to input decimal numbers into cache times during setup - Done!
-* Final QA:
-    * Windows: New install, all defaults - 50% done - Should be finished 9/12 (this is the first QA, so lots of bugs are being found.)
-    * Windows: New install, random options - 0% done - Should be finished 9/12
-    * Windows: New 0.6.1-beta install, upgrade - 0% done - Should be finished 9/13
-    * Linux (Ubuntu Server 16.04.3): New install, all defaults - 0% done - Should be finished 9/13
-    * Linux (Ubuntu Server 16.04.3): New install, random options - 0% done - Should be finished 9/14
-    * Linux (Ubuntu Server 16.04.3): New 0.6.1-beta install, upgrade - 0% done - Should be finished 9/14
-    * Mac OS X 10.12: New install, all defaults - 0% done - Should be finished 9/16
-    * Mac OS X 10.12: New install, random options - 0% done - Should be finished 9/17
-    * Mac OS X 10.12: New 0.6.1-beta install, upgrade - 0% done - Should be finished 9/17
-    * Raspbian 8: New install, all defaults - 0% done - Should be finished 9/15
-    * Raspbian 8: New install, random options - 0% done - Should be finished 9/15
-    * Raspbian 8: New 0.6.1-beta install, upgrade - 0% done - Should be finished 9/15
-    * FreeNAS 11: New install, all defaults - 0% done - Should be finished 9/16
+* Final QA - 15% done - Should be finished 9/18
 
 **BUG FIXES**
 * Fixed a bug where I forgot to globalize variables relating to emptying the radar cache.
