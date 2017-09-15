@@ -781,7 +781,7 @@ if verbosity == False:
 if prefetch10Day_atStart == True: 
     tenday_json = json.loads(hourly10JSON.text)
     if jsonVerbosity == True:
-        logger.debug("hourly10_json loaded with: %s" % hourly10_json)
+        logger.debug("tenday_json loaded with: %s" % tenday_json)
     hourly36_json = json.loads(hourly36JSON.text)
     if jsonVerbosity == True:
         logger.debug("hourly36_json loaded with: %s" % hourly36_json)
