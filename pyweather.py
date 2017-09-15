@@ -1882,9 +1882,9 @@ while True:
             else:
                 logger.debug("refresh_forecastflagged: %s" % refresh_forecastflagged)
                 logger.debug("forecast10_json loaded.")
-        currentForecastIterations = 0
-        logger.debug("currentForecastIterations: %s" % currentForecastIterations)
+        detailedForecastIterations = 0
         totaldetailedForecastIterations = 0
+        logger.debug("totaldetailedForecastIterations: %s" % totaldetailedForecastIterations)
         forecast10_precipDayData = True
         logger.debug("totaldetailedForecastIterations: %s ; forecast10_precipDayData: %s" %
                      (totaldetailedForecastIterations, forecast10_precipDayData))
@@ -1893,6 +1893,7 @@ while True:
         print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + str(location))
         for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
             print("")
+            detailedForecastIterations = detailedForecastIterations + 1
             logger.info("We're on iteration: %s" % detailedForecastIterations)
             forecast10_weekday = day['date']['weekday']
             forecast10_month = str(day['date']['month'])
@@ -2073,8 +2074,8 @@ while True:
                       " (" + forecast10_avgWindDegrees + "°)")
             print(Fore.YELLOW + "Humidity: " + Fore.CYAN +
                   forecast10_avgHumidity + "%")
-            detailedForecastIterations = detailedForecastIterations + 1
             totaldetailedForecastIterations = totaldetailedForecastIterations + 1
+            logger.debug("totaldetailedForecastIterations: %s" % totaldetailedForecastIterations)
             if user_showCompletedIterations == True:
                 print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/10"
                       % totaldetailedForecastIterations)
