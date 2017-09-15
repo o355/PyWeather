@@ -2996,85 +2996,105 @@ while True:
                 logger.debug("astronomy_json: %s" % astronomy_json)
             else:
                 logger.debug("astronomy json loaded.")
+            try:
+                SR_minute = int(astronomy_json['moon_phase']['sunrise']['minute'])
+                SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
+                logger.debug("SR_minute: %s ; SR_hour: %s" %
+                            (SR_minute, SR_hour))
+                sunrisedata = True
+            except:
+                logger.warning("No sunrise data is available!")
+                sunrisedata = False
 
-            SR_minute = int(astronomy_json['moon_phase']['sunrise']['minute'])
-            SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
-            logger.debug("SR_minute: %s ; SR_hour: %s" %
-                        (SR_minute, SR_hour))
-            if SR_hour == 0:
-                logger.debug("Sunrise hour = 0. Prefixing AM, 12-hr correction...")
-                SR_hour = "12"
-                SR_minute = str(SR_minute).zfill(2)
-                sunrise_time = SR_hour + ":" + SR_minute + " AM"
-                logger.debug("SR_hour : %s ; SR_minute: %s" %
-                             (SR_hour, SR_minute))
-                logger.debug("sunrise_time: %s" % sunrise_time)
-            elif SR_hour > 12:
-                logger.debug("Sunrise Hour > 12. Prefixing PM, 12-hr correction...")
-                SR_hour = SR_hour - 12
-                SR_hour = str(SR_hour)
-                SR_minute = str(SR_minute).zfill(2)
-                sunrise_time = SR_hour + ":" + SR_minute + " PM"
-                logger.debug("SR_hour: %s ; SR_minute: %s" %
-                             (SR_hour, SR_minute))
-                logger.debug("sunrise_time: %s" % sunrise_time)
-            elif SR_hour == 12:
-                logger.debug("Sunrise Hour = 12. Prefixing PM.")
-                SR_hour = str(SR_hour)
-                SR_minute = str(SR_minute).zfill(2)
-                sunrise_time = SR_hour + ":" + SR_minute + " PM"
-                logger.debug("SR_hour: %s ; SR_minute: %s" %
-                             (SR_hour, SR_minute))
-                logger.debug("SR_minute: %s" % SR_minute)
+            logger.debug("sunrisedata: %s" % sunrisedata)
+            if sunrisedata == True:
+                if SR_hour == 0:
+                    logger.debug("Sunrise hour = 0. Prefixing AM, 12-hr correction...")
+                    SR_hour = "12"
+                    SR_minute = str(SR_minute).zfill(2)
+                    sunrise_time = SR_hour + ":" + SR_minute + " AM"
+                    logger.debug("SR_hour : %s ; SR_minute: %s" %
+                                 (SR_hour, SR_minute))
+                    logger.debug("sunrise_time: %s" % sunrise_time)
+                elif SR_hour > 12:
+                    logger.debug("Sunrise Hour > 12. Prefixing PM, 12-hr correction...")
+                    SR_hour = SR_hour - 12
+                    SR_hour = str(SR_hour)
+                    SR_minute = str(SR_minute).zfill(2)
+                    sunrise_time = SR_hour + ":" + SR_minute + " PM"
+                    logger.debug("SR_hour: %s ; SR_minute: %s" %
+                                 (SR_hour, SR_minute))
+                    logger.debug("sunrise_time: %s" % sunrise_time)
+                elif SR_hour == 12:
+                    logger.debug("Sunrise Hour = 12. Prefixing PM.")
+                    SR_hour = str(SR_hour)
+                    SR_minute = str(SR_minute).zfill(2)
+                    sunrise_time = SR_hour + ":" + SR_minute + " PM"
+                    logger.debug("SR_hour: %s ; SR_minute: %s" %
+                                 (SR_hour, SR_minute))
+                    logger.debug("SR_minute: %s" % SR_minute)
+                else:
+                    logger.debug("Sunrise Hour < 12. Prefixing AM.")
+                    SR_hour = str(SR_hour)
+                    SR_minute = str(SR_minute).zfill(2)
+                    sunrise_time = SR_hour + ":" + SR_minute + " AM"
+                    logger.debug("SR_hour: %s ; SR_minute: %s" %
+                                 (SR_hour, SR_minute))
+                    logger.debug("sunrise_time: %s" % sunrise_time)
             else:
-                logger.debug("Sunrise Hour < 12. Prefixing AM.")
-                SR_hour = str(SR_hour)
-                SR_minute = str(SR_minute).zfill(2)
-                sunrise_time = SR_hour + ":" + SR_minute + " AM"
-                logger.debug("SR_hour: %s ; SR_minute: %s" %
-                             (SR_hour, SR_minute))
+                sunrise_time = "Unavailable"
                 logger.debug("sunrise_time: %s" % sunrise_time)
 
-            SS_minute = int(astronomy_json['moon_phase']['sunset']['minute'])
-            SS_hour = int(astronomy_json['moon_phase']['sunset']['hour'])
-            logger.debug("SS_minute: %s ; SS_hour: %s" %
-                         (SS_minute, SS_hour))
-            
-            if SS_hour == 0:
-                logger.debug("Sunset hour = 0. Prefixing AM, 12-hr correction...")
-                SS_hour = "0"
-                SS_minute = str(SS_minute).zfill(2)
-                sunset_time = SS_hour + ":" + SS_minute + " AM"
-                logger.debug("SS_hour: %s ; SS_minute: %s" %
-                             (SS_hour, SS_minute))
-                logger.debug("sunset_time: %s" % sunset_time)
-            elif SS_hour > 12:
-                logger.debug("Sunset hour > 12. Prefixing PM, 12-hr correction...")
-                SS_hour = SS_hour - 12
-                SS_hour = str(SS_hour)
-                SS_minute = str(SS_minute).zfill(2)
-                sunset_time = SS_hour + ":" + SS_minute + " PM"
-                logger.debug("SS_hour: %s ; SS_minute: %s"
-                             % (SS_hour, SS_minute))
-                logger.debug("sunset_time: %s" % sunset_time)
-            elif SS_hour == 12:
-                logger.debug("Sunset hour = 12. Prefixing PM...")
-                SS_hour = str(SS_hour)
-                SS_minute = str(SS_minute).zfill(2)
-                sunset_time = SS_hour + ":" + SS_minute + " PM"
-                logger.debug("SS_hour: %s ; SS_minute: %s"
-                             % (SS_hour, SS_minute))
-                logger.debug("sunset_time: %s" % sunset_time)
+            try:
+                SS_minute = int(astronomy_json['moon_phase']['sunset']['minute'])
+                SS_hour = int(astronomy_json['moon_phase']['sunset']['hour'])
+                sunsetdata = True
+                logger.debug("SS_minute: %s ; SS_hour: %s" %
+                             (SS_minute, SS_hour))
+            except:
+                logger.warning("No sunset time is available!")
+                sunsetdata = False
+            logger.debug("sunsetdata: %s" % sunsetdata)
+
+            if sunsetdata == True:
+                if SS_hour == 0:
+                    logger.debug("Sunset hour = 0. Prefixing AM, 12-hr correction...")
+                    SS_hour = "0"
+                    SS_minute = str(SS_minute).zfill(2)
+                    sunset_time = SS_hour + ":" + SS_minute + " AM"
+                    logger.debug("SS_hour: %s ; SS_minute: %s" %
+                                 (SS_hour, SS_minute))
+                    logger.debug("sunset_time: %s" % sunset_time)
+                elif SS_hour > 12:
+                    logger.debug("Sunset hour > 12. Prefixing PM, 12-hr correction...")
+                    SS_hour = SS_hour - 12
+                    SS_hour = str(SS_hour)
+                    SS_minute = str(SS_minute).zfill(2)
+                    sunset_time = SS_hour + ":" + SS_minute + " PM"
+                    logger.debug("SS_hour: %s ; SS_minute: %s"
+                                 % (SS_hour, SS_minute))
+                    logger.debug("sunset_time: %s" % sunset_time)
+                elif SS_hour == 12:
+                    logger.debug("Sunset hour = 12. Prefixing PM...")
+                    SS_hour = str(SS_hour)
+                    SS_minute = str(SS_minute).zfill(2)
+                    sunset_time = SS_hour + ":" + SS_minute + " PM"
+                    logger.debug("SS_hour: %s ; SS_minute: %s"
+                                 % (SS_hour, SS_minute))
+                    logger.debug("sunset_time: %s" % sunset_time)
+                else:
+                    logger.debug("Sunset hour < 12. Prefixing AM...")
+                    SS_hour = str(SS_hour)
+                    SS_minute = str(SS_minute).zfill(2)
+                    sunset_time = SS_hour + ":" + SS_minute + " AM"
+                    logger.debug("SS_hour: %s ; SS_minute: %s"
+                                 % (SS_hour, SS_minute))
+                    logger.debug("sunset_time: %s" % sunset_time)
+                sundata_prefetched = True
+                logger.debug("sundata_prefetched: %s" % sundata_prefetched)
             else:
-                logger.debug("Sunset hour < 12. Prefixing AM...")
-                SS_hour = str(SS_hour)
-                SS_minute = str(SS_minute).zfill(2)
-                sunset_time = SS_hour + ":" + SS_minute + " AM"
-                logger.debug("SS_hour: %s ; SS_minute: %s"
-                             % (SS_hour, SS_minute))
+                sunset_time = "Unavailable"
                 logger.debug("sunset_time: %s" % sunset_time)
-            sundata_prefetched = True
-            logger.debug("sundata_prefetched: %s" % sundata_prefetched)
                 
         moon_percentIlluminated = str(astronomy_json['moon_phase']['percentIlluminated'])
         moon_age = str(astronomy_json['moon_phase']['ageOfMoon'])
