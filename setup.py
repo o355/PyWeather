@@ -1500,6 +1500,12 @@ else:
     # HTTPS validation
     from geopy import GoogleV3
     geocoder = GoogleV3(scheme='https')
+    # I've found that one "warm up request" somehow helps determine if a platform is HTTP/HTTPS compatible.
+    try:
+        geocoder.geocode("123 5th Avenue, New York, NY")
+    except:
+        logger.debug("Warm up geocode failed.")
+
     try:
         geocoder.geocode("123 5th Avenue, New York, NY")
         print("The geocoder can operate with HTTPS enabled on your OS. Saving these changes...")

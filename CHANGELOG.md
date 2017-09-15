@@ -21,6 +21,7 @@
 * Final QA - 25% done - Should be finished by 9/18
 
 **BUG FIXES**
+* Fixed a critical bug where if geopy wasn't installed before setup, Pyweather Setup would install geocoder INSTEAD of geopy, and throw an error.
 * Fixed a bug where I forgot to globalize variables relating to emptying the radar cache.
 * Fixed a bug where if your configuration file failed to load, cache times were set insanely high (5 seconds for alert data, etc)
 * Fixed a bug where if you entered nothing for the backup key directory, an error would occur. Thanks to @creepersbane for reporting the error!
