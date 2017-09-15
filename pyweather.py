@@ -4553,7 +4553,7 @@ while True:
                         logger.info("Breaking to main menu, user issued KeyboardInterrupt")
                         break
 
-    elif moreoptions == "10":
+    elif moreoptions == "12":
         print(Fore.RESET + "Flagging all data types to be refreshed when they are next",
               "launched.", sep="\n")
         refresh_alertsflagged = True
