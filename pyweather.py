@@ -3703,6 +3703,7 @@ while True:
                 break
 #<--- Tide data is above | Hurricane data is below --->
     elif moreoptions == "5":
+        # I get it, this part is poorly coded in. You know what? It works!5
         print(Fore.RED + "Loading...")
         if (hurricanePrefetched == False or refresh_hurricanedataflagged == True or time.time() - cachetime_hurricane >= cache_hurricanetime):
             print(Fore.RED + "Fetching (or refreshing) hurricane data...")
@@ -3824,6 +3825,10 @@ while True:
             print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
             currentstormiterations += 1
             logger.debug("currentstormiterations: %s" % currentstormiterations)
+            if user_showCompletedIterations == "True":
+                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
+                      (currentstormiterations, activestorms))
+                print(Fore.RESET)
 
             # <--- Current storm data to forecast --->
             if activestorms > 1 and currentstormiterations != activestorms:
@@ -3967,6 +3972,9 @@ while True:
                     print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneforecast_lat + ", " + hurricaneforecast_lon)
                     hurricanecurrentiterations += 1
                     logger.debug("hurricanecurrentiterations: %s" % hurricanecurrentiterations)
+                    if user_showCompletedIterations is True:
+                        print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
+                              (hurricanecurrentiterations, hurricanetotaliterations))
 
                     # <--- Forecast data ends, loop into extended forecast data --->
                     # Have a detection for if extended data is available here.
