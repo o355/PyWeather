@@ -1356,7 +1356,11 @@ while True:
         # Or condition will sort out 3 potential conditions.
         logger.debug("alertsPrefetched: %s ; alerts cache time: %s" % 
                          (alertsPrefetched, time.time() - cachetime_alerts))
-        if (alertsPrefetched == False or time.time() - cachetime_alerts >= cache_alertstime and cache_enabled == True
+        # If alerts aren't fetched at boot, there is no cache time available. Make a psuedo cache time to make it work here.
+        # Better solution coming never.
+        if alertsPrefetched == False:
+            cachetime_alerts = time.time()
+        if (alertsPrefetched is False or time.time() - cachetime_alerts >= cache_alertstime and cache_enabled == True
             or refresh_alertsflagged == True):
             print(Fore.RED + "Alerts wasn't prefetched, the cache expired, or alerts was flagged", 
                   " for a refresh. Refreshing...", sep="\n")
@@ -1687,6 +1691,9 @@ while True:
                     (tenday_prefetched, refresh_hourly10flagged))
         # We try to display the hourly 10 cache time, if the user has fetch 10 day hourly on startup enabled.
         # If the user does not have it displayed, display nothing but a slightly informative message.
+        # Also create a psuedo cache time to make the if statement below work.
+        if tenday_prefetched == False:
+            cachetime_hourly10 = time.time()
         try:
             logger.debug("hourly 10 cache time: %s" % time.time() - cachetime_hourly10)
         except:
@@ -2879,6 +2886,9 @@ while True:
     elif moreoptions == "7":
         logger.info("Selected option: almanac")
         print(Fore.RED + "Loading...")
+        # Create a psuedo cache time if almanac data isn't prefetched.
+        if almanac_prefetched == False:
+            cachetime_almanac = time.time()
         try:
             logger.debug("almanac_prefetched: %s ; almanac cache time: %s" %
                          (almanac_prefetched, time.time() - cachetime_almanac))
@@ -2959,6 +2969,10 @@ while True:
     elif moreoptions == "10":
         print(Fore.RED + "Loading...")
         print("")
+        # Create a psuedo cache time if sundata hasn't been prefetched.
+        if sundata_prefetched == False:
+            cachetime_sundata = time.time()
+
         try:
             logger.debug("sundata_prefetched: %s ; sundata cache time: %s" %
                          (sundata_prefetched, time.time() - cachetime_sundata))
