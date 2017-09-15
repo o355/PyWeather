@@ -692,7 +692,6 @@ try:
             print("[###-------] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
     if prefetch10Day_atStart == True:
-        # Masking the JSON as hourlyJSON makes life a LOT easier.
         hourly10JSON = requests.get(tendayurl)
         # Special situation: We separate the 3-day/10-day hourly caches, but
         # they use the same cache timer. 
@@ -780,7 +779,7 @@ if verbosity == False:
     
 
 if prefetch10Day_atStart == True: 
-    hourly10_json = json.loads(hourly10JSON.text)
+    tenday_json = json.loads(hourly10JSON.text)
     if jsonVerbosity == True:
         logger.debug("hourly10_json loaded with: %s" % hourly10_json)
     hourly36_json = json.loads(hourly36JSON.text)
@@ -1182,6 +1181,7 @@ if showTideOnSummary == True and tide_dataavailable == True:
     print(Fore.YELLOW + "Time: " + Fore.CYAN + tide_hightidetime)
     print(Fore.YELLOW + "Height: " + Fore.CYAN + tide_hightideheight)
 elif showTideOnSummary == True and tide_dataavailable == False:
+    print("")
     print(Fore.YELLOW + "** Low/High tide data is not available for the location you entered. **" + Fore.RESET)
 
 # In this part of PyWeather, you'll find comments indicating where things end/begin.
@@ -1537,6 +1537,7 @@ while True:
         logger.info("Selected view more hourly...")
         if (refresh_hourly36flagged == True or
                         time.time() - cachetime_hourly36 >= cache_threedayhourly and cache_enabled == True):
+            print("")
             print(Fore.RED + "Refreshing 3 day hourly data...")
             try:
                 hourly36JSON = requests.get(hourlyurl)
