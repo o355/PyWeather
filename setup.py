@@ -444,7 +444,7 @@ else:
             pip.main(['install', 'colorama'])
         if geopyInstalled == False:
             print("Installing geopy...")
-            pip.main(['install', 'geocoder'])
+            pip.main(['install', 'geopy'])
         if appjarInstalled == False:
             print("Installing appJar...")
             pip.main(['install', 'appJar'])

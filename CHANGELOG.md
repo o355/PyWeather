@@ -18,7 +18,7 @@
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Done! Thanks to @ModoUnreal for coding this in!
 * Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS. - Done!
 * Adds the ability to input decimal numbers into cache times during setup - Done!
-* Final QA - 15% done - Should be finished 9/18
+* Final QA - 25% done - Should be finished by 9/18
 
 **BUG FIXES**
 * Fixed a bug where I forgot to globalize variables relating to emptying the radar cache.
