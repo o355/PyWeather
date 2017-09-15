@@ -1820,7 +1820,6 @@ while True:
             print(Fore.YELLOW + "Barometric pressure: " + Fore.CYAN +
                   hourly10_pressureInHg + " inHg (" + hourly10_pressureMb
                   + " mb)")
-            print("")
             detailedHourly10Iterations = detailedHourly10Iterations + 1
             totaldetailedHourly10Iterations = totaldetailedHourly10Iterations + 1
             if user_showCompletedIterations == True:
@@ -1835,6 +1834,7 @@ while True:
                     logger.debug("detailedHourly10Iterations: %s" % detailedHourly10Iterations)
                     logger.debug("Asking user for continuation...")
                     try:
+                        print("")
                         print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
                               % user_loopIterations)
                         print("You can also press Control + C to head back to the input menu.")
@@ -1882,11 +1882,14 @@ while True:
             else:
                 logger.debug("refresh_forecastflagged: %s" % refresh_forecastflagged)
                 logger.debug("forecast10_json loaded.")
-                
-        detailedForecastIterations = 0
+        currentForecastIterations = 0
+        logger.debug("currentForecastIterations: %s" % currentForecastIterations)
         totaldetailedForecastIterations = 0
         forecast10_precipDayData = True
+        logger.debug("totaldetailedForecastIterations: %s ; forecast10_precipDayData: %s" %
+                     (totaldetailedForecastIterations, forecast10_precipDayData))
         forecast10_snowDayData = True
+        logger.debug("forecast10_snowDayData: %s" % forecast10_snowDayData)
         print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + str(location))
         for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
             print("")
@@ -2090,6 +2093,7 @@ while True:
                         input()
                         logger.info("Iterating %s more times..." 
                                     % user_forecastLoopIterations)
+                        detailedForecastIterations = 0
                     except KeyboardInterrupt:
                         break
                         logger.info("Exiting to the main menu.")
