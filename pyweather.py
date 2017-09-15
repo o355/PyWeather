@@ -706,7 +706,6 @@ try:
             print("[###-------] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
     if prefetch10Day_atStart == True:
-        # Masking the JSON as hourlyJSON makes life a LOT easier.
         hourly10JSON = requests.get(tendayurl)
         # Special situation: We separate the 3-day/10-day hourly caches, but
         # they use the same cache timer. 
@@ -794,9 +793,9 @@ if verbosity == False:
     
 
 if prefetch10Day_atStart == True: 
-    hourly10_json = json.loads(hourly10JSON.text)
+    tenday_json = json.loads(hourly10JSON.text)
     if jsonVerbosity == True:
-        logger.debug("hourly10_json loaded with: %s" % hourly10_json)
+        logger.debug("tenday_json loaded with: %s" % tenday_json)
     hourly36_json = json.loads(hourly36JSON.text)
     if jsonVerbosity == True:
         logger.debug("hourly36_json loaded with: %s" % hourly36_json)
@@ -1045,12 +1044,18 @@ if showTideOnSummary == True:
                 logger.debug("tide_hightidetime: %s ; tide_hightideheight: %s" %
                              (tide_hightidetime, tide_hightideheight))
                 logger.debug("tide_hightideacq: %s" % tide_hightideacq)
+
+            if tide_hightideacq == False and tide_lowtideacq == False:
+                tide_dataavailable = False
+                logger.debug("tide_dataavailable: %s")
     else:
         tide_dataavailable = False
         logger.debug("tide_dataavailable: %s" % tide_dataavailable)
 else:
     tidedata_prefetched = False
     logger.debug("tidedata_prefetched: %s" % tidedata_prefetched)
+
+
 
 yesterday_prefetched = False
 logger.debug("yesterday_prefetched: %s" % yesterday_prefetched)
@@ -1190,7 +1195,8 @@ if showTideOnSummary == True and tide_dataavailable == True:
     print(Fore.YELLOW + "Time: " + Fore.CYAN + tide_hightidetime)
     print(Fore.YELLOW + "Height: " + Fore.CYAN + tide_hightideheight)
 elif showTideOnSummary == True and tide_dataavailable == False:
-    print(Fore.YELLOW + "** Tide data is not available for the location you entered. **" + Fore.RESET)
+    print("")
+    print(Fore.YELLOW + "** Low/High tide data is not available for the location you entered. **" + Fore.RESET)
 
 # In this part of PyWeather, you'll find comments indicating where things end/begin.
 # This is to help when coding, and knowing where things are.
@@ -1199,19 +1205,21 @@ while True:
     print("")
     print(Fore.YELLOW + "What would you like to do now?")
     print(Fore.YELLOW + "- View detailed current data - Enter " + Fore.CYAN + "0")
-    print(Fore.YELLOW + "- View detailed data for previous day - Press " + Fore.CYAN + "1")
-    print(Fore.YELLOW + "- View detailed alerts data - Enter " + Fore.CYAN + "2")
-    print(Fore.YELLOW + "- View detailed hourly data - Enter " + Fore.CYAN + "3")
-    print(Fore.YELLOW + "- View the 10 day hourly forecast - Enter " + Fore.CYAN + "4")
-    print(Fore.YELLOW + "- View the 10 day forecast - Enter " + Fore.CYAN + "5")
-    print(Fore.YELLOW + "- View the almanac for today - Enter " + Fore.CYAN + "6")
-    print(Fore.YELLOW + "- View historical weather data - Enter " + Fore.CYAN + "7")
-    print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Enter " + Fore.CYAN + "8")
-    print(Fore.YELLOW + "- Launch PyWeather's experimental radar - Enter " + Fore.CYAN + "9")
-    print(Fore.YELLOW + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + "10")
-    print(Fore.YELLOW + "- Check for PyWeather updates - Enter " + Fore.CYAN + "11")
-    print(Fore.YELLOW + "- View the about page for PyWeather - Enter " + Fore.CYAN + "12")
-    print(Fore.YELLOW + "- Close PyWeather - Enter " + Fore.CYAN + "13" + Fore.YELLOW)
+    print(Fore.YELLOW + "- View detailed alerts data - Enter " + Fore.CYAN + "1")
+    print(Fore.YELLOW + "- View detailed hourly data - Enter " + Fore.CYAN + "2")
+    print(Fore.YELLOW + "- View the 10 day hourly forecast - Enter " + Fore.CYAN + "3")
+    print(Fore.YELLOW + "- View the 10 day forecast - Enter " + Fore.CYAN + "4")
+    print(Fore.YELLOW + "- View detailed hurricane data - Enter " + Fore.CYAN + "5")
+    print(Fore.YELLOW + "- View detailed tide data - Enter " + Fore.CYAN + "6")
+    print(Fore.YELLOW + "- View the almanac for today - Enter " + Fore.CYAN + "7")
+    print(Fore.YELLOW + "- View historical weather data - Enter " + Fore.CYAN + "8")
+    print(Fore.YELLOW + "- View yesterday's weather data - Enter " + Fore.CYAN + "9")
+    print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Enter " + Fore.CYAN + "10")
+    print(Fore.YELLOW + "- Launch PyWeather's experimental radar - Enter " + Fore.CYAN + "11")
+    print(Fore.YELLOW + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + "12")
+    print(Fore.YELLOW + "- Check for PyWeather updates - Enter " + Fore.CYAN + "13")
+    print(Fore.YELLOW + "- View the about page for PyWeather - Enter " + Fore.CYAN + "14")
+    print(Fore.YELLOW + "- Close PyWeather - Enter " + Fore.CYAN + "15" + Fore.YELLOW)
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
@@ -1358,11 +1366,15 @@ while True:
               + " mm)")
         continue
 
-    elif moreoptions == "2":
+    elif moreoptions == "1":
         # Or condition will sort out 3 potential conditions.
-        logger.debug("alertsPrefetched: %s ; alerts cache time: %s" % 
-                         (alertsPrefetched, time.time() - cachetime_alerts))
-        if (alertsPrefetched == False or time.time() - cachetime_alerts >= cache_alertstime and cache_enabled == True
+        try:
+            logger.debug("alertsPrefetched: %s ; alerts cache time: %s" %
+                             (alertsPrefetched, time.time() - cachetime_alerts))
+        except:
+            logger.debug("alertsPrefetched: %s" % alertsPrefetched)
+
+        if (alertsPrefetched is False or time.time() - cachetime_alerts >= cache_alertstime and cache_enabled == True
             or refresh_alertsflagged == True):
             print(Fore.RED + "Alerts wasn't prefetched, the cache expired, or alerts was flagged", 
                   " for a refresh. Refreshing...", sep="\n")
@@ -1531,7 +1543,7 @@ while True:
 
 # <----- Alerts is above | 36-hour hourly is below ---->
     
-    elif moreoptions == "3":
+    elif moreoptions == "2":
         print(Fore.RED + "Loading...")
         print("")
         logger.debug("refresh_hourly36flagged: %s ; hourly36 cache time: %s" %
@@ -1539,6 +1551,7 @@ while True:
         logger.info("Selected view more hourly...")
         if (refresh_hourly36flagged == True or
                         time.time() - cachetime_hourly36 >= cache_threedayhourly and cache_enabled == True):
+            print("")
             print(Fore.RED + "Refreshing 3 day hourly data...")
             try:
                 hourly36JSON = requests.get(hourlyurl)
@@ -1683,17 +1696,14 @@ while True:
                 if totaldetailedHourlyIterations == 36:
                     logger.debug("totalDetailedHourlyIterations is 36. Breaking...")
                     break
-                
-    elif moreoptions == "4":
+#<-- 36 hour hourly is above | 10 day hourly is below --->
+    elif moreoptions == "3":
         print(Fore.RED + "Loading...")
-        print("")
         logger.info("Selected view more 10 day hourly...")
         detailedHourly10Iterations = 0
         totaldetailedHourly10Iterations = 0
         logger.debug("tenday_prefetched: %s ; refresh_hourly10flagged: %s" %
                     (tenday_prefetched, refresh_hourly10flagged))
-        # We try to display the hourly 10 cache time, if the user has fetch 10 day hourly on startup enabled.
-        # If the user does not have it displayed, display nothing but a slightly informative message.
         try:
             logger.debug("hourly 10 cache time: %s" % time.time() - cachetime_hourly10)
         except:
@@ -1824,7 +1834,6 @@ while True:
             print(Fore.YELLOW + "Barometric pressure: " + Fore.CYAN +
                   hourly10_pressureInHg + " inHg (" + hourly10_pressureMb
                   + " mb)")
-            print("")
             detailedHourly10Iterations = detailedHourly10Iterations + 1
             totaldetailedHourly10Iterations = totaldetailedHourly10Iterations + 1
             if user_showCompletedIterations == True:
@@ -1839,6 +1848,7 @@ while True:
                     logger.debug("detailedHourly10Iterations: %s" % detailedHourly10Iterations)
                     logger.debug("Asking user for continuation...")
                     try:
+                        print("")
                         print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
                               % user_loopIterations)
                         print("You can also press Control + C to head back to the input menu.")
@@ -1852,14 +1862,15 @@ while True:
                 if totaldetailedHourly10Iterations == 240:
                     logger.info("detailedhourly10Iterations is 240. Breaking...")
                     break
-    elif moreoptions == "5":
+# <--- 10 day hourly is above | 10 day forecast is below --->
+    elif moreoptions == "4":
         print(Fore.RED + "Loading, please wait a few seconds.")
         logger.info("Selected view more 10 day...")
         print("")
         logger.debug("refresh_forecastflagged: %s ; forecast cache time: %s" %
                     (refresh_forecastflagged, time.time() - cachetime_forecast))
         if (refresh_forecastflagged == True 
-            or time.time() - cachetime_forecast >= cache_hourlytime and cache_enabled == True):
+            or time.time() - cachetime_forecast >= cache_forecasttime and cache_enabled == True):
             print(Fore.RED + "Refreshing forecast data...")
             try:
                 forecast10JSON = requests.get(f10dayurl)
@@ -1885,14 +1896,18 @@ while True:
             else:
                 logger.debug("refresh_forecastflagged: %s" % refresh_forecastflagged)
                 logger.debug("forecast10_json loaded.")
-                
         detailedForecastIterations = 0
         totaldetailedForecastIterations = 0
+        logger.debug("totaldetailedForecastIterations: %s" % totaldetailedForecastIterations)
         forecast10_precipDayData = True
+        logger.debug("totaldetailedForecastIterations: %s ; forecast10_precipDayData: %s" %
+                     (totaldetailedForecastIterations, forecast10_precipDayData))
         forecast10_snowDayData = True
+        logger.debug("forecast10_snowDayData: %s" % forecast10_snowDayData)
         print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + str(location))
         for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
             print("")
+            detailedForecastIterations = detailedForecastIterations + 1
             logger.info("We're on iteration: %s" % detailedForecastIterations)
             forecast10_weekday = day['date']['weekday']
             forecast10_month = str(day['date']['month'])
@@ -2073,8 +2088,8 @@ while True:
                       " (" + forecast10_avgWindDegrees + "°)")
             print(Fore.YELLOW + "Humidity: " + Fore.CYAN +
                   forecast10_avgHumidity + "%")
-            detailedForecastIterations = detailedForecastIterations + 1
             totaldetailedForecastIterations = totaldetailedForecastIterations + 1
+            logger.debug("totaldetailedForecastIterations: %s" % totaldetailedForecastIterations)
             if user_showCompletedIterations == True:
                 print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/10"
                       % totaldetailedForecastIterations)
@@ -2093,12 +2108,14 @@ while True:
                         input()
                         logger.info("Iterating %s more times..." 
                                     % user_forecastLoopIterations)
+                        detailedForecastIterations = 0
                     except KeyboardInterrupt:
                         break
                         logger.info("Exiting to the main menu.")
 
+#<-- 10 day hourly is above | radar is below --->
 
-    elif moreoptions == "9":
+    elif moreoptions == "11":
         if radar_bypassconfirmation == False:
             print(Fore.RED + "The radar feature is experimental, and may not work properly.",
                   "PyWeather may crash when in this feature, and other unexpected",
@@ -2629,6 +2646,12 @@ while True:
                     frontend.reloadImage("Viewer", "temp//r100.gif")
                     frontend.setStatusbar("Status: Idle", 1)
             elif btnName == "Empty Cache":
+                global r10cached
+                global r20cached
+                global r40cached
+                global r60cached
+                global r80cached
+                global r100cached
                 radar_confirmation = frontend.yesNoBox("Empty the cache?", 
                                                        "Would you like to empty the cache? If you do" +
                                                        ", you'll need to reselect a zoom level.")
@@ -2672,7 +2695,7 @@ while True:
             elif btnName == "Pause":
                 frontend.stopAnimation("Viewer")
         frontend.clearImageCache()       
-        frontend.setTitle("PyWeather Radar Viewer - version 0.6.1 beta")
+        frontend.setTitle("PyWeather Radar Viewer")
         frontend.setResizable(canResize=False)
         frontend.startLabelFrame("Viewer", column=0, row=0, colspan=3)
         # Placeholders are needed to start the viewer.
@@ -2698,9 +2721,13 @@ while True:
         frontend.setStatusbar("Zoom: Not selected", 0)
         frontend.setStatusbar("Status: Idle", 1)
         frontend.go()
-    elif moreoptions == "13":
+#<--- Radar is above | Exit PyWeather is below --->
+
+    elif moreoptions == "15":
         sys.exit()
-    elif moreoptions == "11":
+
+#<--- Exit PyWeather is above | Updater is below --->
+    elif moreoptions == "13":
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
                     (buildnumber, buildversion))
@@ -2870,10 +2897,10 @@ while True:
                   "not trying to travel through a wormhole with Cooper, and report",
                   "the error on GitHub, while it's around.", sep='\n')
             continue
-    elif moreoptions == "6":
+# <--- Updater is above | Almanac is below --->
+    elif moreoptions == "7":
         logger.info("Selected option: almanac")
-        print(Fore.RED + "Loading, please wait...")
-        print("")
+        print(Fore.RED + "Loading...")
         try:
             logger.debug("almanac_prefetched: %s ; almanac cache time: %s" %
                          (almanac_prefetched, time.time() - cachetime_almanac))
@@ -2884,6 +2911,7 @@ while True:
         if (almanac_prefetched == False or time.time() - cachetime_almanac >= cache_almanactime
             or refresh_almanacflagged == True):
             print(Fore.RED + "Fetching (or refreshing) almanac data...")
+            print("")
             try:
                 almanacJSON = requests.get(almanacurl)
                 logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
@@ -2949,9 +2977,11 @@ while True:
         print(Fore.YELLOW + "Normal Low: " + Fore.CYAN + almanac_normalLowF + "°F ("
               + almanac_normalLowC + "°C)")
         print("")
-    elif moreoptions == "8":
-        print(Fore.RED + "Loading, please wait a few seconds...")
+#<--- Almanac is above | Sundata is below --->
+    elif moreoptions == "10":
+        print(Fore.RED + "Loading...")
         print("")
+
         try:
             logger.debug("sundata_prefetched: %s ; sundata cache time: %s" %
                          (sundata_prefetched, time.time() - cachetime_sundata))
@@ -2989,129 +3019,160 @@ while True:
                 logger.debug("astronomy_json: %s" % astronomy_json)
             else:
                 logger.debug("astronomy json loaded.")
-                
-            SR_minute = int(astronomy_json['moon_phase']['sunrise']['minute'])
-            SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
-            logger.debug("SR_minute: %s ; SR_hour: %s" %
-                        (SR_minute, SR_hour))
-            if SR_hour == 0:
-                logger.debug("Sunrise hour = 0. Prefixing AM, 12-hr correction...")
-                SR_hour = "12"
-                SR_minute = str(SR_minute).zfill(2)
-                sunrise_time = SR_hour + ":" + SR_minute + " AM"
-                logger.debug("SR_hour : %s ; SR_minute: %s" %
-                             (SR_hour, SR_minute))
-                logger.debug("sunrise_time: %s" % sunrise_time)
-            elif SR_hour > 12:
-                logger.debug("Sunrise Hour > 12. Prefixing PM, 12-hr correction...")
-                SR_hour = SR_hour - 12
-                SR_hour = str(SR_hour)
-                SR_minute = str(SR_minute).zfill(2)
-                sunrise_time = SR_hour + ":" + SR_minute + " PM"
-                logger.debug("SR_hour: %s ; SR_minute: %s" %
-                             (SR_hour, SR_minute))
-                logger.debug("sunrise_time: %s" % sunrise_time)
-            elif SR_hour == 12:
-                logger.debug("Sunrise Hour = 12. Prefixing PM.")
-                SR_hour = str(SR_hour)
-                SR_minute = str(SR_minute).zfill(2)
-                sunrise_time = SR_hour + ":" + SR_minute + " PM"
-                logger.debug("SR_hour: %s ; SR_minute: %s" %
-                             (SR_hour, SR_minute))
-                logger.debug("SR_minute: %s" % SR_minute)
+            try:
+                SR_minute = int(astronomy_json['moon_phase']['sunrise']['minute'])
+                SR_hour = int(astronomy_json['moon_phase']['sunrise']['hour'])
+                logger.debug("SR_minute: %s ; SR_hour: %s" %
+                            (SR_minute, SR_hour))
+                sunrisedata = True
+            except:
+                logger.warning("No sunrise data is available!")
+                sunrisedata = False
+
+            logger.debug("sunrisedata: %s" % sunrisedata)
+            if sunrisedata == True:
+                if SR_hour == 0:
+                    logger.debug("Sunrise hour = 0. Prefixing AM, 12-hr correction...")
+                    SR_hour = "12"
+                    SR_minute = str(SR_minute).zfill(2)
+                    sunrise_time = SR_hour + ":" + SR_minute + " AM"
+                    logger.debug("SR_hour : %s ; SR_minute: %s" %
+                                 (SR_hour, SR_minute))
+                    logger.debug("sunrise_time: %s" % sunrise_time)
+                elif SR_hour > 12:
+                    logger.debug("Sunrise Hour > 12. Prefixing PM, 12-hr correction...")
+                    SR_hour = SR_hour - 12
+                    SR_hour = str(SR_hour)
+                    SR_minute = str(SR_minute).zfill(2)
+                    sunrise_time = SR_hour + ":" + SR_minute + " PM"
+                    logger.debug("SR_hour: %s ; SR_minute: %s" %
+                                 (SR_hour, SR_minute))
+                    logger.debug("sunrise_time: %s" % sunrise_time)
+                elif SR_hour == 12:
+                    logger.debug("Sunrise Hour = 12. Prefixing PM.")
+                    SR_hour = str(SR_hour)
+                    SR_minute = str(SR_minute).zfill(2)
+                    sunrise_time = SR_hour + ":" + SR_minute + " PM"
+                    logger.debug("SR_hour: %s ; SR_minute: %s" %
+                                 (SR_hour, SR_minute))
+                    logger.debug("SR_minute: %s" % SR_minute)
+                else:
+                    logger.debug("Sunrise Hour < 12. Prefixing AM.")
+                    SR_hour = str(SR_hour)
+                    SR_minute = str(SR_minute).zfill(2)
+                    sunrise_time = SR_hour + ":" + SR_minute + " AM"
+                    logger.debug("SR_hour: %s ; SR_minute: %s" %
+                                 (SR_hour, SR_minute))
+                    logger.debug("sunrise_time: %s" % sunrise_time)
             else:
-                logger.debug("Sunrise Hour < 12. Prefixing AM.")
-                SR_hour = str(SR_hour)
-                SR_minute = str(SR_minute).zfill(2)
-                sunrise_time = SR_hour + ":" + SR_minute + " AM"
-                logger.debug("SR_hour: %s ; SR_minute: %s" %
-                             (SR_hour, SR_minute))
+                sunrise_time = "Unavailable"
                 logger.debug("sunrise_time: %s" % sunrise_time)
 
-            SS_minute = int(astronomy_json['moon_phase']['sunset']['minute'])
-            SS_hour = int(astronomy_json['moon_phase']['sunset']['hour'])
-            logger.debug("SS_minute: %s ; SS_hour: %s" %
-                         (SS_minute, SS_hour))
-            
-            if SS_hour == 0:
-                logger.debug("Sunset hour = 0. Prefixing AM, 12-hr correction...")
-                SS_hour = "0"
-                SS_minute = str(SS_minute).zfill(2)
-                sunset_time = SS_hour + ":" + SS_minute + " AM"
-                logger.debug("SS_hour: %s ; SS_minute: %s" %
-                             (SS_hour, SS_minute))
-                logger.debug("sunset_time: %s" % sunset_time)
-            elif SS_hour > 12:
-                logger.debug("Sunset hour > 12. Prefixing PM, 12-hr correction...")
-                SS_hour = SS_hour - 12
-                SS_hour = str(SS_hour)
-                SS_minute = str(SS_minute).zfill(2)
-                sunset_time = SS_hour + ":" + SS_minute + " PM"
-                logger.debug("SS_hour: %s ; SS_minute: %s"
-                             % (SS_hour, SS_minute))
-                logger.debug("sunset_time: %s" % sunset_time)
-            elif SS_hour == 12:
-                logger.debug("Sunset hour = 12. Prefixing PM...")
-                SS_hour = str(SS_hour)
-                SS_minute = str(SS_minute).zfill(2)
-                sunset_time = SS_hour + ":" + SS_minute + " PM"
-                logger.debug("SS_hour: %s ; SS_minute: %s"
-                             % (SS_hour, SS_minute))
-                logger.debug("sunset_time: %s" % sunset_time)
+            try:
+                SS_minute = int(astronomy_json['moon_phase']['sunset']['minute'])
+                SS_hour = int(astronomy_json['moon_phase']['sunset']['hour'])
+                sunsetdata = True
+                logger.debug("SS_minute: %s ; SS_hour: %s" %
+                             (SS_minute, SS_hour))
+            except:
+                logger.warning("No sunset time is available!")
+                sunsetdata = False
+            logger.debug("sunsetdata: %s" % sunsetdata)
+
+            if sunsetdata == True:
+                if SS_hour == 0:
+                    logger.debug("Sunset hour = 0. Prefixing AM, 12-hr correction...")
+                    SS_hour = "0"
+                    SS_minute = str(SS_minute).zfill(2)
+                    sunset_time = SS_hour + ":" + SS_minute + " AM"
+                    logger.debug("SS_hour: %s ; SS_minute: %s" %
+                                 (SS_hour, SS_minute))
+                    logger.debug("sunset_time: %s" % sunset_time)
+                elif SS_hour > 12:
+                    logger.debug("Sunset hour > 12. Prefixing PM, 12-hr correction...")
+                    SS_hour = SS_hour - 12
+                    SS_hour = str(SS_hour)
+                    SS_minute = str(SS_minute).zfill(2)
+                    sunset_time = SS_hour + ":" + SS_minute + " PM"
+                    logger.debug("SS_hour: %s ; SS_minute: %s"
+                                 % (SS_hour, SS_minute))
+                    logger.debug("sunset_time: %s" % sunset_time)
+                elif SS_hour == 12:
+                    logger.debug("Sunset hour = 12. Prefixing PM...")
+                    SS_hour = str(SS_hour)
+                    SS_minute = str(SS_minute).zfill(2)
+                    sunset_time = SS_hour + ":" + SS_minute + " PM"
+                    logger.debug("SS_hour: %s ; SS_minute: %s"
+                                 % (SS_hour, SS_minute))
+                    logger.debug("sunset_time: %s" % sunset_time)
+                else:
+                    logger.debug("Sunset hour < 12. Prefixing AM...")
+                    SS_hour = str(SS_hour)
+                    SS_minute = str(SS_minute).zfill(2)
+                    sunset_time = SS_hour + ":" + SS_minute + " AM"
+                    logger.debug("SS_hour: %s ; SS_minute: %s"
+                                 % (SS_hour, SS_minute))
+                    logger.debug("sunset_time: %s" % sunset_time)
+                sundata_prefetched = True
+                logger.debug("sundata_prefetched: %s" % sundata_prefetched)
             else:
-                logger.debug("Sunset hour < 12. Prefixing AM...")
-                SS_hour = str(SS_hour)
-                SS_minute = str(SS_minute).zfill(2)
-                sunset_time = SS_hour + ":" + SS_minute + " AM"
-                logger.debug("SS_hour: %s ; SS_minute: %s"
-                             % (SS_hour, SS_minute))
+                sunset_time = "Unavailable"
                 logger.debug("sunset_time: %s" % sunset_time)
-            sundata_prefetched = True
-            logger.debug("sundata_prefetched: %s" % sundata_prefetched)
                 
         moon_percentIlluminated = str(astronomy_json['moon_phase']['percentIlluminated'])
         moon_age = str(astronomy_json['moon_phase']['ageOfMoon'])
         moon_phase = astronomy_json['moon_phase']['phaseofMoon']
-        MR_minute = int(astronomy_json['moon_phase']['moonrise']['minute'])
-        logger.debug("moon_percentIlluminated: %s ; moon_age: %s"
-                     % (moon_percentIlluminated, moon_age))
-        logger.debug("moon_phase: %s ; MR_minute: %s" %
-                     (moon_phase, MR_minute))
-        MR_hour = int(astronomy_json['moon_phase']['moonrise']['hour'])
-        logger.debug("MR_minute: %s" % MR_minute)
-           
-        if MR_hour == 0:
-            logger.debug("Moonrise hour is 0. Prefixing AM, and 12-hr correction...")
-            MR_hour = "12"
-            MR_minute = str(MR_minute).zfill(2)
-            moonrise_time = MR_hour + ":" + MR_minute + " AM" 
-            logger.debug("MR_hour: %s ; MR_minute: %s" %
-                         (MR_hour, MR_minute))
-            logger.debug("moonrise_time: %s" % moonrise_time)   
-        elif MR_hour > 12:
-            logger.debug("Moonrise hour > 12. Prefixing PM, 12-hr correction...")
-            MR_hour = MR_hour - 12
-            MR_hour = str(MR_hour)
-            MR_minute = str(MR_minute).zfill(2)
-            moonrise_time = MR_hour + ":" + MR_minute + " PM"
-            logger.debug("MR_hour: %s ; MR_minute: %s"
-                         % (MR_hour, MR_minute))
-            logger.debug("moonrise_time: %s" % moonrise_time)
-        elif MR_hour == 12:
-            logger.debug("Moonrise hour = 12. Prefixing PM...")
-            MR_hour = str(MR_hour)
-            MR_minute = str(MR_minute).zfill(2)
-            moonrise_time = MR_hour + ":" + MR_minute + " PM"
-            logger.debug("MR_hour: %s ; MR_minute: %s" %
-                         (MR_hour, MR_minute))
-            logger.debug("moonrise_time: %s" % moonrise_time)
+        logger.debug("moon_percentIlluminated: %s ; moon_age: %s" %
+                     (moon_percentIlluminated, moon_age))
+        logger.debug("moon_phase: %s" % moon_phase)
+        try:
+            MR_minute = int(astronomy_json['moon_phase']['moonrise']['minute'])
+            MR_hour = int(astronomy_json['moon_phase']['moonrise']['hour'])
+            moonrisedata = True
+            logger.debug("MR_minute: %s ; MR_hour: %s" % (MR_minute, MR_hour))
+        except ValueError:
+            logger.warning("Moonrise data is not available!")
+            moonrisedata = False
+
+        logger.debug("moonrisedata: %s" % moonrisedata)
+
+
+        if moonrisedata == True:
+            if MR_hour == 0:
+                logger.debug("Moonrise hour is 0. Prefixing AM, and 12-hr correction...")
+                MR_hour = "12"
+                MR_minute = str(MR_minute).zfill(2)
+                moonrise_time = MR_hour + ":" + MR_minute + " AM"
+                logger.debug("MR_hour: %s ; MR_minute: %s" %
+                             (MR_hour, MR_minute))
+                logger.debug("moonrise_time: %s" % moonrise_time)
+            elif MR_hour > 12:
+                logger.debug("Moonrise hour > 12. Prefixing PM, 12-hr correction...")
+                MR_hour = MR_hour - 12
+                MR_hour = str(MR_hour)
+                MR_minute = str(MR_minute).zfill(2)
+                moonrise_time = MR_hour + ":" + MR_minute + " PM"
+                logger.debug("MR_hour: %s ; MR_minute: %s"
+                             % (MR_hour, MR_minute))
+                logger.debug("moonrise_time: %s" % moonrise_time)
+            elif MR_hour == 12:
+                logger.debug("Moonrise hour = 12. Prefixing PM...")
+                MR_hour = str(MR_hour)
+                MR_minute = str(MR_minute).zfill(2)
+                moonrise_time = MR_hour + ":" + MR_minute + " PM"
+                logger.debug("MR_hour: %s ; MR_minute: %s" %
+                             (MR_hour, MR_minute))
+                logger.debug("moonrise_time: %s" % moonrise_time)
+            elif MR_hour < 12:
+                logger.debug("Moonrise hour < 12. Prefixing AM...")
+                MR_hour = str(MR_hour)
+                MR_minute = str(MR_minute).zfill(2)
+                moonrise_time = MR_hour + ":" + MR_minute + " AM"
+                logger.debug("MR_hour: %s ; MR_minute: %s" %
+                             (MR_hour, MR_minute))
+                logger.debug("moonrise_time: %s" % moonrise_time)
         else:
-            logger.debug("Moonrise hour < 12. Prefixing AM...")
-            MR_hour = str(MR_hour)
-            MR_minute = str(MR_minute).zfill(2)
-            moonrise_time = MR_hour + ":" + MR_minute + " AM"
-            logger.debug("MR_hour: %s ; MR_minute: %s" %
-                         (MR_hour, MR_minute))
+            moonrise_time = "Unavailable"
             logger.debug("moonrise_time: %s" % moonrise_time)
         
         try:    
@@ -3157,7 +3218,7 @@ while True:
                 logger.debug("MS_hour: %s ; MS_minute: %s"
                              % (MS_hour, MS_minute))
                 logger.debug("moonset_time: %s" % moonset_time)
-            elif MS_hour < 12 and MS_data == True:
+            elif MS_hour < 12:
                 logger.debug("Moonset hour < 12. Prefixing AM...")
                 MS_hour = str(MS_hour)
                 MS_minute = str(MS_minute).zfill(2)
@@ -3170,6 +3231,9 @@ while True:
                 moonset_time = "Unavailable"
                 logger.debug("MS_data: %s ; moonset_time: %s" %
                              (MS_data, moonset_time))
+        else:
+            moonset_time = "Unavailable"
+            logger.debug("moonset_time: %s" % moonset_time)
         
         logger.info("Printing data...")
         print(Fore.YELLOW + "Here's the detailed sun/moon data for: " +
@@ -3186,7 +3250,8 @@ while True:
               moon_age + " days")
         print(Fore.YELLOW + "Phase of the moon: " + Fore.CYAN +
               moon_phase)
-    elif moreoptions == "7":
+#<--- Sundata is above | Historical data is below --->
+    elif moreoptions == "8":
         print(Fore.RESET + "To show historical data for this location, please enter a date to show the data.")
         print("The date must be in the format YYYYMMDD.")
         print("E.g: If I wanted to see the weather for February 15, 2013, you'd enter 20130215.")
@@ -3557,9 +3622,9 @@ while True:
                     except KeyboardInterrupt:
                         logger.info("Breaking to main menu, user issued KeyboardInterrupt")
                         break
-    elif moreoptions == "14":
-        print(Fore.RED + "Loading, please wait a few seconds...")
-        print("")
+#<--- Historical is above | Tide is below --->
+    elif moreoptions == "6":
+        print(Fore.RED + "Loading...")
         try:
             logger.debug("tidedata_prefetched: %s ; tide data cache time: %s" %
                          (tidedata_prefetched, time.time() - cachetime_tide))
@@ -3571,6 +3636,7 @@ while True:
                             time.time() - cachetime_tide >= cache_tidetime and cache_enabled == True or
                     refresh_tidedataflagged == True):
             print(Fore.RED + "Fetching (or refreshing) tide data...")
+            print("")
             try:
                 tideJSON = requests.get(tideurl)
                 logger.debug("Retrieved tide JSON with response: %s" % tideJSON)
@@ -3650,13 +3716,15 @@ while True:
             elif tide_completediterations == tide_totaliterations:
                 logger.debug("tide_completediterations is equal to tide_totaliterations. Breaking.")
                 break
-    elif moreoptions == "20":
-        # Preload
+#<--- Tide data is above | Hurricane data is below --->
+    elif moreoptions == "5":
+        # I get it, this part is poorly coded in. You know what? It works!5
         print(Fore.RED + "Loading...")
-        if (hurricanePrefetched == False or refresh_hurricanedataflagged == True or time.time() - cache_hurricanetime >= cachetime_hurricane):
+        if (hurricanePrefetched == False or refresh_hurricanedataflagged == True or time.time() - cachetime_hurricane >= cache_hurricanetime):
             print(Fore.RED + "Fetching (or refreshing) hurricane data...")
             try:
                 hurricaneJSON = requests.get(hurricaneurl)
+                cachetime_hurricane = time.time()
                 hurricane_json = json.loads(hurricaneJSON.text)
                 if jsonVerbosity == "True":
                     logger.debug("hurricane_json: %s" % hurricane_json)
@@ -3680,7 +3748,11 @@ while True:
             activestorms += 1
         logger.debug("activestorms: %s" % activestorms)
 
-        print(Fore.YELLOW + "Here are the active hurricanes around the world:")
+        if activestorms == 0:
+            print(Fore.RED + "There are presently no active tropical systems around the world.")
+            continue
+
+        print(Fore.YELLOW + "Here are the active tropical systems around the world:")
         print("")
         # <--- Current data --->
         for data in hurricane_json['currenthurricane']:
@@ -3768,6 +3840,10 @@ while True:
             print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
             currentstormiterations += 1
             logger.debug("currentstormiterations: %s" % currentstormiterations)
+            if user_showCompletedIterations == "True":
+                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
+                      (currentstormiterations, activestorms))
+                print(Fore.RESET)
 
             # <--- Current storm data to forecast --->
             if activestorms > 1 and currentstormiterations != activestorms:
@@ -3817,6 +3893,11 @@ while True:
                 for loops in data['forecast']:
                     hurricanetotaliterations += 1
                 logger.debug("hurricanetotaliterations: %s" % hurricanetotaliterations)
+                if hurricanetotaliterations <= 5:
+                    hurricane_hasExtDataInForecast = False
+                elif hurricanetotaliterations >= 6:
+                    hurricane_hasExtDataInForecast = True
+
                 print(Fore.YELLOW + "Here's the forecast for " + stormname + ".")
                 for forecast in data['forecast']:
                     print("")
@@ -3833,8 +3914,13 @@ while True:
                         hurricaneforecasttime = "48 hours ahead"
                     elif hurricaneforecasttime == "72HR":
                         hurricaneforecasttime = "72 hours ahead"
+                    elif hurricaneforecasttime == "4DAY":
+                        hurricaneforecasttime = "4 days ahead"
+                    elif hurricaneforecasttime == "5DAY":
+                        hurricaneforecasttime = "5 days ahead"
 
-                    logger.debug("hurricaneforecasttime: %s" % hurricaneforecasttime)
+                    logger.debug("hurricaneforecasttime: %s ; hurricane_hasExtDataInForecast: %s" %
+                                 (hurricaneforecasttime, hurricane_hasExtDataInForecast))
                     hurricaneforecasttime_detail = forecast['Time']['pretty']
                     hurricaneforecast_lat = float(forecast['lat'])
                     hurricaneforecast_lon = float(forecast['lon'])
@@ -3901,46 +3987,79 @@ while True:
                     print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneforecast_lat + ", " + hurricaneforecast_lon)
                     hurricanecurrentiterations += 1
                     logger.debug("hurricanecurrentiterations: %s" % hurricanecurrentiterations)
+                    if user_showCompletedIterations is True:
+                        print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
+                              (hurricanecurrentiterations, hurricanetotaliterations))
 
                     # <--- Forecast data ends, loop into extended forecast data --->
                     # Have a detection for if extended data is available here.
 
 
                     # Basically says if activestorms are two and above, and we're not on the last iteration, and we've gone through all
-                    # loops, enter this dialogue.
-                    if activestorms > 1 and currentstormiterations != activestorms and hurricanecurrentiterations == hurricanetotaliterations:
-                        print("")
-                        print(Fore.RED + "Press enter to view the extended forecast for " + stormname + ".",
-                              "Enter 'nextstorm' to view details about the next storm.",
-                              "Otherwise, press Control + C to exit to the main menu.", sep="\n")
+                    # loops, and 4/5 day forecast data was not before the extended forecast enter this dialogue.
+                    if (activestorms > 1 and currentstormiterations != activestorms and hurricanecurrentiterations == hurricanetotaliterations):
+                        if hurricane_hasExtDataInForecast == False:
+                            print("")
+                            print(Fore.RED + "Press enter to view the extended forecast for " + stormname + ".",
+                                  "Enter 'nextstorm' to view details about the next storm.",
+                                  "Otherwise, press Control + C to exit to the main menu.", sep="\n")
 
-                        try:
-                            forecastselection = input("Input here: ").lower()
-                            logger.debug("forecastselection: %s" % forecastselection)
+                            try:
+                                forecastselection = input("Input here: ").lower()
+                                logger.debug("forecastselection: %s" % forecastselection)
+                                print("")
+                            except KeyboardInterrupt:
+                                logger.debug("Breaking to the main menu.")
+                                print("")
+                                break
+
+                            if forecastselection == "nextstorm":
+                                continue
+                            else:
+                                if forecastselection != "":
+                                    print(Fore.RED + "Your input couldn't be understood. Listing extended forecast data.")
+                                    forecastselection = ""
+                        elif hurricane_hasExtDataInForecast == True:
                             print("")
-                        except KeyboardInterrupt:
-                            logger.debug("Breaking to the main menu.")
-                            print("")
+                            print(Fore.RED + "Press enter to view data for the next storm.",
+                                  "Otherwise, press Control + C to exit to the main menu.", sep="\n")
+
+                            try:
+                                forecastselection = input("Input here: ").lower()
+                                logger.debug("forecastselection: %s" % forecastselection)
+                                print("")
+                            except KeyboardInterrupt:
+                                logger.debug("Breaking to the main menu.")
+                                print("")
+                                break
+
+                            if forecastselection != "":
+                                print("Your input could not be understood. Listing data for the next storm...")
+                            continue
+
+                    # This says if activestorms are just one, or if we're on the last storm, and we've gone through all loops, and 4/5 day
+                    # forecast data was not before the extended forecast, enter this dialogue.
+                    elif (activestorms == 1 or currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations):
+                        print("")
+                        if hurricane_hasExtDataInForecast == True:
+                            print(Fore.RED + "Press enter to see extended forecast for " + stormname + ".",
+                            "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
+                            try:
+                                forecastselection = input("Input here: ").lower()
+                                logger.debug("forecastselection: %s" % forecastselection)
+                            except:
+                                logger.debug("Breaking to the main menu.")
+                                print("")
+                                break
+
+                            if forecastselection != "":
+                                print(Fore.RED + "Your input could not be understood. Listing extended forecast data.")
+
+                        elif hurricane_hasExtDataInForecast == False:
                             break
 
-                        if forecastselection == "nextstorm":
-                            continue
-                        else:
-                            if forecastselection != "":
-                                print(Fore.RED + "Your input couldn't be understood. Listing extended forecast data.")
-                                forecastselection = ""
-                    # This says if activestorms are just one, or if we're on the last storm, and we've gone through all loops, enter this dialogue.
-                    elif activestorms == 1 or currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations:
-                        print("")
-                        print(Fore.RED + "Press enter to see extended forecast for " + stormname + ".",
-                        "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
-                        try:
-                            forecastselection = input("Input here: ").lower()
-                            logger.debug("forecastselection: %s" % forecastselection)
-                        except:
-                            print("yee")
-
                     else:
+                        # This has to be none for this entire thing to work.
                         forecastselection = "none"
 
                     if forecastselection == "":
@@ -4050,28 +4169,30 @@ while True:
 
                             if extendedcurrentloops == extendedforecastloops:
                                 print("")
-                                print(Fore.RED + "Press enter to view data for the next storm.",
-                                      "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
+                                if currentstormiterations != activestorms:
+                                    print(Fore.RED + "Press enter to view data for the next storm.",
+                                          "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
 
-                                try:
-                                    extforecastinput = input("Input here: ").lower()
-                                except KeyboardInterrupt:
-                                    logger.debug("Breaking to main menu...")
-                                    print("")
+                                    try:
+                                        extforecastinput = input("Input here: ").lower()
+                                    except KeyboardInterrupt:
+                                        logger.debug("Breaking to main menu...")
+                                        print("")
+                                        break
+
+                                    if extforecastinput == "exit":
+                                        print(Fore.RED + "Exiting to the main menu...")
+                                        break
+                                    else:
+                                        if extforecastinput != "":
+                                            print(Fore.RED + "Your input could not be understood. Viewing data for the next storm...")
+                                        print("")
+                                        continue
+                                elif currentstormiterations == activestorms:
                                     break
 
-                                if extforecastinput == "exit":
-                                    print(Fore.RED + "Exiting to the main menu...")
-                                    break
-                                else:
-                                    if extforecastinput != "":
-                                        print(Fore.RED + "Your input could not be understood. Viewing data for the next storm...")
-                                    print("")
-                                    continue
-
-
-
-    elif moreoptions == "12":
+#<--- Hurricane is above | About is below --->
+    elif moreoptions == "14":
         print("", Fore.YELLOW + "-=-=- " + Fore.CYAN + "PyWeather" + Fore.YELLOW + " -=-=-",
               Fore.CYAN + "version " + about_version, "",
               Fore.YELLOW + "Build Number: " + Fore.CYAN + about_buildnumber,
@@ -4083,7 +4204,8 @@ while True:
               Fore.YELLOW + "Contributors: " + Fore.CYAN + about_contributors,
               Fore.YELLOW + "A special thanks to the developers of these libraries",
               "that are used in PyWeather: " + Fore.CYAN,
-              about_librariesinuse + Fore.RESET, sep="\n")        
+              about_librariesinuse + Fore.RESET, sep="\n")
+#<--- About is above, jokes are below --->
     elif moreoptions == "tell me a joke":
         logger.debug("moreoptions: %s" % moreoptions)
         # Jokes from searching "weather jokes" on DuckDuckGo (the first option)
@@ -4130,7 +4252,8 @@ while True:
         elif jokenum == 12:
             print("What did the hurricane say to the other hurricane?",
                   "I have my eye on you.", sep="\n")
-    elif moreoptions == "1":
+# <--- Jokes are above | Yesterday is below --->
+    elif moreoptions == "9":
         print(Fore.RED + "Loading...")
         yesterday_loops = 0
         yesterday_totalloops = 0
@@ -4449,6 +4572,7 @@ while True:
                 elif yesterday_loops == user_loopIterations:
                     logger.info("Asking user to continue.")
                     try:
+                        print("")
                         print(Fore.RED + "Press enter to view the next", user_loopIterations
                               , "iterations of yesterday weather information.")
                         print("Otherwise, press Control + C to get back to the main menu.")
@@ -4460,7 +4584,7 @@ while True:
                         logger.info("Breaking to main menu, user issued KeyboardInterrupt")
                         break
 
-    elif moreoptions == "10":
+    elif moreoptions == "12":
         print(Fore.RESET + "Flagging all data types to be refreshed when they are next",
               "launched.", sep="\n")
         refresh_alertsflagged = True

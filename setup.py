@@ -57,7 +57,7 @@ def configprovision():
         print("UI section could not be added.")
 
     try:
-        config.add_section('HOURLY')
+        config.add_section('PREFETCH')
     except configparser.DuplicateSectionError:
         print("Hourly section could not be added.")
 
@@ -444,7 +444,7 @@ else:
             pip.main(['install', 'colorama'])
         if geopyInstalled == False:
             print("Installing geopy...")
-            pip.main(['install', 'geocoder'])
+            pip.main(['install', 'geopy'])
         if appjarInstalled == False:
             print("Installing appJar...")
             pip.main(['install', 'appJar'])
@@ -856,7 +856,7 @@ if backup_APIkey == "yes":
                 ", and close backkey.txt.")
 
 
-print("Before we configure PyWeather, I'll now validate your API key.")
+print("", "Before we configure PyWeather, I'll now validate your API key.", sep="\n")
 
 # Do an infinite loop of validation of the API key, so the user can reenter the API key
 # if it was wrong.
@@ -1107,7 +1107,7 @@ else:
     print("", "(10/31)", "Please enter the cache time for alerts data in minutes (default = 5)", sep="\n")
     alertscachetime = input("Input here: ").lower()
     try:
-        alertscachetime = int(alertscachetime)
+        alertscachetime = float(alertscachetime)
         alertscachetime = str(alertscachetime)
         config['CACHE']['alerts_cachedtime'] = alertscachetime
         print("Changes saved.")
@@ -1178,7 +1178,7 @@ else:
     threedayhourly_cachedtime = input("Input here: ").lower()
 
     try:
-        threedayhourly = int(threedayhourly_cachedtime)
+        threedayhourly = float(threedayhourly_cachedtime)
         threedayhourly = str(threedayhourly_cachedtime)
         config['CACHE']['threedayhourly_cachedtime'] = threedayhourly_cachedtime
         print("Changes saved.")
@@ -1192,7 +1192,7 @@ else:
     print("", "(16/31)", "Please enter the cache time for the ten day hourly data in minutes (default = 60)", sep="\n")
     tendayhourly_cachedtime = input("Input here: ").lower()
     try:
-        tendayhourly = int(tendayhourly_cachedtime) 
+        tendayhourly = float(tendayhourly_cachedtime)
         tendayhourly = str(tendayhourly_cachedtime) 
         config['CACHE']['tendayhourly_cachedtime'] = tendayhourly_cachedtime
         print("Changes saved.")
@@ -1500,17 +1500,23 @@ else:
     # HTTPS validation
     from geopy import GoogleV3
     geocoder = GoogleV3(scheme='https')
+    # I've found that one "warm up request" somehow helps determine if a platform is HTTP/HTTPS compatible.
     try:
-        location = geocoder.geocode("123 5th Avenue, New York, NY")
+        geocoder.geocode("123 5th Avenue, New York, NY")
+    except:
+        logger.debug("Warm up geocode failed.")
+
+    try:
+        geocoder.geocode("123 5th Avenue, New York, NY")
         print("The geocoder can operate with HTTPS enabled on your OS. Saving these changes...")
-        config['GEOCDOER']['scheme'] = 'https'
+        config['GEOCODER']['scheme'] = 'https'
         logger.debug("GEOCODER/scheme is now 'https'")
         print("Changes saved.")
     except geopy.exc.GeocoderServiceError:
         print("Geopy probably can't run without HTTPS (or your internet went down). Trying HTTP as the scheme...")
         geocoder = GoogleV3(scheme='http')
         try:
-            location = geocoder.geocode("123 5th Avenue, New York, NY")
+            geocoder.geocode("123 5th Avenue, New York, NY")
             print("The geocoder can operate, but without HTTPS enabled on your OS. Saving these changes...")
             config['GEOCODER']['scheme'] = 'http'
             logger.debug("GEOCODER/scheme is now 'http'")

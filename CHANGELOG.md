@@ -1,7 +1,7 @@
 
 # PyWeather changelog
 
-## version 0.6.3 beta - Should be released idk:
+## version 0.6.3 beta - Should be released late October/early November 2017:
 * Adds a nearby location feature to hurricane data (300km out)
 * Adds the ability to prefetch yesterday's weather at boot
 * Adds a caching system for yesterday's weather (12hrs by default)
@@ -10,16 +10,18 @@
 * Adds the ability to view data through a PWS at boot.
 * MAYBE (if not in 0.6.4) adds the ability to have up to 5 favorite locations.
 
-## version 0.6.2 beta - Should be released September 18, 2017
+## version 0.6.2 beta - Should be released on 9/18/2017 (Final QA in progress)
 **NEW FEATURES/REMOVALS**
 * Adds the ability to view yesterday's weather - Done! Thanks to @ModoUnreal for coding this in!
-* Adds the ability to view hurricane data in PyWeather - 100% done, needs final QA - should be finished by 9/11
+* Adds the ability to view hurricane data in PyWeather - Done!
 * Adds the ability to view tide data in PyWeather - Done!
-* Adds the manual configuration of 3-day and 10-day hourly cache times - Thanks to @ModoUnreal for coding this in! 95% done (need to add remaining config stuff), should be finished by 9/12
+* Adds the manual configuration of 3-day and 10-day hourly cache times - Done! Thanks to @ModoUnreal for coding this in!
 * Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS. - Done!
-* Final QA - 0% done (should be finished by 9/18)
+* Adds the ability to input decimal numbers into cache times during setup - Done!
+* Final QA - 25% done - Should be finished by 9/18
 
 **BUG FIXES**
+* Fixed a critical bug where if geopy wasn't installed before setup, Pyweather Setup would install geocoder INSTEAD of geopy, and throw an error.
 * Fixed a bug where I forgot to globalize variables relating to emptying the radar cache.
 * Fixed a bug where if your configuration file failed to load, cache times were set insanely high (5 seconds for alert data, etc)
 * Fixed a bug where if you entered nothing for the backup key directory, an error would occur. Thanks to @creepersbane for reporting the error!
@@ -27,6 +29,11 @@
 * Fixed a bug where the last step in the setup process (bypassing radar confirmation) didn't have proper else catching, and if a "yes" or "no" was entered, PyWeather setup would crash.
 * Fixed a bug where you weren't able to exit out of the summary screen when viewing historical hourly data.
 * Fixed a bug where wind chill data in celsius in historical hourly displayed "kph" instead of a degree C symbol.
+* Fixed a bug where the 10 day forecast cache expire time was running off of the hourly cache time.
+* Fixed a bug where PyWeather wouldn't properly catch no moonrise data, resulting in a crash.
+* Fixed a bug where if alerts data wasn't getting prefetched at boot, when detailed alerts data was called up PyWeather would crash.
+* Fixed a bug where if you had 10-day hourly prefetch enabled at boot, when you viewed detailed 10-day hourly information PyWeather would crash.
+* Fixed a potential bug where proper code to catch invalid sunrise/sunset data was not implemented.
 
 **OTHER CHANGES**
 * ModoUnreal is now an awesome contributor!
