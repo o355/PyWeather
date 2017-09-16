@@ -2924,21 +2924,39 @@ while True:
                 logger.debug("1 JSON loaded successfully.")
             
             almanac_airportCode = almanac_json['almanac']['airport_code']
-            almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
-            almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
-            almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
+            try:
+                almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
+                almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
+                almanac_normalHighdata = True
+            except:
+                almanac_normalHighdata = False
             logger.debug("almanac_airportCode: %s ; almanac_normalHighF: %s"
                          % (almanac_airportCode, almanac_normalHighF))
-            logger.debug("almanac_normalHighC: %s ; almanac_recordHighF: %s"
-                         % (almanac_normalHighC, almanac_recordHighF))
-            almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
-            almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
-            almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
-            almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
-            logger.debug("almanac_recordHighC: %s ; almanac_recordHighYear: %s"
-                         % (almanac_recordHighC, almanac_recordHighYear))
-            logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s"
-                         % (almanac_normalLowF, almanac_normalLowC))
+            logger.debug("almanac_normalHighdata: %s" % almanac_normalHighdata)
+            try:
+                almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
+                almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
+                almanac_recordHighdata = True
+            except:
+                almanac_recordHighdata = False
+            logger.debug("almanac_recordHighF: %s ; almanac_recordHighC: %s" %
+                         (almanac_recordHighF, almanac_recordHighC))
+            logger.debug("almanac_recordHighdata: %s" % almanac_recordHighdata)
+            try:
+                almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
+                almanac_recordHighYeardata = True
+            except:
+                almanac_recordHighYeardata = False
+            logger.debug("almanac_recordHighYear: %s ; almanac_recordHighYeardata: %s" %
+                         (almanac_recordHighYear, almanac_recordHighYeardata))
+            try:
+                almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
+                almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
+                almanac_normalLowdata = True
+            except:
+                almanac_normalLowdata = False
+            logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s" %
+                         (almanac_normalLowF, almanac_normalLowC))
             almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
             almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
             almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
