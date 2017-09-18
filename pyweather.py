@@ -2957,12 +2957,15 @@ while True:
                 almanac_normalLowdata = False
             logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s" %
                          (almanac_normalLowF, almanac_normalLowC))
-            almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
-            almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
+            logger.debug("almanac_normalLowData: %s" % almanac_normalLowdata)
+            try:
+                almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
+                almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
+                almanac_recordLowdata = True
+            except:
+                almanac_recordLowdata = False
+
             almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
-            logger.debug("alamanac_recordLowF: %s ; almanac_recordLowC: %s"
-                         % (almanac_recordLowF, almanac_recordLowC))
-            logger.debug("almanac_recordLowYear: %s" % almanac_recordLowYear)
         
         print(Fore.YELLOW + "Here's the almanac for: " + Fore.CYAN +
               almanac_airportCode + Fore.YELLOW + " (the nearest airport)")
