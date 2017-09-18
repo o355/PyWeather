@@ -3847,7 +3847,7 @@ while True:
             print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
             currentstormiterations += 1
             logger.debug("currentstormiterations: %s" % currentstormiterations)
-            if user_showCompletedIterations == "True":
+            if user_showCompletedIterations is True:
                 print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
                       (currentstormiterations, activestorms))
                 print(Fore.RESET)
