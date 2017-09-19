@@ -6,7 +6,7 @@ Viewing the weather in a terminal has never been so much fun.
 I had to start separating notices. Yay!
 
 ### 0.6.2 beta status update
-PyWeather 0.6.2 beta has been delayed, yet again. ETA for 0.6.2 beta is now late September. Why? I've been slacking off, and got 2 reports of bugs to fix. I still need to finish QA on Windows, and need to start QA on OS X and Linux. I'll make sure I work hard on PyWeather in the upcoming days.
+PyWeather 0.6.2 beta is coming along nicely. I've fixed most major bugs, so it's almost smooth-sailing QA from here on out. ETA for a release is 9/22.
 
 ### Python 3.7 compatibility notice
 PyWeather 0.6.2 beta will not be quality assured using the newly released Python 3.7, but 0.6.3 beta will get tested with Python 3.7. I can't assure that you won't run into bugs using Python 3.7 on 0.6.2 beta.

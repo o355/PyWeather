@@ -2144,6 +2144,7 @@ while True:
                   Fore.RED + "and not having a display for the GUI to initialize on. If this is not the case, and you have a GUI,",
                   Fore.RED + "turn on tracebacks in the configuration file, and report the traceback on GitHub if the issue persists.",
                   Fore.RED + "Press enter to continue.")
+            input()
             continue
             
         print(Fore.YELLOW + "Defining variables...")
