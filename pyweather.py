@@ -4005,11 +4005,13 @@ while True:
                     # Basically says if activestorms are two and above, and we're not on the last iteration, and we've gone through all
                     # loops, and 4/5 day forecast data was not before the extended forecast enter this dialogue.
                     if (activestorms > 1 and currentstormiterations != activestorms and hurricanecurrentiterations == hurricanetotaliterations):
+                        logger.debug("activestorms > 1, currentstormiterations != activestorms, hurricanecurrentiterations == hurricanetotaliterations")
                         if hurricane_hasExtDataInForecast == False:
+                            logger.debug("hurricane_hasExtDataInForecast = False")
                             print("")
                             print(Fore.RED + "Press enter to view the extended forecast for " + stormname + ".",
                                   "Enter 'nextstorm' to view details about the next storm.",
-                                  "Otherwise, press Control + C to exit to the main menu.", sep="\n")
+                                  "Otherwise, press Control + C twice to exit to the main menu.", sep="\n")
 
                             try:
                                 forecastselection = input("Input here: ").lower()
@@ -4027,6 +4029,7 @@ while True:
                                     print(Fore.RED + "Your input couldn't be understood. Listing extended forecast data.")
                                     forecastselection = ""
                         elif hurricane_hasExtDataInForecast == True:
+                            logger.debug("hurricane_hasExtDataInForecast - True")
                             print("")
                             print(Fore.RED + "Press enter to view data for the next storm.",
                                   "Otherwise, press Control + C to exit to the main menu.", sep="\n")
@@ -4047,8 +4050,10 @@ while True:
                     # This says if activestorms are just one, or if we're on the last storm, and we've gone through all loops, and 4/5 day
                     # forecast data was not before the extended forecast, enter this dialogue.
                     elif (activestorms == 1 or currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations):
+                        logger.debug("activestorms is 1, or currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations")
                         print("")
-                        if hurricane_hasExtDataInForecast == True:
+                        if hurricane_hasExtDataInForecast == False:
+                            logger.debug("hurricane_hasExtDataInForecast is False")
                             print(Fore.RED + "Press enter to see extended forecast for " + stormname + ".",
                             "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
                             try:
@@ -4062,7 +4067,8 @@ while True:
                             if forecastselection != "":
                                 print(Fore.RED + "Your input could not be understood. Listing extended forecast data.")
 
-                        elif hurricane_hasExtDataInForecast == False:
+                        elif hurricane_hasExtDataInForecast == True:
+                            logger.debug("hurricane_hasExtDataInForecast is True.")
                             break
 
                     else:
