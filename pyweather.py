@@ -4179,10 +4179,15 @@ while True:
                             print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneextforecast_lat + ", " + hurricaneextforecast_lon)
                             extendedcurrentloops += 1
                             logger.debug("extendedcurrentloops: %s" % extendedcurrentloops)
+                            if user_showCompletedIterations == True:
+                                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
+                                      (extendedcurrentloops, extendedforecastloops))
 
                             if extendedcurrentloops == extendedforecastloops:
+                                logger.debug("extendedcurrentloops == extendedforecastloops")
                                 print("")
                                 if currentstormiterations != activestorms:
+                                    logger.debug("currentstormiterations != activestorms")
                                     print(Fore.RED + "Press enter to view data for the next storm.",
                                           "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
 
@@ -4202,6 +4207,7 @@ while True:
                                         print("")
                                         continue
                                 elif currentstormiterations == activestorms:
+                                    logger.debug("currentstormiterations == activestorms")
                                     break
 
 #<--- Hurricane is above | About is below --->
