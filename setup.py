@@ -665,6 +665,7 @@ print("", "Would you like PyWeather to update all your PIP packages?",
 confirm_updatepip = input("Input here: ").lower()
 logger.debug("confirm_updatepip: %s" % confirm_updatepip)
 if confirm_updatepip == "yes":
+    print("")
     print("Updating PIP packages.")
     totalpackages = 0
     updatecount = 1

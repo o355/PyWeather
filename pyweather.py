@@ -1826,6 +1826,7 @@ while True:
                 print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/240"
                       % totaldetailedHourly10Iterations)
                 print(Fore.RESET)
+            print("")
             if user_enterToContinue == True:
                 if totaldetailedHourly10Iterations == 240:
                     logger.info("detailedHourly10Iterations is 240. Breaking...")
@@ -1834,7 +1835,6 @@ while True:
                     logger.debug("detailedHourly10Iterations: %s" % detailedHourly10Iterations)
                     logger.debug("Asking user for continuation...")
                     try:
-                        print("")
                         print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
                               % user_loopIterations)
                         print("You can also press Control + C to head back to the input menu.")
@@ -2104,9 +2104,9 @@ while True:
     elif moreoptions == "11":
         if radar_bypassconfirmation == False:
             print(Fore.RED + "The radar feature is experimental, and may not work properly.",
-                  "PyWeather may crash when in this feature, and other unexpected",
-                  "behavior may occur. Despite the radar feature being experimental,",
-                  "would you like to use the radar?" + Fore.RESET, sep="\n")
+                  Fore.RED + "PyWeather may crash when in this feature, and other unexpected",
+                  Fore.RED + "behavior may occur. Despite the radar feature being experimental,",
+                  Fore.RED + "would you like to use the radar?" + Fore.RESET, sep="\n")
             radar_confirmedusage = input("Input here: ").lower()
             if radar_confirmedusage == "yes":
                 print("The radar is now launching.",
@@ -2134,15 +2134,15 @@ while True:
             frontend = gui()
         except ImportError:
             print(Fore.RED + "Cannot launch a GUI on this platform. If you don't have",
-                  "a GUI on Linux, this is expected. Otherwise, investigate into why",
-                  "tkinter won't launch.", sep="\n" + Fore.RESET)
+                  Fore.RED + "a GUI on Linux, this is expected. Otherwise, investigate into why",
+                  Fore.RED + "tkinter won't launch.", sep="\n" + Fore.RESET)
             printException()
             continue
         except:
             printException()
             print(Fore.RED + "Cannot launch the radar GUI. If this issue can be reproduced,",
-                  "please report this issue on GitHub, and enable tracebacks in the configuration",
-                  "file.", sep="\n" + Fore.RESET)
+                  Fore.RED + "please report this issue on GitHub, and enable tracebacks in the configuration",
+                  Fore.RED + "file.", sep="\n" + Fore.RESET)
             continue
             
         print(Fore.YELLOW + "Defining variables...")
@@ -2987,7 +2987,6 @@ while True:
 #<--- Almanac is above | Sundata is below --->
     elif moreoptions == "10":
         print(Fore.RED + "Loading...")
-        print("")
 
         try:
             logger.debug("sundata_prefetched: %s ; sundata cache time: %s" %
@@ -3243,6 +3242,7 @@ while True:
             logger.debug("moonset_time: %s" % moonset_time)
         
         logger.info("Printing data...")
+        print("")
         print(Fore.YELLOW + "Here's the detailed sun/moon data for: " +
               Fore.CYAN + str(location))
         print("")
