@@ -2132,7 +2132,7 @@ while True:
         try:
             from appJar import gui
             frontend = gui()
-        except ImportError:
+        except (ImportError, _tkinter.TclError):
             print(Fore.RED + "Cannot launch a GUI on this platform. If you don't have",
                   Fore.RED + "a GUI on Linux, this is expected. Otherwise, investigate into why",
                   Fore.RED + "tkinter won't launch.", sep="\n" + Fore.RESET)
