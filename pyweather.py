@@ -3700,18 +3700,17 @@ while True:
                 tide_height = data['data']['height']
                 logger.debug("tide_height: %s" % tide_height)
                 print(Fore.YELLOW + "Height: " + Fore.CYAN + tide_height)
+            tide_currentiterations = tide_currentiterations + 1
+            tide_completediterations = tide_completediterations + 1
             if user_showCompletedIterations == True:
                 print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s"
                       % (tide_completediterations, tide_totaliterations))
                 print(Fore.RESET)
             print("")
-            tide_currentiterations = tide_currentiterations + 1
-            tide_completediterations = tide_completediterations + 1
             logger.debug("tide_currentiterations: %s ; tide_completediterations: %s" %
                          (tide_currentiterations, tide_completediterations))
             if user_enterToContinue == True:
                 if tide_currentiterations == user_loopIterations:
-                    print("")
                     try:
                         print(Fore.RED + "Press enter to view the next %s iterations of tide data." % user_loopIterations,
                             "Otherwise, press Control + C to head back to the main menu.", sep="\n")
