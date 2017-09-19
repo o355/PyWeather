@@ -2132,7 +2132,7 @@ while True:
         try:
             from appJar import gui
             frontend = gui()
-        except (ImportError, _tkinter.TclError):
+        except ImportError:
             print(Fore.RED + "Cannot launch a GUI on this platform. If you don't have",
                   Fore.RED + "a GUI on Linux, this is expected. Otherwise, investigate into why",
                   Fore.RED + "tkinter won't launch.", sep="\n" + Fore.RESET)
@@ -2140,9 +2140,10 @@ while True:
             continue
         except:
             printException()
-            print(Fore.RED + "Cannot launch the radar GUI. If this issue can be reproduced,",
-                  Fore.RED + "please report this issue on GitHub, and enable tracebacks in the configuration",
-                  Fore.RED + "file.", sep="\n" + Fore.RESET)
+            print(Fore.RED + "Cannot launch the GUI. This is probably occurring as a result of being in a terminal,",
+                  Fore.RED + "and not having a display for the GUI to initialize on. If this is not the case, and you have a GUI,",
+                  Fore.RED + "turn on tracebacks in the configuration file, and report the traceback on GitHub if the issue persists.",
+                  Fore.RED + "Press enter to continue.")
             continue
             
         print(Fore.YELLOW + "Defining variables...")
