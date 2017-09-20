@@ -1840,6 +1840,7 @@ while True:
                 print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/240"
                       % totaldetailedHourly10Iterations)
                 print(Fore.RESET)
+            print("")
             if user_enterToContinue == True:
                 if totaldetailedHourly10Iterations == 240:
                     logger.info("detailedHourly10Iterations is 240. Breaking...")
@@ -1848,7 +1849,6 @@ while True:
                     logger.debug("detailedHourly10Iterations: %s" % detailedHourly10Iterations)
                     logger.debug("Asking user for continuation...")
                     try:
-                        print("")
                         print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
                               % user_loopIterations)
                         print("You can also press Control + C to head back to the input menu.")
@@ -2118,9 +2118,9 @@ while True:
     elif moreoptions == "11":
         if radar_bypassconfirmation == False:
             print(Fore.RED + "The radar feature is experimental, and may not work properly.",
-                  "PyWeather may crash when in this feature, and other unexpected",
-                  "behavior may occur. Despite the radar feature being experimental,",
-                  "would you like to use the radar?" + Fore.RESET, sep="\n")
+                  Fore.RED + "PyWeather may crash when in this feature, and other unexpected",
+                  Fore.RED + "behavior may occur. Despite the radar feature being experimental,",
+                  Fore.RED + "would you like to use the radar?" + Fore.RESET, sep="\n")
             radar_confirmedusage = input("Input here: ").lower()
             if radar_confirmedusage == "yes":
                 print("The radar is now launching.",
@@ -2148,15 +2148,17 @@ while True:
             frontend = gui()
         except ImportError:
             print(Fore.RED + "Cannot launch a GUI on this platform. If you don't have",
-                  "a GUI on Linux, this is expected. Otherwise, investigate into why",
-                  "tkinter won't launch.", sep="\n" + Fore.RESET)
+                  Fore.RED + "a GUI on Linux, this is expected. Otherwise, investigate into why",
+                  Fore.RED + "tkinter won't launch.", sep="\n" + Fore.RESET)
             printException()
             continue
         except:
             printException()
-            print(Fore.RED + "Cannot launch the radar GUI. If this issue can be reproduced,",
-                  "please report this issue on GitHub, and enable tracebacks in the configuration",
-                  "file.", sep="\n" + Fore.RESET)
+            print(Fore.RED + "Cannot launch the GUI. This is probably occurring as a result of being in a terminal,",
+                  Fore.RED + "and not having a display for the GUI to initialize on. If this is not the case, and you have a GUI,",
+                  Fore.RED + "turn on tracebacks in the configuration file, and report the traceback on GitHub if the issue persists.",
+                  Fore.RED + "Press enter to continue.")
+            input()
             continue
             
         print(Fore.YELLOW + "Defining variables...")
@@ -2938,27 +2940,48 @@ while True:
                 logger.debug("1 JSON loaded successfully.")
             
             almanac_airportCode = almanac_json['almanac']['airport_code']
-            almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
-            almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
-            almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
+            try:
+                almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
+                almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
+                almanac_normalHighdata = True
+            except:
+                almanac_normalHighdata = False
             logger.debug("almanac_airportCode: %s ; almanac_normalHighF: %s"
                          % (almanac_airportCode, almanac_normalHighF))
-            logger.debug("almanac_normalHighC: %s ; almanac_recordHighF: %s"
-                         % (almanac_normalHighC, almanac_recordHighF))
-            almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
-            almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
-            almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
-            almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
-            logger.debug("almanac_recordHighC: %s ; almanac_recordHighYear: %s"
-                         % (almanac_recordHighC, almanac_recordHighYear))
-            logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s"
-                         % (almanac_normalLowF, almanac_normalLowC))
-            almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
-            almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
+            logger.debug("almanac_normalHighdata: %s" % almanac_normalHighdata)
+            try:
+                almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
+                almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
+                almanac_recordHighdata = True
+            except:
+                almanac_recordHighdata = False
+            logger.debug("almanac_recordHighF: %s ; almanac_recordHighC: %s" %
+                         (almanac_recordHighF, almanac_recordHighC))
+            logger.debug("almanac_recordHighdata: %s" % almanac_recordHighdata)
+            try:
+                almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
+                almanac_recordHighYeardata = True
+            except:
+                almanac_recordHighYeardata = False
+            logger.debug("almanac_recordHighYear: %s ; almanac_recordHighYeardata: %s" %
+                         (almanac_recordHighYear, almanac_recordHighYeardata))
+            try:
+                almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
+                almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
+                almanac_normalLowdata = True
+            except:
+                almanac_normalLowdata = False
+            logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s" %
+                         (almanac_normalLowF, almanac_normalLowC))
+            logger.debug("almanac_normalLowData: %s" % almanac_normalLowdata)
+            try:
+                almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
+                almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
+                almanac_recordLowdata = True
+            except:
+                almanac_recordLowdata = False
+
             almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
-            logger.debug("alamanac_recordLowF: %s ; almanac_recordLowC: %s"
-                         % (almanac_recordLowF, almanac_recordLowC))
-            logger.debug("almanac_recordLowYear: %s" % almanac_recordLowYear)
         
         print(Fore.YELLOW + "Here's the almanac for: " + Fore.CYAN +
               almanac_airportCode + Fore.YELLOW + " (the nearest airport)")
@@ -2980,7 +3003,6 @@ while True:
 #<--- Almanac is above | Sundata is below --->
     elif moreoptions == "10":
         print(Fore.RED + "Loading...")
-        print("")
 
         try:
             logger.debug("sundata_prefetched: %s ; sundata cache time: %s" %
@@ -3236,6 +3258,7 @@ while True:
             logger.debug("moonset_time: %s" % moonset_time)
         
         logger.info("Printing data...")
+        print("")
         print(Fore.YELLOW + "Here's the detailed sun/moon data for: " +
               Fore.CYAN + str(location))
         print("")
@@ -3693,18 +3716,17 @@ while True:
                 tide_height = data['data']['height']
                 logger.debug("tide_height: %s" % tide_height)
                 print(Fore.YELLOW + "Height: " + Fore.CYAN + tide_height)
+            tide_currentiterations = tide_currentiterations + 1
+            tide_completediterations = tide_completediterations + 1
             if user_showCompletedIterations == True:
                 print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s"
                       % (tide_completediterations, tide_totaliterations))
                 print(Fore.RESET)
             print("")
-            tide_currentiterations = tide_currentiterations + 1
-            tide_completediterations = tide_completediterations + 1
             logger.debug("tide_currentiterations: %s ; tide_completediterations: %s" %
                          (tide_currentiterations, tide_completediterations))
             if user_enterToContinue == True:
                 if tide_currentiterations == user_loopIterations:
-                    print("")
                     try:
                         print(Fore.RED + "Press enter to view the next %s iterations of tide data." % user_loopIterations,
                             "Otherwise, press Control + C to head back to the main menu.", sep="\n")
@@ -3840,7 +3862,7 @@ while True:
             print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
             currentstormiterations += 1
             logger.debug("currentstormiterations: %s" % currentstormiterations)
-            if user_showCompletedIterations == "True":
+            if user_showCompletedIterations is True:
                 print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
                       (currentstormiterations, activestorms))
                 print(Fore.RESET)
@@ -3998,11 +4020,13 @@ while True:
                     # Basically says if activestorms are two and above, and we're not on the last iteration, and we've gone through all
                     # loops, and 4/5 day forecast data was not before the extended forecast enter this dialogue.
                     if (activestorms > 1 and currentstormiterations != activestorms and hurricanecurrentiterations == hurricanetotaliterations):
+                        logger.debug("activestorms > 1, currentstormiterations != activestorms, hurricanecurrentiterations == hurricanetotaliterations")
                         if hurricane_hasExtDataInForecast == False:
+                            logger.debug("hurricane_hasExtDataInForecast = False")
                             print("")
                             print(Fore.RED + "Press enter to view the extended forecast for " + stormname + ".",
                                   "Enter 'nextstorm' to view details about the next storm.",
-                                  "Otherwise, press Control + C to exit to the main menu.", sep="\n")
+                                  "Otherwise, press Control + C twice to exit to the main menu.", sep="\n")
 
                             try:
                                 forecastselection = input("Input here: ").lower()
@@ -4020,6 +4044,7 @@ while True:
                                     print(Fore.RED + "Your input couldn't be understood. Listing extended forecast data.")
                                     forecastselection = ""
                         elif hurricane_hasExtDataInForecast == True:
+                            logger.debug("hurricane_hasExtDataInForecast - True")
                             print("")
                             print(Fore.RED + "Press enter to view data for the next storm.",
                                   "Otherwise, press Control + C to exit to the main menu.", sep="\n")
@@ -4040,8 +4065,10 @@ while True:
                     # This says if activestorms are just one, or if we're on the last storm, and we've gone through all loops, and 4/5 day
                     # forecast data was not before the extended forecast, enter this dialogue.
                     elif (activestorms == 1 or currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations):
+                        logger.debug("activestorms is 1, or currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations")
                         print("")
-                        if hurricane_hasExtDataInForecast == True:
+                        if hurricane_hasExtDataInForecast == False:
+                            logger.debug("hurricane_hasExtDataInForecast is False")
                             print(Fore.RED + "Press enter to see extended forecast for " + stormname + ".",
                             "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
                             try:
@@ -4055,7 +4082,8 @@ while True:
                             if forecastselection != "":
                                 print(Fore.RED + "Your input could not be understood. Listing extended forecast data.")
 
-                        elif hurricane_hasExtDataInForecast == False:
+                        elif hurricane_hasExtDataInForecast == True:
+                            logger.debug("hurricane_hasExtDataInForecast is True.")
                             break
 
                     else:
@@ -4166,10 +4194,15 @@ while True:
                             print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneextforecast_lat + ", " + hurricaneextforecast_lon)
                             extendedcurrentloops += 1
                             logger.debug("extendedcurrentloops: %s" % extendedcurrentloops)
+                            if user_showCompletedIterations == True:
+                                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
+                                      (extendedcurrentloops, extendedforecastloops))
 
                             if extendedcurrentloops == extendedforecastloops:
+                                logger.debug("extendedcurrentloops == extendedforecastloops")
                                 print("")
                                 if currentstormiterations != activestorms:
+                                    logger.debug("currentstormiterations != activestorms")
                                     print(Fore.RED + "Press enter to view data for the next storm.",
                                           "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
 
@@ -4189,6 +4222,7 @@ while True:
                                         print("")
                                         continue
                                 elif currentstormiterations == activestorms:
+                                    logger.debug("currentstormiterations == activestorms")
                                     break
 
 #<--- Hurricane is above | About is below --->
