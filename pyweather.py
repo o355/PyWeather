@@ -1308,8 +1308,8 @@ while True:
                     % (current_feelsLikeC, current_visibilityMi))
         logger.debug("current_visibilityKm: %s ; current_UVIndex: %s"
                     % (current_visibilityKm, current_UVIndex))
-        current_precip1HrIn = int(current_json['current_observation']['precip_1hr_in'])
-        if current_precip1HrIn == -999:
+        current_precip1HrIn = float(current_json['current_observation']['precip_1hr_in'])
+        if current_precip1HrIn == -999.00:
             current_precip1Hrdata = False
             current_precip1HrIn = str(current_precip1HrIn)
         else:
