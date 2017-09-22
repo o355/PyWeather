@@ -85,9 +85,43 @@ def geopycheck():
                       "Defaulting to HTTP as the geopy scheme...", sep="\n")
                 config['GEOCODER']['scheme'] = 'http'
                 print("Changes saved.")
+if "0.6.2 beta" in versioninfo2:
+    print("PyWeather is up-to-date. As such, we don't need to make any configuration changes.")
+    sys.exit()
+elif "0.6.1 beta" in versioninfo2:
+    try:
+        config.add_section("GEOCODER")
+    except:
+        print("Failed to add the geocoder section. Does it exist?")
 
+    print("New configuration options have been added.",
+          "Details:",
+          "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
+          "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
+          "- CACHE/threedayhourly_cachedtime - Sets the cache time on 1.5 day hourly data - Defaults to 60",
+          "- CACHE/tendayhourly_cachedtime - Sets the cache time on the 10 day hourly data - Defaults to 60",
+          "- CACHE/hurricane_cachedtime - Sets the cache time on hurricane data - Defaults to 180",
+          "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https",
+          "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False",
+          "- PREFETCH/hurricanedata_atboot - Sets if PyWeather should fetch hurricane data at boot - Defaults to False", sep="\n")
 
-if "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
+    print("")
+    print("2 old configuration options, and 2 sections have been deleted.",
+          "Details:",
+          "- CACHE/hourly_cachedtime - Used to set the global hourly cache time - Now removed",
+          "- HOURLY/10dayhourly_atboot - Used to set if PyWeather should fetch 10-day hourly at boot - Now removed",
+          "- HOURLY section - No longer in use for any configuration options.",
+          "- CHANGELOG section - No longer in use for any configuration options.", sep="\n")
+
+    config['CACHE']['tide_cachedtime'] = '480'
+    config['SUMMARY']['showtideonsumary'] = 'False'
+    config['CACHE']['threedayhourly_cachedtime'] = '60'
+    config['CACHE']['tendayhourly_cachedtime'] = '60'
+    config['PREFETCH']['10dayfetch_atboot'] = 'False'
+    config['PREFETCH']['hurricanedata_atboot'] = 'False'
+    config['CACHE']['hurricane_cachedtime'] = '180'
+    geopycheck()
+elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     # A usual input() and sys.exit() isn't present here, as it's assumed this
     # is getting executed inside of the updater.
     try:
@@ -153,44 +187,6 @@ if "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['CACHE']['hurricane_cachedtime'] = '180'
     geopycheck()
-
-elif "0.6.1 beta" in versioninfo2:
-    try:
-        config.add_section("GEOCODER")
-    except:
-        print("Failed to add the geocoder section. Does it exist?")
-
-    print("New configuration options have been added.",
-          "Details:",
-          "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
-          "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
-          "- CACHE/threedayhourly_cachedtime - Sets the cache time on 1.5 day hourly data - Defaults to 60",
-          "- CACHE/tendayhourly_cachedtime - Sets the cache time on the 10 day hourly data - Defaults to 60",
-          "- CACHE/hurricane_cachedtime - Sets the cache time on hurricane data - Defaults to 180",
-          "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https",
-          "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False",
-          "- PREFETCH/hurricanedata_atboot - Sets if PyWeather should fetch hurricane data at boot - Defaults to False", sep="\n")
-
-    print("")
-    print("2 old configuration options, and 2 sections have been deleted.",
-          "Details:",
-          "- CACHE/hourly_cachedtime - Used to set the global hourly cache time - Now removed",
-          "- HOURLY/10dayhourly_atboot - Used to set if PyWeather should fetch 10-day hourly at boot - Now removed",
-          "- HOURLY section - No longer in use for any configuration options.",
-          "- CHANGELOG section - No longer in use for any configuration options.", sep="\n")
-
-    config['CACHE']['tide_cachedtime'] = '480'
-    config['SUMMARY']['showtideonsumary'] = 'False'
-    config['CACHE']['threedayhourly_cachedtime'] = '60'
-    config['CACHE']['tendayhourly_cachedtime'] = '60'
-    config['PREFETCH']['10dayfetch_atboot'] = 'False'
-    config['PREFETCH']['hurricanedata_atboot'] = 'False'
-    config['CACHE']['hurricane_cachedtime'] = '180'
-    geopycheck()
-
-elif "0.6.2 beta" in versioninfo2:
-    print("PyWeather is up-to-date. As such, we don't need to make any configuration changes.")
-    sys.exit()
 
 try:
     with open('storage//config.ini', 'w') as configfile:
