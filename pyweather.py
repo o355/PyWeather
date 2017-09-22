@@ -1322,7 +1322,14 @@ while True:
                     % (current_feelsLikeC, current_visibilityMi))
         logger.debug("current_visibilityKm: %s ; current_UVIndex: %s"
                     % (current_visibilityKm, current_UVIndex))
-        current_precip1HrIn = str(current_json['current_observation']['precip_1hr_in'])
+        current_precip1HrIn = float(current_json['current_observation']['precip_1hr_in'])
+        if current_precip1HrIn == -999.00:
+            current_precip1Hrdata = False
+            current_precip1HrIn = str(current_precip1HrIn)
+        else:
+            current_precip1Hrdata = True
+            current_precip1HrIn = str(current_precip1HrIn)
+        logger.debug("current_precip1Hrdata: %s")
         current_precip1HrMm = str(current_json['current_observation']['precip_1hr_metric'])
         if current_precip1HrMm == "--":
             current_precip1HrMm = "0.0"
@@ -1358,9 +1365,12 @@ while True:
         print(Fore.YELLOW + "Current visibility: " + Fore.CYAN + current_visibilityMi
               + " miles (" + current_visibilityKm + " km)")
         print(Fore.YELLOW + "UV Index: " + Fore.CYAN + current_UVIndex)
-        print(Fore.YELLOW + "Precipitation in the last hour: " + Fore.CYAN
-              + current_precip1HrIn + " inches (" + current_precip1HrMm
-              + " mm)")
+        if current_precip1Hrdata == True:
+            print(Fore.YELLOW + "Precipitation in the last hour: " + Fore.CYAN
+                  + current_precip1HrIn + " inches (" + current_precip1HrMm
+                  + " mm)")
+        else:
+            print(Fore.YELLOW + "Precipitation data in the last hour is not available.")
         print(Fore.YELLOW + "Precipitation so far today: " + Fore.CYAN
               + current_precipTodayIn + " inches (" + current_precipTodayMm
               + " mm)")

@@ -68,7 +68,7 @@ def geopycheck():
                 print("Changes saved.")
 
 
-if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
+if "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     # A usual input() and sys.exit() isn't present here, as it's assumed this
     # is getting executed inside of the updater.
     try:
@@ -135,7 +135,7 @@ if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
     config['CACHE']['hurricane_cachedtime'] = '180'
     geopycheck()
 
-elif versioninfo2 == "0.6.1 beta":
+elif "0.6.1 beta" in versioninfo2:
     try:
         config.add_section("GEOCODER")
     except:
@@ -169,7 +169,7 @@ elif versioninfo2 == "0.6.1 beta":
     config['CACHE']['hurricane_cachedtime'] = '180'
     geopycheck()
 
-elif versioninfo2 == "0.6.2 beta":
+elif "0.6.2 beta" in versioninfo2:
     print("PyWeather is up-to-date. As such, we don't need to make any configuration changes.")
     sys.exit()
 
