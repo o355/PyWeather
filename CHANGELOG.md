@@ -18,6 +18,7 @@
 * Adds the manual configuration of 3-day and 10-day hourly cache times - Done! Thanks to @ModoUnreal for coding this in!
 * Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS. - Done!
 * Adds the ability to input decimal numbers into cache times during setup - Done!
+* Adds the ability to manually define a version you're upgrading to in the configupdate script in the event your versioncheck file is gone.
 * Final QA - 25% done - Should be finished by 9/18
 
 **BUG FIXES**
@@ -33,13 +34,14 @@
 * Fixed a bug where PyWeather wouldn't properly catch no moonrise data, resulting in a crash.
 * Fixed a bug where if alerts data wasn't getting prefetched at boot, when detailed alerts data was called up PyWeather would crash.
 * Fixed a bug where if you had 10-day hourly prefetch enabled at boot, when you viewed detailed 10-day hourly information PyWeather would crash.
-* Fixing a potential bug where the configupdate script might not at all work when you manually edit the version info file. It now searches the file instead of an exact match. - 50% done
+* Fixing a potential bug where the configupdate script might not at all work when you manually edit the version info file. It now searches the file instead of an exact match. - 80% done, need to QA this.
 * Fixing a bug where if some almanac data wasn't available, PyWeather would crash - 50% done. Thanks to @ModoUnreal for reporting the error!
 * Fixing a "bug" where if you had no connection to the updater at boot with it enabled, PyWeather would exit instead of continue - 0% done. Thanks to @creepersbane for reporting the error!
 * Fixed a potential bug where proper code to catch invalid sunrise/sunset data was not implemented.
 
 **OTHER CHANGES**
 * ModoUnreal is now an awesome contributor!
+* The setup script will now forcefully write out a versioninfo file at the top of the script.
 
 ## version 0.6.1 beta - Released on 7/31/2017
 **NEW FEATURES/REMOVALS**

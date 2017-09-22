@@ -6,10 +6,12 @@ Viewing the weather in a terminal has never been so much fun.
 I had to start separating notices. Yay!
 
 ### 0.6.2 beta status update
-PyWeather 0.6.2 beta is coming along nicely. I've fixed most major bugs, so it's almost smooth-sailing QA from here on out. ETA for a release is 9/22.
+PyWeather 0.6.2 beta is coming along nicely, however it has been delayed (again). ETA for release is 9/27.
 
 ### Python 3.7 compatibility notice
 PyWeather 0.6.2 beta will not be quality assured using the newly released Python 3.7, but 0.6.3 beta will get tested with Python 3.7. I can't assure that you won't run into bugs using Python 3.7 on 0.6.2 beta.
+
+I'm not about to delay PyWeather AGAIN due to Python 3.7 coming out. Sorry!
 
 ### Raspbian 9/Debian 9 compatibility notice
 PyWeather 0.6.2 beta will not be quality assured using Raspbian 9 (and 8 for that matter), and I cannot certify that PyWeather works on Debian Stretch, or other distros based on Debian 9.

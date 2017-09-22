@@ -21,16 +21,16 @@ import logging
 import os
 import urllib
 
-# Try loading the versioninfo.txt file. If it isn't around, create the file with
-# the present version info.
+# Now force the writing of the versioninfo file during setup, this should prevent issues
+# in the event I forget to gitignore the file.
 
 try:
-    versioninfo = open('updater//versioninfo.txt')
-except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.1 beta")
+        out.write("0.6.2 beta")
         out.close()
+except:
+    print("Couldn't write the versioninfo file. This may cause issues with PyWeather down the road.")
 
 config = configparser.ConfigParser()
 config.read('storage//config.ini')

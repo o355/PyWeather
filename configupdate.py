@@ -119,7 +119,7 @@ elif "0.6.1 beta" in versioninfo2:
           "- CHANGELOG section - No longer in use for any configuration options.", sep="\n")
 
     config['CACHE']['tide_cachedtime'] = '480'
-    config['SUMMARY']['showtideonsumary'] = 'False'
+    config['SUMMARY']['showtideonsummary'] = 'False'
     config['CACHE']['threedayhourly_cachedtime'] = '60'
     config['CACHE']['tendayhourly_cachedtime'] = '60'
     config['PREFETCH']['10dayfetch_atboot'] = 'False'
@@ -187,7 +187,7 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['CACHE']['enabled'] = 'True'
     config['CACHE']['tide_cachedtime'] = '480'
-    config['SUMMARY']['showtideonsumary'] = 'False'
+    config['SUMMARY']['showtideonsummary'] = 'False'
     config['PREFETCH']['10dayfetch_atboot'] = 'False'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['CACHE']['hurricane_cachedtime'] = '180'
