@@ -33,6 +33,7 @@
 * Fixed a bug where PyWeather wouldn't properly catch no moonrise data, resulting in a crash.
 * Fixed a bug where if alerts data wasn't getting prefetched at boot, when detailed alerts data was called up PyWeather would crash.
 * Fixed a bug where if you had 10-day hourly prefetch enabled at boot, when you viewed detailed 10-day hourly information PyWeather would crash.
+* Fixing a potential bug where the configupdate script might not at all work when you manually edit the version info file. It now searches the file instead of an exact match. - 50% done
 * Fixing a bug where if some almanac data wasn't available, PyWeather would crash - 50% done. Thanks to @ModoUnreal for reporting the error!
 * Fixing a "bug" where if you had no connection to the updater at boot with it enabled, PyWeather would exit instead of continue - 0% done. Thanks to @creepersbane for reporting the error!
 * Fixed a potential bug where proper code to catch invalid sunrise/sunset data was not implemented.

@@ -11,9 +11,28 @@ import configparser
 import traceback
 import os
 
-versioninfo = open("updater//versioninfo.txt")
-versioninfo2 = versioninfo.read()
-versioninfo.close()
+try:
+    versioninfo = open("updater//versioninfo.txt")
+    versioninfo2 = versioninfo.read()
+    versioninfo.close()
+except:
+    print("Your versioncheck file couldn't be found. Below, please enter a number",
+          "which corresponds to the version of PyWeather you're updating from.",
+          "[0] 0.5.2.1 beta and earlier",
+          "[1] 0.6 beta or 0.6.0.1 beta",
+          "[2] 0.6.1 beta or 0.6.1 beta-https", sep="\n")
+    versionselect = input("Input here: ").lower()
+    if versionselect == "0":
+        print("You'll need to completely reinstall PyWeather due to the way the new config system works.",
+              "Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+    elif versionselect == "1":
+        print("Updating PyWeather using version identifier: 0.6 beta")
+        versioninfo2 = "0.6 beta"
+    elif versionselect == "2":
+        print("Updating PyWeather using version identifier: 0.6.1 beta")
+        versioninfo2 = "0.6.1 beta"
 
 config = configparser.ConfigParser()
 config.read("storage//config.ini")
@@ -79,7 +98,7 @@ if "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     try:
         config.add_section("RADAR GUI")
     except:
-        print("Failed to add the cache section. Does it exist?")
+        print("Failed to add the radar GUI section. Does it exist?")
 
     try:
         config.add_section("GEOCODER")
