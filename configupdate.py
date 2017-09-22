@@ -94,7 +94,12 @@ elif "0.6.1 beta" in versioninfo2:
     except:
         print("Failed to add the geocoder section. Does it exist?")
 
-    print("New configuration options have been added.",
+    try:
+        config.add_section("PREFETCH")
+    except:
+        print("Failed to add the prefetch section. Does it exist?")
+
+    print("8 new configuration options have been added.",
           "Details:",
           "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
           "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
@@ -144,7 +149,7 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     except:
         print("Failed to add the prefetch section. Does it exist?")
         
-    print("New configuration options have been added.",
+    print("16 new configuration options have been added.",
           "Details:",
           "- CACHE/alerts_cachedtime - Sets the cache time on alert data - Defaults to 5",
           "- CACHE/current_cachedtime - Sets the cache time on current data - Defaults to 10",
