@@ -1,4 +1,4 @@
-[![Twitter](https://img.shields.io/twitter/url/https/github.com/o355/pyweather.svg?style=social)](https://twitter.com/intent/tweet?text="Feel the urge to check your weather in a terminal? https://github.com/o355/pyweather"&url=%5Bobject%20Object%5D)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/o355/pyweather.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D)
 
 ## Welcome to PyWeather (0.6.2 beta)!
 Viewing the weather in a terminal has never been so much fun.
