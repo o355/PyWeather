@@ -21,6 +21,7 @@
 * Adds the ability to manually define a version you're upgrading to in the configupdate script in the event your versioncheck file is gone.
 * Removed the configdefault script. The configsetup script has taken it's place now.
 * Added up-to-date and no matching version messages in the configupdate script.
+* Minor UI changes.
 
 **BUG FIXES**
 * Fixed a critical bug where if geopy wasn't installed before setup, Pyweather Setup would install geocoder INSTEAD of geopy, and throw an error.
@@ -29,7 +30,7 @@
 * Fixed a bug where if you entered nothing for the backup key directory, an error would occur. Thanks to @creepersbane for reporting the error!
 * Fixed a bug where if your configuration file failed to load, enter to continue prompts were disabled by default.
 * Fixed a bug where the last step in the setup process (bypassing radar confirmation) didn't have proper else catching, and if a "yes" or "no" was entered, PyWeather setup would crash.
-* Fixed a bug where you weren't able to exit out of the summary screen when viewing historical hourly data.
+* Fixed a bug where you weren't able to exit out of the summary screen when viewing historical data.
 * Fixed a bug where wind chill data in celsius in historical hourly displayed "kph" instead of a degree C symbol.
 * Fixed a bug where the 10 day forecast cache expire time was running off of the hourly cache time.
 * Fixed a bug where PyWeather wouldn't properly catch no moonrise data, resulting in a crash.
@@ -37,8 +38,8 @@
 * Fixed a bug where if you had 10-day hourly prefetch enabled at boot, when you viewed detailed 10-day hourly information PyWeather would crash.
 * Fixed a potential bug where the configupdate script might not at all work when you manually edit the version info file. It now searches the file instead of an exact match.
 * Fixed a bug where yesterday precipitation data could say "T" on the summary screen. A data check has been added.
-* Fixing a bug where if some almanac data wasn't available, PyWeather would crash - 80% done. Thanks to @ModoUnreal for reporting the error!
-* Fixing a "bug" where if you had no connection to the updater at boot with it enabled, PyWeather would exit instead of continue - 0% done. Thanks to @creepersbane for reporting the error!
+* Fixed a bug where if some almanac data wasn't available, PyWeather would crash - Thanks to @ModoUnreal for reporting the error!
+* Fixed a "bug" where if you had no connection to the updater at boot with it enabled, PyWeather would exit instead of continue Thanks to @creepersbane for reporting the error!
 * Fixed a potential bug where proper code to catch invalid sunrise/sunset data was not implemented.
 
 **OTHER CHANGES**
@@ -61,6 +62,7 @@
 * Geopy's scheme was changed to HTTP due to issues on OS X.
 * Adds wind direction data to historical hourly.
 * Removed the keybackup script.
+* Minor UI changes.
 
 **BUG FIXES**
 * Fixed a major bug where the PyWeather Git updater wouldn't, uh, fully update.

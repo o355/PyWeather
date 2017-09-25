@@ -1,3 +1,6 @@
+**WHEN UPDATING FROM 0.6.1 BETA TO 0.6.2 BETA, YOU WILL NEED TO ENTER "2" IN THE INPUT PROMPT (also when you run configupdate separately)**
+**YOU SHOULD BE ABLE TO UPDATE FROM 0.6 BETA TO 0.6.2 BETA.**
+
 **NEW FEATURES/REMOVALS**
 * Adds the ability to view yesterday's weather. - Thanks to @ModoUnreal for coding this in!
 * Adds the ability to view hurricane data in PyWeather.
@@ -8,6 +11,7 @@
 * Adds the ability to manually define a version you're upgrading to in the configupdate script in the event your versioncheck file is gone.
 * Removed the configdefault script. The configsetup script has taken it's place now.
 * Added up-to-date and no matching version messages in the configupdate script.
+* Minor UI updates
 
 **BUG FIXES**
 * Fixed a critical bug where if geopy wasn't installed before setup, Pyweather Setup would install geocoder INSTEAD of geopy, and throw an error.
@@ -16,7 +20,7 @@
 * Fixed a bug where if you entered nothing for the backup key directory, an error would occur. Thanks to @creepersbane for reporting the error!
 * Fixed a bug where if your configuration file failed to load, enter to continue prompts were disabled by default.
 * Fixed a bug where the last step in the setup process (bypassing radar confirmation) didn't have proper else catching, and if a "yes" or "no" was entered, PyWeather setup would crash.
-* Fixed a bug where you weren't able to exit out of the summary screen when viewing historical hourly data.
+* Fixed a bug where you weren't able to exit out of the summary screen when viewing historical data.
 * Fixed a bug where wind chill data in celsius in historical hourly displayed "kph" instead of a degree C symbol.
 * Fixed a bug where the 10 day forecast cache expire time was running off of the hourly cache time.
 * Fixed a bug where PyWeather wouldn't properly catch no moonrise data, resulting in a crash.
