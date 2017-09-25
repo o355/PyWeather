@@ -2977,24 +2977,54 @@ while True:
             except:
                 almanac_recordLowdata = False
 
-            almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
+            try:
+                almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
+                almanac_recordLowYeardata = True
+            except:
+                almanac_recordLowYeardata = False
+            logger.debug("almanac_recordLowYear: %s ; almanac_recordLowYeardata: %s" %
+                         (almanac_recordLowYear, almanac_recordLowYeardata))
         
         print(Fore.YELLOW + "Here's the almanac for: " + Fore.CYAN +
               almanac_airportCode + Fore.YELLOW + " (the nearest airport)")
         print("")
-        print(Fore.YELLOW + "Record High: " + Fore.CYAN + almanac_recordHighF + "°F ("
-              + almanac_recordHighC + "°C)")
-        print(Fore.YELLOW + "With the record being set in: " + Fore.CYAN
-              + almanac_recordHighYear)
-        print(Fore.YELLOW + "Normal High: " + Fore.CYAN + almanac_normalHighF
-              + "°F (" + almanac_normalHighC + "°C)")
+        if almanac_recordHighdata is True:
+            print(Fore.YELLOW + "Record High: " + Fore.CYAN + almanac_recordHighF + "°F ("
+                  + almanac_recordHighC + "°C)")
+        else:
+            print(Fore.YELLOW + "Record high data is not available.")
+
+        if almanac_recordHighYeardata is True:
+            print(Fore.YELLOW + "With the record being set in: " + Fore.CYAN
+                  + almanac_recordHighYear)
+        else:
+            print(Fore.YELLOW + "Record high year data is not available.")
+
+        if almanac_normalHighdata is True:
+            print(Fore.YELLOW + "Normal High: " + Fore.CYAN + almanac_normalHighF
+                  + "°F (" + almanac_normalHighC + "°C)")
+        else:
+            print(Fore.YELLOW + "Normal high data is not available.")
+
         print("")
-        print(Fore.YELLOW + "Record Low: " + Fore.CYAN + almanac_recordLowF + "°F ("
-              + almanac_recordLowC + "°C)")
-        print(Fore.YELLOW + "With the record being set in: " + Fore.CYAN
-              + almanac_recordLowYear)
-        print(Fore.YELLOW + "Normal Low: " + Fore.CYAN + almanac_normalLowF + "°F ("
-              + almanac_normalLowC + "°C)")
+
+        if almanac_recordLowdata is True:
+            print(Fore.YELLOW + "Record Low: " + Fore.CYAN + almanac_recordLowF + "°F ("
+                  + almanac_recordLowC + "°C)")
+        else:
+            print(Fore.YELLOW + "Record low data is not available.")
+
+        if almanac_recordLowYeardata is True:
+            print(Fore.YELLOW + "With the record being set in: " + Fore.CYAN
+                  + almanac_recordLowYear)
+        else:
+            print(Fore.YELLOW + "Record low year data is not available.")
+
+        if almanac_normalLowdata is True:
+            print(Fore.YELLOW + "Normal Low: " + Fore.CYAN + almanac_normalLowF + "°F ("
+                  + almanac_normalLowC + "°C)")
+        else:
+            print(Fore.YELLOW + "Normal low year data is not available.")
         print("")
 #<--- Almanac is above | Sundata is below --->
     elif moreoptions == "10":
