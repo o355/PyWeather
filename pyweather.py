@@ -4404,6 +4404,12 @@ while True:
             logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s" %
                          (yesterday_precipMM, yesterday_precipIN))
 
+            if yesterday_precipMM == "T":
+                yesterday_precipdata = False
+            else:
+                yesterday_precipdata = True
+            logger.debug("yesterday_precipdata: %s" % yesterday_precipdata)
+
         print(Fore.YELLOW + "Here's the summary for the day.")
         print(Fore.YELLOW + "Minimum Temperature: " + Fore.CYAN + yesterday_minTempF
               + "°F (" + yesterday_minTempC + "°C)")
@@ -4441,8 +4447,11 @@ while True:
               + " inHg (" + yesterday_avgPressureMB + " mb)")
         print(Fore.YELLOW + "Maximum Pressure: " + Fore.CYAN + yesterday_maxPressureInHg
               + " inHg (" + yesterday_maxPressureMB + " mb)")
-        print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + yesterday_precipIN
-              + " in (" + yesterday_precipMM + "mb)")
+        if yesterday_precipdata is True:
+            print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + yesterday_precipIN
+                  + " in (" + yesterday_precipMM + " mm)")
+        else:
+            print(Fore.YELLOW + "Total precipitation data is not available.")
         print("")
         print(Fore.RED + "To view hourly data for yesterday's weather, please press enter.")
         print(Fore.RED + "If you want to return to the main menu, press Control + C.")

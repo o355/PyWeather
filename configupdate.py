@@ -24,7 +24,7 @@ except:
     versionselect = input("Input here: ").lower()
     if versionselect == "0":
         print("You'll need to completely reinstall PyWeather due to the way the new config system works.",
-              "Press enter to exit.", sep="\n")
+              "Instructions are available on PyWeather's GitHub wiki.", sep="\n")
         input()
         sys.exit()
     elif versionselect == "1":
@@ -67,8 +67,13 @@ def geopycheck():
         import geopy
         from geopy import GoogleV3
         geocoder = GoogleV3(scheme='https')
+        # Warm-up geocode
         try:
-            location = geocoder.geocode("123 5th Avenue, New York, NY")
+            geocoder.geocode("123 5th Avenue, New York, NY")
+        except:
+            isthisisheresopythondoesntyellatme = True
+        try:
+            geocoder.geocode("123 5th Avenue, New York, NY")
             print("The geocoder can operate with HTTPS enabled on your OS. Saving these changes...")
             config['GEOCODER']['scheme'] = 'https'
             print("Changes saved.")
@@ -76,7 +81,7 @@ def geopycheck():
             print("Geopy probably can't run without HTTPS (or your internet went down). Trying HTTP as the scheme...")
             geocoder = GoogleV3(scheme='http')
             try:
-                location = geocoder.geocode("123 5th Avenue, New York, NY")
+                geocoder.geocode("123 5th Avenue, New York, NY")
                 print("The geocoder can operate, but without HTTPS enabled on your OS. Saving these changes...")
                 config['GEOCODER']['scheme'] = 'http'
                 print("Changes saved.")
@@ -86,7 +91,10 @@ def geopycheck():
                 config['GEOCODER']['scheme'] = 'http'
                 print("Changes saved.")
 if "0.6.2 beta" in versioninfo2:
-    print("PyWeather is up-to-date. As such, we don't need to make any configuration changes.")
+    print("PyWeather is up-to-date, so we don't need to make any configuration changes.",
+          "If you want to reprovision your config file, try running the configsetup.py script.",
+          "Press enter to exit.", sep="\n")
+    input()
     sys.exit()
 elif "0.6.1 beta" in versioninfo2:
     try:
