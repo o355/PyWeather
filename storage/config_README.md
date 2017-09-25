@@ -3,6 +3,8 @@ Since configparser hates comments, this will do for now.
 
 Quick notice: This little readme will get an overhaul soon, but that overhaul requires me to look through old versions of PyWeather, to see what configuration options appeared when. That takes time.
 
+Things are actually pretty self-explanatory in the config file, mostly.
+
 ## CHANGELOG
 ### forversion
 **Available in PyWeather ? beta - 0.5.2.1 beta**
