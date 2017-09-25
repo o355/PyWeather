@@ -1,4 +1,4 @@
-# PyWeather Config Setup - 0.6.1 beta
+# PyWeather Config Setup - 0.6.2 beta
 # (c) 2017, o355. GNU GPL.
 
 import sys
@@ -15,7 +15,7 @@ try:
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.1 beta")
+        out.write("0.6.2 beta")
         out.close()
     input()
     sys.exit()
@@ -23,14 +23,14 @@ except:
 # If the config isn't set up, and by default, verbosity is off
 # why should I code it in?
 
-print("Would you like me to set up PyWeather's config?",
+print("Would you like me to set up (or reset) PyWeather's config?",
       "Yes or No.", sep="\n")
 cd_confirmation = input("Input here: ").lower()
 if cd_confirmation == "yes":
     try:
         provisioned = config['USER']['configprovisioned']
         print("Your config file is already provisioned! Would you still",
-              "like to have your config provisioned?", 
+              "like to have your config reprovisioned?",
               "Yes or No.", sep="\n")
         keepprovisioning = input("Input here: ").lower()
         if keepprovisioning == "yes":

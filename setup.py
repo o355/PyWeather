@@ -1,4 +1,4 @@
-# PyWeather Setup - version 0.6.1 beta
+# PyWeather Setup - version 0.6.2 beta
 # (c) 2017, o355, licensed under GNU GPL v3
 
 import sys
@@ -13,6 +13,10 @@ elif (sys.version_info > (3, 0, 0)
           "While PyWeather will work, you may experience a few quirks.",
           "Try updating to Python 3.6, as it works more reliably.",
           "Please take note of this in PyWeather.","", sep="\n")
+elif sys.version_info >= (3, 7, 0):
+    print("You have a Python version of 3.7 and greater.",
+          "Please note that PyWeather 0.6.2 beta is NOT certified to work with",
+          "Python 3.7. Python 3.6 and below should work just fine.", sep="\n")
 
 import configparser
 import traceback
@@ -21,16 +25,16 @@ import logging
 import os
 import urllib
 
-# Try loading the versioninfo.txt file. If it isn't around, create the file with
-# the present version info.
+# Now force the writing of the versioninfo file during setup, this should prevent issues
+# in the event I forget to gitignore the file.
 
 try:
-    versioninfo = open('updater//versioninfo.txt')
-except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.1 beta")
+        out.write("0.6.2 beta")
         out.close()
+except:
+    print("Couldn't write the versioninfo file. This may cause issues with PyWeather down the road.")
 
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
@@ -222,7 +226,7 @@ def printException_loggerwarn():
         traceback.print_exc()
 
 
-logger = logging.getLogger(name='pyweather_setup_0.6.1beta')
+logger = logging.getLogger(name='pyweather_setup_0.6.2beta')
 logger.setLevel(logging.DEBUG)
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
@@ -240,9 +244,9 @@ logger.debug("verbosity: %s ; jsonVerbosity: %s" %
 logger.debug("tracebacksEnabled: %s" %
              tracebacksEnabled)
 
-print("Welcome to PyWeather setup.",
-      "This is meant to run as a one-time program, when you first get PyWeather.","",
-      "Running a few checks...", sep="\n")
+print("Hi! Welcome to PyWeather 0.6.2 beta! Glad that you're here.",
+      "I'm here to help set up PyWeather, and let you configure it to your liking.",
+      "Let's begin!", sep="\n")
 
 
 import shutil
@@ -251,15 +255,15 @@ import json
 import codecs
 
 
-buildnumber = 61
-buildversion = "0.6.1 beta"
+buildnumber = 62
+buildversion = "0.6.2 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
 
 print("","Before we get started, I want to confirm some permissions from you.",
       "Is it okay if I use 1-5 MB of data (downloading libraries), save a small",
-      "text file called apikey.txt (> 2 KB), and automatically install Python",
+      "text file called apikey.txt (under 2 KB), and automatically install Python",
       "libraries?",
       "Please input yes or no below:", sep="\n")
 confirmPermissions = input("Input here: ").lower()

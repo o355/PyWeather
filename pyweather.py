@@ -1,4 +1,4 @@
-# PyWeather - version 0.6.2 beta
+# PyWeather - version 0.6.3 beta
 # (c) 2017 o355, GNU GPL 3.0.
 
 # This line of code was typed in during the solar eclipse, in Eclipse.
@@ -130,6 +130,8 @@ try:
     showTideOnSummary = config.getboolean('SUMMARY', 'showtideonsummary')
     geopyScheme = config.get('GEOCODER', 'scheme')
     prefetchHurricane_atboot = config.getboolean('PREFETCH', 'hurricanedata_atboot')
+    geoip_enabled = config.getboolean('UI', 'geoipservice_enabled')
+    pws_enabled = config.getboolean('UI', 'allow_pwsqueries')
     
 except:
     # If it fails (typo or code error), we set all options to default.
@@ -190,10 +192,12 @@ except:
     showTideOnSummary = False
     geopyScheme = 'https'
     prefetchHurricane_atboot = False
+    geoip_enabled = False
+    pws_enabled = False
 
 # Import logging, and set up the logger.
 import logging
-logger = logging.getLogger(name='pyweather_0.6.2beta')
+logger = logging.getLogger(name='pyweather_0.6.3beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
@@ -248,6 +252,7 @@ logger.debug("showTideOnSummary: %s ; geopyScheme: %s" %
              (showTideOnSummary, geopyScheme))
 logger.debug("prefetchHurricane_atboot: %s ; cache_hurricanetime: %s" %
              (prefetchHurricane_atboot, cache_hurricanetime))
+logger.debug("geoip_enabled: %s" % geoip_enabled)
 
 logger.info("Setting gif x and y resolution for radar...")
 # Set the size of the radar window.
@@ -319,10 +324,6 @@ def radar_clearImages():
         printException_loggerwarn()
 
 
-        
-logger.info("Defining requests classes...")
-
-urlheader = {'user-agent': 'pyweather-0.6.1beta/apifetcher'}
 
 logger.info("Declaring geocoder type...")
 if geopyScheme == "https":
@@ -423,50 +424,43 @@ if checkforUpdates == True:
     try:
         versioncheck = requests.get("https://raw.githubusercontent.com/o355/"
                                 + "pyweather/master/updater/versioncheck.json")
+        versionJSON = json.loads(versioncheck.text)
+        version_buildNumber = float(versionJSON['updater']['latestbuild'])
+        logger.debug("reader2: %s ; versioncheck: %s" %
+                     (reader2, versioncheck))
+        if jsonVerbosity == True:
+            logger.debug("versionJSON: %s" % versionJSON)
+        logger.debug("version_buildNumber: %s" % version_buildNumber)
+        version_latestVersion = versionJSON['updater']['latestversion']
+        version_latestURL = versionJSON['updater']['latesturl']
+        version_latestFileName = versionJSON['updater']['latestfilename']
+        version_latestReleaseDate = versionJSON['updater']['releasedate']
+        logger.debug("version_latestVersion: %s ; version_latestURL: %s"
+                     % (version_latestVersion, version_latestURL))
+        logger.debug("version_latestFileName: %s ; version_latestReleaseDate: %s"
+                     % (version_latestFileName, version_latestReleaseDate))
+        if buildnumber < version_buildNumber:
+            # Print if we're out of date.
+            logger.info("PyWeather is not up to date.")
+            print("PyWeather is not up to date. You have version " + buildversion +
+                  ", and the latest version is " + version_latestVersion + ".")
+            print("")
     except:
-        print("When attempting to check for updates, PyWeather couldn't",
-              "fetch the .json for parsing. If you're on a network with a",
-              "filter, try asking your IT admin to unblock:",
-              "'https://raw.githubusercontent.com'. Otherwise, make",
-              "sure you have a valid internet connection.", sep="\n")
-        printException()
-        print("Press enter to continue.")
-        input()
-        sys.exit()
+        print("Couldn't check for updates. Make sure raw.githubusercontent.com is unblocked on your network,",
+              "and that you have a working internet connection.", sep="\n")
 
-    versionJSON = json.loads(versioncheck.text)
-    version_buildNumber = float(versionJSON['updater']['latestbuild'])
-    logger.debug("reader2: %s ; versioncheck: %s" %
-                 (reader2, versioncheck))
-    if jsonVerbosity == True:
-        logger.debug("versionJSON: %s" % versionJSON)
-    logger.debug("version_buildNumber: %s" % version_buildNumber)
-    version_latestVersion = versionJSON['updater']['latestversion']
-    version_latestURL = versionJSON['updater']['latesturl']
-    version_latestFileName = versionJSON['updater']['latestfilename']
-    version_latestReleaseDate = versionJSON['updater']['releasedate']
-    logger.debug("version_latestVersion: %s ; version_latestURL: %s"
-                 % (version_latestVersion, version_latestURL))
-    logger.debug("version_latestFileName: %s ; version_latestReleaseDate: %s"
-                 % (version_latestFileName, version_latestReleaseDate))
-    if buildnumber < version_buildNumber:
-        # Print if we're out of date.
-        logger.info("PyWeather is not up to date.")
-        print("PyWeather is not up to date. You have version " + buildversion +
-              ", and the latest version is " + version_latestVersion + ".")
-        print("")
 
 # Define about variables here.
 logger.info("Defining about variables...")
-about_buildnumber = "62"
-about_version = "0.6.2 beta"
-about_releasedate = "July 31, 2017"
+about_buildnumber = "63"
+about_version = "0.6.3 beta"
+about_releasedate = "September 24, 2017"
 about_maindevelopers = "o355"
 logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))
 logger.debug("about_releasedate: %s ; about_maindevelopers: %s" %
              (about_releasedate, about_maindevelopers))
-about_awesomecontributors = "ModoUnreal, who is very proud to be on TV, and says hi to his mom." # Oh look I'm on TV, HI MOM!!!!
+about_awesomecontributors = "ModoUnreal" # Oh look I'm on TV, HI MOM!!!!
 about_contributors = "gsilvapt, creepersbane"
 about_releasetype = "beta"
 about_librariesinuse = "Colorama, Geopy, Requests"
@@ -474,13 +468,60 @@ logger.debug("about_contributors: %s ; about_releasetype: %s" %
              (about_contributors, about_releasetype))
 logger.debug("about_librariesinuse: %s ; about_awesomecontributors: %s" % 
             (about_librariesinuse, about_awesomecontributors))
+geoip_url = "https://freegeoip.net/json/"
+if geoip_enabled == True:
+    try:
+        geoipJSON = requests.get(geoip_url)
+        logger.debug("GeoIP JSON requsted with: %s" % geoipJSON)
+        geoip_json = json.loads(geoipJSON.text)
+        if jsonVerbosity is True:
+            logger.debug("geoip_json: %s" % geoip_json)
+        else:
+            logger.debug("geoip_json is loaded.")
+        geoip_city = geoip_json['city']
+        geoip_state = geoip_json['region_code']
+        logger.debug("geoip_city: %s ; geoip_state: %s" %
+                     (geoip_city, geoip_state))
+        currentlocation = geoip_city + ", " + geoip_state
+        geoip_available = True
+        logger.debug("currentlocation: %s ; geoip_available: %s" %
+                     (currentlocation, geoip_available))
+    except:
+        print("Couldn't get your current location.")
+        geoip_available = False
+        logger.debug("geoip_available: %s" % geoip_available)
+
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
 print("Hey, welcome to PyWeather!")
 print("Below, enter a location to check the weather for that location!")
+if geoip_available is True:
+    print("")
+    print("You can also enter this to view weather for your current location:")
+    print("currentlocation - " + currentlocation)
+    print("")
+if pws_enabled is True:
+    print("")
+    print("You can also query a Wunderground PWS by entering this:")
+    print("pws:<PWS ID>")
+    print("")
 locinput = input("Input here: ")
 print("Checking the weather, it'll take a few seconds!")
+
+# Set if the query is a PWS at the beginning. It'll flip to True if a PWS query is detected.
+pws_query = False
+logger.debug("pws_query")
+
+if "currentlocation" in locinput and geoip_available is True:
+    locinput = currentlocation
+    # I fully understand that Wunderground has a built-in GeoIP locator. However, going this way maintains
+    # compatibility with existing code.
+elif "pws:" in locinput and pws_enabled is True:
+    pws_query = True
+    logger.debug("pws_query: %s" % pws_query)
+    # Just for safety, query Wunderground's geolocator to get the lat/lon of the PWS.
+    # This also helps to validate the PWS.
 
 
 # Start the geocoder. If we don't have a connection, exit nicely.
@@ -2825,9 +2866,8 @@ while True:
                                             shell=True)
                             print("Now updating your config file.")
                             exec(open("configupdate.py").read())
-                            print("PyWeather has been updated to version %s." % version_latestReleaseTag,
-                                  "To finish the update, PyWeather has to exit.",
-                                  "Press enter to exit.", sep="\n")
+                            print("PyWeather has been successfully updated. To finish updating,",
+                                  "please press enter to exit PyWeather.", sep="\n")
                             input()
                             sys.exit()
                         except:
@@ -2950,65 +2990,104 @@ while True:
                 logger.debug("1 JSON loaded successfully.")
             
             almanac_airportCode = almanac_json['almanac']['airport_code']
+            logger.debug("almanac_airportCode: %s" % almanac_airportCode)
             try:
                 almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
                 almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
-                almanac_normalHighdata = True
+                logger.debug("almanac_normalHighF: %s ; almanac_normalHighC: %s" %
+                             (almanac_normalHighF, almanac_normalHighC))
+                if almanac_normalHighF == "":
+                    almanac_normalHighdata = False
+                else:
+                    almanac_normalHighdata = True
             except:
                 almanac_normalHighdata = False
-            logger.debug("almanac_airportCode: %s ; almanac_normalHighF: %s"
-                         % (almanac_airportCode, almanac_normalHighF))
             logger.debug("almanac_normalHighdata: %s" % almanac_normalHighdata)
             try:
                 almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
                 almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
+                logger.debug("almanac_recordHighF: %s ; almanac_recordHighC: %s" %
+                             (almanac_recordHighF, almanac_recordHighC))
                 almanac_recordHighdata = True
             except:
                 almanac_recordHighdata = False
-            logger.debug("almanac_recordHighF: %s ; almanac_recordHighC: %s" %
-                         (almanac_recordHighF, almanac_recordHighC))
             logger.debug("almanac_recordHighdata: %s" % almanac_recordHighdata)
             try:
                 almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
+                logger.debug("almanac_recordHighYear: %s" % almanac_recordHighYear)
                 almanac_recordHighYeardata = True
             except:
                 almanac_recordHighYeardata = False
-            logger.debug("almanac_recordHighYear: %s ; almanac_recordHighYeardata: %s" %
-                         (almanac_recordHighYear, almanac_recordHighYeardata))
+            logger.debug("almanac_recordHighYeardata: %s" % almanac_recordHighYeardata)
             try:
                 almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
                 almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
-                almanac_normalLowdata = True
+                logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s" %
+                             (almanac_normalLowF, almanac_normalLowC))
+                if almanac_normalLowF == "":
+                    almanac_normalLowdata = False
+                else:
+                    almanac_normalLowdata = True
             except:
                 almanac_normalLowdata = False
-            logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s" %
-                         (almanac_normalLowF, almanac_normalLowC))
             logger.debug("almanac_normalLowData: %s" % almanac_normalLowdata)
             try:
                 almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
                 almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
+                logger.debug("almanac_recordLowF: %s ; almanac_recordLowC: %s" %
+                             (almanac_recordLowF, almanac_recordLowC))
                 almanac_recordLowdata = True
             except:
                 almanac_recordLowdata = False
-
-            almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
+            logger.debug("almanac_recordLowdata: %s" % almanac_recordLowdata)
+            try:
+                almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
+                logger.debug("almanac_recordLowYear: %s" % almanac_recordLowYear)
+                almanac_recordLowYeardata = True
+            except:
+                almanac_recordLowYeardata = False
+            logger.debug("almanac_recordLowYeardata: %s" % almanac_recordLowYeardata)
         
         print(Fore.YELLOW + "Here's the almanac for: " + Fore.CYAN +
               almanac_airportCode + Fore.YELLOW + " (the nearest airport)")
         print("")
-        print(Fore.YELLOW + "Record High: " + Fore.CYAN + almanac_recordHighF + "°F ("
-              + almanac_recordHighC + "°C)")
-        print(Fore.YELLOW + "With the record being set in: " + Fore.CYAN
-              + almanac_recordHighYear)
-        print(Fore.YELLOW + "Normal High: " + Fore.CYAN + almanac_normalHighF
-              + "°F (" + almanac_normalHighC + "°C)")
+        if almanac_recordHighdata is True:
+            print(Fore.YELLOW + "Record High: " + Fore.CYAN + almanac_recordHighF + "°F ("
+                  + almanac_recordHighC + "°C)")
+        else:
+            print(Fore.YELLOW + "Record high data is not available.")
+
+        if almanac_recordHighYeardata is True:
+            print(Fore.YELLOW + "With the record being set in: " + Fore.CYAN
+                  + almanac_recordHighYear)
+        else:
+            print(Fore.YELLOW + "Record high year data is not available.")
+
+        if almanac_normalHighdata is True:
+            print(Fore.YELLOW + "Normal High: " + Fore.CYAN + almanac_normalHighF
+                  + "°F (" + almanac_normalHighC + "°C)")
+        else:
+            print(Fore.YELLOW + "Normal high data is not available.")
+
         print("")
-        print(Fore.YELLOW + "Record Low: " + Fore.CYAN + almanac_recordLowF + "°F ("
-              + almanac_recordLowC + "°C)")
-        print(Fore.YELLOW + "With the record being set in: " + Fore.CYAN
-              + almanac_recordLowYear)
-        print(Fore.YELLOW + "Normal Low: " + Fore.CYAN + almanac_normalLowF + "°F ("
-              + almanac_normalLowC + "°C)")
+
+        if almanac_recordLowdata is True:
+            print(Fore.YELLOW + "Record Low: " + Fore.CYAN + almanac_recordLowF + "°F ("
+                  + almanac_recordLowC + "°C)")
+        else:
+            print(Fore.YELLOW + "Record low data is not available.")
+
+        if almanac_recordLowYeardata is True:
+            print(Fore.YELLOW + "With the record being set in: " + Fore.CYAN
+                  + almanac_recordLowYear)
+        else:
+            print(Fore.YELLOW + "Record low year data is not available.")
+
+        if almanac_normalLowdata is True:
+            print(Fore.YELLOW + "Normal Low: " + Fore.CYAN + almanac_normalLowF + "°F ("
+                  + almanac_normalLowC + "°C)")
+        else:
+            print(Fore.YELLOW + "Normal low year data is not available.")
         print("")
 #<--- Almanac is above | Sundata is below --->
     elif moreoptions == "10":
@@ -4418,6 +4497,12 @@ while True:
             logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s" %
                          (yesterday_precipMM, yesterday_precipIN))
 
+            if yesterday_precipMM == "T":
+                yesterday_precipdata = False
+            else:
+                yesterday_precipdata = True
+            logger.debug("yesterday_precipdata: %s" % yesterday_precipdata)
+
         print(Fore.YELLOW + "Here's the summary for the day.")
         print(Fore.YELLOW + "Minimum Temperature: " + Fore.CYAN + yesterday_minTempF
               + "°F (" + yesterday_minTempC + "°C)")
@@ -4455,8 +4540,11 @@ while True:
               + " inHg (" + yesterday_avgPressureMB + " mb)")
         print(Fore.YELLOW + "Maximum Pressure: " + Fore.CYAN + yesterday_maxPressureInHg
               + " inHg (" + yesterday_maxPressureMB + " mb)")
-        print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + yesterday_precipIN
-              + " in (" + yesterday_precipMM + "mb)")
+        if yesterday_precipdata is True:
+            print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + yesterday_precipIN
+                  + " in (" + yesterday_precipMM + " mm)")
+        else:
+            print(Fore.YELLOW + "Total precipitation data is not available.")
         print("")
         print(Fore.RED + "To view hourly data for yesterday's weather, please press enter.")
         print(Fore.RED + "If you want to return to the main menu, press Control + C.")

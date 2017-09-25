@@ -9,11 +9,29 @@
 import sys
 import configparser
 import traceback
-import os
 
-versioninfo = open("updater//versioninfo.txt")
-versioninfo2 = versioninfo.read()
-versioninfo.close()
+try:
+    versioninfo = open("updater//versioninfo.txt")
+    versioninfo2 = versioninfo.read()
+    versioninfo.close()
+except:
+    print("Your versioncheck file couldn't be found. Below, please enter a number",
+          "which corresponds to the version of PyWeather you're updating from.",
+          "[0] 0.5.2.1 beta and earlier",
+          "[1] 0.6 beta or 0.6.0.1 beta",
+          "[2] 0.6.1 beta or 0.6.1 beta-https", sep="\n")
+    versionselect = input("Input here: ").lower()
+    if versionselect == "0":
+        print("You'll need to completely reinstall PyWeather due to the way the new config system works.",
+              "Instructions are available on PyWeather's GitHub wiki.", sep="\n")
+        input()
+        sys.exit()
+    elif versionselect == "1":
+        print("Updating PyWeather using version identifier: 0.6 beta")
+        versioninfo2 = "0.6 beta"
+    elif versionselect == "2":
+        print("Updating PyWeather using version identifier: 0.6.1 beta")
+        versioninfo2 = "0.6.1 beta"
 
 config = configparser.ConfigParser()
 config.read("storage//config.ini")
@@ -48,8 +66,13 @@ def geopycheck():
         import geopy
         from geopy import GoogleV3
         geocoder = GoogleV3(scheme='https')
+        # Warm-up geocode
         try:
-            location = geocoder.geocode("123 5th Avenue, New York, NY")
+            geocoder.geocode("123 5th Avenue, New York, NY")
+        except:
+            isthisisheresopythondoesntyellatme = True
+        try:
+            geocoder.geocode("123 5th Avenue, New York, NY")
             print("The geocoder can operate with HTTPS enabled on your OS. Saving these changes...")
             config['GEOCODER']['scheme'] = 'https'
             print("Changes saved.")
@@ -57,7 +80,7 @@ def geopycheck():
             print("Geopy probably can't run without HTTPS (or your internet went down). Trying HTTP as the scheme...")
             geocoder = GoogleV3(scheme='http')
             try:
-                location = geocoder.geocode("123 5th Avenue, New York, NY")
+                geocoder.geocode("123 5th Avenue, New York, NY")
                 print("The geocoder can operate, but without HTTPS enabled on your OS. Saving these changes...")
                 config['GEOCODER']['scheme'] = 'http'
                 print("Changes saved.")
@@ -66,9 +89,51 @@ def geopycheck():
                       "Defaulting to HTTP as the geopy scheme...", sep="\n")
                 config['GEOCODER']['scheme'] = 'http'
                 print("Changes saved.")
+if "0.6.2 beta" in versioninfo2:
+    print("PyWeather is up-to-date, so we don't need to make any configuration changes.",
+          "If you want to reprovision your config file, try running the configsetup.py script.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+elif "0.6.1 beta" in versioninfo2:
+    try:
+        config.add_section("GEOCODER")
+    except:
+        print("Failed to add the geocoder section. Does it exist?")
 
+    try:
+        config.add_section("PREFETCH")
+    except:
+        print("Failed to add the prefetch section. Does it exist?")
 
-if "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
+    print("8 new configuration options have been added from 0.6.1 beta to 0.6.2 beta.",
+          "Details:",
+          "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
+          "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
+          "- CACHE/threedayhourly_cachedtime - Sets the cache time on 1.5 day hourly data - Defaults to 60",
+          "- CACHE/tendayhourly_cachedtime - Sets the cache time on the 10 day hourly data - Defaults to 60",
+          "- CACHE/hurricane_cachedtime - Sets the cache time on hurricane data - Defaults to 180",
+          "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https",
+          "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False",
+          "- PREFETCH/hurricanedata_atboot - Sets if PyWeather should fetch hurricane data at boot - Defaults to False", sep="\n")
+
+    print("")
+    print("2 old configuration options, and 2 sections have been deleted. Please delete these options from your config file.",
+          "Details:",
+          "- CACHE/hourly_cachedtime - Used to set the global hourly cache time - Now removed",
+          "- HOURLY/10dayhourly_atboot - Used to set if PyWeather should fetch 10-day hourly at boot - Now removed",
+          "- HOURLY section - No longer in use for any configuration options.",
+          "- CHANGELOG section - No longer in use for any configuration options.", sep="\n")
+
+    config['CACHE']['tide_cachedtime'] = '480'
+    config['SUMMARY']['showtideonsummary'] = 'False'
+    config['CACHE']['threedayhourly_cachedtime'] = '60'
+    config['CACHE']['tendayhourly_cachedtime'] = '60'
+    config['PREFETCH']['10dayfetch_atboot'] = 'False'
+    config['PREFETCH']['hurricanedata_atboot'] = 'False'
+    config['CACHE']['hurricane_cachedtime'] = '180'
+    geopycheck()
+elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     # A usual input() and sys.exit() isn't present here, as it's assumed this
     # is getting executed inside of the updater.
     try:
@@ -79,7 +144,7 @@ if "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     try:
         config.add_section("RADAR GUI")
     except:
-        print("Failed to add the cache section. Does it exist?")
+        print("Failed to add the radar GUI section. Does it exist?")
 
     try:
         config.add_section("GEOCODER")
@@ -91,7 +156,7 @@ if "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     except:
         print("Failed to add the prefetch section. Does it exist?")
         
-    print("New configuration options have been added.",
+    print("16 new configuration options have been added from 0.6 beta to 0.6.2 beta.",
           "Details:",
           "- CACHE/alerts_cachedtime - Sets the cache time on alert data - Defaults to 5",
           "- CACHE/current_cachedtime - Sets the cache time on current data - Defaults to 10",
@@ -129,50 +194,18 @@ if "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['CACHE']['enabled'] = 'True'
     config['CACHE']['tide_cachedtime'] = '480'
-    config['SUMMARY']['showtideonsumary'] = 'False'
+    config['SUMMARY']['showtideonsummary'] = 'False'
     config['PREFETCH']['10dayfetch_atboot'] = 'False'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['CACHE']['hurricane_cachedtime'] = '180'
     geopycheck()
-
-elif "0.6.1 beta" in versioninfo2:
-    try:
-        config.add_section("GEOCODER")
-    except:
-        print("Failed to add the geocoder section. Does it exist?")
-
-    print("New configuration options have been added.",
-          "Details:",
-          "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
-          "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
-          "- CACHE/threedayhourly_cachedtime - Sets the cache time on 1.5 day hourly data - Defaults to 60",
-          "- CACHE/tendayhourly_cachedtime - Sets the cache time on the 10 day hourly data - Defaults to 60",
-          "- CACHE/hurricane_cachedtime - Sets the cache time on hurricane data - Defaults to 180",
-          "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https",
-          "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False",
-          "- PREFETCH/hurricanedata_atboot - Sets if PyWeather should fetch hurricane data at boot - Defaults to False", sep="\n")
-
-    print("")
-    print("2 old configuration options, and 2 sections have been deleted.",
-          "Details:",
-          "- CACHE/hourly_cachedtime - Used to set the global hourly cache time - Now removed",
-          "- HOURLY/10dayhourly_atboot - Used to set if PyWeather should fetch 10-day hourly at boot - Now removed",
-          "- HOURLY section - No longer in use for any configuration options.",
-          "- CHANGELOG section - No longer in use for any configuration options.", sep="\n")
-
-    config['CACHE']['tide_cachedtime'] = '480'
-    config['SUMMARY']['showtideonsumary'] = 'False'
-    config['CACHE']['threedayhourly_cachedtime'] = '60'
-    config['CACHE']['tendayhourly_cachedtime'] = '60'
-    config['PREFETCH']['10dayfetch_atboot'] = 'False'
-    config['PREFETCH']['hurricanedata_atboot'] = 'False'
-    config['CACHE']['hurricane_cachedtime'] = '180'
-    geopycheck()
-
-elif "0.6.2 beta" in versioninfo2:
-    print("PyWeather is up-to-date. As such, we don't need to make any configuration changes.")
+else:
+    print("Hmm. Your version identifier didn't match any known versions.",
+          "Try deleting your versioninfo.txt file in the updater folder, and then",
+          "rerun this file, and manually input which version of PyWeather you're updating from."
+          "Press enter to exit.", sep="\n")
+    input()
     sys.exit()
-
 try:
     with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)
@@ -183,6 +216,7 @@ except:
     print("Please report this bug to GitHub (github.com/o355/pyweather), along with",
           "the full error. Along with that, please manually add the configuration entries",
           "as listed above, with their default values in your configuration file.",
+          "Alternatively, delete your config file, and run configsetup.py",
           "Press enter to exit.")
     input()
     try:
@@ -202,5 +236,10 @@ try:
 except:
     print("Could not write out an updated versioninfo text file. Please",
           "modify 'updater/versioninfo.txt' to display '0.6.2 beta'.", sep="\n")
+
+print("Ta-da! PyWeather is all up-to-date. Enjoy the new features and bug fixes!"
+      "Press enter to exit.", sep="\n")
+input()
+sys.exit()
     
     

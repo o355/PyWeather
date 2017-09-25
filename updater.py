@@ -1,4 +1,4 @@
-# PyWeather Updater - version 0.6.1 beta
+# PyWeather Updater - version 0.6.2 beta
 # (c) 2017, o355, GNU GPL 3.0
 
 
@@ -42,7 +42,7 @@ try:
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.1 beta")
+        out.write("0.6.2 beta")
         out.close()
         
 # See if the config is "provisioned". If it isn't, a KeyError will occur,
@@ -119,8 +119,8 @@ logger.debug("showReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: %s" %
 logger.debug("showReleaseNotes: %s" %
              (showReleaseNotes))
 
-buildnumber = 61
-buildversion = "0.6.1 beta"
+buildnumber = 62
+buildversion = "0.6.2 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
@@ -212,9 +212,8 @@ elif buildnumber < version_buildNumber:
                                     shell=True)
                     print("Now updating your config file.")
                     exec(open("configupdate.py").read())
-                    print("PyWeather has been updated to version %s." % version_latestReleaseTag,
-                          "To finish the update, PyWeather has to exit.",
-                          "Press enter to exit.", sep="\n")
+                    print("PyWeather has been successfully updated. To finish updating,",
+                          "please press enter to exit PyWeather.", sep="\n")
                     input()
                     sys.exit()
                 except:
