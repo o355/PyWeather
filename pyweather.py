@@ -1,4 +1,4 @@
-# PyWeather - version 0.6.2 beta
+# PyWeather - version 0.6.3 beta
 # (c) 2017 o355, GNU GPL 3.0.
 
 # This line of code was typed in during the solar eclipse, in Eclipse.
@@ -130,6 +130,8 @@ try:
     showTideOnSummary = config.getboolean('SUMMARY', 'showtideonsummary')
     geopyScheme = config.get('GEOCODER', 'scheme')
     prefetchHurricane_atboot = config.getboolean('PREFETCH', 'hurricanedata_atboot')
+    geoip_enabled = config.getboolean('UI', 'geoipservice_enabled')
+    pws_enabled = config.getboolean('UI', 'allow_pwsqueries')
     
 except:
     # If it fails (typo or code error), we set all options to default.
@@ -176,10 +178,12 @@ except:
     showTideOnSummary = False
     geopyScheme = 'https'
     prefetchHurricane_atboot = False
+    geoip_enabled = False
+    pws_enabled = False
 
 # Import logging, and set up the logger.
 import logging
-logger = logging.getLogger(name='pyweather_0.6.2beta')
+logger = logging.getLogger(name='pyweather_0.6.3beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
@@ -234,6 +238,7 @@ logger.debug("showTideOnSummary: %s ; geopyScheme: %s" %
              (showTideOnSummary, geopyScheme))
 logger.debug("prefetchHurricane_atboot: %s ; cache_hurricanetime: %s" %
              (prefetchHurricane_atboot, cache_hurricanetime))
+logger.debug("geoip_enabled: %s" % geoip_enabled)
 
 logger.info("Setting gif x and y resolution for radar...")
 # Set the size of the radar window.
@@ -433,8 +438,8 @@ if checkforUpdates == True:
 
 # Define about variables here.
 logger.info("Defining about variables...")
-about_buildnumber = "62"
-about_version = "0.6.2 beta"
+about_buildnumber = "63"
+about_version = "0.6.3 beta"
 about_releasedate = "September 24, 2017"
 about_maindevelopers = "o355"
 logger.debug("about_buildnumber: %s ; about_version: %s" %
@@ -449,13 +454,60 @@ logger.debug("about_contributors: %s ; about_releasetype: %s" %
              (about_contributors, about_releasetype))
 logger.debug("about_librariesinuse: %s ; about_awesomecontributors: %s" % 
             (about_librariesinuse, about_awesomecontributors))
+geoip_url = "https://freegeoip.net/json/"
+if geoip_enabled == True:
+    try:
+        geoipJSON = requests.get(geoip_url)
+        logger.debug("GeoIP JSON requsted with: %s" % geoipJSON)
+        geoip_json = json.loads(geoipJSON.text)
+        if jsonVerbosity is True:
+            logger.debug("geoip_json: %s" % geoip_json)
+        else:
+            logger.debug("geoip_json is loaded.")
+        geoip_city = geoip_json['city']
+        geoip_state = geoip_json['region_code']
+        logger.debug("geoip_city: %s ; geoip_state: %s" %
+                     (geoip_city, geoip_state))
+        currentlocation = geoip_city + ", " + geoip_state
+        geoip_available = True
+        logger.debug("currentlocation: %s ; geoip_available: %s" %
+                     (currentlocation, geoip_available))
+    except:
+        print("Couldn't get your current location.")
+        geoip_available = False
+        logger.debug("geoip_available: %s" % geoip_available)
+
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
 print("Hey, welcome to PyWeather!")
 print("Below, enter a location to check the weather for that location!")
+if geoip_available is True:
+    print("")
+    print("You can also enter this to view weather for your current location:")
+    print("currentlocation - " + currentlocation)
+    print("")
+if pws_enabled is True:
+    print("")
+    print("You can also query a Wunderground PWS by entering this:")
+    print("pws:<PWS ID>")
+    print("")
 locinput = input("Input here: ")
 print("Checking the weather, it'll take a few seconds!")
+
+# Set if the query is a PWS at the beginning. It'll flip to True if a PWS query is detected.
+pws_query = False
+logger.debug("pws_query")
+
+if "currentlocation" in locinput and geoip_available is True:
+    locinput = currentlocation
+    # I fully understand that Wunderground has a built-in GeoIP locator. However, going this way maintains
+    # compatibility with existing code.
+elif "pws:" in locinput and pws_enabled is True:
+    pws_query = True
+    logger.debug("pws_query: %s" % pws_query)
+    # Just for safety, query Wunderground's geolocator to get the lat/lon of the PWS.
+    # This also helps to validate the PWS.
 
 
 # Start the geocoder. If we don't have a connection, exit nicely.
