@@ -10,16 +10,15 @@
 * Adds the ability to view data through a PWS at boot.
 * MAYBE (if not in 0.6.4) adds the ability to have up to 5 favorite locations.
 
-## version 0.6.2 beta - Should be released on 9/18/2017 (Final QA in progress)
+## version 0.6.2 beta - Should be released on 9/24/2017
 **NEW FEATURES/REMOVALS**
-* Adds the ability to view yesterday's weather - Done! Thanks to @ModoUnreal for coding this in!
-* Adds the ability to view hurricane data in PyWeather - Done!
-* Adds the ability to view tide data in PyWeather - Done!
-* Adds the manual configuration of 3-day and 10-day hourly cache times - Done! Thanks to @ModoUnreal for coding this in!
-* Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS. - Done!
-* Adds the ability to input decimal numbers into cache times during setup - Done!
+* Adds the ability to view yesterday's weather. - Thanks to @ModoUnreal for coding this in!
+* Adds the ability to view hurricane data in PyWeather.
+* Adds the ability to view tide data in PyWeather.
+* Adds the manual configuration of 3-day and 10-day hourly cache times. - Thanks to @ModoUnreal for coding this in!
+* Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS.
+* Adds the ability to input decimal numbers into cache times during setup.
 * Adds the ability to manually define a version you're upgrading to in the configupdate script in the event your versioncheck file is gone.
-* Final QA - 25% done - Should be finished by 9/18
 
 **BUG FIXES**
 * Fixed a critical bug where if geopy wasn't installed before setup, Pyweather Setup would install geocoder INSTEAD of geopy, and throw an error.
@@ -34,9 +33,9 @@
 * Fixed a bug where PyWeather wouldn't properly catch no moonrise data, resulting in a crash.
 * Fixed a bug where if alerts data wasn't getting prefetched at boot, when detailed alerts data was called up PyWeather would crash.
 * Fixed a bug where if you had 10-day hourly prefetch enabled at boot, when you viewed detailed 10-day hourly information PyWeather would crash.
-* Fixing a potential bug where the configupdate script might not at all work when you manually edit the version info file. It now searches the file instead of an exact match. - 80% done, need to QA this.
+* Fixed a potential bug where the configupdate script might not at all work when you manually edit the version info file. It now searches the file instead of an exact match.
 * Fixed a bug where yesterday precipitation data could say "T" on the summary screen. A data check has been added.
-* Fixing a bug where if some almanac data wasn't available, PyWeather would crash - 50% done. Thanks to @ModoUnreal for reporting the error!
+* Fixing a bug where if some almanac data wasn't available, PyWeather would crash - 80% done. Thanks to @ModoUnreal for reporting the error!
 * Fixing a "bug" where if you had no connection to the updater at boot with it enabled, PyWeather would exit instead of continue - 0% done. Thanks to @creepersbane for reporting the error!
 * Fixed a potential bug where proper code to catch invalid sunrise/sunset data was not implemented.
 

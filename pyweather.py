@@ -2942,7 +2942,10 @@ while True:
                 almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
                 logger.debug("almanac_normalHighF: %s ; almanac_normalHighC: %s" %
                              (almanac_normalHighF, almanac_normalHighC))
-                almanac_normalHighdata = True
+                if almanac_normalHighF == "":
+                    almanac_normalHighdata = False
+                else:
+                    almanac_normalHighdata = True
             except:
                 almanac_normalHighdata = False
             logger.debug("almanac_normalHighdata: %s" % almanac_normalHighdata)
@@ -2967,7 +2970,10 @@ while True:
                 almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
                 logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s" %
                              (almanac_normalLowF, almanac_normalLowC))
-                almanac_normalLowdata = True
+                if almanac_normalLowF == "":
+                    almanac_normalLowdata = False
+                else:
+                    almanac_normalLowdata = True
             except:
                 almanac_normalLowdata = False
             logger.debug("almanac_normalLowData: %s" % almanac_normalLowdata)
