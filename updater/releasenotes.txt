@@ -1,5 +1,5 @@
 **WHEN UPDATING FROM 0.6.1 BETA TO 0.6.2 BETA, YOU WILL NEED TO ENTER "2" IN THE INPUT PROMPT (also when you run configupdate separately)**
-**YOU SHOULD BE ABLE TO UPDATE FROM 0.6 BETA TO 0.6.2 BETA.**
+**THE UPDATER WILL BREAK AFTER YOUR CONFIG IS UPDATED. ENTER "NO", THEN EXIT OUT OF PYWEATHER.**
 
 **NEW FEATURES/REMOVALS**
 * Adds the ability to view yesterday's weather. - Thanks to @ModoUnreal for coding this in!

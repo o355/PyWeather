@@ -2800,9 +2800,8 @@ while True:
                                             shell=True)
                             print("Now updating your config file.")
                             exec(open("configupdate.py").read())
-                            print("PyWeather has been updated to version %s." % version_latestReleaseTag,
-                                  "To finish the update, PyWeather has to exit.",
-                                  "Press enter to exit.", sep="\n")
+                            print("PyWeather has been successfully updated. To finish updating,",
+                                  "please press enter to exit PyWeather.", sep="\n")
                             input()
                             sys.exit()
                         except:
