@@ -7,38 +7,40 @@ If you haven't noticed, PyWeather is in beta. This means that basic features sho
 
 If you do encounter bugs, make sure you report them on GitHub!
 
+## Requirements
+To run PyWeather, you'll need:
+* A computer (Windows that supports Python 3.6, OS X, most Linux distros)
+* An internet connection (you have one if you're on here!)
+* Python 3.6 and below & PIP for Python 3
+* ~3 MB of disk space
+
 ## Download/Setup
-The instructions for downloading PyWeather are somewhat awkward just for 0.6.1 beta. Basically, the geocoder that I use had an issue on Mac OS X, in which it could only run with the scheme set to http. This issue has been fixed in 0.6.2 beta, and I coded in automatic detection for what scheme your OS can run.
+To download PyWeather, click the "Releases" button at the top of the page. Download the latest release, and unzip it.
 
-For PyWeather 0.6.1 beta, the default release has the geocoder set to run in http mode. There is another release, that changes the geocoder to run in https mode. For 95% of users, using the https release should work, but might not work for some users. If you run into geocoder issues in the setup process (given a working internet connection), you'll have to use the http release.
-
-**Please note: In the http release, I didn't change the setup's geocoder to run in http mode. Getting a geocoder error during setup (given a working internet connection) 99% of the time just means that the geocoder couldn't run with https enabled.**
-
-You can download the standard HTTP and HTTPS releases of PyWeather in the releases tab.
-
-If you want to use Git to download the HTTP release of PyWeather (the https tag does NOT contain the code to run in https mode), use the commands below:
+If you'd rather, you can also download PyWeather with Git, using the following commands below.
 
 ```
-git clone https://github.com/o355/pyweather.git --depth=1
+git clone https://github.com/o355/pyweather.git ./pyweather
 cd pyweather
-git checkout 0.6.1-beta
+git checkout 0.6.2-beta
 ```
-
-Both the http and https version of PyWeather will be able to update to 0.6.2 beta when the time comes, and I've configured the config updater to automatically detect what mode the geocoder can operate on your OS.
-
-If you want the latest and greatest bleeding edge code on a nightly basis, use this code:
-
-```
-git clone https://github.com/o355/pyweather.git --depth=1`
-cd pyweather
-```
-
-Make sure you run `git pull` on a nightly basis :)
-
-**Please note: Only use the indev code if you really want the latest features. However, indev code is indev code, and I'll sometimes push broken code that will basically break PyWeather, or push out incomplete features.**
-
 
 After that, run `setup.py`, and the setup file will guide you through setting up PyWeather. After that, run `pyweather.py`, and enjoy the magic of PyWeather! It's as easy as that.
+
+### Want the latest and greatest PyWeather nightly code?
+You probably don't! Indev code is unstable, and could break from night to night. Indev code probably isn't for you, except if you really, really want the latest PyWeather features. Just note, updating your config is a pain whenever I add new config options, and I will sometimes leave broken code lying around.
+
+If you want to, use the download button at the top of the page, and download into a .zip, and unzip the file. However, if you want indev code, it's strongly recommended you use Git.
+
+Git users:
+```
+git clone https://github.com/o355/pyweather.git ./pyweather
+cd pyweather
+```
+
+Afterwards, run the setup script, and things might work.
+
+Make sure you run `git pull` on a nightly basis :)
 
 ## Disclaimer
 PyWeather **should not** be used during severe weather conditions, and should not be used to tell the public about weather conditions during a severe weather event.
@@ -47,18 +49,16 @@ Please listen to local authorities, and your country's weather service (NWS in t
 
 I cannot be held liable for injury or death caused in part or directly from using PyWeather. **There is no warranty associated with PyWeather. Use PyWeather at your own risk.**
 
-TL;DR You can't sue me if you die from using PyWeather. It's in the license!
-
 ## What's PyWeather?
 PyWeather is a Python script that fetches the weather using Wunderground's API. I made PyWeather as a solution to a few things:
 * The lack of script-based weather software that was coded in Python, and that relied on a decent enough API
 * The long loading times (and loads of tracking/adverts) when visiting normal weather websites
 * Having the ability to check my weather in a terminal.
 
-As such, PyWeather was born. After 30,000 lines of code removed and added by 3 people, all this hard work turned into this.
+As such, PyWeather was born. After 40,000 lines of code getting removed and added by 3 people, getting called a hacker a few times, and having a few teachers yell at me, this is what happened.
 
 ## Images and Demo
-Just kidding, they're not here. I'll get around to capturing screencaps of 0.6.1 beta and running an asciinema demo soon.
+Just kidding, they're not here. I'll get around to capturing screencaps of 0.6.2 beta and running an asciinema demo soon.
 
 ## What features does PyWeather have?
 PyWeather has lots of them, and the list is ever expanding. Here's the present feature list:
@@ -66,7 +66,7 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 * On the subject of API keys, PyWeather uses Wunderground's API, meaning you'll get accurate weather information. I find Wunderground to be the perfect API for this project, as it has accurate weather information, and has a free developer tier.
 * PyWeather can be configured easily, and has lots of options to configure. You can fine tune nearly 25 variables of how PyWeather works, across different scripts. The config file being used is a .ini file, and a descriptive configuration readme is also provided.
 * PyWeather is simple to use. I've tried to make PyWeather appeal to both people who don't know what Python is, to people who know how to use software. Either way, you can use PyWeather easily.
-* Lots of data types. As of PyWeather 0.6 beta, these data types can be viewed:
+* Lots of data types. All these data types as a matter of a fact!
 	* Current information
 	* Alerts information (US/EU only due to Wunderground's API limits)
 	* 36-hour and 10-day hourly forecasts
@@ -75,11 +75,9 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 	* Astronomy (sunrise/sunset/moonrise/moonset + moon) information
 	* Historical weather information, including hourly weather for a historical date
 	* Radar information (experimental, for now)
-	
-* In addition, you'll soon be able to view these data types soon:
-	* Yesterday's weather - Coming in 0.6.2 beta (the code is done if you'd like to try!)
-	* Tide data - Coming in 0.6.2 beta (the code is done if you'd like to try!)
-	* Hurricane data - Coming in 0.6.2 beta
+	* Yesterday's weather
+	* Tide data
+	* Hurricane data
 	
 * PyWeather is pretty modular. As I said earlier with the super-configurable config file, this also translates into modularity. PyWeather's features can be turned on and off at will.
 * PyWeather has a built-in updater, provided you have git installed. I hope to eventually incorporate a universal "download the zip and unzip it" system down the road.
