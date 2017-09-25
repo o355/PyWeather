@@ -409,38 +409,31 @@ if checkforUpdates == True:
     try:
         versioncheck = requests.get("https://raw.githubusercontent.com/o355/"
                                 + "pyweather/master/updater/versioncheck.json")
+        versionJSON = json.loads(versioncheck.text)
+        version_buildNumber = float(versionJSON['updater']['latestbuild'])
+        logger.debug("reader2: %s ; versioncheck: %s" %
+                     (reader2, versioncheck))
+        if jsonVerbosity == True:
+            logger.debug("versionJSON: %s" % versionJSON)
+        logger.debug("version_buildNumber: %s" % version_buildNumber)
+        version_latestVersion = versionJSON['updater']['latestversion']
+        version_latestURL = versionJSON['updater']['latesturl']
+        version_latestFileName = versionJSON['updater']['latestfilename']
+        version_latestReleaseDate = versionJSON['updater']['releasedate']
+        logger.debug("version_latestVersion: %s ; version_latestURL: %s"
+                     % (version_latestVersion, version_latestURL))
+        logger.debug("version_latestFileName: %s ; version_latestReleaseDate: %s"
+                     % (version_latestFileName, version_latestReleaseDate))
+        if buildnumber < version_buildNumber:
+            # Print if we're out of date.
+            logger.info("PyWeather is not up to date.")
+            print("PyWeather is not up to date. You have version " + buildversion +
+                  ", and the latest version is " + version_latestVersion + ".")
+            print("")
     except:
-        print("When attempting to check for updates, PyWeather couldn't",
-              "fetch the .json for parsing. If you're on a network with a",
-              "filter, try asking your IT admin to unblock:",
-              "'https://raw.githubusercontent.com'. Otherwise, make",
-              "sure you have a valid internet connection.", sep="\n")
-        printException()
-        print("Press enter to continue.")
-        input()
-        sys.exit()
+        print("Couldn't check for updates. Make sure raw.githubusercontent.com is unblocked on your network,",
+              "and that you have a working internet connection.", sep="\n")
 
-    versionJSON = json.loads(versioncheck.text)
-    version_buildNumber = float(versionJSON['updater']['latestbuild'])
-    logger.debug("reader2: %s ; versioncheck: %s" %
-                 (reader2, versioncheck))
-    if jsonVerbosity == True:
-        logger.debug("versionJSON: %s" % versionJSON)
-    logger.debug("version_buildNumber: %s" % version_buildNumber)
-    version_latestVersion = versionJSON['updater']['latestversion']
-    version_latestURL = versionJSON['updater']['latesturl']
-    version_latestFileName = versionJSON['updater']['latestfilename']
-    version_latestReleaseDate = versionJSON['updater']['releasedate']
-    logger.debug("version_latestVersion: %s ; version_latestURL: %s"
-                 % (version_latestVersion, version_latestURL))
-    logger.debug("version_latestFileName: %s ; version_latestReleaseDate: %s"
-                 % (version_latestFileName, version_latestReleaseDate))
-    if buildnumber < version_buildNumber:
-        # Print if we're out of date.
-        logger.info("PyWeather is not up to date.")
-        print("PyWeather is not up to date. You have version " + buildversion +
-              ", and the latest version is " + version_latestVersion + ".")
-        print("")
 
 # Define about variables here.
 logger.info("Defining about variables...")
