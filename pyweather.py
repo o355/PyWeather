@@ -2936,54 +2936,57 @@ while True:
                 logger.debug("1 JSON loaded successfully.")
             
             almanac_airportCode = almanac_json['almanac']['airport_code']
+            logger.debug("almanac_airportCode: %s" % almanac_airportCode)
             try:
                 almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
                 almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
+                logger.debug("almanac_normalHighF: %s ; almanac_normalHighC: %s" %
+                             (almanac_normalHighF, almanac_normalHighC))
                 almanac_normalHighdata = True
             except:
                 almanac_normalHighdata = False
-            logger.debug("almanac_airportCode: %s ; almanac_normalHighF: %s"
-                         % (almanac_airportCode, almanac_normalHighF))
             logger.debug("almanac_normalHighdata: %s" % almanac_normalHighdata)
             try:
                 almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
                 almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
+                logger.debug("almanac_recordHighF: %s ; almanac_recordHighC: %s" %
+                             (almanac_recordHighF, almanac_recordHighC))
                 almanac_recordHighdata = True
             except:
                 almanac_recordHighdata = False
-            logger.debug("almanac_recordHighF: %s ; almanac_recordHighC: %s" %
-                         (almanac_recordHighF, almanac_recordHighC))
             logger.debug("almanac_recordHighdata: %s" % almanac_recordHighdata)
             try:
                 almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
+                logger.debug("almanac_recordHighYear: %s" % almanac_recordHighYear)
                 almanac_recordHighYeardata = True
             except:
                 almanac_recordHighYeardata = False
-            logger.debug("almanac_recordHighYear: %s ; almanac_recordHighYeardata: %s" %
-                         (almanac_recordHighYear, almanac_recordHighYeardata))
+            logger.debug("almanac_recordHighYeardata: %s" % almanac_recordHighYeardata)
             try:
                 almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
                 almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
+                logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s" %
+                             (almanac_normalLowF, almanac_normalLowC))
                 almanac_normalLowdata = True
             except:
                 almanac_normalLowdata = False
-            logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s" %
-                         (almanac_normalLowF, almanac_normalLowC))
             logger.debug("almanac_normalLowData: %s" % almanac_normalLowdata)
             try:
                 almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
                 almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
+                logger.debug("almanac_recordLowF: %s ; almanac_recordLowC: %s" %
+                             (almanac_recordLowF, almanac_recordLowC))
                 almanac_recordLowdata = True
             except:
                 almanac_recordLowdata = False
-
+            logger.debug("almanac_recordLowdata: %s" % almanac_recordLowdata)
             try:
                 almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
+                logger.debug("almanac_recordLowYear: %s" % almanac_recordLowYear)
                 almanac_recordLowYeardata = True
             except:
                 almanac_recordLowYeardata = False
-            logger.debug("almanac_recordLowYear: %s ; almanac_recordLowYeardata: %s" %
-                         (almanac_recordLowYear, almanac_recordLowYeardata))
+            logger.debug("almanac_recordLowYeardata: %s" % almanac_recordLowYeardata)
         
         print(Fore.YELLOW + "Here's the almanac for: " + Fore.CYAN +
               almanac_airportCode + Fore.YELLOW + " (the nearest airport)")
