@@ -305,10 +305,6 @@ def radar_clearImages():
         printException_loggerwarn()
 
 
-        
-logger.info("Defining requests classes...")
-
-urlheader = {'user-agent': 'pyweather-0.6.1beta/apifetcher'}
 
 logger.info("Declaring geocoder type...")
 if geopyScheme == "https":
@@ -439,13 +435,13 @@ if checkforUpdates == True:
 logger.info("Defining about variables...")
 about_buildnumber = "62"
 about_version = "0.6.2 beta"
-about_releasedate = "July 31, 2017"
+about_releasedate = "September 24, 2017"
 about_maindevelopers = "o355"
 logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))
 logger.debug("about_releasedate: %s ; about_maindevelopers: %s" %
              (about_releasedate, about_maindevelopers))
-about_awesomecontributors = "ModoUnreal, who is very proud to be on TV, and says hi to his mom." # Oh look I'm on TV, HI MOM!!!!
+about_awesomecontributors = "ModoUnreal" # Oh look I'm on TV, HI MOM!!!!
 about_contributors = "gsilvapt, creepersbane"
 about_releasetype = "beta"
 about_librariesinuse = "Colorama, Geopy, Requests"

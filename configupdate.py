@@ -9,7 +9,6 @@
 import sys
 import configparser
 import traceback
-import os
 
 try:
     versioninfo = open("updater//versioninfo.txt")
@@ -107,7 +106,7 @@ elif "0.6.1 beta" in versioninfo2:
     except:
         print("Failed to add the prefetch section. Does it exist?")
 
-    print("8 new configuration options have been added.",
+    print("8 new configuration options have been added from 0.6.1 beta to 0.6.2 beta.",
           "Details:",
           "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
           "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
@@ -119,7 +118,7 @@ elif "0.6.1 beta" in versioninfo2:
           "- PREFETCH/hurricanedata_atboot - Sets if PyWeather should fetch hurricane data at boot - Defaults to False", sep="\n")
 
     print("")
-    print("2 old configuration options, and 2 sections have been deleted.",
+    print("2 old configuration options, and 2 sections have been deleted. Please delete these options from your config file.",
           "Details:",
           "- CACHE/hourly_cachedtime - Used to set the global hourly cache time - Now removed",
           "- HOURLY/10dayhourly_atboot - Used to set if PyWeather should fetch 10-day hourly at boot - Now removed",
@@ -157,7 +156,7 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     except:
         print("Failed to add the prefetch section. Does it exist?")
         
-    print("16 new configuration options have been added.",
+    print("16 new configuration options have been added from 0.6 beta to 0.6.2 beta.",
           "Details:",
           "- CACHE/alerts_cachedtime - Sets the cache time on alert data - Defaults to 5",
           "- CACHE/current_cachedtime - Sets the cache time on current data - Defaults to 10",
@@ -200,7 +199,13 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['CACHE']['hurricane_cachedtime'] = '180'
     geopycheck()
-
+else:
+    print("Hmm. Your version identifier didn't match any known versions.",
+          "Try deleting your versioninfo.txt file in the updater folder, and then",
+          "rerun this file, and manually input which version of PyWeather you're updating from."
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
 try:
     with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)
@@ -211,6 +216,7 @@ except:
     print("Please report this bug to GitHub (github.com/o355/pyweather), along with",
           "the full error. Along with that, please manually add the configuration entries",
           "as listed above, with their default values in your configuration file.",
+          "Alternatively, delete your config file, and run configsetup.py",
           "Press enter to exit.")
     input()
     try:
@@ -230,5 +236,10 @@ try:
 except:
     print("Could not write out an updated versioninfo text file. Please",
           "modify 'updater/versioninfo.txt' to display '0.6.2 beta'.", sep="\n")
+
+print("Ta-da! PyWeather is all up-to-date. Enjoy the new features and bug fixes!"
+      "Press enter to exit.", sep="\n")
+input()
+sys.exit()
     
     

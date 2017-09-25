@@ -1,25 +1,11 @@
 
-## Welcome to PyWeather (0.6.1 beta)!
+## Welcome to PyWeather (0.6.2 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
-## Notices
-I had to start separating notices. Yay!
+## Beta Notice
+If you haven't noticed, PyWeather is in beta. This means that basic features should work fine, but more advanced and new features may not work.
 
-### 0.6.2 beta status update
-PyWeather 0.6.2 beta is coming along nicely, however it has been delayed (again). ETA for release is 9/27.
-
-### Python 3.7 compatibility notice
-PyWeather 0.6.2 beta will not be quality assured using the newly released Python 3.7, but 0.6.3 beta will get tested with Python 3.7. I can't assure that you won't run into bugs using Python 3.7 on 0.6.2 beta.
-
-I'm not about to delay PyWeather AGAIN due to Python 3.7 coming out. Sorry!
-
-### Raspbian 9/Debian 9 compatibility notice
-PyWeather 0.6.2 beta will not be quality assured using Raspbian 9 (and 8 for that matter), and I cannot certify that PyWeather works on Debian Stretch, or other distros based on Debian 9.
-
-### Beta notice
-If you haven't noticed, PyWeather is in beta. At this point, essential features mostly work.
-
-However, newer or more complex features may not work as expected. It's also up to you to report bugs that you find, as it makes every new PyWeather release better.
+If you do encounter bugs, make sure you report them on GitHub!
 
 ## Download/Setup
 The instructions for downloading PyWeather are somewhat awkward just for 0.6.1 beta. Basically, the geocoder that I use had an issue on Mac OS X, in which it could only run with the scheme set to http. This issue has been fixed in 0.6.2 beta, and I coded in automatic detection for what scheme your OS can run.
@@ -43,7 +29,7 @@ Both the http and https version of PyWeather will be able to update to 0.6.2 bet
 If you want the latest and greatest bleeding edge code on a nightly basis, use this code:
 
 ```
-git clone https://github.com/o355/pyweather.git --depth=`
+git clone https://github.com/o355/pyweather.git --depth=1`
 cd pyweather
 ```
 

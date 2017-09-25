@@ -19,6 +19,8 @@
 * Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS.
 * Adds the ability to input decimal numbers into cache times during setup.
 * Adds the ability to manually define a version you're upgrading to in the configupdate script in the event your versioncheck file is gone.
+* Removed the configdefault script. The configsetup script has taken it's place now.
+* Added up-to-date and no matching version messages in the configupdate script.
 
 **BUG FIXES**
 * Fixed a critical bug where if geopy wasn't installed before setup, Pyweather Setup would install geocoder INSTEAD of geopy, and throw an error.
