@@ -1,5 +1,6 @@
 **WHEN UPDATING FROM 0.6.1 BETA TO 0.6.2 BETA, YOU WILL NEED TO ENTER "2" IN THE INPUT PROMPT (also when you run configupdate separately)**
-**THE UPDATER WILL BREAK AFTER YOUR CONFIG IS UPDATED. ENTER "NO", THEN EXIT OUT OF PYWEATHER.**
+**THE GIT UPDATER WILL BREAK AFTER YOUR CONFIG IS UPDATED IF YOU HAD THE SHOW RELEASE TAG OPTION OFF. ENTER "NO", THEN EXIT OUT OF PYWEATHER.**
+**Before you update, go into your config file, and enable showing the release tag if you want the Git updater to work.**
 
 **NEW FEATURES/REMOVALS**
 * Adds the ability to view yesterday's weather. - Thanks to @ModoUnreal for coding this in!
