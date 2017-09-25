@@ -10,7 +10,7 @@
 * Adds the ability to view data through a PWS at boot.
 * MAYBE (if not in 0.6.4) adds the ability to have up to 5 favorite locations.
 
-## version 0.6.2 beta - Should be released on 9/24/2017
+## version 0.6.2 beta - Released on 9/24/2017
 **NEW FEATURES/REMOVALS**
 * Adds the ability to view yesterday's weather. - Thanks to @ModoUnreal for coding this in!
 * Adds the ability to view hurricane data in PyWeather.
