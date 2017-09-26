@@ -455,6 +455,7 @@ logger.debug("about_contributors: %s ; about_releasetype: %s" %
 logger.debug("about_librariesinuse: %s ; about_awesomecontributors: %s" % 
             (about_librariesinuse, about_awesomecontributors))
 geoip_url = "https://freegeoip.net/json/"
+geoip_available = False
 if geoip_enabled == True:
     try:
         geoipJSON = requests.get(geoip_url)
