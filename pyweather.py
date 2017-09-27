@@ -533,6 +533,7 @@ elif "pws:" in locinput and pws_enabled is True:
         sys.exit()
     except:
         logger.info("We have good PWS data.")
+    pws_available = True
     # Extract data about latitude and longitude
     pws_lat = pwsinfo_json['lat']
     pws_lon = pwsinfo_json['lon']
@@ -714,15 +715,26 @@ if validateAPIKey == False and backupKeyLoaded == True:
                 apikey = apikey2
                 logger.debug("apikey = apikey2. apikey: %s" % apikey)
                 logger.debug("Redefining URL variables...")
-                currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
-                f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
-                hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
-                tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
-                astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
-                almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
-                yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
-                tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
-                hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
+                if pws_urls is True:
+                    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + locinput.lower() + '.json'
+                    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + locinput.lower() + '.json'
+                    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + locinput.lower() + '.json'
+                    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + locinput.lower() + '.json'
+                    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + locinput.lower() + '.json'
+                    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + locinput.lower() + '.json'
+                    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + locinput.lower() + '.json'
+                    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + locinput.lower() + '.json'
+                    hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
+                elif pws_urls is False:
+                    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
+                    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
+                    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
+                    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
+                    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
+                    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
+                    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
+                    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
+                    hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
 
                 logger.debug("currenturl: %s ; f10dayurl: %s" %
                              (currenturl, f10dayurl))
@@ -1146,6 +1158,8 @@ logger.info("Printing current conditions...")
 
 summaryHourlyIterations = 0
 
+if pws_available is True:
+    location = "PWS " + pws_id + " (located in " + pws_location + ")"
 print(Style.BRIGHT + Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + str(location))
 print(Fore.YELLOW + summary_lastupdated)
 print("")
