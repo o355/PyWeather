@@ -124,6 +124,14 @@ Since I don't have all the time in the world to work on PyWeather, contributing 
 
 Bug reports, pull requests, feature suggestions, all that fun stuff can help me out with my limited time I have to code PyWeather. Read over CONTRIBUTING.md in the .github folder, to see how things work.
 
+## Contributers
+Thanks to these awesome people, they've helped out PyWeather by coding in bug fixes, new features, reporting bugs, and suggesting new stuff.
+
+* ModoUnreal - Awesome contributor - Has made 8 pull requests, 5 of which were merged, and coded in 2 new features/1 data type
+* creepersbane - Awesome contributor -  Has made 6 reports (3 of which required code changes), and 1 pull request.
+* gsilvapt - Contributor - Has made 1 report, which required code changes
+* DiSiqueira - Contributor - Has made 1 report.
+
 ## Sharing
 I've, among others have poured in hundreds of hours into making PyWeather what it is, and I plan to spend hundreds of more hours refining PyWeather.
 
