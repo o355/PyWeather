@@ -456,6 +456,9 @@ logger.debug("about_librariesinuse: %s ; about_awesomecontributors: %s" %
             (about_librariesinuse, about_awesomecontributors))
 geoip_url = "https://freegeoip.net/json/"
 geoip_available = False
+pws_available = False
+pws_urls = False
+useGeocoder = True
 if geoip_enabled == True:
     try:
         geoipJSON = requests.get(geoip_url)
@@ -509,6 +512,39 @@ elif "pws:" in locinput and pws_enabled is True:
     logger.debug("pws_query: %s" % pws_query)
     # Just for safety, query Wunderground's geolocator to get the lat/lon of the PWS.
     # This also helps to validate the PWS.
+    pwsinfourl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + locinput + ".json"
+    logger.debug("pwsurl: %s" % pwsinfourl)
+    try:
+        pwsinfoJSON = requests.get(pwsinfourl)
+        logger.debug("pwsinfoJSON acquired with: %s" % pwsinfoJSON)
+        pwsinfo_json = json.loads(pwsinfoJSON.text)
+    except:
+        print("Couldn't query Wunderground to validate your inputted PWS. Make sure that you have",
+              "an internet connection, and that api.wunderground.com is unblocked."
+              "Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+    try:
+        pws_invalid = pwsinfo_json['error']['type']
+        print("The PWS you entered isn't online, or is invalid. Please try entering an online",
+              "or valid PWS next time you use PyWeather. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+    except:
+        logger.info("We have good PWS data.")
+    # Extract data about latitude and longitude
+    pws_lat = pwsinfo_json['lat']
+    pws_lon = pwsinfo_json['lon']
+    # Extract data about the PWS location for outputting to user
+    pws_city = pwsinfo_json['city']
+    pws_state = pwsinfo_json['state']
+    pws_location = pws_city + ", " + pws_state
+    # Get the ID for outputting to user
+    for data in pwsinfo_json['pws']['station'], range(1, 1):
+        pws_id = data['id']
+    # Flag PWS enabled URLs, and not use the geocoder
+    pws_urls = True
+    useGeocoder = False
 
 
 # Start the geocoder. If we don't have a connection, exit nicely.
