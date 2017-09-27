@@ -6,7 +6,7 @@
 * Adds the ability to prefetch yesterday's weather at boot - 0% done, should be finished by 10/14
 * Adds a caching system for yesterday's weather (12hrs by default) - 0% done, should be finished by 10/19
 * Adds a caching system for hurricane data (3hrs by default) - 0% done, should be finished by 10/26
-* Adds the ability to view your current location through a GeoIP service - Done!
+* Adds the ability to view your current location through a GeoIP service - 90% done
 * Adds the ability to view data through a PWS at boot. - 0% done, should be finished by 10/3
     * Adding basic functionality for PWS viewing up to the summary screen - Up to API key validation
     * Adding functionality for PWS location viewing in the radar, and other areas of PyWeather - 0% done, should be finished by 9/30

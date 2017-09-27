@@ -455,11 +455,19 @@ logger.debug("about_contributors: %s ; about_releasetype: %s" %
 logger.debug("about_librariesinuse: %s ; about_awesomecontributors: %s" % 
             (about_librariesinuse, about_awesomecontributors))
 geoip_url = "https://freegeoip.net/json/"
+
+# Set up the initial variables that dictate availability, using PWS URLs,
+# or using the geocoder.
 geoip_available = False
 pws_available = False
 pws_urls = False
 useGeocoder = True
+logger.debug("geoip_available: %s ; pws_available: %s" %
+             (geoip_available, pws_available))
+logger.debug("pws_urls: %s ; useGeocoder: %s" %
+             (pws_urls, useGeocoder))
 if geoip_enabled == True:
+    logger.info("geoip is enabled, attempting to fetch current location...")
     try:
         geoipJSON = requests.get(geoip_url)
         logger.debug("GeoIP JSON requsted with: %s" % geoipJSON)
@@ -487,11 +495,13 @@ if geoip_enabled == True:
 print("Hey, welcome to PyWeather!")
 print("Below, enter a location to check the weather for that location!")
 if geoip_available is True:
+    logger.debug("geoip is available. Showing option...")
     print("")
     print("You can also enter this to view weather for your current location:")
     print("currentlocation - " + currentlocation)
     print("")
 if pws_enabled is True:
+    logger.debug("pws queries have been enabled. Showing option...")
     print("")
     print("You can also query a Wunderground PWS by entering this:")
     print("pws:<PWS ID>")
@@ -501,12 +511,12 @@ print("Checking the weather, it'll take a few seconds!")
 
 # Set if the query is a PWS at the beginning. It'll flip to True if a PWS query is detected.
 pws_query = False
-logger.debug("pws_query")
+logger.debug("pws_query: %s" % pws_query)
 
 if "currentlocation" in locinput and geoip_available is True:
     locinput = currentlocation
-    # I fully understand that Wunderground has a built-in GeoIP locator. However, going this way maintains
-    # compatibility with existing code.
+    # Future code for parsing lat/lon go here.
+    logger.debug("locinput: %s")
 elif "pws:" in locinput and pws_enabled is True:
     pws_query = True
     logger.debug("pws_query: %s" % pws_query)
@@ -514,19 +524,25 @@ elif "pws:" in locinput and pws_enabled is True:
     # This also helps to validate the PWS.
     # Use a .lower() on the PWS query for safety. It works when in lower-case.
     pwsinfourl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + locinput.lower() + ".json"
-    logger.debug("pwsurl: %s" % pwsinfourl)
+    logger.debug("pwsinfourl: %s" % pwsinfourl)
     try:
         pwsinfoJSON = requests.get(pwsinfourl)
         logger.debug("pwsinfoJSON acquired with: %s" % pwsinfoJSON)
         pwsinfo_json = json.loads(pwsinfoJSON.text)
+        if jsonVerbosity is True:
+            logger.debug("pwsinfo_json: %s" % pwsinfo_json)
+        else:
+            logger.debug("pwsinfo_json has been loaded.")
     except:
         print("Couldn't query Wunderground to validate your inputted PWS. Make sure that you have",
               "an internet connection, and that api.wunderground.com is unblocked."
               "Press enter to exit.", sep="\n")
+        printException()
         input()
         sys.exit()
     try:
         pws_invalid = pwsinfo_json['error']['type']
+        logger.debug("pws_invalid: %s" % pws_invalid)
         print("The PWS you entered isn't online, or is invalid. Please try entering an online",
               "or valid PWS next time you use PyWeather. Press enter to exit.", sep="\n")
         input()
@@ -534,19 +550,26 @@ elif "pws:" in locinput and pws_enabled is True:
     except:
         logger.info("We have good PWS data.")
     pws_available = True
-    # Extract data about latitude and longitude
+    logger.debug("pws_available: %s" % pws_available)
+    # Extract data about latitude and longitude. Used for the radar.
     pws_lat = pwsinfo_json['lat']
     pws_lon = pwsinfo_json['lon']
+    logger.debug("pws_lat: %s ; pws_lon: %s" % (pws_lat, pws_lon))
     # Extract data about the PWS location for outputting to user
     pws_city = pwsinfo_json['city']
     pws_state = pwsinfo_json['state']
+    logger.debug("pws_city: %s ; pws_state: %s" %
+                 (pws_city, pws_state))
     pws_location = pws_city + ", " + pws_state
+    logger.debug("pws_location: %s" % pws_location)
     # Get the ID for outputting to user
-    for data in pwsinfo_json['pws']['station'], range(1, 1):
+    for data in pwsinfo_json['pws']['station'], range(0, 1):
         pws_id = data['id']
+    logger.debug("pws_id: %s" % pws_id)
     # Flag PWS enabled URLs, and not use the geocoder
     pws_urls = True
     useGeocoder = False
+    logger.debug("pws_urls: %s ; useGeocoder: %s" % (pws_urls, useGeocoder))
 
 
 # Start the geocoder. If we don't have a connection, exit nicely.
