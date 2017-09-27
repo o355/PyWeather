@@ -8,12 +8,14 @@
 * Adds a caching system for hurricane data (3hrs by default) - 0% done, should be finished by 10/26
 * Adds the ability to view your current location through a GeoIP service - 90% done
 * Adds the ability to view data through a PWS at boot. - 0% done, should be finished by 10/3
-    * Adding basic functionality for PWS viewing up to the summary screen - Up to API key validation
+    * Adding basic functionality for PWS viewing up to the summary screen - Done
     * Adding functionality for PWS location viewing in the radar, and other areas of PyWeather - 0% done, should be finished by 9/30
     * Adding PWS validation when entered at the main input - 0% done, should be finished by 10/3
 * MAYBE (if not in 0.6.4) adds the ability to have up to 5 favorite locations. - Should be finished by 11/2
+* Will push the API key validation code up further thanks to new features. - Should be finished by 10/6
 
 * Will fix a bug where the updater would fail on some platforms due to a print statement.
+
 
 ## version 0.6.2 beta - Released on 9/24/2017
 **NEW FEATURES/REMOVALS**

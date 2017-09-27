@@ -552,19 +552,17 @@ elif "pws:" in locinput and pws_enabled is True:
     pws_available = True
     logger.debug("pws_available: %s" % pws_available)
     # Extract data about latitude and longitude. Used for the radar.
-    pws_lat = pwsinfo_json['lat']
-    pws_lon = pwsinfo_json['lon']
+    pws_lat = pwsinfo_json['location']['lat']
+    pws_lon = pwsinfo_json['location']['lon']
     logger.debug("pws_lat: %s ; pws_lon: %s" % (pws_lat, pws_lon))
     # Extract data about the PWS location for outputting to user
-    pws_city = pwsinfo_json['city']
-    pws_state = pwsinfo_json['state']
+    pws_city = pwsinfo_json['location']['city']
+    pws_state = pwsinfo_json['location']['state']
     logger.debug("pws_city: %s ; pws_state: %s" %
                  (pws_city, pws_state))
     pws_location = pws_city + ", " + pws_state
     logger.debug("pws_location: %s" % pws_location)
-    # Get the ID for outputting to user
-    for data in pwsinfo_json['pws']['station'], range(0, 1):
-        pws_id = data['id']
+    pws_id = pwsinfo_json['location']['nearby_weather_stations']['pws']['station'][0]['id']
     logger.debug("pws_id: %s" % pws_id)
     # Flag PWS enabled URLs, and not use the geocoder
     pws_urls = True
