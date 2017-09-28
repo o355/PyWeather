@@ -19,7 +19,8 @@ except:
           "which corresponds to the version of PyWeather you're updating from.",
           "[0] 0.5.2.1 beta and earlier",
           "[1] 0.6 beta or 0.6.0.1 beta",
-          "[2] 0.6.1 beta or 0.6.1 beta-https", sep="\n")
+          "[2] 0.6.1 beta or 0.6.1 beta-https",
+          "[3] 0.6.2 beta", sep="\n")
     versionselect = input("Input here: ").lower()
     if versionselect == "0":
         print("You'll need to completely reinstall PyWeather due to the way the new config system works.",
@@ -32,6 +33,8 @@ except:
     elif versionselect == "2":
         print("Updating PyWeather using version identifier: 0.6.1 beta")
         versioninfo2 = "0.6.1 beta"
+    elif versioninfo2 == "3":
+        print("Updating PoyWeather using version identifier: 0.6.2 beta")
 
 config = configparser.ConfigParser()
 config.read("storage//config.ini")
@@ -90,11 +93,12 @@ def geopycheck():
                 config['GEOCODER']['scheme'] = 'http'
                 print("Changes saved.")
 if "0.6.2 beta" in versioninfo2:
-    print("PyWeather is up-to-date, so we don't need to make any configuration changes.",
-          "If you want to reprovision your config file, try running the configsetup.py script.",
-          "Press enter to exit.", sep="\n")
-    input()
-    sys.exit()
+    print("2 new configuration options have been added from 0.6.2 beta to 0.6.3 beta.",
+          "Details:",
+          "- UI/geoipservice_enabled - Sets if the service to allow current location queries is enabled - Defaults to False",
+          "- UI/allow_pwsqueries - Sets if PyWeather will allow PWS queries - Defaults to True", sep="\n")
+    config['UI']['geoipservice_enabled'] = 'False'
+    config['UI']['allow_pwsqueries'] = 'True'
 elif "0.6.1 beta" in versioninfo2:
     try:
         config.add_section("GEOCODER")
@@ -106,7 +110,7 @@ elif "0.6.1 beta" in versioninfo2:
     except:
         print("Failed to add the prefetch section. Does it exist?")
 
-    print("8 new configuration options have been added from 0.6.1 beta to 0.6.2 beta.",
+    print("10 new configuration options have been added from 0.6.1 beta to 0.6.3 beta.",
           "Details:",
           "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
           "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
@@ -115,7 +119,9 @@ elif "0.6.1 beta" in versioninfo2:
           "- CACHE/hurricane_cachedtime - Sets the cache time on hurricane data - Defaults to 180",
           "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https",
           "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False",
-          "- PREFETCH/hurricanedata_atboot - Sets if PyWeather should fetch hurricane data at boot - Defaults to False", sep="\n")
+          "- PREFETCH/hurricanedata_atboot - Sets if PyWeather should fetch hurricane data at boot - Defaults to False",
+          "- UI/geoipservice_enabled - Sets if the service to allow current location queries is enabled - Defaults to False",
+          "- UI/allow_pwsqueries - Sets if PyWeather will allow PWS queries - Defaults to True", sep="\n")
 
     print("")
     print("2 old configuration options, and 2 sections have been deleted. Please delete these options from your config file.",
@@ -132,6 +138,8 @@ elif "0.6.1 beta" in versioninfo2:
     config['PREFETCH']['10dayfetch_atboot'] = 'False'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['CACHE']['hurricane_cachedtime'] = '180'
+    config['UI']['geoipservice_enabled'] = 'False'
+    config['UI']['allow_pwsqueries'] = 'True'
     geopycheck()
 elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     # A usual input() and sys.exit() isn't present here, as it's assumed this
@@ -156,7 +164,7 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     except:
         print("Failed to add the prefetch section. Does it exist?")
         
-    print("16 new configuration options have been added from 0.6 beta to 0.6.2 beta.",
+    print("18 new configuration options have been added from 0.6 beta to 0.6.3 beta.",
           "Details:",
           "- CACHE/alerts_cachedtime - Sets the cache time on alert data - Defaults to 5",
           "- CACHE/current_cachedtime - Sets the cache time on current data - Defaults to 10",
@@ -173,7 +181,9 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
           "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
           "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https",
           "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False",
-          "- PREFETCH/hurricanedata_atboot - Sets if PyWeather should fetch hurricane data at boot - Defaults to False", sep="\n")
+          "- PREFETCH/hurricanedata_atboot - Sets if PyWeather should fetch hurricane data at boot - Defaults to False",
+          "- UI/geoipservice_enabled - Sets if the service to allow current location queries is enabled - Defaults to False",
+          "- UI/allow_pwsqueries - Sets if PyWeather will allow PWS queries - Defaults to True", sep="\n")
 
     print("")
     print("2 old configuration options, and 2 sections are now unused. Please delete these options from your config file.",
@@ -198,6 +208,8 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     config['PREFETCH']['10dayfetch_atboot'] = 'False'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['CACHE']['hurricane_cachedtime'] = '180'
+    config['UI']['geoipservice_enabled'] = 'False'
+    config['UI']['allow_pwsqueries'] = 'True'
     geopycheck()
 else:
     print("Hmm. Your version identifier didn't match any known versions.",
