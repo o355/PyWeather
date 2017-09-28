@@ -469,7 +469,19 @@ logger.debug("about_contributors: %s ; about_releasetype: %s" %
 logger.debug("about_librariesinuse: %s ; about_awesomecontributors: %s" % 
             (about_librariesinuse, about_awesomecontributors))
 geoip_url = "https://freegeoip.net/json/"
+
+# Set up the initial variables that dictate availability, using PWS URLs,
+# or using the geocoder.
+geoip_available = False
+pws_available = False
+pws_urls = False
+useGeocoder = True
+logger.debug("geoip_available: %s ; pws_available: %s" %
+             (geoip_available, pws_available))
+logger.debug("pws_urls: %s ; useGeocoder: %s" %
+             (pws_urls, useGeocoder))
 if geoip_enabled == True:
+    logger.info("geoip is enabled, attempting to fetch current location...")
     try:
         geoipJSON = requests.get(geoip_url)
         logger.debug("GeoIP JSON requsted with: %s" % geoipJSON)
@@ -497,11 +509,13 @@ if geoip_enabled == True:
 print("Hey, welcome to PyWeather!")
 print("Below, enter a location to check the weather for that location!")
 if geoip_available is True:
+    logger.debug("geoip is available. Showing option...")
     print("")
     print("You can also enter this to view weather for your current location:")
     print("currentlocation - " + currentlocation)
     print("")
 if pws_enabled is True:
+    logger.debug("pws queries have been enabled. Showing option...")
     print("")
     print("You can also query a Wunderground PWS by entering this:")
     print("pws:<PWS ID>")
@@ -511,17 +525,63 @@ print("Checking the weather, it'll take a few seconds!")
 
 # Set if the query is a PWS at the beginning. It'll flip to True if a PWS query is detected.
 pws_query = False
-logger.debug("pws_query")
+logger.debug("pws_query: %s" % pws_query)
 
 if "currentlocation" in locinput and geoip_available is True:
     locinput = currentlocation
-    # I fully understand that Wunderground has a built-in GeoIP locator. However, going this way maintains
-    # compatibility with existing code.
+    # Future code for parsing lat/lon go here.
+    logger.debug("locinput: %s")
 elif "pws:" in locinput and pws_enabled is True:
     pws_query = True
     logger.debug("pws_query: %s" % pws_query)
     # Just for safety, query Wunderground's geolocator to get the lat/lon of the PWS.
     # This also helps to validate the PWS.
+    # Use a .lower() on the PWS query for safety. It works when in lower-case.
+    pwsinfourl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + locinput.lower() + ".json"
+    logger.debug("pwsinfourl: %s" % pwsinfourl)
+    try:
+        pwsinfoJSON = requests.get(pwsinfourl)
+        logger.debug("pwsinfoJSON acquired with: %s" % pwsinfoJSON)
+        pwsinfo_json = json.loads(pwsinfoJSON.text)
+        if jsonVerbosity is True:
+            logger.debug("pwsinfo_json: %s" % pwsinfo_json)
+        else:
+            logger.debug("pwsinfo_json has been loaded.")
+    except:
+        print("Couldn't query Wunderground to validate your inputted PWS. Make sure that you have",
+              "an internet connection, and that api.wunderground.com is unblocked."
+              "Press enter to exit.", sep="\n")
+        printException()
+        input()
+        sys.exit()
+    try:
+        pws_invalid = pwsinfo_json['error']['type']
+        logger.debug("pws_invalid: %s" % pws_invalid)
+        print("The PWS you entered isn't online, or is invalid. Please try entering an online",
+              "or valid PWS next time you use PyWeather. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+    except:
+        logger.info("We have good PWS data.")
+    pws_available = True
+    logger.debug("pws_available: %s" % pws_available)
+    # Extract data about latitude and longitude. Used for the radar.
+    pws_lat = pwsinfo_json['location']['lat']
+    pws_lon = pwsinfo_json['location']['lon']
+    logger.debug("pws_lat: %s ; pws_lon: %s" % (pws_lat, pws_lon))
+    # Extract data about the PWS location for outputting to user
+    pws_city = pwsinfo_json['location']['city']
+    pws_state = pwsinfo_json['location']['state']
+    logger.debug("pws_city: %s ; pws_state: %s" %
+                 (pws_city, pws_state))
+    pws_location = pws_city + ", " + pws_state
+    logger.debug("pws_location: %s" % pws_location)
+    pws_id = pwsinfo_json['location']['nearby_weather_stations']['pws']['station'][0]['id']
+    logger.debug("pws_id: %s" % pws_id)
+    # Flag PWS enabled URLs, and not use the geocoder
+    pws_urls = True
+    useGeocoder = False
+    logger.debug("pws_urls: %s ; useGeocoder: %s" % (pws_urls, useGeocoder))
 
 
 # Start the geocoder. If we don't have a connection, exit nicely.
@@ -529,69 +589,80 @@ elif "pws:" in locinput and pws_enabled is True:
 # it in the table called loccords.
 
 firstfetch = time.time()
-logger.info("Start geolocator...")
-try:
-    location = geolocator.geocode(locinput, language="en", timeout=20)
-    # Since the loading bars interfere with true verbosity logging, we turn
-    # them off if verbosity is enabled (it isn't needed)
-    # :/
-    if verbosity == False:
-        print("[#---------] | 1% |", round(time.time() - firstfetch,1), 
-              "seconds", end="\r")
-except geopy.exc.GeocoderServiceError:
-    logger.warning("Service error from geopy. SSL issue most likely?")
-    print("When attempting to access Google's geocoder, a service error occurred.",
-          "99% of the time, this is due to the geocoder operating in HTTPS mode,",
-          "but not being able to properly operate on your OS in such mode. To fix this",
-          "issue, in the configuration file, change the GEOCODER/scheme option to 'http'.", sep="\n")
-    printException()
-    print("Press enter to continue.")
-    input()
-    sys.exit()
-except:
-    logger.warning("No connection to Google's geocoder!")
-    print("When attempting to access Google's geocoder, PyWeather ran into an error.",
-          "A few things could of happened. If you're on a filter, make sure Google's",
-          "geocoder is unblocked. Otherwise, Make sure your internet connection is online.",
-          sep="\n")
-    printException()
-    print("Press enter to continue.")
-    input()
-    sys.exit()
-logger.debug("location = %s" % location)
+if useGeocoder is True:
+    logger.info("Start geolocator...")
+    try:
+        location = geolocator.geocode(locinput, language="en", timeout=20)
+        # Since the loading bars interfere with true verbosity logging, we turn
+        # them off if verbosity is enabled (it isn't needed)
+        # :/
+        if verbosity == False:
+            print("[#---------] | 1% |", round(time.time() - firstfetch,1),
+                  "seconds", end="\r")
+    except geopy.exc.GeocoderServiceError:
+        logger.warning("Service error from geopy. SSL issue most likely?")
+        print("When attempting to access Google's geocoder, a service error occurred.",
+              "99% of the time, this is due to the geocoder operating in HTTPS mode,",
+              "but not being able to properly operate on your OS in such mode. To fix this",
+              "issue, in the configuration file, change the GEOCODER/scheme option to 'http'.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+    except:
+        logger.warning("No connection to Google's geocoder!")
+        print("When attempting to access Google's geocoder, PyWeather ran into an error.",
+              "A few things could of happened. If you're on a filter, make sure Google's",
+              "geocoder is unblocked. Otherwise, Make sure your internet connection is online.",
+              sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+    logger.debug("location = %s" % location)
 
-try:
-    latstr = str(location.latitude)
-    lonstr = str(location.longitude)
-except AttributeError:
-    logger.warning("No lat/long was provided by Google! Bad location?")
-    print("When attempting to parse the location inputted, PyWeather",
-          "ran into an error. Make sure that the location you entered is",
-          "valid, and don't attempt to see the weather at Mark Watney's base.",
-          sep="\n")
-    printException()
-    print("Press enter to continue.")
-    input()
-    sys.exit()
-logger.debug("Latstr: %s ; Lonstr: %s" % (latstr, lonstr))
-loccoords = [latstr, lonstr]
-logger.debug("Loccoords: %s" % loccoords)
-logger.info("End geolocator...")
+    try:
+        latstr = str(location.latitude)
+        lonstr = str(location.longitude)
+    except AttributeError:
+        logger.warning("No lat/long was provided by Google! Bad location?")
+        print("When attempting to parse the location inputted, PyWeather",
+              "ran into an error. Make sure that the location you entered is",
+              "valid, and don't attempt to see the weather at Mark Watney's base.",
+              sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+    logger.debug("Latstr: %s ; Lonstr: %s" % (latstr, lonstr))
+    loccoords = [latstr, lonstr]
+    logger.debug("Loccoords: %s" % loccoords)
+    logger.info("End geolocator...")
 logger.info("Start API var declare...")
 
 # Declare the API URLs with the API key, and latitude/longitude strings from earlier.
-
-currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
-f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
-hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
-tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
-astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
-almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
-alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + latstr + ',' + lonstr + '.json'
-yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
-tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
-hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
-yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday' + '/q/' + latstr + "," + lonstr + '.json'
+if pws_urls is False:
+    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
+    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
+    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
+    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
+    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
+    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
+    alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + latstr + ',' + lonstr + '.json'
+    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
+    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
+    hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
+elif pws_urls is True:
+    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + locinput.lower() + '.json'
+    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + locinput.lower() + '.json'
+    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + locinput.lower() + '.json'
+    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + locinput.lower() + '.json'
+    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + locinput.lower() + '.json'
+    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + locinput.lower() + '.json'
+    alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + locinput.lower() + '.json'
+    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + locinput.lower() + '.json'
+    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + locinput.lower() + '.json'
+    hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
 
 if verbosity == False:
     print("[##--------] | 6% |", round(time.time() - firstfetch,1), "seconds", end="\r")
@@ -679,15 +750,26 @@ if validateAPIKey == False and backupKeyLoaded == True:
                 apikey = apikey2
                 logger.debug("apikey = apikey2. apikey: %s" % apikey)
                 logger.debug("Redefining URL variables...")
-                currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
-                f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
-                hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
-                tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
-                astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
-                almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
-                yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
-                tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
-                hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
+                if pws_urls is True:
+                    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + locinput.lower() + '.json'
+                    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + locinput.lower() + '.json'
+                    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + locinput.lower() + '.json'
+                    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + locinput.lower() + '.json'
+                    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + locinput.lower() + '.json'
+                    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + locinput.lower() + '.json'
+                    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + locinput.lower() + '.json'
+                    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + locinput.lower() + '.json'
+                    hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
+                elif pws_urls is False:
+                    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
+                    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
+                    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
+                    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
+                    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
+                    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
+                    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
+                    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
+                    hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
 
                 logger.debug("currenturl: %s ; f10dayurl: %s" %
                              (currenturl, f10dayurl))
@@ -1111,6 +1193,8 @@ logger.info("Printing current conditions...")
 
 summaryHourlyIterations = 0
 
+if pws_available is True:
+    location = "PWS " + pws_id + " (located in " + pws_location + ")"
 print(Style.BRIGHT + Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + str(location))
 print(Fore.YELLOW + summary_lastupdated)
 print("")
