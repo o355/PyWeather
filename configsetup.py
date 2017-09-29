@@ -42,6 +42,11 @@ if cd_confirmation == "yes":
             sys.exit()
     except:
         print("Setting up your config...")
+
+    try:
+        config.add_section("FIRSTINPUT")
+    except configparser.DuplicateSectionError:
+        print("Firstinput section could not be added.")
     
     try:
         config.add_section('SUMMARY')
@@ -148,6 +153,8 @@ if cd_confirmation == "yes":
     config['PREFETCH']['10dayfetch_atboot']= 'False'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['CACHE']['hurricane_cachedtime'] = '180'
+    config['FIRSTFETCH']['geoipservice_enabled'] = 'False'
+    config['FIRSTFETCH']['allow_pwsqueries'] = 'True'
     try:
         with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)

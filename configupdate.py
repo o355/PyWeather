@@ -93,13 +93,23 @@ def geopycheck():
                 config['GEOCODER']['scheme'] = 'http'
                 print("Changes saved.")
 if "0.6.2 beta" in versioninfo2:
+    try:
+        config.add_section("FIRSTINPUT")
+    except:
+        print("Failed to add the firstinput section. Does it exist?")
+
     print("2 new configuration options have been added from 0.6.2 beta to 0.6.3 beta.",
           "Details:",
-          "- UI/geoipservice_enabled - Sets if the service to allow current location queries is enabled - Defaults to False",
-          "- UI/allow_pwsqueries - Sets if PyWeather will allow PWS queries - Defaults to True", sep="\n")
-    config['UI']['geoipservice_enabled'] = 'False'
-    config['UI']['allow_pwsqueries'] = 'True'
+          "- FIRSTINPUT/geoipservice_enabled - Sets if the service to allow current location queries is enabled - Defaults to False",
+          "- FIRSTINPUT/allow_pwsqueries - Sets if PyWeather will allow PWS queries - Defaults to True", sep="\n")
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
 elif "0.6.1 beta" in versioninfo2:
+    try:
+        config.add_section("FIRSTINPUT")
+    except:
+        print("Failed to add the firstinput section. Does it exist?")
+
     try:
         config.add_section("GEOCODER")
     except:
@@ -120,8 +130,8 @@ elif "0.6.1 beta" in versioninfo2:
           "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https",
           "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False",
           "- PREFETCH/hurricanedata_atboot - Sets if PyWeather should fetch hurricane data at boot - Defaults to False",
-          "- UI/geoipservice_enabled - Sets if the service to allow current location queries is enabled - Defaults to False",
-          "- UI/allow_pwsqueries - Sets if PyWeather will allow PWS queries - Defaults to True", sep="\n")
+          "- FIRSTINPUT/geoipservice_enabled - Sets if the service to allow current location queries is enabled - Defaults to False",
+          "- FIRSTINPUT/allow_pwsqueries - Sets if PyWeather will allow PWS queries - Defaults to True", sep="\n")
 
     print("")
     print("2 old configuration options, and 2 sections have been deleted. Please delete these options from your config file.",
@@ -138,12 +148,17 @@ elif "0.6.1 beta" in versioninfo2:
     config['PREFETCH']['10dayfetch_atboot'] = 'False'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['CACHE']['hurricane_cachedtime'] = '180'
-    config['UI']['geoipservice_enabled'] = 'False'
-    config['UI']['allow_pwsqueries'] = 'True'
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
     geopycheck()
 elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     # A usual input() and sys.exit() isn't present here, as it's assumed this
     # is getting executed inside of the updater.
+    try:
+        config.add_section("FIRSTINPUT")
+    except:
+        print("Failed to add the firstinput section. Does it exist?")
+
     try:
         config.add_section("CACHE")
     except:
@@ -182,8 +197,8 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
           "- GEOCODER/scheme - Sets the geocoder scheme (https on 95% of platforms, http on others) - Defaults to https",
           "- PREFETCH/10dayfetch_atboot - Sets if PyWeather should fetch 10-day hourly at boot - Defaults to False",
           "- PREFETCH/hurricanedata_atboot - Sets if PyWeather should fetch hurricane data at boot - Defaults to False",
-          "- UI/geoipservice_enabled - Sets if the service to allow current location queries is enabled - Defaults to False",
-          "- UI/allow_pwsqueries - Sets if PyWeather will allow PWS queries - Defaults to True", sep="\n")
+          "- FIRSTINPUT/geoipservice_enabled - Sets if the service to allow current location queries is enabled - Defaults to False",
+          "- FIRSTINPUT/allow_pwsqueries - Sets if PyWeather will allow PWS queries - Defaults to True", sep="\n")
 
     print("")
     print("2 old configuration options, and 2 sections are now unused. Please delete these options from your config file.",
@@ -208,8 +223,8 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     config['PREFETCH']['10dayfetch_atboot'] = 'False'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['CACHE']['hurricane_cachedtime'] = '180'
-    config['UI']['geoipservice_enabled'] = 'False'
-    config['UI']['allow_pwsqueries'] = 'True'
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
     geopycheck()
 else:
     print("Hmm. Your version identifier didn't match any known versions.",
