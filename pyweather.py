@@ -130,8 +130,10 @@ try:
     showTideOnSummary = config.getboolean('SUMMARY', 'showtideonsummary')
     geopyScheme = config.get('GEOCODER', 'scheme')
     prefetchHurricane_atboot = config.getboolean('PREFETCH', 'hurricanedata_atboot')
-    geoip_enabled = config.getboolean('UI', 'geoipservice_enabled')
-    pws_enabled = config.getboolean('UI', 'allow_pwsqueries')
+    geoip_enabled = config.getboolean('FIRSTINPUT', 'geoipservice_enabled')
+    pws_enabled = config.getboolean('FIRSTINPUT', 'allow_pwsqueries')
+    hurricaneclosestcity_enabled = config.getboolean('HURRICANE', 'enableclosestcity')
+    geonames_apiusername = config.get('HURRICANE', 'api_username')
     
 except:
     # If it fails (typo or code error), we set all options to default.
@@ -180,6 +182,8 @@ except:
     prefetchHurricane_atboot = False
     geoip_enabled = False
     pws_enabled = False
+    hurricaneclosestcity_enabled = False
+    geonames_apiusername = "pyweather_proj"
 
 # Import logging, and set up the logger.
 import logging
@@ -238,7 +242,6 @@ logger.debug("showTideOnSummary: %s ; geopyScheme: %s" %
              (showTideOnSummary, geopyScheme))
 logger.debug("prefetchHurricane_atboot: %s ; cache_hurricanetime: %s" %
              (prefetchHurricane_atboot, cache_hurricanetime))
-logger.debug("geoip_enabled: %s" % geoip_enabled)
 
 logger.info("Setting gif x and y resolution for radar...")
 # Set the size of the radar window.

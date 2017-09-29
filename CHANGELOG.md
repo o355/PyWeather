@@ -3,13 +3,33 @@
 
 ## version 0.6.3 beta - Should be released late October/early November 2017:
 * Adds a nearby location feature to hurricane data (300km out) - 0% done, should be finished by 10/5
-* Adds the ability to prefetch yesterday's weather at boot - 0% done, should be finished by 10/14
-* Adds a caching system for yesterday's weather (12hrs by default) - 0% done, should be finished by 10/19
-* Adds a caching system for hurricane data (3hrs by default) - 0% done, should be finished by 10/26
-* Adds the ability to view your current location through a GeoIP service - Done!
-* Adds the ability to view data through a PWS at boot. - Done!
-* Adds the ability to have up to 5 favorite locations. - Should be finished by 11/2
+    * Initial support for API - 0% done - Should be finished by 10/2
+    * Adding extra functions (custom API username, nearest city size) - 0% done, should be finished by 10/4
+    * Adding new config options to configupdate, configsetup, and setup - 0% done, should be finished by 10/5
 * Will push the API key validation code up further thanks to new features. - Should be finished by 10/6
+*October break from PyWeather development - 10/7 to 10/9*
+* Adds the ability to prefetch yesterday's weather at boot, and a caching system - 0% done, should be finished by 10/17
+    * Initial support for prefetching at boot - 0% done, should be finished by 10/11
+    * Initial support for caching (cache times, etc.) - 0% done, should be finished by 10/13
+    * Additional support for caching (refresh flags, etc.) - 0% done, should be finished by 10/16
+    * Adding new config options to configsetup/setup, and configupdate - 0% done, should be finished by 10/17
+* Adds a caching system for hurricane data (3hrs by default) - 0% done, should be finished by 10/26
+    * Initial support for caching (cache times, etc.) - 0% done, should be finished by 10/19
+    * Additional support for caching (refresh flags, etc.) - 0% done, should be finished by 10/20
+    * Adding new config options to configsetup/setup, and configupdate - 0% done, should be finished by 10/24
+* Adds the ability to view your current location through a GeoIP service - 95% done
+    * Add new config options to configsetup/setup - 0% done - Should be finished by 9/28
+* Adds the ability to view data through a PWS at boot. - Done!
+    * Add new config options to configsetup/setup - 0% done - Should be finished by 9/28
+* Adds the ability to have up to 5 favorite locations. - Should be finished by 11/14
+    * Adding initial support (config options) - Should be finished by 10/25
+    * Adding menu option - Adding favorite locations - Should be finished by 10/27
+    * Adding menu option - Editing favorite locations - Should be finished by 11/1
+    * Adding menu option - Removing favorite locations - Should be finished by 11/3
+    * Adding support at boot - Should be finished by 11/7
+    * Adding additional logistics (checking for None, etc.) - Should be finished by 11/9
+    * Adding new config options to configsetup/setup, and configupdate. - Should be finished by 11/14
+* Adds the ability to show cache timings when enabled - Should be finished by 11/18
 
 * Will fix a bug where the updater would fail on some platforms due to a print statement.
 

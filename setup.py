@@ -41,6 +41,10 @@ config.read('storage//config.ini')
 
 def configprovision():
     try:
+        config.add_section("FIRSTINPUT")
+    except configparser.DuplicateSectionError:
+        print("Firstinput section could not be added.")
+    try:
         config.add_section('SUMMARY')
     except configparser.DuplicateSectionError:
         print("Cache section could not be added.")
@@ -145,6 +149,8 @@ def configprovision():
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['GEOCODER']['scheme'] = 'https'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
     try:
         with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)
@@ -1461,6 +1467,25 @@ else:
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     logger.debug("PREFETCH/hurricanedata_atboot is now FALSE.")
     print("Changes saved.")
+
+print("", "(30/32)", "In PyWeather 0.6.3 beta, you can now easily call your current location at boot.",
+      "The current location feature allows you to enter 'currentlocation' at boot, and view the weather for your",
+      "approximate location. However, GeoIP lookups might be inaccurate, especially for mobile users. The GeoIP service",
+      "uses freegeoip.net. Would you like to enable this service? By default, this is disabled. Yes or No.", sep="\n")
+allowgeoipservice = input("Input here: ").lower()
+logger.debug("allowgeoipservice: %s" % allowgeoipservice)
+if allowgeoipservice == "yes":
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'True'
+    logger.debug("FIRSTINPUT/geoipservice_enabled is now TRUE.")
+    print("Changes saved.")
+elif allowgeoipservice == "no":
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
+    logger.debug("FIRSTINPUT/geoipservice_enabled is now FALSE.")
+else:
+    print("Could not understand what you inputted. Defaulting to 'False'.")
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
+
+
 
 print("", "(30/30)", "PyWeather's geocoder usually uses https, but issues have been discovered",
       "on some platforms, where the geocoder cannot operate in the https mode. If you press enter",

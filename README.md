@@ -114,9 +114,9 @@ PyWeather has lots of advantages over using websites on your desktop, or even we
 
 
 ## What's the current status of PyWeather?
-PyWeather is presently in a rapid-development beta.
+PyWeather's main data types are done, so now it's on to rapid development of new features for PyWeather.
 
-Until the end of 2017, I expect to continue adding new features to PyWeather at a rapid pace. Until this point, I'll be attempting to use every part of Wunderground's API, and implement it into PyWeather.
+This stage of PyWeather will last a few versions, and span at last 6 months.    
 
 ## Contributing
 Since I don't have all the time in the world to work on PyWeather, contributing is a great way to help with PyWeather.
