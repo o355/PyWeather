@@ -79,20 +79,19 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 	* Yesterday's weather
 	* Tide data
 	* Hurricane data
+	* Webcam images - Coming in either 0.6.4 beta or 0.6.5 beta
 	
 * PyWeather is pretty modular. As I said earlier with the super-configurable config file, this also translates into modularity. PyWeather's features can be turned on and off at will.
 * PyWeather has a built-in updater, provided you have git installed. I hope to eventually incorporate a universal "download the zip and unzip it" system down the road.
 * PyWeather has a robust built-in debugger/logger. When turned on, it'll spam your console with verbosityness, or whatever that's called.
-* PyWeather has colors. I made the program colorful.
+* PyWeather has a built-in geoIP service, which can detect your approximate location for even faster weather access. However, this may not be 100% accurate, especially on mobile networks. - Coming in 0.6.3 beta, the code is done!
+* PyWeather supports the viewing of weather data for individual Wunderground Personal Weather Stations. You'll soon be able to also use PWSes as favorite locations! - Coming in 0.6.3 beta, the code is done!
 
 In addition, these features will soon be coming to PyWeather:
 * PyWeather will soon be able to store 5 favorite locations of yours, and you can easily call your favorite locations when you boot up PyWeather. - Coming in 0.6.3 beta
 * PyWeather will soon be able to tell the user the closest city that a tropical system is to (up to 300km) - Coming in 0.6.3 beta
-* PyWeather will soon be able to show you the 5 previous locations you entered. - Coming in either 0.6.3 beta or 0.6.4 beta
-* PyWeather will soon be able to automatically detect your location, so you can get the weather information for your location faster. Sadly, this may not be 100% accurate, as a GeoIP service would have to be used, since there isn't a known way to get a device's location using Python. - Coming in 0.6.4 beta
-* PyWeather will soon be able to show weather data for individual Wunderground PWSes (Personal Weather Stations). This should be useful for those who run their own PWS. Along with this, you'll be able to add PWSes to your favorite locations. - Coming in 0.7 beta
-* PyWeather will soon have a universal updater that's not reliant on Git. This should increase the reliability of the updater, and will let Windows users be able to have an automatic updater. - Coming in 0.7.1 beta
-* PyWeather will soon have rounding enabled on all data type variables, to fix a major bug on some platforms where rounding issues occur on. - Coming sometime soon.
+* PyWeather will soon be able to show you the 5 previous locations you entered. - Coming in 0.6.4 beta
+* PyWeather will soon have a universal updater that's not reliant on Git. This should increase the reliability of the updater, and will let Windows users be able to have an automatic updater. - Coming in 0.6.4 beta
 
 ## Why actually use PyWeather over Wunderground, or other apps?
 PyWeather has lots of advantages over using websites on your desktop, or even weather apps on mobile (PyWeather is compatible with Termux for Android, and other SSH apps of course)

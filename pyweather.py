@@ -498,8 +498,13 @@ if geoip_enabled == True:
         geoip_available = True
         logger.debug("currentlocation: %s ; geoip_available: %s" %
                      (currentlocation, geoip_available))
+        latstr = str(geoip_json['latitude'])
+        lonstr = str(geoip_json['longitude'])
+        logger.debug("latstr: %s ; lonstr: %s" % (latstr, lonstr))
+        logger.debug("useGeocoder: %s" % useGeocoder)
     except:
-        print("Couldn't get your current location.")
+        print("Couldn't get your current location. You won't be able to",
+              "use your current location.", sep="\n")
         geoip_available = False
         logger.debug("geoip_available: %s" % geoip_available)
 
@@ -516,7 +521,6 @@ if geoip_available is True:
     print("")
 if pws_enabled is True:
     logger.debug("pws queries have been enabled. Showing option...")
-    print("")
     print("You can also query a Wunderground PWS by entering this:")
     print("pws:<PWS ID>")
     print("")
@@ -529,8 +533,11 @@ logger.debug("pws_query: %s" % pws_query)
 
 if "currentlocation" in locinput and geoip_available is True:
     locinput = currentlocation
-    # Future code for parsing lat/lon go here.
-    logger.debug("locinput: %s")
+    useGeocoder = False
+    location = currentlocation
+    logger.debug("locinput: %s ; useGeocoder: %s" %
+                 (locinput, useGeocoder))
+    logger.debug("location: %s" % currentlocation)
 elif "pws:" in locinput and pws_enabled is True:
     pws_query = True
     logger.debug("pws_query: %s" % pws_query)
@@ -565,10 +572,14 @@ elif "pws:" in locinput and pws_enabled is True:
         logger.info("We have good PWS data.")
     pws_available = True
     logger.debug("pws_available: %s" % pws_available)
-    # Extract data about latitude and longitude. Used for the radar.
+    # Extract data about latitude and longitude, if needed in a float format.
     pws_lat = pwsinfo_json['location']['lat']
     pws_lon = pwsinfo_json['location']['lon']
     logger.debug("pws_lat: %s ; pws_lon: %s" % (pws_lat, pws_lon))
+    # Use the standard latstr/lonstr variables for the PWS' lat/lon.
+    latstr = str(pwsinfo_json['location']['lat'])
+    lonstr = str(pwsinfo_json['location']['lon'])
+    logger.debug("latstr: %s ; lonstr: %s" % (latstr, lonstr))
     # Extract data about the PWS location for outputting to user
     pws_city = pwsinfo_json['location']['city']
     pws_state = pwsinfo_json['location']['state']
@@ -1194,7 +1205,7 @@ logger.info("Printing current conditions...")
 summaryHourlyIterations = 0
 
 if pws_available is True:
-    location = "PWS " + pws_id + " (located in " + pws_location + ")"
+    location = pws_id + " (located in " + pws_location + ")"
 print(Style.BRIGHT + Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + str(location))
 print(Fore.YELLOW + summary_lastupdated)
 print("")
@@ -3459,7 +3470,10 @@ while True:
         historical_totalloops = 0
         logger.debug("historical_loops: %s ; historical_totalloops: %s"
                      % (historical_loops, historical_totalloops))
-        historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historical_input +  '/q/' + latstr + "," + lonstr + '.json'
+        if pws_available is False:
+            historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historical_input + '/q/' + latstr + "," + lonstr + '.json'
+        elif pws_available is True:
+            historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historical_input + '/q/' + locinput.lower() + '.json'
         logger.debug("historicalurl: %s" % historicalurl)
         
         historical_skipfetch = False
