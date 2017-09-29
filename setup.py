@@ -90,6 +90,11 @@ def configprovision():
         print("Cache section could not be added.")
 
     try:
+        config.add_section('HISTORY')
+    except configparser.DuplicateSectionError:
+        print("History section could not be added.")
+
+    try:
         config.add_section('RADAR GUI')
     except configparser.DuplicateSectionError:
         print("Radar GUI section could not be added.")
