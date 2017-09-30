@@ -545,6 +545,11 @@ if pws_enabled is True:
     print("")
 locinput = input("Input here: ")
 
+config['HISTORY']['RECENT_2'] = config['HISTORY']['RECENT_1']
+config['HISTORY']['RECENT_3'] = config['HISTORY']['RECENT_2']
+config['HISTORY']['RECENT_4'] = config['HISTORY']['RECENT_3']
+config['HISTORY']['RECENT_5'] = config['HISTORY']['RECENT_4']
+config['HISTORY']['RECENT_1'] = locinput
 
 # This is where the code will reside, for the recent searches...
 # I've been busy as usual, so I'm off now..
