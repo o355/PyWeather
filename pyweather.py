@@ -123,6 +123,13 @@ try:
     cache_tidetime = cache_tidetime * 60
     cache_hurricanetime = config.getfloat('CACHE', 'hurricane_cachedtime')
     cache_hurricanetime = cache_hurricanetime * 60
+
+    recentsearch_1 = config.get('HISTORY', 'RECENT_1')
+    recentsearch_2 = config.get('HISTORY', 'RECENT_2')
+    recentsearch_3 = config.get('HISTORY', 'RECENT_3')
+    recentsearch_4 = config.get('HISTORY', 'RECENT_4')
+    recentsearch_5 = config.get('HISTORY', 'RECENT_5')
+
     user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
     user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
     user_radarImageSize = config.get('RADAR GUI', 'radar_imagesize')
@@ -142,6 +149,20 @@ except:
           "in the code. Make sure there aren't any typos in the config file,",
           "and check the traceback below (report it to GitHub for extra internet",
           "points).", sep="\n")
+#    print("It could be because you haven't updated your config file.",
+#            "Would you like me to update your config file?", sep="\n")
+#    configupdate_input = input("Input here: ").lower()
+#    if configupdate_input == "yes":
+
+
+
+
+
+
+
+
+
+
     traceback.print_exc()
     sundata_summary = False
     almanac_summary = False
@@ -242,6 +263,14 @@ logger.debug("showTideOnSummary: %s ; geopyScheme: %s" %
              (showTideOnSummary, geopyScheme))
 logger.debug("prefetchHurricane_atboot: %s ; cache_hurricanetime: %s" %
              (prefetchHurricane_atboot, cache_hurricanetime))
+
+logger.debug("recentsearch_1: %s ; recentsearch_2: %s" %
+            (recentsearch_1, recentsearch_2))
+
+logger.debug("recentsearch_3: %s ; recentsearch_4: %s" %
+            (recentsearch_3, recentsearch_4))
+
+
 
 logger.info("Setting gif x and y resolution for radar...")
 # Set the size of the radar window.
@@ -514,6 +543,20 @@ if pws_enabled is True:
     print("pws:<PWS ID>")
     print("")
 locinput = input("Input here: ")
+locinput = str(locinput)
+
+
+config.set('HISTORY', 'RECENT_2', recentsearch_1)
+config.set('HISTORY', 'RECENT_3', recentsearch_2)
+config.set('HISTORY', 'RECENT_4', recentsearch_3)
+config.set('HISTORY', 'RECENT_5', recentsearch_4)
+config.set('HISTORY', 'RECENT_1', locinput)
+
+with open('storage//config.ini', 'w') as configfile:
+    config.write(configfile)
+
+
+
 print("Checking the weather, it'll take a few seconds!")
 
 # Set if the query is a PWS at the beginning. It'll flip to True if a PWS query is detected.

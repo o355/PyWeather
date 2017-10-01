@@ -94,6 +94,11 @@ def configprovision():
         print("Cache section could not be added.")
 
     try:
+        config.add_section('HISTORY')
+    except configparser.DuplicateSectionError:
+        print("History section could not be added.")
+
+    try:
         config.add_section('RADAR GUI')
     except configparser.DuplicateSectionError:
         print("Radar GUI section could not be added.")
@@ -145,6 +150,11 @@ def configprovision():
     config['CACHE']['sundata_cachedtime'] = '480'
     config['CACHE']['tide_cachedtime'] = '480'
     config['CACHE']['hurricane_cachedtime'] = '180'
+    config['HISTORY']['RECENT_1'] = 'N/A'
+    config['HISTORY']['RECENT_2'] = 'N/A'
+    config['HISTORY']['RECENT_3'] = 'N/A'
+    config['HISTORY']['RECENT_4'] = 'N/A'
+    config['HISTORY']['RECENT_5'] = 'N/A'
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['GEOCODER']['scheme'] = 'https'
