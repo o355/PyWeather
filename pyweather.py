@@ -125,7 +125,6 @@ try:
     cache_hurricanetime = cache_hurricanetime * 60
 
     recentsearch_1 = config.get('HISTORY', 'RECENT_1')
-
     recentsearch_2 = config.get('HISTORY', 'RECENT_2')
     recentsearch_3 = config.get('HISTORY', 'RECENT_3')
     recentsearch_4 = config.get('HISTORY', 'RECENT_4')
@@ -544,15 +543,18 @@ if pws_enabled is True:
     print("pws:<PWS ID>")
     print("")
 locinput = input("Input here: ")
+locinput = str(locinput)
 
-config['HISTORY']['RECENT_2'] = config['HISTORY']['RECENT_1']
-config['HISTORY']['RECENT_3'] = config['HISTORY']['RECENT_2']
-config['HISTORY']['RECENT_4'] = config['HISTORY']['RECENT_3']
-config['HISTORY']['RECENT_5'] = config['HISTORY']['RECENT_4']
-config['HISTORY']['RECENT_1'] = locinput
 
-# This is where the code will reside, for the recent searches...
-# I've been busy as usual, so I'm off now..
+config.set('HISTORY', 'RECENT_2', recentsearch_1)
+config.set('HISTORY', 'RECENT_3', recentsearch_2)
+config.set('HISTORY', 'RECENT_4', recentsearch_3)
+config.set('HISTORY', 'RECENT_5', recentsearch_4)
+config.set('HISTORY', 'RECENT_1', locinput)
+
+with open('storage//config.ini', 'w') as configfile:
+    config.write(configfile)
+
 
 
 print("Checking the weather, it'll take a few seconds!")
