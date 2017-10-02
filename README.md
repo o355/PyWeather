@@ -48,7 +48,7 @@ PyWeather **should not** be used during severe weather conditions, and should no
 
 Please listen to local authorities, and your country's weather service (NWS in the US, EC in Canada) during a severe storm.
 
-I cannot be held liable for injury or death caused in part or directly from using PyWeather. **There is no warranty associated with PyWeather. Use PyWeather at your own risk.**
+[Please do note that there is no warranty associated with PyWeather.](https://github.com/o355/PyWeather/blob/master/LICENSE#L589)
 
 ## What's PyWeather?
 PyWeather is a Python script that fetches the weather using Wunderground's API. I made PyWeather as a solution to a few things:
