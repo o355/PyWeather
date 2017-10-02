@@ -1406,7 +1406,7 @@ for x in range(0, 4):
         config['RADAR GUI']['radar_imagesize'] = 'normal'
         print("Changes saved.")
 
-print("", "(27/30)", "PyWeather's radar feature is unfortunately experimental as of PyWeather 0.6.1 beta.",
+print("", "(27/30)", "PyWeather's radar feature is unfortunately experimental as of PyWeather 0.6.3 beta.",
       "By default, a confirmation message will always appear when attempting to launch the radar.",
       "However, this can be turned off, if you plan to use the experimental radar on a regular basis.",
       "By default, bypassing the confirmation message is disabled. Yes or No.", sep="\n")
@@ -1468,7 +1468,7 @@ else:
     logger.debug("PREFETCH/hurricanedata_atboot is now FALSE.")
     print("Changes saved.")
 
-print("", "(30/32)", "In PyWeather 0.6.3 beta, you can now easily call your current location at boot.",
+print("", "(30/32)", "PyWeather has a new feature where you can now easily call your current location at boot.",
       "The current location feature allows you to enter 'currentlocation' at boot, and view the weather for your",
       "approximate location. However, GeoIP lookups might be inaccurate, especially for mobile users. The GeoIP service",
       "uses freegeoip.net. Would you like to enable this service? By default, this is disabled. Yes or No.", sep="\n")
@@ -1484,6 +1484,28 @@ elif allowgeoipservice == "no":
 else:
     print("Could not understand what you inputted. Defaulting to 'False'.")
     config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
+    logger.debug("FIRSTINPUT/geoipservice_enabled is now FALSE.")
+    print("Changes saved.")
+
+print("", "(31/32)", "PyWeather has a new feature where you can query indivdiual Wunderground PWS stations.",
+      "You can query any PWS globally by entering pws:<pws ID> when enabled, and where <pws ID> is the ID of the",
+      "PWS you want to query. However, this can be turned off if you don't want to have extra lines of text at boot,",
+      "or don't want the ability to query PWSes. By default, this is enabled. Yes or No.", sep="\n")
+allowpwsqueries = input("Input here: ").lower()
+logger.debug("allowpwsqueries: %s" % allowpwsqueries)
+if allowpwsqueries == "yes":
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
+    logger.debug("FIRSTINPUT/allow_pwsqueries is now TRUE.")
+    print("Changes saved.")
+elif allowpwsqueries == "no":
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'False'
+    logger.debug("FIRSTINPUT/allow_pwsqueries is now FALSE.")
+    print("Changes saved.")
+else:
+    print("Could not understand what you inputted. Defaulting to 'True'.")
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
+    logger.debug("FIRSTINPUT/allow_pwsqueries is now TRUE.")
+    print("Changes saved.")
 
 
 

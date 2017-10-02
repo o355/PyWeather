@@ -3957,7 +3957,8 @@ while True:
         logger.debug("activestorms: %s" % activestorms)
 
         if activestorms == 0:
-            print(Fore.RED + "There are presently no active tropical systems around the world.")
+            print(Fore.RED + "There are presently no active tropical systems anywhere on Earth.",
+                  "Try a different planet.")
             continue
 
         print(Fore.YELLOW + "Here are the active tropical systems around the world:")
@@ -3971,32 +3972,35 @@ while True:
             stormlon = float(data['Current']['lon'])
             stormlonurl = str(stormlon)
             nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + stormlaturl + '&lng=' + stormlonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
-            try:
-                nearestJSON = requests.get(nearesturl)
-                logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
-                nearest_json = json.loads(nearestJSON.text)
-                if jsonVerbosity == True:
-                    logger.debug("nearest_json: %s" % nearest_json)
-                else:
-                    logger.debug("nearest_json loaded.")
-                nearest_data = True
-            except:
-                nearest_data = False
-
-            if nearest_data is True:
+            if hurricaneclosestcity_enabled is True:
                 try:
-                    nearest_cityname = nearest_json['geonames'][0]['name']
-                    nearest_citycountry = nearest_json['geonames'][0]['countryName']
-                    nearest_kmdistance = float(nearest_json['geonames'][0]['distance'])
-                    nearest_cityavailable = True
+                    nearestJSON = requests.get(nearesturl)
+                    logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
+                    nearest_json = json.loads(nearestJSON.text)
+                    if jsonVerbosity == True:
+                        logger.debug("nearest_json: %s" % nearest_json)
+                    else:
+                        logger.debug("nearest_json loaded.")
+                    nearest_data = True
                 except:
-                    nearest_cityavailable = False
+                    nearest_data = False
 
-            if nearest_cityavailable is True:
-                # Convert distance into imperial units for 3% of the world, round down to single digit
-                nearest_midistance = nearest_kmdistance * 0.621371
-                nearest_kmdistance = str(nearest_kmdistance)
-                nearest_midistance = str(nearest_midistance)
+                if nearest_data is True:
+                    try:
+                        nearest_cityname = nearest_json['geonames'][0]['name']
+                        nearest_citycountry = nearest_json['geonames'][0]['countryName']
+                        nearest_kmdistance = float(nearest_json['geonames'][0]['distance'])
+                        nearest_cityavailable = True
+                    except:
+                        nearest_cityavailable = False
+
+                if nearest_cityavailable is True:
+                    # Convert distance into imperial units for 3% of the world, round down to single digit
+                    nearest_midistance = nearest_kmdistance * 0.621371
+                    nearest_kmdistance = str(nearest_kmdistance)
+                    nearest_midistance = str(nearest_midistance)
+            else:
+                logger.debug("closest city is disabled.")
 
             # Prefix direction cardinals to the lat/lon
             if stormlat >= 0:
