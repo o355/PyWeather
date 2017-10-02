@@ -6,7 +6,7 @@
     * Initial support for API - 25% done - Will be finished when a hurricane decides to form and make landfall.
     * Adding extra functions (custom API username, nearest city size) - 25% done, should be finished by 10/4
     * Adding new config options to configupdate, configsetup, and setup - 0% done, should be finished by 10/5
-* Will push the API key validation code up further thanks to new features. - Should be finished by 10/6
+* Will push the API key validation code up further thanks to new features. - Done!
 *October break from PyWeather development - 10/6 to 10/9*
 * Adds the ability to prefetch yesterday's weather at boot, and a caching system - 0% done, should be finished by 10/17
     * Initial support for prefetching at boot - 0% done, should be finished by 10/11
@@ -34,8 +34,12 @@
 * Adding a "last frame" button for radaar
 * Adding programmer dad jokes
 
+**BUG FIXES**
+* Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
 
-* Will fix a bug where the updater would fail on some platforms due to a print statement.
+**OTHER CHANGES**
+* The Git Updater will been completely removed, as it's been unreliable. A universal updater will be introduced later in time.
+
 
 
 ## version 0.6.2 beta - Released on 9/24/2017
