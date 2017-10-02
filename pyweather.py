@@ -134,6 +134,7 @@ try:
     pws_enabled = config.getboolean('FIRSTINPUT', 'allow_pwsqueries')
     hurricaneclosestcity_enabled = config.getboolean('HURRICANE', 'enableclosestcity')
     geonames_apiusername = config.get('HURRICANE', 'api_username')
+    hurricane_nearestsize = config.get('HURRICANE', 'nearestcitysize')
     
 except:
     # If it fails (typo or code error), we set all options to default.
@@ -184,6 +185,7 @@ except:
     pws_enabled = False
     hurricaneclosestcity_enabled = False
     geonames_apiusername = "pyweather_proj"
+    hurricane_nearestsize = 'medium'
 
 # Import logging, and set up the logger.
 import logging
@@ -327,6 +329,14 @@ else:
     geolocator = GoogleV3(scheme='https')
     logger.debug("geocoder scheme is now https.")
 
+logger.info("Declaring hurricane nearest city population minimum...")
+if hurricane_nearestsize == "small":
+    hurricane_citiesamp = "&cities=cities1000"
+elif hurricane_nearestsize == "medium":
+    hurricane_citiesamp = "&cities=cities5000"
+elif hurricane_nearestsize == "large":
+    hurricane_citiesamp = "&cities=cities10000"
+
 # Declare historical cache dictionary
 historical_cache = {}
 logger.debug("historical_cache: %s" % historical_cache)
@@ -384,8 +394,8 @@ logger.debug("apikey = %s" % apikey)
 
 # Version info gets defined here.
 
-buildnumber = 62
-buildversion = '0.6.2 beta'
+buildnumber = 63
+buildversion = '0.6.3 beta'
 
 # Refresh flag variables go here.
 refresh_currentflagged = False
@@ -3957,9 +3967,37 @@ while True:
             stormname = data['stormInfo']['stormName_Nice']
             logger.debug("stormname: %s" % stormname)
             stormlat = float(data['Current']['lat'])
+            stormlaturl = str(stormlat)
             stormlon = float(data['Current']['lon'])
-            logger.debug("stormlat: %s ; stormlon: %s" %
-                         (stormlat, stormlon))
+            stormlonurl = str(stormlon)
+            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + stormlaturl + '&lng=' + stormlonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
+            try:
+                nearestJSON = requests.get(nearesturl)
+                logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
+                nearest_json = json.loads(nearestJSON.text)
+                if jsonVerbosity == True:
+                    logger.debug("nearest_json: %s" % nearest_json)
+                else:
+                    logger.debug("nearest_json loaded.")
+                nearest_data = True
+            except:
+                nearest_data = False
+
+            if nearest_data is True:
+                try:
+                    nearest_cityname = nearest_json['geonames'][0]['name']
+                    nearest_citycountry = nearest_json['geonames'][0]['countryName']
+                    nearest_kmdistance = float(nearest_json['geonames'][0]['distance'])
+                    nearest_cityavailable = True
+                except:
+                    nearest_cityavailable = False
+
+            if nearest_cityavailable is True:
+                # Convert distance into imperial units for 3% of the world, round down to single digit
+                nearest_midistance = nearest_kmdistance * 0.621371
+                nearest_kmdistance = str(nearest_kmdistance)
+                nearest_midistance = str(nearest_midistance)
+
             # Prefix direction cardinals to the lat/lon
             if stormlat >= 0:
                 stormlat = str(stormlat) + "° N"

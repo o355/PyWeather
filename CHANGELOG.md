@@ -2,7 +2,7 @@
 # PyWeather changelog
 
 ## version 0.6.3 beta - Should be released late October/early November 2017:
-* Adds a nearby location feature to hurricane data (300km out) - 0% done, should be finished by 10/5
+* Adds a nearby location feature to hurricane data (300km out) - 0% done, DELAYED - There aren't any hurricanes to do QA with
     * Initial support for API - 0% done - Should be finished by 10/2
     * Adding extra functions (custom API username, nearest city size) - 0% done, should be finished by 10/4
     * Adding new config options to configupdate, configsetup, and setup - 0% done, should be finished by 10/5
@@ -30,6 +30,10 @@
     * Adding additional logistics (checking for None, etc.) - Should be finished by 11/9
     * Adding new config options to configsetup/setup, and configupdate. - Should be finished by 11/14
 * Adds the ability to show cache timings when enabled - Should be finished by 11/18
+* Much better error catching for the config file
+* Adding a "last frame" button for radaar
+* Adding programmer dad jokes
+
 
 * Will fix a bug where the updater would fail on some platforms due to a print statement.
 
