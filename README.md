@@ -10,10 +10,10 @@ If you do encounter bugs, make sure you report them on GitHub!
 
 ## Requirements
 To run PyWeather, you'll need:
-* A computer (Windows that supports Python 3.6, OS X, most Linux distros)
+* A computer (Windows, OS X, most Linux distros)
 * An internet connection (you have one if you're on here!)
-* Python 3.6 and below & PIP for Python 3
-* ~3 MB of disk space
+* Python 3 (Python 3.5 and above is recommended) & PIP for Python 3
+* ~5-10 MB of disk space
 
 ## Download/Setup
 To download PyWeather, click the "Releases" button at the top of the page. Download the latest release, and unzip it.
@@ -48,7 +48,7 @@ PyWeather **should not** be used during severe weather conditions, and should no
 
 Please listen to local authorities, and your country's weather service (NWS in the US, EC in Canada) during a severe storm.
 
-I cannot be held liable for injury or death caused in part or directly from using PyWeather. **There is no warranty associated with PyWeather. Use PyWeather at your own risk.**
+However, during times of non-severe weather, PyWeather is a fun way to check the weather.
 
 ## What's PyWeather?
 PyWeather is a Python script that fetches the weather using Wunderground's API. I made PyWeather as a solution to a few things:
@@ -90,7 +90,7 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 In addition, these features will soon be coming to PyWeather:
 * PyWeather will soon be able to store 5 favorite locations of yours, and you can easily call your favorite locations when you boot up PyWeather. - Coming in 0.6.3 beta
 * PyWeather will soon be able to tell the user the closest city that a tropical system is to (up to 300km) - Coming in 0.6.3 beta
-* PyWeather will soon be able to show you the 5 previous locations you entered. - Coming in 0.6.4 beta
+* PyWeather will soon be able to show you the 5 previous locations you entered. - Coming in 0.6.3 beta
 * PyWeather will soon have a universal updater that's not reliant on Git. This should increase the reliability of the updater, and will let Windows users be able to have an automatic updater. - Coming in 0.6.4 beta
 
 ## Why actually use PyWeather over Wunderground, or other apps?

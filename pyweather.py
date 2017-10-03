@@ -141,6 +141,7 @@ try:
     pws_enabled = config.getboolean('FIRSTINPUT', 'allow_pwsqueries')
     hurricaneclosestcity_enabled = config.getboolean('HURRICANE', 'enableclosestcity')
     geonames_apiusername = config.get('HURRICANE', 'api_username')
+    hurricane_nearestsize = config.get('HURRICANE', 'nearestcitysize')
     
 except:
     # If it fails (typo or code error), we set all options to default.
@@ -205,6 +206,7 @@ except:
     pws_enabled = False
     hurricaneclosestcity_enabled = False
     geonames_apiusername = "pyweather_proj"
+    hurricane_nearestsize = 'medium'
 
 # Import logging, and set up the logger.
 import logging
@@ -356,6 +358,14 @@ else:
     geolocator = GoogleV3(scheme='https')
     logger.debug("geocoder scheme is now https.")
 
+logger.info("Declaring hurricane nearest city population minimum...")
+if hurricane_nearestsize == "small":
+    hurricane_citiesamp = "&cities=cities1000"
+elif hurricane_nearestsize == "medium":
+    hurricane_citiesamp = "&cities=cities5000"
+elif hurricane_nearestsize == "large":
+    hurricane_citiesamp = "&cities=cities10000"
+
 # Declare historical cache dictionary
 historical_cache = {}
 logger.debug("historical_cache: %s" % historical_cache)
@@ -413,8 +423,8 @@ logger.debug("apikey = %s" % apikey)
 
 # Version info gets defined here.
 
-buildnumber = 62
-buildversion = '0.6.2 beta'
+buildnumber = 63
+buildversion = '0.6.3 beta'
 
 # Refresh flag variables go here.
 refresh_currentflagged = False
@@ -498,6 +508,93 @@ logger.debug("geoip_available: %s ; pws_available: %s" %
              (geoip_available, pws_available))
 logger.debug("pws_urls: %s ; useGeocoder: %s" %
              (pws_urls, useGeocoder))
+
+# Validate the API key before boot. It's now up here due to the new features at boot.
+if validateAPIKey == True and backupKeyLoaded == True:
+    logger.info("Beginning API key validation.")
+    testurl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/NY/New_York.json'
+    logger.debug("testurl: %s" % testurl)
+    try:
+        testJSON = requests.get(testurl)
+        logger.debug("Acquired test JSON, end result: %s" % testJSON)
+    except:
+        logger.warn("Cannot connect to the API! Is the internet down?")
+        print("When attempting to validate your primary API key, PyWeather ran",
+              "into an error when accessing Wunderground's API. If you're",
+              "on a network with a filter, make sure that",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you",
+              "have an internet connection.", sep="\n")
+        printException()
+        print("Press enter to exit.")
+        input()
+        sys.exit()
+    test_json = json.loads(testJSON.text)
+    if jsonVerbosity == True:
+        logger.debug("test_json: %s" % test_json)
+    try:
+        test_conditions = str(test_json['current_observation']['temp_f'])
+        logger.debug("test_conditions: %s" % test_conditions)
+        logger.info("API key is valid!")
+    except:
+        logger.warn("API key is NOT valid. Attempting to revalidate API key...")
+        if backupKeyLoaded == True:
+            logger.info("Beginning backup API key validation.")
+            testurl = 'http://api.wunderground.com/api/' + apikey2 + '/conditions/q/NY/New_York.json'
+            logger.debug("testurl: %s" % testurl)
+            # What if the user's internet connection was alive during the 1st
+            # validation, but not the 2nd? That's why this is here.
+            try:
+                testJSON = requests.get(testurl)
+                logger.debug("Acquired test JSON, end result: %s" % testJSON)
+            except:
+                print("When attempting to validate your backup API key, PyWeather ran",
+                      "into an error. If you're on a network with a filter, make sure",
+                      "that 'api.wunderground.com' is unblocked. Otherwise, make sure you",
+                      "have an internet conection, that that your internet connection's latency",
+                      "isn't 1.59 days.", sep="\n")
+                printException()
+                print("Press enter to exit.")
+                input()
+                sys.exit()
+            test_json = json.loads(testJSON.text)
+            if jsonVerbosity == True:
+                logger.debug("test_json: %s" % test_json)
+            try:
+                test_conditions = str(test_json['current_observation']['temp_f'])
+                logger.debug("test_conditions: %s" % test_conditions)
+                logger.info("Backup API key is valid!")
+                apikey = apikey2
+                logger.debug("apikey = apikey2. apikey: %s" % apikey)
+                # We don't need to define new URLs here. The apikey variable is set before URL declaration.
+            except:
+                logger.warn("Backup API key could not be validated!")
+                print("Your primary and backup API key(s) could not be validated.",
+                      "Make sure that your primary API key is valid, either because of a typo",
+                      "or some other reason. Installing Gentoo may help with the validation",
+                      "of your API key.", sep="\n")
+                printException()
+                print("Press enter to exit.")
+                input()
+                sys.exit()
+        elif backupKeyLoaded == False:
+            print("When attempting to validate your API key, your primary key",
+                  "couldn't be validated, and your backup key wasn't able to",
+                  "load at boot. Make sure that your primary API key is valid,",
+                  "and that your backup API key can be accessed by PyWeather."
+                  "Press enter to exit.", sep="\n")
+            input()
+            sys.exit()
+        else:
+            logger.warn("Backup key couldn't get loaded!")
+            print("Your primary API key couldn't be validated, and your",
+                  "backup key could not be loaded at startup.",
+                  "Please make sure your primary API key is valid, and that",
+                  "your backup API key can be accessed (common mistakes include",
+                  "wrong permissions, and the file not existing).",
+                  "Press enter to exit.", sep="\n")
+            input()
+            sys.exit()
+
 if geoip_enabled == True:
     logger.info("geoip is enabled, attempting to fetch current location...")
     try:
@@ -734,124 +831,6 @@ logger.info("Start API fetch...")
 
 # If a user requested their API key to be validated, and the backup key
 # can be loaded (as was checked earlier), we do it here.
-if validateAPIKey == False and backupKeyLoaded == True:
-    logger.info("Beginning API key validation.")
-    testurl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/NY/New_York.json'
-    logger.debug("testurl: %s" % testurl)
-    try:
-        testJSON = requests.get(testurl)
-        logger.debug("Acquired test JSON, end result: %s" % testJSON)
-    except:
-        logger.warn("Cannot connect to the API! Is the internet down?")
-        print("When attempting to validate your primary API key, PyWeather ran",
-              "into an error when accessing Wunderground's API. If you're",
-              "on a network with a filter, make sure that",
-              "'api.wunderground.com' is unblocked. Otherwise, make sure you",
-              "have an internet connection.", sep="\n")
-        printException()
-        print("Press enter to exit.")
-        input()
-        sys.exit()
-    if verbosity == False:
-        print("[##--------] | 9% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    test_json = json.loads(testJSON.text)
-    if jsonVerbosity == True:
-        logger.debug("test_json: %s" % test_json)
-    try:
-        test_conditions = str(test_json['current_observation']['temp_f'])
-        logger.debug("test_conditions: %s" % test_conditions)
-        logger.info("API key is valid!")
-    except:
-        logger.warn("API key is NOT valid. Attempting to revalidate API key...")
-        if backupKeyLoaded == True:
-            logger.info("Beginning backup API key validation.")
-            testurl = 'http://api.wunderground.com/api/' + apikey2 + '/conditions/q/NY/New_York.json'
-            logger.debug("testurl: %s" % testurl)
-            # What if the user's internet connection was alive during the 1st
-            # validation, but not the 2nd? That's why this is here.
-            try:
-                testJSON = requests.get(testurl)
-                logger.debug("Acquired test JSON, end result: %s" % testJSON)
-            except:
-                print("When attempting to validate your backup API key, PyWeather ran",
-                      "into an error. If you're on a network with a filter, make sure",
-                      "that 'api.wunderground.com' is unblocked. Otherwise, make sure you",
-                      "have an internet conection, that that your internet connection's latency",
-                      "isn't 1.59 days.", sep="\n")
-                printException()
-                print("Press enter to exit.")
-                input()
-                sys.exit()
-            if verbosity == False:
-                print("[##--------] | 12% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-            test_json = json.loads(testJSON.text)
-            if jsonVerbosity == True:
-                logger.debug("test_json: %s" % test_json)
-            try:
-                test_conditions = str(test_json['current_observation']['temp_f'])
-                logger.debug("test_conditions: %s" % test_conditions)
-                logger.info("Backup API key is valid!")
-                apikey = apikey2
-                logger.debug("apikey = apikey2. apikey: %s" % apikey)
-                logger.debug("Redefining URL variables...")
-                if pws_urls is True:
-                    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + locinput.lower() + '.json'
-                    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + locinput.lower() + '.json'
-                    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + locinput.lower() + '.json'
-                    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + locinput.lower() + '.json'
-                    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + locinput.lower() + '.json'
-                    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + locinput.lower() + '.json'
-                    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + locinput.lower() + '.json'
-                    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + locinput.lower() + '.json'
-                    hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
-                elif pws_urls is False:
-                    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
-                    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
-                    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
-                    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
-                    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
-                    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
-                    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
-                    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
-                    hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
-
-                logger.debug("currenturl: %s ; f10dayurl: %s" %
-                             (currenturl, f10dayurl))
-                logger.debug("hourlyurl: %s ; tendayurl: %s" %
-                             (hourlyurl, tendayurl))
-                logger.debug("astronomyurl: %s ; almanacurl: %s" %
-                             (astronomyurl, almanacurl))
-                logger.debug("yesterdayurl: %s ; tideurl: %s" %
-                             (yesterdayurl, tideurl))
-                logger.debug("hurricaneurl: %s" % hurricaneurl)
-            except:
-                logger.warn("Backup API key could not be validated!")
-                print("Your primary and backup API key(s) could not be validated.",
-                      "Make sure that your primary API key is valid, either because of a typo",
-                      "or some other reason. Installing Gentoo may help with the validation",
-                      "of your API key.", sep="\n")
-                printException()
-                print("Press enter to exit.")
-                input()
-                sys.exit()
-        elif backupKeyLoaded == False:
-            print("When attempting to validate your API key, your primary key",
-                  "couldn't be validated, and your backup key wasn't able to",
-                  "load at boot. Make sure that your primary API key is valid,",
-                  "and that your backup API key can be accessed by PyWeather."
-                  "Press enter to exit.", sep="\n")
-            input()
-            sys.exit()
-        else:
-            logger.warn("Backup key couldn't get loaded!")
-            print("Your primary API key couldn't be validated, and your",
-                  "backup key could not be loaded at startup.",
-                  "Please make sure your primary API key is valid, and that",
-                  "your backup API key can be accessed (common mistakes include",
-                  "wrong permissions, and the file not existing).",
-                  "Press enter to exit.", sep="\n")
-            input()
-            sys.exit()
 
 # Fetch JSON files. Why not go one by one for each? If we can't fetch one data type, PyWeather can't really work, so an exit is needed anyways.
 # A huge try loop just simplifies things.
@@ -3991,7 +3970,8 @@ while True:
         logger.debug("activestorms: %s" % activestorms)
 
         if activestorms == 0:
-            print(Fore.RED + "There are presently no active tropical systems around the world.")
+            print(Fore.RED + "There are presently no active tropical systems anywhere on Earth.",
+                  "Try a different planet.")
             continue
 
         print(Fore.YELLOW + "Here are the active tropical systems around the world:")
@@ -4001,9 +3981,40 @@ while True:
             stormname = data['stormInfo']['stormName_Nice']
             logger.debug("stormname: %s" % stormname)
             stormlat = float(data['Current']['lat'])
+            stormlaturl = str(stormlat)
             stormlon = float(data['Current']['lon'])
-            logger.debug("stormlat: %s ; stormlon: %s" %
-                         (stormlat, stormlon))
+            stormlonurl = str(stormlon)
+            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + stormlaturl + '&lng=' + stormlonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
+            if hurricaneclosestcity_enabled is True:
+                try:
+                    nearestJSON = requests.get(nearesturl)
+                    logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
+                    nearest_json = json.loads(nearestJSON.text)
+                    if jsonVerbosity == True:
+                        logger.debug("nearest_json: %s" % nearest_json)
+                    else:
+                        logger.debug("nearest_json loaded.")
+                    nearest_data = True
+                except:
+                    nearest_data = False
+
+                if nearest_data is True:
+                    try:
+                        nearest_cityname = nearest_json['geonames'][0]['name']
+                        nearest_citycountry = nearest_json['geonames'][0]['countryName']
+                        nearest_kmdistance = float(nearest_json['geonames'][0]['distance'])
+                        nearest_cityavailable = True
+                    except:
+                        nearest_cityavailable = False
+
+                if nearest_cityavailable is True:
+                    # Convert distance into imperial units for 3% of the world, round down to single digit
+                    nearest_midistance = nearest_kmdistance * 0.621371
+                    nearest_kmdistance = str(nearest_kmdistance)
+                    nearest_midistance = str(nearest_midistance)
+            else:
+                logger.debug("closest city is disabled.")
+
             # Prefix direction cardinals to the lat/lon
             if stormlat >= 0:
                 stormlat = str(stormlat) + "° N"
