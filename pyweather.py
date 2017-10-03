@@ -555,6 +555,7 @@ config.set('HISTORY', 'RECENT_1', locinput)
 with open('storage//config.ini', 'w') as configfile:
     config.write(configfile)
 
+logger.debug("Most recent user input is: %s." % locinput)
 
 
 print("Checking the weather, it'll take a few seconds!")
