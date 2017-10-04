@@ -4171,12 +4171,14 @@ while True:
                                  (hurricaneforecasttime, hurricane_hasExtDataInForecast))
                     hurricaneforecasttime_detail = forecast['Time']['pretty']
                     hurricaneforecast_lat = float(forecast['lat'])
-                    hurricaneforecast_laturl = str(hurricaneforecast_lat)
-                    hurricaneforecast_lon = float(forecast['lon'])
-                    hurricaneforecast_lonurl = str(hurricaneforecast_lon)
                     logger.debug("hurricaneforecasttime_detail: %s ; hurricaneforecast_lat: %s" %
                                  (hurricaneforecasttime_detail, hurricaneforecast_lat))
-                    logger.debug("hurricaneforecast_lon: %s" % hurricaneforecast_lon)
+                    hurricaneforecast_laturl = str(hurricaneforecast_lat)
+                    hurricaneforecast_lon = float(forecast['lon'])
+                    logger.debug("hurricaneforecast_laturl: %s ; hurricaneforecast_lon: %s" %
+                                 (hurricaneforecast_laturl, hurricaneforecast_lon))
+                    hurricaneforecast_lonurl = str(hurricaneforecast_lon)
+                    logger.debug("hurricaneforecast_lonurl: %s" % hurricaneforecast_lonurl)
                     nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneforecast_laturl + '&lng=' + hurricaneforecast_lonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
                     logger.debug("nearesturl: %s" % nearesturl)
 
@@ -4419,7 +4421,9 @@ while True:
                             logger.debug("hurricaneextforecasttime: %s" % hurricaneextforecasttime)
                             hurricaneextforecasttime_detail = extforecast['Time']['pretty']
                             hurricaneextforecast_lat = float(extforecast['lat'])
+                            hurricaneextforecast_urllat = str(hurricaneextforecast_lat)
                             hurricaneextforecast_lon = float(extforecast['lon'])
+                            hurricaneextforecast_urllon = str(hurricaneextforecast_lon)
                             logger.debug("hurricaneextforecasttime_detail: %s ; hurricaneextforecast_lat: %s" %
                                          (hurricaneextforecasttime_detail, hurricaneextforecast_lat))
                             logger.debug("hurricaneextforecast_lon: %s" % hurricaneextforecast_lon)
