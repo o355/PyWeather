@@ -3941,6 +3941,7 @@ while True:
             stormlon = float(data['Current']['lon'])
             stormlonurl = str(stormlon)
             nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + stormlaturl + '&lng=' + stormlonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
+            logger.debug("nearesturl: %s" % nearesturl)
             if hurricaneclosestcity_enabled is True:
                 try:
                     nearestJSON = requests.get(nearesturl)
@@ -3959,13 +3960,17 @@ while True:
                         nearest_cityname = nearest_json['geonames'][0]['name']
                         nearest_citycountry = nearest_json['geonames'][0]['countryName']
                         nearest_kmdistance = float(nearest_json['geonames'][0]['distance'])
+                        nearest_city = nearest_cityname + ", " + nearest_citycountry
                         nearest_cityavailable = True
                     except:
+                        printException()
                         nearest_cityavailable = False
 
                 if nearest_cityavailable is True:
                     # Convert distance into imperial units for 3% of the world, round down to single digit
                     nearest_midistance = nearest_kmdistance * 0.621371
+                    nearest_kmdistance = round(nearest_kmdistance, 1)
+                    nearest_midistance = round(nearest_midistance, 1)
                     nearest_kmdistance = str(nearest_kmdistance)
                     nearest_midistance = str(nearest_midistance)
             else:
@@ -4047,6 +4052,14 @@ while True:
                 print(Fore.YELLOW + "Pressure: " + Fore.CYAN + stormpressuremb + " mb ("
                       + stormpressureinches + " inHg)")
             print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
+            if hurricaneclosestcity_enabled is True:
+                if nearest_data is False:
+                    print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
+                elif nearest_data is True and nearest_cityavailable is False:
+                    print(Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from the nearest city.")
+                elif nearest_data is True and nearest_cityavailable is True:
+                    print(Fore.CYAN + nearest_midistance + " mi (" + nearest_kmdistance + " km)" + Fore.YELLOW
+                          + " away from " + nearest_city + ".")
             currentstormiterations += 1
             logger.debug("currentstormiterations: %s" % currentstormiterations)
             if user_showCompletedIterations is True:
