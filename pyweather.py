@@ -139,7 +139,8 @@ try:
     prefetchHurricane_atboot = config.getboolean('PREFETCH', 'hurricanedata_atboot')
     geoip_enabled = config.getboolean('FIRSTINPUT', 'geoipservice_enabled')
     pws_enabled = config.getboolean('FIRSTINPUT', 'allow_pwsqueries')
-    hurricaneclosestcity_enabled = config.getboolean('HURRICANE', 'enableclosestcity')
+    hurricanenearestcity_enabled = config.getboolean('HURRICANE', 'enablenearestcity')
+    hurricanenearestcity_fenabled = config.getboolean('HURRICANE', 'enablenearestcity_forecast')
     geonames_apiusername = config.get('HURRICANE', 'api_username')
     hurricane_nearestsize = config.get('HURRICANE', 'nearestcitysize')
     
@@ -204,7 +205,8 @@ except:
     prefetchHurricane_atboot = False
     geoip_enabled = False
     pws_enabled = False
-    hurricaneclosestcity_enabled = False
+    hurricanenearestcity_enabled = False
+    hurricanenearestcity_fenabled = False
     geonames_apiusername = "pyweather_proj"
     hurricane_nearestsize = 'medium'
 
@@ -740,6 +742,14 @@ if useGeocoder is True:
         if verbosity == False:
             print("[#---------] | 1% |", round(time.time() - firstfetch,1),
                   "seconds", end="\r")
+    except geopy.exc.GeocoderQuotaExceeded:
+        logger.warning("Geocoder quota has been exceeded!")
+        print("When attempting to access Google's geocoder, a quota error was hit. Please",
+              "wait 1-2 minutes, then try using PyWeather again.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
     except geopy.exc.GeocoderServiceError:
         logger.warning("Service error from geopy. SSL issue most likely?")
         print("When attempting to access Google's geocoder, a service error occurred.",
@@ -3985,7 +3995,9 @@ while True:
             stormlon = float(data['Current']['lon'])
             stormlonurl = str(stormlon)
             nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + stormlaturl + '&lng=' + stormlonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
-            if hurricaneclosestcity_enabled is True:
+            logger.debug("nearesturl: %s" % nearesturl)
+            if hurricanenearestcity_enabled is True:
+                logger.info("hurricanenearestcity_enabled is True, loading up data...")
                 try:
                     nearestJSON = requests.get(nearesturl)
                     logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
@@ -3995,23 +4007,42 @@ while True:
                     else:
                         logger.debug("nearest_json loaded.")
                     nearest_data = True
+                    logger.debug("nearest_data: %s" % nearest_data)
                 except:
+                    printException_loggerwarn()
                     nearest_data = False
+                    logger.debug("nearest_data: %s" % nearest_data)
 
                 if nearest_data is True:
+                    logger.debug("nearest_data is True, parsing data...")
                     try:
                         nearest_cityname = nearest_json['geonames'][0]['name']
                         nearest_citycountry = nearest_json['geonames'][0]['countryName']
+                        logger.debug("nearest_cityname: %s ; nearest_citycountry: %s" %
+                                     (nearest_cityname, nearest_citycountry))
                         nearest_kmdistance = float(nearest_json['geonames'][0]['distance'])
+                        nearest_city = nearest_cityname + ", " + nearest_citycountry
+                        logger.debug("nearest_kmdistance: %s ; nearest_city: %s" %
+                                     (nearest_kmdistance, nearest_city))
                         nearest_cityavailable = True
+                        logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
                     except:
+                        printException_loggerwarn()
                         nearest_cityavailable = False
+                        logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
 
                 if nearest_cityavailable is True:
+                    logger.debug("nearest_cityavailable is true. Doing some conversions...")
                     # Convert distance into imperial units for 3% of the world, round down to single digit
                     nearest_midistance = nearest_kmdistance * 0.621371
+                    logger.debug("nearest_midistance: %s" % nearest_midistance)
+                    nearest_kmdistance = round(nearest_kmdistance, 1)
+                    nearest_midistance = round(nearest_midistance, 1)
+                    logger.debug("nearest_kmdistance: %s ; nearest_midistance: %s" %
+                                 (nearest_kmdistance, nearest_midistance))
                     nearest_kmdistance = str(nearest_kmdistance)
                     nearest_midistance = str(nearest_midistance)
+                    logger.info("Converted nearest_kmdistance and nearest_midistance to str")
             else:
                 logger.debug("closest city is disabled.")
 
@@ -4091,6 +4122,14 @@ while True:
                 print(Fore.YELLOW + "Pressure: " + Fore.CYAN + stormpressuremb + " mb ("
                       + stormpressureinches + " inHg)")
             print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
+            if hurricanenearestcity_enabled is True:
+                if nearest_data is False:
+                    print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
+                elif nearest_data is True and nearest_cityavailable is False:
+                    print(Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from the nearest city.")
+                elif nearest_data is True and nearest_cityavailable is True:
+                    print(Fore.YELLOW + "Nearest city: " + Fore.CYAN + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
+                          + " away from " + nearest_city + ".")
             currentstormiterations += 1
             logger.debug("currentstormiterations: %s" % currentstormiterations)
             if user_showCompletedIterations is True:
@@ -4176,10 +4215,16 @@ while True:
                                  (hurricaneforecasttime, hurricane_hasExtDataInForecast))
                     hurricaneforecasttime_detail = forecast['Time']['pretty']
                     hurricaneforecast_lat = float(forecast['lat'])
-                    hurricaneforecast_lon = float(forecast['lon'])
                     logger.debug("hurricaneforecasttime_detail: %s ; hurricaneforecast_lat: %s" %
                                  (hurricaneforecasttime_detail, hurricaneforecast_lat))
-                    logger.debug("hurricaneforecast_lon: %s" % hurricaneforecast_lon)
+                    hurricaneforecast_laturl = str(hurricaneforecast_lat)
+                    hurricaneforecast_lon = float(forecast['lon'])
+                    logger.debug("hurricaneforecast_laturl: %s ; hurricaneforecast_lon: %s" %
+                                 (hurricaneforecast_laturl, hurricaneforecast_lon))
+                    hurricaneforecast_lonurl = str(hurricaneforecast_lon)
+                    logger.debug("hurricaneforecast_lonurl: %s" % hurricaneforecast_lonurl)
+                    nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneforecast_laturl + '&lng=' + hurricaneforecast_lonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
+                    logger.debug("nearesturl: %s" % nearesturl)
 
                     if hurricaneforecast_lat >= 0:
                         hurricaneforecast_lat = str(hurricaneforecast_lat) + "° N"
@@ -4231,6 +4276,56 @@ while True:
                     logger.debug("hurricaneforecast_gustkph: %s ; hurricaneforecast_gustkts: %s" %
                                  (hurricaneforecast_gustkph, hurricaneforecast_gustkts))
 
+                    if hurricanenearestcity_fenabled is True:
+                        logger.info("hurricanenearestcity_fenabled is True, loading up data...")
+                        try:
+                            nearestJSON = requests.get(nearesturl)
+                            logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
+                            nearest_json = json.loads(nearestJSON.text)
+                            if jsonVerbosity == True:
+                                logger.debug("nearest_json: %s" % nearest_json)
+                            else:
+                                logger.debug("nearest_json loaded.")
+                            nearest_data = True
+                            logger.debug("nearest_data: %s" % nearest_data)
+                        except:
+                            printException_loggerwarn()
+                            nearest_data = False
+                            logger.debug("nearest_data: %s" % nearest_data)
+
+                        if nearest_data is True:
+                            logger.debug("nearest_data is True, parsing data...")
+                            try:
+                                nearest_cityname = nearest_json['geonames'][0]['name']
+                                nearest_citycountry = nearest_json['geonames'][0]['countryName']
+                                logger.debug("nearest_cityname: %s ; nearest_citycountry: %s" %
+                                             (nearest_cityname, nearest_citycountry))
+                                nearest_kmdistance = float(nearest_json['geonames'][0]['distance'])
+                                nearest_city = nearest_cityname + ", " + nearest_citycountry
+                                logger.debug("nearest_kmdistance: %s ; nearest_city: %s" %
+                                             (nearest_kmdistance, nearest_city))
+                                nearest_cityavailable = True
+                                logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
+                            except:
+                                printException_loggerwarn()
+                                nearest_cityavailable = False
+                                logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
+
+                        if nearest_cityavailable is True:
+                            logger.debug("nearest_cityavailable is true. Doing some conversions...")
+                            # Convert distance into imperial units for 3% of the world, round down to single digit
+                            nearest_midistance = nearest_kmdistance * 0.621371
+                            logger.debug("nearest_midistance: %s" % nearest_midistance)
+                            nearest_kmdistance = round(nearest_kmdistance, 1)
+                            nearest_midistance = round(nearest_midistance, 1)
+                            logger.debug("nearest_kmdistance: %s ; nearest_midistance: %s" %
+                                         (nearest_kmdistance, nearest_midistance))
+                            nearest_kmdistance = str(nearest_kmdistance)
+                            nearest_midistance = str(nearest_midistance)
+                            logger.info("Converted nearest_kmdistance and nearest_midistance to str")
+                    else:
+                        logger.debug("closest city is disabled.")
+
                     print(Fore.YELLOW + hurricaneforecasttime_detail + " (" + hurricaneforecasttime + ")")
                     print(Fore.YELLOW + "Storm Type: " + Fore.CYAN + hurricaneforecast_type)
                     print(Fore.YELLOW + "Wind Speed: " + Fore.CYAN + hurricaneforecast_windmph + " mph (" + hurricaneforecast_windkph + " kph, "
@@ -4238,6 +4333,16 @@ while True:
                     print(Fore.YELLOW + "Wind Gusts: " + Fore.CYAN + hurricaneforecast_gustmph + " mph (" + hurricaneforecast_gustkph + " kph, "
                           + hurricaneforecast_gustkts + " kts)")
                     print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneforecast_lat + ", " + hurricaneforecast_lon)
+                    if hurricanenearestcity_fenabled is True:
+                        if nearest_data is False:
+                            print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
+                        elif nearest_data is True and nearest_cityavailable is False:
+                            print(
+                                Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from the nearest city.")
+                        elif nearest_data is True and nearest_cityavailable is True:
+                            print(
+                                Fore.YELLOW + "Nearest city: " + Fore.CYAN + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
+                                + " away from " + nearest_city + ".")
                     hurricanecurrentiterations += 1
                     logger.debug("hurricanecurrentiterations: %s" % hurricanecurrentiterations)
                     if user_showCompletedIterations is True:
@@ -4321,6 +4426,7 @@ while True:
                         # This has to be none for this entire thing to work.
                         forecastselection = "none"
 
+
                     if forecastselection == "":
                         extendedforecastloops = 0
                         extendedcurrentloops = 0
@@ -4359,7 +4465,9 @@ while True:
                             logger.debug("hurricaneextforecasttime: %s" % hurricaneextforecasttime)
                             hurricaneextforecasttime_detail = extforecast['Time']['pretty']
                             hurricaneextforecast_lat = float(extforecast['lat'])
+                            hurricaneextforecast_urllat = str(hurricaneextforecast_lat)
                             hurricaneextforecast_lon = float(extforecast['lon'])
+                            hurricaneextforecast_urllon = str(hurricaneextforecast_lon)
                             logger.debug("hurricaneextforecasttime_detail: %s ; hurricaneextforecast_lat: %s" %
                                          (hurricaneextforecasttime_detail, hurricaneextforecast_lat))
                             logger.debug("hurricaneextforecast_lon: %s" % hurricaneextforecast_lon)
@@ -4455,6 +4563,8 @@ while True:
                                 elif currentstormiterations == activestorms:
                                     logger.debug("currentstormiterations == activestorms")
                                     break
+                        else:
+                            continue
 
 #<--- Hurricane is above | About is below --->
     elif moreoptions == "14":
