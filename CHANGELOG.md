@@ -4,7 +4,7 @@
 ## version 0.6.3 beta - Should be released late October/early November 2017:
 * Adds a nearby location feature to hurricane data (300km out) - 20% done
     * Initial support for API - 100% done
-    * Adding extra functions (custom API username, nearest city size, logger) - 80% done
+    * Adding more logger messages/better commenting - 0% done
     * Adding new config options to configupdate, configsetup, and setup - 0% done, should be finished by 10/5
 * Will push the API key validation code up further thanks to new features. - Done!
 *October break from PyWeather development - 10/6 to 10/9*

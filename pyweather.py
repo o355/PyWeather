@@ -4427,6 +4427,7 @@ while True:
                             logger.debug("hurricaneextforecasttime_detail: %s ; hurricaneextforecast_lat: %s" %
                                          (hurricaneextforecasttime_detail, hurricaneextforecast_lat))
                             logger.debug("hurricaneextforecast_lon: %s" % hurricaneextforecast_lon)
+                            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneextforecast_laturl + '&lng=' + hurricaneextforecast_lonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
 
                             if hurricaneextforecast_lat >= 0:
                                 hurricaneextforecast_lat = str(hurricaneextforecast_lat) + "° N"
@@ -4463,8 +4464,20 @@ while True:
                                 hurricaneextforecast_type = "Invest"
                             elif hurricaneextforecast_category == -5:
                                 hurricaneextforecast_type = "Remnants"
-                            logger.debug("hurricaneextforecast_type: %s" % hurricaneextforecast_type)
-                            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneextforecast_laturl + '&lng=' + hurricaneextforecast_lonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
+
+                            hurricaneextforecast_windmph = str(extforecast['WindSpeed']['Mph'])
+                            hurricaneextforecast_windkph = str(extforecast['WindSpeed']['Kph'])
+                            logger.debug("hurricaneextforecast_windmph: %s ; hurricaneextforecast_windkph: %s" %
+                                         (hurricaneextforecast_windmph, hurricaneextforecast_windkph))
+                            hurricaneextforecast_windkts = str(extforecast['WindSpeed']['Kts'])
+                            hurricaneextforecast_gustmph = str(extforecast['WindGust']['Mph'])
+                            logger.debug("hurricaneextforecast_windkts: %s ; hurricaneextforecast_gustmph: %s" %
+                                         (hurricaneextforecast_windkts, hurricaneextforecast_gustmph))
+                            hurricaneextforecast_gustkph = str(extforecast['WindGust']['Kph'])
+                            hurricaneextforecast_gustkts = str(extforecast['WindGust']['Kts'])
+                            logger.debug("hurricaneextforecast_gustkph: %s ; hurricaneextforecast_gustkts: %s" %
+                                         (hurricaneextforecast_gustkph, hurricaneextforecast_gustkts))
+
                             if hurricanenearestcity_fenabled is True:
                                 logger.info("hurricanenearestcity_fenabled is True, loading up data...")
                                 try:
@@ -4514,19 +4527,6 @@ while True:
                                     logger.info("Converted nearest_kmdistance and nearest_midistance to str")
                             else:
                                 logger.debug("closest city is disabled.")
-
-                            hurricaneextforecast_windmph = str(extforecast['WindSpeed']['Mph'])
-                            hurricaneextforecast_windkph = str(extforecast['WindSpeed']['Kph'])
-                            logger.debug("hurricaneextforecast_windmph: %s ; hurricaneextforecast_windkph: %s" %
-                                         (hurricaneextforecast_windmph, hurricaneextforecast_windkph))
-                            hurricaneextforecast_windkts = str(extforecast['WindSpeed']['Kts'])
-                            hurricaneextforecast_gustmph = str(extforecast['WindGust']['Mph'])
-                            logger.debug("hurricaneextforecast_windkts: %s ; hurricaneextforecast_gustmph: %s" %
-                                         (hurricaneextforecast_windkts, hurricaneextforecast_gustmph))
-                            hurricaneextforecast_gustkph = str(extforecast['WindGust']['Kph'])
-                            hurricaneextforecast_gustkts = str(extforecast['WindGust']['Kts'])
-                            logger.debug("hurricaneextforecast_gustkph: %s ; hurricaneextforecast_gustkts: %s" %
-                                         (hurricaneextforecast_gustkph, hurricaneextforecast_gustkts))
 
                             print(Fore.YELLOW + hurricaneextforecasttime_detail + " (" + hurricaneextforecasttime + ")")
                             print(Fore.YELLOW + "Storm Type: " + Fore.CYAN + hurricaneextforecast_type)
