@@ -36,6 +36,7 @@
 
 **BUG FIXES**
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
+* Fixed a potential bug where if there was just one storm, extended forecast data and forecast data got all mixed up - Investigating
 
 **OTHER CHANGES**
 * The Git Updater will been completely removed, as it's been unreliable. A universal updater will be introduced later in time.

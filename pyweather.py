@@ -4356,7 +4356,7 @@ while True:
 
                     # This says if activestorms are just one, or if we're on the last storm, and we've gone through all loops, and 4/5 day
                     # forecast data was not before the extended forecast, enter this dialogue.
-                    elif (activestorms == 1 or currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations):
+                    elif (activestorms == 1 and currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations):
                         logger.debug("activestorms is 1, or currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations")
                         print("")
                         if hurricane_hasExtDataInForecast == False:
@@ -4427,7 +4427,7 @@ while True:
                             logger.debug("hurricaneextforecasttime_detail: %s ; hurricaneextforecast_lat: %s" %
                                          (hurricaneextforecasttime_detail, hurricaneextforecast_lat))
                             logger.debug("hurricaneextforecast_lon: %s" % hurricaneextforecast_lon)
-                            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneextforecast_laturl + '&lng=' + hurricaneextforecast_lonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
+                            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneextforecast_urllat + '&lng=' + hurricaneextforecast_urllon + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
 
                             if hurricaneextforecast_lat >= 0:
                                 hurricaneextforecast_lat = str(hurricaneextforecast_lat) + "° N"
