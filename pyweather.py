@@ -4464,6 +4464,56 @@ while True:
                             elif hurricaneextforecast_category == -5:
                                 hurricaneextforecast_type = "Remnants"
                             logger.debug("hurricaneextforecast_type: %s" % hurricaneextforecast_type)
+                            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneextforecast_laturl + '&lng=' + hurricaneextforecast_lonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
+                            if hurricanenearestcity_fenabled is True:
+                                logger.info("hurricanenearestcity_fenabled is True, loading up data...")
+                                try:
+                                    nearestJSON = requests.get(nearesturl)
+                                    logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
+                                    nearest_json = json.loads(nearestJSON.text)
+                                    if jsonVerbosity == True:
+                                        logger.debug("nearest_json: %s" % nearest_json)
+                                    else:
+                                        logger.debug("nearest_json loaded.")
+                                    nearest_data = True
+                                    logger.debug("nearest_data: %s" % nearest_data)
+                                except:
+                                    printException_loggerwarn()
+                                    nearest_data = False
+                                    logger.debug("nearest_data: %s" % nearest_data)
+
+                                if nearest_data is True:
+                                    logger.debug("nearest_data is True, parsing data...")
+                                    try:
+                                        nearest_cityname = nearest_json['geonames'][0]['name']
+                                        nearest_citycountry = nearest_json['geonames'][0]['countryName']
+                                        logger.debug("nearest_cityname: %s ; nearest_citycountry: %s" %
+                                                     (nearest_cityname, nearest_citycountry))
+                                        nearest_kmdistance = float(nearest_json['geonames'][0]['distance'])
+                                        nearest_city = nearest_cityname + ", " + nearest_citycountry
+                                        logger.debug("nearest_kmdistance: %s ; nearest_city: %s" %
+                                                     (nearest_kmdistance, nearest_city))
+                                        nearest_cityavailable = True
+                                        logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
+                                    except:
+                                        printException_loggerwarn()
+                                        nearest_cityavailable = False
+                                        logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
+
+                                if nearest_cityavailable is True:
+                                    logger.debug("nearest_cityavailable is true. Doing some conversions...")
+                                    # Convert distance into imperial units for 3% of the world, round down to single digit
+                                    nearest_midistance = nearest_kmdistance * 0.621371
+                                    logger.debug("nearest_midistance: %s" % nearest_midistance)
+                                    nearest_kmdistance = round(nearest_kmdistance, 1)
+                                    nearest_midistance = round(nearest_midistance, 1)
+                                    logger.debug("nearest_kmdistance: %s ; nearest_midistance: %s" %
+                                                 (nearest_kmdistance, nearest_midistance))
+                                    nearest_kmdistance = str(nearest_kmdistance)
+                                    nearest_midistance = str(nearest_midistance)
+                                    logger.info("Converted nearest_kmdistance and nearest_midistance to str")
+                            else:
+                                logger.debug("closest city is disabled.")
 
                             hurricaneextforecast_windmph = str(extforecast['WindSpeed']['Mph'])
                             hurricaneextforecast_windkph = str(extforecast['WindSpeed']['Kph'])
@@ -4487,6 +4537,16 @@ while True:
                                 Fore.YELLOW + "Wind Gusts: " + Fore.CYAN + hurricaneextforecast_gustmph + " mph (" + hurricaneextforecast_gustkph + " kph, "
                                 + hurricaneextforecast_gustkts + " kts)")
                             print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneextforecast_lat + ", " + hurricaneextforecast_lon)
+                            if hurricanenearestcity_fenabled is True:
+                                if nearest_data is False:
+                                    print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
+                                elif nearest_data is True and nearest_cityavailable is False:
+                                    print(
+                                        Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from the nearest city.")
+                                elif nearest_data is True and nearest_cityavailable is True:
+                                    print(
+                                        Fore.YELLOW + "Nearest city: " + Fore.CYAN + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
+                                        + " away from " + nearest_city + ".")
                             extendedcurrentloops += 1
                             logger.debug("extendedcurrentloops: %s" % extendedcurrentloops)
                             if user_showCompletedIterations == True:
