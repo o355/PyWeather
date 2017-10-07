@@ -3,8 +3,8 @@
 
 ## version 0.6.3 beta - Should be released late October/early November 2017:
 * Adds a nearby location feature to hurricane data (300km out) - 20% done
-    * Initial support for API - 50% done, should be finished by 10/4
-    * Adding extra functions (custom API username, nearest city size, logger) - 80% done
+    * Initial support for API - 100% done
+    * Adding more logger messages/better commenting - 0% done
     * Adding new config options to configupdate, configsetup, and setup - 0% done, should be finished by 10/5
 * Will push the API key validation code up further thanks to new features. - Done!
 *October break from PyWeather development - 10/6 to 10/9*
@@ -36,6 +36,7 @@
 
 **BUG FIXES**
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
+* Fixed a potential bug where if there was just one storm, extended forecast data and forecast data got all mixed up - Investigating
 
 **OTHER CHANGES**
 * The Git Updater will been completely removed, as it's been unreliable. A universal updater will be introduced later in time.
