@@ -1324,6 +1324,14 @@ for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
     if summary_forecastIterations == 5:
         break
 print("")
+
+print(Fore.YELLOW + "Your 5 most recent searches:")
+print(Fore.YELLOW + '(1)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_1'))
+print(Fore.YELLOW + '(2)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_2'))
+print(Fore.YELLOW + '(3)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_3'))
+print(Fore.YELLOW + '(4)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_4'))
+print(Fore.YELLOW + '(5)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_5'))
+
 if almanac_summary == True:
     print(Fore.YELLOW + "The almanac:")
     print(Fore.YELLOW + "Data from: " + Fore.CYAN + almanac_airportCode
