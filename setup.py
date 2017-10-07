@@ -150,6 +150,7 @@ def configprovision():
     config['CACHE']['sundata_cachedtime'] = '480'
     config['CACHE']['tide_cachedtime'] = '480'
     config['CACHE']['hurricane_cachedtime'] = '180'
+    config['HISTORY']['ENABLED'] = 'N/A'
     config['HISTORY']['RECENT_1'] = 'N/A'
     config['HISTORY']['RECENT_2'] = 'N/A'
     config['HISTORY']['RECENT_3'] = 'N/A'
@@ -1249,6 +1250,28 @@ else:
               "cache time to it's default value of '180'.", sep="\n")
         config['CACHE']['hurricane_cachedtime'] = '180'
         logger.debug("Hurricane data cache time now 180 minutes.")
+
+
+    print("", "(19/31)", "Your 5 most recent location searches can be saved in the cache",
+            "Would you like to enable this? This feature is enabled as a default.", sep="\n")
+    historyenabled = input("Input here: ").lower()
+    try:
+        if(historyenabled == "true"):
+            config['HISTORY']['ENABLED'] = "True"
+            print("Recent history now enabled.")
+            logger.debug("History enabled is now True.")
+
+        else(historyenabled == "false"):
+            config['HISTORY']['ENABLED'] = 'False'
+            print("Recent history now disabled.")
+            logger.debug("History enabled is now False")
+
+    except:
+        print("", "Your input couldn't be understood. Recent history will be disabled")
+        config['HISTORY']['ENABLED'] = "False"
+
+        print("Recent history now disabled.")
+        logger.debug("History enabled is now False")
 
 
 print("", "(19/30)", "When viewing detailed EU alerts information, how many",
