@@ -3991,6 +3991,39 @@ while True:
                     nearest_data = False
                     logger.debug("nearest_data: %s" % nearest_data)
 
+                if nearest_data is True:
+                    try:
+                        errorvalue = str(nearest_json['status']['value'])
+                        if errorvalue == "10":
+                            nearest_errortext = "The username for the API wasn't authorized."
+                        elif errorvalue == "11":
+                            nearest_errortext = "The record doesn't exist."
+                        elif errorvalue == "12":
+                            nearest_errortext = "An undefined error occurred."
+                        elif errorvalue == "13":
+                            nearest_errortext = "The database timed out."
+                        elif errorvalue == "15":
+                            nearest_errortext = "No result was found."
+                        elif errorvalue == "18":
+                            nearest_errortext = "The daily limit of lookups was exceeded. Please try again tomorrow."
+                        elif errorvalue == "19":
+                            nearest_errortext = "The hourly limit of lookups was exceeded. Please try again in an hour."
+                        elif errorvalue == "20":
+                            nearest_errortext = "The weekly limit of lookups was exceeded. Please try again at the start of next week."
+                        elif errorvalue == "22":
+                            nearest_errortext = "The geonames server was overloaded. Please try again in a bit."
+                        else:
+                            nearest_errortext = "A strange error occurred. That's strange!"
+                        nearest_error = True
+                        logger.debug("nearest_errortext: %s ; nearest_error: %s" %
+                                     (nearest_errortext, nearest_error))
+                        nearest_data = False
+                        logger.debug("nearest_data: %s" % nearest_data)
+                    except:
+                        logger.debug("No error.")
+                        nearest_error = False
+                        logger.debug("nearest_error: %s" % nearest_error)
+
                 # If we have the raw data, start parsing.
                 if nearest_data is True:
                     logger.debug("nearest_data is True, parsing data...")
@@ -4105,7 +4138,9 @@ while True:
                       + stormpressureinches + " inHg)")
             print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
             if hurricanenearestcity_enabled is True:
-                if nearest_data is False:
+                if nearest_error is True and nearest_data is False:
+                    print(Fore.RED + "Error: " + Fore.CYAN + nearest_errortext)
+                elif nearest_data is False:
                     print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
                 elif nearest_data is True and nearest_cityavailable is False:
                     print(Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from a city.")
@@ -4276,6 +4311,39 @@ while True:
                             logger.debug("nearest_data: %s" % nearest_data)
 
                         if nearest_data is True:
+                            try:
+                                errorvalue = str(nearest_json['status']['value'])
+                                if errorvalue == "10":
+                                    nearest_errortext = "The username for the API wasn't authorized."
+                                elif errorvalue == "11":
+                                    nearest_errortext = "The record doesn't exist."
+                                elif errorvalue == "12":
+                                    nearest_errortext = "An undefined error occurred."
+                                elif errorvalue == "13":
+                                    nearest_errortext = "The database timed out."
+                                elif errorvalue == "15":
+                                    nearest_errortext = "No result was found."
+                                elif errorvalue == "18":
+                                    nearest_errortext = "The daily limit of lookups was exceeded. Please try again tomorrow."
+                                elif errorvalue == "19":
+                                    nearest_errortext = "The hourly limit of lookups was exceeded. Please try again in an hour."
+                                elif errorvalue == "20":
+                                    nearest_errortext = "The weekly limit of lookups was exceeded. Please try again at the start of next week."
+                                elif errorvalue == "22":
+                                    nearest_errortext = "The geonames server was overloaded. Please try again in a bit."
+                                else:
+                                    nearest_errortext = "A strange error occurred. That's strange!"
+                                nearest_error = True
+                                logger.debug("nearest_errortext: %s ; nearest_error: %s" %
+                                             (nearest_errortext, nearest_error))
+                                nearest_data = False
+                                logger.debug("nearest_data: %s" % nearest_data)
+                            except:
+                                logger.debug("No error.")
+                                nearest_error = False
+                                logger.debug("nearest_error: %s" % nearest_error)
+
+                        if nearest_data is True:
                             logger.debug("nearest_data is True, parsing data...")
                             try:
                                 nearest_cityname = nearest_json['geonames'][0]['name']
@@ -4316,7 +4384,9 @@ while True:
                           + hurricaneforecast_gustkts + " kts)")
                     print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneforecast_lat + ", " + hurricaneforecast_lon)
                     if hurricanenearestcity_fenabled is True:
-                        if nearest_data is False:
+                        if nearest_error is True and nearest_data is False:
+                            print(Fore.RED + "Error: " + Fore.CYAN + nearest_errortext)
+                        elif nearest_data is False:
                             print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
                         elif nearest_data is True and nearest_cityavailable is False:
                             print(
@@ -4334,7 +4404,6 @@ while True:
                     # <--- Forecast data ends, loop into extended forecast data --->
                     # Have a detection for if extended data is available here.
 
-                    logger.debug("ENTERING FORECAST TO EXTENDED DECIDE LOOP")
                     # Basically says if activestorms are two and above, and we're not on the last iteration, and we've gone through all
                     # loops, and 4/5 day forecast data was not before the extended forecast enter this dialogue.
                     if (activestorms > 1 and currentstormiterations != activestorms and hurricanecurrentiterations == hurricanetotaliterations):
@@ -4522,6 +4591,39 @@ while True:
                                     logger.debug("nearest_data: %s" % nearest_data)
 
                                 if nearest_data is True:
+                                    try:
+                                        errorvalue = str(nearest_json['status']['value'])
+                                        if errorvalue == "10":
+                                            nearest_errortext = "The username for the API wasn't authorized."
+                                        elif errorvalue == "11":
+                                            nearest_errortext = "The record doesn't exist."
+                                        elif errorvalue == "12":
+                                            nearest_errortext = "An undefined error occurred."
+                                        elif errorvalue == "13":
+                                            nearest_errortext = "The database timed out."
+                                        elif errorvalue == "15":
+                                            nearest_errortext = "No result was found."
+                                        elif errorvalue == "18":
+                                            nearest_errortext = "The daily limit of lookups was exceeded. Please try again tomorrow."
+                                        elif errorvalue == "19":
+                                            nearest_errortext = "The hourly limit of lookups was exceeded. Please try again in an hour."
+                                        elif errorvalue == "20":
+                                            nearest_errortext = "The weekly limit of lookups was exceeded. Please try again at the start of next week."
+                                        elif errorvalue == "22":
+                                            nearest_errortext = "The geonames server was overloaded. Please try again in a bit."
+                                        else:
+                                            nearest_errortext = "A strange error occurred. That's strange!"
+                                        nearest_error = True
+                                        logger.debug("nearest_errortext: %s ; nearest_error: %s" %
+                                                     (nearest_errortext, nearest_error))
+                                        nearest_data = False
+                                        logger.debug("nearest_data: %s" % nearest_data)
+                                    except:
+                                        logger.debug("No error.")
+                                        nearest_error = False
+                                        logger.debug("nearest_error: %s" % nearest_error)
+
+                                if nearest_data is True:
                                     logger.debug("nearest_data is True, parsing data...")
                                     try:
                                         nearest_cityname = nearest_json['geonames'][0]['name']
@@ -4564,7 +4666,9 @@ while True:
                                 + hurricaneextforecast_gustkts + " kts)")
                             print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneextforecast_lat + ", " + hurricaneextforecast_lon)
                             if hurricanenearestcity_fenabled is True:
-                                if nearest_data is False:
+                                if nearest_error is True and nearest_data is False:
+                                    print(Fore.RED + "Error: " + Fore.CYAN + nearest_errortext)
+                                elif nearest_data is False:
                                     print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
                                 elif nearest_data is True and nearest_cityavailable is False:
                                     print(

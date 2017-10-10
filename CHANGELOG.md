@@ -2,8 +2,8 @@
 # PyWeather changelog
 
 ## version 0.6.3 beta - Should be released late October/early November 2017:
-* Adds a nearby location feature to hurricane data (300km out) - 85% done, should be finished by 10/10
-    * Initial support for API - 90% done, need to add detections for errors - should be finished by 10/10
+* Adds a nearby location feature to hurricane data (300km out) - Done!
+    * Initial support for API - 90% done, need to add detections for errors - Done!
     * Adding new config options to configupdate, configsetup, and setup - Done!
 * Will push the API key validation code up further thanks to new features. - Done!
 *October break from PyWeather development - 10/6 to 10/9*
