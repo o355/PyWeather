@@ -7,7 +7,9 @@
     * Adding new config options to configupdate, configsetup, and setup - Done!
 * Will push the API key validation code up further thanks to new features. - Done!
 *October break from PyWeather development - 10/6 to 10/9*
-* Adding a much nicer progress indicator
+* Adding a much nicer progress indicator - 20% done.
+    * Adding the initial spinners - 25% done
+    * New library setups, etc. - 0% done
 * Adds the ability to prefetch yesterday's weather at boot, and a caching system - 0% done, should be finished by 10/17
     * Initial support for prefetching at boot - 0% done, should be finished by 10/11
     * Initial support for caching (cache times, etc.) - 0% done, should be finished by 10/13
