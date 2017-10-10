@@ -4018,14 +4018,17 @@ while True:
                         logger.debug("nearest_errortext: %s ; nearest_error: %s" %
                                      (nearest_errortext, nearest_error))
                         nearest_data = False
-                        logger.debug("nearest_data: %s" % nearest_data)
+                        nearest_cityavailable = False
+                        logger.debug("nearest_data: %s ; nearest_cityavailable: %s" %
+                                     (nearest_data, nearest_cityavailable))
+
                     except:
                         logger.debug("No error.")
                         nearest_error = False
                         logger.debug("nearest_error: %s" % nearest_error)
 
                 # If we have the raw data, start parsing.
-                if nearest_data is True:
+                if nearest_data is True and nearest_error is False:
                     logger.debug("nearest_data is True, parsing data...")
                     try:
                         nearest_cityname = nearest_json['geonames'][0]['name']
@@ -4046,7 +4049,7 @@ while True:
                         logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
 
                 # Final data parsing if the nearest city is available. 
-                if nearest_cityavailable is True:
+                if nearest_cityavailable is True and nearest_error is False:
                     logger.debug("nearest_cityavailable is true. Doing some conversions...")
                     # Convert distance into imperial units for 3% of the world, round down to single digit
                     nearest_midistance = nearest_kmdistance * 0.621371
@@ -4139,7 +4142,7 @@ while True:
             print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
             if hurricanenearestcity_enabled is True:
                 if nearest_error is True and nearest_data is False:
-                    print(Fore.RED + "Error: " + Fore.CYAN + nearest_errortext)
+                    print(Fore.RED + "Nearest city error: " + Fore.CYAN + nearest_errortext)
                 elif nearest_data is False:
                     print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
                 elif nearest_data is True and nearest_cityavailable is False:
@@ -4385,7 +4388,7 @@ while True:
                     print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneforecast_lat + ", " + hurricaneforecast_lon)
                     if hurricanenearestcity_fenabled is True:
                         if nearest_error is True and nearest_data is False:
-                            print(Fore.RED + "Error: " + Fore.CYAN + nearest_errortext)
+                            print(Fore.RED + "Nearest city error: " + Fore.CYAN + nearest_errortext)
                         elif nearest_data is False:
                             print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
                         elif nearest_data is True and nearest_cityavailable is False:
@@ -4667,7 +4670,7 @@ while True:
                             print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneextforecast_lat + ", " + hurricaneextforecast_lon)
                             if hurricanenearestcity_fenabled is True:
                                 if nearest_error is True and nearest_data is False:
-                                    print(Fore.RED + "Error: " + Fore.CYAN + nearest_errortext)
+                                    print(Fore.RED + "Nearest city error: " + Fore.CYAN + nearest_errortext)
                                 elif nearest_data is False:
                                     print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
                                 elif nearest_data is True and nearest_cityavailable is False:
