@@ -3,10 +3,17 @@
 ## Welcome to PyWeather (0.6.2 beta)!
 Viewing the weather in a terminal has never been so much fun.
 
-## Beta Notice
+## Notices
+
+### Beta Notice
 If you haven't noticed, PyWeather is in beta. This means that basic features should work fine, but more advanced and new features may not work.
 
 If you do encounter bugs, make sure you report them on GitHub!
+
+### 0.6.3 beta update (October 9, 2017)
+0.6.3 beta is coming along well! The nearest city feature for PyWeather is almost done, and I'm working on making sure that the scripts that deal with the config file are ready to rumble.
+
+Right now, the ETA for 0.6.3 beta is early December. 
 
 ## Requirements
 To run PyWeather, you'll need:

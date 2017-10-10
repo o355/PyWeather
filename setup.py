@@ -1,5 +1,18 @@
-# PyWeather Setup - version 0.6.2 beta
-# (c) 2017, o355, licensed under GNU GPL v3
+# PyWeather Setup - version 0.6.3 beta
+# Copyright (C) 2017 o355
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
 if sys.version_info < (3, 0, 0):
@@ -40,6 +53,11 @@ config = configparser.ConfigParser()
 config.read('storage//config.ini')
 
 def configprovision():
+    try:
+        config.add_section("HURRICANE")
+    except:
+        print("Failed to add the hurricane section. Does it exist?")
+
     try:
         config.add_section("FIRSTINPUT")
     except configparser.DuplicateSectionError:

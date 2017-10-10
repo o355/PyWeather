@@ -3,11 +3,11 @@
 
 ## version 0.6.3 beta - Should be released late October/early November 2017:
 * Adds a nearby location feature to hurricane data (300km out) - 20% done
-    * Initial support for API - 100% done
-    * Adding more logger messages/better commenting - 0% done
-    * Adding new config options to configupdate, configsetup, and setup - 0% done, should be finished by 10/5
+    * Initial support for API - 90% done, need to add detections for rate overloading
+    * Adding new config options to configupdate, configsetup, and setup - 65% done, should be finished by 10/5
 * Will push the API key validation code up further thanks to new features. - Done!
 *October break from PyWeather development - 10/6 to 10/9*
+* Adding a much nicer progress indicator
 * Adds the ability to prefetch yesterday's weather at boot, and a caching system - 0% done, should be finished by 10/17
     * Initial support for prefetching at boot - 0% done, should be finished by 10/11
     * Initial support for caching (cache times, etc.) - 0% done, should be finished by 10/13
@@ -19,7 +19,6 @@
     * Adding new config options to configsetup/setup, and configupdate - 0% done, should be finished by 10/24
 * Adds the ability to view your current location through a GeoIP service - Done!
 * Adds the ability to view data through a PWS at boot. - Done!
-    * Add new config options to configsetup/setup - 0% done - Should be finished by 9/28
 * Adds the ability to have up to 5 favorite locations. - Should be finished by 11/14
     * Adding initial support (config options) - Should be finished by 10/25
     * Adding menu option - Adding favorite locations - Should be finished by 10/27
@@ -31,7 +30,7 @@
 * Adds the ability to show cache timings when enabled - Should be finished by 11/18
 * Much better error catching for the config file - Should be finished by 11/21
 *November break from PyWeather development - 11/22 to 11/27*
-* Adding a "last frame" button for radaar
+* Adding a "last frame" button for radar - Should be finished by 
 * Adding programmer dad jokes
 
 **BUG FIXES**
