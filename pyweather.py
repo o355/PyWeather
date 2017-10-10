@@ -3969,7 +3969,7 @@ while True:
             logger.debug("stormlon: %s ; stormlonurl: %s" %
                          (stormlon, stormlonurl))
             # Declare the URL for nearest city data
-            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + stormlaturl + '&lng=' + stormlonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
+            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + stormlaturl + '&lng=' + stormlonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
             logger.debug("nearesturl: %s" % nearesturl)
             # Enter in here if the nearest city option is enabled
             if hurricanenearestcity_enabled is True:
@@ -4205,7 +4205,7 @@ while True:
                                  (hurricaneforecast_laturl, hurricaneforecast_lon))
                     hurricaneforecast_lonurl = str(hurricaneforecast_lon)
                     logger.debug("hurricaneforecast_lonurl: %s" % hurricaneforecast_lonurl)
-                    nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneforecast_laturl + '&lng=' + hurricaneforecast_lonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
+                    nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneforecast_laturl + '&lng=' + hurricaneforecast_lonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
                     logger.debug("nearesturl: %s" % nearesturl)
 
                     if hurricaneforecast_lat >= 0:
@@ -4453,7 +4453,7 @@ while True:
                             logger.debug("hurricaneextforecasttime_detail: %s ; hurricaneextforecast_lat: %s" %
                                          (hurricaneextforecasttime_detail, hurricaneextforecast_lat))
                             logger.debug("hurricaneextforecast_lon: %s" % hurricaneextforecast_lon)
-                            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneextforecast_urllat + '&lng=' + hurricaneextforecast_urllon + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
+                            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneextforecast_urllat + '&lng=' + hurricaneextforecast_urllon + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
 
                             if hurricaneextforecast_lat >= 0:
                                 hurricaneextforecast_lat = str(hurricaneextforecast_lat) + "° N"
