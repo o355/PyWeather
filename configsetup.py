@@ -1,5 +1,18 @@
-# PyWeather Config Setup - 0.6.2 beta
-# (c) 2017, o355. GNU GPL.
+# PyWeather Configuration Setup - version 0.6.3 beta
+# Copyright (C) 2017 o355
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
 import configparser
@@ -153,8 +166,12 @@ if cd_confirmation == "yes":
     config['PREFETCH']['10dayfetch_atboot']= 'False'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['CACHE']['hurricane_cachedtime'] = '180'
-    config['FIRSTFETCH']['geoipservice_enabled'] = 'False'
-    config['FIRSTFETCH']['allow_pwsqueries'] = 'True'
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
+    config['HURRICANE']['enablenearestcity'] = 'False'
+    config['HURRICANE']['enablenearestcity_forecast'] = 'False'
+    config['HURRICANE']['api_username'] = 'pyweather_proj'
+    config['HURRICANE']['nearestcitysize'] = 'medium'
     try:
         with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)

@@ -1,5 +1,18 @@
 # PyWeather - version 0.6.3 beta
-# (c) 2017 o355, GNU GPL 3.0.
+# Copyright (C) 2017 o355
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # This line of code was typed in during the solar eclipse, in Eclipse.
 #
@@ -3947,14 +3960,22 @@ while True:
             stormname = data['stormInfo']['stormName_Nice']
             logger.debug("stormname: %s" % stormname)
             stormlat = float(data['Current']['lat'])
+            # Make a *url variable to store the raw lat/lon in str() format.
             stormlaturl = str(stormlat)
+            logger.debug("stormlat: %s ; stormlaturl: %s" %
+                         (stormlat, stormlaturl))
             stormlon = float(data['Current']['lon'])
             stormlonurl = str(stormlon)
+            logger.debug("stormlon: %s ; stormlonurl: %s" %
+                         (stormlon, stormlonurl))
+            # Declare the URL for nearest city data
             nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + stormlaturl + '&lng=' + stormlonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
             logger.debug("nearesturl: %s" % nearesturl)
+            # Enter in here if the nearest city option is enabled
             if hurricanenearestcity_enabled is True:
                 logger.info("hurricanenearestcity_enabled is True, loading up data...")
                 try:
+                    # Get the JSON file. If all goes well, set the nearest_data variable to true.
                     nearestJSON = requests.get(nearesturl)
                     logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
                     nearest_json = json.loads(nearestJSON.text)
@@ -3965,10 +3986,12 @@ while True:
                     nearest_data = True
                     logger.debug("nearest_data: %s" % nearest_data)
                 except:
+                    # Have an issue, we have no data. Set the variable to false.
                     printException_loggerwarn()
                     nearest_data = False
                     logger.debug("nearest_data: %s" % nearest_data)
 
+                # If we have the raw data, start parsing.
                 if nearest_data is True:
                     logger.debug("nearest_data is True, parsing data...")
                     try:
@@ -3983,10 +4006,13 @@ while True:
                         nearest_cityavailable = True
                         logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
                     except:
+                        # If we can't parse data, set the cityavailable variable to False. This shows a different
+                        # error message to the user.
                         printException_loggerwarn()
                         nearest_cityavailable = False
                         logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
 
+                # Final data parsing if the nearest city is available. 
                 if nearest_cityavailable is True:
                     logger.debug("nearest_cityavailable is true. Doing some conversions...")
                     # Convert distance into imperial units for 3% of the world, round down to single digit
@@ -4082,7 +4108,7 @@ while True:
                 if nearest_data is False:
                     print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
                 elif nearest_data is True and nearest_cityavailable is False:
-                    print(Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from the nearest city.")
+                    print(Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from a city.")
                 elif nearest_data is True and nearest_cityavailable is True:
                     print(Fore.YELLOW + "Nearest city: " + Fore.CYAN + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
                           + " away from " + nearest_city + ".")
@@ -4294,7 +4320,7 @@ while True:
                             print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
                         elif nearest_data is True and nearest_cityavailable is False:
                             print(
-                                Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from the nearest city.")
+                                Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from a city.")
                         elif nearest_data is True and nearest_cityavailable is True:
                             print(
                                 Fore.YELLOW + "Nearest city: " + Fore.CYAN + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
@@ -4308,7 +4334,7 @@ while True:
                     # <--- Forecast data ends, loop into extended forecast data --->
                     # Have a detection for if extended data is available here.
 
-
+                    logger.debug("ENTERING FORECAST TO EXTENDED DECIDE LOOP")
                     # Basically says if activestorms are two and above, and we're not on the last iteration, and we've gone through all
                     # loops, and 4/5 day forecast data was not before the extended forecast enter this dialogue.
                     if (activestorms > 1 and currentstormiterations != activestorms and hurricanecurrentiterations == hurricanetotaliterations):
@@ -4542,7 +4568,7 @@ while True:
                                     print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
                                 elif nearest_data is True and nearest_cityavailable is False:
                                     print(
-                                        Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from the nearest city.")
+                                        Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from a city.")
                                 elif nearest_data is True and nearest_cityavailable is True:
                                     print(
                                         Fore.YELLOW + "Nearest city: " + Fore.CYAN + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
