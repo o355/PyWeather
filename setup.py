@@ -180,6 +180,10 @@ def configprovision():
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
     config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
+    config['HURRICANE']['enablenearestcity'] = 'False'
+    config['HURRICANE']['enablenearestcity_forecast'] = 'False'
+    config['HURRICANE']['api_username'] = 'pyweather_proj'
+    config['HURRICANE']['nearestcitysize'] = 'medium'
     try:
         with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)
@@ -279,7 +283,7 @@ logger.debug("verbosity: %s ; jsonVerbosity: %s" %
 logger.debug("tracebacksEnabled: %s" %
              tracebacksEnabled)
 
-print("Hi! Welcome to PyWeather 0.6.2 beta! Glad that you're here.",
+print("Hi! Welcome to PyWeather 0.6.3 beta! Glad that you're here.",
       "I'm here to help set up PyWeather, and let you configure it to your liking.",
       "Let's begin!", sep="\n")
 
@@ -290,8 +294,8 @@ import json
 import codecs
 
 
-buildnumber = 62
-buildversion = "0.6.2 beta"
+buildnumber = 63
+buildversion = "0.6.3 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
@@ -444,7 +448,7 @@ try:
 except:
     requestsInstalled = False
     neededLibraries = neededLibraries + 1
-    logger.debug("requests is NOT isntalled.")
+    logger.debug("requests is NOT installed.")
     printException_loggerwarn()
     logger.debug("requestsInstalled: %s ; neededLibraries: %s" %
                  (requestsInstalled, neededLibraries))
@@ -1558,7 +1562,111 @@ else:
     logger.debug("FIRSTINPUT/allow_pwsqueries is now TRUE.")
     print("Changes saved.")
 
+print("", "(32/36)", "PyWeather has a new feature where in hurricane data, you can see the nearest city that a hurricane is to.",
+      "However, this feature uses a separate API (geonames.org), can only work when the hurricane is within 300km of a city,",
+      "and will drastically increase loading times. You may also run into issues with the default API key hitting rate limits.",
+      "Despite all of this, would you like to enable the nearest city features for non-forecast hurricane data?",
+      "Yes or No. By default, this is disabled.", sep="\n")
+allownearestcities = input("Input here: ").lower()
+logger.debug("allownearestcities: %s" % allownearestcities)
+if allownearestcities == "yes":
+    additional_ncoptions = True
+    logger.debug("additional_ncoptions: %s" % additional_ncoptions)
+    config['HURRICANE']['enablenearestcity'] = 'True'
+    logger.debug("HURRICANE/enablenearestcity is now TRUE.")
+    print("Changes saved.")
+elif allownearestcities == "no":
+    additional_ncoptions = False
+    logger.debug("additional_ncoptions: %s" % additional_ncoptions)
+    config['HURRICANE']['enablenearestcity'] = 'False'
+    logger.debug("HURRICANE/enablenearestcity is now FALSE.")
+    print("Changes saved.")
+else:
+    additional_ncoptions = False
+    logger.debug("additional_ncoptions: %s" % additional_ncoptions)
+    print("Could not understand what you inputted. Defaulting to 'False'.")
+    config['HURRICANE']['enablenearestcity'] = 'False'
+    logger.debug("HURRICANE/enablenearestcity is now FALSE.")
+    print("Changes saved.")
 
+# <--- Additional options for nearest city feature --->
+
+if additional_ncoptions is True:
+    print("", "(33/36)", "By default, the nearest city feature is only enabled on the current data screen of hurricane data.",
+          "You can enable the nearest city feature to be enabled on forecast data. However, loading hurricane data becomes much",
+          "slower. By default, this is disabled. Yes or No.", sep="\n")
+    enable_ncforecast = input("Input here: ").lower()
+    if enable_ncforecast == "yes":
+        config['HURRICANE']['enablenearestcity_forecast'] = 'True'
+        logger.debug("HURRICANE/enablenearestcity_forecast is now TRUE.")
+        print("Changes saved.")
+    elif enable_ncforecast == "no":
+        config['HURRICANE']['enablenearestcity_forecast'] = 'False'
+        logger.debug("HURRICANE/enablenearestcity_forecast is now FALSE.")
+        print("Changes saved.")
+    else:
+        print("Could not understand your input. Defaulting to 'False'.")
+        config['HURRICANE']['enablenearestcity_forecast'] = 'False'
+        logger.debug("HURRICANE/enablenearestcity_forecast is now FALSE.")
+        print("Changes saved.")
+
+    print("", "(34/36)", "By default, PyWeather uses it's own API username for the nearest city features, which should be able to",
+          "handle PyWeather's user demands just fine. However, if you'd like to use your own account for the API, you may.",
+          "You can sign up at geonames.org, and follow all the steps. The confirmation letter may take some time to hit your inbox.",
+          "Would you like to define your own API username? Yes or No. By default, this is no.", sep="\n")
+    definegeonamesusername = input("Input here: ").lower()
+    logger.debug("definegeonamesusername: %s" % definegeonamesusername)
+    if definegeonamesusername == "yes":
+        # Enter into confirmation loop
+        while True:
+            print("Please enter the username that you'll use to access the geonames API.")
+            geonamesusername = input("Input here: ").lower()
+            logger.debug("geonamesusername: %s" % geonamesusername)
+            print("The API username you gave me was: %s" % geonamesusername,
+                  "Is this the username that you'd like to use? Yes or No.",
+                  "Please note that your username will not be validated.", sep="\n")
+            geonamesconfirmation = input("Input here: ").lower()
+            confirmurl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=19.3&lng=102.2&username= ' + geonamesusername + '&radius=300&maxRows=1&cities=cities5000'
+            logger.debug("geonamesconfirmation: %s ; confirmurl: %s" %
+                         (geonamesconfirmation, confirmurl))
+            if geonamesconfirmation == "yes":
+                config['HURRICANE']['api_username'] = geonamesusername
+                logger.debug("HURRICANE/api_username is now %s" % geonamesusername)
+                print("Changes saved.")
+            elif geonamesconfirmation == "no":
+                continue
+            else:
+                print("Input not understood. Will not validate username. If the username is",
+                      "invalid, please change the HURRICANE/api_username option in the config.", sep="\n")
+                config['HURRICANE']['api_username'] = geonamesusername
+                logger.debug("HURRICANE/api_username is now %s" % geonamesusername)
+                print("Changes saved.")
+    elif definegeonamesusername == "no":
+        print("Defaulting to the default username for the geonames API.")
+    else:
+        print("Input not understood.",
+              "Defaulting to the default username for the geonames API.", sep="\n")
+
+    print("", "(35/36)", "For the nearest city feature, you can define how large a city has to be to show up as a nearest city.",
+          "You have three options for this. 'small' will set the threshold to cities with a 1,000 population and greater, but this",
+          "tends to include cities with very few or no people. 'medium' will set the threshold to cities with a 5,000 population",
+          "and greater, and 'large' for cities that have a population of 10,000 or greater. Please enter either 'small', 'medium'",
+          "or 'large' below. Default is 'medium'.", sep="\n")
+    nearestcitysize = input("Input here: ").lower()
+    logger.debug("nearestcitysize: %s" % nearestcitysize)
+    if nearestcitysize == "small":
+        config['HURRICANE']['nearestcitysize'] = 'small'
+        logger.debug("HURRICANE/nearestcitysize is now 'small'.")
+        print("Changes saved.")
+    elif nearestcitysize == "medium":
+        config['HURRICANE']['nearestcitysize'] = 'medium'
+        logger.debug("HURRICANE/nearestcitysize is now 'medium'")
+        print("Changes saved.")
+    else:
+        print("Could not understand your input. Defaulting to 'medium'.")
+        config['HURRICANE']['nearestcitysize'] = 'medium'
+        logger.debug("HURRICANE/nearestcitysize is now 'medium'.")
+        print("Changes saved.")
 
 print("", "(30/30)", "PyWeather's geocoder usually uses https, but issues have been discovered",
       "on some platforms, where the geocoder cannot operate in the https mode. If you press enter",

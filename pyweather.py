@@ -60,6 +60,13 @@ except:
     input()
     sys.exit()
 
+try:
+    from halo import Halo
+except ImportError:
+    print("When attempting to import the library halo, we ran into an import error.",
+          "Please make sure that halo is installed.",
+          "Press enter to exit.", sep="\n")
+
 
 # Try loading the versioninfo.txt file. If it isn't around, create the file with
 # the present version info.
@@ -237,6 +244,10 @@ elif tracebacksEnabled:
     logger.setLevel(logging.ERROR)
 else:
     logger.setLevel(logging.CRITICAL)
+
+# Initialize the halo spinner
+spinner = Halo(text='Loading PyWeather...', spinner='dots')
+spinner.start()
     
 # List config options for those who have verbosity enabled.    
 logger.info("PyWeather 0.6.2 beta now starting.")
@@ -641,6 +652,8 @@ if geoip_enabled == True:
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
+spinner.stop()
+
 print("Hey, welcome to PyWeather!")
 print("Below, enter a location to check the weather for that location!")
 if geoip_available is True:
@@ -671,6 +684,7 @@ logger.debug("Most recent user input is: %s." % locinput)
 
 
 print("Checking the weather, it'll take a few seconds!")
+print("")
 
 # Set if the query is a PWS at the beginning. It'll flip to True if a PWS query is detected.
 pws_query = False
@@ -691,7 +705,9 @@ elif "pws:" in locinput and pws_enabled is True:
     # Use a .lower() on the PWS query for safety. It works when in lower-case.
     pwsinfourl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + locinput.lower() + ".json"
     logger.debug("pwsinfourl: %s" % pwsinfourl)
+    spinner.start(text="Validating PWS query...")
     try:
+
         pwsinfoJSON = requests.get(pwsinfourl)
         logger.debug("pwsinfoJSON acquired with: %s" % pwsinfoJSON)
         pwsinfo_json = json.loads(pwsinfoJSON.text)
@@ -700,21 +716,25 @@ elif "pws:" in locinput and pws_enabled is True:
         else:
             logger.debug("pwsinfo_json has been loaded.")
     except:
+        spinner.fail(text='Failed to validate PWS query!')
+        print("")
         print("Couldn't query Wunderground to validate your inputted PWS. Make sure that you have",
               "an internet connection, and that api.wunderground.com is unblocked."
               "Press enter to exit.", sep="\n")
         printException()
         input()
         sys.exit()
+
     try:
-        pws_invalid = pwsinfo_json['error']['type']
-        logger.debug("pws_invalid: %s" % pws_invalid)
+        pws_invalid = pwsinfo_json['location']['lat']
+        logger.debug("we have good pws data.")
+    except:
+        spinner.fail(text='Failed to validate PWS query!')
+        print("")
         print("The PWS you entered isn't online, or is invalid. Please try entering an online",
               "or valid PWS next time you use PyWeather. Press enter to exit.", sep="\n")
         input()
         sys.exit()
-    except:
-        logger.info("We have good PWS data.")
     pws_available = True
     logger.debug("pws_available: %s" % pws_available)
     # Extract data about latitude and longitude, if needed in a float format.
@@ -746,16 +766,16 @@ elif "pws:" in locinput and pws_enabled is True:
 
 firstfetch = time.time()
 if useGeocoder is True:
+    spinner.start(text='Locating input...')
     logger.info("Start geolocator...")
     try:
         location = geolocator.geocode(locinput, language="en", timeout=20)
         # Since the loading bars interfere with true verbosity logging, we turn
         # them off if verbosity is enabled (it isn't needed)
         # :/
-        if verbosity == False:
-            print("[#---------] | 1% |", round(time.time() - firstfetch,1),
-                  "seconds", end="\r")
     except geopy.exc.GeocoderQuotaExceeded:
+        spinner.fail(text='Failed to locate input!')
+        print("")
         logger.warning("Geocoder quota has been exceeded!")
         print("When attempting to access Google's geocoder, a quota error was hit. Please",
               "wait 1-2 minutes, then try using PyWeather again.", sep="\n")
@@ -764,6 +784,8 @@ if useGeocoder is True:
         input()
         sys.exit()
     except geopy.exc.GeocoderServiceError:
+        spinner.fail(text='Failed to locate input!')
+        print("")
         logger.warning("Service error from geopy. SSL issue most likely?")
         print("When attempting to access Google's geocoder, a service error occurred.",
               "99% of the time, this is due to the geocoder operating in HTTPS mode,",
@@ -774,6 +796,8 @@ if useGeocoder is True:
         input()
         sys.exit()
     except:
+        spinner.fail(text='Failed to locate input!')
+        print("")
         logger.warning("No connection to Google's geocoder!")
         print("When attempting to access Google's geocoder, PyWeather ran into an error.",
               "A few things could of happened. If you're on a filter, make sure Google's",
@@ -789,6 +813,8 @@ if useGeocoder is True:
         latstr = str(location.latitude)
         lonstr = str(location.longitude)
     except AttributeError:
+        spinner.fail(text='Failed to locate input!')
+        print("")
         logger.warning("No lat/long was provided by Google! Bad location?")
         print("When attempting to parse the location inputted, PyWeather",
               "ran into an error. Make sure that the location you entered is",
@@ -803,6 +829,9 @@ if useGeocoder is True:
     logger.debug("Loccoords: %s" % loccoords)
     logger.info("End geolocator...")
 logger.info("Start API var declare...")
+
+spinner.stop()
+spinner.start(text='Declaring API variables...')
 
 # Declare the API URLs with the API key, and latitude/longitude strings from earlier.
 if pws_urls is False:
@@ -828,8 +857,6 @@ elif pws_urls is True:
     tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + locinput.lower() + '.json'
     hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
 
-if verbosity == False:
-    print("[##--------] | 6% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 logger.debug("currenturl: %s" % currenturl)
 logger.debug("f10dayurl: %s" % f10dayurl)
 logger.debug("hourlyurl: %s" % hourlyurl)
@@ -841,40 +868,72 @@ logger.debug("tideurl: %s" % tideurl)
 logger.debug("hurricaneurl: %s" % hurricaneurl)
 logger.debug("yesterdayurl: %s" % yesterdayurl)
 logger.info("End API var declare...")
-logger.info("Start codec change...")
 
-# Due to Python being Python, we have to get the UTF-8 reader 
-# to properly parse the JSON we got.
-reader = codecs.getreader("utf-8")
-if verbosity == False:
-    print("[##--------] | 8% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-logger.debug("reader: %s" % reader)
-logger.info("End codec change...")
 logger.info("Start API fetch...")
 
 # If a user requested their API key to be validated, and the backup key
 # can be loaded (as was checked earlier), we do it here.
 
-# Fetch JSON files. Why not go one by one for each? If we can't fetch one data type, PyWeather can't really work, so an exit is needed anyways.
-# A huge try loop just simplifies things.
+# Fetch JSON files. Exit if a failure occurs.
+
+spinner.stop()
+spinner.start(text="Fetching current weather information...")
+
 try:
     summaryJSON = requests.get(currenturl)
     cachetime_current = time.time()
-    if verbosity == False:
-        print("[##--------] | 15% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
+except:
+    logger.warning("No connection to the API!! Is the connection offline?")
+    print("When PyWeather attempted to fetch current weather information,",
+          "PyWeather ran into an error. If you're on a network with a filter, make sure",
+          "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+          "connection.", sep="\n")
+    printException()
+    print("Press enter to continue.")
+    input()
+    sys.exit()
+
+spinner.stop()
+spinner.start(text="Fetching forecast information...")
+try:
     forecast10JSON = requests.get(f10dayurl)
     cachetime_forecast = time.time()
-    if verbosity == False:
-        print("[###-------] | 24% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
-    if sundata_summary == True:
+except:
+    logger.warning("No connection to the API!! Is the connection offline?")
+    print("When PyWeather attempted to fetch forecast information,",
+          "PyWeather ran into an error. If you're on a network with a filter, make sure",
+          "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+          "connection.", sep="\n")
+    printException()
+    print("Press enter to continue.")
+    input()
+    sys.exit()
+
+
+if sundata_summary == True:
+    spinner.stop()
+    spinner.start(text="Fetching astronomy information...")
+    try:
         cachetime_sundata = time.time()
         sundataJSON = requests.get(astronomyurl)
-        if verbosity == False:
-            print("[###-------] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
-    if prefetch10Day_atStart == True:
+    except:
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch astronomy information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+
+if prefetch10Day_atStart == True:
+    spinner.stop()
+    spinner.start(text="Fetching 10 day/1.5 day hourly information...")
+    try:
         hourly10JSON = requests.get(tendayurl)
         # Special situation: We separate the 3-day/10-day hourly caches, but
         # they use the same cache timer. 
@@ -886,81 +945,139 @@ try:
         hourly36JSON = requests.get(hourlyurl)
         cachetime_hourly36 = time.time()
         logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
-    else:   
+    except:
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch 10 day/1.5 day hourly information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+
+else:
+    spinner.stop()
+    spinner.start(text="Fetching 1.5 day hourly information...")
+    try:
         hourly36JSON = requests.get(hourlyurl)
         cachetime_hourly36 = time.time()
         tenday_prefetched = False
         logger.debug("tenday_prefetched: %s" % tenday_prefetched)
         logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
-    if verbosity == False:
-        print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    if almanac_summary == True:
+    except:
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to 1.5 day hourly information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+
+if almanac_summary == True:
+    spinner.stop()
+    spinner.start(text="Fetching almanac information...")
+    try:
         almanacJSON = requests.get(almanacurl)
         cachetime_almanac = time.time()
-        if verbosity == False:
-            print("[#####-----] | 49% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
-    if showAlertsOnSummary == True:
+    except:
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch almanac information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+
+if showAlertsOnSummary == True:
+    spinner.stop()
+    spinner.start(text="Fetching alerts information...")
+    try:
         alertsJSON = requests.get(alertsurl)
         cachetime_alerts = time.time()
         alertsPrefetched = True
-        if verbosity == False:
-            print("[#####-----] | 52% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+
         logger.debug("Acquired alerts JSON, end result: %s" % alertsJSON)
-    else:
-        alertsPrefetched = False
-    logger.debug("alertsPrefetched: %s" % alertsPrefetched)
-    if showTideOnSummary == True:
+    except:
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch alerts information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+
+else:
+    alertsPrefetched = False
+logger.debug("alertsPrefetched: %s" % alertsPrefetched)
+
+if showTideOnSummary == True:
+    spinner.stop()
+    spinner.start(text="Fetching tide information...")
+    try:
         tideJSON = requests.get(tideurl)
         cachetime_tide = time.time()
         tidePrefetched = True
-        if verbosity == False:
-            print("[#####-----] | 55% | ", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired tide JSON, end result: %s" % tideJSON)
-    else:
-        tidePrefetched = False
-    logger.debug("tidePrefetched: %s" % tidePrefetched)
+    except:
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch tide information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
 
-    if prefetchHurricane_atboot == True:
+else:
+    tidePrefetched = False
+
+logger.debug("tidePrefetched: %s" % tidePrefetched)
+
+if prefetchHurricane_atboot == True:
+    spinner.stop()
+    spinner.start(text="Fetching hurricane information...")
+    try:
         hurricaneJSON = requests.get(hurricaneurl)
         cachetime_hurricane = time.time()
         hurricanePrefetched = True
-        if verbosity == False:
-            print("[######----] | 58% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired hurricane JSON, end result: %s" % hurricaneJSON)
-    else:
-        hurricanePrefetched = False
-    logger.debug("hurricanePrefetched: %s" % hurricanePrefetched)
+    except:
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch hurricane information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+else:
+    hurricanePrefetched = False
+
+logger.debug("hurricanePrefetched: %s" % hurricanePrefetched)
 
 
-except:
-    logger.warn("No connection to the API!! Is the connection offline?")
-    print("When PyWeather attempted to fetch the .json files to show you the weather,",
-          "PyWeather ran into an error. If you're on a network with a filter, make sure",
-          "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
-          "connection.", sep="\n")
-    printException()
-    print("Press enter to continue.")
-    input()
-    sys.exit()
     
 # And we parse the json using json.load.
 logger.info("End API fetch...")
 logger.info("Start JSON load...")
-if verbosity == False:
-    print("[######----] | 60% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+spinner.stop()
+spinner.start(text="Parsing weather information...")
 current_json = json.loads(summaryJSON.text)
 if jsonVerbosity == True:
     logger.debug("current_json loaded with: %s" % current_json)
-if verbosity == False:
-    print("[######----] | 63% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 forecast10_json = json.loads(forecast10JSON.text)
 if jsonVerbosity == True:
     logger.debug("forecast10_json loaded with: %s" % forecast10_json)
-if verbosity == False:
-    print("[#######---] | 71% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    
-
 if prefetch10Day_atStart == True: 
     tenday_json = json.loads(hourly10JSON.text)
     if jsonVerbosity == True:
@@ -974,32 +1091,22 @@ else:
         logger.debug("hourly36_json loaded with: %s" % hourly36_json)
 if sundata_summary == True:
     astronomy_json = json.loads(sundataJSON.text)
-    if verbosity == False:
-        print("[########--] | 81% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("astronomy_json loaded with: %s" % astronomy_json)
 if almanac_summary == True:
     almanac_json = json.loads(almanacJSON.text)
-    if verbosity == False:
-        print("[#########-] | 87% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("almanac_json loaded with: %s" % almanac_json)
 if showAlertsOnSummary == True:
     alerts_json = json.loads(alertsJSON.text)
-    if verbosity == False:
-        print("[#########-] | 90% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("alerts_json loaded with: %s" % alerts_json)
 if showTideOnSummary == True:
     tide_json = json.loads(tideJSON.text)
-    if verbosity == False:
-        print("[#########-] | 92% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("tide_json loaded with: %s" % tide_json)
 if prefetchHurricane_atboot == True:
     hurricane_json = json.loads(hurricaneJSON.text)
-    if verbosity == True:
-        print("[#########-] | 94% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     if jsonVerbosity == True:
         logger.debug("hurricane_json loaded with: %s" % hurricane_json)
 logger.info("Some amount of JSONs loaded...")
@@ -1034,8 +1141,6 @@ logger.debug("summary_windmphstr: %s ; summary_windkph: %s"
              % (summary_windmphstr, summary_windkph))
 summary_windkphstr = str(summary_windkph)
 logger.debug("summary_windkphstr: %s" % summary_windkphstr)
-if verbosity == False:
-    print("[##########] | 97% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 # Since some PWS stations on WU don't have a wind meter, this method will check if we should display wind data.
 # WU lists the MPH at -9999 if there is no wind data.
 # This method is probably reliable, but I need to see if it'll work by testing it work PWS stations around my area.
@@ -1231,8 +1336,7 @@ logger.debug("yesterday_prefetched: %s" % yesterday_prefetched)
 
 logger.info("Initalize color...")
 init()
-if verbosity == False:
-    print("[##########] | 100% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+spinner.stop()
 logger.info("Printing current conditions...")
     
 # <--------------- This is where we end parsing, and begin printing. ---------->
@@ -4021,7 +4125,7 @@ while True:
             logger.debug("stormlon: %s ; stormlonurl: %s" %
                          (stormlon, stormlonurl))
             # Declare the URL for nearest city data
-            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + stormlaturl + '&lng=' + stormlonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
+            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + stormlaturl + '&lng=' + stormlonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
             logger.debug("nearesturl: %s" % nearesturl)
             # Enter in here if the nearest city option is enabled
             if hurricanenearestcity_enabled is True:
@@ -4043,8 +4147,44 @@ while True:
                     nearest_data = False
                     logger.debug("nearest_data: %s" % nearest_data)
 
-                # If we have the raw data, start parsing.
                 if nearest_data is True:
+                    try:
+                        errorvalue = str(nearest_json['status']['value'])
+                        if errorvalue == "10":
+                            nearest_errortext = "The username for the API wasn't authorized."
+                        elif errorvalue == "11":
+                            nearest_errortext = "The record doesn't exist."
+                        elif errorvalue == "12":
+                            nearest_errortext = "An undefined error occurred."
+                        elif errorvalue == "13":
+                            nearest_errortext = "The database timed out."
+                        elif errorvalue == "15":
+                            nearest_errortext = "No result was found."
+                        elif errorvalue == "18":
+                            nearest_errortext = "The daily limit of lookups was exceeded. Please try again tomorrow."
+                        elif errorvalue == "19":
+                            nearest_errortext = "The hourly limit of lookups was exceeded. Please try again in an hour."
+                        elif errorvalue == "20":
+                            nearest_errortext = "The weekly limit of lookups was exceeded. Please try again at the start of next week."
+                        elif errorvalue == "22":
+                            nearest_errortext = "The geonames server was overloaded. Please try again in a bit."
+                        else:
+                            nearest_errortext = "A strange error occurred. That's strange!"
+                        nearest_error = True
+                        logger.debug("nearest_errortext: %s ; nearest_error: %s" %
+                                     (nearest_errortext, nearest_error))
+                        nearest_data = False
+                        nearest_cityavailable = False
+                        logger.debug("nearest_data: %s ; nearest_cityavailable: %s" %
+                                     (nearest_data, nearest_cityavailable))
+
+                    except:
+                        logger.debug("No error.")
+                        nearest_error = False
+                        logger.debug("nearest_error: %s" % nearest_error)
+
+                # If we have the raw data, start parsing.
+                if nearest_data is True and nearest_error is False:
                     logger.debug("nearest_data is True, parsing data...")
                     try:
                         nearest_cityname = nearest_json['geonames'][0]['name']
@@ -4065,7 +4205,7 @@ while True:
                         logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
 
                 # Final data parsing if the nearest city is available. 
-                if nearest_cityavailable is True:
+                if nearest_cityavailable is True and nearest_error is False:
                     logger.debug("nearest_cityavailable is true. Doing some conversions...")
                     # Convert distance into imperial units for 3% of the world, round down to single digit
                     nearest_midistance = nearest_kmdistance * 0.621371
@@ -4157,7 +4297,9 @@ while True:
                       + stormpressureinches + " inHg)")
             print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
             if hurricanenearestcity_enabled is True:
-                if nearest_data is False:
+                if nearest_error is True and nearest_data is False:
+                    print(Fore.RED + "Nearest city error: " + Fore.CYAN + nearest_errortext)
+                elif nearest_data is False:
                     print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
                 elif nearest_data is True and nearest_cityavailable is False:
                     print(Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from a city.")
@@ -4257,7 +4399,7 @@ while True:
                                  (hurricaneforecast_laturl, hurricaneforecast_lon))
                     hurricaneforecast_lonurl = str(hurricaneforecast_lon)
                     logger.debug("hurricaneforecast_lonurl: %s" % hurricaneforecast_lonurl)
-                    nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneforecast_laturl + '&lng=' + hurricaneforecast_lonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
+                    nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneforecast_laturl + '&lng=' + hurricaneforecast_lonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
                     logger.debug("nearesturl: %s" % nearesturl)
 
                     if hurricaneforecast_lat >= 0:
@@ -4328,6 +4470,39 @@ while True:
                             logger.debug("nearest_data: %s" % nearest_data)
 
                         if nearest_data is True:
+                            try:
+                                errorvalue = str(nearest_json['status']['value'])
+                                if errorvalue == "10":
+                                    nearest_errortext = "The username for the API wasn't authorized."
+                                elif errorvalue == "11":
+                                    nearest_errortext = "The record doesn't exist."
+                                elif errorvalue == "12":
+                                    nearest_errortext = "An undefined error occurred."
+                                elif errorvalue == "13":
+                                    nearest_errortext = "The database timed out."
+                                elif errorvalue == "15":
+                                    nearest_errortext = "No result was found."
+                                elif errorvalue == "18":
+                                    nearest_errortext = "The daily limit of lookups was exceeded. Please try again tomorrow."
+                                elif errorvalue == "19":
+                                    nearest_errortext = "The hourly limit of lookups was exceeded. Please try again in an hour."
+                                elif errorvalue == "20":
+                                    nearest_errortext = "The weekly limit of lookups was exceeded. Please try again at the start of next week."
+                                elif errorvalue == "22":
+                                    nearest_errortext = "The geonames server was overloaded. Please try again in a bit."
+                                else:
+                                    nearest_errortext = "A strange error occurred. That's strange!"
+                                nearest_error = True
+                                logger.debug("nearest_errortext: %s ; nearest_error: %s" %
+                                             (nearest_errortext, nearest_error))
+                                nearest_data = False
+                                logger.debug("nearest_data: %s" % nearest_data)
+                            except:
+                                logger.debug("No error.")
+                                nearest_error = False
+                                logger.debug("nearest_error: %s" % nearest_error)
+
+                        if nearest_data is True:
                             logger.debug("nearest_data is True, parsing data...")
                             try:
                                 nearest_cityname = nearest_json['geonames'][0]['name']
@@ -4368,7 +4543,9 @@ while True:
                           + hurricaneforecast_gustkts + " kts)")
                     print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneforecast_lat + ", " + hurricaneforecast_lon)
                     if hurricanenearestcity_fenabled is True:
-                        if nearest_data is False:
+                        if nearest_error is True and nearest_data is False:
+                            print(Fore.RED + "Nearest city error: " + Fore.CYAN + nearest_errortext)
+                        elif nearest_data is False:
                             print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
                         elif nearest_data is True and nearest_cityavailable is False:
                             print(
@@ -4386,7 +4563,6 @@ while True:
                     # <--- Forecast data ends, loop into extended forecast data --->
                     # Have a detection for if extended data is available here.
 
-                    logger.debug("ENTERING FORECAST TO EXTENDED DECIDE LOOP")
                     # Basically says if activestorms are two and above, and we're not on the last iteration, and we've gone through all
                     # loops, and 4/5 day forecast data was not before the extended forecast enter this dialogue.
                     if (activestorms > 1 and currentstormiterations != activestorms and hurricanecurrentiterations == hurricanetotaliterations):
@@ -4505,7 +4681,7 @@ while True:
                             logger.debug("hurricaneextforecasttime_detail: %s ; hurricaneextforecast_lat: %s" %
                                          (hurricaneextforecasttime_detail, hurricaneextforecast_lat))
                             logger.debug("hurricaneextforecast_lon: %s" % hurricaneextforecast_lon)
-                            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneextforecast_urllat + '&lng=' + hurricaneextforecast_urllon + '&username=' + geonames_apiusername + '&radius=300&maxRows=1&cities=' + hurricane_citiesamp
+                            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneextforecast_urllat + '&lng=' + hurricaneextforecast_urllon + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
 
                             if hurricaneextforecast_lat >= 0:
                                 hurricaneextforecast_lat = str(hurricaneextforecast_lat) + "° N"
@@ -4574,6 +4750,39 @@ while True:
                                     logger.debug("nearest_data: %s" % nearest_data)
 
                                 if nearest_data is True:
+                                    try:
+                                        errorvalue = str(nearest_json['status']['value'])
+                                        if errorvalue == "10":
+                                            nearest_errortext = "The username for the API wasn't authorized."
+                                        elif errorvalue == "11":
+                                            nearest_errortext = "The record doesn't exist."
+                                        elif errorvalue == "12":
+                                            nearest_errortext = "An undefined error occurred."
+                                        elif errorvalue == "13":
+                                            nearest_errortext = "The database timed out."
+                                        elif errorvalue == "15":
+                                            nearest_errortext = "No result was found."
+                                        elif errorvalue == "18":
+                                            nearest_errortext = "The daily limit of lookups was exceeded. Please try again tomorrow."
+                                        elif errorvalue == "19":
+                                            nearest_errortext = "The hourly limit of lookups was exceeded. Please try again in an hour."
+                                        elif errorvalue == "20":
+                                            nearest_errortext = "The weekly limit of lookups was exceeded. Please try again at the start of next week."
+                                        elif errorvalue == "22":
+                                            nearest_errortext = "The geonames server was overloaded. Please try again in a bit."
+                                        else:
+                                            nearest_errortext = "A strange error occurred. That's strange!"
+                                        nearest_error = True
+                                        logger.debug("nearest_errortext: %s ; nearest_error: %s" %
+                                                     (nearest_errortext, nearest_error))
+                                        nearest_data = False
+                                        logger.debug("nearest_data: %s" % nearest_data)
+                                    except:
+                                        logger.debug("No error.")
+                                        nearest_error = False
+                                        logger.debug("nearest_error: %s" % nearest_error)
+
+                                if nearest_data is True:
                                     logger.debug("nearest_data is True, parsing data...")
                                     try:
                                         nearest_cityname = nearest_json['geonames'][0]['name']
@@ -4616,7 +4825,9 @@ while True:
                                 + hurricaneextforecast_gustkts + " kts)")
                             print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneextforecast_lat + ", " + hurricaneextforecast_lon)
                             if hurricanenearestcity_fenabled is True:
-                                if nearest_data is False:
+                                if nearest_error is True and nearest_data is False:
+                                    print(Fore.RED + "Nearest city error: " + Fore.CYAN + nearest_errortext)
+                                elif nearest_data is False:
                                     print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
                                 elif nearest_data is True and nearest_cityavailable is False:
                                     print(

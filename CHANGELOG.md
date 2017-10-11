@@ -2,12 +2,14 @@
 # PyWeather changelog
 
 ## version 0.6.3 beta - Should be released late October/early November 2017:
-* Adds a nearby location feature to hurricane data (300km out) - 20% done
-    * Initial support for API - 90% done, need to add detections for rate overloading
-    * Adding new config options to configupdate, configsetup, and setup - 65% done, should be finished by 10/5
+* Adds a nearby location feature to hurricane data (300km out) - Done!
+    * Initial support for API - 90% done, need to add detections for errors - Done!
+    * Adding new config options to configupdate, configsetup, and setup - Done!
 * Will push the API key validation code up further thanks to new features. - Done!
 *October break from PyWeather development - 10/6 to 10/9*
-* Adding a much nicer progress indicator
+* Adding a much nicer progress indicator - 20% done.
+    * Adding the initial spinners - 25% done
+    * New library setups, etc. - 0% done
 * Adds the ability to prefetch yesterday's weather at boot, and a caching system - 0% done, should be finished by 10/17
     * Initial support for prefetching at boot - 0% done, should be finished by 10/11
     * Initial support for caching (cache times, etc.) - 0% done, should be finished by 10/13
@@ -30,8 +32,8 @@
 * Adds the ability to show cache timings when enabled - Should be finished by 11/18
 * Much better error catching for the config file - Should be finished by 11/21
 *November break from PyWeather development - 11/22 to 11/27*
-* Adding a "last frame" button for radar - Should be finished by 
-* Adding programmer dad jokes
+* Adding a "last frame" button for radar - Should be finished by 11/29
+* Adding programmer dad jokes - Should be finished by 12/1
 
 **BUG FIXES**
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
