@@ -1283,7 +1283,7 @@ else:
             print("Recent history now enabled.")
             logger.debug("History enabled is now True.")
 
-        else(historyenabled == "false"):
+        elif(historyenabled == "false"):
             config['HISTORY']['ENABLED'] = 'False'
             print("Recent history now disabled.")
             logger.debug("History enabled is now False")
