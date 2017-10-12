@@ -445,6 +445,8 @@ logger.debug("refresh_sundataflagged: %s ; refresh_tidedataflagged: %s" %
 logger.debug("refresh_hurricanedataflagged: %s" % refresh_hurricanedataflagged)
  
 if checkforUpdates == True:
+    spinner.stop()
+    spinner.start(text='Checking for updates...')
     reader2 = codecs.getreader("utf-8")
     try:
         versioncheck = requests.get("https://raw.githubusercontent.com/o355/"
@@ -471,6 +473,9 @@ if checkforUpdates == True:
                   ", and the latest version is " + version_latestVersion + ".")
             print("")
     except:
+        spinner.warn(text="Couldn't check for updates.")
+        print("")
+        spinner.start(text="Loading PyWeather...")
         print("Couldn't check for updates. Make sure raw.githubusercontent.com is unblocked on your network,",
               "and that you have a working internet connection.", sep="\n")
 
@@ -508,6 +513,8 @@ logger.debug("pws_urls: %s ; useGeocoder: %s" %
 
 # Validate the API key before boot. It's now up here due to the new features at boot.
 if validateAPIKey == True and backupKeyLoaded == True:
+    spinner.stop()
+    spinner.start(text="Validating API key...")
     logger.info("Beginning API key validation.")
     testurl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/NY/New_York.json'
     logger.debug("testurl: %s" % testurl)
@@ -515,6 +522,8 @@ if validateAPIKey == True and backupKeyLoaded == True:
         testJSON = requests.get(testurl)
         logger.debug("Acquired test JSON, end result: %s" % testJSON)
     except:
+        spinner.fail(text="Failed to validate API key!")
+        print("")
         logger.warn("Cannot connect to the API! Is the internet down?")
         print("When attempting to validate your primary API key, PyWeather ran",
               "into an error when accessing Wunderground's API. If you're",
@@ -533,8 +542,10 @@ if validateAPIKey == True and backupKeyLoaded == True:
         logger.debug("test_conditions: %s" % test_conditions)
         logger.info("API key is valid!")
     except:
+        spinner.warn(text="Primary API key is not valid!")
         logger.warn("API key is NOT valid. Attempting to revalidate API key...")
         if backupKeyLoaded == True:
+            spinner.start(text="Validating backup API key...")
             logger.info("Beginning backup API key validation.")
             testurl = 'http://api.wunderground.com/api/' + apikey2 + '/conditions/q/NY/New_York.json'
             logger.debug("testurl: %s" % testurl)
@@ -544,6 +555,8 @@ if validateAPIKey == True and backupKeyLoaded == True:
                 testJSON = requests.get(testurl)
                 logger.debug("Acquired test JSON, end result: %s" % testJSON)
             except:
+                spinner.fail(text="Failed to validate backup API key!")
+                print("")
                 print("When attempting to validate your backup API key, PyWeather ran",
                       "into an error. If you're on a network with a filter, make sure",
                       "that 'api.wunderground.com' is unblocked. Otherwise, make sure you",
@@ -562,8 +575,11 @@ if validateAPIKey == True and backupKeyLoaded == True:
                 logger.info("Backup API key is valid!")
                 apikey = apikey2
                 logger.debug("apikey = apikey2. apikey: %s" % apikey)
+                spinner.success(text="Backup API key is valid!")
                 # We don't need to define new URLs here. The apikey variable is set before URL declaration.
             except:
+                spinner.fail(text="Failed to valaidate backup API key!")
+                print("")
                 logger.warn("Backup API key could not be validated!")
                 print("Your primary and backup API key(s) could not be validated.",
                       "Make sure that your primary API key is valid, either because of a typo",
@@ -574,6 +590,8 @@ if validateAPIKey == True and backupKeyLoaded == True:
                 input()
                 sys.exit()
         elif backupKeyLoaded == False:
+            spinner.fail(text="Failed to validate API key!")
+            print("")
             print("When attempting to validate your API key, your primary key",
                   "couldn't be validated, and your backup key wasn't able to",
                   "load at boot. Make sure that your primary API key is valid,",
@@ -582,6 +600,8 @@ if validateAPIKey == True and backupKeyLoaded == True:
             input()
             sys.exit()
         else:
+            spinner.fail(text="Failed to validate API key!")
+            print("")
             logger.warn("Backup key couldn't get loaded!")
             print("Your primary API key couldn't be validated, and your",
                   "backup key could not be loaded at startup.",
@@ -592,7 +612,11 @@ if validateAPIKey == True and backupKeyLoaded == True:
             input()
             sys.exit()
 
+spinner.stop()
+spinner.start(text="Loading PyWeather...")
 if geoip_enabled == True:
+    spinner.stop()
+    spinner.start(text="Fetching current location...")
     logger.info("geoip is enabled, attempting to fetch current location...")
     try:
         geoipJSON = requests.get(geoip_url)
@@ -615,8 +639,7 @@ if geoip_enabled == True:
         logger.debug("latstr: %s ; lonstr: %s" % (latstr, lonstr))
         logger.debug("useGeocoder: %s" % useGeocoder)
     except:
-        print("Couldn't get your current location. You won't be able to",
-              "use your current location.", sep="\n")
+        spinner.warn(text="Failed to get current location! Current location is disabled.")
         geoip_available = False
         logger.debug("geoip_available: %s" % geoip_available)
 
@@ -840,6 +863,8 @@ try:
     cachetime_current = time.time()
     logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
 except:
+    spinner.fail("Failed to fetch current weather information!")
+    print("")
     logger.warning("No connection to the API!! Is the connection offline?")
     print("When PyWeather attempted to fetch current weather information,",
           "PyWeather ran into an error. If you're on a network with a filter, make sure",
