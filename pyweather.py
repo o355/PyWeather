@@ -143,6 +143,14 @@ try:
     cache_tidetime = cache_tidetime * 60
     cache_hurricanetime = config.getfloat('CACHE', 'hurricane_cachedtime')
     cache_hurricanetime = cache_hurricanetime * 60
+
+    recent_summary = config.getboolean('HISTORY', 'ALLOW_SUMMARY')
+    recentsearch_1 = config.get('HISTORY', 'RECENT_1')
+    recentsearch_2 = config.get('HISTORY', 'RECENT_2')
+    recentsearch_3 = config.get('HISTORY', 'RECENT_3')
+    recentsearch_4 = config.get('HISTORY', 'RECENT_4')
+    recentsearch_5 = config.get('HISTORY', 'RECENT_5')
+
     user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
     user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
     user_radarImageSize = config.get('RADAR GUI', 'radar_imagesize')
@@ -164,6 +172,20 @@ except:
           "in the code. Make sure there aren't any typos in the config file,",
           "and check the traceback below (report it to GitHub for extra internet",
           "points).", sep="\n")
+#    print("It could be because you haven't updated your config file.",
+#            "Would you like me to update your config file?", sep="\n")
+#    configupdate_input = input("Input here: ").lower()
+#    if configupdate_input == "yes":
+
+
+
+
+
+
+
+
+
+
     traceback.print_exc()
     sundata_summary = False
     almanac_summary = False
@@ -270,6 +292,14 @@ logger.debug("showTideOnSummary: %s ; geopyScheme: %s" %
              (showTideOnSummary, geopyScheme))
 logger.debug("prefetchHurricane_atboot: %s ; cache_hurricanetime: %s" %
              (prefetchHurricane_atboot, cache_hurricanetime))
+
+logger.debug("recentsearch_1: %s ; recentsearch_2: %s" %
+            (recentsearch_1, recentsearch_2))
+
+logger.debug("recentsearch_3: %s ; recentsearch_4: %s" %
+            (recentsearch_3, recentsearch_4))
+
+
 
 logger.info("Setting gif x and y resolution for radar...")
 # Set the size of the radar window.
@@ -662,6 +692,23 @@ if pws_enabled is True:
     print("pws:<PWS ID>")
     print("")
 locinput = input("Input here: ")
+locinput = str(locinput)
+
+
+if recent_summary == True:
+    print("These are your 5 most recent searches.")
+    config.set('HISTORY', 'RECENT_2', recentsearch_1)
+    config.set('HISTORY', 'RECENT_3', recentsearch_2)
+    config.set('HISTORY', 'RECENT_4', recentsearch_3)
+    config.set('HISTORY', 'RECENT_5', recentsearch_4)
+    config.set('HISTORY', 'RECENT_1', locinput)
+
+with open('storage//config.ini', 'w') as configfile:
+    config.write(configfile)
+
+logger.debug("Most recent user input is: %s." % locinput)
+
+
 print("Checking the weather, it'll take a few seconds!")
 print("")
 
@@ -1438,6 +1485,14 @@ for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
     if summary_forecastIterations == 5:
         break
 print("")
+
+print(Fore.YELLOW + "Your 5 most recent searches:")
+print(Fore.YELLOW + '(1)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_1'))
+print(Fore.YELLOW + '(2)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_2'))
+print(Fore.YELLOW + '(3)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_3'))
+print(Fore.YELLOW + '(4)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_4'))
+print(Fore.YELLOW + '(5)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_5'))
+
 if almanac_summary == True:
     print(Fore.YELLOW + "The almanac:")
     print(Fore.YELLOW + "Data from: " + Fore.CYAN + almanac_airportCode
