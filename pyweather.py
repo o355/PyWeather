@@ -144,6 +144,7 @@ try:
     cache_hurricanetime = config.getfloat('CACHE', 'hurricane_cachedtime')
     cache_hurricanetime = cache_hurricanetime * 60
 
+    recent_summary = config.getboolean('HISTORY', 'ALLOW_SUMMARY')
     recentsearch_1 = config.get('HISTORY', 'RECENT_1')
     recentsearch_2 = config.get('HISTORY', 'RECENT_2')
     recentsearch_3 = config.get('HISTORY', 'RECENT_3')
@@ -694,11 +695,13 @@ locinput = input("Input here: ")
 locinput = str(locinput)
 
 
-config.set('HISTORY', 'RECENT_2', recentsearch_1)
-config.set('HISTORY', 'RECENT_3', recentsearch_2)
-config.set('HISTORY', 'RECENT_4', recentsearch_3)
-config.set('HISTORY', 'RECENT_5', recentsearch_4)
-config.set('HISTORY', 'RECENT_1', locinput)
+if recent_summary == True:
+    print("These are your 5 most recent searches.")
+    config.set('HISTORY', 'RECENT_2', recentsearch_1)
+    config.set('HISTORY', 'RECENT_3', recentsearch_2)
+    config.set('HISTORY', 'RECENT_4', recentsearch_3)
+    config.set('HISTORY', 'RECENT_5', recentsearch_4)
+    config.set('HISTORY', 'RECENT_1', locinput)
 
 with open('storage//config.ini', 'w') as configfile:
     config.write(configfile)

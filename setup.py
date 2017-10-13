@@ -168,7 +168,8 @@ def configprovision():
     config['CACHE']['sundata_cachedtime'] = '480'
     config['CACHE']['tide_cachedtime'] = '480'
     config['CACHE']['hurricane_cachedtime'] = '180'
-    config['HISTORY']['ENABLED'] = 'N/A'
+    config['HISTORY']['ENABLED'] = 'True'
+    config['HISTORY']['ALLOW_SUMMARY'] = 'False'
     config['HISTORY']['RECENT_1'] = 'N/A'
     config['HISTORY']['RECENT_2'] = 'N/A'
     config['HISTORY']['RECENT_3'] = 'N/A'
@@ -1289,11 +1290,35 @@ else:
             logger.debug("History enabled is now False")
 
     except:
-        print("", "Your input couldn't be understood. Recent history will be disabled")
-        config['HISTORY']['ENABLED'] = "False"
+        print("", "Your input couldn't be understood. Recent history will be enabled.")
+        config['HISTORY']['ENABLED'] = "True"
 
-        print("Recent history now disabled.")
-        logger.debug("History enabled is now False")
+        print("Recent history now enabled.")
+        logger.debug("Recent history now True.")
+        print("Changes saved.")
+
+    print("", "(20/30)", "These 5 most recent locations can be shown on boot.", 
+            "Would you like to enable this? This feature is enabled as a default.", sep="\n")
+    recent_summary = input("Input here: ").lower()
+    try:
+        if(recent_summary = "true"):
+            config['HISTORY']['ALLOW_SUMMARY'] = "True"
+            print("Recent history at boot now enabled.")
+            logger.debug("History enabled is now True.")
+            print("Changes saved.")
+
+        else(recent_summary = "false"):
+            config['HISTORY']['ALLOW_SUMMARY'] = "False"
+            print("Recent history at boot now disabled.")
+            logger.debug("History enabled is now False.")
+            print("Changes saved.")
+
+    except:
+        print("", "Your input couldn't be understood. Recent history at boot will be enabled.")
+        config['HISTORY']['ALLOW_SUMMARY'] = "True"
+
+        print("Recent history at boot now enabled.")
+        logger.debug("Recent history at boot is True.")
 
 
 print("", "(19/30)", "When viewing detailed EU alerts information, how many",
