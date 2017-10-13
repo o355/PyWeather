@@ -227,7 +227,7 @@ else:
 # Initialize the halo spinner
 spinner = Halo(text='Loading PyWeather...', spinner='dots')
 spinner.start()
-    
+
 # List config options for those who have verbosity enabled.    
 logger.info("PyWeather 0.6.2 beta now starting.")
 logger.info("Configuration options are as follows: ")
@@ -575,7 +575,7 @@ if validateAPIKey == True and backupKeyLoaded == True:
                 logger.info("Backup API key is valid!")
                 apikey = apikey2
                 logger.debug("apikey = apikey2. apikey: %s" % apikey)
-                spinner.success(text="Backup API key is valid!")
+                spinner.succeed(text="Backup API key is valid!")
                 # We don't need to define new URLs here. The apikey variable is set before URL declaration.
             except:
                 spinner.fail(text="Failed to valaidate backup API key!")
@@ -882,6 +882,8 @@ try:
     cachetime_forecast = time.time()
     logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
 except:
+    spinner.fail(text="Failed to fetch forecast information!")
+    print("")
     logger.warning("No connection to the API!! Is the connection offline?")
     print("When PyWeather attempted to fetch forecast information,",
           "PyWeather ran into an error. If you're on a network with a filter, make sure",
@@ -901,6 +903,8 @@ if sundata_summary == True:
         sundataJSON = requests.get(astronomyurl)
         logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
     except:
+        spinner.fail(text="Failed to fetch astronomy information!")
+        print("")
         logger.warning("No connection to the API!! Is the connection offline?")
         print("When PyWeather attempted to fetch astronomy information,",
               "PyWeather ran into an error. If you're on a network with a filter, make sure",
@@ -927,6 +931,8 @@ if prefetch10Day_atStart == True:
         cachetime_hourly36 = time.time()
         logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
     except:
+        spinner.fail(text="Failed to fetch 10 day/1.5 day hourly information!")
+        print("")
         logger.warning("No connection to the API!! Is the connection offline?")
         print("When PyWeather attempted to fetch 10 day/1.5 day hourly information,",
               "PyWeather ran into an error. If you're on a network with a filter, make sure",
@@ -947,6 +953,8 @@ else:
         logger.debug("tenday_prefetched: %s" % tenday_prefetched)
         logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
     except:
+        spinner.fail(text="Failed to fetch 1.5 day hourly information!")
+        print("")
         logger.warning("No connection to the API!! Is the connection offline?")
         print("When PyWeather attempted to 1.5 day hourly information,",
               "PyWeather ran into an error. If you're on a network with a filter, make sure",
@@ -965,6 +973,8 @@ if almanac_summary == True:
         cachetime_almanac = time.time()
         logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
     except:
+        spinner.fail(text="Failed to fetch almanac information!")
+        print("")
         logger.warning("No connection to the API!! Is the connection offline?")
         print("When PyWeather attempted to fetch almanac information,",
               "PyWeather ran into an error. If you're on a network with a filter, make sure",
@@ -982,9 +992,10 @@ if showAlertsOnSummary == True:
         alertsJSON = requests.get(alertsurl)
         cachetime_alerts = time.time()
         alertsPrefetched = True
-
         logger.debug("Acquired alerts JSON, end result: %s" % alertsJSON)
     except:
+        spinner.fail(text="Failed to fetch alerts information!")
+        print("")
         logger.warning("No connection to the API!! Is the connection offline?")
         print("When PyWeather attempted to fetch alerts information,",
               "PyWeather ran into an error. If you're on a network with a filter, make sure",
@@ -1008,6 +1019,8 @@ if showTideOnSummary == True:
         tidePrefetched = True
         logger.debug("Acquired tide JSON, end result: %s" % tideJSON)
     except:
+        spinner.fail(text="Failed to fetch tide information!")
+        print("")
         logger.warning("No connection to the API!! Is the connection offline?")
         print("When PyWeather attempted to fetch tide information,",
               "PyWeather ran into an error. If you're on a network with a filter, make sure",
@@ -1032,6 +1045,8 @@ if prefetchHurricane_atboot == True:
         hurricanePrefetched = True
         logger.debug("Acquired hurricane JSON, end result: %s" % hurricaneJSON)
     except:
+        spinner.fail(text="Failed to fetch hurricane information!")
+        print("")
         logger.warning("No connection to the API!! Is the connection offline?")
         print("When PyWeather attempted to fetch hurricane information,",
               "PyWeather ran into an error. If you're on a network with a filter, make sure",
@@ -1317,6 +1332,7 @@ logger.debug("yesterday_prefetched: %s" % yesterday_prefetched)
 
 logger.info("Initalize color...")
 init()
+
 spinner.stop()
 logger.info("Printing current conditions...")
     
@@ -1481,13 +1497,12 @@ while True:
         
         
     if moreoptions == "0":
-        print(Fore.RED + "Loading...")
         logger.info("Selected view more currently...")
         logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
                     (refresh_currentflagged, time.time() - cachetime_current))
         if (time.time() - cachetime_current >= cache_currenttime and cache_enabled == True
             or refresh_currentflagged == True):
-            print(Fore.RED + "Refreshing current data...")
+            spinner.start("Refreshing current weather information...")
             try:
                 summaryJSON = requests.get(currenturl)
                 logger.debug("summaryJSON acquired, end result: %s" % summaryJSON)
@@ -1496,6 +1511,8 @@ while True:
                 logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
                              (refresh_currentflagged, time.time() - cachetime_current))
             except:
+                spinner.warn("Failed to load current information!")
+                print("")
                 print("Whoops! PyWeather ran into an error when refetching current",
                       "weather. Make sure that you have an internet connection, and",
                       "if you're on a filtered network, api.wunderground.com is unblocked.", 
@@ -1506,8 +1523,8 @@ while True:
             current_json = json.loads(summaryJSON.text)
             if jsonVerbosity == True:
                 logger.debug("current_json loaded with: %s" % current_json)
-                   
-        print("")
+            spinner.stop()
+        spinner.start("Loading current weather information...")
         # Parse extra stuff. Variable names are kept the same for the sake of sanity.
         # If the user hasn't refetched, this works out. Vars stay the same.
         summary_overall = current_json['current_observation']['weather']
@@ -1596,6 +1613,9 @@ while True:
                     % (current_precip1HrIn, current_precip1HrMm))
         logger.debug("current_precipTodayIn: %s ; current_precipTodayMm: %s"
                      % (current_precipTodayIn, current_precipTodayMm))
+
+        spinner.stop()
+        print("")
         print(Fore.YELLOW + "Here's the detailed current weather for: " + Fore.CYAN + str(location))
         print(Fore.YELLOW + summary_lastupdated)
         print("")
