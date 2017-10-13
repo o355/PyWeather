@@ -1301,13 +1301,13 @@ else:
             "Would you like to enable this? This feature is enabled as a default.", sep="\n")
     recent_summary = input("Input here: ").lower()
     try:
-        if(recent_summary = "true"):
+        if(recent_summary == "true"):
             config['HISTORY']['ALLOW_SUMMARY'] = "True"
             print("Recent history at boot now enabled.")
             logger.debug("History enabled is now True.")
             print("Changes saved.")
 
-        else(recent_summary = "false"):
+        elif(recent_summary == "false"):
             config['HISTORY']['ALLOW_SUMMARY'] = "False"
             print("Recent history at boot now disabled.")
             logger.debug("History enabled is now False.")
