@@ -721,6 +721,9 @@ else:
 print("I'm now going to guide you through obtaining an API key.",
 "Please carefully read my detailed instructions, so you don't mess anything up.", sep="\n")
 
+print("","If you know how to acquire a Wunderground API key, or are resetting PyWeather,",
+      "hit enter 15 times to get to the API key entry.", sep="\n")
+
 print("Let's begin.",
 "Start by opening a web browser, and going to https://www.wunderground.com/weather/api/.",
 "Press any key when you are done.", sep="\n")

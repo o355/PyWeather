@@ -156,6 +156,12 @@ try:
     hurricanenearestcity_fenabled = config.getboolean('HURRICANE', 'enablenearestcity_forecast')
     geonames_apiusername = config.get('HURRICANE', 'api_username')
     hurricane_nearestsize = config.get('HURRICANE', 'nearestcitysize')
+    favoritelocation_enabled = config.getboolean('FAVORITE LOCATIONS', 'enabled')
+    favoritelocation_1 = config.get('FAVORITE LOCATIONS', 'favloc1')
+    favoritelocation_2 = config.get('FAVORITE LOCATIONS', 'favloc2')
+    favoritelocation_3 = config.get('FAVORITE LOCATIONS', 'favloc3')
+    favoritelocation_4 = config.get('FAVORITE LOCATIONS', 'favloc4')
+    favoritelocation_5 = config.get('FAVORITE LOCATIONS', 'favloc5')
     
 except:
     # If it fails (typo or code error), we set all options to default.
@@ -208,6 +214,12 @@ except:
     hurricanenearestcity_fenabled = False
     geonames_apiusername = "pyweather_proj"
     hurricane_nearestsize = 'medium'
+    favoritelocation_enabled = False
+    favoritelocation_1 = "None"
+    favoritelocation_2 = "None"
+    favoritelocation_3 = "None"
+    favoritelocation_4 = "None"
+    favoritelocation_5 = "None"
 
 # Import logging, and set up the logger.
 import logging
@@ -270,6 +282,12 @@ logger.debug("showTideOnSummary: %s ; geopyScheme: %s" %
              (showTideOnSummary, geopyScheme))
 logger.debug("prefetchHurricane_atboot: %s ; cache_hurricanetime: %s" %
              (prefetchHurricane_atboot, cache_hurricanetime))
+logger.debug("favoritelocation_enabled: %s ; favoritelocation_1: %s" %
+             (favoritelocation_enabled, favoritelocation_1))
+logger.debug("favoritelocation_2: %s ; favoritelocation_3: %s" %
+             (favoritelocation_2, favoritelocation_3))
+logger.debug("favoritelocation_4: %s ; favoritelocation_5: %s" %
+             (favoritelocation_4, favoritelocation_5))
 
 logger.info("Setting gif x and y resolution for radar...")
 # Set the size of the radar window.
@@ -643,6 +661,19 @@ if geoip_enabled == True:
         geoip_available = False
         logger.debug("geoip_available: %s" % geoip_available)
 
+# Check if we need to fully disable favorite location from having 5 "None" entries, if enabled
+if favoritelocation_enabled is True:
+    logger.debug("Checking favorite locations...")
+    invalidlocations = 0
+    for (key, val) in config.items("FAVORITE LOCATIONS"):
+        if val == "None":
+            invalidlocations += 1
+
+    if invalidlocations >= 5:
+        favoritelocation_enabled = False
+
+
+
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
@@ -655,6 +686,21 @@ if geoip_available is True:
     print("")
     print("You can also enter this to view weather for your current location:")
     print("currentlocation - " + currentlocation)
+    print("")
+if favoritelocation_enabled is True:
+    logger.debug("favorite locations are enabled and available. showing option...")
+    print("")
+    print("You can also enter this to show weather for your favorite locations:")
+    if favoritelocation_1 != "None":
+        print("favoritelocation:1 - " + favoritelocation_1)
+    if favoritelocation_2 != "None":
+        print("favoritelocation:2 - " + favoritelocation_2)
+    if favoritelocation_3 != "None":
+        print("favoritelocation:3 - " + favoritelocation_3)
+    if favoritelocation_4 != "None":
+        print("favoritelocation:4 - " + favoritelocation_4)
+    if favoritelocation_5 != "None":
+        print("favoritelocation:5 - " + favoritelocation_5)
     print("")
 if pws_enabled is True:
     logger.debug("pws queries have been enabled. Showing option...")
@@ -669,6 +715,25 @@ print("")
 pws_query = False
 logger.debug("pws_query: %s" % pws_query)
 
+# Tell users their query isn't supported nicely
+
+if "currentlocation" in locinput and geoip_available is False:
+    print("Whoops! You entered the query to access your current location, but",
+          "your current location isn't available. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+elif "favoritelocation:" in locinput and favoritelocation_enabled is False:
+    print("Whoops! You entered the query to access one of your favorite locations, but",
+          "favorite locations isn't on (either you have no favorite locations, or it's disabled",
+          "entirely). Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+elif "pws:" in locinput and pws_enabled is False:
+    print("Whoops! You entered the query to access a PWS, but PWS queries are currently",
+          "disabled. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+
 if "currentlocation" in locinput and geoip_available is True:
     locinput = currentlocation
     useGeocoder = False
@@ -676,6 +741,11 @@ if "currentlocation" in locinput and geoip_available is True:
     logger.debug("locinput: %s ; useGeocoder: %s" %
                  (locinput, useGeocoder))
     logger.debug("location: %s" % currentlocation)
+elif "favoritelocation:" in locinput and favoritelocation_enabled is True:
+    if locinput == "favoritelocation:1" and favoritelocation_1 != "None":
+        locinput = favoritelocation_1
+    elif locinput == "favoritelocation:2" and favoritelocation_2 != "None":
+        locinput = favoritelocation_2
 elif "pws:" in locinput and pws_enabled is True:
     pws_query = True
     logger.debug("pws_query: %s" % pws_query)
