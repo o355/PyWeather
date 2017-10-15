@@ -41,6 +41,7 @@ import time
 import shutil
 try:
     from colorama import init, Fore, Style
+    import colorama
 except ImportError:
     print("When attempting to import the library colorama, we ran into an import error.",
           "Please make sure that colorama is installed.",
@@ -663,14 +664,21 @@ if geoip_enabled == True:
 
 # Check if we need to fully disable favorite location from having 5 "None" entries, if enabled
 if favoritelocation_enabled is True:
-    logger.debug("Checking favorite locations...")
+    logger.debug("Checking favorite locations for invalid locations.")
     invalidlocations = 0
     for (key, val) in config.items("FAVORITE LOCATIONS"):
+        logger.debug("key: %s ; val: %s" % (key, val))
         if val == "None":
             invalidlocations += 1
+            logger.debug("invalidlocations: %s" % invalidlocations)
 
     if invalidlocations >= 5:
-        favoritelocation_enabled = False
+        logger.debug("invalidlocations is greater than or above 5. Favorite locations is disabled.")
+        favoritelocation_available = False
+    else:
+        favoritelocation_available = True
+
+    logger.debug("favoritelocation_available: %s" % favoritelocation_available)
 
 
 
@@ -687,7 +695,7 @@ if geoip_available is True:
     print("You can also enter this to view weather for your current location:")
     print("currentlocation - " + currentlocation)
     print("")
-if favoritelocation_enabled is True:
+if favoritelocation_available is True:
     logger.debug("favorite locations are enabled and available. showing option...")
     print("")
     print("You can also enter this to show weather for your favorite locations:")
@@ -722,7 +730,7 @@ if "currentlocation" in locinput and geoip_available is False:
           "your current location isn't available. Press enter to exit.", sep="\n")
     input()
     sys.exit()
-elif "favoritelocation:" in locinput and favoritelocation_enabled is False:
+elif "favoritelocation:" in locinput and favoritelocation_available is False:
     print("Whoops! You entered the query to access one of your favorite locations, but",
           "favorite locations isn't on (either you have no favorite locations, or it's disabled",
           "entirely). Press enter to exit.", sep="\n")
@@ -741,11 +749,72 @@ if "currentlocation" in locinput and geoip_available is True:
     logger.debug("locinput: %s ; useGeocoder: %s" %
                  (locinput, useGeocoder))
     logger.debug("location: %s" % currentlocation)
-elif "favoritelocation:" in locinput and favoritelocation_enabled is True:
+elif "favoritelocation:" in locinput and favoritelocation_available is True:
+    haveFavoriteLocation = False
+    logger.debug("haveFavoriteLocation: %s" % haveFavoriteLocation)
     if locinput == "favoritelocation:1" and favoritelocation_1 != "None":
         locinput = favoritelocation_1
-    elif locinput == "favoritelocation:2" and favoritelocation_2 != "None":
+        haveFavoriteLocation = True
+        logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
+                     (locinput, haveFavoriteLocation))
+    elif locinput == "favoritelocation:1" and favoritelocation_1 == "None":
+        print("Whoops! You entered the query to access your first favorite location, but",
+              "it's currently not set to anything. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+
+    if locinput == "favoritelocation:2" and favoritelocation_2 != "None" and haveFavoriteLocation is False:
         locinput = favoritelocation_2
+        haveFavoriteLocation = True
+        logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
+                     (locinput, haveFavoriteLocation))
+    elif locinput == "favoritelocation:2" and favoritelocation_2 == "None":
+        print("Whoops! You entered the query to access your second favorite location, but",
+              "it's currently not set to anything. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+
+    if locinput == "favoritelocation:3" and favoritelocation_3 != "None" and haveFavoriteLocation is False:
+        locinput = favoritelocation_3
+        haveFavoriteLocation = True
+        logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
+                     (locinput, haveFavoriteLocation))
+    elif locinput == "favoritelocation:3" and favoritelocation_3 == "None":
+        print("Whoops! You entered the query to access your third favorite location, but",
+              "it's currently not set to anything. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+
+    if locinput == "favoritelocation:4" and favoritelocation_4 != "None" and haveFavoriteLocation is False:
+        locinput = favoritelocation_4
+        haveFavoriteLocation = True
+        logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
+                     (locinput, haveFavoriteLocation))
+    elif locinput == "favoritelocation:4" and favoritelocation_4 == "None":
+        print("Whoops! You entered the query to access your fourth favorite location, but",
+              "it's currently not set to anything. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+
+    if locinput == "favoritelocation:5" and favoritelocation_5 != "None" and haveFavoriteLocation is False:
+        locinput = favoritelocation_5
+        haveFavoriteLocation = True
+        logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
+                     (locinput, haveFavoriteLocation))
+    elif locinput == "favoritelocation:5" and favoritelocation_5 == "None":
+        print("Whoops! You entered the query to access your fifth favorite location, but",
+              "it's currently not set to anything. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+
+    if haveFavoriteLocation is False:
+        print("Your input didn't match up to a favorite location (you likely entered an invalid character/number past the colon).",
+              "Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+
+    useGeocoder = True
+    logger.debug("useGeocoder: %s" % useGeocoder)
 elif "pws:" in locinput and pws_enabled is True:
     pws_query = True
     logger.debug("pws_query: %s" % pws_query)
@@ -1412,7 +1481,9 @@ summaryHourlyIterations = 0
 
 if pws_available is True:
     location = pws_id + " (located in " + pws_location + ")"
-print(Style.BRIGHT + Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + str(location))
+
+print(Style.BRIGHT)
+print(Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + str(location))
 print(Fore.YELLOW + summary_lastupdated)
 print("")
 
@@ -1559,9 +1630,11 @@ while True:
     print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Enter " + Fore.CYAN + "10")
     print(Fore.YELLOW + "- Launch PyWeather's experimental radar - Enter " + Fore.CYAN + "11")
     print(Fore.YELLOW + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + "12")
-    print(Fore.YELLOW + "- Check for PyWeather updates - Enter " + Fore.CYAN + "13")
-    print(Fore.YELLOW + "- View the about page for PyWeather - Enter " + Fore.CYAN + "14")
-    print(Fore.YELLOW + "- Close PyWeather - Enter " + Fore.CYAN + "15" + Fore.YELLOW)
+    print(Fore.YELLOW + "- Manage your favorite locations - Enter " + Fore.CYAN + "13")
+    print(Fore.YELLOW + "- Check for PyWeather updates - Enter " + Fore.CYAN + "14 (13)")
+    print(Fore.YELLOW + "- Check PyWeather's cache timings - Enter " + Fore.CYAN + "15")
+    print(Fore.YELLOW + "- View the about page for PyWeather - Enter " + Fore.CYAN + "16 (14)")
+    print(Fore.YELLOW + "- Close PyWeather - Enter " + Fore.CYAN + "17 (15)" + Fore.YELLOW)
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
@@ -4933,6 +5006,134 @@ while True:
                                     break
                         else:
                             continue
+    elif moreoptions == "20":
+        if favoritelocation_enabled is False:
+            print(Fore.RED + "", "To manage favorite locations, you'll need to enable the favorite locations feature.",
+                  "Would you like me to enable favorite locations for you?", sep="\n")
+            enablefavoritelocations = input("Input here: ").lower()
+            logger.debug("enablefavoritelocations: %s" % enablefavoritelocations)
+            if enablefavoritelocations == "yes":
+                config['FAVORITE LOCATIONS']['enabled'] = 'True'
+            try:
+                with open('storage//config.ini', 'w') as configfile:
+                    config.write(configfile)
+                print("Favorite locations is now enabled, and will be operational when you next boot up PyWeather.")
+                continue
+            except:
+                print("An issue occurred when trying to save new configuration options.",
+                      "Please enable favorite locations in the config file. In the FAVORITE LOCATIONS",
+                      "section, change enabled to True.")
+                continue
+
+        while True:
+            # Get up-to-date configuration information about favorite locations.
+            try:
+                favoritelocation_1 = config.get('FAVORITE LOCATIONS', 'favloc1')
+                favoritelocation_1d = favoritelocation_1
+                favoritelocation_2 = config.get('FAVORITE LOCATIONS', 'favloc2')
+                favoritelocation_2d = favoritelocation_2
+                favoritelocation_3 = config.get('FAVORITE LOCATIONS', 'favloc3')
+                favoritelocation_3d = favoritelocation_3
+                favoritelocation_4 = config.get('FAVORITE LOCATIONS', 'favloc4')
+                favoritelocation_4d = favoritelocation_4
+                favoritelocation_5 = config.get('FAVORITE LOCATIONS', 'favloc5')
+                favoritelocation_5d = favoritelocation_5
+            except:
+                print(Fore.RED + "An error with your configuration file occurred when",
+                      "we tried to refresh current location information. For safety,",
+                      "the favorite location configurator will be exited out of.")
+                printException()
+                break
+
+            logger.debug("favoritelocation_1: %s ; favoritelocation_1d: %s" %
+                         (favoritelocation_1, favoritelocation_1d))
+            logger.debug("favoritelocation_2: %s ; favoritelocation_2d: %s" %
+                         (favoritelocation_2, favoritelocation_2d))
+            logger.debug("favoritelocation_3: %s ; favoritelocation_3d: %s" %
+                         (favoritelocation_3, favoritelocation_3d))
+            logger.debug("favoritelocation_4: %s ; favoritelocation_4d: %s" %
+                         (favoritelocation_4, favoritelocation_4d))
+            logger.debug("favoritelocation_5: %s ; favoritelocation_5d: %s" %
+                         (favoritelocation_5, favoritelocation_5d))
+
+            if "pws:" in favoritelocation_1d:
+                # Delete pws: from the display string
+                favoritelocation_1d = favoritelocation_1d[4:]
+                favoritelocation_1d = "PWS " + favoritelocation_1d.upper()
+                logger.debug("favoritelocation_1d: %s" % favoritelocation_1d)
+
+            if "pws:" in favoritelocation_2d:
+                # Delete pws: from the display string
+                favoritelocation_2d = favoritelocation_2d[4:]
+                favoritelocation_2d = "PWS " + favoritelocation_2d.upper()
+                logger.debug("favoritelocation_2d: %s" % favoritelocation_2d)
+
+            if "pws:" in favoritelocation_3d:
+                # Delete pws: from the display string
+                favoritelocation_3d = favoritelocation_3d[4:]
+                favoritelocation_3d = "PWS " + favoritelocation_3d.upper()
+                logger.debug("favoritelocation_3d: %s" % favoritelocation_3d)
+
+            if "pws:" in favoritelocation_4d:
+                # Delete pws: from the display string
+                favoritelocation_4d = favoritelocation_4d[4:]
+                favoritelocation_4d = "PWS " + favoritelocation_4d.upper()
+                logger.debug("favoritelocation_4d: %s" % favoritelocation_4d)
+
+            if "pws:" in favoritelocation_5d:
+                # Delete pws: from the display string
+                favoritelocation_5d = favoritelocation_5d[4:]
+                favoritelocation_5d = "PWS " + favoritelocation_5d.upper()
+                logger.debug("favoritelocation_5d: %s" % favoritelocation_5d)
+            print("")
+            print(Fore.YELLOW + "Your current favorite locations configuration:")
+            print(Fore.YELLOW + "Favorite Location 1 - " + Fore.CYAN + favoritelocation_1)
+            print(Fore.YELLOW + "Favorite Location 2 - " + Fore.CYAN + favoritelocation_2)
+            print(Fore.YELLOW + "Favorite Location 3 - " + Fore.CYAN + favoritelocation_3)
+            print(Fore.YELLOW + "Favorite Location 4 - " + Fore.CYAN + favoritelocation_4)
+            print(Fore.YELLOW + "Favorite Location 5 - " + Fore.CYAN + favoritelocation_5)
+            print("")
+            print(Fore.YELLOW + "What would you like to do with your favorite locations?")
+            print(Fore.YELLOW + "Add this location (" + Fore.CYAN + str(location) + Fore.YELLOW
+                  + ") as a favorite location - Enter " + Fore.CYAN + "1")
+            print(Fore.YELLOW + "Add a location as a favorite location - Enter " + "2")
+            print(Fore.YELLOW + "Edit a favorite location - Enter " + Fore.CYAN + "3")
+            print(Fore.YELLOW + "Remove a favorite location - Enter " + Fore.CYAN + "4")
+            print(Fore.YELLOW + "Return to PyWeather - Enter " + Fore.CYAN + "5")
+            favconfig_menuinput = input("Input here: ").lower()
+            logger.debug("favconfig_menuinput: %s" % favconfig_menuinput)
+            if favconfig_menuinput == "1":
+                print(Fore.YELLOW + "Would you like to add " + Fore.CYAN + str(location) + Fore.YELLOW
+                      + " as a favorite location? Yes or No.", sep="\n")
+                favconfig_confirmadd = input("Input here: ").lower()
+                if favconfig_confirmadd != "yes":
+                    if favconfig_confirmadd != "no":
+                        print("Couldn't understand your input. Not adding " + Fore.CYAN + str(location) +
+                              Fore.YELLOW + " to your location list.")
+                    else:
+                        print("Not adding " + Fore.CYAN + str(location) + Fore.YELLOW + " to your location list.")
+                    continue
+
+                # Add location to favorite locations
+                config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_1
+                config['FAVORITE LOCATIONS']['favloc3'] = favoritelocation_2
+                config['FAVORITE LOCATIONS']['favloc4'] = favoritelocation_3
+                config['FAVORITE LOCATIONS']['favloc5'] = favoritelocation_4
+                # Use locinput instead of location, as the raw PWS query is in locinput.
+                config['FAVORITE LOCATIONS']['favloc1'] = locinput
+
+                try:
+                    with open('storage//config.ini', 'w') as configfile:
+                        config.write(configfile)
+                    print("Changes made successfully!")
+                    continue
+                except:
+                    print("An issue occurred when trying to write new options to your config file.",
+                          "Please note that no changes were made to your config file.", sep="\n")
+                    continue
+
+            if favconfig_menuinput == "5":
+                break
 
 #<--- Hurricane is above | About is below --->
     elif moreoptions == "14":

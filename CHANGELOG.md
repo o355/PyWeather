@@ -7,7 +7,7 @@
     * Adding new config options to configupdate, configsetup, and setup - Done!
 * Will push the API key validation code up further thanks to new features. - Done!
 *October break from PyWeather development - 10/6 to 10/9*
-* Adding a much nicer progress indicator - 20% done.
+* Adding a much nicer progress indicator - 20% done (suspended temporarily - Issue with colorama library)
     * Adding the initial spinners - 25% done
     * New library setups, etc. - 0% done
 * Adds the ability to prefetch yesterday's weather at boot, and a caching system - 0% done, should be finished by 10/17
@@ -21,14 +21,14 @@
     * Adding new config options to configsetup/setup, and configupdate - 0% done, should be finished by 10/24
 * Adds the ability to view your current location through a GeoIP service - Done!
 * Adds the ability to view data through a PWS at boot. - Done!
-* Adds the ability to have up to 5 favorite locations. - Should be finished by 11/14
-    * Adding initial support (config options) - Should be finished by 10/25
-    * Adding menu option - Adding favorite locations - Should be finished by 10/27
-    * Adding menu option - Editing favorite locations - Should be finished by 11/1
-    * Adding menu option - Removing favorite locations - Should be finished by 11/3
-    * Adding support at boot - Should be finished by 11/7
-    * Adding additional logistics (checking for None, etc.) - Should be finished by 11/9
-    * Adding new config options to configsetup/setup, and configupdate. - Should be finished by 11/14
+* Adds the ability to have up to 5 favorite locations. - 20% done
+    * Adding initial support - 90% done, need to add PWS parsing at boot
+    * Adding initial menu - 25% done
+    * Adding menu option - Adding favorite locations - 0% done
+    * Adding menu option - Editing favorite locations - 0% done
+    * Adding menu option - Removing favorite locations - 0% done
+    * Adding new config options to configsetup/setup, and configupdate. - 0% done
+    * Roll back changes to geocoder
 * Adds the ability to show cache timings when enabled - Should be finished by 11/18
 * Much better error catching for the config file - Should be finished by 11/21
 *November break from PyWeather development - 11/22 to 11/27*
