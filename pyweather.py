@@ -736,19 +736,7 @@ elif "favoritelocation:" in locinput and favoritelocation_available is False:
           "entirely). Press enter to exit.", sep="\n")
     input()
     sys.exit()
-elif "pws:" in locinput and pws_enabled is False:
-    print("Whoops! You entered the query to access a PWS, but PWS queries are currently",
-          "disabled. Press enter to exit.", sep="\n")
-    input()
-    sys.exit()
 
-if "currentlocation" in locinput and geoip_available is True:
-    locinput = currentlocation
-    useGeocoder = False
-    location = currentlocation
-    logger.debug("locinput: %s ; useGeocoder: %s" %
-                 (locinput, useGeocoder))
-    logger.debug("location: %s" % currentlocation)
 elif "favoritelocation:" in locinput and favoritelocation_available is True:
     haveFavoriteLocation = False
     logger.debug("haveFavoriteLocation: %s" % haveFavoriteLocation)
@@ -815,6 +803,20 @@ elif "favoritelocation:" in locinput and favoritelocation_available is True:
 
     useGeocoder = True
     logger.debug("useGeocoder: %s" % useGeocoder)
+
+elif "pws:" in locinput and pws_enabled is False:
+    print("Whoops! You entered the query to access a PWS, but PWS queries are currently",
+          "disabled. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+
+if "currentlocation" in locinput and geoip_available is True:
+    locinput = currentlocation
+    useGeocoder = False
+    location = currentlocation
+    logger.debug("locinput: %s ; useGeocoder: %s" %
+                 (locinput, useGeocoder))
+    logger.debug("location: %s" % currentlocation)
 elif "pws:" in locinput and pws_enabled is True:
     pws_query = True
     logger.debug("pws_query: %s" % pws_query)
@@ -1481,6 +1483,10 @@ summaryHourlyIterations = 0
 
 if pws_available is True:
     location = pws_id + " (located in " + pws_location + ")"
+    location2 = "PWS " + pws_id
+else:
+    location2 = str(location)
+logger.debug("location2: %s" % location2)
 
 print(Style.BRIGHT)
 print(Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + str(location))
@@ -5087,19 +5093,19 @@ while True:
                 logger.debug("favoritelocation_5d: %s" % favoritelocation_5d)
             print("")
             print(Fore.YELLOW + "Your current favorite locations configuration:")
-            print(Fore.YELLOW + "Favorite Location 1 - " + Fore.CYAN + favoritelocation_1)
-            print(Fore.YELLOW + "Favorite Location 2 - " + Fore.CYAN + favoritelocation_2)
-            print(Fore.YELLOW + "Favorite Location 3 - " + Fore.CYAN + favoritelocation_3)
-            print(Fore.YELLOW + "Favorite Location 4 - " + Fore.CYAN + favoritelocation_4)
-            print(Fore.YELLOW + "Favorite Location 5 - " + Fore.CYAN + favoritelocation_5)
+            print(Fore.YELLOW + "Favorite Location 1 - " + Fore.CYAN + favoritelocation_1d)
+            print(Fore.YELLOW + "Favorite Location 2 - " + Fore.CYAN + favoritelocation_2d)
+            print(Fore.YELLOW + "Favorite Location 3 - " + Fore.CYAN + favoritelocation_3d)
+            print(Fore.YELLOW + "Favorite Location 4 - " + Fore.CYAN + favoritelocation_4d)
+            print(Fore.YELLOW + "Favorite Location 5 - " + Fore.CYAN + favoritelocation_5d)
             print("")
             print(Fore.YELLOW + "What would you like to do with your favorite locations?")
-            print(Fore.YELLOW + "Add this location (" + Fore.CYAN + str(location) + Fore.YELLOW
+            print(Fore.YELLOW + "- Add this location (" + Fore.CYAN + location2 + Fore.YELLOW
                   + ") as a favorite location - Enter " + Fore.CYAN + "1")
-            print(Fore.YELLOW + "Add a location as a favorite location - Enter " + "2")
-            print(Fore.YELLOW + "Edit a favorite location - Enter " + Fore.CYAN + "3")
-            print(Fore.YELLOW + "Remove a favorite location - Enter " + Fore.CYAN + "4")
-            print(Fore.YELLOW + "Return to PyWeather - Enter " + Fore.CYAN + "5")
+            print(Fore.YELLOW + "- Add a location as a favorite location - Enter " + "2")
+            print(Fore.YELLOW + "- Edit a favorite location - Enter " + Fore.CYAN + "3")
+            print(Fore.YELLOW + "- Remove a favorite location - Enter " + Fore.CYAN + "4")
+            print(Fore.YELLOW + "- Return to PyWeather - Enter " + Fore.CYAN + "5")
             favconfig_menuinput = input("Input here: ").lower()
             logger.debug("favconfig_menuinput: %s" % favconfig_menuinput)
             if favconfig_menuinput == "1":
@@ -5108,7 +5114,7 @@ while True:
                 favconfig_confirmadd = input("Input here: ").lower()
                 if favconfig_confirmadd != "yes":
                     if favconfig_confirmadd != "no":
-                        print("Couldn't understand your input. Not adding " + Fore.CYAN + str(location) +
+                        print("Couldn't understand your input. Not adding " + Fore.CYAN + location2 +
                               Fore.YELLOW + " to your location list.")
                     else:
                         print("Not adding " + Fore.CYAN + str(location) + Fore.YELLOW + " to your location list.")
@@ -5125,7 +5131,7 @@ while True:
                 try:
                     with open('storage//config.ini', 'w') as configfile:
                         config.write(configfile)
-                    print("Changes made successfully!")
+                    print("Changes saved!")
                     continue
                 except:
                     print("An issue occurred when trying to write new options to your config file.",

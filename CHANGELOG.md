@@ -21,14 +21,13 @@
     * Adding new config options to configsetup/setup, and configupdate - 0% done, should be finished by 10/24
 * Adds the ability to view your current location through a GeoIP service - Done!
 * Adds the ability to view data through a PWS at boot. - Done!
-* Adds the ability to have up to 5 favorite locations. - 20% done
+* Adds the ability to have up to 5 favorite locations. - 40% done
     * Adding initial support - 90% done, need to add PWS parsing at boot
-    * Adding initial menu - 25% done
-    * Adding menu option - Adding favorite locations - 0% done
+    * Adding initial menu - Done!
+    * Adding menu option - Adding favorite locations - Done!
     * Adding menu option - Editing favorite locations - 0% done
     * Adding menu option - Removing favorite locations - 0% done
     * Adding new config options to configsetup/setup, and configupdate. - 0% done
-    * Roll back changes to geocoder
 * Adds the ability to show cache timings when enabled - Should be finished by 11/18
 * Much better error catching for the config file - Should be finished by 11/21
 *November break from PyWeather development - 11/22 to 11/27*

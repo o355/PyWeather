@@ -8,7 +8,7 @@ Viewing the weather in a terminal has never been so much fun.
 ### Indev code notice
 Right now, there is an issue regarding the new spinner library conflicting with colorama's color styles that I use to color and brighten up text in PyWeather. It appears to only be occurring on Windows at the moment.
 
-I've reported an issue to the project on GitHub, and hopefully things get solved. Just remember, PyWeather 0.6.3 beta's release date is well over 2 months away, so I'm hoping things get fixed soon.
+I've reported an issue to the project on GitHub, and hopefully things will get solved. This doesn't affect PyWeather 0.6.2 beta, or any indev code from commit `bda1180` and earlier.
 
 ### Beta Notice
 If you haven't noticed, PyWeather is in beta. This means that basic features should work fine, but more advanced and new features may not work.
