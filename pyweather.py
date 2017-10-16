@@ -726,19 +726,19 @@ logger.debug("pws_query: %s" % pws_query)
 # Tell users their query isn't supported nicely
 # I understand that eggs.find("ham") isn't the most pythonic thing ever, but it's more reliable
 # and easier to work with than if "ham" in eggs
-if locinput.find("currentlocation") == 0 or locinput.find("curloc") == 0 and geoip_available is False:
+if geoip_available is False and locinput.find("currentlocation") == 0 or locinput.find("curloc") == 0:
     print("Whoops! You entered the query to access your current location, but",
           "your current location isn't available. Press enter to exit.", sep="\n")
     input()
     sys.exit()
-elif locinput.find("favoritelocation:") == 0 or locinput.find("favloc:") == 0 and favoritelocation_available is False:
+elif favoritelocation_available is False and locinput.find("favoritelocation:") == 0 or locinput.find("favloc:") == 0:
     print("Whoops! You entered the query to access one of your favorite locations, but",
           "favorite locations isn't on (either you have no favorite locations, or it's disabled",
           "entirely). Press enter to exit.", sep="\n")
     input()
     sys.exit()
 
-elif locinput.find("favoritelocation:") == 0 or locinput.find("favloc:") == 0 and favoritelocation_available is True:
+elif favoritelocation_available is True and locinput.find("favoritelocation:") == 0 or locinput.find("favloc:") == 0:
     haveFavoriteLocation = False
     logger.debug("haveFavoriteLocation: %s" % haveFavoriteLocation)
     if locinput == "favoritelocation:1" and favoritelocation_1 != "None":
@@ -805,20 +805,20 @@ elif locinput.find("favoritelocation:") == 0 or locinput.find("favloc:") == 0 an
     useGeocoder = True
     logger.debug("useGeocoder: %s" % useGeocoder)
 
-elif "pws:" in locinput and pws_enabled is False:
+elif pws_enabled is False and locinput.find("pws") == 0:
     print("Whoops! You entered the query to access a PWS, but PWS queries are currently",
           "disabled. Press enter to exit.", sep="\n")
     input()
     sys.exit()
 
-if "currentlocation" in locinput and geoip_available is True:
+if geoip_available is True and locinput.find("currentlocation") == 0 or locinput.find("curloc") == 0:
     locinput = currentlocation
     useGeocoder = False
     location = currentlocation
     logger.debug("locinput: %s ; useGeocoder: %s" %
                  (locinput, useGeocoder))
     logger.debug("location: %s" % currentlocation)
-elif "pws:" in locinput and pws_enabled is True:
+elif pws_enabled is True and locinput.find("pws:") == 0:
     pws_query = True
     logger.debug("pws_query: %s" % pws_query)
     # Just for safety, query Wunderground's geolocator to get the lat/lon of the PWS.
