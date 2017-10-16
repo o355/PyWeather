@@ -24,9 +24,11 @@
 * Adds the ability to have up to 5 favorite locations. - 40% done
     * Adding initial support - 90% done, need to add PWS parsing at boot
     * Adding initial menu - Done!
-    * Adding menu option - Adding favorite locations - Done!
+    * Adding menu option - Adding favorite locations based on location entered - Done!
+    * Adding menu option - Adding favorite locations manually - 30% done
     * Adding menu option - Editing favorite locations - 0% done
     * Adding menu option - Removing favorite locations - 0% done
+    * Adding extra logging - 0% done
     * Adding new config options to configsetup/setup, and configupdate. - 0% done
 * Adds the ability to show cache timings when enabled - Should be finished by 11/18
 * Much better error catching for the config file - Should be finished by 11/21
