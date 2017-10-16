@@ -126,7 +126,21 @@ PyWeather's main data types are done, so now it's on to rapid development of new
 This stage of PyWeather will last a few versions, and span at last 6 months.    
 
 ## Contributing
+Sadly, being a Python developer isn't my day job. I can't work on PyWeather for 8 hours a day, and about 45 hours a week. I have to go to school, do homework, sleep, eat, and other various things. I can't work on PyWeather for 5 hours afterschool, I'd be exhausted.
 
+So, here's the deal. I can only work on PyWeather at max for 10 hours/week usually. At max, 6 hours during the workweek, and 4 hours on the weekend. This is usually lower, at around 3-5 hours/week. It's a lot, but it's not a lot.
+
+I anticipate PyWeather 0.6.3 beta to consume about 50 hours to code in new features, but this might be even higher. QA will take another 10-15 hours. Given the usual 5 hours/week coding time, you can see why PyWeather releases take about 8-10 weeks to complete. Of course, these numbers are not set in stone, and will never be.
+
+Here's the deal. I want faster releases as much as you do. I'd like releases to drop in 3-4 weeks while maintaining the code quality presented in 0.6.2 beta. If that could happen, I'd need more time for PyWeather. This is where you help.
+
+If you don't know how to code Python, you can help report issues. I can't possibly catch every error with every setup. If you see a bug, report it! Every report improves PyWeather.
+
+If you know some basic Python, try coding in some smaller features. As an example, adding prefetching yesterday's weather, caching yesterday's weather, and caching hurricane data are all features that are simple to add (you can easily copy/paste code and change a few variables around). Doing this helps tremendously, and lets me focus on more advanced features that take longer to code.
+
+If you know a solid chunk of Python, you might want to consider coding in more advanced features. However, if you're new to PyWeather, I'd suggest working on smaller features to get a feel for the program. If you're up to coding more advanced features, you'll want to contact me on Reddit, /u/therealo355. I'll give you a full explaination of what needs to get added.
+
+To get a rundown of things, read the CONTRIBUTING.md file in the .github folder. Just know what by contributing code to PyWeather, you're helping to bring the delay between releases down, and reduces my time working a feature from multiple hours to >15 mins.
 
 ## Contributers
 Thanks to these awesome people, they've helped out PyWeather by coding in bug fixes, new features, reporting bugs, and suggesting new stuff.
@@ -137,6 +151,6 @@ Thanks to these awesome people, they've helped out PyWeather by coding in bug fi
 * DiSiqueira - Contributor - Has made 1 report.
 
 ## Sharing
-I've, among others have poured in hundreds of hours into making PyWeather what it is, and I plan to spend hundreds of more hours refining PyWeather.
+I've, among others have poured in over 1,000 hours into making PyWeather what it is, and I plan to spend hundreds of more hours refining PyWeather.
 
 If you'd like, please consider telling your friends, social media followers, whomever about PyWeather. Every star, fork, and user keeps me motivated to keep working on PyWeather.
