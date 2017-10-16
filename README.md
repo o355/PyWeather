@@ -5,15 +5,15 @@ Viewing the weather in a terminal has never been so much fun.
 
 ## Notices
 
+### Indev code notice
+Right now, there is an issue regarding the new spinner library conflicting with colorama's color styles that I use to color and brighten up text in PyWeather. It appears to only be occurring on Windows at the moment.
+
+This doesn't affect PyWeather 0.6.2 beta, or any indev code from commit `bda1180` and earlier.
+
 ### Beta Notice
 If you haven't noticed, PyWeather is in beta. This means that basic features should work fine, but more advanced and new features may not work.
 
 If you do encounter bugs, make sure you report them on GitHub!
-
-### 0.6.3 beta update (October 9, 2017)
-0.6.3 beta is coming along well! The nearest city feature for PyWeather is almost done, and I'm working on making sure that the scripts that deal with the config file are ready to rumble.
-
-Right now, the ETA for 0.6.3 beta is early December. 
 
 ## Requirements
 To run PyWeather, you'll need:
@@ -46,7 +46,7 @@ git clone https://github.com/o355/pyweather.git ./pyweather
 cd pyweather
 ```
 
-Afterwards, run the setup script, and things might work.
+Afterwards, run the setup script, and things ~~might work~~ will work!
 
 Make sure you run `git pull` on a nightly basis :)
 
