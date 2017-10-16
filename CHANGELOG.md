@@ -30,6 +30,9 @@
     * Adding menu option - Removing favorite locations - 0% done
     * Adding extra logging - 0% done
     * Adding new config options to configsetup/setup, and configupdate. - 0% done
+* Adds the ability to manually define a Google Maps API key (because rate limiting has pissed me off too many times) - 0% done
+    * Adding initial support
+    * Adding new config options to configsetup/setup, and configupdate
 * Adds the ability to show cache timings when enabled - Should be finished by 11/18
 * Much better error catching for the config file - Should be finished by 11/21
 *November break from PyWeather development - 11/22 to 11/27*

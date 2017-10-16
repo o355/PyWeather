@@ -724,20 +724,21 @@ pws_query = False
 logger.debug("pws_query: %s" % pws_query)
 
 # Tell users their query isn't supported nicely
-
-if "currentlocation" in locinput and geoip_available is False:
+# I understand that eggs.find("ham") isn't the most pythonic thing ever, but it's more reliable
+# and easier to work with than if "ham" in eggs
+if locinput.find("currentlocation") == 0 or locinput.find("curloc") == 0 and geoip_available is False:
     print("Whoops! You entered the query to access your current location, but",
           "your current location isn't available. Press enter to exit.", sep="\n")
     input()
     sys.exit()
-elif "favoritelocation:" in locinput and favoritelocation_available is False:
+elif locinput.find("favoritelocation:") == 0 or locinput.find("favloc:") == 0 and favoritelocation_available is False:
     print("Whoops! You entered the query to access one of your favorite locations, but",
           "favorite locations isn't on (either you have no favorite locations, or it's disabled",
           "entirely). Press enter to exit.", sep="\n")
     input()
     sys.exit()
 
-elif "favoritelocation:" in locinput and favoritelocation_available is True:
+elif locinput.find("favoritelocation:") == 0 or locinput.find("favloc:") == 0 and favoritelocation_available is True:
     haveFavoriteLocation = False
     logger.debug("haveFavoriteLocation: %s" % haveFavoriteLocation)
     if locinput == "favoritelocation:1" and favoritelocation_1 != "None":

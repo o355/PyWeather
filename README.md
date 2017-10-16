@@ -126,9 +126,7 @@ PyWeather's main data types are done, so now it's on to rapid development of new
 This stage of PyWeather will last a few versions, and span at last 6 months.    
 
 ## Contributing
-Since I don't have all the time in the world to work on PyWeather, contributing is a great way to help with PyWeather.
 
-Bug reports, pull requests, feature suggestions, all that fun stuff can help me out with my limited time I have to code PyWeather. Read over CONTRIBUTING.md in the .github folder, to see how things work.
 
 ## Contributers
 Thanks to these awesome people, they've helped out PyWeather by coding in bug fixes, new features, reporting bugs, and suggesting new stuff.
