@@ -5151,7 +5151,8 @@ while True:
                 if favloc_manualinputLower == "exit":
                     print("Exiting to main menu...")
                     continune
-                elif "pws:" in favloc_manualinputLower:
+
+                if favloc_manualinputLower.find("pws:") == 0:
                     logger.debug("PWS query detected.")
                     print("Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
                           "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
@@ -5171,35 +5172,35 @@ while True:
                               "Please note that no changes were made to your config file.", sep="\n")
                         continue
 
-                elif "favoritelocation:" or "favloc:" in favloc_manualinputLower:
+                if favloc_manualinputLower.find("favoritelocation:") == 0 or favloc_manualinputLower.find("favloc:") == 0:
                     logger.debug("Invalid query detected - favorite location")
                     print("Whoops! You can't use a favorite location query as a favorite location.",
                           "Makes sense, right? Returning to main menu.", sep="\n")
                     continue
-                elif "currentlocation" or "curloc" in favloc_manualinputLower:
+                if favloc_manualinputLower.find("currentlocation:") == 0 or favloc_manualinputLower.find("curloc:") == 0:
                     logger.debug("Invalid query detected - current location")
                     print("Whoops! You can't use a current location query as a favorite location.",
                           "If you'd like to use your current location at boot, make sure that the",
                           "current location feature is enabled (FIRSTINPUT/geoipservice_enabled should be True).",
                           "Returning to main menu.", sep="\n")
                     continue
-                else:
-                    config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_1
-                    config['FAVORITE LOCATIONS']['favloc3'] = favoritelocation_2
-                    config['FAVORITE LOCATIONS']['favloc4'] = favoritelocation_3
-                    config['FAVORITE LOCATIONS']['favloc5'] = favoritelocation_4
-                    # Use the non-lowercased variable as the favorite location here.
-                    # I guess it's important? I don't know.
-                    config['FAVORITE LOCATIONS']['favloc1'] = favloc_manualinput
-                    try:
-                        with open('storage//config.ini', 'w') as configfile:
-                            config.write(configfile)
-                        print("Changes saved!")
-                        continue
-                    except:
-                        print("An issue occurred when trying to write new options to your config file.",
-                              "Please note that no changes were made to your config file.", sep="\n")
-                        continue
+
+                config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_1
+                config['FAVORITE LOCATIONS']['favloc3'] = favoritelocation_2
+                config['FAVORITE LOCATIONS']['favloc4'] = favoritelocation_3
+                config['FAVORITE LOCATIONS']['favloc5'] = favoritelocation_4
+                # Use the non-lowercased variable as the favorite location here.
+                # I guess it's important? I don't know.
+                config['FAVORITE LOCATIONS']['favloc1'] = favloc_manualinput
+                try:
+                    with open('storage//config.ini', 'w') as configfile:
+                        config.write(configfile)
+                    print("Changes saved!")
+                    continue
+                except:
+                    print("An issue occurred when trying to write new options to your config file.",
+                          "Please note that no changes were made to your config file.", sep="\n")
+                    continue
             elif favconfig_menuinput == "5":
                 break
 
