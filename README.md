@@ -138,6 +138,8 @@ If you don't know how to code Python, you can help report issues. I can't possib
 
 If you know some basic Python, try coding in some smaller features. As an example, adding prefetching yesterday's weather, caching yesterday's weather, and caching hurricane data are all features that are simple to add (you can easily copy/paste code and change a few variables around). Doing this helps tremendously, and lets me focus on more advanced features that take longer to code.
 
+As another basic Python example, if you find a bug caused by a typo, a missing variable, etc, you're more than welcome to fix the bug.
+
 If you know a solid chunk of Python, you might want to consider coding in more advanced features. However, if you're new to PyWeather, I'd suggest working on smaller features to get a feel for the program. If you're up to coding more advanced features, you'll want to contact me on Reddit, /u/therealo355. I'll give you a full explaination of what needs to get added.
 
 To get a rundown of things, read the CONTRIBUTING.md file in the .github folder. Just know what by contributing code to PyWeather, you're helping to bring the delay between releases down, and reduces my time working a feature from multiple hours to >15 mins.

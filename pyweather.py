@@ -1,6 +1,8 @@
 # PyWeather - version 0.6.3 beta
 # Copyright (C) 2017 o355
 
+# Section 0 - The license
+
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -23,7 +25,7 @@
 
 # <---- Preload starts here ---->
 
-# Begin the import process.
+# Begin the import process. - Section 1
 import configparser
 import subprocess
 import traceback
@@ -70,7 +72,7 @@ except ImportError:
 
 
 # Try loading the versioninfo.txt file. If it isn't around, create the file with
-# the present version info.
+# the present version info. - Section 2
 
 try:
     versioninfo = open('updater//versioninfo.txt').close()
@@ -81,12 +83,12 @@ except:
         out.close()
 
 
-# Define configparser under config, and read the config.
+# Define configparser under config, and read the config. - Section 3
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
 
 # See if the config is "provisioned". If it isn't, a KeyError will occur,
-# because it's not created. Creative.
+# because it's not created. Creative. - Section 4
 try:
     configprovisioned = config.getboolean('USER', 'configprovisioned')
 except:
@@ -101,7 +103,7 @@ except:
     input()
     sys.exit()
     
-# Try to parse configuration options.    
+# Try to parse configuration options. - Section 5
 try:
     sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
     almanac_summary = config.getboolean('SUMMARY', 'almanac_summary')
@@ -222,14 +224,14 @@ except:
     favoritelocation_4 = "None"
     favoritelocation_5 = "None"
 
-# Import logging, and set up the logger.
+# Import logging, and set up the logger. - Section 6
 import logging
 logger = logging.getLogger(name='pyweather_0.6.3beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
 # Set the logger levels by design. Critical works as a non-verbosity
-# option, as I made sure not to have any critical messages.
+# option, as I made sure not to have any critical messages. - Section 7
 if verbosity:
     logger.setLevel(logging.DEBUG)
 elif tracebacksEnabled:
@@ -237,11 +239,11 @@ elif tracebacksEnabled:
 else:
     logger.setLevel(logging.CRITICAL)
 
-# Initialize the halo spinner
+# Initialize the halo spinner - Section 8
 spinner = Halo(text='Loading PyWeather...', spinner='dots')
 spinner.start()
 
-# List config options for those who have verbosity enabled.    
+# List config options for those who have verbosity enabled. - Section 9
 logger.info("PyWeather 0.6.2 beta now starting.")
 logger.info("Configuration options are as follows: ")
 logger.debug("sundata_summary: %s ; almanac_summary: %s" %
@@ -291,7 +293,7 @@ logger.debug("favoritelocation_4: %s ; favoritelocation_5: %s" %
              (favoritelocation_4, favoritelocation_5))
 
 logger.info("Setting gif x and y resolution for radar...")
-# Set the size of the radar window.
+# Set the size of the radar window. - Section 10
 if user_radarImageSize == "extrasmall":
     radar_gifx = "320"
     radar_gify = "240"
@@ -313,6 +315,7 @@ else:
 
 logger.info("Defining custom functions...")
 
+# Define custom functions - Section 11
 def printException():
     # We use tracebacksEnabled here, as it just worked.
     if tracebacksEnabled == True:
@@ -362,6 +365,7 @@ def radar_clearImages():
 
 
 logger.info("Declaring geocoder type...")
+# Declare geocoder type - Section 12
 if geopyScheme == "https":
     geolocator = GoogleV3(scheme='https')
     logger.debug("geocoder scheme is now https.")
@@ -375,6 +379,7 @@ else:
     logger.debug("geocoder scheme is now https.")
 
 logger.info("Declaring hurricane nearest city population minimum...")
+# Set hurricane nearest city size depending on the config option - Section 13
 if hurricane_nearestsize == "small":
     hurricane_citiesamp = "&cities=cities1000"
 elif hurricane_nearestsize == "medium":
@@ -382,13 +387,14 @@ elif hurricane_nearestsize == "medium":
 elif hurricane_nearestsize == "large":
     hurricane_citiesamp = "&cities=cities10000"
 
-# Declare historical cache dictionary
+# Declare historical cache dictionary - Section 14
 historical_cache = {}
 logger.debug("historical_cache: %s" % historical_cache)
 
 logger.debug("Begin API keyload...")
-# Load the API key.
+# Load the API key - Section 15
 try:
+    # Initially load the key - Section 15a
     apikey_load = open('storage//apikey.txt')
     logger.debug("apikey_load = %s" % apikey_load)
     apikey = apikey_load.read()
@@ -398,7 +404,7 @@ except FileNotFoundError:
           "file can be accessed (usually found at storage/apikey.txt. Make sure it has",
           "proper permissions, and that it exists). In the mean time, we're attempting",
           "to load your backup API key.", sep="\n")
-    # If the key isn't found, try to find the second key.
+    # If the key isn't found, try to find the second key. - Section 15b
     try:
         apikey2_load = open(user_backupKeyDirectory + "backkey.txt")
         logger.debug("apikey2_load: %s" % apikey2_load)
@@ -414,7 +420,8 @@ except FileNotFoundError:
         print("Press enter to continue.")
         input()
         sys.exit()
-        
+
+# Validate the user's API key for the full API key validation - Section 16
 if validateAPIKey == True:
     # If the primary API key is valid, and got through the check,
     # this is here for those who validate their API key, and making sure
@@ -680,6 +687,52 @@ if favoritelocation_enabled is True:
 
     logger.debug("favoritelocation_available: %s" % favoritelocation_available)
 
+# Define favorite location display variables.
+favoritelocation_1d = favoritelocation_1
+favoritelocation_2d = favoritelocation_2
+favoritelocation_3d = favoritelocation_3
+favoritelocation_4d = favoritelocation_4
+favoritelocation_5d = favoritelocation_5
+
+logger.debug("favoritelocation_1d: %s ; favoritelocation_2d: %s" %
+             (favoritelocation_1d, favoritelocation_2d))
+logger.debug("favoritelocation_3d: %s ; favoritelocation_4d: %s" %
+             (favoritelocation_3d, favoritelocation_4d))
+logger.debug("favoritelocation_5d: %s" % favoritelocation_5d)
+
+# Parse any favorite locations that contain PWS in their name. Set display variables.
+# This is the same code for viewing favorite locations in the dedicated menu.
+
+if favoritelocation_1d.find("pws:") == 0:
+    # Delete pws: from the display string
+    favoritelocation_1d = favoritelocation_1d[4:]
+    favoritelocation_1d = "PWS " + favoritelocation_1d.upper()
+    logger.debug("favoritelocation_1d: %s" % favoritelocation_1d)
+
+if favoritelocation_2d.find("pws:") == 0:
+    # Delete pws: from the display string
+    favoritelocation_2d = favoritelocation_2d[4:]
+    favoritelocation_2d = "PWS " + favoritelocation_2d.upper()
+    logger.debug("favoritelocation_2d: %s" % favoritelocation_2d)
+
+if favoritelocation_3d.find("pws:") == 0:
+    # Delete pws: from the display string
+    favoritelocation_3d = favoritelocation_3d[4:]
+    favoritelocation_3d = "PWS " + favoritelocation_3d.upper()
+    logger.debug("favoritelocation_3d: %s" % favoritelocation_3d)
+
+if favoritelocation_4d.find("pws:") == 0:
+    # Delete pws: from the display string
+    favoritelocation_4d = favoritelocation_4d[4:]
+    favoritelocation_4d = "PWS " + favoritelocation_4d.upper()
+    logger.debug("favoritelocation_4d: %s" % favoritelocation_4d)
+
+if favoritelocation_5d.find("pws:") == 0:
+    # Delete pws: from the display string
+    favoritelocation_5d = favoritelocation_5d[4:]
+    favoritelocation_5d = "PWS " + favoritelocation_5d.upper()
+    logger.debug("favoritelocation_5d: %s" % favoritelocation_5d)
+
 
 
 # I understand this goes against Wunderground's ToS for logo usage.
@@ -700,21 +753,22 @@ if favoritelocation_available is True:
     print("")
     print("You can also enter this to show weather for your favorite locations:")
     if favoritelocation_1 != "None":
-        print("favoritelocation:1 - " + favoritelocation_1)
+        print("favoritelocation:1 - " + favoritelocation_1d)
     if favoritelocation_2 != "None":
-        print("favoritelocation:2 - " + favoritelocation_2)
+        print("favoritelocation:2 - " + favoritelocation_2d)
     if favoritelocation_3 != "None":
-        print("favoritelocation:3 - " + favoritelocation_3)
+        print("favoritelocation:3 - " + favoritelocation_3d)
     if favoritelocation_4 != "None":
-        print("favoritelocation:4 - " + favoritelocation_4)
+        print("favoritelocation:4 - " + favoritelocation_4d)
     if favoritelocation_5 != "None":
-        print("favoritelocation:5 - " + favoritelocation_5)
+        print("favoritelocation:5 - " + favoritelocation_5d)
     print("")
 if pws_enabled is True:
     logger.debug("pws queries have been enabled. Showing option...")
     print("You can also query a Wunderground PWS by entering this:")
     print("pws:<PWS ID>")
     print("")
+
 locinput = input("Input here: ")
 print("Checking the weather, it'll take a few seconds!")
 print("")
@@ -725,20 +779,24 @@ logger.debug("pws_query: %s" % pws_query)
 
 # Tell users their query isn't supported nicely
 # I understand that eggs.find("ham") isn't the most pythonic thing ever, but it's more reliable
-# and easier to work with than if "ham" in eggs
-if geoip_available is False and locinput.find("currentlocation") == 0 or locinput.find("curloc") == 0:
+# and easier to work with than if "ham" in eggs. Multiple conditions are needed to support the short
+# shortcuts? Basically favloc: instead of favoritelocation:.
+if (geoip_available is False and locinput.find("currentlocation") == 0 or
+    geoip_available is False and locinput.find("curloc") == 0):
     print("Whoops! You entered the query to access your current location, but",
           "your current location isn't available. Press enter to exit.", sep="\n")
     input()
     sys.exit()
-elif favoritelocation_available is False and locinput.find("favoritelocation:") == 0 or locinput.find("favloc:") == 0:
+elif (favoritelocation_available is False and locinput.find("favoritelocation:") == 0 or
+        favoritelocation_available is False and locinput.find("favloc:") == 0):
     print("Whoops! You entered the query to access one of your favorite locations, but",
           "favorite locations isn't on (either you have no favorite locations, or it's disabled",
           "entirely). Press enter to exit.", sep="\n")
     input()
     sys.exit()
 
-elif favoritelocation_available is True and locinput.find("favoritelocation:") == 0 or locinput.find("favloc:") == 0:
+elif (favoritelocation_available is True and locinput.find("favoritelocation:") == 0 or
+        favoritelocation_available is True and locinput.find("favloc:") == 0):
     haveFavoriteLocation = False
     logger.debug("haveFavoriteLocation: %s" % haveFavoriteLocation)
     if locinput == "favoritelocation:1" and favoritelocation_1 != "None":
@@ -805,13 +863,14 @@ elif favoritelocation_available is True and locinput.find("favoritelocation:") =
     useGeocoder = True
     logger.debug("useGeocoder: %s" % useGeocoder)
 
-elif pws_enabled is False and locinput.find("pws") == 0:
+elif pws_enabled is False and locinput.find("pws:") == 0:
     print("Whoops! You entered the query to access a PWS, but PWS queries are currently",
           "disabled. Press enter to exit.", sep="\n")
     input()
     sys.exit()
 
-if geoip_available is True and locinput.find("currentlocation") == 0 or locinput.find("curloc") == 0:
+if (geoip_available is True and locinput.find("currentlocation") == 0 or
+    geoip_available is True and locinput.find("curloc") == 0):
     locinput = currentlocation
     useGeocoder = False
     location = currentlocation

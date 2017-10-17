@@ -22,10 +22,10 @@
 * Adds the ability to view your current location through a GeoIP service - Done!
 * Adds the ability to view data through a PWS at boot. - Done!
 * Adds the ability to have up to 5 favorite locations. - 40% done
-    * Adding initial support - 85% done, need to add PWS parsing at boot, and using the string.find method
+    * Adding initial support - 90% done, need to improve string finding support
     * Adding initial menu - Done!
     * Adding menu option - Adding favorite locations based on location entered - Done!
-    * Adding menu option - Adding favorite locations manually - 30% done
+    * Adding menu option - Adding favorite locations manually - 80% done, need to finish checks for odd queries
     * Adding menu option - Editing favorite locations - 0% done
     * Adding menu option - Removing favorite locations - 0% done
     * Adding extra logging - 0% done
