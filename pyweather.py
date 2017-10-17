@@ -5237,7 +5237,7 @@ while True:
                     print("Whoops! You can't use a favorite location query as a favorite location.",
                           "Makes sense, right? Returning to main menu.", sep="\n")
                     continue
-                if favloc_manualinputLower.find("currentlocation:") == 0 or favloc_manualinputLower.find("curloc:") == 0:
+                if favloc_manualinputLower.find("currentlocation") == 0 or favloc_manualinputLower.find("curloc") == 0:
                     logger.debug("Invalid query detected - current location")
                     print("Whoops! You can't use a current location query as a favorite location.",
                           "If you'd like to use your current location at boot, make sure that the",
