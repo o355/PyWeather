@@ -5261,6 +5261,96 @@ while True:
                     print("An issue occurred when trying to write new options to your config file.",
                           "Please note that no changes were made to your config file.", sep="\n")
                     continue
+            elif favconfig_menuinput == "3":
+                print("Which favorite location would you like to modify? Enter 1-5 representing",
+                      "the favorite locations 1-5.", sep="\n")
+                favloc_editinputnum = input("Input here: ").lower()
+                logger.debug("favloc_editinputnum: %s" % favloc_editinputnum)
+                # Convert the number to an integer to see if the user entered a number. If a ValueError is catched,
+                # return to the main menu. Floats will be rounded down to the first number.
+
+                try:
+                    favloc_editinputnum = int(favloc_editinputnum)
+                except ValueError:
+                    print("Whoops! Your input didn't seem to be a number. Returning to the",
+                          "main menu.", sep="\n")
+                    continue
+
+                # Validate the number is between 1-5
+                if 1 < favloc_editinputnum < 5:
+                    print("Whoops! You entered a favorite location to input that was not between 1-5.",
+                          "Returning to the main menu...", sep="\n")
+
+                # Confirm to the user which favorite location we're editing.
+                if favloc_editinputnum is 1:
+                    favloc_editdisplay = favoritelocation_1d
+                elif favloc_editinputnum is 2:
+                    favloc_editdisplay = favoritelocation_2d
+                elif favloc_editinputnum is 3:
+                    favloc_editdisplay = favoritelocation_3d
+                elif favloc_editinputnum is 4:
+                    favloc_editdisplay = favoritelocation_4d
+                elif favloc_editinputnum is 5:
+                    favloc_editdisplay = favoritelocation_5d
+                logger.debug("favloc_editdisplay: %s" % favloc_editdisplay)
+
+                print("Just to confirm, you're editing favorite location " + str(favloc_editdisplay) + ".",
+                      "This favorite location is currently: " + favloc_editdisplay + ".",
+                      "Would you like to edit this favorite location? Yes or No.", sep="\n")
+                favloc_editconfirm = input("Input here: ").lower()
+                logger.debug("favloc_editconfirm: %s" % favloc_editconfirm)
+                if favloc_editconfirm == "yes":
+                    logger.debug("moving to the final input...")
+                elif favloc_editconfirm == "no":
+                    print("Returning to the main menu.")
+                    continue
+                else:
+                    print("Couldn't understand your input. Returning to the",
+                          "main menu.", sep="\n")
+                    continue
+
+
+                # User input for the change goes here.
+                print("What would you like to change favorite location " + str(favloc_editdisplay) + " to?",
+                      "For a PWS, you'd enter pws:<PWS ID>, where <PWS ID> is the ID of the PWS.",
+                      "Queries for favoritelocation:, currentlocation, and previouslocation: are not supported.",
+                      "Please note that your input WILL NOT be validated. To exit, enter 'exit' in the input.", sep="\n")
+                favloc_editinput = input("Input here: ")
+                favloc_editinputLower = favloc_editinput.lower()
+                logger.debug("favloc_editinput: %s ; favloc_editinputLower: %s" %
+                             (favloc_editinput, favloc_editinputLower))
+
+                # Validate the user input, do special conversions for PWSes.
+                if favloc_editinputLower == "exit":
+                    print("Exiting to the main menu.")
+
+                if favloc_manualinputLower.find("pws:") == 0:
+                    logger.debug("PWS query has been detected.")
+                    print("Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
+                          "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
+                    if favloc_editinputnum == 1:
+                        config['FAVORITE LOCATIONS']['favloc1'] = favloc_editinputLower
+                    elif favloc_editinputnum == 2:
+                        config['FAVORITE LOCATIONS']['favloc2'] = favloc_editinputLower
+                    elif favloc_editinputnum == 3:
+                        config['FAVORITE LOCATIONS']['favloc3'] = favloc_editinputLower
+                    elif favloc_editinputnum == 4:
+                        config['FAVORITE LOCATIONS']['favloc4'] = favloc_editinputLower
+                    elif favloc_editinputnum == 5:
+                        config['FAVORITE LOCATIONS']['favloc5'] = favloc_editinputLower
+
+                    try:
+                        with open('storage//config.ini', 'w') as configfile:
+                            config.write(configfile)
+                        print("Changes saved!")
+                        continue
+                    except:
+                        print("An issue occurred when trying to write new options to your config file.",
+                              "Please note that no changes were made to your config file.", sep="\n")
+                        continue
+
+                # Commit to the config. A favorite location is committed to based on what
+                # number a user entered.
             elif favconfig_menuinput == "5":
                 break
 

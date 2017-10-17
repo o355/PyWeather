@@ -22,13 +22,13 @@
 * Adds the ability to view your current location through a GeoIP service - Done!
 * Adds the ability to view data through a PWS at boot. - Done!
 * Adds the ability to have up to 5 favorite locations. - 40% done
-    * Adding initial support - 90% done, need to improve string finding support
+    * Adding initial support - Done!
     * Adding initial menu - Done!
     * Adding menu option - Adding favorite locations based on location entered - Done!
-    * Adding menu option - Adding favorite locations manually - 80% done, need to finish checks for odd queries
-    * Adding menu option - Editing favorite locations - 0% done
+    * Adding menu option - Adding favorite locations manually - Done!
+    * Adding menu option - Editing favorite locations - 25% done
     * Adding menu option - Removing favorite locations - 0% done
-    * Adding extra logging - 0% done
+    * Adding extra logging and more colors - 0% done
     * Adding new config options to configsetup/setup, and configupdate. - 0% done
 * Adds the ability to manually define a Google Maps API key (because rate limiting has pissed me off too many times) - 0% done
     * Adding initial support
