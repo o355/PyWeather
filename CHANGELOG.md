@@ -36,7 +36,6 @@
 * Adds the ability to show cache timings when enabled - Should be finished by 11/18
 * Much better error catching for the config file - Should be finished by 11/21
 *November break from PyWeather development - 11/22 to 11/27*
-* Adding a "last frame" button for radar - Should be finished by 11/29
 * Adding programmer dad jokes - Should be finished by 12/1
 
 **BUG FIXES**
