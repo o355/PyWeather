@@ -5262,7 +5262,7 @@ while True:
                           "Please note that no changes were made to your config file.", sep="\n")
                     continue
             elif favconfig_menuinput == "3":
-                print("Which favorite location would you like to modify? Enter 1-5 representing",
+                print("Which favorite location would you like to modify? Enter a number 1-5 representing",
                       "the favorite locations 1-5.", sep="\n")
                 favloc_editinputnum = input("Input here: ").lower()
                 logger.debug("favloc_editinputnum: %s" % favloc_editinputnum)
@@ -5386,6 +5386,39 @@ while True:
                     print("An issue occurred when trying to write new options to your config file.",
                           "Please note that no changes were made to your config file.", sep="\n")
                     continue
+            elif favconfig_menuinput == "4":
+                print("Which favorite location would you like to remove? Enter a number 1-5 representing",
+                      "the favorite locations 1-5.", sep="\n")
+                favloc_removeinputnum = input("Input here: ").lower()
+                logger.debug("favloc_removeinputnum: %s" % favloc_removeinputnum)
+                # Convert the input number to an integer, see if the user entered a number.
+                # Floats get converted down to the first number.
+
+                try:
+                    favloc_removeinputnum = int(favloc_removeinputnum)
+                except ValueError:
+                    print("Whoops! Your input didn't seem to be a number. Returning to the",
+                          "main menu.", sep="\n")
+                    continue
+
+                # Validate the input number is between 1 and 5
+                if 1 < favloc_editinputnum < 5:
+                    print("Whoops! You entered a favorite location to remove that was not between 1-5.",
+                          "Returning to the main menu.", sep="\n")
+                    continue
+
+                # Validate that the location that a user is trying to remove isn't "None".
+                favloc_remove_isnotNone = True
+                if favloc_editinputnum == 1 and favoritelocation_1 == "None":
+                    favloc_remove_isnotNone = False
+                elif favloc_editinputnum == 2 and favoritelocation_2 == "None":
+                    favloc_remove_isnotNone = False
+                elif favloc_editinputnum == 3 and favoritelocation_3 == "None":
+                    favloc_remove_isnotNone = False
+                elif favloc_editinputnum == 4 and favoritelocation_4 == "None":
+                    favloc_remove_isnotNone = False
+                elif favloc_editinputnum == 5 and favoritelocation_5 == "None":
+                    favloc_remove_isnotNone = False
 
             elif favconfig_menuinput == "5":
                 break
