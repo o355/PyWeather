@@ -5324,7 +5324,7 @@ while True:
                 if favloc_editinputLower == "exit":
                     print("Exiting to the main menu.")
 
-                if favloc_manualinputLower.find("pws:") == 0:
+                if favloc_editinputLower.find("pws:") == 0:
                     logger.debug("PWS query has been detected.")
                     print("Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
                           "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
@@ -5348,9 +5348,45 @@ while True:
                         print("An issue occurred when trying to write new options to your config file.",
                               "Please note that no changes were made to your config file.", sep="\n")
                         continue
+                if favloc_editinputLower.find("favoritelocation:") == 0 or favloc_manualinputLower.find(
+                        "favloc:") == 0:
+                    logger.debug("Invalid query detected - favorite location")
+                    print("Whoops! You can't use a favorite location query as a favorite location.",
+                          "Makes sense, right? Returning to main menu.", sep="\n")
+                    continue
+                if favloc_editinputLower.find("currentlocation") == 0 or favloc_manualinputLower.find(
+                        "curloc") == 0:
+                    logger.debug("Invalid query detected - current location")
+                    print("Whoops! You can't use a current location query as a favorite location.",
+                          "If you'd like to use your current location at boot, make sure that the",
+                          "current location feature is enabled (FIRSTINPUT/geoipservice_enabled should be True).",
+                          "Returning to main menu.", sep="\n")
+                    continue
 
-                # Commit to the config. A favorite location is committed to based on what
+                # Commit to the config, if anything isn't catched. A favorite location is committed to based on what
                 # number a user entered.
+
+                if favloc_editinputnum == 1:
+                    config['FAVORITE LOCATIONS']['favloc1'] = favloc_editinput
+                elif favloc_editinputnum == 2:
+                    config['FAVORITE LOCATIONS']['favloc2'] = favloc_editinput
+                elif favloc_editinputnum == 3:
+                    config['FAVORITE LOCATIONS']['favloc3'] = favloc_editinput
+                elif favloc_editinputnum == 4:
+                    config['FAVORITE LOCATIONS']['favloc4'] = favloc_editinput
+                elif favloc_editinputnum == 5:
+                    config['FAVORITE LOCATIONS']['favloc5'] = favloc_editinput
+
+                try:
+                    with open('storage//config.ini', 'w') as configfile:
+                        config.write(configfile)
+                    print("Changes saved!")
+                    continue
+                except:
+                    print("An issue occurred when trying to write new options to your config file.",
+                          "Please note that no changes were made to your config file.", sep="\n")
+                    continue
+
             elif favconfig_menuinput == "5":
                 break
 
