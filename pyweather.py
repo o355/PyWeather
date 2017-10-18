@@ -5348,13 +5348,13 @@ while True:
                         print("An issue occurred when trying to write new options to your config file.",
                               "Please note that no changes were made to your config file.", sep="\n")
                         continue
-                if favloc_editinputLower.find("favoritelocation:") == 0 or favloc_manualinputLower.find(
+                if favloc_editinputLower.find("favoritelocation:") == 0 or favloc_editinputLower.find(
                         "favloc:") == 0:
                     logger.debug("Invalid query detected - favorite location")
                     print("Whoops! You can't use a favorite location query as a favorite location.",
                           "Makes sense, right? Returning to main menu.", sep="\n")
                     continue
-                if favloc_editinputLower.find("currentlocation") == 0 or favloc_manualinputLower.find(
+                if favloc_editinputLower.find("currentlocation") == 0 or favloc_editinputLower.find(
                         "curloc") == 0:
                     logger.debug("Invalid query detected - current location")
                     print("Whoops! You can't use a current location query as a favorite location.",

@@ -26,7 +26,7 @@
     * Adding initial menu - Done!
     * Adding menu option - Adding favorite locations based on location entered - Done!
     * Adding menu option - Adding favorite locations manually - Done!
-    * Adding menu option - Editing favorite locations - 100% done, doing testing.
+    * Adding menu option - Editing favorite locations - Done!
     * Adding menu option - Removing favorite locations - 0% done
     * Adding extra logging and more colors - 0% done
     * Adding new config options to configsetup/setup, and configupdate. - 0% done
