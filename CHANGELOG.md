@@ -29,7 +29,7 @@
     * Adding menu option - Editing favorite locations - Done!
     * Adding menu option - Removing favorite locations - Done!
     * Adding extra logging, colors, and better UI - Done!
-    * Adding new config options to configsetup/setup, and configupdate. - 0% done
+    * Adding new config options to configsetup/setup, and configupdate. - 20% done
 * Adds the ability to manually define a Google Maps API key (because rate limiting has pissed me off too many times) - 0% done
     * Adding initial support
     * Adding new config options to configsetup/setup, and configupdate
@@ -43,8 +43,8 @@
 * Fixed a potential bug where if there was just one storm, extended forecast data and forecast data got all mixed up - Investigating
 
 **OTHER CHANGES**
-* The Git Updater will been completely removed, as it's been unreliable. A universal updater will be introduced later in time.
-
+* The Git Updater will been completely removed, as it's been unreliable. A universal updater will be introduced later in time. - 0% done
+* The configupdate file will now properly catch a bad section error (not a plain except)
 
 
 ## version 0.6.2 beta - Released on 9/24/2017

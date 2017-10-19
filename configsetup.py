@@ -57,6 +57,11 @@ if cd_confirmation == "yes":
         print("Setting up your config...")
 
     try:
+        config.add_section("FAVORITE LOCATIONS")
+    except configparser.DuplicateSectionError:
+        print("Favorite locations section could not be added.")
+
+    try:
         config.add_section("FIRSTINPUT")
     except configparser.DuplicateSectionError:
         print("Firstinput section could not be added.")
@@ -172,6 +177,13 @@ if cd_confirmation == "yes":
     config['HURRICANE']['enablenearestcity_forecast'] = 'False'
     config['HURRICANE']['api_username'] = 'pyweather_proj'
     config['HURRICANE']['nearestcitysize'] = 'medium'
+    config['FAVORITE LOCATIONS']['enabled'] = 'True'
+    config['FAVORITE LOCATIONS']['favloc1'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc2'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc3'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc4'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc5'] = 'None'
+
     try:
         with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)

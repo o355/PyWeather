@@ -108,29 +108,46 @@ def geopycheck():
                 print("Changes saved.")
 if "0.6.2 beta" in versioninfo2:
     try:
+        config.add_section("FAVORITE LOCATIONS")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the favorite locations section. Does it exist?")
+    try:
         config.add_section("FIRSTINPUT")
-    except:
+    except configparser.DuplicateSectionError:
         print("Failed to add the firstinput section. Does it exist?")
 
     try:
         config.add_section("HURRICANE")
-    except:
+    except configparser.DuplicateSectionError:
         print("Failed to add the hurricane section. Does it exist?")
 
-    print("6 new configuration options have been added from 0.6.2 beta to 0.6.3 beta.",
+    print("12 new configuration options have been added from 0.6.2 beta to 0.6.3 beta.",
           "Details:",
           "- FIRSTINPUT/geoipservice_enabled - Sets if the service to allow current location queries is enabled - Defaults to False",
           "- FIRSTINPUT/allow_pwsqueries - Sets if PyWeather will allow PWS queries - Defaults to True",
           "- HURRICANE/enablenearestcity - Sets if the nearest city feature for hurricane data is enabled - Defaults to False",
           "- HURRICANE/enablenearestcity_forecast - Sets if the nearest city feature is enabled when viewing forecast data - Defaults to False",
           "- HURRICANE/api_username - Sets the API username for the API used by the nearest city feature - Defaults to 'pyweather_proj'",
-          "- HURRICANE/nearestcitysize - Sets how big a city has to be to show up in nearest city data for hurricanes - Defaults to 'medium'", sep="\n")
+          "- HURRICANE/nearestcitysize - Sets how big a city has to be to show up in nearest city data for hurricanes - Defaults to 'medium'",
+          "- FAVORITE LOCATIONS/enabled - Sets if the favorite locations feature is enabled - Defaults to True",
+          "- FAVORITE LOCATIONS/favloc1 - Sets the first favorite location - Defaults to 'None'",
+          "- FAVORITE LOCATIONS/favloc2 - Sets the second favorite location - Defaults to 'None'",
+          "- FAVORITE LOCATIONS/favloc3 - Sets the third favorite location - Defaults to 'None'",
+          "- FAVORITE LOCATIONS/favloc4 - Sets the fourth favorite location - Defaults to 'None'",
+          "- FAVORITE LOCATIONS/favloc5 - Sets the fifth favorite location - Defaults to 'None'", sep="\n")
     config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
     config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
     config['HURRICANE']['enablenearestcity'] = 'False'
     config['HURRICANE']['enablenearestcity_forecast'] = 'False'
     config['HURRICANE']['api_username'] = 'pyweather_proj'
     config['HURRICANE']['nearestcitysize'] = 'medium'
+    config['FAVORITE LOCATIONS']['enabled'] = 'True'
+    config['FAVORITE LOCATIONS']['favloc1'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc2'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc3'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc4'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc5'] = 'None'
+
 elif "0.6.1 beta" in versioninfo2:
     try:
         config.add_section("FIRSTINPUT")
