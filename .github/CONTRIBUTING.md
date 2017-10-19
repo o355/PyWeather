@@ -12,13 +12,59 @@ When contributing to PyWeather, please make sure to follow the code of conduct, 
 ## Bug reports
 An easy, yet substantial way to contribute to PyWeather is in the form of bug reports. When you create an issue, you'll see an issue template, and this is the general format on how issues are created and formatted. This document will expand on what should ideally be in a report.
 
+Just note, if at any time you are confused about if you should report an issue or not, just report the issue. I'd much rather have you report the issue and for me to fix a potential bug, versus not knowing about it.
+
 ### Doing the to-do list
 It's really important to run down this list to save your time, and my time from unnecessary reports. This to-do list also includes steps to help your report be the best it can be.
 
 ### Reporting indev code
 Reporting indev code is ok, under certain circumstances. As mentioned in the issue template, you'll not want to report config errors. At every PyWeather QA, this is automatically tested about 30x on 6 platforms. However, if PyWeather is close to release, and you find a config bug, you'll want to report a config error.
 
-In addition, please don't make a bug report on a feature that's incomplete. However, feel free to report bugs
+In addition, please don't make a bug report on a feature that's incomplete. However, feel free to report bugs on complete features.
+
+### Necessary things for a report
+When making a report, you'll want a full traceback (if applicable), System information, a detailed description, and some other extra information. Below I'll expand on what necessary things are needed for a report.
+
+### A full traceback
+A full traceback looks something like this:
+```
+Traceback (most recent call last):
+  File "<stdin">, line 1, in <module>
+ValueError: could not convert string to float: 'hello'
+```
+A traceback does not look like this:
+```
+Some horrible thing occurred that prevented PyWeather from loading!
+I can't remember the actual error messages in PyWeather and I'm too lazy to reference one.
+Press enter to exit.
+```
+
+You'll want a full traceback in your error report. In PyWeather, you'll deal with 2 types of tracebacks. Catched errors at a potential point of failure, or a random traceback that randomly exits PyWeather.
+
+For catched errors, a traceback will be outputted, given you turn on tracebacks in the config file. Turning on tracebacks can be done in the setup script, or by making the `tracebacks` option in the `[TRACEBACKS]` section in the config file `True`.
+
+It's important to know that you shouldn't report *some* catched errors. As an example...
+* Reporting the geocoder rate limit error - Don't report this
+* Reporting a config error when you've properly configured your config - Report this
+* Reporting missing data for Wunderground at your location (and it's caught with a message like "no data") - Don't report this
+* Reporting odd data without any message of bad data - Report this
+
+If you also enable verbosity, please don't report non-critical errors. Most of them are due to bad conversions of data, and that actually helps to catch bad data.
+
+However, for random tracebacks, report these! As soon as your PyWeather randomly quits, report the traceback. This is easy if you launch PyWeather in a terminal, but tricky if you double-click PyWeather. 
+
+If you end up double-clicking to launch PyWeather, you'll want to immediately run PyWeather in a terminal (OS X - Launch `Terminal`, `cd pyweather` (or whereever PyWeather is, starts in home folder), `python3 pyweather.py`; Windows - File manager, go into PyWeather's folder, File, Open in Command Prompt (Windows 10 1703 and newer PowerShell), `python pyweather.py`; Linux - You know what to do), do exactly what you did, and get the traceback, and report the issue.
+
+### System Information
+In a report, you'll want what OS you're on, and the Python version you have.
+
+To get the version you have, remember what version is installed on your box, or enter `python3` (sometimes `python` for python 3) into a terminal, and put down the Python version you have. Examples:
+
+`Python 3` - Doesn't help. PyWeather runs on Python 3.
+`Python 3.6` - Good, but having a specific version is better.
+`Python 3.6.3` - Great! That's what I need.
+
+Please note: If you're running Python 3.6, and just 3.6 (not 3.6.x), please report your Python version as `3.6.0`.
 
 ## Enhancements
 
