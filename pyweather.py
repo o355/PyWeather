@@ -5402,25 +5402,26 @@ while True:
                     continue
 
                 # Validate the input number is between 1 and 5
-                if 1 < favloc_editinputnum < 5:
+                if 1 < favloc_removeinputnum < 5:
                     print("Whoops! You entered a favorite location to remove that was not between 1-5.",
                           "Returning to the main menu.", sep="\n")
                     continue
 
                 # Validate that the location that a user is trying to remove isn't "None".
-                favloc_remove_isnotNone = True
+                favloc_remove_isNone = False
                 if favloc_removeinputnum == 1 and favoritelocation_1 == "None":
-                    favloc_remove_isnotNone = False
+                    favloc_remove_isNone = True
                 elif favloc_removeinputnum == 2 and favoritelocation_2 == "None":
-                    favloc_remove_isnotNone = False
+                    favloc_remove_isNone = True
                 elif favloc_removeinputnum == 3 and favoritelocation_3 == "None":
-                    favloc_remove_isnotNone = False
+                    favloc_remove_isNone = True
                 elif favloc_removeinputnum == 4 and favoritelocation_4 == "None":
-                    favloc_remove_isnotNone = False
+                    favloc_remove_isNone = True
                 elif favloc_removeinputnum == 5 and favoritelocation_5 == "None":
-                    favloc_remove_isnotNone = False
+                    favloc_remove_isNone = True
 
-                if favloc_remove_isnotNone is True:
+                logger.debug("favloc_remove_isNone: %s" % favloc_remove_isNone)
+                if favloc_remove_isNone is True:
                     print("Whoops! The favorite location you're trying to remove isn't set to anything.",
                           "Returning to the main menu.", sep="\n")
                     continue
@@ -5453,7 +5454,7 @@ while True:
                           "Returning to the main menu.", sep="\n")
 
                 # Delete certain favorite locations based on what favorite location we're trying to delete.
-        
+
                 if favloc_removeinputnum <= 1:
                     config['FAVORITE LOCATIONS']['favloc1'] = favoritelocation_2
                 if favloc_removeinputnum <= 2:
@@ -5465,6 +5466,15 @@ while True:
                 if favloc_removeinputnum <= 5:
                     config['FAVORITE LOCATIONS']['favloc5'] = "None"
 
+                try:
+                    with open('storage//config.ini', 'w') as configfile:
+                        config.write(configfile)
+                    print("Changes saved!")
+                    continue
+                except:
+                    print("An issue occurred when trying to write new options to your config file.",
+                          "Please note that no changes were made to your config file.", sep="\n")
+                    continue
 
             elif favconfig_menuinput == "5":
                 break
