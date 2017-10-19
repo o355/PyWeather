@@ -5409,16 +5409,62 @@ while True:
 
                 # Validate that the location that a user is trying to remove isn't "None".
                 favloc_remove_isnotNone = True
-                if favloc_editinputnum == 1 and favoritelocation_1 == "None":
+                if favloc_removeinputnum == 1 and favoritelocation_1 == "None":
                     favloc_remove_isnotNone = False
-                elif favloc_editinputnum == 2 and favoritelocation_2 == "None":
+                elif favloc_removeinputnum == 2 and favoritelocation_2 == "None":
                     favloc_remove_isnotNone = False
-                elif favloc_editinputnum == 3 and favoritelocation_3 == "None":
+                elif favloc_removeinputnum == 3 and favoritelocation_3 == "None":
                     favloc_remove_isnotNone = False
-                elif favloc_editinputnum == 4 and favoritelocation_4 == "None":
+                elif favloc_removeinputnum == 4 and favoritelocation_4 == "None":
                     favloc_remove_isnotNone = False
-                elif favloc_editinputnum == 5 and favoritelocation_5 == "None":
+                elif favloc_removeinputnum == 5 and favoritelocation_5 == "None":
                     favloc_remove_isnotNone = False
+
+                if favloc_remove_isnotNone is True:
+                    print("Whoops! The favorite location you're trying to remove isn't set to anything.",
+                          "Returning to the main menu.", sep="\n")
+                    continue
+
+                # Display variable for when we display what favorite location we're removing.
+                if favloc_removeinputnum == 1:
+                    favloc_removedisplay = favoritelocation_1d
+                elif favloc_removeinputnum == 2:
+                    favloc_removedisplay = favoritelocation_2d
+                elif favloc_removeinputnum == 3:
+                    favloc_removedisplay = favoritelocation_3d
+                elif favloc_removeinputnum == 4:
+                    favloc_removedisplay = favoritelocation_4d
+                elif favloc_removeinputnum == 5:
+                    favloc_removedisplay = favoritelocation_5d
+
+                print("Are you sure you want to delete favorite location " + str(favloc_removeinputnum) + "?",
+                      "This favorite location is presently set to: " + favloc_removedisplay,
+                      "This action cannot be undone! Yes or No.", sep="\n")
+                favloc_removeconfirm = input("Input here: ").lower()
+                logger.debug("favloc_removeconfirm: %s" % favloc_removeconfirm)
+                if favloc_removeconfirm == "yes":
+                    logger.debug("removing favorite location...")
+                elif favloc_removeconfirm == "no":
+                    print("Not deleting favorite location " + str(favloc_removeinputnum) + ".",
+                          "Returning to the main menu.", sep="\n")
+                    continue
+                else:
+                    print("Couldn't understand your input, and not deleting favorite location " + str(favloc_removeinputnum) + ".",
+                          "Returning to the main menu.", sep="\n")
+
+                # Delete certain favorite locations based on what favorite location we're trying to delete.
+        
+                if favloc_removeinputnum <= 1:
+                    config['FAVORITE LOCATIONS']['favloc1'] = favoritelocation_2
+                if favloc_removeinputnum <= 2:
+                    config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_3
+                if favloc_removeinputnum <= 3:
+                    config['FAVORITE LOCATIONS']['favloc3'] = favoritelocation_4
+                if favloc_removeinputnum <= 4:
+                    config['FAVORITE LOCATIONS']['favloc4'] = favoritelocation_5
+                if favloc_removeinputnum <= 5:
+                    config['FAVORITE LOCATIONS']['favloc5'] = "None"
+
 
             elif favconfig_menuinput == "5":
                 break
