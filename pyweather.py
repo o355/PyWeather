@@ -5310,24 +5310,24 @@ while True:
                     favloc_editdisplay = favoritelocation_5d
                 logger.debug("favloc_editdisplay: %s" % favloc_editdisplay)
 
-                print("Just to confirm, you're editing favorite location " + str(favloc_editdisplay) + ".",
-                      "This favorite location is currently: " + favloc_editdisplay + ".",
+                print(Fore.YELLOW + "Just to confirm, you're editing favorite location " + Fore.CYAN + str(favloc_editdisplay) + Fore.YELLOW + ".",
+                      "This favorite location is currently: " + Fore.CYAN + favloc_editdisplay + Fore.YELLOW + ".",
                       "Would you like to edit this favorite location? Yes or No.", sep="\n")
                 favloc_editconfirm = input("Input here: ").lower()
                 logger.debug("favloc_editconfirm: %s" % favloc_editconfirm)
                 if favloc_editconfirm == "yes":
                     logger.debug("moving to the final input...")
                 elif favloc_editconfirm == "no":
-                    print("Not editing...")
+                    print(Fore.YELLOW + "", "Not editing favorite location " + Fore.CYAN + str(favloc_editinputnum) + Fore.YELLOW + ".",
+                          "Returning to the main menu.", sep="\n")
                     continue
                 else:
-                    print("Couldn't understand your input. Returning to the",
-                          "main menu.", sep="\n")
+                    print(Fore.RED + "", "Could not understand your input. Returning to the main menu.", sep="\n")
                     continue
 
 
                 # User input for the change goes here.
-                print("What would you like to change favorite location " + str(favloc_editdisplay) + " to?",
+                print(Fore.YELLOW + "What would you like to change favorite location " + Fore.CYAN + str(favloc_editdisplay) + Fore.YELLOW + " to?",
                       "For a PWS, you'd enter pws:<PWS ID>, where <PWS ID> is the ID of the PWS.",
                       "Queries for favoritelocation:, currentlocation, and previouslocation: are not supported.",
                       "Please note that your input WILL NOT be validated. To exit, enter 'exit' in the input.", sep="\n")
@@ -5338,22 +5338,27 @@ while True:
 
                 # Validate the user input, do special conversions for PWSes.
                 if favloc_editinputLower == "exit":
-                    print("Exiting to the main menu.")
+                    print("", "Exiting to the main menu.", sep="\n")
 
                 if favloc_editinputLower.find("pws:") == 0:
                     logger.debug("PWS query has been detected.")
-                    print("Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
+                    print("", "Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
                           "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
                     if favloc_editinputnum == 1:
                         config['FAVORITE LOCATIONS']['favloc1'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_editinputLower)
                     elif favloc_editinputnum == 2:
                         config['FAVORITE LOCATIONS']['favloc2'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favloc_editinputLower)
                     elif favloc_editinputnum == 3:
                         config['FAVORITE LOCATIONS']['favloc3'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favloc_editinputLower)
                     elif favloc_editinputnum == 4:
                         config['FAVORITE LOCATIONS']['favloc4'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favloc_editinputLower)
                     elif favloc_editinputnum == 5:
                         config['FAVORITE LOCATIONS']['favloc5'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favloc_editinputLower)
 
                     try:
                         with open('storage//config.ini', 'w') as configfile:
@@ -5361,19 +5366,19 @@ while True:
                         print("Changes saved!")
                         continue
                     except:
-                        print("An issue occurred when trying to write new options to your config file.",
+                        print(Fore.RED + "An issue occurred when trying to write new options to your config file.",
                               "Please note that no changes were made to your config file.", sep="\n")
                         continue
                 if favloc_editinputLower.find("favoritelocation:") == 0 or favloc_editinputLower.find(
                         "favloc:") == 0:
                     logger.debug("Invalid query detected - favorite location")
-                    print("Whoops! You can't use a favorite location query as a favorite location.",
+                    print(Fore.RED + "", "Whoops! You can't use a favorite location query as a favorite location.",
                           "Makes sense, right? Returning to main menu.", sep="\n")
                     continue
                 if favloc_editinputLower.find("currentlocation") == 0 or favloc_editinputLower.find(
                         "curloc") == 0:
                     logger.debug("Invalid query detected - current location")
-                    print("Whoops! You can't use a current location query as a favorite location.",
+                    print(Fore.RED + "", "Whoops! You can't use a current location query as a favorite location.",
                           "If you'd like to use your current location at boot, make sure that the",
                           "current location feature is enabled (FIRSTINPUT/geoipservice_enabled should be True).",
                           "Returning to main menu.", sep="\n")
@@ -5384,14 +5389,19 @@ while True:
 
                 if favloc_editinputnum == 1:
                     config['FAVORITE LOCATIONS']['favloc1'] = favloc_editinput
+                    logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_editinput)
                 elif favloc_editinputnum == 2:
                     config['FAVORITE LOCATIONS']['favloc2'] = favloc_editinput
+                    logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favloc_editinput)
                 elif favloc_editinputnum == 3:
                     config['FAVORITE LOCATIONS']['favloc3'] = favloc_editinput
+                    logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favloc_editinput)
                 elif favloc_editinputnum == 4:
                     config['FAVORITE LOCATIONS']['favloc4'] = favloc_editinput
+                    logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favloc_editinput)
                 elif favloc_editinputnum == 5:
                     config['FAVORITE LOCATIONS']['favloc5'] = favloc_editinput
+                    logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favloc_editinput)
 
                 try:
                     with open('storage//config.ini', 'w') as configfile:
@@ -5399,11 +5409,11 @@ while True:
                     print("Changes saved!")
                     continue
                 except:
-                    print("An issue occurred when trying to write new options to your config file.",
+                    print(Fore.RED + "An issue occurred when trying to write new options to your config file.",
                           "Please note that no changes were made to your config file.", sep="\n")
                     continue
             elif favconfig_menuinput == "4":
-                print("Which favorite location would you like to remove? Enter a number 1-5 representing",
+                print(Fore.YELLOW + "Which favorite location would you like to remove? Enter a number 1-5 representing",
                       "the favorite locations 1-5.", sep="\n")
                 favloc_removeinputnum = input("Input here: ").lower()
                 logger.debug("favloc_removeinputnum: %s" % favloc_removeinputnum)
@@ -5413,13 +5423,13 @@ while True:
                 try:
                     favloc_removeinputnum = int(favloc_removeinputnum)
                 except ValueError:
-                    print("Whoops! Your input didn't seem to be a number. Returning to the",
+                    print(Fore.RED + "", "Whoops! Your input didn't seem to be a number. Returning to the",
                           "main menu.", sep="\n")
                     continue
 
                 # Validate the input number is between 1 and 5
                 if 1 < favloc_removeinputnum < 5:
-                    print("Whoops! You entered a favorite location to remove that was not between 1-5.",
+                    print(Fore.RED + "", "Whoops! You entered a favorite location to remove that was not between 1-5.",
                           "Returning to the main menu.", sep="\n")
                     continue
 
@@ -5438,7 +5448,7 @@ while True:
 
                 logger.debug("favloc_remove_isNone: %s" % favloc_remove_isNone)
                 if favloc_remove_isNone is True:
-                    print("Whoops! The favorite location you're trying to remove isn't set to anything.",
+                    print(Fore.RED + "", "Whoops! The favorite location you're trying to remove isn't set to anything.",
                           "Returning to the main menu.", sep="\n")
                     continue
 
@@ -5453,34 +5463,40 @@ while True:
                     favloc_removedisplay = favoritelocation_4d
                 elif favloc_removeinputnum == 5:
                     favloc_removedisplay = favoritelocation_5d
+                logger.debug("favloc_removedisplay: %s" % favloc_removedisplay)
 
-                print("Are you sure you want to delete favorite location " + str(favloc_removeinputnum) + "?",
-                      "This favorite location is presently set to: " + favloc_removedisplay,
-                      "This action cannot be undone! Yes or No.", sep="\n")
+                print(Fore.YELLOW + "Are you sure you want to delete favorite location " + Fore.CYAN + str(favloc_removeinputnum) + Fore.YELLOW + "?",
+                      Fore.YELLOW + "This favorite location is presently set to: " + Fore.CYAN + favloc_removedisplay,
+                      Fore.YELLOW + "This action cannot be undone! Yes or No.", sep="\n")
                 favloc_removeconfirm = input("Input here: ").lower()
                 logger.debug("favloc_removeconfirm: %s" % favloc_removeconfirm)
                 if favloc_removeconfirm == "yes":
                     logger.debug("removing favorite location...")
                 elif favloc_removeconfirm == "no":
-                    print("Not deleting favorite location " + str(favloc_removeinputnum) + ".",
+                    print("", "Not deleting favorite location " + str(favloc_removeinputnum) + ".",
                           "Returning to the main menu.", sep="\n")
                     continue
                 else:
-                    print("Couldn't understand your input, and not deleting favorite location " + str(favloc_removeinputnum) + ".",
+                    print(Fore.RED + "", "Couldn't understand your input, and not deleting favorite location " + str(favloc_removeinputnum) + ".",
                           "Returning to the main menu.", sep="\n")
 
                 # Delete certain favorite locations based on what favorite location we're trying to delete.
 
                 if favloc_removeinputnum <= 1:
                     config['FAVORITE LOCATIONS']['favloc1'] = favoritelocation_2
+                    logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favoritelocation_2)
                 if favloc_removeinputnum <= 2:
                     config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_3
+                    logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favoritelocation_3)
                 if favloc_removeinputnum <= 3:
                     config['FAVORITE LOCATIONS']['favloc3'] = favoritelocation_4
+                    logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favoritelocation_4)
                 if favloc_removeinputnum <= 4:
                     config['FAVORITE LOCATIONS']['favloc4'] = favoritelocation_5
+                    logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favoritelocation_5)
                 if favloc_removeinputnum <= 5:
                     config['FAVORITE LOCATIONS']['favloc5'] = "None"
+                    logger.debug('FAVORITE LOCATIONS/favloc5 is now: "None"')
 
                 try:
                     with open('storage//config.ini', 'w') as configfile:
@@ -5488,7 +5504,7 @@ while True:
                     print("Changes saved!")
                     continue
                 except:
-                    print("An issue occurred when trying to write new options to your config file.",
+                    print(Fore.RED + "An issue occurred when trying to write new options to your config file.",
                           "Please note that no changes were made to your config file.", sep="\n")
                     continue
 

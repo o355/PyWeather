@@ -28,7 +28,7 @@
     * Adding menu option - Adding favorite locations manually - Done!
     * Adding menu option - Editing favorite locations - Done!
     * Adding menu option - Removing favorite locations - Done!
-    * Adding extra logging, colors, and better UI - 0% done
+    * Adding extra logging, colors, and better UI - Done!
     * Adding new config options to configsetup/setup, and configupdate. - 0% done
 * Adds the ability to manually define a Google Maps API key (because rate limiting has pissed me off too many times) - 0% done
     * Adding initial support
