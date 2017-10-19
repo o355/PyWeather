@@ -5173,6 +5173,7 @@ while True:
                 print(Fore.YELLOW + "Would you like to add " + Fore.CYAN + str(location) + Fore.YELLOW
                       + " as a favorite location? Yes or No.", sep="\n")
                 favconfig_confirmadd = input("Input here: ").lower()
+                logger.debug("favconfig_confirmadd: %s" % favconfig_confirmadd)
                 if favconfig_confirmadd != "yes":
                     if favconfig_confirmadd != "no":
                         print("Couldn't understand your input. Not adding " + Fore.CYAN + location2 +
@@ -5183,11 +5184,16 @@ while True:
 
                 # Add location to favorite locations
                 config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_1
+                logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favoritelocation_1)
                 config['FAVORITE LOCATIONS']['favloc3'] = favoritelocation_2
+                logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favoritelocation_2)
                 config['FAVORITE LOCATIONS']['favloc4'] = favoritelocation_3
+                logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favoritelocation_3)
                 config['FAVORITE LOCATIONS']['favloc5'] = favoritelocation_4
+                logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favoritelocation_4)
                 # Use locinput instead of location, as the raw PWS query is in locinput.
                 config['FAVORITE LOCATIONS']['favloc1'] = locinput
+                logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % locinput)
 
                 try:
                     with open('storage//config.ini', 'w') as configfile:
@@ -5195,7 +5201,7 @@ while True:
                     print("Changes saved!")
                     continue
                 except:
-                    print("An issue occurred when trying to write new options to your config file.",
+                    print(Fore.RED + "An issue occurred when trying to write new options to your config file.",
                           "Please note that no changes were made to your config file.", sep="\n")
                     continue
             elif favconfig_menuinput == "2":
