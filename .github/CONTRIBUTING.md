@@ -6,6 +6,20 @@ Hey, thanks for your interest in contributing to PyWeather. If you don't taking 
 
 Oh, and quick side note, I'm (o355) am a GitHub novice. This is a learning experience for me, and this will adapt.
 
+## A quick blurb about PyWeather & contributing
+PyWeather has been the result of thousands of hours of worked poured in by people who want to help PyWeather be the best it can be. I apprecipate every single person who reports an issue, makes a pull request, and in general helps PyWeather in any shape or form.
+
+Contrary to popular belief, you don't need to know how to code Python to contribute to PyWeather. Reporting bugs is tremendously helpful in contributing to PyWeather, or even making a pull request with one line of code helps out PyWeather. 
+
+When contributing to PyWeather, start small. Reporting bugs and issues, OS compatibility reports, or even suggesting enhancements is a great way to get started in contributing to PyWeather. If you feel more comfortable reading code and making pull requests, you can without a doubt code in a small feature in PyWeather that's relevant, or you can quickly fix a bug you found. If you feel really comfortable, try coding in a larger feature. Please make sure to contact me first, however.
+
+## Contacting me
+If you need to ask me any questions about PyWeather without using GitHub, the best place to do so is on Reddit. I'll usually respond within 48 hours, since I get a notification on my phone whenever I get new Reddit mail.
+
+My reddit username is `therealo355`. I have about 3100 karma if that helps to verify my account.
+
+If you'd rather do email, you can email the PyWeather project email at `pyweather <at> owenthe <dot> ninja`. I usually don't respond as quickly to that email, so a response may take up to a few weeks. 
+
 ## Code of Conduct
 When contributing to PyWeather, please make sure to follow the code of conduct, available here: https://github.com/o355/PyWeather/blob/master/CODE_OF_CONDUCT.md
 
