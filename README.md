@@ -1,19 +1,11 @@
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/o355/pyweather.svg?style=social)](https://twitter.com/intent/tweet?text=Feel%20the%20urge%20to%20check%20your%20weather%20in%20a%20terminal?%20Check%20this%20out:%20%20&url=https%3A%2F%2Fgithub.com%2Fo355%2Fpyweather)
 
 ## Welcome to PyWeather (0.6.2 beta)!
-Viewing the weather in a terminal has never been so much fun.
+Welcome to PyWeather, and thanks for being here! Don't worry, we're super happy that you're here.
 
-## Notices
+PyWeather is the culmination of thousands of hours of work poured into a silly little project that got more advanced over time.
 
-### Indev code notice
-Right now, there is an issue regarding the new spinner library conflicting with colorama's color styles that I use to color and brighten up text in PyWeather. It appears to only be occurring on Windows at the moment.
-
-This doesn't affect PyWeather 0.6.2 beta, or any indev code from commit `bda1180` and earlier.
-
-### Beta Notice
-If you haven't noticed, PyWeather is in beta. This means that basic features should work fine, but more advanced and new features may not work.
-
-If you do encounter bugs, make sure you report them on GitHub!
+I hope that you can enjoy PyWeather as much as I enjoy making PyWeather, so, let's get started!
 
 ## Requirements
 To run PyWeather, you'll need:
@@ -46,7 +38,7 @@ git clone https://github.com/o355/pyweather.git ./pyweather
 cd pyweather
 ```
 
-Afterwards, run the setup script, and things ~~might work~~ will work!
+Afterwards, run the setup script. However, the setup script might not be entirely reliable, especially once I've started working on a feature. I usually input setup file options last when making a feature.
 
 Make sure you run `git pull` on a nightly basis :)
 
@@ -147,9 +139,10 @@ To get a rundown of things, read the CONTRIBUTING.md file in the .github folder.
 ## Contributers
 Thanks to these awesome people, they've helped out PyWeather by coding in bug fixes, new features, reporting bugs, and suggesting new stuff.
 
-* ModoUnreal - Awesome contributor - Has made 8 pull requests, 5 of which were merged, and coded in 2 new features/1 data type
+* ModoUnreal - Awesome contributor - Has made 10 pull requests, 5 of which were merged, and coded in 2 new features/1 data type
 * creepersbane - Awesome contributor -  Has made 6 reports (3 of which required code changes), and 1 pull request.
 * gsilvapt - Contributor - Has made 1 report, which required code changes
+* theletterandrew - Contributor - Has made 1 report, which required code changes
 * DiSiqueira - Contributor - Has made 1 report.
 
 ## Sharing
