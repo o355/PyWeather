@@ -684,6 +684,8 @@ if favoritelocation_enabled is True:
         favoritelocation_available = False
     else:
         favoritelocation_available = True
+else:
+    favoritelocation_available = False
 
     logger.debug("favoritelocation_available: %s" % favoritelocation_available)
 
