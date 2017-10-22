@@ -1,5 +1,5 @@
 # PyWeather Contributor Covenant Code of Conduct
-Last updated: July 20, 2017
+Last updated: October 21, 2017
 
 ## Our Pledge
 
@@ -40,9 +40,20 @@ This Code of Conduct applies both within project spaces and in public spaces whe
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at <i'll set up an email later>. The project team will review and investigate all complaints, and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident. Further details of specific enforcement policies may be posted separately.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at pyweather <at> owenthe <dot> ninja. The project team will review and investigate all complaints, and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident. Further details of specific enforcement policies may be posted separately.
+  
+If project maintainers find instances of abusive, harassing, or otherwise unacceptable behavior, project maintainers will respond in a way that it deems appropriate to the circumstances.
 
 Project maintainers who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project's leadership.
+
+If an instance of unacceptable behavior was deemed to be not in acceptance of the code of conduct, the responsible user will face a punishment that will deny them the right to contribute to PyWeather for a certain period of time, or permanently. The first warning a user receives will be a warning, with no punishments depending on the severity of the punishment.
+
+## Contacting
+
+If contributors have any questions in regards to this code of conduct, or PyWeather in general, they may contact the project maintainer team at pyweather <at> owenthe <dot> ninja.
+  
+## Project maintainer team
+* o355 - Lead project maintainer
 
 ## Attribution
 
@@ -52,6 +63,12 @@ This Code of Conduct is adapted from the [Contributor Covenant][homepage], versi
 [version]: http://contributor-covenant.org/version/1/4/
 
 ## Changes
-**July 20 Changes:**
+**July 20, 2017 Changes (went into effect July 27, 2017):**
 * Added 2 new tips to examples of positive behavior
 * Added the changes section
+
+**October 21 Changes (will go into effect on October 28, 2017):**
+* Added new unacceptable behavior in regards to managing PyWeather as a contributor
+* Added new paragraph about project maintainers managing PyWeather
+* Added new paragraph(s) about new warning system for violating the code of conduct
+* Added new section about contacting project maintainers
