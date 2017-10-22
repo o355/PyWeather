@@ -147,13 +147,6 @@ try:
     cache_hurricanetime = config.getfloat('CACHE', 'hurricane_cachedtime')
     cache_hurricanetime = cache_hurricanetime * 60
 
-    recent_summary = config.getboolean('HISTORY', 'ALLOW_SUMMARY')
-    recentsearch_1 = config.get('HISTORY', 'RECENT_1')
-    recentsearch_2 = config.get('HISTORY', 'RECENT_2')
-    recentsearch_3 = config.get('HISTORY', 'RECENT_3')
-    recentsearch_4 = config.get('HISTORY', 'RECENT_4')
-    recentsearch_5 = config.get('HISTORY', 'RECENT_5')
-
     user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
     user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
     user_radarImageSize = config.get('RADAR GUI', 'radar_imagesize')
@@ -313,13 +306,6 @@ logger.debug("favoritelocation_2: %s ; favoritelocation_3: %s" %
              (favoritelocation_2, favoritelocation_3))
 logger.debug("favoritelocation_4: %s ; favoritelocation_5: %s" %
              (favoritelocation_4, favoritelocation_5))
-
-logger.debug("recentsearch_1: %s ; recentsearch_2: %s" %
-            (recentsearch_1, recentsearch_2))
-
-logger.debug("recentsearch_3: %s ; recentsearch_4: %s" %
-            (recentsearch_3, recentsearch_4))
-
 
 
 logger.info("Setting gif x and y resolution for radar...")
@@ -803,21 +789,6 @@ if pws_enabled is True:
 
 locinput = input("Input here: ")
 locinput = str(locinput)
-
-
-if recent_summary == True:
-    print("These are your 5 most recent searches.")
-    config.set('HISTORY', 'RECENT_2', recentsearch_1)
-    config.set('HISTORY', 'RECENT_3', recentsearch_2)
-    config.set('HISTORY', 'RECENT_4', recentsearch_3)
-    config.set('HISTORY', 'RECENT_5', recentsearch_4)
-    config.set('HISTORY', 'RECENT_1', locinput)
-
-with open('storage//config.ini', 'w') as configfile:
-    config.write(configfile)
-
-logger.debug("Most recent user input is: %s." % locinput)
-
 
 print("Checking the weather, it'll take a few seconds!")
 print("")
@@ -1693,14 +1664,6 @@ for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
     summary_forecastIterations = summary_forecastIterations + 1
     if summary_forecastIterations == 5:
         break
-print("")
-
-print(Fore.YELLOW + "Your 5 most recent searches:")
-print(Fore.YELLOW + '(1)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_1'))
-print(Fore.YELLOW + '(2)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_2'))
-print(Fore.YELLOW + '(3)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_3'))
-print(Fore.YELLOW + '(4)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_4'))
-print(Fore.YELLOW + '(5)' + Fore.CYAN + ' ' + config.get('HISTORY', 'RECENT_5'))
 
 if almanac_summary == True:
     print(Fore.YELLOW + "The almanac:")

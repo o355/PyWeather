@@ -116,11 +116,6 @@ def configprovision():
         print("Cache section could not be added.")
 
     try:
-        config.add_section('HISTORY')
-    except configparser.DuplicateSectionError:
-        print("History section could not be added.")
-
-    try:
         config.add_section('RADAR GUI')
     except configparser.DuplicateSectionError:
         print("Radar GUI section could not be added.")
@@ -172,13 +167,6 @@ def configprovision():
     config['CACHE']['sundata_cachedtime'] = '480'
     config['CACHE']['tide_cachedtime'] = '480'
     config['CACHE']['hurricane_cachedtime'] = '180'
-    config['HISTORY']['ENABLED'] = 'True'
-    config['HISTORY']['ALLOW_SUMMARY'] = 'False'
-    config['HISTORY']['RECENT_1'] = 'N/A'
-    config['HISTORY']['RECENT_2'] = 'N/A'
-    config['HISTORY']['RECENT_3'] = 'N/A'
-    config['HISTORY']['RECENT_4'] = 'N/A'
-    config['HISTORY']['RECENT_5'] = 'N/A'
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['GEOCODER']['scheme'] = 'https'
@@ -1287,51 +1275,6 @@ else:
         config['CACHE']['hurricane_cachedtime'] = '180'
         logger.debug("Hurricane data cache time now 180 minutes.")
 
-
-    print("", "(19/31)", "Your 5 most recent location searches can be saved in the cache",
-            "Would you like to enable this? This feature is enabled as a default.", sep="\n")
-    historyenabled = input("Input here: ").lower()
-    try:
-        if(historyenabled == "true"):
-            config['HISTORY']['ENABLED'] = "True"
-            print("Recent history now enabled.")
-            logger.debug("History enabled is now True.")
-
-        elif(historyenabled == "false"):
-            config['HISTORY']['ENABLED'] = 'False'
-            print("Recent history now disabled.")
-            logger.debug("History enabled is now False")
-
-    except:
-        print("", "Your input couldn't be understood. Recent history will be enabled.")
-        config['HISTORY']['ENABLED'] = "True"
-
-        print("Recent history now enabled.")
-        logger.debug("Recent history now True.")
-        print("Changes saved.")
-
-    print("", "(20/30)", "These 5 most recent locations can be shown on boot.", 
-            "Would you like to enable this? This feature is enabled as a default.", sep="\n")
-    recent_summary = input("Input here: ").lower()
-    try:
-        if(recent_summary == "true"):
-            config['HISTORY']['ALLOW_SUMMARY'] = "True"
-            print("Recent history at boot now enabled.")
-            logger.debug("History enabled is now True.")
-            print("Changes saved.")
-
-        elif(recent_summary == "false"):
-            config['HISTORY']['ALLOW_SUMMARY'] = "False"
-            print("Recent history at boot now disabled.")
-            logger.debug("History enabled is now False.")
-            print("Changes saved.")
-
-    except:
-        print("", "Your input couldn't be understood. Recent history at boot will be enabled.")
-        config['HISTORY']['ALLOW_SUMMARY'] = "True"
-
-        print("Recent history at boot now enabled.")
-        logger.debug("Recent history at boot is True.")
 
 
 print("", "(19/30)", "When viewing detailed EU alerts information, how many",
