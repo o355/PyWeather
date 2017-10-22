@@ -1,122 +1,94 @@
 # Contributing to PyWeather
 
+**Warning: This document is undergoing renovation. Please excuse our apperance.**
+
 Hey, thanks for your interest in contributing to PyWeather. If you don't taking 2 minutes of your day to read this, you'll get the run-down on how things work.
 
 Oh, and quick side note, I'm (o355) am a GitHub novice. This is a learning experience for me, and this will adapt.
 
+## A quick blurb about PyWeather & contributing
+PyWeather has been the result of thousands of hours of worked poured in by people who want to help PyWeather be the best it can be. I apprecipate every single person who reports an issue, makes a pull request, and in general helps PyWeather in any shape or form.
+
+Contrary to popular belief, you don't need to know how to code Python to contribute to PyWeather. Reporting bugs is tremendously helpful in contributing to PyWeather, or even making a pull request with one line of code helps out PyWeather. 
+
+When contributing to PyWeather, start small. Reporting bugs and issues, OS compatibility reports, or even suggesting enhancements is a great way to get started in contributing to PyWeather. If you feel more comfortable reading code and making pull requests, you can without a doubt code in a small feature in PyWeather that's relevant, or you can quickly fix a bug you found. If you feel really comfortable, try coding in a larger feature. Please make sure to contact me first, however.
+
+## Contacting me
+If you need to ask me any questions about PyWeather without using GitHub, the best place to do so is on Reddit. I'll usually respond within 48 hours, since I get a notification on my phone whenever I get new Reddit mail.
+
+My reddit username is `therealo355`. I have about 3100 karma if that helps to verify my account.
+
+If you'd rather do email, you can email the PyWeather project email at `pyweather <at> owenthe <dot> ninja`. I usually don't respond as quickly to that email, so a response may take up to a few weeks. 
+
 ## Code of Conduct
 When contributing to PyWeather, please make sure to follow the code of conduct, available here: https://github.com/o355/PyWeather/blob/master/CODE_OF_CONDUCT.md
 
-## Issues
-When reporting an issue, make sure that you include lots of details. Details that contribute to a successful report are as follows:
+## Bug reports
+An easy, yet substantial way to contribute to PyWeather is in the form of bug reports. When you create an issue, you'll see an issue template, and this is the general format on how issues are created and formatted. This document will expand on what should ideally be in a report.
 
-### OS version
-Make sure you detail your OS version. 
+Just note, if at any time you are confused about if you should report an issue or not, just report the issue. I'd much rather have you report the issue and for me to fix a potential bug, versus not knowing about it.
 
-Pro-tip: Linux users: Use `uname -a` to get your kernel version.
+### Doing the to-do list
+It's really important to run down this list to save your time, and my time from unnecessary reports. This to-do list also includes steps to help your report be the best it can be.
 
-`Windows 10 | Ubuntu 16.04 | Debian 8.7` - Is acceptable, but doesn't provide too much detail. Instead, try for:
+### Reporting indev code
+Reporting indev code is ok, under certain circumstances. As mentioned in the issue template, you'll not want to report config errors. At every PyWeather QA, this is automatically tested about 30x on 6 platforms. However, if PyWeather is close to release, and you find a config bug, you'll want to report a config error.
 
-`Windows 10 Pro version 1703 | Ubuntu Server 16.04.2 LTS | Debian 8.7 amd64` - Is good, but you can even try for more detail:
+In addition, please don't make a bug report on a feature that's incomplete. However, feel free to report bugs on complete features.
 
-`Windows 10 Pro version 1703 build 15063.296 | Ubuntu Server 16.04.2 LTS, kernel 4.4.0-78-generic` - Is amazing!
-
-### Python version
-Make sure you detail what Python version you have.
-
-Doing such is easy enough, open a Python 3 shell using the command `python` or `python3` in a command prompt. Detailed version info is in the first two lines of when you start up a Python 3 shell.
-
-You'll want to paste something like this into your report:
-
-```
-Python 3.5.2 (default, Nov 17 2016, 17:05:23)
-[GCC 5.4.0 20160609] on linux
-```
+### Necessary things for a report
+When making a report, you'll want a full traceback (if applicable), System information, a detailed description, and some other extra information. Below I'll expand on what necessary things are needed for a report.
 
 ### A full traceback
-Providing a full traceback, if possible, will 90% of the time let me find the issue quickly. If the bug can be replicated, go into the `config.ini` file, located in the `storage` folder, and make your `[TRACEBACK]` section look like the following:
-
+A full traceback looks something like this:
 ```
-[TRACEBACK]
-tracebacks = True
-setup_tracebacks = True
-updater_tracebacks = True
-configdefault_tracebacks = True
+Traceback (most recent call last):
+  File "<stdin">, line 1, in <module>
+ValueError: could not convert string to float: 'hello'
+```
+A traceback does not look like this:
+```
+Some horrible thing occurred that prevented PyWeather from loading!
+I can't remember the actual error messages in PyWeather and I'm too lazy to reference one.
+Press enter to exit.
 ```
 
-### If it's needed, the location that causes the issue
-Sometimes, bugs are location-based. If you need to share your location for a bug report, please do so in a way that respects your privacy.
+You'll want a full traceback in your error report. In PyWeather, you'll deal with 2 types of tracebacks. Catched errors at a potential point of failure, or a random traceback that randomly exits PyWeather.
 
-`123 5th Avenue, New York, NY` is not acceptable, as that is violating your privacy.
+For catched errors, a traceback will be outputted, given you turn on tracebacks in the config file. Turning on tracebacks can be done in the setup script, or by making the `tracebacks` option in the `[TRACEBACKS]` section in the config file `True`.
 
-`5th Avenue, New York, NY` is not acceptable, as that is still technically violating your privacy.
+It's important to know that you shouldn't report *some* catched errors. As an example...
+* Reporting the geocoder rate limit error - Don't report this
+* Reporting a config error when you've properly configured your config - Report this
+* Reporting missing data for Wunderground at your location (and it's caught with a message like "no data") - Don't report this
+* Reporting odd data without any message of bad data - Report this
 
-`New York, NY` is acceptable, that's a general location.
+If you also enable verbosity, please don't report non-critical errors. Most of them are due to bad conversions of data, and that actually helps to catch bad data.
 
-If you make a report with a location, once I notice the issue, I'll immediately censor the location provided. If you insist on making a bug report, please contact me, at pyweather at owenthe dot ninja. 
+However, for random tracebacks, report these! As soon as your PyWeather randomly quits, report the traceback. This is easy if you launch PyWeather in a terminal, but tricky if you double-click PyWeather. 
 
-Along with that, a full description is always nice to have, along with potential solutions.
+If you end up double-clicking to launch PyWeather, you'll want to immediately run PyWeather in a terminal (OS X - Launch `Terminal`, `cd pyweather` (or whereever PyWeather is, starts in home folder), `python3 pyweather.py`; Windows - File manager, go into PyWeather's folder, File, Open in Command Prompt (Windows 10 1703 and newer PowerShell), `python pyweather.py`; Linux - You know what to do), do exactly what you did, and get the traceback, and report the issue.
 
-I'll usually get back to reports within 24-48 hours, sometimes less. I have an IFTTT trigger set up on my phone to alert me whenever a new issue is created.
+### System Information
+In a report, you'll want what OS you're on, and the Python version you have.
+
+To get the version you have, remember what version is installed on your box, or enter `python3` (sometimes `python` for python 3) into a terminal, and put down the Python version you have. Examples:
+
+`Python 3` - Doesn't help. PyWeather runs on Python 3.
+`Python 3.6` - Good, but having a specific version is better.
+`Python 3.6.3` - Great! That's what I need.
+
+Please note: If you're running Python 3.6, and just 3.6 (not 3.6.x), please report your Python version as `3.6.0`.
+
+## Enhancements
 
 ## Enhancement suggestions
-If you'd like to suggest an enhancement, you'll generally want these things:
 
-### A full description of the enhancement
-Just saying "add 1 year ago weather" doesn't help. Instead, try for something along the lines of this:
-
-"I'd like to suggest adding 1 year ago weather in the similar fashion of yesterday's weather. A user would be able to see the weather 1 year ago, look at the daily summary, and then dive into detailed hourly information. The 1 year ago weather would be determined based on year."
-
-### Add suggestions for parts of the implementation
-This isn't required, but you can help bring your idea to fruition by suggesting how I should code your suggestion in.
-
-Something like this is what you should shoot for:
-
-"For finding the one year ago date, try and grab the current year, date, and month off of the user's box. The date and month should have leading 0s for the API. Make the year a int, then subtract by 1. Combine the year, date, month into a string like this:
-
-YEARMONTHDATE, and then make an API request.
-
-When making the enhancement, for now, add the prefix [ENHANCEMENT] to the report's name. I'll most likely get back to enhancement reports in 24-48 hours, and I'll see if I can code it in.
-
-## OS compatibility reports
-If you saw the wiki page, and would like to report that an OS works with PyWeather, you'll want to do some testing, and add some things into your report, to make the OS you're reporting officially work with PyWeather.
-
-### When testing, test most basic functions.
-Run the setup script, set it up as a real user. Launch PyWeather, go into all the options, and then launch the other scripts and see if they work, too.
-
-### When making the report, detail the OS that PyWeather is compatible with.
-As the title says.
-
-### Add (a) screenshot(s) (or better, a video/asciinema) of PyWeather working.
-Make sure you launch into a generic location when recording or taking (a) screenshot(s) when you do so. If you record the set up process, in which you input your API key, you should really change it afterwards.
-
-### Add the [OS REPORT] prefix to your alert name.
-Shabang.
-
-As stated above, I'll get back to you within 24-48 hours, and add it to the wiki, if you have all your detail. If you miss out on some detail, I'll notify you.
-
-## Pull Requests
-I'm not the best at pull requests, and I sometimes mess up PyWeather (thanks ModoUnreal for bearing with my git stupidity). However, try to follow these general "recommendations" for working on new PyWeather features.
-
-* Submit your PR when you're done with your code. I update Git like a ninja (get it, my domain name is owenthe dot ninja), so try your best to not submit your PR until you're done.
-* I have a to-do list of things to do. If you have enough free time on your hands, you can code in those features. Make sure it isn't a feature that I'll be working on soon (e.x. don't code in a feature that i'll code for 0.6.2 beta when I'm working on 0.6.2 beta).
-* You can easily base your code from other PyWeather functions. A solid amount of code in PyWeather is copy and paste, just with changes. If you go this method, you can forgo adding logger functionality.
-
-However, please keep in mind these requirements when coding in something for PyWeather:
-* Make sure that your code addition has a logger, if necessary. Changing a variable? Log it. Loggers begin with `logger`.
-* If you are adding a new option to PyWeather, set the menu number as something <15. I'll do another commit which brings the menu item to the proper number.
-* I'll handle logistics, you code.
-* If worse comes to worse, and we both mess up, you do agree that I can copy & paste in your code from a PR, and "accept" your PR. I'll still give you credit and all that fun stuff.
-
-In return, you'll get credit for your work, in the changelog.
+## Pull requests
 
 ## Wiki
 
-## Rules
-Please have a look at the CODE_OF_CONDUCT.md file located in the master branch for details on the code of conduct.
-
-## Translating PyWeather
-Translating PyWeather is not available yet.
+## Translating
 
 ## Contributing Rewards/Acknowledgements
 In return for contributing to PyWeather, I'll acknowledge how much of a cool person you are through acknowledgements and contributing levels. The levels are as follows:

@@ -54,8 +54,12 @@ config.read('storage//config.ini')
 
 def configprovision():
     try:
+        config.add_section("FAVORITE LOCATIONS")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the favorite locations section. Does it exist?")
+    try:
         config.add_section("HURRICANE")
-    except:
+    except configparser.DuplicateSectionError:
         print("Failed to add the hurricane section. Does it exist?")
 
     try:
@@ -185,6 +189,12 @@ def configprovision():
     config['HURRICANE']['enablenearestcity_forecast'] = 'False'
     config['HURRICANE']['api_username'] = 'pyweather_proj'
     config['HURRICANE']['nearestcitysize'] = 'medium'
+    config['FAVORITE LOCATIONS']['enabled'] = 'True'
+    config['FAVORITE LOCATIONS']['favloc1'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc2'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc3'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc4'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc5'] = 'None'
     try:
         with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)
@@ -1695,6 +1705,26 @@ if additional_ncoptions is True:
         config['HURRICANE']['nearestcitysize'] = 'medium'
         logger.debug("HURRICANE/nearestcitysize is now 'medium'.")
         print("Changes saved.")
+
+print("", "(36/37)", "PyWeather will now let you enable a favorite locations feature, which allows",
+      "you to quickly call up to 5 locations in PyWeather. You have the ability to configure your",
+      "favorite locations in a menu option in PyWeather. By default, this feature is enabled.",
+      "Yes or No.", sep="\n")
+enable_favoritelocations = input("Input here: ").lower()
+logger.debug("enable_favoritelocations: %s" % enable_favoritelocations)
+if enable_favoritelocations == "yes":
+    config['FAVORITE LOCATIONS']['enabled'] = 'True'
+    logger.debug("FAVORITE LOCATIONS/enabled is now 'True'.")
+    print("Changes saved!")
+elif enable_favoritelocations == "no":
+    config['FAVORITE LOCATIONS']['enabled'] = 'False'
+    logger.debug("FAVORITE LOCATIONS/enabled is now 'False'.")
+    print("Changes saved!")
+else:
+    print("Could not understand your input. Defaulting to 'True'.")
+    config['FAVORITE LOCATIONS']['enabled'] = 'True'
+    logger.debug("FAVORITE LOCATIONS/enabled is now 'True'.")
+    print("Changes saved!")
 
 print("", "(30/30)", "PyWeather's geocoder usually uses https, but issues have been discovered",
       "on some platforms, where the geocoder cannot operate in the https mode. If you press enter",

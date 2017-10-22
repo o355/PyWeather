@@ -1,19 +1,11 @@
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/o355/pyweather.svg?style=social)](https://twitter.com/intent/tweet?text=Feel%20the%20urge%20to%20check%20your%20weather%20in%20a%20terminal?%20Check%20this%20out:%20%20&url=https%3A%2F%2Fgithub.com%2Fo355%2Fpyweather)
 
 ## Welcome to PyWeather (0.6.2 beta)!
-Viewing the weather in a terminal has never been so much fun.
+Welcome to PyWeather, and thanks for being here! Don't worry, we're super happy that you're here.
 
-## Notices
+PyWeather is the culmination of thousands of hours of work poured into a silly little project that got more advanced over time.
 
-### Indev code notice
-Right now, there is an issue regarding the new spinner library conflicting with colorama's color styles that I use to color and brighten up text in PyWeather. It appears to only be occurring on Windows at the moment.
-
-This doesn't affect PyWeather 0.6.2 beta, or any indev code from commit `bda1180` and earlier.
-
-### Beta Notice
-If you haven't noticed, PyWeather is in beta. This means that basic features should work fine, but more advanced and new features may not work.
-
-If you do encounter bugs, make sure you report them on GitHub!
+I hope that you can enjoy PyWeather as much as I enjoy making PyWeather, so, let's get started!
 
 ## Requirements
 To run PyWeather, you'll need:
@@ -46,7 +38,7 @@ git clone https://github.com/o355/pyweather.git ./pyweather
 cd pyweather
 ```
 
-Afterwards, run the setup script, and things ~~might work~~ will work!
+Afterwards, run the setup script. However, the setup script might not be entirely reliable, especially once I've started working on a feature. I usually input setup file options last when making a feature.
 
 Make sure you run `git pull` on a nightly basis :)
 
@@ -126,19 +118,34 @@ PyWeather's main data types are done, so now it's on to rapid development of new
 This stage of PyWeather will last a few versions, and span at last 6 months.    
 
 ## Contributing
-Since I don't have all the time in the world to work on PyWeather, contributing is a great way to help with PyWeather.
+Sadly, being a Python developer isn't my day job. I can't work on PyWeather for 8 hours a day, and about 45 hours a week. I have to go to school, do homework, sleep, eat, and other various things. I can't work on PyWeather for 5 hours afterschool, I'd be exhausted.
 
-Bug reports, pull requests, feature suggestions, all that fun stuff can help me out with my limited time I have to code PyWeather. Read over CONTRIBUTING.md in the .github folder, to see how things work.
+So, here's the deal. I can only work on PyWeather at max for 10 hours/week usually. At max, 6 hours during the workweek, and 4 hours on the weekend. This is usually lower, at around 3-5 hours/week. It's a lot, but it's not a lot.
+
+I anticipate PyWeather 0.6.3 beta to consume about 50 hours to code in new features, but this might be even higher. QA will take another 10-15 hours. Given the usual 5 hours/week coding time, you can see why PyWeather releases take about 8-10 weeks to complete. Of course, these numbers are not set in stone, and will never be.
+
+Here's the deal. I want faster releases as much as you do. I'd like releases to drop in 3-4 weeks while maintaining the code quality presented in 0.6.2 beta. If that could happen, I'd need more time for PyWeather. This is where you help.
+
+If you don't know how to code Python, you can help report issues. I can't possibly catch every error with every setup. If you see a bug, report it! Every report improves PyWeather.
+
+If you know some basic Python, try coding in some smaller features. As an example, adding prefetching yesterday's weather, caching yesterday's weather, and caching hurricane data are all features that are simple to add (you can easily copy/paste code and change a few variables around). Doing this helps tremendously, and lets me focus on more advanced features that take longer to code.
+
+As another basic Python example, if you find a bug caused by a typo, a missing variable, etc, you're more than welcome to fix the bug.
+
+If you know a solid chunk of Python, you might want to consider coding in more advanced features. However, if you're new to PyWeather, I'd suggest working on smaller features to get a feel for the program. If you're up to coding more advanced features, you'll want to contact me on Reddit, /u/therealo355. I'll give you a full explaination of what needs to get added.
+
+To get a rundown of things, read the CONTRIBUTING.md file in the .github folder. Just know what by contributing code to PyWeather, you're helping to bring the delay between releases down, and reduces my time working a feature from multiple hours to >15 mins.
 
 ## Contributers
 Thanks to these awesome people, they've helped out PyWeather by coding in bug fixes, new features, reporting bugs, and suggesting new stuff.
 
-* ModoUnreal - Awesome contributor - Has made 8 pull requests, 5 of which were merged, and coded in 2 new features/1 data type
+* ModoUnreal - Awesome contributor - Has made 10 pull requests, 5 of which were merged, and coded in 2 new features/1 data type
 * creepersbane - Awesome contributor -  Has made 6 reports (3 of which required code changes), and 1 pull request.
 * gsilvapt - Contributor - Has made 1 report, which required code changes
+* theletterandrew - Contributor - Has made 1 report, which required code changes
 * DiSiqueira - Contributor - Has made 1 report.
 
 ## Sharing
-I've, among others have poured in hundreds of hours into making PyWeather what it is, and I plan to spend hundreds of more hours refining PyWeather.
+I've, among others have poured in over 1,000 hours into making PyWeather what it is, and I plan to spend hundreds of more hours refining PyWeather.
 
 If you'd like, please consider telling your friends, social media followers, whomever about PyWeather. Every star, fork, and user keeps me motivated to keep working on PyWeather.
