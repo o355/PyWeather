@@ -165,6 +165,8 @@ try:
     favoritelocation_3 = config.get('FAVORITE LOCATIONS', 'favloc3')
     favoritelocation_4 = config.get('FAVORITE LOCATIONS', 'favloc4')
     favoritelocation_5 = config.get('FAVORITE LOCATIONS', 'favloc5')
+    geocoder_customkeyEnabled = config.getboolean('GEOCODER API', 'customkey_enabled')
+    geocoder_customkey = config.get('GEOCODER API', 'customkey')
     
 except:
     # If it fails (typo or code error), we set all options to default.
@@ -223,6 +225,8 @@ except:
     favoritelocation_3 = "None"
     favoritelocation_4 = "None"
     favoritelocation_5 = "None"
+    geocoder_customkeyEnabled = False
+    geocoder_customkey = "None"
 
 # Import logging, and set up the logger. - Section 6
 import logging
@@ -291,6 +295,8 @@ logger.debug("favoritelocation_2: %s ; favoritelocation_3: %s" %
              (favoritelocation_2, favoritelocation_3))
 logger.debug("favoritelocation_4: %s ; favoritelocation_5: %s" %
              (favoritelocation_4, favoritelocation_5))
+logger.debug("geocoder_customkeyEnabled: %s ; geocoder_customkey: %s" %
+             (geocoder_customkeyEnabled, geocoder_customkey))
 
 logger.info("Setting gif x and y resolution for radar...")
 # Set the size of the radar window. - Section 10
