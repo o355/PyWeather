@@ -1,7 +1,7 @@
 # PyWeather changelog
 **Note: The changelog being used for tracking PyWeather progress has been retiredish. Please check the projects tab of PyWeather for progress on the next versions of PyWeather.**
 
-## version 0.6.3 beta - Should be released late October/early November 2017:
+## version 0.6.3 beta - Should be released late November/early December 2017:
 * Adds a nearby location feature to hurricane data (300km out)
 * Will push the API key validation code up further thanks to new features.
 * Adding a much nicer progress indicator.
@@ -10,20 +10,17 @@
     * Initial support for caching (cache times, etc.) - 0% done, should be finished by 10/13
     * Additional support for caching (refresh flags, etc.) - 0% done, should be finished by 10/16
     * Adding new config options to configsetup/setup, and configupdate - 0% done, should be finished by 10/17
-* Adds a caching system for hurricane data (3hrs by default) - 0% done, should be finished by 10/26
-    * Initial support for caching (cache times, etc.) - 0% done, should be finished by 10/19
-    * Additional support for caching (refresh flags, etc.) - 0% done, should be finished by 10/20
-    * Adding new config options to configsetup/setup, and configupdate - 0% done, should be finished by 10/24
 * Adds the ability to view your current location through a GeoIP service
 * Adds the ability to view data through a PWS at boot.
 * Adds the ability to have up to 5 favorite locations.
 * Adds the ability to manually define a Google Maps API key (because rate limiting has pissed me off too many times) - 0% done
     * Adding initial support - Done!
     * Adding new config options to configsetup/setup, and configupdate - 0% done
-* Adds the ability to show cache timings when enabled - Should be finished by 11/18
-* Much better error catching for the config file - Should be finished by 11/21
-*November break from PyWeather development - 11/22 to 11/27*
-* Adding programmer dad jokes - Should be finished by 12/1
+* Adds the ability to show cache timings when enabled - 0% done, Should be finished by 11/18
+* Much better error catching for the config file - 0% done, Should be finished by 11/21
+* Adding programmer dad jokes - 0% done, Should be finished by 12/1
+
+* Investigating the spinner and what to do about it - 0% done
 
 **BUG FIXES**
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.

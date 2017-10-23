@@ -108,6 +108,10 @@ def geopycheck():
                 print("Changes saved.")
 if "0.6.2 beta" in versioninfo2:
     try:
+        config.add_section("GEOCODER API")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the ")
+    try:
         config.add_section("FAVORITE LOCATIONS")
     except configparser.DuplicateSectionError:
         print("Failed to add the favorite locations section. Does it exist?")
