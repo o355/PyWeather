@@ -146,6 +146,8 @@ try:
     cache_tidetime = cache_tidetime * 60
     cache_hurricanetime = config.getfloat('CACHE', 'hurricane_cachedtime')
     cache_hurricanetime = cache_hurricanetime * 60
+    cache_yesterdaytime = config.getfloat('CACHE', 'yesterday_cachedtime')
+    cache_yesterdaytime = cache_yesterdaytime * 60
 
     user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
     user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
@@ -219,6 +221,7 @@ except:
     cache_sundatatime = 28800
     cache_tidetime = 28800
     cache_hurricanetime = 10800
+    cache_yesterdaytime = 28800
     user_alertsEUiterations = 2
     user_alertsUSiterations = 1
     user_radarImageSize = "normal"
@@ -300,6 +303,7 @@ logger.debug("showTideOnSummary: %s ; geopyScheme: %s" %
              (showTideOnSummary, geopyScheme))
 logger.debug("prefetchHurricane_atboot: %s ; cache_hurricanetime: %s" %
              (prefetchHurricane_atboot, cache_hurricanetime))
+logger.debug("cache_yesterdaytime: %s" % (yesterday_cachedtime))
 logger.debug("favoritelocation_enabled: %s ; favoritelocation_1: %s" %
              (favoritelocation_enabled, favoritelocation_1))
 logger.debug("favoritelocation_2: %s ; favoritelocation_3: %s" %

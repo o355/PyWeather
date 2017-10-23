@@ -167,7 +167,7 @@ def configprovision():
     config['CACHE']['sundata_cachedtime'] = '480'
     config['CACHE']['tide_cachedtime'] = '480'
     config['CACHE']['hurricane_cachedtime'] = '180'
-    config['CACHE']['yesterday_cachetime'] = '240' # This value is just a guess, change it pls.
+    config['CACHE']['yesterday_cachedtime'] = '240' # This value is just a guess, change it pls.
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['GEOCODER']['scheme'] = 'https'
@@ -1277,17 +1277,17 @@ else:
         logger.debug("Hurricane data cache time now 180 minutes.")
 
     print("", "(19/30)", "Please enter the cache time for yesterday's weather data in minutes (default = 240)", sep="\n")
-    yesterdaycachetime = input("Input here: ").lower()
+    yesterdaycachedtime = input("Input here: ").lower()
     try:
-        yesterdaycachetime = float(yesterdaycachetime)
-        yesterdaycachetime = str(yesterdaycachetime)
-        config['CACHE']['yesterday_cachetime'] = yesterdaycachetime
+        yesterdaycachedtime = float(yesterdaycachedtime)
+        yesterdaycachedtime = str(yesterdaycachedtime)
+        config['CACHE']['yesterday_cachedtime'] = yesterdaycachedtime
         print("Changes saved.")
-        logger.debug("Yesterday cache time now %s minutess" % yesterdaycachetime)
+        logger.debug("Yesterday cache time now %s minutess" % yesterdaycachedtime)
     except:
         print("", "Your input couldn't be converted into a number. Setting yesterday's weather data",
                 "cache time to it's default value of 240.", sep="\n")
-        config['CACHE']['yesterday_cachetime'] = '240'
+        config['CACHE']['yesterday_cachedtime'] = '240'
         logger.debug("Yesterday data cache time now 240 minutes.")
 
 
