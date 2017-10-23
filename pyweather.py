@@ -168,6 +168,8 @@ try:
     favoritelocation_3 = config.get('FAVORITE LOCATIONS', 'favloc3')
     favoritelocation_4 = config.get('FAVORITE LOCATIONS', 'favloc4')
     favoritelocation_5 = config.get('FAVORITE LOCATIONS', 'favloc5')
+    geocoder_customkeyEnabled = config.getboolean('GEOCODER API', 'customkey_enabled')
+    geocoder_customkey = config.get('GEOCODER API', 'customkey')
     
 except:
     # If it fails (typo or code error), we set all options to default.
@@ -241,6 +243,8 @@ except:
     favoritelocation_3 = "None"
     favoritelocation_4 = "None"
     favoritelocation_5 = "None"
+    geocoder_customkeyEnabled = False
+    geocoder_customkey = "None"
 
 # Import logging, and set up the logger. - Section 6
 import logging
@@ -310,6 +314,8 @@ logger.debug("favoritelocation_2: %s ; favoritelocation_3: %s" %
              (favoritelocation_2, favoritelocation_3))
 logger.debug("favoritelocation_4: %s ; favoritelocation_5: %s" %
              (favoritelocation_4, favoritelocation_5))
+logger.debug("geocoder_customkeyEnabled: %s ; geocoder_customkey: %s" %
+             (geocoder_customkeyEnabled, geocoder_customkey))
 
 
 logger.info("Setting gif x and y resolution for radar...")
@@ -386,12 +392,58 @@ def radar_clearImages():
 
 logger.info("Declaring geocoder type...")
 # Declare geocoder type - Section 12
-if geopyScheme == "https":
+if geopyScheme == "https" and geocoder_customkeyEnabled is False:
     geolocator = GoogleV3(scheme='https')
-    logger.debug("geocoder scheme is now https.")
-elif geopyScheme == "http":
+    logger.debug("geocoder scheme is now https, no custom key")
+elif geopyScheme == "https" and geocoder_customkeyEnabled is True:
+    geolocator = GoogleV3(api_key=geocoder_customkey, scheme='https')
+    logger.debug("geocoder scheme is now https, custom key. Validating...")
+    # Do a warm-up geocode
+    try:
+        location = geolocator.geocode("123 5th Avenue, New York, NY")
+    except:
+        logger.debug("warmup geocode failed.")
+    # Do the actual geocode
+    try:
+        location = geolocator.geocode("123 5th Avenue, New York, NY")
+    except geopy.exc.GeocoderQueryError:
+        logger.debug("API key is invalid, falling back to no API key...")
+        print("Your geocoder API key failed to validate, since it is wrong.",
+              "Falling back to no API key...", sep="\n")
+        printException()
+        geolocator = GoogleV3(scheme='https')
+    except:
+        print("When trying to validate your geocoder API key, something went wrong.",
+              "Falling back to no API key...", sep="\n")
+        printException()
+        logger.debug("Failed to validate API key.")
+        geolocator = GoogleV3(scheme='https')
+elif geopyScheme == "http" and geocoder_customkeyEnabled is False:
     geolocator = GoogleV3(scheme='http')
     logger.debug("geocoder scheme is now http.")
+elif geopyScheme == "http" and geocoder_customkeyEnabled is True:
+    geolocator = GoogleV3(api_key=geocoder_customkey, scheme='http')
+    logger.debug("geocoder scheme is now http, custom key. Validating...")
+    # Do a warm-up geocode
+    try:
+        location = geolocator.geocode("123 5th Avenue, New York, NY")
+    except:
+        logger.debug("warmup geocode failed.")
+    # Do the actual geocode
+    try:
+        location = geolocator.geocode("123 5th Avenue, New York, NY")
+    except geopy.exc.GeocoderQueryError:
+        logger.debug("API key is invalid, falling back to no API key...")
+        print("Your geocoder API key failed to validate, since it is wrong.",
+              "Falling back to no API key...", sep="\n")
+        printException()
+        geolocator = GoogleV3(scheme='http')
+    except:
+        print("When trying to validate your geocoder API key, something went wrong.",
+              "Falling back to no API key...", sep="\n")
+        printException()
+        logger.debug("Failed to validate API key.")
+        geolocator = GoogleV3(scheme='http')
 else:
     print("Geocoder scheme variable couldn't be understood.",
           "Defaulting to the https scheme.", sep="\n")
