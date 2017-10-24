@@ -161,8 +161,8 @@ Thanks to these awesome people, they've helped out PyWeather by coding in bug fi
 
 * ModoUnreal - Awesome contributor - Has made 10 pull requests, 5 of which were merged, and coded in 2 new features/1 data type
 * creepersbane - Awesome contributor -  Has made 6 reports (3 of which required code changes), and 1 pull request.
+* theletterandrew - Awesome contributor - Has made 2 reports, which required code changes, has made 1 pull requested which was merged, and coded in 1 new feature
 * gsilvapt - Contributor - Has made 1 report, which required code changes
-* theletterandrew - Contributor - Has made 1 report, which required code changes
 * DiSiqueira - Contributor - Has made 1 report.
 
 ## Sharing
