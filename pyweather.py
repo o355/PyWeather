@@ -108,89 +108,86 @@ try:
     sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. sundata_summary failed to load. Defaulting to False.", sep="\n")
+          "occurred. SUMMARY/sundata_summary failed to load. Defaulting to False.", sep="\n")
     sundata_summary = False
 try:
     almanac_summary = config.getboolean('SUMMARY', 'almanac_summary')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. almanac_summary failed to load. Defaulting to False.", sep="\n")
+          "occurred. SUMMARY/almanac_summary failed to load. Defaulting to False.", sep="\n")
     almanac_summary = False
 
 try:
     checkforUpdates = config.getboolean('UPDATER', 'autocheckforupdates')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. checkforUpdates failed to load. Defaulting to False.", sep="\n")
+          "occurred. UPDATER/checkforUpdates failed to load. Defaulting to False.", sep="\n")
     checkforUpdates = False
 try:
     verbosity = config.getboolean('VERBOSITY', 'verbosity')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. VERBOSITY failed to load. Defaulting to False.", sep="\n")
+          "occurred. VERBOSITY/verbosity failed to load. Defaulting to False.", sep="\n")
     verbosity = False
 try:
     jsonVerbosity = config.getboolean('VERBOSITY', 'json_verbosity')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. jsonVerbosity failed to load. Defaulting to False.", sep="\n")
+          "occurred. VERBOSITY/jsonVerbosity failed to load. Defaulting to False.", sep="\n")
     jsonVerbosity = False
 try:
     tracebacksEnabled = config.getboolean('TRACEBACK', 'tracebacks')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. tracebacksEnabled failed to load. Defaulting to False.", sep="\n")
+          "occurred. TRACEBACK/tracebacksEnabled failed to load. Defaulting to False.", sep="\n")
     tracebacksEnabled = False
 try:
     prefetch10Day_atStart = config.getboolean('PREFETCH', '10dayfetch_atboot')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. prefetch10Day_atStart failed to load. Defaulting to False.", sep="\n")
+          "occurred. PREFETCH/prefetch10Day_atStart failed to load. Defaulting to False.", sep="\n")
     prefetch10Day_atStart = False
 try:
     user_loopIterations = config.getint('UI', 'detailedInfoLoops')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. user_loopIterations failed to load. Defaulting to 6.", sep="\n")
+          "occurred. UI/user_loopIterations failed to load. Defaulting to 6.", sep="\n")
     user_loopIterations = 6
 try:
     user_enterToContinue = config.getboolean('UI', 'show_enterToContinue')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. user_enterToContinue failed to load. Defaulting to True.", sep="\n")
+          "occurred. UI/user_enterToContinue failed to load. Defaulting to True.", sep="\n")
     user_enterToContinue = True
 try:
-    user_showCompletedIterations = config.getboolean('UI', 
-                                                     'show_completedIterations')
+    user_showCompletedIterations = config.getboolean('UI', 'show_completedIterations')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. user_showCompletedIterations failed to load. Defaulting to False.", sep="\n")
+          "occurred. UI/user_showCompletedIterations failed to load. Defaulting to False.", sep="\n")
     user_showCompletedIterations = False
 try:
-    user_forecastLoopIterations = config.getint('UI', 
-                                                'forecast_detailedInfoLoops')
+    user_forecastLoopIterations = config.getint('UI', 'forecast_detailedInfoLoops')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. user_forecastLoopIterations failed to load. Defaulting to 5.", sep="\n")
+          "occurred. UI/user_forecastLoopIterations failed to load. Defaulting to 5.", sep="\n")
     user_forecastLoopIterations = 5
 try:
-    user_showUpdaterReleaseTag = config.getboolean('UPDATER', 
-                                                   'show_updaterReleaseTag')
+    user_showUpdaterReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. user_showUpdaterReleaseTag failed to load. Defaulting to False.", sep="\n")
+          "occurred. UPDATER/user_showUpdaterReleaseTag failed to load. Defaulting to False.", sep="\n")
     user_showUpdaterReleaseTag = False
 try:
     user_backupKeyDirectory = config.get('KEYBACKUP', 'savedirectory')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. user_backupKeyDirectory failed to load. Defaulting to 'backup//'.", sep="\n")
+          "occurred. KEYBACKUP/user_backupKeyDirectory failed to load. Defaulting to 'backup//'.", sep="\n")
     user_backupKeyDirectory = 'backup//'
 try:
     validateAPIKey = config.getboolean('PYWEATHER BOOT', 'validateAPIKey')
 except:
     print("When attempting to load your configuration file, an error",
-      "occurred. validateAPIKey failed to load. Defaulting to True.", sep="\n")
+          "occurred. PYWEATHER BOOT/validateAPIKey failed to load. Defaulting to True.", sep="\n")
     validateAPIKey = True
 try:
     allowGitForUpdating = config.getboolean('UPDATER', 'allowGitForUpdating')
@@ -1792,8 +1789,7 @@ else:
     location2 = str(location)
 logger.debug("location2: %s" % location2)
 
-print(Style.BRIGHT)
-print(Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + str(location))
+print(Fore.YELLOW + Style.BRIGHT + "Here's the weather for: " + Fore.CYAN + Style.BRIGHT + str(location))
 print(Fore.YELLOW + summary_lastupdated)
 print("")
 

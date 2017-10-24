@@ -110,7 +110,8 @@ if "0.6.2 beta" in versioninfo2:
     try:
         config.add_section("GEOCODER API")
     except configparser.DuplicateSectionError:
-        print("Failed to add the ")
+        print("Failed to add the geocoder API section.")
+
     try:
         config.add_section("FAVORITE LOCATIONS")
     except configparser.DuplicateSectionError:
@@ -126,7 +127,7 @@ if "0.6.2 beta" in versioninfo2:
     except configparser.DuplicateSectionError:
         print("Failed to add the hurricane section. Does it exist?")
 
-    print("12 new configuration options have been added from 0.6.2 beta to 0.6.3 beta.",
+    print("14 new configuration options have been added from 0.6.2 beta to 0.6.3 beta.",
           "Details:",
           "- FIRSTINPUT/geoipservice_enabled - Sets if the service to allow current location queries is enabled - Defaults to False",
           "- FIRSTINPUT/allow_pwsqueries - Sets if PyWeather will allow PWS queries - Defaults to True",
@@ -139,7 +140,9 @@ if "0.6.2 beta" in versioninfo2:
           "- FAVORITE LOCATIONS/favloc2 - Sets the second favorite location - Defaults to 'None'",
           "- FAVORITE LOCATIONS/favloc3 - Sets the third favorite location - Defaults to 'None'",
           "- FAVORITE LOCATIONS/favloc4 - Sets the fourth favorite location - Defaults to 'None'",
-          "- FAVORITE LOCATIONS/favloc5 - Sets the fifth favorite location - Defaults to 'None'", sep="\n")
+          "- FAVORITE LOCATIONS/favloc5 - Sets the fifth favorite location - Defaults to 'None'",
+          "- GEOCODER API/customkey_enabled - Sets if a custom API key for the geocoder is enabled - Defaults to 'False'.",
+          "- GEOCODER API/customkey - Sets the custom API key for the geocoder, if enabled - Defaults to 'None'.", sep="\n")
     config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
     config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
     config['HURRICANE']['enablenearestcity'] = 'False'
@@ -152,8 +155,15 @@ if "0.6.2 beta" in versioninfo2:
     config['FAVORITE LOCATIONS']['favloc3'] = 'None'
     config['FAVORITE LOCATIONS']['favloc4'] = 'None'
     config['FAVORITE LOCATIONS']['favloc5'] = 'None'
+    config['GEOCODER API']['customkey_enabled'] = 'False'
+    config['GEOCODER API']['customkey'] = 'None'
 
 elif "0.6.1 beta" in versioninfo2:
+    try:
+        config.add_section("GEOCODER API")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the geocoder API section.")
+
     try:
         config.add_section("FAVORITE LOCATIONS")
     except configparser.DuplicateSectionError:
@@ -161,22 +171,22 @@ elif "0.6.1 beta" in versioninfo2:
 
     try:
         config.add_section("FIRSTINPUT")
-    except:
+    except configparser.DuplicateSectionError:
         print("Failed to add the firstinput section. Does it exist?")
 
     try:
         config.add_section("GEOCODER")
-    except:
+    except configparser.DuplicateSectionError:
         print("Failed to add the geocoder section. Does it exist?")
 
     try:
         config.add_section("PREFETCH")
-    except:
+    except configparser.DuplicateSectionError:
         print("Failed to add the prefetch section. Does it exist?")
 
     try:
         config.add_section("HURRICANE")
-    except:
+    except configparser.DuplicateSectionError:
         print("Failed to add the hurricane section. Does it exist?")
 
     print("20 new configuration options have been added from 0.6.1 beta to 0.6.3 beta.",
@@ -200,7 +210,9 @@ elif "0.6.1 beta" in versioninfo2:
           "- FAVORITE LOCATIONS/favloc2 - Sets the second favorite location - Defaults to 'None'",
           "- FAVORITE LOCATIONS/favloc3 - Sets the third favorite location - Defaults to 'None'",
           "- FAVORITE LOCATIONS/favloc4 - Sets the fourth favorite location - Defaults to 'None'",
-          "- FAVORITE LOCATIONS/favloc5 - Sets the fifth favorite location - Defaults to 'None'", sep="\n")
+          "- FAVORITE LOCATIONS/favloc5 - Sets the fifth favorite location - Defaults to 'None'",
+          "- GEOCODER API/customkey_enabled - Sets if a custom API key for the geocoder is enabled - Defaults to 'False'.",
+          "- GEOCODER API/customkey - Sets the custom API key for the geocoder, if enabled - Defaults to 'None'.", sep="\n")
 
     print("")
     print("2 old configuration options, and 2 sections have been deleted. Please delete these options from your config file.",
@@ -229,10 +241,17 @@ elif "0.6.1 beta" in versioninfo2:
     config['FAVORITE LOCATIONS']['favloc3'] = 'None'
     config['FAVORITE LOCATIONS']['favloc4'] = 'None'
     config['FAVORITE LOCATIONS']['favloc5'] = 'None'
+    config['GEOCODER API']['customkey_enabled'] = 'False'
+    config['GEOCODER API']['customkey'] = 'None'
     geopycheck()
 elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     # A usual input() and sys.exit() isn't present here, as it's assumed this
     # is getting executed inside of the updater.
+    try:
+        config.add_section("GEOCODER API")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the geocoder API section.")
+
     try:
         config.add_section("FAVORITE LOCATIONS")
     except configparser.DuplicateSectionError:
@@ -240,32 +259,32 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
 
     try:
         config.add_section("FIRSTINPUT")
-    except:
+    except configparser.DuplicateSectionError:
         print("Failed to add the firstinput section. Does it exist?")
 
     try:
         config.add_section("CACHE")
-    except:
+    except configparser.DuplicateSectionError:
         print("Failed to add the cache section. Does it exist?")
     
     try:
         config.add_section("RADAR GUI")
-    except:
+    except configparser.DuplicateSectionError:
         print("Failed to add the radar GUI section. Does it exist?")
 
     try:
         config.add_section("GEOCODER")
-    except:
+    except configparser.DuplicateSectionError:
         print("Failed to add the geocoder section. Does it exist?")
 
     try:
         config.add_section("PREFETCH")
-    except:
+    except configparser.DuplicateSectionError:
         print("Failed to add the prefetch section. Does it exist?")
 
     try:
         config.add_section("HURRICANE")
-    except:
+    except configparser.DuplicateSectionError:
         print("Failed to add the hurricane section. Does it exist?")
         
     print("28 new configuration options have been added from 0.6 beta to 0.6.3 beta.",
@@ -297,7 +316,9 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
           "- FAVORITE LOCATIONS/favloc2 - Sets the second favorite location - Defaults to 'None'",
           "- FAVORITE LOCATIONS/favloc3 - Sets the third favorite location - Defaults to 'None'",
           "- FAVORITE LOCATIONS/favloc4 - Sets the fourth favorite location - Defaults to 'None'",
-          "- FAVORITE LOCATIONS/favloc5 - Sets the fifth favorite location - Defaults to 'None'", sep="\n")
+          "- FAVORITE LOCATIONS/favloc5 - Sets the fifth favorite location - Defaults to 'None'",
+          "- GEOCODER API/customkey_enabled - Sets if a custom API key for the geocoder is enabled - Defaults to 'False'.",
+          "- GEOCODER API/customkey - Sets the custom API key for the geocoder, if enabled - Defaults to 'None'.", sep="\n")
 
     print("")
     print("2 old configuration options, and 2 sections are now unused. Please delete these options from your config file.",
@@ -334,6 +355,8 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     config['FAVORITE LOCATIONS']['favloc3'] = 'None'
     config['FAVORITE LOCATIONS']['favloc4'] = 'None'
     config['FAVORITE LOCATIONS']['favloc5'] = 'None'
+    config['GEOCODER API']['customkey_enabled'] = 'False'
+    config['GEOCODER API']['customkey'] = 'None'
     geopycheck()
 else:
     print("Hmm. Your version identifier didn't match any known versions.",
