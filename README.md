@@ -54,11 +54,6 @@ However, during times of non-severe weather, PyWeather is a fun way to check the
 ## Notices
 Notices are important things you'll want to know about PyWeather.
 
-### Hiatus notice - 10/23 to 10/28
-Being a Python developer and being in school is hard stuff, and sometimes teachers decide to schedule a whole bunch of projects and tests in the same week. 
-
-This is a notice to alert you that PyWeather development will slow down, or even stop from my part for this week. Next week things should be back in full swing.
-
 ### Beta notice
 If you haven't noticed, PyWeather is in beta. Basic features should work completely fine, but more advanced and newer features may not work 100% of the time.
 

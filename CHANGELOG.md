@@ -17,7 +17,7 @@
     * Adding initial support - Done!
     * Adding new config options to configsetup/setup, and configupdate - 0% done
 * Adds the ability to show cache timings when enabled - 0% done, Should be finished by 11/18
-* Much better error catching for the config file - 95% done, need to add finishing touches
+* Much better error catching for the config file - Done!
 * Adding programmer dad jokes - 0% done, Should be finished by 12/1
 
 * Investigating the spinner and what to do about it - 0% done
