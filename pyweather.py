@@ -1815,7 +1815,7 @@ else:
 logger.debug("location2: %s" % location2)
 
 print(Fore.YELLOW + Style.BRIGHT + "Here's the weather for: " + Fore.CYAN + Style.BRIGHT + str(location))
-print(Fore.YELLOW + summary_lastupdated)
+print(Fore.YELLOW + Style.BRIGHT + summary_lastupdated)
 print("")
 
 # Attempt to parse alerts here.
@@ -1874,7 +1874,7 @@ if winddata == True:
         print(Fore.YELLOW + Style.BRIGHT + "Current wind: " + Fore.CYAN + Style.BRIGHT + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
 else:
     print(Fore.YELLOW + Style.BRIGHT + "Wind data is not available for this location.")
-print(Fore.YELLOW + Style.BRIGHT + "Current humidity: " + Fore.CYAN + summary_humidity)
+print(Fore.YELLOW + Style.BRIGHT + "Current humidity: " + Fore.CYAN + Style.BRIGHT + summary_humidity)
 print("")
 
 print(Fore.YELLOW + Style.BRIGHT + "The hourly forecast:")
@@ -1889,7 +1889,7 @@ for hour in hourly36_json['hourly_forecast']:
     if summaryHourlyIterations == 6:
         break
 print("")
-print(Fore.YELLOW + "For the next few days:")
+print(Fore.YELLOW + Style.BRIGHT + "For the next few days:")
 
 summary_forecastIterations = 0
 # Iterations are what will have to happen for now...
@@ -1903,7 +1903,7 @@ for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
     forecast10_lowc = str(day['low']['celsius'])
     forecast10_conditions = day['conditions']
     print(Fore.YELLOW + Style.BRIGHT + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ": " + Fore.CYAN + Style.BRIGHT +
-          + forecast10_conditions + " with a high of " + forecast10_highf + "°F (" +
+          forecast10_conditions + " with a high of " + forecast10_highf + "°F (" +
           forecast10_highc + "°C), and a low of " + forecast10_lowf + "°F (" +
           forecast10_lowc + "°C).")
     summary_forecastIterations = summary_forecastIterations + 1
@@ -1966,7 +1966,7 @@ while True:
     print(Fore.YELLOW + Style.BRIGHT + "- Check PyWeather's cache timings - Enter " + Fore.CYAN + Style.BRIGHT + "15")
     print(Fore.YELLOW + Style.BRIGHT + "- View the about page for PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "16 (14)")
     print(Fore.YELLOW + Style.BRIGHT + "- Close PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "17 (15)")
-    moreoptions = input(Fore.YELLOW + Style.BRIGHT + "Enter here: ").lower()
+    moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
         
@@ -2116,7 +2116,7 @@ while True:
               + " miles (" + current_visibilityKm + " km)")
         print(Fore.YELLOW + Style.BRIGHT + "UV Index: " + Fore.CYAN + Style.BRIGHT + current_UVIndex)
         if current_precip1Hrdata == True:
-            print(Fore.YELLOW + "Precipitation in the last hour: " + Fore.CYAN + Style.BRIGHT
+            print(Fore.YELLOW + Style.BRIGHT + "Precipitation in the last hour: " + Fore.CYAN + Style.BRIGHT
                   + current_precip1HrIn + " inches (" + current_precip1HrMm
                   + " mm)")
         else:
