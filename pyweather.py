@@ -1031,12 +1031,16 @@ logger.debug("pws_query: %s" % pws_query)
 # shortcuts? Basically favloc: instead of favoritelocation:.
 if (geoip_available is False and locinput.find("currentlocation") == 0 or
     geoip_available is False and locinput.find("curloc") == 0):
+    spinner.fail(text="PyWeather query failed!")
+    print("")
     print("Whoops! You entered the query to access your current location, but",
           "your current location isn't available. Press enter to exit.", sep="\n")
     input()
     sys.exit()
 elif (favoritelocation_available is False and locinput.find("favoritelocation:") == 0 or
         favoritelocation_available is False and locinput.find("favloc:") == 0):
+    spinner.fail(text="PyWeather query failed!")
+    print("")
     print("Whoops! You entered the query to access one of your favorite locations, but",
           "favorite locations isn't on (either you have no favorite locations, or it's disabled",
           "entirely). Press enter to exit.", sep="\n")
@@ -1053,6 +1057,8 @@ elif (favoritelocation_available is True and locinput.find("favoritelocation:") 
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
                      (locinput, haveFavoriteLocation))
     elif locinput == "favoritelocation:1" and favoritelocation_1 == "None":
+        spinner.fail(text="PyWeather query failed!")
+        print("")
         print("Whoops! You entered the query to access your first favorite location, but",
               "it's currently not set to anything. Press enter to exit.", sep="\n")
         input()
@@ -1064,6 +1070,8 @@ elif (favoritelocation_available is True and locinput.find("favoritelocation:") 
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
                      (locinput, haveFavoriteLocation))
     elif locinput == "favoritelocation:2" and favoritelocation_2 == "None":
+        spinner.fail(text="PyWeather query failed!")
+        print("")
         print("Whoops! You entered the query to access your second favorite location, but",
               "it's currently not set to anything. Press enter to exit.", sep="\n")
         input()
@@ -1075,6 +1083,8 @@ elif (favoritelocation_available is True and locinput.find("favoritelocation:") 
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
                      (locinput, haveFavoriteLocation))
     elif locinput == "favoritelocation:3" and favoritelocation_3 == "None":
+        spinner.fail(text="PyWeather query failed!")
+        print("")
         print("Whoops! You entered the query to access your third favorite location, but",
               "it's currently not set to anything. Press enter to exit.", sep="\n")
         input()
@@ -1086,6 +1096,8 @@ elif (favoritelocation_available is True and locinput.find("favoritelocation:") 
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
                      (locinput, haveFavoriteLocation))
     elif locinput == "favoritelocation:4" and favoritelocation_4 == "None":
+        spinner.fail(text="PyWeather query failed!")
+        print("")
         print("Whoops! You entered the query to access your fourth favorite location, but",
               "it's currently not set to anything. Press enter to exit.", sep="\n")
         input()
@@ -1097,12 +1109,16 @@ elif (favoritelocation_available is True and locinput.find("favoritelocation:") 
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
                      (locinput, haveFavoriteLocation))
     elif locinput == "favoritelocation:5" and favoritelocation_5 == "None":
+        spinner.fail(text="PyWeather query failed!")
+        print("")
         print("Whoops! You entered the query to access your fifth favorite location, but",
               "it's currently not set to anything. Press enter to exit.", sep="\n")
         input()
         sys.exit()
 
     if haveFavoriteLocation is False:
+        spinner.fail(text="PyWeather query failed!")
+        print("")
         print("Your input didn't match up to a favorite location (you likely entered an invalid character/number past the colon).",
               "Press enter to exit.", sep="\n")
         input()
@@ -1112,6 +1128,8 @@ elif (favoritelocation_available is True and locinput.find("favoritelocation:") 
     logger.debug("useGeocoder: %s" % useGeocoder)
 
 elif pws_enabled is False and locinput.find("pws:") == 0:
+    spinner.fail(text="PyWeather query failed!")
+    print("")
     print("Whoops! You entered the query to access a PWS, but PWS queries are currently",
           "disabled. Press enter to exit.", sep="\n")
     input()
@@ -1818,9 +1836,9 @@ if showAlertsOnSummary == True:
             logger.debug("alerts_description: %s ; alerts_expiretime: %s"
                          % (alerts_description, alerts_expiretime))
             logger.debug("alerts_type: %s" % alerts_type)
-            print(Fore.RED + "** A " + alerts_description + " Meteoalarm has been issued" +
+            print(Fore.RED + Style.BRIGHT + "** A " + alerts_description + " Meteoalarm has been issued" +
                   " for " + str(location) + ",", 
-                  "and is in effect until " + alerts_expiretime + ". **", sep="\n")
+                  Fore.RED + Style.BRIGHT + "and is in effect until " + alerts_expiretime + ". **", sep="\n")
             print("")
     except:
         try:
@@ -1832,9 +1850,9 @@ if showAlertsOnSummary == True:
                 logger.debug("alerts_description: %s ; alerts_expiretime: %s"
                              % (alerts_description, alerts_expiretime))
                 logger.debug("alerts_type: %s" % alerts_type)
-                print(Fore.RED + "** A " + alerts_description + " has been issued" + 
+                print(Fore.RED + Style.BRIGHT + "** A " + alerts_description + " has been issued" +
                       " for " + str(location) + ",",
-                      "and is in effect until " + alerts_expiretime + ". **", sep="\n")
+                      Fore.RED + Style.BRIGHT + "and is in effect until " + alerts_expiretime + ". **", sep="\n")
                 print("")
         except:
             # I'll keep this here as a "just in case".
@@ -1842,31 +1860,31 @@ if showAlertsOnSummary == True:
             alerts_type = "None"
             logger.debug("alerts_type: %s" % alerts_type)
     
-print(Fore.YELLOW + "Currently:")
-print(Fore.YELLOW + "Current conditions: " + Fore.CYAN + summary_overall)
-print(Fore.YELLOW + "Current temperature: " + Fore.CYAN + summary_tempf + "°F (" + summary_tempc + "°C)")
-print(Fore.YELLOW + "And it feels like: " + Fore.CYAN + summary_feelslikef
+print(Fore.YELLOW + Style.BRIGHT + "Currently:")
+print(Fore.YELLOW + Style.BRIGHT + "Current conditions: " + Fore.CYAN + Style.BRIGHT + summary_overall)
+print(Fore.YELLOW + Style.BRIGHT + "Current temperature: " + Fore.CYAN + Style.BRIGHT + summary_tempf + "°F (" + summary_tempc + "°C)")
+print(Fore.YELLOW + Style.BRIGHT + "And it feels like: " + Fore.CYAN + Style.BRIGHT + summary_feelslikef
       + "°F (" + summary_feelslikec + "°C)")
-print(Fore.YELLOW + "Current dew point: " + Fore.CYAN + summary_dewPointF
+print(Fore.YELLOW + Style.BRIGHT + "Current dew point: " + Fore.CYAN + Style.BRIGHT + summary_dewPointF
       + "°F (" + summary_dewPointC + "°C)")
 if winddata == True:
     if summary_winddir == "Variable":
-        print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing in variable directions.")
+        print(Fore.YELLOW + Style.BRIGHT + "Current wind: " + Fore.CYAN + Style.BRIGHT + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing in variable directions.")
     else:
-        print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
+        print(Fore.YELLOW + Style.BRIGHT + "Current wind: " + Fore.CYAN + Style.BRIGHT + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
 else:
-    print(Fore.YELLOW + "Wind data is not available for this location.")
-print(Fore.YELLOW + "Current humidity: " + Fore.CYAN + summary_humidity)
+    print(Fore.YELLOW + Style.BRIGHT + "Wind data is not available for this location.")
+print(Fore.YELLOW + Style.BRIGHT + "Current humidity: " + Fore.CYAN + summary_humidity)
 print("")
 
-print(Fore.YELLOW + "The hourly forecast:")
+print(Fore.YELLOW + Style.BRIGHT + "The hourly forecast:")
 
 for hour in hourly36_json['hourly_forecast']:
     hourly_time = hour['FCTTIME']['civil']
     hourly_tempf = hour['temp']['english']
     hourly_tempc = hour['temp']['metric']
     hourly_condition = hour['condition']
-    print(Fore.YELLOW + hourly_time + ": " + Fore.CYAN + hourly_condition + " with a temperature of " + hourly_tempf + "°F (" + hourly_tempc + "°C)")
+    print(Fore.YELLOW + Style.BRIGHT + hourly_time + ": " + Fore.CYAN + Style.BRIGHT + hourly_condition + " with a temperature of " + hourly_tempf + "°F (" + hourly_tempc + "°C)")
     summaryHourlyIterations = summaryHourlyIterations + 1
     if summaryHourlyIterations == 6:
         break
@@ -1884,7 +1902,7 @@ for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
     forecast10_lowf = str(day['low']['fahrenheit'])
     forecast10_lowc = str(day['low']['celsius'])
     forecast10_conditions = day['conditions']
-    print(Fore.YELLOW + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ": " + Fore.CYAN
+    print(Fore.YELLOW + Style.BRIGHT + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ": " + Fore.CYAN + Style.BRIGHT +
           + forecast10_conditions + " with a high of " + forecast10_highf + "°F (" +
           forecast10_highc + "°C), and a low of " + forecast10_lowf + "°F (" +
           forecast10_lowc + "°C).")
@@ -1893,62 +1911,62 @@ for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
         break
 print("")
 if almanac_summary == True:
-    print(Fore.YELLOW + "The almanac:")
-    print(Fore.YELLOW + "Data from: " + Fore.CYAN + almanac_airportCode
-          + Fore.YELLOW + " (the nearest airport)")
-    print(Fore.YELLOW + "Record high for today: " + Fore.CYAN + almanac_recordHighF
+    print(Fore.YELLOW + Style.BRIGHT + "The almanac:")
+    print(Fore.YELLOW + Style.BRIGHT + "Data from: " + Fore.CYAN + Style.BRIGHT + almanac_airportCode
+          + Fore.YELLOW + Style.BRIGHT + " (the nearest airport)")
+    print(Fore.YELLOW + Style.BRIGHT + "Record high for today: " + Fore.CYAN + Style.BRIGHT + almanac_recordHighF
           + "°F (" + almanac_recordHighC + "°C)")
-    print(Fore.YELLOW + "It was set in: " + Fore.CYAN + almanac_recordHighYear)
-    print(Fore.YELLOW + "Record low for today: " + Fore.CYAN + almanac_recordLowF
+    print(Fore.YELLOW + Style.BRIGHT + "It was set in: " + Fore.CYAN + Style.BRIGHT + almanac_recordHighYear)
+    print(Fore.YELLOW + Style.BRIGHT + "Record low for today: " + Fore.CYAN + Style.BRIGHT + almanac_recordLowF
           + "°F (" + almanac_recordLowC + "°C)")
-    print(Fore.YELLOW + "It was set in: " + Fore.CYAN + almanac_recordLowYear)
+    print(Fore.YELLOW + Style.BRIGHT + "It was set in: " + Fore.CYAN + Style.BRIGHT + almanac_recordLowYear)
 
 if sundata_summary == True:
     print("")
-    print(Fore.YELLOW + "The sunrise and sunset:")
-    print(Fore.YELLOW + "Sunrise: " + Fore.CYAN + sunrise_time)
-    print(Fore.YELLOW + "Sunset: " + Fore.CYAN + sunset_time)
+    print(Fore.YELLOW + Style.BRIGHT + "The sunrise and sunset:")
+    print(Fore.YELLOW + Style.BRIGHT + "Sunrise: " + Fore.CYAN + Style.BRIGHT + sunrise_time)
+    print(Fore.YELLOW + Style.BRIGHT + "Sunset: " + Fore.CYAN + Style.BRIGHT + sunset_time)
 
 if showTideOnSummary == True and tide_dataavailable == True:
     print("")
-    print(Fore.YELLOW + "The tide for " + Fore.CYAN + tide_site + Fore.YELLOW + " (the closest site to you):")
+    print(Fore.YELLOW + Style.BRIGHT + "The tide for " + Fore.CYAN + Style.BRIGHT + tide_site + Fore.YELLOW + Style.BRIGHT + " (the closest site to you):")
     print("")
-    print(Fore.YELLOW + "Low tide:")
-    print(Fore.YELLOW + "Time: " + Fore.CYAN + tide_lowtidetime)
-    print(Fore.YELLOW + "Height: " + Fore.CYAN + tide_lowtideheight)
+    print(Fore.YELLOW + Style.BRIGHT + "Low tide:")
+    print(Fore.YELLOW + Style.BRIGHT + "Time: " + Fore.CYAN + Style.BRIGHT + tide_lowtidetime)
+    print(Fore.YELLOW + Style.BRIGHT + "Height: " + Fore.CYAN + Style.BRIGHT + tide_lowtideheight)
     print("")
-    print(Fore.YELLOW + "High tide:")
-    print(Fore.YELLOW + "Time: " + Fore.CYAN + tide_hightidetime)
-    print(Fore.YELLOW + "Height: " + Fore.CYAN + tide_hightideheight)
+    print(Fore.YELLOW + Style.BRIGHT + "High tide:")
+    print(Fore.YELLOW + Style.BRIGHT + "Time: " + Fore.CYAN + Style.BRIGHT + tide_hightidetime)
+    print(Fore.YELLOW + Style.BRIGHT + "Height: " + Fore.CYAN + Style.BRIGHT + tide_hightideheight)
 elif showTideOnSummary == True and tide_dataavailable == False:
     print("")
-    print(Fore.YELLOW + "** Low/High tide data is not available for the location you entered. **" + Fore.RESET)
+    print(Fore.YELLOW + Style.BRIGHT + "** Low/High tide data is not available for the location you entered. **" + Fore.RESET)
 
 # In this part of PyWeather, you'll find comments indicating where things end/begin.
 # This is to help when coding, and knowing where things are.
 
 while True:
     print("")
-    print(Fore.YELLOW + "What would you like to do now?")
-    print(Fore.YELLOW + "- View detailed current data - Enter " + Fore.CYAN + "0")
-    print(Fore.YELLOW + "- View detailed alerts data - Enter " + Fore.CYAN + "1")
-    print(Fore.YELLOW + "- View detailed hourly data - Enter " + Fore.CYAN + "2")
-    print(Fore.YELLOW + "- View the 10 day hourly forecast - Enter " + Fore.CYAN + "3")
-    print(Fore.YELLOW + "- View the 10 day forecast - Enter " + Fore.CYAN + "4")
-    print(Fore.YELLOW + "- View detailed hurricane data - Enter " + Fore.CYAN + "5")
-    print(Fore.YELLOW + "- View detailed tide data - Enter " + Fore.CYAN + "6")
-    print(Fore.YELLOW + "- View the almanac for today - Enter " + Fore.CYAN + "7")
-    print(Fore.YELLOW + "- View historical weather data - Enter " + Fore.CYAN + "8")
-    print(Fore.YELLOW + "- View yesterday's weather data - Enter " + Fore.CYAN + "9")
-    print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Enter " + Fore.CYAN + "10")
-    print(Fore.YELLOW + "- Launch PyWeather's experimental radar - Enter " + Fore.CYAN + "11")
-    print(Fore.YELLOW + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + "12")
-    print(Fore.YELLOW + "- Manage your favorite locations - Enter " + Fore.CYAN + "13")
-    print(Fore.YELLOW + "- Check for PyWeather updates - Enter " + Fore.CYAN + "14 (13)")
-    print(Fore.YELLOW + "- Check PyWeather's cache timings - Enter " + Fore.CYAN + "15")
-    print(Fore.YELLOW + "- View the about page for PyWeather - Enter " + Fore.CYAN + "16 (14)")
-    print(Fore.YELLOW + "- Close PyWeather - Enter " + Fore.CYAN + "17 (15)" + Fore.YELLOW)
-    moreoptions = input("Enter here: ").lower()
+    print(Fore.YELLOW + Style.BRIGHT + "What would you like to do now?")
+    print(Fore.YELLOW + Style.BRIGHT + "- View detailed current data - Enter " + Fore.CYAN + Style.BRIGHT + "0")
+    print(Fore.YELLOW + Style.BRIGHT + "- View detailed alerts data - Enter " + Fore.CYAN + Style.BRIGHT + "1")
+    print(Fore.YELLOW + Style.BRIGHT + "- View detailed hourly data - Enter " + Fore.CYAN + Style.BRIGHT + "2")
+    print(Fore.YELLOW + Style.BRIGHT + "- View the 10 day hourly forecast - Enter " + Fore.CYAN + Style.BRIGHT + "3")
+    print(Fore.YELLOW + Style.BRIGHT + "- View the 10 day forecast - Enter " + Fore.CYAN + Style.BRIGHT + "4")
+    print(Fore.YELLOW + Style.BRIGHT + "- View detailed hurricane data - Enter " + Fore.CYAN + Style.BRIGHT + "5")
+    print(Fore.YELLOW + Style.BRIGHT + "- View detailed tide data - Enter " + Fore.CYAN + Style.BRIGHT + "6")
+    print(Fore.YELLOW + Style.BRIGHT + "- View the almanac for today - Enter " + Fore.CYAN + Style.BRIGHT + "7")
+    print(Fore.YELLOW + Style.BRIGHT + "- View historical weather data - Enter " + Fore.CYAN + Style.BRIGHT + "8")
+    print(Fore.YELLOW + Style.BRIGHT + "- View yesterday's weather data - Enter " + Fore.CYAN + Style.BRIGHT + "9")
+    print(Fore.YELLOW + Style.BRIGHT + "- View detailed sun/moon rise/set data - Enter " + Fore.CYAN + Style.BRIGHT + "10")
+    print(Fore.YELLOW + Style.BRIGHT + "- Launch PyWeather's experimental radar - Enter " + Fore.CYAN + Style.BRIGHT + "11")
+    print(Fore.YELLOW + Style.BRIGHT + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + Style.BRIGHT + "12")
+    print(Fore.YELLOW + Style.BRIGHT + "- Manage your favorite locations - Enter " + Fore.CYAN + Style.BRIGHT + "13")
+    print(Fore.YELLOW + Style.BRIGHT + "- Check for PyWeather updates - Enter " + Fore.CYAN + Style.BRIGHT + "14 (13)")
+    print(Fore.YELLOW + Style.BRIGHT + "- Check PyWeather's cache timings - Enter " + Fore.CYAN + Style.BRIGHT + "15")
+    print(Fore.YELLOW + Style.BRIGHT + "- View the about page for PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "16 (14)")
+    print(Fore.YELLOW + Style.BRIGHT + "- Close PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "17 (15)")
+    moreoptions = input(Fore.YELLOW + Style.BRIGHT + "Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
         
@@ -1967,12 +1985,12 @@ while True:
                 logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
                              (refresh_currentflagged, time.time() - cachetime_current))
             except:
-                spinner.warn("Failed to load current information!")
+                spinner.warn("Failed to refresh current information!")
                 print("")
-                print("Whoops! PyWeather ran into an error when refetching current",
-                      "weather. Make sure that you have an internet connection, and",
-                      "if you're on a filtered network, api.wunderground.com is unblocked.", 
-                      "Press enter to exit to the main menu.", sep="\n")
+                print(Fore.YELLOW + Style.BRIGHT + "Whoops! PyWeather ran into an error when refetching current",
+                      Fore.YELLOW + Style.BRIGHT + "weather. Make sure that you have an internet connection, and",
+                      Fore.YELLOW + Style.BRIGHT + "if you're on a filtered network, api.wunderground.com is unblocked.",
+                      Fore.YELLOW + Style.BRIGHT + "Press enter to exit to the main menu.", sep="\n")
                 input()
                 refresh_currentflagged = True
                 logger.debug("refresh_currentflagged: %s" % refresh_currentflagged)
@@ -2072,38 +2090,38 @@ while True:
 
         spinner.stop()
         print("")
-        print(Fore.YELLOW + "Here's the detailed current weather for: " + Fore.CYAN + str(location))
-        print(Fore.YELLOW + summary_lastupdated)
+        print(Fore.YELLOW + Style.BRIGHT + "Here's the detailed current weather for: " + Fore.CYAN + Style.BRIGHT + str(location))
+        print(Fore.YELLOW + Style.BRIGHT + summary_lastupdated)
         print("")
-        print(Fore.YELLOW + "Current conditions: " + Fore.CYAN + summary_overall)
-        print(Fore.YELLOW + "Current temperature: " + Fore.CYAN + summary_tempf + "°F (" + summary_tempc + "°C)")
-        print(Fore.YELLOW + "And it feels like: " + Fore.CYAN + current_feelsLikeF
+        print(Fore.YELLOW + Style.BRIGHT + "Current conditions: " + Fore.CYAN + Style.BRIGHT + summary_overall)
+        print(Fore.YELLOW + Style.BRIGHT + "Current temperature: " + Fore.CYAN + Style.BRIGHT + summary_tempf + "°F (" + summary_tempc + "°C)")
+        print(Fore.YELLOW + Style.BRIGHT + "And it feels like: " + Fore.CYAN + Style.BRIGHT + current_feelsLikeF
               + "°F (" + current_feelsLikeC + "°C)")
-        print(Fore.YELLOW + "Current dew point: " + Fore.CYAN + summary_dewPointF
+        print(Fore.YELLOW + Style.BRIGHT + "Current dew point: " + Fore.CYAN + Style.BRIGHT + summary_dewPointF
               + "°F (" + summary_dewPointC + "°C)")
         if winddata == True:
             if summary_winddir == "Variable":
-                print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr +
+                print(Fore.YELLOW + Style.BRIGHT + "Current wind: " + Fore.CYAN + Style.BRIGHT + summary_windmphstr +
                     " mph (" + summary_windkphstr + " kph), blowing in variable directions.")
             else:
-                print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr +
+                print(Fore.YELLOW + Style.BRIGHT + "Current wind: " + Fore.CYAN + Style.BRIGHT + summary_windmphstr +
                       " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir
                       + " (" + current_windDegrees + " degrees)")
         else:
-            print(Fore.YELLOW + "Wind data is not available for this location.")
-        print(Fore.YELLOW + "Current humidity: " + Fore.CYAN + summary_humidity)
-        print(Fore.YELLOW + "Current pressure: " + Fore.CYAN + current_pressureInHg
+            print(Fore.YELLOW + Style.BRIGHT + "Wind data is not available for this location.")
+        print(Fore.YELLOW + Style.BRIGHT + "Current humidity: " + Fore.CYAN + Style.BRIGHT + summary_humidity)
+        print(Fore.YELLOW + Style.BRIGHT + "Current pressure: " + Fore.CYAN + Style.BRIGHT + current_pressureInHg
               + " inHg (" + current_pressureMb + " mb), " + current_pressureTrend2)
-        print(Fore.YELLOW + "Current visibility: " + Fore.CYAN + current_visibilityMi
+        print(Fore.YELLOW + Style.BRIGHT + "Current visibility: " + Fore.CYAN + Style.BRIGHT + current_visibilityMi
               + " miles (" + current_visibilityKm + " km)")
-        print(Fore.YELLOW + "UV Index: " + Fore.CYAN + current_UVIndex)
+        print(Fore.YELLOW + Style.BRIGHT + "UV Index: " + Fore.CYAN + Style.BRIGHT + current_UVIndex)
         if current_precip1Hrdata == True:
-            print(Fore.YELLOW + "Precipitation in the last hour: " + Fore.CYAN
+            print(Fore.YELLOW + "Precipitation in the last hour: " + Fore.CYAN + Style.BRIGHT
                   + current_precip1HrIn + " inches (" + current_precip1HrMm
                   + " mm)")
         else:
-            print(Fore.YELLOW + "Precipitation data in the last hour is not available.")
-        print(Fore.YELLOW + "Precipitation so far today: " + Fore.CYAN
+            print(Fore.YELLOW + Style.BRIGHT + "Precipitation data in the last hour is not available.")
+        print(Fore.YELLOW + Style.BRIGHT + "Precipitation so far today: " + Fore.CYAN + Style.BRIGHT
               + current_precipTodayIn + " inches (" + current_precipTodayMm
               + " mm)")
         continue
