@@ -2136,8 +2136,7 @@ while True:
 
         if (alertsPrefetched is False or time.time() - cachetime_alerts >= cache_alertstime and cache_enabled == True
             or refresh_alertsflagged == True):
-            print(Fore.RED + "Alerts wasn't prefetched, the cache expired, or alerts was flagged", 
-                  " for a refresh. Refreshing...", sep="\n")
+            spinner.start(text="Refreshing alerts info...")
             logger.debug("refresh_alertsflagged: %s" % refresh_alertsflagged)
             try:
                 alertsJSON = requests.get(alertsurl)
@@ -2149,16 +2148,18 @@ while True:
                 refresh_alertsflagged = False
                 logger.debug("alertsPrefetched: %s" % alertsPrefetched)
             except:
-                print("When attempting to fetch the alerts JSON file to parse,",
-                      "PyWeather ran into an error. If you're on a network with a",
-                      "filter, make sure that 'api.wunderground.com' is unblocked.",
-                      "Otherwise, make sure you have an internet connection.", sep="\n")
+                spinner.warn(text="Failed to refresh alerts information!")
+                print("")
+                print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the alerts JSON file to parse,",
+                      Fore.YELLOW + Style.BRIGHT + "PyWeather ran into an error. If you're on a network with a",
+                      Fore.YELLOW + Style.BRIGHT + "filter, make sure that 'api.wunderground.com' is unblocked.",
+                      Fore.YELLOW + Style.BRIGHT + "Otherwise, make sure you have an internet connection.", sep="\n")
                 printException()
                 alertsPrefetched = False
                 refresh_alertsflagged = True
                 logger.debug("alertsPrefetched: %s ; refresh_alertsflagged: %s" % 
                              (alertsPrefetched, refresh_alertsflagged))
-                print("Press enter to continue.")
+                print(Fore.YELLOW + Style.BRIGHT + "Press enter to continue.")
                 input()
                 continue
             alerts_json = json.loads(alertsJSON.text)
@@ -2181,10 +2182,10 @@ while True:
                     logger.info("No alert data available!")
                     alerts_type = "None"
                     logger.debug("alerts_type: %s" % alerts_type)
-                    
+            spinner.stop()
         # Because of the oddities of locations with no alerts, we're doing a mini
         # catch the error here. An error would occur when going into the conditional.
-        
+        spinner.start(text="Loading alerts data...")
         try:
             logger.debug("Attempting to see if alert type is declared...")
             if alerts_type == "US":
@@ -2221,14 +2222,14 @@ while True:
                 alerts_expiretime = data['expires']
                 logger.debug("alerts_issuedtime: %s ; alerts_expiretime: %s"
                              % (alerts_issuedtime, alerts_expiretime))
-                print(Fore.YELLOW + "-----")
-                print(Fore.RED + "Alert %s/%s:" % 
+                print(Fore.YELLOW + Style.BRIGHT + "-----")
+                print(Fore.RED + Style.BRIGHT + "Alert %s/%s:" %
                       (alerts_completediterations, alerts_totaliterations))
-                print("Alert Name: " + Fore.CYAN + alerts_alertname)
-                print(Fore.RED + "Alert Level: " + Fore.CYAN + alerts_alertlevel)
-                print(Fore.RED + "Alert issued at: " + Fore.CYAN + alerts_issuedtime)
-                print(Fore.RED + "Alert expires at: " + Fore.CYAN + alerts_expiretime)
-                print(Fore.RED + "Alert Description: " + Fore.CYAN + alerts_description
+                print(Fore.RED + Style.BRIGHT + "Alert Name: " + Fore.CYAN + Style.BRIGHT + alerts_alertname)
+                print(Fore.RED + Style.BRIGHT + "Alert Level: " + Fore.CYAN + Style.BRIGHT + alerts_alertlevel)
+                print(Fore.RED + Style.BRIGHT + "Alert issued at: " + Fore.CYAN + Style.BRIGHT + alerts_issuedtime)
+                print(Fore.RED + Style.BRIGHT + "Alert expires at: " + Fore.CYAN + Style.BRIGHT + alerts_expiretime)
+                print(Fore.RED + Style.BRIGHT + "Alert Description: " + Fore.CYAN + Style.BRIGHT + alerts_description
                       + Fore.RESET)
                 alerts_tempiterations = alerts_tempiterations + 1
                 if alerts_completediterations == alerts_totaliterations:
@@ -2237,9 +2238,8 @@ while True:
                 if alerts_tempiterations == user_alertsEUiterations:
                     print("")
                     try:
-                        print(Fore.YELLOW + "Please press enter to view the next",
-                              "%s alerts. To exit, press Control + C." % user_alertsEUiterations
-                              ,sep="\n")
+                        print(Fore.YELLOW + Style.BRIGHT + "Please press enter to view the next",
+                              "%s alerts. To exit, press Control + C." % user_alertsEUiterations, sep="\n")
                         input()
                         alerts_tempiterations = 0
                     except KeyboardInterrupt:
