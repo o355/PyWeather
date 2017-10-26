@@ -202,6 +202,12 @@ except:
           "occurred. SUMMARY/showAlertsOnSummary failed to load. Defaulting to True.", sep="\n")
     showAlertsOnSummary = True
 try:
+    showyesterdayonsummary = config.getboolean('SUMMARY', 'showyesterdayonsummary')
+except:
+    print("Whnn attempting to load your configuration file, an error",
+            "occurred. SUMMARY/showyesterdayonsummary failed to load. Defaulting to False", sep="\n")
+    showyesterdayonsummary = False
+try:
     showUpdaterReleaseNotes = config.getboolean('UPDATER', 'showReleaseNotes')
 except:
     print("When attempting to load your configuration file, an error",
@@ -418,6 +424,7 @@ except:
 try:
     traceback.print_exc()
     sundata_summary = False
+    showyesterdayonsummary = False
     almanac_summary = False
     verbosity = False
     jsonVerbosity = False
@@ -502,6 +509,7 @@ logger.info("PyWeather 0.6.2 beta now starting.")
 logger.info("Configuration options are as follows: ")
 logger.debug("sundata_summary: %s ; almanac_summary: %s" %
              (sundata_summary, almanac_summary))
+logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
 logger.debug("checkforUpdates: %s ; verbosity: %s" %
              (checkforUpdates, verbosity))
 logger.debug("jsonVerbosity: %s ; tracebacksEnabled: %s" %
@@ -539,7 +547,7 @@ logger.debug("showTideOnSummary: %s ; geopyScheme: %s" %
              (showTideOnSummary, geopyScheme))
 logger.debug("prefetchHurricane_atboot: %s ; cache_hurricanetime: %s" %
              (prefetchHurricane_atboot, cache_hurricanetime))
-logger.debug("cache_yesterdaytime: %s" % (yesterday_cachedtime))
+logger.debug("cache_yesterdaytime: %s" % (cache_yesterdaytime))
 logger.debug("favoritelocation_enabled: %s ; favoritelocation_1: %s" %
              (favoritelocation_enabled, favoritelocation_1))
 logger.debug("favoritelocation_2: %s ; favoritelocation_3: %s" %
@@ -1401,6 +1409,30 @@ except:
     print("Press enter to continue.")
     input()
     sys.exit()
+
+if showyesterdayonsummary == True:
+    spinner.stop()
+    spinner.start(text="Fetching yesterday's weather information...")
+
+    try:
+        yesterdayJSON = requests.get(yesterdayurl)
+        cachetime_yesterday = time.time()
+        logger.debug("Acquired yesterday JSON, end result: %s" % yesterdayJSON)
+
+    except:
+        spinner.fail("Failed to fetch yesterday weather information!")
+        print("")
+        logger.warning("No connection to the API!! Is the connection offline?")
+
+        print("When PyWeather attempted to fetch yesterday's weather information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+
 
 spinner.stop()
 spinner.start(text="Fetching forecast information...")

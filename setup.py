@@ -129,6 +129,7 @@ def configprovision():
     config['SUMMARY']['almanac_summary'] = 'False'
     config['SUMMARY']['showalertsonsummary'] = 'True'
     config['SUMMARY']['showtideonsummary'] = 'False'
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
     config['VERBOSITY']['verbosity'] = 'False'
     config['VERBOSITY']['json_verbosity'] = 'False'
     config['VERBOSITY']['setup_verbosity'] = 'False'
@@ -1022,6 +1023,28 @@ else:
     print("Could not understand what you inputted.",
           "Defaulting to 'True'", sep="\n")
     config['SUMMARY']['showAlertsOnSummary'] = 'True'
+
+print("", "(4/30)", "On the summary screen, would you like me to show yesterday's weather?",
+        "By default, this is disabled.",
+        "Yes or No.", sep="\n")
+yesterday_Summary = input("Input here: ").lower()
+logger.debug("yesterday_Summary: %s" % yesterday_Summary)
+if yesterday_Summary == "yes":
+    config["SUMMARY"]["showyesterdayonsummary"] = "True"
+    print("Changes saved.")
+    logger.debug("Yesterday data on the summary is now ENABLED.")
+
+elif yesterday_Summary == "no":
+    config["SUMMARY"]["showyesterdayonsummary"] = "False"
+    print("Changes saved.")
+    logger.debug("Yesterday data on the summary is now DISABLED")
+
+else:
+    print("Could not understand what you inputted.",
+          "Defaulting to False", sep="\n")
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
+    print("Changes saved.")
+    logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
 print("", "(4/30)","On boot, would you like PyWeather to check for updates?",
       "By default, this is disabled, due to a load time increase of ~2-5 seconds.",
