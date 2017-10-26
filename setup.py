@@ -1684,6 +1684,53 @@ else:
     logger.debug("FAVORITE LOCATIONS/enabled is now 'True'.")
     print("Changes saved!")
 
+print("", "(37/39", "PyWeather by default uses Google's geocoder, which can occasionally have rate limiting issues.",
+      "To get around this, you can manually use your own API key that you sign up for with Google. This is completely",
+      "optional, and you can continue past this step and not impede PyWeather's functionality. However, would you like",
+      "to enable the use of a custom API key for the geocoder? Yes or No.", sep="\n")
+enablecustomgeocoderkey = input("Input here: ").lower()
+logger.debug("enablecustomgeocoderkey: %s" % enablecustomgeocoderkey)
+if enablecustomgeocoderkey == "yes":
+    print("", "(38/39)", "To sign up for a Google Maps API key, please visit this link: ",
+          "https://developers.google.com/maps/documentation/javascript/get-api-key",
+          "Press the button 'Get Key', and wait a minute. Copy and paste the key into the input",
+          "below. Your API key will NOT be validated. Enter 'exit' to exit this process, and to disable",
+          "a custom API key.", sep="\n")
+    customgeocoderkey = input("Input here: ")
+    logger.debug("customgeocoderkey: %s" % customgeocoderkey)
+    while True:
+        print("", "The API key you entered is: %s" % customgeocoderkey,
+              "Is this the API key you want to use? Yes or No.", sep="\n")
+        confirmcustomgeocoderkey = input("Input here: ").lower()
+        logger.debug("confirmcustomgeocoderkey: %s" % confirmcustomgeocoderkey)
+        if confirmcustomgeocoderkey == "yes":
+            break
+        else:
+            if confirmcustomgeocoderkey != "no":
+                print("Couldn't understand your input. Please input your API key again.")
+            print("Please enter the API key you want to use below.")
+            customgeocoderkey = input("Input here: ")
+            logger.debug("customgeocoderkey: %s" % customgeocoderkey)
+
+    if customgeocoderkey == "exit":
+        print("Exiting the custom geocoder key process, and disabling a custom geocoder key.")
+        config['GEOCODER API']['customkey_enabled'] = 'False'
+        logger.debug("GEOCODER API/customkey_enabled is now FALSE.")
+        print("Changes saved.")
+    else:
+        config['GEOCODER API']['customkey_enabled'] = 'True'
+        config['GEOCODER API']['customkey'] = str(customgeocoderkey)
+        logger.debug("GEOCODER API/customkey_enabled is now TRUE.")
+elif enablecustomgeocoderkey == "no":
+    config['GEOCODER API']['customkey_enabled'] = 'False'
+    logger.debug("GEOCODER API/customkey_enabled is now FALSE.")
+    print("Changes saved.")
+else:
+    print("Your input could not be understood. Defaulting to 'False'.")
+    config['GEOCODER API']['customkey_enabled'] = 'False'
+    logger.debug("GEOCODER API/customkey_enabled is now FALSE.")
+    print("Changes saved.")
+    
 print("", "(30/30)", "PyWeather's geocoder usually uses https, but issues have been discovered",
       "on some platforms, where the geocoder cannot operate in the https mode. If you press enter",
       "PyWeather will automatically detect which scheme to use. If you are an advanced user, and want",

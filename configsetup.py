@@ -57,6 +57,11 @@ if cd_confirmation == "yes":
         print("Setting up your config...")
 
     try:
+        config.add_section("GEOCODER API")
+    except configparser.DuplicateSectionError:
+        print("Geocoder API section could not be added.")
+
+    try:
         config.add_section("FAVORITE LOCATIONS")
     except configparser.DuplicateSectionError:
         print("Favorite locations section could not be added.")
@@ -183,6 +188,8 @@ if cd_confirmation == "yes":
     config['FAVORITE LOCATIONS']['favloc3'] = 'None'
     config['FAVORITE LOCATIONS']['favloc4'] = 'None'
     config['FAVORITE LOCATIONS']['favloc5'] = 'None'
+    config['GEOCODER API']['customkey_enabled'] = 'False'
+    config['GEOCODER API']['customkey'] = 'None'
 
     try:
         with open('storage//config.ini', 'w') as configfile:

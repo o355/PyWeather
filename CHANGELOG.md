@@ -13,11 +13,11 @@
 * Adds the ability to view your current location through a GeoIP service
 * Adds the ability to view data through a PWS at boot.
 * Adds the ability to have up to 5 favorite locations.
-* Adds the ability to manually define a Google Maps API key (because rate limiting has pissed me off too many times) - 0% done
+* Adds the ability to manually define a Google Maps API key (because rate limiting has pissed me off too many times) - 50% done
     * Adding initial support - Done!
     * Adding new config options to configsetup/setup, and configupdate - 0% done
 * Adds the ability to show cache timings when enabled - 0% done, Should be finished by 11/18
-* Much better error catching for the config file - 0% done, Should be finished by 11/21
+* Much better error catching for the config file - Done!
 * Adding programmer dad jokes - 0% done, Should be finished by 12/1
 
 * Investigating the spinner and what to do about it - 0% done
