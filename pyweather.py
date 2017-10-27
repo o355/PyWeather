@@ -2239,7 +2239,7 @@ while True:
                     print("")
                     try:
                         print(Fore.YELLOW + Style.BRIGHT + "Please press enter to view the next",
-                              "%s alerts. To exit, press Control + C." % user_alertsEUiterations, sep="\n")
+                              Fore.YELLOW + Style.BRIGHT + "%s alerts. To exit, press Control + C." % user_alertsEUiterations, sep="\n")
                         input()
                         alerts_tempiterations = 0
                     except KeyboardInterrupt:
@@ -2267,14 +2267,14 @@ while True:
                              % (alerts_description, alerts_issuedtime))
                 alerts_expiretime = data['expires']
                 logger.debug("alerts_expiretime: %s" % alerts_expiretime)
-                print(Fore.RED + "Alert %s/%s:" %
+                print(Fore.RED + Style.BRIGHT + "Alert %s/%s:" %
                       (alerts_completediterations, alerts_totaliterations))
-                print(Fore.YELLOW + "-----")
-                print(Fore.RED + "Alert Name: " + Fore.CYAN + alerts_alertname)
-                print(Fore.RED + "Alert Type: " + Fore.CYAN + alerts_alerttype)
-                print(Fore.RED + "Alert issued at: " + Fore.CYAN + alerts_issuedtime)
-                print(Fore.RED + "Alert expires at: " + Fore.CYAN + alerts_expiretime)
-                print(Fore.RED + "Alert Description: " + Fore.CYAN + alerts_description
+                print(Fore.YELLOW + Style.BRIGHT + "-----")
+                print(Fore.RED + Style.BRIGHT + "Alert Name: " + Fore.CYAN + Style.BRIGHT + alerts_alertname)
+                print(Fore.RED + Style.BRIGHT + "Alert Type: " + Fore.CYAN + Style.BRIGHT + alerts_alerttype)
+                print(Fore.RED + Style.BRIGHT + "Alert issued at: " + Fore.CYAN + Style.BRIGHT + alerts_issuedtime)
+                print(Fore.RED + Style.BRIGHT + "Alert expires at: " + Fore.CYAN + Style.BRIGHT + alerts_expiretime)
+                print(Fore.RED + Style.BRIGHT + "Alert Description: " + Fore.CYAN + Style.BRIGHT + alerts_description
                       + Fore.RESET)
                 alerts_tempiterations = alerts_tempiterations + 1
                 if alerts_completediterations == alerts_totaliterations:
@@ -2282,63 +2282,64 @@ while True:
                     break
                 if alerts_tempiterations == user_alertsUSiterations:
                     try:
-                        print(Fore.YELLOW + "Please press enter to view the next",
-                              "%s alert(s). To exit, press Control + C." % user_alertsUSiterations,
-                              sep="\n")
+                        print(Fore.YELLOW + Style.BRIGHT + "Please press enter to view the next",
+                              Fore.YELLOW + Style.BRIGHT + "%s alert(s). To exit, press Control + C." % user_alertsUSiterations, sep="\n")
                         input()
                         alerts_tempiterations = 0
                     except KeyboardInterrupt:
                         logger.debug("User issued KeyboardInterrupt. Breaking...")
                         break
         elif alerts_type == "None":
-            print(Fore.RED + "No data available! Either there are no alerts",
-                  "at the location inputted, or Wunderground doesn't support alerts",
-                  "for the location inputted.",
-                  "As a quick note, Wunderground only supports alerts in the US/EU.", sep="\n")
+            print(Fore.RED + Style.BRIGHT + "No data available! Either there are no alerts",
+                  Fore.RED + Style.BRIGHT + "at the location inputted, or Wunderground doesn't support alerts",
+                  Fore.RED + Style.BRIGHT + "for the location inputted.",
+                  Fore.RED + Style.BRIGHT + "As a quick note, Wunderground only supports alerts in the US/EU.", sep="\n")
         else:
-            print(Fore.YELLOW + "Something went wrong when launching the correct conditional",
-                  "for the alert data type involved.",
-                  "For error reporting, this is what the variable 'alerts_type' is currently storing.",
-                  "alerts_type: %s" % alerts_type, sep="\n" + Fore.RESET)  
+            print(Fore.YELLOW + Style.BRIGHT + "Something went wrong when launching the correct conditional",
+                  Fore.YELLOW + Style.BRIGHT + "for the alert data type involved.",
+                  Fore.YELLOW + Style.BRIGHT + "For error reporting, this is what the variable 'alerts_type' is currently storing.",
+                  Fore.YELLOW + Style.BRIGHT + "alerts_type: %s" % alerts_type, sep="\n" + Fore.RESET)
 
 # <----- Alerts is above | 36-hour hourly is below ---->
     
     elif moreoptions == "2":
-        print(Fore.RED + "Loading...")
         print("")
         logger.debug("refresh_hourly36flagged: %s ; hourly36 cache time: %s" %
                     (refresh_hourly36flagged, time.time() - cachetime_hourly36))
         logger.info("Selected view more hourly...")
         if (refresh_hourly36flagged == True or
                         time.time() - cachetime_hourly36 >= cache_threedayhourly and cache_enabled == True):
-            print("")
-            print(Fore.RED + "Refreshing 3 day hourly data...")
+            spinner.start(text="Refreshing 36-hour hourly information...")
             try:
                 hourly36JSON = requests.get(hourlyurl)
                 logger.debug("hourly36JSON acquired, end result: %s" % hourly36JSON)
                 cachetime_hourly36 = time.time()
             except:
-                print("Whoops! A problem occurred when trying to refresh 36 hour",
-                      "hourly data. Make sure you have an internet connection, and if",
-                      "you're on a network with a filter, make sure that api.wunderground.com",
-                      "is unblocked.",
-                      "Press enter to continue.", sep="\n")
+                spinner.warn(text="Failed to refresh 36-hour hourly information!")
+                print("")
+                print(Fore.YELLOW + Style.BRIGHT + "Whoops! A problem occurred when trying to refresh 36 hour",
+                      Fore.YELLOW + Style.BRIGHT + "hourly data. Make sure you have an internet connection, and if",
+                      Fore.YELLOW + Style.BRIGHT + "you're on a network with a filter, make sure that api.wunderground.com",
+                      Fore.YELLOW + Style.BRIGHT + "is unblocked.",
+                      Fore.YELLOW + Style.BRIGHT + "Press enter to continue.", sep="\n")
                 printException()
                 input()
                 refresh_hourly36flagged = False
                 logger.debug("refresh_hourly36flagged: %s" % refresh_hourly36flagged)
                 continue
-            
+
             hourly36_json = json.loads(hourly36JSON.text)
             if jsonVerbosity == True:
                 logger.debug("hourly36_json: %s" % hourly36_json)
             refresh_hourly36flagged = False
             logger.debug("refresh_hourly36flagged: %s" % refresh_hourly36flagged)
+            spinner.stop()
             
-                
+        spinner.start(text="Loading 36-hour hourly information...")
         detailedHourlyIterations = 0
         totaldetailedHourlyIterations = 0
-        print(Fore.YELLOW + "Here's the detailed hourly forecast for: " + Fore.CYAN + str(location))
+        spinner.stop()
+        print(Fore.YELLOW + Style.BRIGHT + "Here's the detailed hourly forecast for: " + Fore.CYAN + Style.BRIGHT + str(location))
         for hour in hourly36_json['hourly_forecast']:
             logger.info("We're on iteration: %s" % detailedHourlyIterations)
             hourly_time = hour['FCTTIME']['civil']
@@ -2400,38 +2401,38 @@ while True:
             # If you have verbosity on, there's a chance that the next
             # hourly iteration will start BEFORE the previous iteration
             # prints out. This is normal, and no issues are caused by such.
-            print(Fore.YELLOW + hourly_time + " on " + hourly_month + " " + hourly_day + ":")
-            print(Fore.YELLOW + "Conditions: " + Fore.CYAN + hourly_condition)
-            print(Fore.YELLOW + "Temperature: " + Fore.CYAN + hourly_tempf 
+            print(Fore.YELLOW + Style.BRIGHT + hourly_time + " on " + hourly_month + " " + hourly_day + ":")
+            print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT + hourly_condition)
+            print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + hourly_tempf
                   + "°F (" + hourly_tempc + "°C)")
-            print(Fore.YELLOW + "Feels like: " + Fore.CYAN + hourly_feelsLikeF
+            print(Fore.YELLOW + Style.BRIGHT + "Feels like: " + Fore.CYAN + Style.BRIGHT + hourly_feelsLikeF
                   + "°F (" + hourly_feelsLikeC + "°C)")
-            print(Fore.YELLOW + "Dew Point: " + Fore.CYAN + hourly_dewpointF
+            print(Fore.YELLOW + Style.BRIGHT + "Dew Point: " + Fore.CYAN + Style.BRIGHT + hourly_dewpointF
                   + "°F (" + hourly_dewpointC + "°C)")
             if hourly_windDir == "Variable":
-                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly_windMPH
+                print(Fore.YELLOW + Style.BRIGHT + "Wind: " + Fore.CYAN + Style.BRIGHT + hourly_windMPH
                     + " mph (" + hourly_windKPH + " kph) blowing in " +
                     "variable directions.")
             else:
-                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly_windMPH
+                print(Fore.YELLOW + Style.BRIGHT + "Wind: " + Fore.CYAN + Style.BRIGHT + hourly_windMPH
                       + " mph (" + hourly_windKPH + " kph) blowing to the " +
                       hourly_windDir + " (" + hourly_windDegrees + "°)")
-            print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly_humidity + "%")
+            print(Fore.YELLOW + Style.BRIGHT + "Humidity: " + Fore.CYAN + Style.BRIGHT + hourly_humidity + "%")
             if hourly_snowData == False:
-                print(Fore.YELLOW + "Rain for the hour: " + Fore.CYAN +
+                print(Fore.YELLOW + Style.BRIGHT + "Rain for the hour: " + Fore.CYAN + Style.BRIGHT +
                       hourly_precipIn + " in (" + hourly_precipMm + " mm)")
             if hourly_snowData == True:
-                print(Fore.YELLOW + "Snow for the hour: " + Fore.CYAN +
+                print(Fore.YELLOW + Style.BRIGHT + "Snow for the hour: " + Fore.CYAN + Style.BRIGHT +
                       hourly_snowIn + " in (" + hourly_snowMm + " mm)")
-            print(Fore.YELLOW + "Precipitation chance: " + Fore.CYAN + 
+            print(Fore.YELLOW + Style.BRIGHT + "Precipitation chance: " + Fore.CYAN + Style.BRIGHT +
                   hourly_precipChance + "%")
-            print(Fore.YELLOW + "Barometric pressure: " + Fore.CYAN +
+            print(Fore.YELLOW + Style.BRIGHT + "Barometric pressure: " + Fore.CYAN + Style.BRIGHT +
                   hourly_pressureInHg + " inHg (" + hourly_pressureMb
                   + " mb)")
             detailedHourlyIterations = detailedHourlyIterations + 1
             totaldetailedHourlyIterations = totaldetailedHourlyIterations + 1
             if user_showCompletedIterations == True:
-                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/36"
+                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/36"
                       % totaldetailedHourlyIterations)
                 print(Fore.RESET)
             if user_enterToContinue == True:
@@ -2443,9 +2444,9 @@ while True:
                     logger.debug("Asking user for continuation...")
                     try:
                         print("")
-                        print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
+                        print(Fore.RED + Style.BRIGHT + "Please press enter to view the next %s hours of hourly data."
                               % user_loopIterations)
-                        print("You can also press Control + C to head back to the input menu.")
+                        print(Fore.RED + Style.BRIGHT + "You can also press Control + C to head back to the input menu.")
                         input()
                         logger.debug("Iterating %s more times..." % user_loopIterations)
                         detailedHourlyIterations = 0
@@ -2458,7 +2459,6 @@ while True:
                     break
 #<-- 36 hour hourly is above | 10 day hourly is below --->
     elif moreoptions == "3":
-        print(Fore.RED + "Loading...")
         logger.info("Selected view more 10 day hourly...")
         detailedHourly10Iterations = 0
         totaldetailedHourly10Iterations = 0
@@ -2470,16 +2470,18 @@ while True:
             logger.debug("no hourly 10 cache time")
         if (tenday_prefetched == False or refresh_hourly10flagged == True or
             time.time() - cachetime_hourly10 >= cache_tendayhourly and cache_enabled == True):
-            print(Fore.RED + "Refreshing (or fetching for the first time) 10 day hourly data...")
+            spinner.start(text="Refreshing ten-day hourly information...")
             try:
                 tendayJSON = requests.get(tendayurl)
                 logger.debug("Retrieved hourly 10 JSON with end result: %s" % tendayJSON)
                 cachetime_hourly10 = time.time()
             except:
-                print("When attempting to fetch the 10-day hourly forecast data, PyWeather ran",
-                      "info an error. If you're on a network with a filter, make sure that",
-                      "'api.wunderground.com' is unblocked. Otherwise, make sure that you have",
-                      "an internet connection.", sep="\n")
+                spinner.warn(text="Failed to refresh ten-day hourly information!")
+                print("")
+                print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the 10-day hourly forecast data, PyWeather ran",
+                      Fore.YELLOW + Style.BRIGHT + "info an error. If you're on a network with a filter, make sure that",
+                      Fore.YELLOW + Style.BRIGHT + "'api.wunderground.com' is unblocked. Otherwise, make sure that you have",
+                      Fore.YELLOW + Style.BRIGHT + "an internet connection.", sep="\n")
                 printException()
                 tenday_prefetched = False
                 refresh_hourly10flagged = False
@@ -2498,8 +2500,12 @@ while True:
             if jsonVerbosity == True:
                 logger.debug("tenday_json: %s" % tenday_json)
             logger.debug("tenday json loaded.")
+            spinner.stop()
+        # I get it, nothing gets loaded here. Just show the spinner anyways.
+        spinner.start(text="Loading ten-day hourly information...")
+        spinner.stop()
             
-        print(Fore.YELLOW + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + str(location))  
+        print(Fore.YELLOW + Style.BRIGHT + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + Style.BRIGHT + str(location))
         for hour in tenday_json['hourly_forecast']:
             logger.info("We're on iteration: %s/24. User iterations: %s." %
                         (detailedHourly10Iterations, user_loopIterations))
@@ -2564,40 +2570,40 @@ while True:
             # If you have verbosity on, there's a chance that the next
             # hourly iteration will start BEFORE the previous iteration
             # prints out. This is normal, and no issues are caused by such.
-            print(Fore.YELLOW + hourly10_time + " on " + hourly10_month + " " 
+            print(Fore.YELLOW + Style.BRIGHT + hourly10_time + " on " + hourly10_month + " "
                   + hourly10_day + ":")
-            print(Fore.YELLOW + "Conditions: " + Fore.CYAN 
+            print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT +
                   + hourly10_condition)
-            print(Fore.YELLOW + "Temperature: " + Fore.CYAN + hourly10_tempf 
+            print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + hourly10_tempf + Style.BRIGHT +
                   + "°F (" + hourly10_tempc + "°C)")
-            print(Fore.YELLOW + "Feels like: " + Fore.CYAN + hourly10_feelsLikeF
+            print(Fore.YELLOW + Style.BRIGHT + "Feels like: " + Fore.CYAN + Style.BRIGHT + hourly10_feelsLikeF
                   + "°F (" + hourly10_feelsLikeC + "°C)")
-            print(Fore.YELLOW + "Dew Point: " + Fore.CYAN + hourly10_dewpointF
+            print(Fore.YELLOW + Style.BRIGHT + "Dew Point: " + Fore.CYAN + Style.BRIGHT + hourly10_dewpointF
                   + "°F (" + hourly10_dewpointC + "°C)")
             if hourly10_windDir == "Variable":
-                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly10_windMPH
+                print(Fore.YELLOW + Style.BRIGHT + "Wind: " + Fore.CYAN + Style.BRIGHT + hourly10_windMPH
                     + " mph (" + hourly10_windKPH + " kph) blowing in " +
                     "variable directions.")
             else:
-                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly10_windMPH
+                print(Fore.YELLOW + Style.BRIGHT + "Wind: " + Fore.CYAN + Style.BRIGHT + hourly10_windMPH
                       + " mph (" + hourly10_windKPH + " kph) blowing to the " +
                       hourly10_windDir + " (" + hourly10_windDegrees + "°)")
-            print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly10_humidity + "%")
+            print(Fore.YELLOW + Style.BRIGHT + "Humidity: " + Fore.CYAN + Style.BRIGHT + hourly10_humidity + "%")
             if hourly10_snowData == False:
-                print(Fore.YELLOW + "Rain for the hour: " + Fore.CYAN +
+                print(Fore.YELLOW + Style.BRIGHT + "Rain for the hour: " + Fore.CYAN + Style.BRIGHT +
                       hourly10_precipIn + " in (" + hourly10_precipMm + " mm)")
             if hourly10_snowData == True:
-                print(Fore.YELLOW + "Snow for the hour: " + Fore.CYAN +
+                print(Fore.YELLOW + Style.BRIGHT + "Snow for the hour: " + Fore.CYAN + Style.BRIGHT +
                       hourly10_snowIn + " in (" + hourly10_snowMm + " mm)")
-            print(Fore.YELLOW + "Precipitation chance: " + Fore.CYAN + 
+            print(Fore.YELLOW + Style.BRIGHT +"Precipitation chance: " + Fore.CYAN + Style.BRIGHT +
                   hourly10_precipChance + "%")
-            print(Fore.YELLOW + "Barometric pressure: " + Fore.CYAN +
+            print(Fore.YELLOW + Style.BRIGHT + "Barometric pressure: " + Fore.CYAN + Style.BRIGHT +
                   hourly10_pressureInHg + " inHg (" + hourly10_pressureMb
                   + " mb)")
             detailedHourly10Iterations = detailedHourly10Iterations + 1
             totaldetailedHourly10Iterations = totaldetailedHourly10Iterations + 1
             if user_showCompletedIterations == True:
-                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/240"
+                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/240"
                       % totaldetailedHourly10Iterations)
                 print(Fore.RESET)
             print("")
@@ -2609,9 +2615,9 @@ while True:
                     logger.debug("detailedHourly10Iterations: %s" % detailedHourly10Iterations)
                     logger.debug("Asking user for continuation...")
                     try:
-                        print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
+                        print(Fore.RED + Style.BRIGHT + "Please press enter to view the next %s hours of hourly data."
                               % user_loopIterations)
-                        print("You can also press Control + C to head back to the input menu.")
+                        print(Fore.RED + Style.BRIGHT + "You can also press Control + C to head back to the input menu.")
                         input()
                         logger.debug("Iterating %s more times...")
                         detailedHourly10Iterations = 0
@@ -2624,23 +2630,24 @@ while True:
                     break
 # <--- 10 day hourly is above | 10 day forecast is below --->
     elif moreoptions == "4":
-        print(Fore.RED + "Loading, please wait a few seconds.")
         logger.info("Selected view more 10 day...")
         print("")
         logger.debug("refresh_forecastflagged: %s ; forecast cache time: %s" %
                     (refresh_forecastflagged, time.time() - cachetime_forecast))
         if (refresh_forecastflagged == True 
             or time.time() - cachetime_forecast >= cache_forecasttime and cache_enabled == True):
-            print(Fore.RED + "Refreshing forecast data...")
+            spinner.start(text="Refreshing forecast information...")
             try:
                 forecast10JSON = requests.get(f10dayurl)
                 cachetime_forecast = time.time()
                 logger.debug("forecast10JSON acquired, end result: %s" % forecast10JSON)
             except:
-                print("PyWeather ran into an error when trying to refetch forecast",
-                      "data. If you're on a filtered network, make sure that",
-                      "api.wunderground.com is unblocked. Otherwise, make sure you have",
-                      "an internet connection.", sep="\n")
+                spinner.warn(text="Failed to refresh forecast data!")
+                print("")
+                print(Fore.YELLOW + Style.BRIGHT + "PyWeather ran into an error when trying to refetch forecast",
+                      Fore.YELLOW + Style.BRIGHT + "data. If you're on a filtered network, make sure that",
+                      Fore.YELLOW + Style.BRIGHT + "api.wunderground.com is unblocked. Otherwise, make sure you have",
+                      Fore.YELLOW + Style.BRIGHT + "an internet connection.", sep="\n")
                 printException()
                 refresh_forecastflagged = False
                 logger.debug("refresh_forecastflagged: %s" % refresh_forecastflagged)
@@ -2656,6 +2663,8 @@ while True:
             else:
                 logger.debug("refresh_forecastflagged: %s" % refresh_forecastflagged)
                 logger.debug("forecast10_json loaded.")
+            spinner.stop()
+        spinner.start(text="Loading forecast data...")
         detailedForecastIterations = 0
         totaldetailedForecastIterations = 0
         logger.debug("totaldetailedForecastIterations: %s" % totaldetailedForecastIterations)
@@ -2664,7 +2673,8 @@ while True:
                      (totaldetailedForecastIterations, forecast10_precipDayData))
         forecast10_snowDayData = True
         logger.debug("forecast10_snowDayData: %s" % forecast10_snowDayData)
-        print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + str(location))
+        spinner.stop()
+        print(Fore.CYAN + Style.BRIGHT + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + Style.BRIGHT + str(location))
         for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
             print("")
             detailedForecastIterations = detailedForecastIterations + 1
@@ -2796,10 +2806,10 @@ while True:
                         % (forecast10_avgWindDir, forecast10_avgWindDegrees))
             logger.debug("forecast10_avgHumidity: %s" % forecast10_avgHumidity)
             logger.info("Printing weather data...")
-            print(Fore.YELLOW + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ":")
-            print(Fore.CYAN + forecast10_conditions + Fore.YELLOW + " with a high of "
-                  + Fore.CYAN + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
-                  Fore.YELLOW + " and a low of " + Fore.CYAN + forecast10_lowf + "°F (" +
+            print(Fore.YELLOW + Style.BRIGHT + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ":")
+            print(Fore.CYAN + Style.BRIGHT + forecast10_conditions + Fore.YELLOW + Style.BRIGHT + " with a high of "
+                  + Fore.CYAN + Style.BRIGHT + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
+                  Fore.YELLOW + Style.BRIGHT + " and a low of " + Fore.CYAN + Style.BRIGHT + forecast10_lowf + "°F (" +
                   forecast10_lowc + "°C)" + ".")
             if forecast10_showsnowdatatotal == True and forecast10_showraindatatotal == False:
                 print(Fore.YELLOW + "Snow in total: " + Fore.CYAN + forecast10_snowTotalIn
