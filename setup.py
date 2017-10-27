@@ -168,7 +168,7 @@ def configprovision():
     config['CACHE']['sundata_cachedtime'] = '480'
     config['CACHE']['tide_cachedtime'] = '480'
     config['CACHE']['hurricane_cachedtime'] = '180'
-    config['CACHE']['yesterday_cachedtime'] = '240' # This value is just a guess, change it pls.
+    config['CACHE']['yesterday_cachedtime'] = '720' # This value is just a guess, change it pls.
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['GEOCODER']['scheme'] = 'https'
@@ -1024,28 +1024,6 @@ else:
           "Defaulting to 'True'", sep="\n")
     config['SUMMARY']['showAlertsOnSummary'] = 'True'
 
-print("", "(4/30)", "On the summary screen, would you like me to show yesterday's weather?",
-        "By default, this is disabled.",
-        "Yes or No.", sep="\n")
-yesterday_Summary = input("Input here: ").lower()
-logger.debug("yesterday_Summary: %s" % yesterday_Summary)
-if yesterday_Summary == "yes":
-    config["SUMMARY"]["showyesterdayonsummary"] = "True"
-    print("Changes saved.")
-    logger.debug("Yesterday data on the summary is now ENABLED.")
-
-elif yesterday_Summary == "no":
-    config["SUMMARY"]["showyesterdayonsummary"] = "False"
-    print("Changes saved.")
-    logger.debug("Yesterday data on the summary is now DISABLED")
-
-else:
-    print("Could not understand what you inputted.",
-          "Defaulting to False", sep="\n")
-    config['SUMMARY']['showyesterdayonsummary'] = 'False'
-    print("Changes saved.")
-    logger.debug("Could not recognize input. Defaulting to DISABLED.")
-
 print("", "(4/30)","On boot, would you like PyWeather to check for updates?",
       "By default, this is disabled, due to a load time increase of ~2-5 seconds.",
       "Yes or No.", sep="\n")
@@ -1811,6 +1789,27 @@ else:
             logger.debug("GEOCODER/scheme is now 'http'")
             print("Changes saved.")
 
+print("", "(40/40)", "On the summary screen, would you like me to show yesterday's weather?",
+        "By default, this is disabled.",
+        "Yes or No.", sep="\n")
+yesterday_Summary = input("Input here: ").lower()
+logger.debug("yesterday_Summary: %s" % yesterday_Summary)
+if yesterday_Summary == "yes":
+    config["SUMMARY"]["showyesterdayonsummary"] = "True"
+    print("Changes saved.")
+    logger.debug("Yesterday data on the summary is now ENABLED.")
+
+elif yesterday_Summary == "no":
+    config["SUMMARY"]["showyesterdayonsummary"] = "False"
+    print("Changes saved.")
+    logger.debug("Yesterday data on the summary is now DISABLED")
+
+else:
+    print("Could not understand what you inputted.",
+          "Defaulting to False", sep="\n")
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
+    print("Changes saved.")
+    logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
 print("","That's it! Now commiting config changes...", sep="\n")
 try:

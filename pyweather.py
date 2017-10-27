@@ -294,11 +294,15 @@ except:
     print("When attempting to load your configuration file, an error",
           "occurred. CACHE/hurricane_cachedtime failed to load. Defaulting to 10800.", sep="\n")
     cache_hurricanetime = 10800
-    cache_hurricanetime = cache_hurricanetime * 60
 
 try:
     cache_yesterdaytime = config.getfloat('CACHE', 'yesterday_cachedtime')
     cache_yesterdaytime = cache_yesterdaytime * 60
+
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. CACHE/yesterday_cachedtime failed to load. Defaulting to 10800.", sep="\n")
+    cache_hurricanetime = 10800
 
 try:
     user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
@@ -420,55 +424,6 @@ try:
 except:
     print("When attempting to load your configuration file, an error",
           "occurred. FAVORITE LOCATIONS/favloc5 failed to load. Defaulting to 'None'.", sep="\n")
-
-try:
-    traceback.print_exc()
-    sundata_summary = False
-    showyesterdayonsummary = False
-    almanac_summary = False
-    verbosity = False
-    jsonVerbosity = False
-    checkforUpdates = False
-    tracebacksEnabled = False
-    prefetch10Day_atStart = False
-    user_loopIterations = 6
-    user_enterToContinue = True
-    user_showCompletedIterations = False
-    user_forecastLoopIterations = 5
-    user_showUpdaterReleaseTag = False
-    user_backupKeyDirectory = 'backup//'
-    validateAPIKey = True
-    allowGitForUpdating = False
-    showAlertsOnSummary = True
-    showUpdaterReleaseNotes = True
-    showUpdaterReleaseNotes_uptodate = False
-    showNewVersionReleaseDate = True
-    cache_enabled = True
-    # Values listed here are seconds for refresh times, not minutes.
-    cache_alertstime = 300
-    cache_currenttime = 600
-    cache_forecasttime = 3600
-    cache_almanactime = 14400
-    cache_threedayhourly = 3600
-    cache_tendayhourly = 3600
-    cache_sundatatime = 28800
-    cache_tidetime = 28800
-    cache_hurricanetime = 10800
-    cache_yesterdaytime = 28800
-    user_alertsEUiterations = 2
-    user_alertsUSiterations = 1
-    user_radarImageSize = "normal"
-    radar_bypassconfirmation = False
-    showTideOnSummary = False
-    geopyScheme = 'https'
-    prefetchHurricane_atboot = False
-    geoip_enabled = False
-    pws_enabled = False
-    hurricanenearestcity_enabled = False
-    hurricanenearestcity_fenabled = False
-    geonames_apiusername = "pyweather_proj"
-    hurricane_nearestsize = 'medium'
-    favoritelocation_enabled = False
 
 try:
     geocoder_customkeyEnabled = config.getboolean('GEOCODER API', 'customkey_enabled')
@@ -2001,6 +1956,8 @@ for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
     summary_forecastIterations = summary_forecastIterations + 1
     if summary_forecastIterations == 5:
         break
+
+print("")
 
 if almanac_summary == True:
     print(Fore.YELLOW + Style.BRIGHT + "The almanac:")
