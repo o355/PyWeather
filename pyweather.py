@@ -4564,9 +4564,8 @@ while True:
 #<--- Tide data is above | Hurricane data is below --->
     elif moreoptions == "5":
         # I get it, this part is poorly coded in. You know what? It works!
-        print(Fore.RED + "Loading...")
         if (hurricanePrefetched == False or refresh_hurricanedataflagged == True or time.time() - cachetime_hurricane >= cache_hurricanetime):
-            print(Fore.RED + "Fetching (or refreshing) hurricane data...")
+            spinner.start(text="Refreshing hurricane data...")
             try:
                 hurricaneJSON = requests.get(hurricaneurl)
                 cachetime_hurricane = time.time()
@@ -4578,13 +4577,16 @@ while True:
                 hurricanePrefetched = True
                 refresh_hurricanedataflagged = False
             except:
-                print("When attempting to fetch hurricane data, PyWeather ran into an error.",
-                      "you have an internet connection, and that api.wunderground.com is unblocked",
-                      "on your network. Press enter to continue.", sep="\n")
+                spinner.warn(text="Failed to refresh hurricane data!")
+                print("")
+                print(Fore.RED + Style.BRIGHT + "When attempting to fetch hurricane data, PyWeather ran into an error.",
+                      Fore.RED + Style.BRIGHT + "you have an internet connection, and that api.wunderground.com is unblocked",
+                      Fore.RED + Style.BRIGHT + "on your network. Press enter to continue.", sep="\n")
                 printException()
                 input()
                 continue
 
+        spinner.start(text="Loading hurricane data!")
         activestorms = 0
         currentstormiterations = 0
         logger.debug("activestorms: %s ; currentstormiterations: %s" %
@@ -4594,11 +4596,10 @@ while True:
         logger.debug("activestorms: %s" % activestorms)
 
         if activestorms == 0:
-            print(Fore.RED + "There are presently no active tropical systems anywhere on Earth.",
-                  "Try a different planet.")
+            spinner.fail(text="There are no active tropical storms at this time.")
             continue
-
-        print(Fore.YELLOW + "Here are the active tropical systems around the world:")
+        spinner.stop()
+        print(Fore.YELLOW + Style.BRIGHT + "Here are the active tropical systems around the world:")
         print("")
         # <--- Current data --->
         for data in hurricane_json['currenthurricane']:
@@ -4771,8 +4772,8 @@ while True:
             else:
                 stormpressuredataavail = True
             logger.debug("stormpressuredataavail: %s" % stormpressuredataavail)
-            print(Fore.YELLOW + stormname + ":")
-            print(Fore.YELLOW + "Last updated: " + Fore.CYAN + stormtime)
+            print(Fore.YELLOW + Style.BRIGHT + stormname + ":")
+            print(Fore.YELLOW + Style.BRIGHT + "Last updated: " + Fore.CYAN + Style.BRIGHT + stormtime)
             print(Fore.YELLOW + "Storm Type: " + Fore.CYAN + stormtype)
             print(Fore.YELLOW + "Wind speed: " + Fore.CYAN + stormwindspeedmph + " mph ("
                   + stormwindspeedkph + " kph, " + stormwindspeedkts + " kts)")
