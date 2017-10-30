@@ -17,17 +17,19 @@
     * Adding initial support - Done!
     * Adding new config options to configsetup/setup, and configupdate - 0% done
 * Adds the ability to show cache timings when enabled - 0% done, Should be finished by 11/18
-* Much better error catching for the config file - Done!
+* Much better error catching for the config file - 90% done, need to make changes to the updater
 * Adding programmer dad jokes - 0% done, Should be finished by 12/1
-
-* Investigating the spinner and what to do about it - 0% done
+* Adding a new loader - 30% done
+    * Fixing color - 40% done
+    * Adding additional loaders - 0% done
 
 **BUG FIXES**
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
-* Fixed a potential bug where if there was just one storm, extended forecast data and forecast data got all mixed up - Investigating
+* Fixed a potential bug where if there was just one storm, extended forecast data and forecast data got all mixed up.
+* Reworking the snow detection system for forecast data - A bug can occur when snow AND rain will occur during the day, and PyWeather will only spit out rain data since the high temp is above 32.
 
 **OTHER CHANGES**
-* The Git Updater will been completely removed, as it's been unreliable. A universal updater will be introduced later in time. - 0% done
+* The Git Updater will been completely removed, as it's been unreliable. A universal updater will be introduced later in time. - 25% done
 * The configupdate file will now properly catch a bad section error (not a plain except)
 
 
