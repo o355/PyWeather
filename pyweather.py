@@ -5381,6 +5381,7 @@ while True:
 
         while True:
             # Get up-to-date configuration information about favorite locations.
+            spinner.start(text="Loading your favorite locations...")
             try:
                 favoritelocation_1 = config.get('FAVORITE LOCATIONS', 'favloc1')
                 favoritelocation_1d = favoritelocation_1
@@ -5393,9 +5394,11 @@ while True:
                 favoritelocation_5 = config.get('FAVORITE LOCATIONS', 'favloc5')
                 favoritelocation_5d = favoritelocation_5
             except:
-                print(Fore.RED + "An error with your configuration file occurred when",
-                      "we tried to refresh current location information. For safety,",
-                      "the favorite location configurator will be exited out of.")
+                spinner.fail(text="Failed to load your favorite locations!")
+                print("")
+                print(Fore.RED + Style.BRIGHT + "An error with your configuration file occurred when",
+                      Fore.RED + Style.BRIGHT + "we tried to refresh current location information. For safety,",
+                      Fore.RED + Style.BRIGHT +"the favorite location configurator will be exited out of.")
                 printException()
                 break
 
@@ -5439,35 +5442,38 @@ while True:
                 favoritelocation_5d = favoritelocation_5d[4:]
                 favoritelocation_5d = "PWS " + favoritelocation_5d.upper()
                 logger.debug("favoritelocation_5d: %s" % favoritelocation_5d)
+
+            spinner.stop()
             print("")
-            print(Fore.YELLOW + "Your current favorite locations configuration:")
-            print(Fore.YELLOW + "Favorite Location 1 - " + Fore.CYAN + favoritelocation_1d)
-            print(Fore.YELLOW + "Favorite Location 2 - " + Fore.CYAN + favoritelocation_2d)
-            print(Fore.YELLOW + "Favorite Location 3 - " + Fore.CYAN + favoritelocation_3d)
-            print(Fore.YELLOW + "Favorite Location 4 - " + Fore.CYAN + favoritelocation_4d)
-            print(Fore.YELLOW + "Favorite Location 5 - " + Fore.CYAN + favoritelocation_5d)
+            print(Fore.YELLOW + Style.BRIGHT + "Your current favorite locations configuration:")
+            print(Fore.YELLOW + Style.BRIGHT + "Favorite Location 1 - " + Fore.CYAN + Style.BRIGHT + favoritelocation_1d)
+            print(Fore.YELLOW + Style.BRIGHT + "Favorite Location 2 - " + Fore.CYAN + Style.BRIGHT + favoritelocation_2d)
+            print(Fore.YELLOW + Style.BRIGHT + "Favorite Location 3 - " + Fore.CYAN + Style.BRIGHT + favoritelocation_3d)
+            print(Fore.YELLOW + Style.BRIGHT + "Favorite Location 4 - " + Fore.CYAN + Style.BRIGHT + favoritelocation_4d)
+            print(Fore.YELLOW + Style.BRIGHT + "Favorite Location 5 - " + Fore.CYAN + Style.BRIGHT + favoritelocation_5d)
             print("")
-            print(Fore.YELLOW + "What would you like to do with your favorite locations?")
-            print(Fore.YELLOW + "- Add this location (" + Fore.CYAN + location2 + Fore.YELLOW
-                  + ") as a favorite location - Enter " + Fore.CYAN + "1")
-            print(Fore.YELLOW + "- Add a location as a favorite location - Enter " + "2")
-            print(Fore.YELLOW + "- Edit a favorite location - Enter " + Fore.CYAN + "3")
-            print(Fore.YELLOW + "- Remove a favorite location - Enter " + Fore.CYAN + "4")
-            print(Fore.YELLOW + "- Return to PyWeather - Enter " + Fore.CYAN + "5")
+            print(Fore.YELLOW + Style.BRIGHT + "What would you like to do with your favorite locations?")
+            print(Fore.YELLOW + Style.BRIGHT + "- Add this location (" + Fore.CYAN + Style.BRIGHT + location2 + Fore.YELLOW
+                  + Style.BRIGHT + ") as a favorite location - Enter " + Fore.CYAN + "1")
+            print(Fore.YELLOW + Style.BRIGHT + "- Add a location as a favorite location - Enter " + Fore.CYAN + Style.BRIGHT + "2")
+            print(Fore.YELLOW + Style.BRIGHT + "- Edit a favorite location - Enter " + Fore.CYAN + Style.BRIGHT + "3")
+            print(Fore.YELLOW + Style.BRIGHT + "- Remove a favorite location - Enter " + Fore.CYAN + Style.BRIGHT + "4")
+            print(Fore.YELLOW + Style.BRIGHT + "- Return to PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "5")
             favconfig_menuinput = input("Input here: ").lower()
             logger.debug("favconfig_menuinput: %s" % favconfig_menuinput)
             if favconfig_menuinput == "1":
                 # Code for adding current location as a favorite location
-                print(Fore.YELLOW + "Would you like to add " + Fore.CYAN + str(location) + Fore.YELLOW
-                      + " as a favorite location? Yes or No.", sep="\n")
+                print(Fore.YELLOW + Style.BRIGHT + "Would you like to add " + Fore.CYAN + Style.BRIGHT + str(location) + Fore.YELLOW
+                      + Style.BRIGHT + " as a favorite location? Yes or No.", sep="\n")
                 favconfig_confirmadd = input("Input here: ").lower()
                 logger.debug("favconfig_confirmadd: %s" % favconfig_confirmadd)
                 if favconfig_confirmadd != "yes":
                     if favconfig_confirmadd != "no":
-                        print("","Couldn't understand your input. Not adding " + Fore.CYAN + location2 +
-                              Fore.YELLOW + " to your location list.", sep="\n")
+                        print("", Fore.YELLOW + Style.BRIGHT + "Couldn't understand your input. Not adding " + Fore.CYAN + Style.BRIGHT + location2 +
+                              Fore.YELLOW + Style.BRIGHT + " to your location list.", sep="\n")
                     else:
-                        print("", "Not adding " + Fore.CYAN + str(location) + Fore.YELLOW + " to your location list.", sep="\n")
+                        print("", Fore.YELLOW + Style.BRIGHT + "Not adding " + Fore.CYAN + Style.BRIGHT +
+                              str(location) + Fore.YELLOW + Style.BRIGHT + " to your location list.", sep="\n")
                     continue
 
                 # Add location to favorite locations
@@ -5486,30 +5492,30 @@ while True:
                 try:
                     with open('storage//config.ini', 'w') as configfile:
                         config.write(configfile)
-                    print(Fore.YELLOW + "Changes saved!")
+                    print(Fore.YELLOW + Style.BRIGHT + "Changes saved!")
                     continue
                 except:
-                    print(Fore.RED + "An issue occurred when trying to write new options to your config file.",
+                    print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
                           "Please note that no changes were made to your config file.", sep="\n")
                     continue
             elif favconfig_menuinput == "2":
                 # Code for adding a separate current location as a favorite location
-                print(Fore.YELLOW + "Please enter the location that you'd like to add as a favorite location.",
-                      "For a PWS, you'd enter pws:<PWS ID>, where <PWS ID> is the ID of the PWS.",
-                      "Queries for favoritelocation:, currentlocation, and previouslocation: are not supported.",
-                      "Please note that your input WILL NOT be validated. To exit, enter 'exit' in the input.", sep="\n")
+                print(Fore.YELLOW + Style.BRIGHT + "Please enter the location that you'd like to add as a favorite location.",
+                      Fore.YELLOW + Style.BRIGHT + "For a PWS, you'd enter pws:<PWS ID>, where <PWS ID> is the ID of the PWS.",
+                      Fore.YELLOW + Style.BRIGHT + "Queries for favoritelocation:, currentlocation, and previouslocation: are not supported.",
+                      Fore.YELLOW + Style.BRIGHT + "Please note that your input WILL NOT be validated. To exit, enter 'exit' in the input.", sep="\n")
                 favloc_manualinput = input("Input here: ")
                 favloc_manualinputLower = favloc_manualinput.lower()
                 logger.debug("favloc_manualinput: %s ; favloc_manualinputLower: %s" %
                              (favloc_manualinput, favloc_manualinputLower))
                 if favloc_manualinputLower == "exit":
-                    print("", "Exiting to main menu...", sep="\n")
+                    print("", Fore.YELLOW + Style.BRIGHT + "Exiting to main menu...", sep="\n")
                     continune
 
                 if favloc_manualinputLower.find("pws:") == 0:
                     logger.debug("PWS query detected.")
-                    print(Fore.YELLOW + "", "Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
-                          "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
+                    print("", Fore.YELLOW + Style.BRIGHT + "Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
+                          Fore.YELLOW + Style.BRIGHT + "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
                     config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_1
                     logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favoritelocation_1)
                     config['FAVORITE LOCATIONS']['favloc3'] = favoritelocation_2
@@ -5524,24 +5530,24 @@ while True:
                     try:
                         with open('storage//config.ini', 'w') as configfile:
                             config.write(configfile)
-                        print("Changes saved!")
+                        print(Fore.YELLOW + Style.BRIGHT + "Changes saved!")
                         continue
                     except:
-                        print(Fore.RED + "An issue occurred when trying to write new options to your config file.",
-                              "Please note that no changes were made to your config file.", sep="\n")
+                        print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
+                              Fore.RED + Style.BRIGHT + "Please note that no changes were made to your config file.", sep="\n")
                         continue
 
                 if favloc_manualinputLower.find("favoritelocation:") == 0 or favloc_manualinputLower.find("favloc:") == 0:
                     logger.debug("Invalid query detected - favorite location")
-                    print(Fore.RED + "", "Whoops! You can't use a favorite location query as a favorite location.",
-                          "Makes sense, right? Returning to main menu.", sep="\n")
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! You can't use a favorite location query as a favorite location.",
+                          Fore.RED + Style.BRIGHT + "Makes sense, right? Returning to main menu.", sep="\n")
                     continue
                 if favloc_manualinputLower.find("currentlocation") == 0 or favloc_manualinputLower.find("curloc") == 0:
                     logger.debug("Invalid query detected - current location")
-                    print(Fore.RED + "", "Whoops! You can't use a current location query as a favorite location.",
-                          "If you'd like to use your current location at boot, make sure that the",
-                          "current location feature is enabled (FIRSTINPUT/geoipservice_enabled should be True).",
-                          "Returning to main menu.", sep="\n")
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! You can't use a current location query as a favorite location.",
+                          Fore.RED + Style.BRIGHT + "If you'd like to use your current location at boot, make sure that the",
+                          Fore.RED + Style.BRIGHT + "current location feature is enabled (FIRSTINPUT/geoipservice_enabled should be True).",
+                          Fore.RED + Style.BRIGHT + "Returning to main menu.", sep="\n")
                     continue
 
                 config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_1
@@ -5559,15 +5565,15 @@ while True:
                 try:
                     with open('storage//config.ini', 'w') as configfile:
                         config.write(configfile)
-                    print("Changes saved!")
+                    print(Fore.YELLOW + Style.BRIGHT + "Changes saved!")
                     continue
                 except:
-                    print(Fore.RED + "An issue occurred when trying to write new options to your config file.",
-                          "Please note that no changes were made to your config file.", sep="\n")
+                    print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
+                          Fore.RED + Style.BRIGHT + "Please note that no changes were made to your config file.", sep="\n")
                     continue
             elif favconfig_menuinput == "3":
-                print(Fore.YELLOW + "Which favorite location would you like to modify? Enter a number 1-5 representing",
-                      "the favorite locations 1-5.", sep="\n")
+                print(Fore.YELLOW + Style.BRIGHT + "Which favorite location would you like to modify? Enter a number 1-5 representing",
+                      Fore.YELLOW + Style.BRIGHT + "the favorite locations 1-5.", sep="\n")
                 favloc_editinputnum = input("Input here: ").lower()
                 logger.debug("favloc_editinputnum: %s" % favloc_editinputnum)
                 # Convert the number to an integer to see if the user entered a number. If a ValueError is catched,
@@ -5576,14 +5582,15 @@ while True:
                 try:
                     favloc_editinputnum = int(favloc_editinputnum)
                 except ValueError:
-                    print(Fore.RED + "", "Whoops! Your input didn't seem to be a number. Returning to the",
-                          "main menu.", sep="\n")
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! Your input didn't seem to be a number. Returning to the",
+                          Fore.RED + Style.BRIGHT + "main menu.", sep="\n")
                     continue
 
                 # Validate the number is between 1-5
                 if 1 < favloc_editinputnum < 5:
-                    print("Whoops! You entered a favorite location to input that was not between 1-5.",
-                          "Returning to the main menu...", sep="\n")
+                    print(Fore.RED + Style.BRIGHT + "Whoops! You entered a favorite location to input that was not between 1-5.",
+                          Fore.RED + Style.BRIGHT + "Returning to the main menu...", sep="\n")
+                    continue
 
                 # Confirm to the user which favorite location we're editing.
                 if favloc_editinputnum is 1:
@@ -5598,27 +5605,30 @@ while True:
                     favloc_editdisplay = favoritelocation_5d
                 logger.debug("favloc_editdisplay: %s" % favloc_editdisplay)
 
-                print(Fore.YELLOW + "Just to confirm, you're editing favorite location " + Fore.CYAN + str(favloc_editdisplay) + Fore.YELLOW + ".",
-                      "This favorite location is currently: " + Fore.CYAN + favloc_editdisplay + Fore.YELLOW + ".",
-                      "Would you like to edit this favorite location? Yes or No.", sep="\n")
+                print(Fore.YELLOW + Style.BRIGHT + "Just to confirm, you're editing favorite location " + Fore.CYAN + Style.BRIGHT + str(favloc_editdisplay)
+                      + Fore.YELLOW + Style.BRIGHT + ".",
+                      Fore.YELLOW + Style.BRIGHT + "This favorite location is currently: " + Fore.CYAN + Style.BRIGHT + favloc_editdisplay +
+                      Fore.YELLOW + Style.BRIGHT + ".",
+                      Fore.YELLOW + Style.BRIGHT + "Would you like to edit this favorite location? Yes or No.", sep="\n")
                 favloc_editconfirm = input("Input here: ").lower()
                 logger.debug("favloc_editconfirm: %s" % favloc_editconfirm)
                 if favloc_editconfirm == "yes":
                     logger.debug("moving to the final input...")
                 elif favloc_editconfirm == "no":
-                    print(Fore.YELLOW + "", "Not editing favorite location " + Fore.CYAN + str(favloc_editinputnum) + Fore.YELLOW + ".",
-                          "Returning to the main menu.", sep="\n")
+                    print(Fore.YELLOW + Style.BRIGHT + "", "Not editing favorite location " + Fore.CYAN + Style.BRIGHT + str(favloc_editinputnum)
+                          + Fore.YELLOW + Style.BRIGHT + ".",
+                          Fore.YELLOW + Style.BRIGHT + "Returning to the main menu.", sep="\n")
                     continue
                 else:
-                    print(Fore.RED + "", "Could not understand your input. Returning to the main menu.", sep="\n")
+                    print("", Fore.RED + Style.BRIGHT + "Could not understand your input. Returning to the main menu.", sep="\n")
                     continue
 
 
                 # User input for the change goes here.
-                print(Fore.YELLOW + "What would you like to change favorite location " + Fore.CYAN + str(favloc_editdisplay) + Fore.YELLOW + " to?",
-                      "For a PWS, you'd enter pws:<PWS ID>, where <PWS ID> is the ID of the PWS.",
-                      "Queries for favoritelocation:, currentlocation, and previouslocation: are not supported.",
-                      "Please note that your input WILL NOT be validated. To exit, enter 'exit' in the input.", sep="\n")
+                print(Fore.YELLOW + Style.BRIGHT + "What would you like to change favorite location " + Fore.CYAN + Style.BRIGHT + str(favloc_editdisplay) + Fore.YELLOW + Style.BRIGHT + " to?",
+                      Fore.YELLOW + Style.BRIGHT + "For a PWS, you'd enter pws:<PWS ID>, where <PWS ID> is the ID of the PWS.",
+                      Fore.YELLOW + Style.BRIGHT + "Queries for favoritelocation:, currentlocation, and previouslocation: are not supported.",
+                      Fore.YELLOW + Style.BRIGHT + "Please note that your input WILL NOT be validated. To exit, enter 'exit' in the input.", sep="\n")
                 favloc_editinput = input("Input here: ")
                 favloc_editinputLower = favloc_editinput.lower()
                 logger.debug("favloc_editinput: %s ; favloc_editinputLower: %s" %
@@ -5626,12 +5636,12 @@ while True:
 
                 # Validate the user input, do special conversions for PWSes.
                 if favloc_editinputLower == "exit":
-                    print("", "Exiting to the main menu.", sep="\n")
+                    print("", Fore.YELLOW + Style.BRIGHT + "Exiting to the main menu.", sep="\n")
 
                 if favloc_editinputLower.find("pws:") == 0:
                     logger.debug("PWS query has been detected.")
-                    print("", "Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
-                          "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
+                    print("", Fore.YELLOW + Style.BRIGHT +"Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
+                          Fore.YELLOW + Style.BRIGHT + "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
                     if favloc_editinputnum == 1:
                         config['FAVORITE LOCATIONS']['favloc1'] = favloc_editinputLower
                         logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_editinputLower)
@@ -5651,25 +5661,25 @@ while True:
                     try:
                         with open('storage//config.ini', 'w') as configfile:
                             config.write(configfile)
-                        print("Changes saved!")
+                        print(Fore.YELLOW + Style.BRIGHT +"Changes saved!")
                         continue
                     except:
-                        print(Fore.RED + "An issue occurred when trying to write new options to your config file.",
-                              "Please note that no changes were made to your config file.", sep="\n")
+                        print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
+                              Fore.RED + Style.BRIGHT + "Please note that no changes were made to your config file.", sep="\n")
                         continue
                 if favloc_editinputLower.find("favoritelocation:") == 0 or favloc_editinputLower.find(
                         "favloc:") == 0:
                     logger.debug("Invalid query detected - favorite location")
-                    print(Fore.RED + "", "Whoops! You can't use a favorite location query as a favorite location.",
-                          "Makes sense, right? Returning to main menu.", sep="\n")
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! You can't use a favorite location query as a favorite location.",
+                          Fore.RED + Style.BRIGHT + "Makes sense, right? Returning to main menu.", sep="\n")
                     continue
                 if favloc_editinputLower.find("currentlocation") == 0 or favloc_editinputLower.find(
                         "curloc") == 0:
                     logger.debug("Invalid query detected - current location")
-                    print(Fore.RED + "", "Whoops! You can't use a current location query as a favorite location.",
-                          "If you'd like to use your current location at boot, make sure that the",
-                          "current location feature is enabled (FIRSTINPUT/geoipservice_enabled should be True).",
-                          "Returning to main menu.", sep="\n")
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! You can't use a current location query as a favorite location.",
+                          Fore.RED + Style.BRIGHT + "If you'd like to use your current location at boot, make sure that the",
+                          Fore.RED + Style.BRIGHT + "current location feature is enabled (FIRSTINPUT/geoipservice_enabled should be True).",
+                          Fore.RED + Style.BRIGHT + "Returning to main menu.", sep="\n")
                     continue
 
                 # Commit to the config, if anything isn't catched. A favorite location is committed to based on what
@@ -5694,15 +5704,15 @@ while True:
                 try:
                     with open('storage//config.ini', 'w') as configfile:
                         config.write(configfile)
-                    print("Changes saved!")
+                    print(Fore.YELLOW + Style.BRIGHT + "Changes saved!")
                     continue
                 except:
-                    print(Fore.RED + "An issue occurred when trying to write new options to your config file.",
-                          "Please note that no changes were made to your config file.", sep="\n")
+                    print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
+                          Fore.RED + Style.BRIGHT + "Please note that no changes were made to your config file.", sep="\n")
                     continue
             elif favconfig_menuinput == "4":
-                print(Fore.YELLOW + "Which favorite location would you like to remove? Enter a number 1-5 representing",
-                      "the favorite locations 1-5.", sep="\n")
+                print(Fore.YELLOW + Style.BRIGHT + "Which favorite location would you like to remove? Enter a number 1-5 representing",
+                      Fore.YELLOW + Style.BRIGHT + "the favorite locations 1-5.", sep="\n")
                 favloc_removeinputnum = input("Input here: ").lower()
                 logger.debug("favloc_removeinputnum: %s" % favloc_removeinputnum)
                 # Convert the input number to an integer, see if the user entered a number.
@@ -5711,14 +5721,14 @@ while True:
                 try:
                     favloc_removeinputnum = int(favloc_removeinputnum)
                 except ValueError:
-                    print(Fore.RED + "", "Whoops! Your input didn't seem to be a number. Returning to the",
-                          "main menu.", sep="\n")
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! Your input didn't seem to be a number. Returning to the",
+                          Fore.RED + Style.BRIGHT + "main menu.", sep="\n")
                     continue
 
                 # Validate the input number is between 1 and 5
                 if 1 < favloc_removeinputnum < 5:
-                    print(Fore.RED + "", "Whoops! You entered a favorite location to remove that was not between 1-5.",
-                          "Returning to the main menu.", sep="\n")
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! You entered a favorite location to remove that was not between 1-5.",
+                          Fore.RED + Style.BRIGHT + "Returning to the main menu.", sep="\n")
                     continue
 
                 # Validate that the location that a user is trying to remove isn't "None".
@@ -5736,8 +5746,8 @@ while True:
 
                 logger.debug("favloc_remove_isNone: %s" % favloc_remove_isNone)
                 if favloc_remove_isNone is True:
-                    print(Fore.RED + "", "Whoops! The favorite location you're trying to remove isn't set to anything.",
-                          "Returning to the main menu.", sep="\n")
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! The favorite location you're trying to remove isn't set to anything.",
+                          Fore.RED + Style.BRIGHT + "Returning to the main menu.", sep="\n")
                     continue
 
                 # Display variable for when we display what favorite location we're removing.
@@ -5753,20 +5763,23 @@ while True:
                     favloc_removedisplay = favoritelocation_5d
                 logger.debug("favloc_removedisplay: %s" % favloc_removedisplay)
 
-                print(Fore.YELLOW + "Are you sure you want to delete favorite location " + Fore.CYAN + str(favloc_removeinputnum) + Fore.YELLOW + "?",
-                      Fore.YELLOW + "This favorite location is presently set to: " + Fore.CYAN + favloc_removedisplay,
-                      Fore.YELLOW + "This action cannot be undone! Yes or No.", sep="\n")
+                print(Fore.YELLOW + Style.BRIGHT + "Are you sure you want to delete favorite location " + Fore.CYAN + Style.BRIGHT + str(favloc_removeinputnum)
+                      + Fore.YELLOW + Style.BRIGHT + "?",
+                      Fore.YELLOW + Style.BRIGHT + "This favorite location is presently set to: " + Fore.CYAN + Style.BRIGHT + favloc_removedisplay,
+                      Fore.YELLOW + Style.BRIGHT + "This action cannot be undone! Yes or No.", sep="\n")
                 favloc_removeconfirm = input("Input here: ").lower()
                 logger.debug("favloc_removeconfirm: %s" % favloc_removeconfirm)
                 if favloc_removeconfirm == "yes":
                     logger.debug("removing favorite location...")
                 elif favloc_removeconfirm == "no":
-                    print("", "Not deleting favorite location " + str(favloc_removeinputnum) + ".",
-                          "Returning to the main menu.", sep="\n")
+                    print("", Fore.YELLOW + Style.BRIGHT + "Not deleting favorite location " +
+                          Fore.CYAN + Style.BRIGHT + str(favloc_removeinputnum) + Fore.YELLOW + Style.BRIGHT + ".",
+                          Fore.CYAN + Style.BRIGHT + "Returning to the main menu.", sep="\n")
                     continue
                 else:
-                    print(Fore.RED + "", "Couldn't understand your input, and not deleting favorite location " + str(favloc_removeinputnum) + ".",
-                          "Returning to the main menu.", sep="\n")
+                    print("", Fore.YELLOW + Style.BRIGHT + "Couldn't understand your input, and not deleting favorite location "
+                          + Fore.CYAN + Style.BRIGHT + str(favloc_removeinputnum) + Fore.CYAN + Style.BRIGHT + ".",
+                          Fore.YELLOW + Style.BRIGHT + "Returning to the main menu.", sep="\n")
 
                 # Delete certain favorite locations based on what favorite location we're trying to delete.
 
@@ -5789,11 +5802,11 @@ while True:
                 try:
                     with open('storage//config.ini', 'w') as configfile:
                         config.write(configfile)
-                    print("Changes saved!")
+                    print(Fore.YELLOW + Style.BRIGHT + "Changes saved!")
                     continue
                 except:
-                    print(Fore.RED + "An issue occurred when trying to write new options to your config file.",
-                          "Please note that no changes were made to your config file.", sep="\n")
+                    print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
+                          Fore.RED + Style.BRIGHT + "Please note that no changes were made to your config file.", sep="\n")
                     continue
 
             elif favconfig_menuinput == "5":
@@ -5801,18 +5814,18 @@ while True:
 
 #<--- Hurricane is above | About is below --->
     elif moreoptions == "14":
-        print("", Fore.YELLOW + "-=-=- " + Fore.CYAN + "PyWeather" + Fore.YELLOW + " -=-=-",
-              Fore.CYAN + "version " + about_version, "",
-              Fore.YELLOW + "Build Number: " + Fore.CYAN + about_buildnumber,
-              Fore.YELLOW + "Release Date: " + Fore.CYAN + about_releasedate,
-              Fore.YELLOW + "Release Type: " + Fore.CYAN + about_releasetype,
+        print("", Fore.YELLOW + Style.BRIGHT + "-=-=- " + Fore.CYAN + Style.BRIGHT + "PyWeather" + Fore.YELLOW + Style.BRIGHT + " -=-=-",
+              Fore.CYAN + Style.BRIGHT + "version " + about_version, "",
+              Fore.YELLOW + Style.BRIGHT + "Build Number: " + Fore.CYAN + Style.BRIGHT + about_buildnumber,
+              Fore.YELLOW + Style.BRIGHT + "Release Date: " + Fore.CYAN + Style.BRIGHT + about_releasedate,
+              Fore.YELLOW + Style.BRIGHT + "Release Type: " + Fore.CYAN + Style.BRIGHT + about_releasetype,
               "",
-              Fore.YELLOW + "Created, and mostly coded by: " + Fore.CYAN + about_maindevelopers,
-              Fore.YELLOW + "Awesome contributors: " + Fore.CYAN + about_awesomecontributors,
-              Fore.YELLOW + "Contributors: " + Fore.CYAN + about_contributors,
-              Fore.YELLOW + "A special thanks to the developers of these libraries",
-              "that are used in PyWeather: " + Fore.CYAN,
-              about_librariesinuse + Fore.RESET, sep="\n")
+              Fore.YELLOW + Style.BRIGHT + "Created, and mostly coded by: " + Style.BRIGHT + Fore.CYAN + about_maindevelopers,
+              Fore.YELLOW + Style.BRIGHT + "Awesome contributors: " + Fore.CYAN + Style.BRIGHT + about_awesomecontributors,
+              Fore.YELLOW + Style.BRIGHT + "Contributors: " + Fore.CYAN + Style.BRIGHT + about_contributors,
+              Fore.YELLOW + Style.BRIGHT + "A special thanks to the developers of these libraries",
+              "that are used in PyWeather: ",
+              Fore.CYAN + Fore.BRIGHT + about_librariesinuse + Fore.RESET, sep="\n")
 #<--- About is above, jokes are below --->
     elif moreoptions == "tell me a joke":
         logger.debug("moreoptions: %s" % moreoptions)
@@ -5822,45 +5835,85 @@ while True:
         logger.debug("jokenum: %s" % jokenum)
         print("")
         if jokenum == 0:
-            print("How do hurricanes see?",
-                  "With one eye!", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "How do hurricanes see?",
+                  Fore.YELLOW + Style.BRIGHT + "With one eye!", sep="\n")
         elif jokenum == 1:
-            print("What does a cloud wear under his raincoat?",
-                  "Thunderwear!", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What does a cloud wear under his raincoat?",
+                  Fore.YELLOW + Style.BRIGHT + "Thunderwear!", sep="\n")
         elif jokenum == 2:
-            print("What type of lightning likes to play sports?",
-                  "Ball lightning!", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What type of lightning likes to play sports?",
+                  Fore.YELLOW + Style.BRIGHT + "Ball lightning!", sep="\n")
         elif jokenum == 3:
-            print("What type of cloud is so lazy, because it will never get up?",
-                  "Fog!", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What type of cloud is so lazy, because it will never get up?",
+                  Fore.YELLOW + Style.BRIGHT + "Fog!", sep="\n")
         elif jokenum == 4:
-            print("What did the lightning bolt say to the other lightning bolt?",
-                  "You're shocking!", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What did the lightning bolt say to the other lightning bolt?",
+                  Fore.YELLOW + Style.BRIGHT + "You're shocking!", sep="\n")
         elif jokenum == 5:
-            print("Whatever happened to the cow that was lifted into the tornado?",
-                  "Udder disaster!", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "Whatever happened to the cow that was lifted into the tornado?",
+                  Fore.YELLOW + Style.BRIGHT + "Udder disaster!", sep="\n")
         elif jokenum == 6:
-            print("What did the one tornado say to the other?",
-                  "Let's twist again like we did last summer.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What did the one tornado say to the other?",
+                  Fore.YELLOW + Style.BRIGHT + "Let's twist again like we did last summer.", sep="\n")
         elif jokenum == 7:
-            print("What did the thermometer say to the other thermometer?",
-                  "You make my temperature rise.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What did the thermometer say to the other thermometer?",
+                  Fore.YELLOW + Style.BRIGHT + "You make my temperature rise.", sep="\n")
         elif jokenum == 8:
-            print("What's the difference between a horse and the weather?",
-                  "One is reined up and the other rains down.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What's the difference between a horse and the weather?",
+                  Fore.YELLOW + Style.BRIGHT + "One is reined up and the other rains down.", sep="\n")
         elif jokenum == 9:
-            print("What did the one raindrop say to the other raindrop?",
-                  "My plop is bigger than your plop.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What did the one raindrop say to the other raindrop?",
+                  Fore.YELLOW + Style.BRIGHT + "My plop is bigger than your plop.", sep="\n")
         elif jokenum == 10:
-            print("Why did the woman go outdoors with her purse open?",
-                  "Because she expected some change in the weather.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "Why did the woman go outdoors with her purse open?",
+                  Fore.YELLOW + Style.BRIGHT + "Because she expected some change in the weather.", sep="\n")
         elif jokenum == 11:
-            print("What's the different between weather and climate?",
-                  "You can't weather a tree, but you can climate.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What's the different between weather and climate?",
+                  Fore.YELLOW + Style.BRIGHT + "You can't weather a tree, but you can climate.", sep="\n")
         elif jokenum == 12:
-            print("What did the hurricane say to the other hurricane?",
-                  "I have my eye on you.", sep="\n")
-# <--- Jokes are above | Yesterday is below --->
+            print(Fore.YELLOW + Style.BRIGHT + "What did the hurricane say to the other hurricane?",
+                  Fore.YELLOW + Style.BRIGHT + "I have my eye on you.", sep="\n")
+# <--- Jokes are above | Programmer dad jokes is below --->
+    elif moreoptions == "tell me a programmer dad joke":
+        logger.debug("moreoptions: %s" % moreoptions)
+        dadjokenum = randint(0, 12)
+        logger.debug("dadjokenum: %s" % dadjokenum)
+        # Jokes from /r/programmerdadjokes top 12 posts
+        # Top list fetched in late October 2017
+        print("")
+        if dadjokenum == 0:
+            print('["hip", "hip"]',
+                 'hip hip array!', sep="\n")
+        elif dadjokenum == 1:
+            print("How did pirates collaborate before computers?",
+                  "Pier to pier networking", sep="\n")
+        elif dadjokenum == 2:
+            print("As a programmer, sometimes I feel a void",
+                  "And I know I've reached the point of no return", sep="\n")
+        elif dadjokenum == 3:
+            print("Why are 'i' and 'j' a good source of information?",
+                  "They're always in the loop", sep="\n")
+        elif dadjokenum == 4:
+            print("Two SQL developers walk into a bar & then walk straight out...",
+                  "Because there were no tables they could join", sep="\n")
+        elif dadjokenum == 5:
+            print("I'm starting a band called HTML Encoder",
+                  "Looking to buy a guitar &amp;", sep="\n")
+        elif dadjokenum == 6:
+            print("Why did the functions stop calling each other?",
+                  "Because they had constant arguments.", sep="\n")
+        elif dadjokenum == 7:
+            print("Why don't bachelors like Git?",
+                  "Because they are afraid to commit.", sep="\n")
+        elif dadjokenum == 8:
+            print("What do you call a skinny ghost?",
+                  "BOOLEAN.", sep="\n")
+        elif dadjokenum == 9:
+            print("You should be careful with functions that don't return a value.",
+                  "In fact, I would just a void them.", sep="\n")
+        elif dadjokenum == 10:
+            print("Kernel programming is like buying from IKEA.",
+                  "Some assembly required.", sep="\n")
     elif moreoptions == "9":
         print(Fore.RED + "Loading...")
         yesterday_loops = 0
