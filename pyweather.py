@@ -5874,7 +5874,7 @@ while True:
             print(Fore.YELLOW + Style.BRIGHT + "What did the hurricane say to the other hurricane?",
                   Fore.YELLOW + Style.BRIGHT + "I have my eye on you.", sep="\n")
 # <--- Jokes are above | Programmer dad jokes is below --->
-    elif moreoptions == "tell me a programmer dad joke":
+    elif moreoptions == "tell me a dad joke":
         logger.debug("moreoptions: %s" % moreoptions)
         dadjokenum = randint(0, 12)
         logger.debug("dadjokenum: %s" % dadjokenum)
@@ -5882,38 +5882,46 @@ while True:
         # Top list fetched in late October 2017
         print("")
         if dadjokenum == 0:
-            print('["hip", "hip"]',
-                 'hip hip array!', sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + '["hip", "hip"]',
+                  Fore.YELLOW + Style.BRIGHT + 'hip hip array!', sep="\n")
         elif dadjokenum == 1:
-            print("How did pirates collaborate before computers?",
-                  "Pier to pier networking", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "How did pirates collaborate before computers?",
+                  Fore.YELLOW + Style.BRIGHT + "Pier to pier networking", sep="\n")
         elif dadjokenum == 2:
-            print("As a programmer, sometimes I feel a void",
-                  "And I know I've reached the point of no return", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "As a programmer, sometimes I feel a void",
+                  Fore.YELLOW + Style.BRIGHT + "And I know I've reached the point of no return", sep="\n")
         elif dadjokenum == 3:
-            print("Why are 'i' and 'j' a good source of information?",
-                  "They're always in the loop", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "Why are 'i' and 'j' a good source of information?",
+                  Fore.YELLOW + Style.BRIGHT + "They're always in the loop", sep="\n")
         elif dadjokenum == 4:
-            print("Two SQL developers walk into a bar & then walk straight out...",
-                  "Because there were no tables they could join", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "Two SQL developers walk into a bar & then walk straight out...",
+                  Fore.YELLOW + Style.BRIGHT + "Because there were no tables they could join", sep="\n")
         elif dadjokenum == 5:
-            print("I'm starting a band called HTML Encoder",
-                  "Looking to buy a guitar &amp;", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "I'm starting a band called HTML Encoder",
+                  Fore.YELLOW + Style.BRIGHT + "Looking to buy a guitar &amp;", sep="\n")
         elif dadjokenum == 6:
-            print("Why did the functions stop calling each other?",
-                  "Because they had constant arguments.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "Why did the functions stop calling each other?",
+                  Fore.YELLOW + Style.BRIGHT + "Because they had constant arguments.", sep="\n")
         elif dadjokenum == 7:
-            print("Why don't bachelors like Git?",
-                  "Because they are afraid to commit.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "Why don't bachelors like Git?",
+                  Fore.YELLOW + Style.BRIGHT + "Because they are afraid to commit.", sep="\n")
         elif dadjokenum == 8:
-            print("What do you call a skinny ghost?",
-                  "BOOLEAN.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What do you call a skinny ghost?",
+                  Fore.YELLOW + Style.BRIGHT + "BOOLEAN.", sep="\n")
         elif dadjokenum == 9:
-            print("You should be careful with functions that don't return a value.",
-                  "In fact, I would just a void them.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "You should be careful with functions that don't return a value.",
+                  Fore.YELLOW + Style.BRIGHT + "In fact, I would just a void them.", sep="\n")
         elif dadjokenum == 10:
-            print("Kernel programming is like buying from IKEA.",
-                  "Some assembly required.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "Kernel programming is like buying from IKEA.",
+                  Fore.YELLOW + Style.BRIGHT + "Some assembly required.", sep="\n")
+        elif dadjokenum == 11:
+            print(Fore.YELLOW + Style.BRIGHT + "A man is sent to town by his wife to get bread",
+                  Fore.YELLOW + Style.BRIGHT + "She says, 'oh and while you're there, get some eggs.'",
+                  Fore.YELLOW + Style.BRIGHT + "He never came back.", sep="\n")
+        elif dadjokenum == 12:
+            print(Fore.YELLOW + Style.BRIGHT + "Why is gorillas' vision useful to programmers?",
+                  Fore.YELLOW + Style.BRIGHT + "They have an apey eye.", sep="\n")
+# <--- Programmer dad jokes is above | Yesterday's weather is below --->
     elif moreoptions == "9":
         print(Fore.RED + "Loading...")
         yesterday_loops = 0
