@@ -4774,32 +4774,32 @@ while True:
             logger.debug("stormpressuredataavail: %s" % stormpressuredataavail)
             print(Fore.YELLOW + Style.BRIGHT + stormname + ":")
             print(Fore.YELLOW + Style.BRIGHT + "Last updated: " + Fore.CYAN + Style.BRIGHT + stormtime)
-            print(Fore.YELLOW + "Storm Type: " + Fore.CYAN + stormtype)
-            print(Fore.YELLOW + "Wind speed: " + Fore.CYAN + stormwindspeedmph + " mph ("
+            print(Fore.YELLOW + Style.BRIGHT + "Storm Type: " + Fore.CYAN + Style.BRIGHT + stormtype)
+            print(Fore.YELLOW + Style.BRIGHT + "Wind speed: " + Fore.CYAN + Style.BRIGHT + stormwindspeedmph + " mph ("
                   + stormwindspeedkph + " kph, " + stormwindspeedkts + " kts)")
-            print(Fore.YELLOW + "Wind Gust: " + Fore.CYAN + stormgustspeedmph + " mph ("
+            print(Fore.YELLOW + Style.BRIGHT + "Wind Gust: " + Fore.CYAN + Style.BRIGHT + stormgustspeedmph + " mph ("
                   + stormgustspeedkph + " kph, " + stormgustspeedkts + " kts)")
-            print(Fore.YELLOW + "Storm Movement: " + Fore.CYAN + "Moving to the " +
+            print(Fore.YELLOW + Style.BRIGHT + "Storm Movement: " + Fore.CYAN + Style.BRIGHT + "Moving to the " +
                   stormdirection + " (" + stormdirectiondegrees + "°) at " + stormdirectionmph + " mph ("
                   + stormdirectionkph + " kph, " + stormdirectionkts + " kts)")
             if stormpressuredataavail == True:
-                print(Fore.YELLOW + "Pressure: " + Fore.CYAN + stormpressuremb + " mb ("
+                print(Fore.YELLOW + Style.BRIGHT + "Pressure: " + Fore.CYAN + Style.BRIGHT + stormpressuremb + " mb ("
                       + stormpressureinches + " inHg)")
-            print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
+            print(Fore.YELLOW + Style.BRIGHT + "Location: " + Fore.CYAN + Style.BRIGHT + stormlat + ", " + stormlon)
             if hurricanenearestcity_enabled is True:
                 if nearest_error is True and nearest_data is False:
-                    print(Fore.RED + "Nearest city error: " + Fore.CYAN + nearest_errortext)
+                    print(Fore.RED + Style.BRIGHT + "Nearest city error: " + Fore.CYAN + Style.BRIGHT + nearest_errortext)
                 elif nearest_data is False:
-                    print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
+                    print(Fore.YELLOW + Style.BRIGHT + "No data is available for this tropical storm's nearest city.")
                 elif nearest_data is True and nearest_cityavailable is False:
-                    print(Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from a city.")
+                    print(Fore.YELLOW + Style.BRIGHT + "This tropical system is further than 300 km (186.411 mi) from a city.")
                 elif nearest_data is True and nearest_cityavailable is True:
-                    print(Fore.YELLOW + "Nearest city: " + Fore.CYAN + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
+                    print(Fore.YELLOW + Style.BRIGHT + "Nearest city: " + Fore.CYAN + Style.BRIGHT + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
                           + " away from " + nearest_city + ".")
             currentstormiterations += 1
             logger.debug("currentstormiterations: %s" % currentstormiterations)
             if user_showCompletedIterations is True:
-                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
+                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s" %
                       (currentstormiterations, activestorms))
                 print(Fore.RESET)
 
@@ -4807,9 +4807,9 @@ while True:
             if activestorms > 1 and currentstormiterations != activestorms:
                 logger.info("activestorms > 1 and currentstormiterations != activestorms.")
                 print("")
-                print(Fore.RED + "Press enter to view forecast data for " + stormname + ".",
-                      "Enter 'nextstorm' to view data for the next storm. Press Control + C to exit",
-                      "to the main menu.", sep="\n")
+                print(Fore.RED + Style.BRIGHT + "Press enter to view forecast data for " + stormname + ".",
+                      Fore.RED + Style.BRIGHT + "Enter 'nextstorm' to view data for the next storm. Press Control + C to exit",
+                      Fore.RED + Style.BRIGHT + "to the main menu.", sep="\n")
                 try:
                     selection = input("Input here: ").lower()
                     print("")
@@ -4821,13 +4821,13 @@ while True:
                     continue
                 else:
                     if selection != "":
-                        print("Couldn't understand your input. Listing forecast data...")
+                        print(Fore.RED + Style.BRIGHT + "Couldn't understand your input. Listing forecast data...")
                         selection = ""
             elif activestorms == 1 or currentstormiterations == activestorms:
                 logger.info("activestorms is 1 or currentstormiterations is activestorms.")
                 print("")
-                print(Fore.RED + "Press enter to view forecast data for " + stormname + ".",
-                      "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep="\n")
+                print(Fore.RED + Style.BRIGHT + "Press enter to view forecast data for " + stormname + ".",
+                      Fore.RED + Style.BRIGHT + "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep="\n")
                 try:
                     selection = input("Input here: ").lower()
                     print("")
@@ -4840,7 +4840,7 @@ while True:
                     break
                 else:
                     if selection != "":
-                        print("Couldn't understand your input. Listing forecast data...")
+                        print(Fore.RED + Style.BRIGHT + "Couldn't understand your input. Listing forecast data...")
                         selection = ""
 
             # <--- Where the forecast is looped into --->
@@ -4856,7 +4856,7 @@ while True:
                 elif hurricanetotaliterations >= 6:
                     hurricane_hasExtDataInForecast = True
 
-                print(Fore.YELLOW + "Here's the forecast for " + stormname + ".")
+                print(Fore.YELLOW + Style.BRIGHT + "Here's the forecast for " + stormname + ".")
                 for forecast in data['forecast']:
                     print("")
                     hurricaneforecasttime = forecast['ForecastHour']
@@ -5025,29 +5025,29 @@ while True:
                     else:
                         logger.debug("closest city is disabled.")
 
-                    print(Fore.YELLOW + hurricaneforecasttime_detail + " (" + hurricaneforecasttime + ")")
-                    print(Fore.YELLOW + "Storm Type: " + Fore.CYAN + hurricaneforecast_type)
-                    print(Fore.YELLOW + "Wind Speed: " + Fore.CYAN + hurricaneforecast_windmph + " mph (" + hurricaneforecast_windkph + " kph, "
+                    print(Fore.YELLOW + Style.BRIGHT + hurricaneforecasttime_detail + " (" + hurricaneforecasttime + ")")
+                    print(Fore.YELLOW + Style.BRIGHT + "Storm Type: " + Fore.CYAN + Style.BRIGHT + hurricaneforecast_type)
+                    print(Fore.YELLOW + Style.BRIGHT + "Wind Speed: " + Fore.CYAN + Style.BRIGHT + hurricaneforecast_windmph + " mph (" + hurricaneforecast_windkph + " kph, "
                           + hurricaneforecast_windkts + " kts)")
-                    print(Fore.YELLOW + "Wind Gusts: " + Fore.CYAN + hurricaneforecast_gustmph + " mph (" + hurricaneforecast_gustkph + " kph, "
+                    print(Fore.YELLOW + Style.BRIGHT + "Wind Gusts: " + Fore.CYAN + Style.BRIGHT + hurricaneforecast_gustmph + " mph (" + hurricaneforecast_gustkph + " kph, "
                           + hurricaneforecast_gustkts + " kts)")
-                    print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneforecast_lat + ", " + hurricaneforecast_lon)
+                    print(Fore.YELLOW + Style.BRIGHT + "Location: " + Fore.CYAN + Style.BRIGHT + hurricaneforecast_lat + ", " + hurricaneforecast_lon)
                     if hurricanenearestcity_fenabled is True:
                         if nearest_error is True and nearest_data is False:
-                            print(Fore.RED + "Nearest city error: " + Fore.CYAN + nearest_errortext)
+                            print(Fore.RED + Style.BRIGHT + "Nearest city error: " + Fore.CYAN + Style.BRIGHT + nearest_errortext)
                         elif nearest_data is False:
-                            print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
+                            print(Fore.YELLOW + Style.BRIGHT + "No data is available for this tropical storm's nearest city.")
                         elif nearest_data is True and nearest_cityavailable is False:
                             print(
-                                Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from a city.")
+                                Fore.YELLOW + Style.BRIGHT + "This tropical system is further than 300 km (186.411 mi) from a city.")
                         elif nearest_data is True and nearest_cityavailable is True:
                             print(
-                                Fore.YELLOW + "Nearest city: " + Fore.CYAN + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
+                                Fore.YELLOW + Style.BRIGHT + "Nearest city: " + Fore.CYAN + Style.BRIGHT + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
                                 + " away from " + nearest_city + ".")
                     hurricanecurrentiterations += 1
                     logger.debug("hurricanecurrentiterations: %s" % hurricanecurrentiterations)
                     if user_showCompletedIterations is True:
-                        print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
+                        print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s" %
                               (hurricanecurrentiterations, hurricanetotaliterations))
 
                     # <--- Forecast data ends, loop into extended forecast data --->
@@ -5060,9 +5060,9 @@ while True:
                         if hurricane_hasExtDataInForecast == False:
                             logger.debug("hurricane_hasExtDataInForecast = False")
                             print("")
-                            print(Fore.RED + "Press enter to view the extended forecast for " + stormname + ".",
-                                  "Enter 'nextstorm' to view details about the next storm.",
-                                  "Otherwise, press Control + C twice to exit to the main menu.", sep="\n")
+                            print(Fore.RED + Style.BRIGHT + "Press enter to view the extended forecast for " + stormname + ".",
+                                  Fore.RED + Style.BRIGHT + "Enter 'nextstorm' to view details about the next storm.",
+                                  Fore.RED + Style.BRIGHT + "Otherwise, press Control + C twice to exit to the main menu.", sep="\n")
 
                             try:
                                 forecastselection = input("Input here: ").lower()
@@ -5077,13 +5077,13 @@ while True:
                                 continue
                             else:
                                 if forecastselection != "":
-                                    print(Fore.RED + "Your input couldn't be understood. Listing extended forecast data.")
+                                    print(Fore.RED + Style.BRIGHT + "Your input couldn't be understood. Listing extended forecast data.")
                                     forecastselection = ""
                         elif hurricane_hasExtDataInForecast == True:
                             logger.debug("hurricane_hasExtDataInForecast - True")
                             print("")
-                            print(Fore.RED + "Press enter to view data for the next storm.",
-                                  "Otherwise, press Control + C to exit to the main menu.", sep="\n")
+                            print(Fore.RED + Style.BRIGHT + "Press enter to view data for the next storm.",
+                                  Fore.RED + Style.BRIGHT + "Otherwise, press Control + C to exit to the main menu.", sep="\n")
 
                             try:
                                 forecastselection = input("Input here: ").lower()
@@ -5095,7 +5095,7 @@ while True:
                                 break
 
                             if forecastselection != "":
-                                print("Your input could not be understood. Listing data for the next storm...")
+                                print(Fore.RED + Style.BRIGHT + "Your input could not be understood. Listing data for the next storm...")
                             continue
 
                     # This says if activestorms are just one, or if we're on the last storm, and we've gone through all loops, and 4/5 day
@@ -5105,8 +5105,8 @@ while True:
                         print("")
                         if hurricane_hasExtDataInForecast == False:
                             logger.debug("hurricane_hasExtDataInForecast is False")
-                            print(Fore.RED + "Press enter to see extended forecast for " + stormname + ".",
-                            "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
+                            print(Fore.RED + Style.BRIGHT + "Press enter to see extended forecast for " + stormname + ".",
+                            Fore.RED + Style.BRIGHT + "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
                             try:
                                 forecastselection = input("Input here: ").lower()
                                 logger.debug("forecastselection: %s" % forecastselection)
@@ -5116,7 +5116,7 @@ while True:
                                 break
 
                             if forecastselection != "":
-                                print(Fore.RED + "Your input could not be understood. Listing extended forecast data.")
+                                print(Fore.RED + Style.BRIGHT + "Your input could not be understood. Listing extended forecast data.")
 
                         elif hurricane_hasExtDataInForecast == True:
                             logger.debug("hurricane_hasExtDataInForecast is True.")
@@ -5135,8 +5135,8 @@ while True:
                         for extforecast in data['ExtendedForecast']:
                             extendedforecastloops += 1
                         if extendedforecastloops == 0:
-                            print(Fore.RED + "Extended forecast data is not available for " + stormname + ".",
-                                  "Press enter to view data for the next storm. Press Control + C to exit to the main menu.", sep="\n")
+                            print(Fore.RED + Style.BRIGHT + "Extended forecast data is not available for " + stormname + ".",
+                                  Fore.RED + Style.BRIGHT + "Press enter to view data for the next storm. Press Control + C to exit to the main menu.", sep="\n")
                             try:
                                 extnodata = input("Input here: ").lower()
                                 print("")
@@ -5147,8 +5147,8 @@ while True:
                                 break
                         # If we're on the last storm, and there isn't an extended forecast, press enter to exit.
                         elif extendedforecastloops == 0 and currentstormiterations == activestorms:
-                            print(Fore.RED + "Extended forecast data is not available for " + stormname + ".",
-                                  "Since this is the last storm, press enter to exit.", sep='\n')
+                            print(Fore.RED + Style.BRIGHT + "Extended forecast data is not available for " + stormname + ".",
+                                  Fore.RED + Style.BRIGHT + "Since this is the last storm, press enter to exit.", sep='\n')
                             input()
                             break
 
@@ -5305,31 +5305,31 @@ while True:
                             else:
                                 logger.debug("closest city is disabled.")
 
-                            print(Fore.YELLOW + hurricaneextforecasttime_detail + " (" + hurricaneextforecasttime + ")")
-                            print(Fore.YELLOW + "Storm Type: " + Fore.CYAN + hurricaneextforecast_type)
+                            print(Fore.YELLOW + Style.BRIGHT + hurricaneextforecasttime_detail + " (" + hurricaneextforecasttime + ")")
+                            print(Fore.YELLOW + Style.BRIGHT + "Storm Type: " + Fore.CYAN + Style.BRIGHT + hurricaneextforecast_type)
                             print(
-                                Fore.YELLOW + "Wind Speed: " + Fore.CYAN + hurricaneextforecast_windmph + " mph (" + hurricaneextforecast_windkph + " kph, "
+                                Fore.YELLOW + Style.BRIGHT + "Wind Speed: " + Fore.CYAN + Style.BRIGHT + hurricaneextforecast_windmph + " mph (" + hurricaneextforecast_windkph + " kph, "
                                 + hurricaneextforecast_windkts + " kts)")
                             print(
-                                Fore.YELLOW + "Wind Gusts: " + Fore.CYAN + hurricaneextforecast_gustmph + " mph (" + hurricaneextforecast_gustkph + " kph, "
+                                Fore.YELLOW + Style.BRIGHT + "Wind Gusts: " + Fore.CYAN + Style.BRIGHT + hurricaneextforecast_gustmph + " mph (" + hurricaneextforecast_gustkph + " kph, "
                                 + hurricaneextforecast_gustkts + " kts)")
-                            print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneextforecast_lat + ", " + hurricaneextforecast_lon)
+                            print(Fore.YELLOW + Style.BRIGHT + "Location: " + Fore.CYAN + Style.BRIGHT + hurricaneextforecast_lat + ", " + hurricaneextforecast_lon)
                             if hurricanenearestcity_fenabled is True:
                                 if nearest_error is True and nearest_data is False:
-                                    print(Fore.RED + "Nearest city error: " + Fore.CYAN + nearest_errortext)
+                                    print(Fore.RED + Style.BRIGHT + "Nearest city error: " + Fore.CYAN + Style.BRIGHT + nearest_errortext)
                                 elif nearest_data is False:
-                                    print(Fore.YELLOW + "No data is available for this tropical storm's nearest city.")
+                                    print(Fore.YELLOW + Style.BRIGHT + "No data is available for this tropical storm's nearest city.")
                                 elif nearest_data is True and nearest_cityavailable is False:
                                     print(
-                                        Fore.YELLOW + "This tropical system is further than 300 km (186.411 mi) from a city.")
+                                        Fore.YELLOW + Style.BRIGHT + "This tropical system is further than 300 km (186.411 mi) from a city.")
                                 elif nearest_data is True and nearest_cityavailable is True:
                                     print(
-                                        Fore.YELLOW + "Nearest city: " + Fore.CYAN + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
+                                        Fore.YELLOW + Style.BRIGHT + "Nearest city: " + Fore.CYAN + Style.BRIGHT + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
                                         + " away from " + nearest_city + ".")
                             extendedcurrentloops += 1
                             logger.debug("extendedcurrentloops: %s" % extendedcurrentloops)
                             if user_showCompletedIterations == True:
-                                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
+                                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s" %
                                       (extendedcurrentloops, extendedforecastloops))
 
                             if extendedcurrentloops == extendedforecastloops:
@@ -5337,8 +5337,8 @@ while True:
                                 print("")
                                 if currentstormiterations != activestorms:
                                     logger.debug("currentstormiterations != activestorms")
-                                    print(Fore.RED + "Press enter to view data for the next storm.",
-                                          "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
+                                    print(Fore.RED + Style.BRIGHT + "Press enter to view data for the next storm.",
+                                          Fore.RED + Style.BRIGHT + "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
 
                                     try:
                                         extforecastinput = input("Input here: ").lower()
@@ -5352,7 +5352,7 @@ while True:
                                         break
                                     else:
                                         if extforecastinput != "":
-                                            print(Fore.RED + "Your input could not be understood. Viewing data for the next storm...")
+                                            print(Fore.RED + Style.BRIGHT + "Your input could not be understood. Viewing data for the next storm...")
                                         print("")
                                         continue
                                 elif currentstormiterations == activestorms:
@@ -5362,8 +5362,8 @@ while True:
                             continue
     elif moreoptions == "20":
         if favoritelocation_enabled is False:
-            print(Fore.RED + "", "To manage favorite locations, you'll need to enable the favorite locations feature.",
-                  "Would you like me to enable favorite locations for you?", sep="\n")
+            print("", Fore.RED + Style.BRIGHT + "To manage favorite locations, you'll need to enable the favorite locations feature.",
+                  Fore.RED + Style.BRIGHT + "Would you like me to enable favorite locations for you?", sep="\n")
             enablefavoritelocations = input("Input here: ").lower()
             logger.debug("enablefavoritelocations: %s" % enablefavoritelocations)
             if enablefavoritelocations == "yes":
@@ -5371,12 +5371,12 @@ while True:
             try:
                 with open('storage//config.ini', 'w') as configfile:
                     config.write(configfile)
-                print("Favorite locations is now enabled, and will be operational when you next boot up PyWeather.")
+                print(Fore.YELLOW + Style.BRIGHT + "Favorite locations is now enabled, and will be operational when you next boot up PyWeather.")
                 continue
             except:
-                print("An issue occurred when trying to save new configuration options.",
-                      "Please enable favorite locations in the config file. In the FAVORITE LOCATIONS",
-                      "section, change enabled to True.")
+                print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to save new configuration options.",
+                      Fore.RED + Style.BRIGHT + "Please enable favorite locations in the config file. In the FAVORITE LOCATIONS",
+                      Fore.RED + Style.BRIGHT + "section, change enabled to True.")
                 continue
 
         while True:
