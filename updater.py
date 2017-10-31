@@ -246,61 +246,62 @@ elif buildnumber < version_buildNumber:
     downloadLatest = input("Yes or No: ").lower()
     logger.debug("downloadLatest: %s" % downloadLatest)
     if downloadLatest == "yes":
-        if allowGitForUpdating == True:
-            print("Would you like to use Git to update PyWeather?",
-                  "Yes or No.")
-            confirmUpdateWithGit = input("Input here: ").lower()
-            if confirmUpdateWithGit == "yes":
-                print("Now updating with Git.")
-                try:
-                    # Doesn't hurt to stash twice.
-                    subprocess.call(["git fetch"], shell=True)
-                    subprocess.call(["git stash"], shell=True)
-                    subprocess.call(["git checkout %s" % version_latestReleaseTag],
-                                    shell=True)
-                    print("Now updating your config file.")
-                    exec(open("configupdate.py").read())
-                    print("PyWeather has been successfully updated. To finish updating,",
-                          "please press enter to exit PyWeather.", sep="\n")
-                    input()
-                    sys.exit()
-                except:
-                    print("When attempting to update using git, either",
-                          "when doing `git fetch`, `git checkout`, or to",
-                          "execute the configupdate script, an error occurred."
-                          "We can try updating using the .zip method.",
-                          "Would you like to update PyWeather using the .zip method?",
-                          "Yes or No.", sep="\n")
-                    printException()
-                    confirmZipDownload = input("Input here: ").lower()
-                    if confirmZipDownload == "yes":
-                        print("Downloading using the .zip method.")
-                    elif confirmZipDownload == "no":
-                        print("Not downloading latest updates using the",
-                              ".zip method.", 
-                              "Press enter to exit.", sep="\n")
-                        
-                    else:
-                        print("Couldn't understand your input. Defaulting",
-                              "to downloading using a .zip.", sep="\n")
-            elif confirmUpdateWithGit == "no":
-                print("Not updating with Git. Would you like to update",
-                      "PyWeather using the .zip download option?",
-                      "Yes or No.", sep="\n")
-                confirmZipDownload = input("Input here: ").lower()
-                if confirmZipDownload == "yes":
-                    print("Downloading the latest update with a .zip.")
-                elif confirmZipDownload == "no":
-                    print("Not downloading the latest PyWeather updates.",
-                          "Press enter to exit.", sep="\n")
-                    input()
-                    sys.exit()
-                else:
-                    print("Couldn't understand your input. Defaulting to",
-                          "downloading the latest version with a .zip.", sep="\n")
-            else:
-                print("Couldn't understand your input. Defaulting to",
-                      "downloading the latest version with a .zip.", sep="\n")        
+        # Remove the git updater - It's no longer needed at this time.
+        #if allowGitForUpdating == True:
+        #    print("Would you like to use Git to update PyWeather?",
+        #          "Yes or No.")
+        #    confirmUpdateWithGit = input("Input here: ").lower()
+        #    if confirmUpdateWithGit == "yes":
+        #        print("Now updating with Git.")
+        #        try:
+        #            # Doesn't hurt to stash twice.
+        #            subprocess.call(["git fetch"], shell=True)
+        #            subprocess.call(["git stash"], shell=True)
+        #            subprocess.call(["git checkout %s" % version_latestReleaseTag],
+        #                            shell=True)
+        #            print("Now updating your config file.")
+        #            exec(open("configupdate.py").read())
+        #            print("PyWeather has been successfully updated. To finish updating,",
+        #                  "please press enter to exit PyWeather.", sep="\n")
+        #            input()
+        #            sys.exit()
+        #        except:
+        #            print("When attempting to update using git, either",
+        #                  "when doing `git fetch`, `git checkout`, or to",
+        #                  "execute the configupdate script, an error occurred."
+        #                  "We can try updating using the .zip method.",
+        #                  "Would you like to update PyWeather using the .zip method?",
+        #                  "Yes or No.", sep="\n")
+        #            printException()
+        #            confirmZipDownload = input("Input here: ").lower()
+        #            if confirmZipDownload == "yes":
+        #                print("Downloading using the .zip method.")
+        #            elif confirmZipDownload == "no":
+        #                print("Not downloading latest updates using the",
+        #                      ".zip method.",
+        #                      "Press enter to exit.", sep="\n")
+        #
+        #            else:
+        #                print("Couldn't understand your input. Defaulting",
+        #                      "to downloading using a .zip.", sep="\n")
+        #    elif confirmUpdateWithGit == "no":
+        #        print("Not updating with Git. Would you like to update",
+        #              "PyWeather using the .zip download option?",
+        #              "Yes or No.", sep="\n")
+        #        confirmZipDownload = input("Input here: ").lower()
+        #        if confirmZipDownload == "yes":
+        #            print("Downloading the latest update with a .zip.")
+        #        elif confirmZipDownload == "no":
+        #            print("Not downloading the latest PyWeather updates.",
+        #                  "Press enter to exit.", sep="\n")
+        #            input()
+        #            sys.exit()
+        #        else:
+        #            print("Couldn't understand your input. Defaulting to",
+        #                  "downloading the latest version with a .zip.", sep="\n")
+        #    else:
+        #        print("Couldn't understand your input. Defaulting to",
+        #              "downloading the latest version with a .zip.", sep="\n")
         print("")
         logger.debug("Downloading latest version...")
         print(Fore.YELLOW + "Downloading the latest version of PyWeather...")

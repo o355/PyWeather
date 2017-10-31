@@ -151,7 +151,6 @@ def configprovision():
     config['UPDATER']['autocheckforupdates'] = 'False'
     config['UPDATER']['show_updaterreleasetag'] = 'False'
     config['KEYBACKUP']['savedirectory'] = 'backup//'
-    config['UPDATER']['allowGitForUpdating'] = 'False'
     config['PYWEATHER BOOT']['validateapikey'] = 'True'
     config['UPDATER']['showReleaseNotes'] = 'True'
     config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
@@ -1372,28 +1371,6 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(24/30)", "When you check for updates, and PyWeather notices",
-      "a new version is out, PyWeather can use Git to update",
-      "itself. Make sure you have Git installed if you enable this.",
-      "By default, this is disabled. Keep this disabled if you're unsure",
-      "you have Git installed.",
-      "Yes or No.", sep="\n")
-allowGitUpdating = input("Input here: ").lower()
-if allowGitUpdating == "yes":
-    config['UPDATER']['allowGitForUpdating'] = 'True'
-    print("Changes saved.")
-    logger.debug("Allowing updates with Git is ENABLED.")
-elif allowGitUpdating == "no":
-    config['UPDATER']['allowGitForUpdating'] = 'False'
-    print("Changes saved.")
-    logger.debug("Allowing updates with Git is DISABLED.")
-else:
-    print("Could not understand what you inputted.",
-          "Defaulting to 'False'.", sep="\n")
-    config['UPDATER']['allowGitForUpdating'] = 'False'
-    print("Changes saved.")
-    logger.debug("Could not understand input. Defaulting to DISABLED.")
-
 print("", "(25/30)", "When PyWeather boots, it can validate your API key. If PyWeather",
       "finds your primary API key is invalid, it'll attempt to validate your",
       "backup key, and load that if it's validated successfully.",
@@ -1715,7 +1692,7 @@ else:
     logger.debug("GEOCODER API/customkey_enabled is now FALSE.")
     print("Changes saved.")
     
-print("", "(30/30)", "PyWeather's geocoder usually uses https, but issues have been discovered",
+print("", "(30/39)", "PyWeather's geocoder usually uses https, but issues have been discovered",
       "on some platforms, where the geocoder cannot operate in the https mode. If you press enter",
       "PyWeather will automatically detect which scheme to use. If you are an advanced user, and want",
       "to configure the scheme yourself, enter advancedconfig at the prompt below.", sep="\n")

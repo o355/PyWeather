@@ -155,7 +155,6 @@ if cd_confirmation == "yes":
     config['UPDATER']['autocheckforupdates'] = 'False'
     config['UPDATER']['show_updaterreleasetag'] = 'False'
     config['KEYBACKUP']['savedirectory'] = 'backup//'
-    config['UPDATER']['allowGitForUpdating'] = 'False'
     config['PYWEATHER BOOT']['validateapikey'] = 'True'
     config['UPDATER']['showReleaseNotes'] = 'True'
     config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
