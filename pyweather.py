@@ -515,8 +515,7 @@ logger.debug("user_forecastLoopIterations: %s ; user_showUpdaterReleaseTag: %s"
              % (user_forecastLoopIterations, user_showUpdaterReleaseTag))
 logger.debug("user_backupKeyDirectory: %s ; validateAPIKey: %s"
              % (user_backupKeyDirectory, validateAPIKey))
-logger.debug("allowGitForUpdating: %s ; showAlertsOnSummary: %s"
-             % (allowGitForUpdating, showAlertsOnSummary))
+logger.debug("showAlertsOnSummary: %s" % showAlertsOnSummary)
 logger.debug("showUpdaterReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: %s"
              % (showUpdaterReleaseNotes_uptodate, showNewVersionReleaseDate))
 logger.debug("showUpdaterReleaseNotes: %s ; cache_enabled: %s" %
@@ -2279,6 +2278,7 @@ while True:
                 alerts_expiretime = data['expires']
                 logger.debug("alerts_issuedtime: %s ; alerts_expiretime: %s"
                              % (alerts_issuedtime, alerts_expiretime))
+                spinner.stop()
                 print(Fore.YELLOW + Style.BRIGHT + "-----")
                 print(Fore.RED + Style.BRIGHT + "Alert %s/%s:" %
                       (alerts_completediterations, alerts_totaliterations))
@@ -2324,6 +2324,7 @@ while True:
                              % (alerts_description, alerts_issuedtime))
                 alerts_expiretime = data['expires']
                 logger.debug("alerts_expiretime: %s" % alerts_expiretime)
+                spinner.stop()
                 print(Fore.RED + Style.BRIGHT + "Alert %s/%s:" %
                       (alerts_completediterations, alerts_totaliterations))
                 print(Fore.YELLOW + Style.BRIGHT + "-----")
@@ -2347,6 +2348,8 @@ while True:
                         logger.debug("User issued KeyboardInterrupt. Breaking...")
                         break
         elif alerts_type == "None":
+            spinner.warn(text="No alert data is available!")
+            print("")
             print(Fore.RED + Style.BRIGHT + "No data available! Either there are no alerts",
                   Fore.RED + Style.BRIGHT + "at the location inputted, or Wunderground doesn't support alerts",
                   Fore.RED + Style.BRIGHT + "for the location inputted.",
@@ -2360,7 +2363,6 @@ while True:
 # <----- Alerts is above | 36-hour hourly is below ---->
     
     elif moreoptions == "2":
-        print("")
         logger.debug("refresh_hourly36flagged: %s ; hourly36 cache time: %s" %
                     (refresh_hourly36flagged, time.time() - cachetime_hourly36))
         logger.info("Selected view more hourly...")
@@ -2396,6 +2398,7 @@ while True:
         detailedHourlyIterations = 0
         totaldetailedHourlyIterations = 0
         spinner.stop()
+        print("")
         print(Fore.YELLOW + Style.BRIGHT + "Here's the detailed hourly forecast for: " + Fore.CYAN + Style.BRIGHT + str(location))
         for hour in hourly36_json['hourly_forecast']:
             logger.info("We're on iteration: %s" % detailedHourlyIterations)
