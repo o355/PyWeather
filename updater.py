@@ -74,30 +74,65 @@ except:
     input()
     sys.exit()
 
-
+configerrorcount = 0
 try:
     verbosity = config.getboolean('VERBOSITY', 'updater_verbosity')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "VERBOSITY/updater_verbosity failed to load. Defaulting to 'False'.", sep="\n")
+    configerrorcount += 1
+    verbosity = False
+try:
     jsonVerbosity = config.getboolean('VERBOSITY', 'updater_jsonverbosity')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "VERBOSITY/updater_jsonverbosity failed to load. Defaulting to 'False'.", sep="\n")
+    jsonVerbosity = False
+    configerrorcount += 1
+try:
     showReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "UPDATER/show_updaterReleaseTag failed to load. Defaulting to 'False'.", sep="\n")
+    showReleaseTag = False
+    configerrorcount += 1
+try:
     tracebacksEnabled = config.getboolean('TRACEBACK', 'updater_tracebacks')
-    allowGitForUpdating = config.getboolean('UPDATER', 'allowGitForUpdating')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "TRACEBACK/updater_tracebacks failed to load. Defaulting to 'False'.", sep="\n")
+    tracebacksEnabled = False
+    configerrorcount += 1
+
+try:
     showReleaseNotes = config.getboolean('UPDATER', 'showReleaseNotes')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "UPDATER/showReleaseNotes failed to load. Defaulting to 'True'.", sep="\n")
+    showReleaseNotes = True
+    configerrorcount += 1
+try:
     showReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "UPDATER/showReleaseNotes_uptodate failed to load. Defaulting to 'False'.", sep="\n")
+    showReleaseNotes_uptodate
+    configerrorcount += 1
+
+try:
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
 except:
-    print("Couldn't load your config file. Make sure there aren't any typos",
-          "in the config, and that the config file is accessible.",
-          "Setting config variables to their defaults.",
-          "Here's the full traceback, in case you need it.", sep="\n")
-    traceback.print_exc()
-    verbosity = False
-    jsonVerbosity = False
-    showReleaseTag = False
-    tracebacksEnabled = False
-    allowGitForUpdating = False
-    showReleaseNotes = True
-    showReleaseNotes_uptodate = False
-    showNewVersionReleaseDate = True
+    print("When attempting to load your configuration file, an error occurred.",
+          "UPDATER/showNewVersionReleaseDate failed to load. Defaulting to 'True'.")
+    showNewVersionReleaseDate
+    configerrorcount += 1
+
+if configerrorcount >= 1:
+    print("", "When trying to load your configuration file, error(s) occurred.",
+          "Try making sure that there are no typos in your config file, and try setting values",
+          "in your config file to the default values as listed above. If all else fails, try using",
+          "configsetup.py to set all config options to their defaults. If issues still occur,",
+          "report the bug on GitHub.", sep="\n")
     
     
 import logging
