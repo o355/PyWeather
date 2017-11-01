@@ -143,6 +143,10 @@ if "0.6.2 beta" in versioninfo2:
           "- FAVORITE LOCATIONS/favloc5 - Sets the fifth favorite location - Defaults to 'None'",
           "- GEOCODER API/customkey_enabled - Sets if a custom API key for the geocoder is enabled - Defaults to 'False'.",
           "- GEOCODER API/customkey - Sets the custom API key for the geocoder, if enabled - Defaults to 'None'.", sep="\n")
+
+    print("", "One old configuration option has been removed - Please delete this options from your config file.",
+          "- UPDATER/allowGitForUpdating - Used to set if the Git updater was enabled - Now removed", sep="\n")
+
     config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
     config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
     config['HURRICANE']['enablenearestcity'] = 'False'
@@ -215,10 +219,11 @@ elif "0.6.1 beta" in versioninfo2:
           "- GEOCODER API/customkey - Sets the custom API key for the geocoder, if enabled - Defaults to 'None'.", sep="\n")
 
     print("")
-    print("2 old configuration options, and 2 sections have been deleted. Please delete these options from your config file.",
+    print("3 old configuration options, and 2 sections have been removed. Please delete these options from your config file.",
           "Details:",
           "- CACHE/hourly_cachedtime - Used to set the global hourly cache time - Now removed",
           "- HOURLY/10dayhourly_atboot - Used to set if PyWeather should fetch 10-day hourly at boot - Now removed",
+          "- UPDATER/allowGitForUpdating - Used to set if the Git updater was enabled - Now removed",
           "- HOURLY section - No longer in use for any configuration options.",
           "- CHANGELOG section - No longer in use for any configuration options.", sep="\n")
 
@@ -321,10 +326,11 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
           "- GEOCODER API/customkey - Sets the custom API key for the geocoder, if enabled - Defaults to 'None'.", sep="\n")
 
     print("")
-    print("2 old configuration options, and 2 sections are now unused. Please delete these options from your config file.",
+    print("3 old configuration options, and 2 sections are now removed. Please delete these options from your config file.",
           "Details:",
           "- CACHE/hourly_cachedtime - Used to set the global hourly cache time - Now removed",
           "- HOURLY/10dayhourly_atboot - Used to set if PyWeather should fetch 10-day hourly at boot - Now removed",
+          "- UPDATER/allowGitForUpdating - Used to set if the Git updater was enabled - Now removed",
           "- HOURLY section - No longer in use for any configuration options.",
           "- CHANGELOG section - No longer in use for any configuration options.", sep="\n")
     
