@@ -25,7 +25,7 @@
 
 **BUG FIXES**
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
-* Fixed a potential bug where if there was just one storm, extended forecast data and forecast data got all mixed up.
+* Fixed a potential bug where if there were two or more storms, on the last storm there wasn't code to let the storm go into extended forecast data.
 * Reworking the snow detection system for forecast data - A bug can occur when snow AND rain will occur during the day, and PyWeather will only spit out rain data since the high temp is above 32.
 
 **OTHER CHANGES**

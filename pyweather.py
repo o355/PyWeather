@@ -2564,7 +2564,7 @@ while True:
         # I get it, nothing gets loaded here. Just show the spinner anyways.
         spinner.start(text="Loading ten-day hourly information...")
         spinner.stop()
-            
+        print("")
         print(Fore.YELLOW + Style.BRIGHT + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + Style.BRIGHT + str(location))
         for hour in tenday_json['hourly_forecast']:
             logger.info("We're on iteration: %s/24. User iterations: %s." %
@@ -2634,7 +2634,7 @@ while True:
                   + hourly10_day + ":")
             print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT
                   + hourly10_condition)
-            print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + hourly10_tempf + Style.BRIGHT
+            print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + hourly10_tempf
                   + "°F (" + hourly10_tempc + "°C)")
             print(Fore.YELLOW + Style.BRIGHT + "Feels like: " + Fore.CYAN + Style.BRIGHT + hourly10_feelsLikeF
                   + "°F (" + hourly10_feelsLikeC + "°C)")
@@ -2734,6 +2734,7 @@ while True:
         forecast10_snowDayData = True
         logger.debug("forecast10_snowDayData: %s" % forecast10_snowDayData)
         spinner.stop()
+        print("")
         print(Fore.CYAN + Style.BRIGHT + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + Style.BRIGHT + str(location))
         for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
             print("")
@@ -2872,56 +2873,56 @@ while True:
                   Fore.YELLOW + Style.BRIGHT + " and a low of " + Fore.CYAN + Style.BRIGHT + forecast10_lowf + "°F (" +
                   forecast10_lowc + "°C)" + ".")
             if forecast10_showsnowdatatotal == True and forecast10_showraindatatotal == False:
-                print(Fore.YELLOW + Fore.BRIGHT + "Snow in total: " + Fore.CYAN + Fore.BRIGHT + forecast10_snowTotalIn
+                print(Fore.YELLOW + Style.BRIGHT + "Snow in total: " + Fore.CYAN + Style.BRIGHT + forecast10_snowTotalIn
                       + " in (" + forecast10_snowTotalCm + " cm)")
             elif forecast10_showsnowdatatotal == False and forecast10_showraindatatotal == True:
-                print(Fore.YELLOW + Fore.BRIGHT +  "Rain in total: " + Fore.CYAN + Fore.BRIGHT +  forecast10_precipTotalIn
+                print(Fore.YELLOW + Style.BRIGHT +  "Rain in total: " + Fore.CYAN + Style.BRIGHT +  forecast10_precipTotalIn
                       + " in (" + forecast10_precipTotalMm + " mm)")
             elif forecast10_showsnowdatatotal == True and forecast10_showraindatatotal == True:
-                print(Fore.YELLOW + Fore.BRIGHT + "Snow in total: " + Fore.CYAN + Fore.BRIGHT + forecast10_snowTotalIn
+                print(Fore.YELLOW + Style.BRIGHT + "Snow in total: " + Fore.CYAN + Style.BRIGHT + forecast10_snowTotalIn
                       + " in (" + forecast10_snowTotalCm + " cm)")
-                print(Fore.YELLOW + Fore.BRIGHT + "Rain in total: " + Fore.CYAN + Fore.BRIGHT + forecast10_precipTotalIn
+                print(Fore.YELLOW + Style.BRIGHT + "Rain in total: " + Fore.CYAN + Style.BRIGHT + forecast10_precipTotalIn
                       + " in (" + forecast10_precipTotalMm + " mm)")
             else:
-                print(Fore.YELLOW + Fore.BRIGHT + "Rain in total: " + Fore.CYAN + Fore.BRIGHT + forecast10_precipTotalIn
+                print(Fore.YELLOW + Style.BRIGHT + "Rain in total: " + Fore.CYAN + Style.BRIGHT + forecast10_precipTotalIn
                       + " in (" + forecast10_precipTotalMm + " mm)")
                 
             if forecast10_showsnowdataday == False and forecast10_precipDayData == True:
-                print(Fore.YELLOW + Fore.BRIGHT + "Rain for the day: " + Fore.CYAN + Fore.BRIGHT + forecast10_precipDayIn
+                print(Fore.YELLOW + Style.BRIGHT + "Rain for the day: " + Fore.CYAN + Style.BRIGHT + forecast10_precipDayIn
                       + " in (" + forecast10_precipDayMm + " mm)")
             elif forecast10_showsnowdataday == True and forecast10_snowDayData == True:
-                print(Fore.YELLOW + Fore.BRIGHT + "Snow for the day: " + Fore.CYAN + Fore.BRIGHT + forecast10_snowDayIn
+                print(Fore.YELLOW + Style.BRIGHT + "Snow for the day: " + Fore.CYAN + Style.BRIGHT + forecast10_snowDayIn
                       + " in (" + forecast10_snowDayCm + " cm)")
             
             if forecast10_showsnowdatanight == False:
-                print(Fore.YELLOW + Fore.BRIGHT + "Rain for the night: " + Fore.CYAN + Fore.BRIGHT + forecast10_precipNightIn
+                print(Fore.YELLOW + Style.BRIGHT + "Rain for the night: " + Fore.CYAN + Style.BRIGHT + forecast10_precipNightIn
                       + " in (" + forecast10_precipNightMm + " mm)")
             elif forecast10_showsnowdatanight == True:
-                print(Fore.YELLOW + Fore.BRIGHT + "Snow for the night: " + Fore.CYAN + Fore.BRIGHT + forecast10_snowNightIn
+                print(Fore.YELLOW + Style.BRIGHT + "Snow for the night: " + Fore.CYAN + Style.BRIGHT + forecast10_snowNightIn
                       + " in (" + forecast10_snowNightCm + " cm)")
             else:
-                print(Fore.YELLOW + Fore.BRIGHT + "Rain for the night: " + Fore.CYAN + Fore.BRIGHT + forecast10_precipNightIn
+                print(Fore.YELLOW + Style.BRIGHT + "Rain for the night: " + Fore.CYAN + Style.BRIGHT + forecast10_precipNightIn
                       + " in (" + forecast10_precipNightMm + " mm)")
 
             if forecast10_avgWindDir == "Variable":
-                print(Fore.YELLOW + Fore.BRIGHT + "Winds: " + Fore.CYAN + Fore.BRIGHT +
+                print(Fore.YELLOW + Style.BRIGHT + "Winds: " + Fore.CYAN + Style.BRIGHT +
                     forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
                     + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
                     + forecast10_maxWindKPH + " kph), "
                     + "and blowing in variable directions.")
             else:
-                print(Fore.YELLOW + Fore.BRIGHT + "Winds: " + Fore.CYAN + Fore.BRIGHT +
+                print(Fore.YELLOW + Style.BRIGHT + "Winds: " + Fore.CYAN + Style.BRIGHT +
                       forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
                       + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
                       + forecast10_maxWindKPH + " kph), "
                       + "and blowing " + forecast10_avgWindDir +
                       " (" + forecast10_avgWindDegrees + "°)")
-            print(Fore.YELLOW + Fore.BRIGHT + "Humidity: " + Fore.CYAN + Fore.BRIGHT +
+            print(Fore.YELLOW + Style.BRIGHT + "Humidity: " + Fore.CYAN + Style.BRIGHT +
                   forecast10_avgHumidity + "%")
             totaldetailedForecastIterations = totaldetailedForecastIterations + 1
             logger.debug("totaldetailedForecastIterations: %s" % totaldetailedForecastIterations)
             if user_showCompletedIterations == True:
-                print(Fore.YELLOW + Fore.BRIGHT + "Completed iterations: " + Fore.CYAN + Fore.BRIGHT + "%s/10"
+                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/10"
                       % totaldetailedForecastIterations)
                 print(Fore.RESET)
             if totaldetailedForecastIterations == 10:
@@ -2932,9 +2933,9 @@ while True:
                     logger.debug("detailedForecastIterations: %s" % detailedForecastIterations)
                     try:
                         print("")
-                        print(Fore.RED + Fore.BRIGHT + "Press enter to view the next %s days of weather data."
+                        print(Fore.RED + Style.BRIGHT + "Press enter to view the next %s days of weather data."
                               % user_forecastLoopIterations)
-                        print(Fore.RED + Fore.BRIGHT +"You can also press Control + C to return to the input menu.")
+                        print(Fore.RED + Style.BRIGHT +"You can also press Control + C to return to the input menu.")
                         input()
                         logger.info("Iterating %s more times..." 
                                     % user_forecastLoopIterations)
@@ -2947,10 +2948,10 @@ while True:
 
     elif moreoptions == "11":
         if radar_bypassconfirmation == False:
-            print(Fore.RED + Fore.BRIGHT + "The radar feature is experimental, and may not work properly.",
-                  Fore.RED + Fore.BRIGHT + "PyWeather may crash when in this feature, and other unexpected",
-                  Fore.RED + Fore.BRIGHT + "behavior may occur. Despite the radar feature being experimental,",
-                  Fore.RED + Fore.BRIGHT + "would you like to use the radar?" + Fore.RESET, sep="\n")
+            print(Fore.RED + Style.BRIGHT + "The radar feature is experimental, and may not work properly.",
+                  Fore.RED + Style.BRIGHT + "PyWeather may crash when in this feature, and other unexpected",
+                  Fore.RED + Style.BRIGHT + "behavior may occur. Despite the radar feature being experimental,",
+                  Fore.RED + Style.BRIGHT + "would you like to use the radar?" + Fore.RESET, sep="\n")
             radar_confirmedusage = input("Input here: ").lower()
             if radar_confirmedusage == "yes":
                 print("", "The radar is now launching.",
@@ -2971,23 +2972,23 @@ while True:
         except:
             printException_loggerwarn()
             
-        print(Fore.YELLOW + Fore.BRIGHT + "Loading the GUI. This should take around 5 seconds.")
+        print(Fore.YELLOW + Style.BRIGHT + "Loading the GUI. This should take around 5 seconds.")
         radar_clearImages()
         try:
             from appJar import gui
             frontend = gui()
         except ImportError:
-            print(Fore.RED + Fore.BRIGHT + "Cannot launch a GUI on this platform. If you don't have",
-                  Fore.RED + Fore.BRIGHT + "a GUI on Linux, this is expected. Otherwise, investigate into why",
-                  Fore.RED + Fore.BRIGHT + "tkinter won't launch.", sep="\n" + Fore.RESET)
+            print(Fore.RED + Style.BRIGHT + "Cannot launch a GUI on this platform. If you don't have",
+                  Fore.RED + Style.BRIGHT + "a GUI on Linux, this is expected. Otherwise, investigate into why",
+                  Fore.RED + Style.BRIGHT + "tkinter won't launch.", sep="\n" + Fore.RESET)
             printException()
             continue
         except:
             printException()
-            print(Fore.RED + Fore.BRIGHT + "Cannot launch the GUI. This is probably occurring as a result of being in a terminal,",
-                  Fore.RED + Fore.BRIGHT + "and not having a display for the GUI to initialize on. If this is not the case, and you have a GUI,",
-                  Fore.RED + Fore.BRIGHT + "turn on tracebacks in the configuration file, and report the traceback on GitHub if the issue persists.",
-                  Fore.RED + Fore.BRIGHT + "Press enter to continue.")
+            print(Fore.RED + Style.BRIGHT + "Cannot launch the GUI. This is probably occurring as a result of being in a terminal,",
+                  Fore.RED + Style.BRIGHT + "and not having a display for the GUI to initialize on. If this is not the case, and you have a GUI,",
+                  Fore.RED + Style.BRIGHT + "turn on tracebacks in the configuration file, and report the traceback on GitHub if the issue persists.",
+                  Fore.RED + Style.BRIGHT + "Press enter to continue.")
             input()
             continue
             
@@ -3563,17 +3564,17 @@ while True:
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
                     (buildnumber, buildversion))
-        print(Fore.YELLOW + Fore.BRIGHT + "Checking for updates. This should only take a few seconds.")
+        print(Fore.YELLOW + Style.BRIGHT + "Checking for updates. This should only take a few seconds.")
         try:
             versioncheck = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
             releasenotes = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/releasenotes.txt")
             logger.debug("versioncheck: %s" % versioncheck)
         except:
             logger.warn("Couldn't check for updates! Is there an internet connection?")
-            print(Fore.YELLOW + Fore.BRIGHT + "When attempting to fetch the update data file, PyWeather",
-                  Fore.YELLOW + Fore.BRIGHT + "ran into an error. If you're on a network with a filter,",
-                  Fore.YELLOW + Fore.BRIGHT + "make sure that 'raw.githubusercontent.com' is unblocked. Otherwise,",
-                  Fore.YELLOW + Fore.BRIGHT + "make sure that you have an internet connecction.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the update data file, PyWeather",
+                  Fore.YELLOW + Style.BRIGHT + "ran into an error. If you're on a network with a filter,",
+                  Fore.YELLOW + Style.BRIGHT + "make sure that 'raw.githubusercontent.com' is unblocked. Otherwise,",
+                  Fore.YELLOW + Style.BRIGHT + "make sure that you have an internet connecction.", sep="\n")
             printException()
             continue
         versionJSON = json.loads(versioncheck.text)
@@ -5160,7 +5161,7 @@ while True:
 
                     # This says if activestorms are just one, or if we're on the last storm, and we've gone through all loops, and 4/5 day
                     # forecast data was not before the extended forecast, enter this dialogue.
-                    elif (activestorms == 1 and currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations):
+                    elif (currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations):
                         logger.debug("activestorms is 1, or currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations")
                         print("")
                         if hurricane_hasExtDataInForecast == False:
@@ -5181,7 +5182,6 @@ while True:
                         elif hurricane_hasExtDataInForecast == True:
                             logger.debug("hurricane_hasExtDataInForecast is True.")
                             break
-
                     else:
                         # This has to be none for this entire thing to work.
                         forecastselection = "none"
@@ -5194,7 +5194,14 @@ while True:
                                      (extendedforecastloops, extendedcurrentloops))
                         for extforecast in data['ExtendedForecast']:
                             extendedforecastloops += 1
-                        if extendedforecastloops == 0:
+
+                        if extendedforecastloops == 0 and currentstormiterations == activestorms:
+                            print(Fore.RED + Style.BRIGHT + "Extended forecast data is not available for " + stormname + ".",
+                                  Fore.RED + Style.BRIGHT + "Since this is the last storm, press enter to exit.", sep='\n')
+                            input()
+                            break
+
+                        elif extendedforecastloops == 0:
                             print(Fore.RED + Style.BRIGHT + "Extended forecast data is not available for " + stormname + ".",
                                   Fore.RED + Style.BRIGHT + "Press enter to view data for the next storm. Press Control + C to exit to the main menu.", sep="\n")
                             try:
@@ -5206,11 +5213,6 @@ while True:
                                 print("")
                                 break
                         # If we're on the last storm, and there isn't an extended forecast, press enter to exit.
-                        elif extendedforecastloops == 0 and currentstormiterations == activestorms:
-                            print(Fore.RED + Style.BRIGHT + "Extended forecast data is not available for " + stormname + ".",
-                                  Fore.RED + Style.BRIGHT + "Since this is the last storm, press enter to exit.", sep='\n')
-                            input()
-                            break
 
                         for extforecast in data['ExtendedForecast']:
                             print("")
@@ -5885,7 +5887,7 @@ while True:
               Fore.YELLOW + Style.BRIGHT + "Contributors: " + Fore.CYAN + Style.BRIGHT + about_contributors,
               Fore.YELLOW + Style.BRIGHT + "A special thanks to the developers of these libraries",
               "that are used in PyWeather: ",
-              Fore.CYAN + Fore.BRIGHT + about_librariesinuse + Fore.RESET, sep="\n")
+              Fore.CYAN + Style.BRIGHT + about_librariesinuse + Fore.RESET, sep="\n")
 #<--- About is above, jokes are below --->
     elif moreoptions == "tell me a joke":
         logger.debug("moreoptions: %s" % moreoptions)
