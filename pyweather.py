@@ -2753,40 +2753,6 @@ while True:
             forecast10_lowf = str(day['low']['fahrenheit'])
             forecast10_lowfcheck = int(day['low']['fahrenheit'])
             forecast10_lowc = str(day['low']['celsius'])
-            forecast10_showsnowdatanight = False
-            forecast10_showsnowdataday = False
-            logger.debug("forecast10_highfcheck: %s ; forecast10_lowfcheck: %s" %
-                         (forecast10_highfcheck, forecast10_lowfcheck))
-            if forecast10_highfcheck > 32:
-                forecast10_showsnowdataday = False
-            else:
-                forecast10_showsnowdataday = True
-                
-            if forecast10_lowfcheck > 32:
-                forecat10_showsnowdatanight = False
-            else:
-                forecast10_showsnowdatanight = True
-                
-            logger.debug("forecast10_showsnowdataday: %s ; forecast10_showsnowdatanight: %s"
-                         % (forecast10_showsnowdataday, forecast10_showsnowdatanight)) 
-               
-            if forecast10_highfcheck < 32 and forecast10_lowfcheck < 32:
-                forecast10_showsnowdatatotal = True
-                forecast10_showraindatatotal = False
-            # It could happen!
-            elif (forecast10_highfcheck > 32 and forecast10_lowfcheck < 32 or
-                  forecast10_highfcheck < 32 and forecast10_lowfcheck > 32):
-                forecast10_showsnowdatatotal = True
-                forecast10_showraindatatotal = True
-            elif forecast10_highfcheck > 32 and forecast10_lowfcheck > 32:
-                forecast10_showsnowdatatotal = False
-                forecast10_showraindatatotal = True
-            else:
-                forecast10_showsnowdatatotal = False
-                forecast10_showraindatatotal = True
-                
-            logger.debug("forecast10_showsnowdatatotal: %s ; forecast10_showraindatatotal: %s" %
-                         (forecast10_showsnowdatatotal, forecast10_showraindatatotal))
             forecast10_conditions = day['conditions']
             logger.debug("forecast10_highc: %s ; forecast10_lowf: %s"
                         % (forecast10_highc, forecast10_lowf))
@@ -2796,14 +2762,6 @@ while True:
             forecast10_precipTotalMm = str(day['qpf_allday']['mm'])
             forecast10_precipDayIn = str(day['qpf_day']['in'])
             forecast10_precipDayMm = str(day['qpf_day']['mm'])
-            if forecast10_precipDayIn == "None":
-                forecast10_precipDayData = False
-                logger.debug("forecast10_precipDayData: %s" 
-                             % forecast10_precipDayData)
-            else:
-                forecast10_precipDayData = True
-                logger.debug("forecast10_precipDayData: %s"
-                             % forecast10_precipDayData)
             logger.debug("forecast10_precipTotalIn: %s ; forecast10_precipTotalMm: %s"
                         % (forecast10_precipTotalIn, forecast10_precipTotalMm))
             logger.debug("forecast10_precipDayIn: %s ; forecast10_precipDayMm: %s"
@@ -2812,30 +2770,77 @@ while True:
             forecast10_precipNightMm = str(day['qpf_night']['mm'])
             logger.debug("forecast10_precipNightIn: %s ; forecast10_precipNightMm: %s"
                         % (forecast10_precipNightIn, forecast10_precipNightMm))
-            forecast10_snowTotalCheck = day['snow_allday']['in']
-            logger.debug("forecast10_snowTotalCheck: %s" % forecast10_snowTotalCheck)
-            forecast10_snowTotalIn = str(forecast10_snowTotalCheck)
+            forecast10_snowTotalIn = str(day['snow_allday']['in'])
             forecast10_snowTotalCm = str(day['snow_allday']['cm'])
-            forecast10_snowDayCheck = day['snow_day']['in']
             logger.debug("forecast10_snowTotalIn: %s ; forecast10_snowTotalCm: %s"
                         % (forecast10_snowTotalIn, forecast10_snowTotalCm))
-            logger.debug("forecast10_snowDayCheck: %s" % forecast10_snowDayCheck)
-            forecast10_snowDayIn = str(forecast10_snowDayCheck)
+            forecast10_snowDayIn = str(day['snow_day']['in'])
             forecast10_snowDayCm = str(day['snow_day']['cm'])
-            if forecast10_snowDayIn == "None":
-                forecast10_snowDayData = False
-                logger.debug("forecast10_snowDayData: %s" % 
-                             forecast10_snowDayData)
-            else:
-                forecast10_snowDayData = True
-                logger.debug("forecast10_snowDayData: %s" %
-                             forecast10_snowDayData)
-            forecast10_snowNightCheck = day['snow_night']['in']
             logger.debug("forecast10_snowDayIn: %s ; forecast10_snowDayCm: %s"
                          % (forecast10_snowDayIn, forecast10_snowDayCm))
-            logger.debug("forecast10_snowNightCheck: %s" % forecast10_snowNightCheck)
-            forecast10_snowNightIn = str(forecast10_snowNightCheck)
+            forecast10_snowNightIn = str(day['snow_night']['in'])
             forecast10_snowNightCm = str(day['snow_night']['cm'])
+            # Set all display variables to true to begin with
+            forecast10_showsnowdatatotal = True
+            forecast10_showraindatatotal = True
+            forecast10_showsnowdataday = True
+            forecast10_showsnowdatanight = True
+            forecast10_showraindataday = True
+            forecast10_showraindatanight = True
+            logger.debug("forecast10_showsnowdatatotal: %s ; forecast10_showraindatatotal: %s" %
+                         (forecast10_showsnowdatatotal, forecast10_showraindatatotal))
+            logger.debug("forecast10_showsnowdataday: %s ; forecast10_showsnowdatanight: %s" %
+                         (forecast10_showsnowdataday, forecast10_showsnowdatanight))
+            logger.debug("forecast10_showraindataday: %s ; forecast10_showraindatanight: %s" %
+                         (forecast10_showraindataday, forecast10_showraindatanight))
+            # Begin checking for available data - Start with int conversions.
+            # If a ValueError occurs, set the display variable to false.
+            try:
+                forecast10_snowtotalCheck = float(forecast10_snowTotalIn)
+                logger.debug("forecast10_snowtotalCheck: %s" % forecast10_snowtotalCheck)
+            except ValueError:
+                logger.warning("Failed to convert total snow into float, not displaying...")
+                forecast10_showsnowdatatotal = False
+                logger.debug("forecast10_showsnowdatatotal: %s" % forecast10_showsnowdatatotal)
+
+            try:
+                forecast10_raintotalCheck = float(forecast10_precipTotalIn)
+                logger.debug("forecast10_raintotalCheck: %s" % forecast10_raintotalCheck)
+            except ValueError:
+                logger.warning("Failed to convert total precip into float, not displaying...")
+                forecast10_showraindatatotal = False
+                logger.debug("forecast10_showraindatatotal: %s" % forecast10_showraindatatotal)
+
+            try:
+                forecast10_snowdayCheck = float(forecast10_snowDayIn)
+                logger.debug("forecast10_snowdayCheck: %s" % forecast10_snowdayCheck)
+            except ValueError:
+                logger.warning("Failed to convert day-only snow into float, not displaying...")
+                forecast10_showsnowdataday = False
+                logger.debug("forecast10_showsnowdataday: %s" % forecast10_showsnowdataday)
+
+            try:
+                forecast10_snownightCheck = float(forecast10_snowNightIn)
+                logger.debug("forecast10_snownightCheck: %s" % forecast10_snownightCheck)
+            except ValueError:
+                logger.warning("Failed to convert night-only snow into float, not displaying...")
+                forecast10_showsnowdatanight = False
+                logger.debug("forecast10_showsnowdatanight: %s" % forecast10_showsnowdatanight)
+
+            try:
+                forecast10_raindayCheck = float(forecast10_precipDayIn)
+                logger.debug("forecast10_raindayCheck: %s" % forecast10_raindayCheck)
+            except ValueError:
+                logger.warning("Failed to convert day-only rain into float, not displaying...")
+                forecast10_showraindataday = False
+
+            try:
+                forecast10_rainnightCheck = float(forecast10_precipNightIn)
+                logger.debug("forecast10_rainnightCheck: %s" % forecast10_rainnightCheck)
+            except ValueError:
+                logger.warning("Failed to convert night-only rain into float, not displaying...")
+                forecast10_showraindatanight = False
+
             forecast10_maxWindMPH = str(day['maxwind']['mph'])
             forecast10_maxWindKPH = str(day['maxwind']['kph'])
             forecast10_maxMPHcheck = int(forecast10_maxWindMPH)
@@ -2866,43 +2871,35 @@ while True:
             logger.debug("forecast10_avgWindDir: %s ; forecast10_avgWindDegrees: %s"
                         % (forecast10_avgWindDir, forecast10_avgWindDegrees))
             logger.debug("forecast10_avgHumidity: %s" % forecast10_avgHumidity)
+            forecast10_precipChance = str(day['pop'] + "%")
+            logger.debug("forecast10_precipChance: %s" % forecast10_precipChance)
             logger.info("Printing weather data...")
             print(Fore.YELLOW + Style.BRIGHT + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ":")
             print(Fore.CYAN + Style.BRIGHT + forecast10_conditions + Fore.YELLOW + Style.BRIGHT + " with a high of "
                   + Fore.CYAN + Style.BRIGHT + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
                   Fore.YELLOW + Style.BRIGHT + " and a low of " + Fore.CYAN + Style.BRIGHT + forecast10_lowf + "°F (" +
                   forecast10_lowc + "°C)" + ".")
-            if forecast10_showsnowdatatotal == True and forecast10_showraindatatotal == False:
+            print(Fore.YELLOW + Style.BRIGHT + "Precipitation chance: " + Fore.CYAN + Style.BRIGHT + forecast10_precipChance)
+            if forecast10_showsnowdatatotal == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Snow in total: " + Fore.CYAN + Style.BRIGHT + forecast10_snowTotalIn
                       + " in (" + forecast10_snowTotalCm + " cm)")
-            elif forecast10_showsnowdatatotal == False and forecast10_showraindatatotal == True:
+            if forecast10_showraindatatotal == True:
                 print(Fore.YELLOW + Style.BRIGHT +  "Rain in total: " + Fore.CYAN + Style.BRIGHT +  forecast10_precipTotalIn
                       + " in (" + forecast10_precipTotalMm + " mm)")
-            elif forecast10_showsnowdatatotal == True and forecast10_showraindatatotal == True:
-                print(Fore.YELLOW + Style.BRIGHT + "Snow in total: " + Fore.CYAN + Style.BRIGHT + forecast10_snowTotalIn
-                      + " in (" + forecast10_snowTotalCm + " cm)")
-                print(Fore.YELLOW + Style.BRIGHT + "Rain in total: " + Fore.CYAN + Style.BRIGHT + forecast10_precipTotalIn
-                      + " in (" + forecast10_precipTotalMm + " mm)")
-            else:
-                print(Fore.YELLOW + Style.BRIGHT + "Rain in total: " + Fore.CYAN + Style.BRIGHT + forecast10_precipTotalIn
-                      + " in (" + forecast10_precipTotalMm + " mm)")
                 
-            if forecast10_showsnowdataday == False and forecast10_precipDayData == True:
+            if forecast10_showraindataday == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Rain for the day: " + Fore.CYAN + Style.BRIGHT + forecast10_precipDayIn
                       + " in (" + forecast10_precipDayMm + " mm)")
-            elif forecast10_showsnowdataday == True and forecast10_snowDayData == True:
+            if forecast10_showsnowdataday == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Snow for the day: " + Fore.CYAN + Style.BRIGHT + forecast10_snowDayIn
                       + " in (" + forecast10_snowDayCm + " cm)")
             
-            if forecast10_showsnowdatanight == False:
+            if forecast10_showraindatanight == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Rain for the night: " + Fore.CYAN + Style.BRIGHT + forecast10_precipNightIn
                       + " in (" + forecast10_precipNightMm + " mm)")
             elif forecast10_showsnowdatanight == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Snow for the night: " + Fore.CYAN + Style.BRIGHT + forecast10_snowNightIn
                       + " in (" + forecast10_snowNightCm + " cm)")
-            else:
-                print(Fore.YELLOW + Style.BRIGHT + "Rain for the night: " + Fore.CYAN + Style.BRIGHT + forecast10_precipNightIn
-                      + " in (" + forecast10_precipNightMm + " mm)")
 
             if forecast10_avgWindDir == "Variable":
                 print(Fore.YELLOW + Style.BRIGHT + "Winds: " + Fore.CYAN + Style.BRIGHT +
