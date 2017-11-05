@@ -52,15 +52,13 @@ However, during times of non-severe weather, PyWeather is a fun way to check the
 ## Notices
 Notices are important things you'll want to know about PyWeather.
 
+## PyWeather 0.6.3 beta may be delayed
+I'd like to let you know that PyWeather 0.6.3 beta may not be released on November 30, 2017. I've picked up extra work from a contributor who is too busy, and I'll be trying to complete the few features in PyWeather as fast as I can.
+
+QA is now scheduled to start on November 11, 2017. Depending on how many bugs I find and how long QA takes (ideally 1 OS per 3-4 days), 0.6.3 beta may be delayed until early December 2017. 
+
 ### Beta notice
 If you haven't noticed, PyWeather is in beta. Basic features should work completely fine, but more advanced and newer features may not work 100% of the time.
-
-### Indev code notice
-I've been having an issue with the library that was proposed for spinners dimming the colored text in PyWeather.
-
-I'm going to investigate methods in which to fix this issue in the coming weeks, and one of our contributors is working on a library that should emulate Halo's functionality without interfering with colors.
-
-Any commits from `bda1140` and earlier do not have dimmed colors. 
 
 ## What's PyWeather?
 PyWeather is a Python script that fetches the weather using Wunderground's API. I made PyWeather as a solution to a few things:
