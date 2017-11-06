@@ -1321,6 +1321,7 @@ if useGeocoder is True:
         location = geolocator.geocode(locinput, language="en", timeout=20)
         # Since the loading bars interfere with true verbosity logging, we turn
         # them off if verbosity is enabled (it isn't needed)
+        
         # :/
     except geopy.exc.GeocoderQuotaExceeded:
         spinner.fail(text='Failed to locate input!')
