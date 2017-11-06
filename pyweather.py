@@ -2908,6 +2908,7 @@ while True:
 
             if forecast10_snownightCheck >= 0.01:
                 logger.info("forecast10_snownightCheck is >= 0.01.")
+                forecast10_showsnowdatanight = True
 
             if forecast10_snownightCheck == 0.00:
                 logger.info("forecast10_snownightCheck is 0.00")
@@ -2996,7 +2997,7 @@ while True:
             if forecast10_showraindatanight == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Rain for the night: " + Fore.CYAN + Style.BRIGHT + forecast10_precipNightIn
                       + " in (" + forecast10_precipNightMm + " mm)")
-            elif forecast10_showsnowdatanight == True:
+            if forecast10_showsnowdatanight == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Snow for the night: " + Fore.CYAN + Style.BRIGHT + forecast10_snowNightIn
                       + " in (" + forecast10_snowNightCm + " cm)")
 
