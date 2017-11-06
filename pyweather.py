@@ -3146,6 +3146,7 @@ while True:
                 logger.debug("forecast10_showraindatanight: %s" % forecast10_showraindatanight)
 
 
+
             forecast10_maxWindMPH = str(day['maxwind']['mph'])
             forecast10_maxWindKPH = str(day['maxwind']['kph'])
             forecast10_maxMPHcheck = int(forecast10_maxWindMPH)
