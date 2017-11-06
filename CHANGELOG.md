@@ -5,7 +5,7 @@
 * Adds a nearby location feature to hurricane data (300km out)
 * Will push the API key validation code up further thanks to new features.
 * Adding a much nicer progress indicator.
-* Adds the ability to prefetch yesterday's weather at boot, and a caching system - 90% done?
+* Adds the ability to prefetch yesterday's weather at boot, and a caching system - 80% done
     * Need to add options to all the usual scripts that work with the config
 * Adds the ability to view your current location through a GeoIP service
 * Adds the ability to view data through a PWS at boot.
@@ -13,17 +13,21 @@
 * Adds the ability to manually define a Google Maps API key
 * Adds the ability to show cache timings when enabled - 0% done, Should be finished by 11/18
 * Much better error catching for the config file
-* Adding a new loader - 95% done, waiting on additional code before making final changes
+* Adding a new loader - 95% done
 * Adds the ability to view the chance of precipitation on the forecast page.
+* Adding the ability to show cache timings - 25% done
+    * Initial implementation
+    * Adding config stuff
+* Final menu additions - 0% done
    
 
 **BUG FIXES**
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
 * Fixed a potential bug where if there were two or more storms, on the last storm there wasn't code to let the storm go into extended forecast data.
-* Reworking the snow detection system for forecast data - A bug can occur when snow AND rain will occur during the day, and PyWeather will only spit out rain data since the high temp is above 32.
+* Reworked the snow detection system for forecast data - A bug can occur when snow AND rain will occur during the day, and PyWeather will only spit out rain data since the high temp is above 32.
 
 **OTHER CHANGES**
-* The Git Updater will been completely removed, as it's been unreliable. A universal updater will be introduced later in time. - 25% done
+* The Git Updater has been completely removed, as it's been unreliable. A universal updater will be introduced later in time.
 * The configupdate file will now properly catch a bad section error (not a plain except)
 
 

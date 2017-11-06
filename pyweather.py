@@ -472,6 +472,14 @@ except:
     configerrorcount += 1
     geocoder_customkey = "None"
 
+try:
+    extratools_enabled = config.getboolean('UI', 'extratools_enabled')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. UI/extratools_enabled failed to load. Defaulting to 'False'.", sep="\n")
+    configerrorcount += 1
+    extratools_enabled = False
+
 if configerrorcount >= 1:
     print("", "When trying to load your configuration file, error(s) occurred.",
           "Try making sure that there are no typos in your config file, and try setting values",
@@ -547,6 +555,7 @@ logger.debug("favoritelocation_4: %s ; favoritelocation_5: %s" %
              (favoritelocation_4, favoritelocation_5))
 logger.debug("geocoder_customkeyEnabled: %s ; geocoder_customkey: %s" %
              (geocoder_customkeyEnabled, geocoder_customkey))
+logger.debug("extratools_enabled: %s" % extratools_enabled)
 
 logger.info("Setting gif x and y resolution for radar...")
 # Set the size of the radar window. - Section 10
@@ -625,6 +634,8 @@ logger.info("Declaring geocoder type...")
 if geopyScheme == "https" and geocoder_customkeyEnabled is False:
     geolocator = GoogleV3(scheme='https')
     logger.debug("geocoder scheme is now https, no custom key")
+# If the user has a custom key enabled, do a geocode to validate the custom API key.
+# The option to turn this off will be added in 0.6.4 beta.
 elif geopyScheme == "https" and geocoder_customkeyEnabled is True:
     geolocator = GoogleV3(api_key=geocoder_customkey, scheme='https')
     logger.debug("geocoder scheme is now https, custom key. Validating...")
@@ -971,6 +982,14 @@ if geoip_enabled == True:
         geoip_available = False
         logger.debug("geoip_available: %s" % geoip_available)
 
+    # If geoip is available (the except block wasn't run), check for a bad geolocation (a straight up comma)
+    if geoip_available == True:
+        if geoip_city == "" or geoip_state == "":
+            logger.warning("Bad geolocator data, geoip data is now not available.")
+            geoip_available = False
+            logger.debug("geoip_available: %s" % geoip_available)
+
+
 # Check if we need to fully disable favorite location from having 5 "None" entries, if enabled
 if favoritelocation_enabled is True:
     logger.debug("Checking favorite locations for invalid locations.")
@@ -1052,6 +1071,12 @@ if geoip_available is True:
     print("You can also enter this to view weather for your current location:")
     print("currentlocation - " + currentlocation)
     print("")
+elif geoip_available is False:
+    logger.debug("geoip isn't available, show an error message.")
+    print("")
+    print("The GeoIP service used for your current location gave an invalid location.")
+    print("If this error continues, you can turn off the current location feature to avoid these error messages.")
+    print("")
 if favoritelocation_available is True:
     logger.debug("favorite locations are enabled and available. showing option...")
     print("")
@@ -1072,7 +1097,6 @@ if pws_enabled is True:
     print("You can also query a Wunderground PWS by entering this:")
     print("pws:<PWS ID>")
     print("")
-
 locinput = input("Input here: ")
 print("Checking the weather, it'll take a few seconds!")
 print("")
@@ -2848,12 +2872,11 @@ while True:
             # If snow total amount is above 0.01, show it regardless of temp
             if forecast10_snowtotalCheck >= 0.01:
                 logger.info("forecast10_snowtotalCheck is >= 0.01.")
-                # No need to reset the variable. It's still true.
 
             # Have a completely separate block of code for calculating displaying snow data
             if forecast10_snowtotalCheck == 0.00:
                 logger.info("forecast10_snowtotalCheck is 0.00")
-                if forecast10_highfcheck > 32 and forecast_lowfcheck > 32:
+                if forecast10_highfcheck > 32 and forecast10_lowfcheck > 32:
                     forecast10_showsnowdatatotal = False
                 else:
                     # Every other possible combination will lead to showing snow data to be true.
@@ -2947,7 +2970,7 @@ while True:
             logger.debug("forecast10_avgWindDir: %s ; forecast10_avgWindDegrees: %s"
                         % (forecast10_avgWindDir, forecast10_avgWindDegrees))
             logger.debug("forecast10_avgHumidity: %s" % forecast10_avgHumidity)
-            forecast10_precipChance = str(day['pop'] + "%")
+            forecast10_precipChance = str(day['pop'])
             logger.debug("forecast10_precipChance: %s" % forecast10_precipChance)
             logger.info("Printing weather data...")
             print(Fore.YELLOW + Style.BRIGHT + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ":")
@@ -2955,7 +2978,7 @@ while True:
                   + Fore.CYAN + Style.BRIGHT + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
                   Fore.YELLOW + Style.BRIGHT + " and a low of " + Fore.CYAN + Style.BRIGHT + forecast10_lowf + "°F (" +
                   forecast10_lowc + "°C)" + ".")
-            print(Fore.YELLOW + Style.BRIGHT + "Precipitation chance: " + Fore.CYAN + Style.BRIGHT + forecast10_precipChance)
+            print(Fore.YELLOW + Style.BRIGHT + "Precipitation chance: " + Fore.CYAN + Style.BRIGHT + forecast10_precipChance + "%")
             if forecast10_showsnowdatatotal == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Snow in total: " + Fore.CYAN + Style.BRIGHT + forecast10_snowTotalIn
                       + " in (" + forecast10_snowTotalCm + " cm)")
@@ -6415,6 +6438,48 @@ while True:
         refresh_tidedataflagged = True
         logger.debug("refresh_sundataflagged: %s ; refresh_tidedataflagged: %s" %
                      (refresh_sundataflagged, refresh_tidedataflagged))
+    elif moreoptions == "extratools:1":
+        print(Fore.YELLOW + Style.BRIGHT + "Listing all cache times:")
+        print(Fore.YELLOW + Style.BRIGHT + "Current conditions: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+              (round(time.time() - cachetime_current, 2), round((time.time() - cachetime_current) / 60, 2), cache_currenttime, cache_currenttime / 60))
+        # The variables in order: The raw cache time in seconds (rounded down to 2 decimal places, the raw cache time divided by 60, rounded to 2 (current cache time in mins)
+        # After that, display the configured refresh cache limit, and divide the variable by 60 to get it in minutes.
+        print(Fore.YELLOW + Style.BRIGHT + "Forecast data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+              (round(time.time() - cachetime_forecast, 2), round((time.time() - cachetime_forecast) / 60, 2), cache_forecasttime, cache_forecasttime / 60))
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "Astronomy (sundata) data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+                  round(time.time() - cachetime_sundata, 2), round((time.time() - cachetime_sundata) / 60, 2), cache_sundatatime, cache_sundatatime / 60)
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "Astronomy (sundata) data: Data not cached / limit %s seconds (%s minutes)" %
+                  (cache_sundatatime, cache_sundatatime / 60))
+
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "10-day hourly data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_hourly10, 2), round((time.time() - cachetime_hourly10) / 60, 2), cache_tendayhourly, cache_tendayhourly / 60))
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "10-day hourly data: Data not cached / limit %s seconds (%s minutes)" %
+                  (cache_tendayhourly, cache_tendayhourly / 60))
+
+        print(Fore.YELLOW + Style.BRIGHT + "1.5 day hourly data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+              (round(time.time() - cachetime_hourly36, 2), round((time.time() - cachetime_hourly36) / 60, 2), cache_threedayhourly, cache_threedayhourly / 60))
+
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "Almanac data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_almanac / 60), round((time.time() - cachetime_almanac) / 60, 2), cache_almanactime, cache_almanactime / 60))
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "Almanac data: Data not cached / limit %s seconds (%s minutes)" %
+                  (cache_almanactime, cache_almanactime / 60))
+
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "Alerts data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_alerts / 60), round((time.time() - cachetime_alerts) / 60, 2), cache_alertstime, cache_alertstime / 60))
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "Alerts data: Data not cached / limit %s seconds (%s minutes)" %
+                  (cache_alertstime, cache_alertstime / 60))
+
+        print(Fore.YELLOW + Style.BRIGHT + "Tide data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+              (round(time.time() - cachetime_tide / 60), round((time.time() - cachetime_tide) / 60, 2), cache_tidetime, cache_tidetime / 60))
+
     else:
         logger.warn("Input could not be understood!")
         print(Fore.RED + Style.BRIGHT + "Not a valid option.")
