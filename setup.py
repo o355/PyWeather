@@ -129,6 +129,7 @@ def configprovision():
     config['SUMMARY']['almanac_summary'] = 'False'
     config['SUMMARY']['showalertsonsummary'] = 'True'
     config['SUMMARY']['showtideonsummary'] = 'False'
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
     config['VERBOSITY']['verbosity'] = 'False'
     config['VERBOSITY']['json_verbosity'] = 'False'
     config['VERBOSITY']['setup_verbosity'] = 'False'
@@ -166,6 +167,7 @@ def configprovision():
     config['CACHE']['sundata_cachedtime'] = '480'
     config['CACHE']['tide_cachedtime'] = '480'
     config['CACHE']['hurricane_cachedtime'] = '180'
+    config['CACHE']['yesterday_cachedtime'] = '720' # This value is just a guess, change it pls.
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['GEOCODER']['scheme'] = 'https'
@@ -1274,6 +1276,21 @@ else:
         config['CACHE']['hurricane_cachedtime'] = '180'
         logger.debug("Hurricane data cache time now 180 minutes.")
 
+    print("", "(19/30)", "Please enter the cache time for yesterday's weather data in minutes (default = 240)", sep="\n")
+    yesterdaycachedtime = input("Input here: ").lower()
+    try:
+        yesterdaycachedtime = float(yesterdaycachedtime)
+        yesterdaycachedtime = str(yesterdaycachedtime)
+        config['CACHE']['yesterday_cachedtime'] = yesterdaycachedtime
+        print("Changes saved.")
+        logger.debug("Yesterday cache time now %s minutess" % yesterdaycachedtime)
+    except:
+        print("", "Your input couldn't be converted into a number. Setting yesterday's weather data",
+                "cache time to it's default value of 240.", sep="\n")
+        config['CACHE']['yesterday_cachedtime'] = '240'
+        logger.debug("Yesterday data cache time now 240 minutes.")
+
+
 
 print("", "(19/30)", "When viewing detailed EU alerts information, how many",
       "iterations should PyWeather go through, before asking you to",
@@ -1749,6 +1766,27 @@ else:
             logger.debug("GEOCODER/scheme is now 'http'")
             print("Changes saved.")
 
+print("", "(40/40)", "On the summary screen, would you like me to show yesterday's weather?",
+        "By default, this is disabled.",
+        "Yes or No.", sep="\n")
+yesterday_Summary = input("Input here: ").lower()
+logger.debug("yesterday_Summary: %s" % yesterday_Summary)
+if yesterday_Summary == "yes":
+    config["SUMMARY"]["showyesterdayonsummary"] = "True"
+    print("Changes saved.")
+    logger.debug("Yesterday data on the summary is now ENABLED.")
+
+elif yesterday_Summary == "no":
+    config["SUMMARY"]["showyesterdayonsummary"] = "False"
+    print("Changes saved.")
+    logger.debug("Yesterday data on the summary is now DISABLED")
+
+else:
+    print("Could not understand what you inputted.",
+          "Defaulting to False", sep="\n")
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
+    print("Changes saved.")
+    logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
 print("","That's it! Now commiting config changes...", sep="\n")
 try:
