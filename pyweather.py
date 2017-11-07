@@ -498,6 +498,22 @@ except:
     configerrorcount += 1
     extratools_enabled = False
 
+try:
+    prefetch_yesterdaydata = config.getboolean('PREFETCH', 'yesterdaydata_atboot')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. PREFETCH/yesterdaydata_atboot failed to load. Defaulting to 'False'.", sep="\n")
+    configerrorcount += 1
+    prefetch_yesterdaydata = False
+
+try:
+    yesterdaydata_onsummary = config.getboolean('SUMMARY', 'showyesterdayonsummary')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. SUMMARY/showyesterdayonsummary failed to load. Defaulting to 'False'.", sep="\n")
+    configerrorcount += 1
+    yesterdaydata_onsummary = False
+
 if configerrorcount >= 1:
     print("", "When trying to load your configuration file, error(s) occurred.",
           "Try making sure that there are no typos in your config file, and try setting values",
@@ -1321,7 +1337,6 @@ if useGeocoder is True:
         location = geolocator.geocode(locinput, language="en", timeout=20)
         # Since the loading bars interfere with true verbosity logging, we turn
         # them off if verbosity is enabled (it isn't needed)
-        
         # :/
     except geopy.exc.GeocoderQuotaExceeded:
         spinner.fail(text='Failed to locate input!')
@@ -1446,30 +1461,31 @@ except:
     input()
     sys.exit()
 
-if yesterday_prefetched == True:
-    if showyesterdayonsummary == True:
-        spinner.stop()
-        spinner.start(text="Fetching yesterday's weather information...")
-
-        try:
-            yesterdayJSON = requests.get(yesterdayurl)
-            cachetime_yesterday = time.time()
-            logger.debug("Acquired yesterday JSON, end result: %s" % yesterdayJSON)
-
-        except:
-            spinner.fail("Failed to fetch yesterday weather information!")
-            print("")
-            logger.warning("No connection to the API!! Is the connection offline?")
-
-            print("When PyWeather attempted to fetch yesterday's weather information,",
-                  "PyWeather ran into an error. If you're on a network with a filter, make sure",
-                  "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
-                  "connection.", sep="\n")
-            printException()
-            print("Press enter to continue.")
-            input()
-            sys.exit()
-
+if yesterdaydata_onsummary is True or prefetch_yesterdaydata is True:
+    spinner.stop()
+    spinner.start(text="Fetching yesterday's weather information...")
+    # Tell PyWeather that yesterday's weather is prefetched
+    yesterdaydata_prefetched = True
+    logger.debug("yesterdaydata_prefetched: %s" % yesterdaydata_prefetched)
+    try:
+        yesterdayJSON = requests.get(yesterdayurl)
+        cachetime_yesterday = time.time()
+        logger.debug("Acquired yesterday JSON, end result: %s" % yesterdayJSON)
+    except:
+        spinner.fail("Failed to fetch yesterday weather information!")
+        print("")
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch yesterday's weather information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+else:
+    yesterdaydata_prefetched = False
+    logger.debug("yesterdaydata_prefetched: %s" % yesterdaydata_prefetched)
 
 spinner.stop()
 spinner.start(text="Fetching forecast information...")
@@ -1665,47 +1681,47 @@ logger.info("Start JSON load...")
 spinner.stop()
 spinner.start(text="Parsing weather information...")
 current_json = json.loads(summaryJSON.text)
-if jsonVerbosity == True:
+if jsonVerbosity is True:
     logger.debug("current_json loaded with: %s" % current_json)
 forecast10_json = json.loads(forecast10JSON.text)
-if jsonVerbosity == True:
+if jsonVerbosity is True:
     logger.debug("forecast10_json loaded with: %s" % forecast10_json)
-if prefetch10Day_atStart == True: 
+if prefetch10Day_atStart is True:
     tenday_json = json.loads(hourly10JSON.text)
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("tenday_json loaded with: %s" % tenday_json)
     hourly36_json = json.loads(hourly36JSON.text)
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("hourly36_json loaded with: %s" % hourly36_json)
 else:
     hourly36_json = json.loads(hourly36JSON.text)
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("hourly36_json loaded with: %s" % hourly36_json)
-if sundata_summary == True:
+if sundata_summary is True:
     astronomy_json = json.loads(sundataJSON.text)
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("astronomy_json loaded with: %s" % astronomy_json)
 
-if showyesterdayonsummary == True:
+if yesterdaydata_prefetched is True:
     yesterday_json = json.loads(yesterdayJSON.text)
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("yesterday_json: %s" % yesterday_json)
 
-if almanac_summary == True:
+if almanac_summary is True:
     almanac_json = json.loads(almanacJSON.text)
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("almanac_json loaded with: %s" % almanac_json)
-if showAlertsOnSummary == True:
+if showAlertsOnSummary is True:
     alerts_json = json.loads(alertsJSON.text)
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("alerts_json loaded with: %s" % alerts_json)
-if showTideOnSummary == True:
+if showTideOnSummary is True:
     tide_json = json.loads(tideJSON.text)
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("tide_json loaded with: %s" % tide_json)
-if prefetchHurricane_atboot == True:
+if prefetchHurricane_atboot is True:
     hurricane_json = json.loads(hurricaneJSON.text)
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("hurricane_json loaded with: %s" % hurricane_json)
 logger.info("Some amount of JSONs loaded...")
 
@@ -1932,6 +1948,89 @@ else:
 yesterday_prefetched = False
 logger.debug("yesterday_prefetched: %s" % yesterday_prefetched)
 
+# Parse basic yesterday weather information.
+if yesterdaydata_onsummary is True:
+    # Parse the weather conditions, which is actually quite interesting to do.
+    # For the day/night conditions, parse what the weather was at 12pm and 12am, and find the conditions given that '12:' and 'PM', etc are found.
+    # If it matches, say the data was fetched, and move on.
+    yesterdaysummary_daycondfetched = False
+    yesterdaysummary_nightcondfetched = False
+    logger.debug("yesterdaysummary_daycondfetched: %s ; yesterdaysummary_nightcondfetched: %s" %
+                 (yesterdaysummary_daycondfetched, yesterdaysummary_nightcondfetched))
+    for data in yesterday_json['history']['observations']:
+        yesterdaysummary_hour = data['date']['hour']
+        logger.debug("yesterdaysummary_hour: %s" % yesterdaysummary_hour)
+        # Parse the weather given that we found '00' in the hour.
+        if yesterdaysummary_hour.find("00") == 0 and yesterdaysummary_nightcondfetched is False:
+            logger.info("'00' was found in yesterdaysummary_hour and yesterdaysummary_nightcondfetched is False.")
+            yesterdaysummary_nightconditions = data['conds']
+            yesterdaysummary_nightcondfetched = True
+            logger.debug("yesterdaysummary_nightconditions: %s ; yesterdaysummary_nightcondfetched: %s" %
+                         (yesterdaysummary_nightconditions, yesterdaysummary_nightcondfetched))
+
+        if yesterdaysummary_hour.find("12") == 0 and yesterdaysummary_daycondfetched is False:
+            logger.info("'12' was found in yesterdaysummary_hour and yesterdaysummary_daycondfetched is False.")
+            yesterdaysummary_dayconditions = data['conds']
+            yesterdaysummary_daycondfetched = True
+            logger.debug("yesterdaysummary_dayconditions: %s ; yesterdaysummary_daycondfetched: %s" %
+                         (yesterdaysummary_dayconditions, yesterdaysummary_daycondfetched))
+
+        # We have data for both day/night conditions, break the loop.
+        if yesterdaysummary_nightcondfetched is True and yesterdaysummary_daycondfetched is True:
+            logger.info("yesterdaysummary_nightcondfetched is True & yesterdaysummary_daycondfetched is True.")
+            break
+
+    # Check from the for loop above if we have data for conditions. If we don't, put 'Not available' as the condition.
+
+    if yesterdaysummary_nightcondfetched is False:
+        logger.info("yesterdaysummary_nightcondfetched is False.")
+        yesterdaysummary_nightconditions = "Not available"
+        logger.debug("yesterdaysummary_nightconditions: %s" % yesterdaysummary_nightconditions)
+
+    if yesterdaysummary_daycondfetched is False:
+        logger.info("yesterdaysummary_daycondfetched is False.")
+        yesterdaysummary_dayconditions = "Not available"
+        logger.debug("yesterdaysummary_dayconditions: %s" % yesterdaysummary_dayconditions)
+
+    # Get the high/low weather, the average wind/max wind, and average humidity for the previous day.
+    # While t
+    for data in yesterday_json['history']['dailysummary']:
+        yesterdaysummary_hightempf = str(data['maxtempi'])
+        yesterdaysummary_hightempc = str(data['maxtempm'])
+        yesterdaysummary_lowtempf = str(data['mintempi'])
+        yesterdaysummary_lowtempc = str(data['mintempm'])
+        yesterdaysummary_windmph = str(data['meanwspedi'])
+        yesterdaysummary_windkph = str(data['meanwspedm'])
+        yesterdaysummary_gustmph = str(data['maxwspedi'])
+        yesterdaysummary_gustkph = str(data['maxwspedm'])
+        # Do what we do best - Guess the average humidity
+        try:
+            yesterdaysummary_maxhumidity = int(data['maxhumidity'])
+            yesterdaysummary_minhumidity = int(data['minhumidity'])
+            logger.debug("yesterdaysummary_maxhumidity: %s ; yesterdaysummary_minhumidity: %s" %
+                         (yesterdaysummary_maxhumidity, yesterdaysummary_minhumidity))
+        except ValueError:
+            printException_loggerwarn()
+            yesterdaysummary_avghumidity = "Not available"
+            logger.debug("yesterdaysummary_avghumidity: %s" % yesterdaysummary_avghumidity)
+
+        if yesterdaysummary_avghumidity != "Not available":
+            # Enter this block if we have valid humidity data, which basically means
+            # yesterdaysummary_avghumidity isn't 'Not available'.
+            logger.info("yesterdaysummary_avghumidity != 'Not available'")
+            # Add the humidity, divide by 2
+            yesterdaysummary_avghumidity = yesterdaysummary_maxhumidity + yesterdaysummary_minhumidity
+            logger.debug("yesterdaysummary_avghumidity: %s" % yesterdaysummary_avghumidity)
+            yesterdaysummary_avghumidity = yesterdaysummary_avghumidity / 2
+            logger.debug("yesterdaysummary_avghumidity: %s" % yesterdaysummary_avghumidity)
+            # Round to the 0th digit, then int it, and THEN str it. This removes the trailing zero.
+            yesterdaysummary_avghumidity = str(int(round(yesterdaysummary_avghumidity, 0)))
+            logger.debug("yesterdaysummary_avghumidity: %s" % yesterdaysummary_avghumidity)
+
+
+
+
+
 logger.info("Initalize color...")
 init()
 
@@ -2012,6 +2111,13 @@ else:
 print(Fore.YELLOW + Style.BRIGHT + "Current humidity: " + Fore.CYAN + Style.BRIGHT + summary_humidity)
 print("")
 
+if yesterdaydata_onsummary is True:
+    print(Fore.YELLOW + Style.BRIGHT + "The weather that occurred yesterday: ")
+    print(Fore.YELLOW + Style.BRIGHT + "It was " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_dayconditions + Fore.YELLOW + Style.BRIGHT + " during the day, and "
+          + Fore.CYAN + Style.BRIGHT + yesterdaysummary_nightconditions + Fore.YELLOW + Style.BRIGHT + " during the night.")
+    print(Fore.YELLOW + Style.BRIGHT + "The high temperature yesterday: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_hightempf + "°F (" + yesterdaysummary_hightempc + "°C)")
+    print(Fore.YELLOW + Style.BRIGHT + "The low temperature yesterday: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_lowtempf + "°F (" + yesterdaysummary_lowtempc + "°C)")
+    
 print(Fore.YELLOW + Style.BRIGHT + "The hourly forecast:")
 
 for hour in hourly36_json['hourly_forecast']:
