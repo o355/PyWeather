@@ -5,8 +5,7 @@
 * Adds a nearby location feature to hurricane data (300km out)
 * Will push the API key validation code up further thanks to new features.
 * Adding a much nicer progress indicator.
-* Adds the ability to prefetch yesterday's weather at boot, and a caching system - 85% done
-    * Adding config options - Will be done on 10/7
+* Adds the ability to prefetch yesterday's weather at boot, and a caching system.
 * Adds the ability to view your current location through a GeoIP service
 * Adds the ability to view data through a PWS at boot.
 * Adds the ability to have up to 5 favorite locations.
