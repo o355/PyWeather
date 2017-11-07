@@ -454,6 +454,19 @@ except:
     logger.debug("requestsInstalled: %s ; neededLibraries: %s" %
                  (requestsInstalled, neededLibraries))
 
+try:
+    import halo
+    haloInstalled = True
+    logger.debug("halo is installed.")
+    logger.debug("haloInstalled: %s" % haloInstalled)
+except:
+    haloInstalled = False
+    neededLibraries += 1
+    logger.debug("halo is NOT installed.")
+    printException_loggerwarn()
+    logger.debug("haloInstalled: %s ; neededLibraries: %s" %
+                 (haloInstalled, neededLibraries))
+
 
 print("All done!")
 if neededLibraries == 0:
@@ -462,20 +475,22 @@ if neededLibraries == 0:
 else:
     logger.debug("Libraries need to be installed.")
     print("Shucks. Not all necessary libraries are installed. Here's what needs to be installed:")
-    if coloramaInstalled == False:
+    if coloramaInstalled is False:
         print("- Colorama")
-    if geopyInstalled == False:
+    if geopyInstalled is False:
         print("- Geopy")
-    if appjarInstalled == False:
+    if appjarInstalled is False:
         print("- appJar")
-    if requestsInstalled == False:
+    if requestsInstalled is False:
         print("- Requests")
+    if haloInstalled is False:
+        print("- Halo")
     print("If you want me to, I can automatically install these libraries.",
     "Would you like me to do such? Yes or No.", sep="\n")
     neededLibrariesConfirm = input("Input here: ").lower()
     logger.debug("neededLibrariesConfirm: %s" % neededLibrariesConfirm)
     if neededLibrariesConfirm == "no":
-        logger.warn("Not installing necessary libraries. Now exiting...")
+        logger.warning("Not installing necessary libraries. Now exiting...")
         print("Okay. I needed to install necessary libraries to continue.",
         "Now quitting...",
         "Press enter to exit.", sep="\n")
@@ -483,18 +498,21 @@ else:
         sys.exit()
     elif neededLibrariesConfirm == "yes":
         print("Now installing necessary libraries...")
-        if coloramaInstalled == False:
+        if coloramaInstalled is False:
             print("Installing Colorama...")
             pip.main(['install', 'colorama'])
-        if geopyInstalled == False:
+        if geopyInstalled is False:
             print("Installing geopy...")
             pip.main(['install', 'geopy'])
-        if appjarInstalled == False:
+        if appjarInstalled is False:
             print("Installing appJar...")
             pip.main(['install', 'appJar'])
-        if requestsInstalled == False:
+        if requestsInstalled is False:
             print("Installing requests...")
             pip.main(['install', 'requests'])
+        if haloInstalled is False:
+            print("Installing halo...")
+            pip.main(['install', 'halo'])
 
         logger.info("Running the double check on libraries...")
         print("Sweet! All libraries should be installed.",
@@ -628,6 +646,9 @@ else:
                       "Press enter to exit.")
                 input()
                 sys.exit()
+        # Why is appJar not here? When appJar is straight up imported in a non-GUI environment, it'll throw an error
+        # even when it's installed. I don't check for an install because of this reason.
+
 
         try:
             import requests
@@ -695,11 +716,77 @@ else:
                 input()
                 sys.exit()
 
+        try:
+            import halo
+            logger.info("Halo installed successfully.")
+        except ImportError:
+            logger.warn("halo was not installed successfully.")
+            print("Hmm...Halo didn't install properly.")
+            printException()
+            print("As a last resort, we can use sudo -H to install packages.",
+            "Do you want to use the shell option to install halo?",
+            "WARNING: Using the last-resort method may screw up PIP, and",
+            "may require you to reinstall PIP on your machine."
+            "Yes or No.", sep="\n")
+            halo_lastresort = input("Input here: ").lower()
+            logger.debug("halo_lastresort: %s" % halo_lastresort)
+            if halo_lastresort == "yes":
+                try:
+                    print("Now executing `sudo -H pip3 install halo`.",
+                          "Please enter the password for sudo when the prompt",
+                          "comes up. Press Control + C to cancel.",
+                          "Starting in 5 seconds...", sep="\n")
+                    time.sleep(5)
+                    try:
+                        subprocess.call(["sudo -H pip3 install halo"], shell=True)
+                        try:
+                            print("Attempting to reimport halo.")
+                            import colorama
+                            print("Halo is now installed!")
+                        except:
+                            print("Halo still wasn't successfully installed.",
+                                  "Cannot continue without Halo.",
+                                  "Try doing a manual install of Halo with PIP.", sep="\n")
+                            printException()
+                            print("Press enter to exit.")
+                            input()
+                            sys.exit()
+                    except:
+                        print("When running the command, an error occurred",
+                              "Try doing a manual install of Halo with PIP.", sep="\n")
+                        printException()
+                        print("Press enter to exit.")
+                        input()
+                        sys.exit()
+                except KeyboardInterrupt:
+                    print("Command execution aborted.",
+                          "Cannot continue without Halo.",
+                          "Try and do a manual install of Halo with PIP",
+                          "in a command line.", sep="\n")
+                    printException()
+                    print("Press enter to exit.")
+                    input()
+                    sys.exit()
+            elif halo_lastresort == "no":
+                print("Not installing Halo with a shell command.",
+                      "Cannot continue without Halo.",
+                      "Press enter to exit.", sep="\n")
+                input()
+                sys.exit()
+            else:
+                print("Did not understand your input. Defaulting to not installing",
+                      "via the shell. Cannot continue without Halo.",
+                      "Try installing Halo with PIP.",
+                      "Press enter to exit.")
+                input()
+                sys.exit()
+
         print("","All libraries are installed!", sep="\n")
     else:
         logger.warn("Input was not understood. Closing...")
-        print("I'm not sure what you said.",
-        "As a precaution, I'm now closing.", sep="\n")
+        print("Your input wasn't understood for if you wanted to automatically import libraries.",
+              "As a precaution PyWeather Setup needs to now close. Press enter to exit.", sep="\n")
+        input()
         sys.exit()
 
 print("", "Would you like PyWeather to update all your PIP packages?",
@@ -1767,7 +1854,56 @@ else:
             logger.debug("GEOCODER/scheme is now 'http'")
             print("Changes saved.")
 
-# show yesterday on summary blah blah blah
+print("", "(40/41)", "On the summary screen, you can now view a summary of the weather that occurred yesterday.",
+      "Enabling this will also enable the option to prefetch yesterday's weather at boot in the config file.",
+      "Please note that enabling this uses 1 extra API call at boot, and will increase PyWeather's loading time.",
+      "Would you like to turn on showing yesterday's weather on the summary screen? Yes or No. By default, this is",
+      "disabled.", sep="\n")
+showyesterdayonsummary = input("Input here: ").lower()
+logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
+if showyesterdayonsummary == "yes":
+    config['SUMMARY']['showyesterdayonsummary'] = 'True'
+    logger.info("SUMMARY/showyesterdayonsummary is now 'True'.")
+    config['PREFETCH']['yesterdaydata_atboot'] = 'True'
+    logger.info("PREFETCH/yesterdaydata_atboot is now 'True'.")
+    showyesterdayonsummary = True
+    logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
+    print("Changes saved.")
+elif showyesterdayonsummary == "no":
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
+    logger.info("SUMMARY/showyesterdayonsummary is now 'False'.")
+    showyesterdayonsummary = False
+    logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
+    print("Changes saved.")
+else:
+    print("Your input could not be understood. Defaulting to 'False'.")
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
+    logger.info("SUMMARY/showyesterdayonsumary is now 'False'.")
+    showyesterdayonsummary = False
+    logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
+    print("Changes saved.")
+
+if showyesterdayonsummary is False:
+    print("", "(41/41)", "When PyWeather boots up, you can have the option to have yesterday's weather data",
+          "prefetched during bootup. Enabling this will use 1 extra API call at boot, and will increase PyWeather's",
+          "loading time. Would you like to enable prefetching yesterday's weather data on boot? Yes or No.",
+          "By default, this is disabled.", sep="\n")
+    prefetchyesterdayatboot = input("Input here: ").lower()
+    logger.debug("prefetchyesterdayatboot: %s" % prefetchyesterdayatboot)
+    if prefetchyesterdayatboot == "yes":
+        config['PREFETCH']['yesterdaydata_atboot'] = 'True'
+        logger.info("PREFETCH/yesterdaydata_atboot is now 'True'.")
+        print("Changes saved.")
+    elif prefetchyesterdayatboot == "no":
+        config['PREFETCH']['yesterdaydata_atboot'] = 'False'
+        logger.info("PREFETCH/yesterdaydata_atboot is now 'False'.")
+        print("Changes saved.")
+    else:
+        print("Your input could not be understood. Defaulting to 'False'.")
+        config['PREFETCH']['yesterdaydata_atboot'] = 'False'
+        logger.info("PREFETCH/yesterdaydata_atboot is now 'False'.")
+        print("Changes saved.")
+
 # if showing yesterday is disabled show prefetch yesterday
 # if show yest. on sum. is enabled enable prefetch too basically the same code
 
