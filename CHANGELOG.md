@@ -24,7 +24,8 @@
 **BUG FIXES**
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
 * Fixed a potential bug where if there were two or more storms, on the last storm there wasn't code to let the storm go into extended forecast data.
-* Reworked the snow detection system for forecast data - A bug can occur when snow AND rain will occur during the day, and PyWeather will only spit out rain data since the high temp is above 32.
+* Fixed potential bugs where PyWeather wouldn't properly display precip information for hurricane data - The algorithm was reworked.
+* Fixed a bug where if you manually flagged all data types to refresh, hurricane data wouldn't be refreshed.
 
 **OTHER CHANGES**
 * The Git Updater has been completely removed, as it's been unreliable. A universal updater will be introduced later in time.

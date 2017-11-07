@@ -809,6 +809,7 @@ refresh_almanacflagged = False
 refresh_sundataflagged = False
 refresh_tidedataflagged = False
 refresh_hurricanedataflagged = False
+refresh_yesterdaydataflagged = False
 
 logger.debug("refresh_currentflagged: %s ; refresh_alertsflagged: %s" %
              (refresh_currentflagged, refresh_alertsflagged))
@@ -818,7 +819,8 @@ logger.debug("refresh_forecastflagged: %s ; refresh_almanacflagged: %s" %
              (refresh_forecastflagged, refresh_almanacflagged))
 logger.debug("refresh_sundataflagged: %s ; refresh_tidedataflagged: %s" %
              (refresh_sundataflagged, refresh_tidedataflagged))
-logger.debug("refresh_hurricanedataflagged: %s" % refresh_hurricanedataflagged)
+logger.debug("refresh_hurricanedataflagged: %s ; refresh_yesterdaydataflagged: %s" %
+             (refresh_hurricanedataflagged, refresh_yesterdaydataflagged))
  
 if checkforUpdates == True:
     spinner.stop()
@@ -4890,6 +4892,11 @@ while True:
                 break
 #<--- Tide data is above | Hurricane data is below --->
     elif moreoptions == "5":
+        try:
+            logger.debug("hurricane cache time: %s ; hurricane cache limit: %s" %
+                         (time.time() - cachetime_hurricane, cache_hurricanetime))
+        except:
+            logger.debug("hurricane cache limit: %s" % cache_hurricanetime)
         # I get it, this part is poorly coded in. You know what? It works!
         if (hurricanePrefetched == False or refresh_hurricanedataflagged == True or time.time() - cachetime_hurricane >= cache_hurricanetime):
             spinner.start(text="Refreshing hurricane data...")
@@ -6258,12 +6265,18 @@ while True:
 
         logger.debug("yesterdayurl: %s" % yesterdayurl)
 
-        if yesterday_prefetched == False:
+        if (yesterday_prefetched is False or refresh_yesterdaydataflagged is True or time.time() - cachetime_yesterday >= cache_yesterdaytime):
+            spinner.start(text="Refreshing yesterday's weather data...")
             try:
                 yesterdayJSON = requests.get(yesterdayurl)
                 yesterday_prefetched = True
-                logger.debug("yesterday_prefetched: %s" % yesterday_prefetched)
+                cachetime_yesterday = time.time()
+                refresh_yesterdaydataflagged = False
+                logger.debug("yesterday_prefetched: %s ; refresh_yesterdaydataflagged: %s" %
+                             (yesterday_prefetched, refresh_yesterdaydataflagged))
             except:
+                spinner.warn("Failed to refresh yesterday's weather data!")
+                print("")
                 print("When attempting to fetch yesterday's data, PyWeather ran into",
                       "an error. If you're on a network with a filter make sure that",
                       "'api.wunderground.com' is unblocked. Otherwise, make sure that",
@@ -6274,6 +6287,7 @@ while True:
                 input()
                 continue
 
+        spinner.start(text="Loading yesterday's weather information...")
         logger.debug("yesterdayJSON loaded with: %s" % yesterdayJSON)
         yesterday_json = json.loads(yesterdayJSON.text)
         if jsonVerbosity == True:
@@ -6281,9 +6295,6 @@ while True:
         else:
             logger.debug("Loaded 1 JSON.")
         yesterday_date = yesterday_json['history']['date']['pretty']
-        print(Fore.YELLOW + "Here's yesterday's weather for " + Fore.CYAN +
-              str(location) + Fore.YELLOW + " on "
-              + Fore.CYAN + yesterday_date)
         logger.debug("yesterday_date: %s" % yesterday_date)
         for data in yesterday_json['history']['dailysummary']:
             print("")
@@ -6375,7 +6386,11 @@ while True:
             else:
                 yesterday_precipdata = True
             logger.debug("yesterday_precipdata: %s" % yesterday_precipdata)
-
+        spinner.stop()
+        print(Fore.YELLOW + "Here's yesterday's weather for " + Fore.CYAN +
+              str(location) + Fore.YELLOW + " on "
+              + Fore.CYAN + yesterday_date)
+        print("")
         print(Fore.YELLOW + "Here's the summary for the day.")
         print(Fore.YELLOW + "Minimum Temperature: " + Fore.CYAN + yesterday_minTempF
               + "°F (" + yesterday_minTempC + "°C)")
@@ -6608,6 +6623,11 @@ while True:
         refresh_tidedataflagged = True
         logger.debug("refresh_sundataflagged: %s ; refresh_tidedataflagged: %s" %
                      (refresh_sundataflagged, refresh_tidedataflagged))
+        refresh_hurricanedataflagged = True
+        refresh_yesterdaydataflagged = True
+        logger.debug("refresh_hurricanedataflagged: %s ; refresh_yesterdaydataflagged: %s" %
+                     (refresh_hurricanedataflagged, refresh_yesterdaydataflagged))
+
     elif moreoptions == "extratools:1":
         print(Fore.YELLOW + Style.BRIGHT + "Listing all cache times:")
         print(Fore.YELLOW + Style.BRIGHT + "Current conditions: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
