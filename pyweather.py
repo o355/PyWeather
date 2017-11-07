@@ -685,17 +685,23 @@ elif geopyScheme == "https" and geocoder_customkeyEnabled is True:
     try:
         location = geolocator.geocode("123 5th Avenue, New York, NY")
     except geopy.exc.GeocoderQueryError:
+        spinner.warn(text="Geocoder API key is invalid!")
+        print("")
         logger.debug("API key is invalid, falling back to no API key...")
         print("Your geocoder API key failed to validate, since it is wrong.",
               "Falling back to no API key...", sep="\n")
         printException()
         geolocator = GoogleV3(scheme='https')
+        spinner.start(text="Loading PyWeather...")
     except:
+        spinner.warn(text="Failed to validate geocoder API key!")
+        print("")
         print("When trying to validate your geocoder API key, something went wrong.",
               "Falling back to no API key...", sep="\n")
         printException()
         logger.debug("Failed to validate API key.")
         geolocator = GoogleV3(scheme='https')
+        spinner.start(text="Loading PyWeather...")
 elif geopyScheme == "http" and geocoder_customkeyEnabled is False:
     geolocator = GoogleV3(scheme='http')
     logger.debug("geocoder scheme is now http.")
@@ -711,17 +717,23 @@ elif geopyScheme == "http" and geocoder_customkeyEnabled is True:
     try:
         location = geolocator.geocode("123 5th Avenue, New York, NY")
     except geopy.exc.GeocoderQueryError:
+        spinner.warn(text="Geocoder API key is invalid!")
+        print("")
         logger.debug("API key is invalid, falling back to no API key...")
         print("Your geocoder API key failed to validate, since it is wrong.",
               "Falling back to no API key...", sep="\n")
         printException()
         geolocator = GoogleV3(scheme='http')
+        spinner.start(text="Loading PyWeather...")
     except:
+        spinner.warn(text="Failed to validate geocoder API key!")
+        print("")
         print("When trying to validate your geocoder API key, something went wrong.",
               "Falling back to no API key...", sep="\n")
         printException()
         logger.debug("Failed to validate API key.")
         geolocator = GoogleV3(scheme='http')
+        spinner.start(text="Loading PyWeather...")
 else:
     print("Geocoder scheme variable couldn't be understood.",
           "Defaulting to the https scheme.", sep="\n")
@@ -749,19 +761,25 @@ try:
     logger.debug("apikey_load = %s" % apikey_load)
     apikey = apikey_load.read()
 except FileNotFoundError:
+    spinner.warn(text="Failed to access your primary API key!")
+    print("")
     print("Your primary API key couldn't be loaded, as PyWeather ran into",
           "an error when attempting to access it. Make sure that your primary key",
           "file can be accessed (usually found at storage/apikey.txt. Make sure it has",
           "proper permissions, and that it exists). In the mean time, we're attempting",
           "to load your backup API key.", sep="\n")
     # If the key isn't found, try to find the second key. - Section 15b
+    spinner.start(text="Loading PyWeather...")
     try:
         apikey2_load = open(user_backupKeyDirectory + "backkey.txt")
         logger.debug("apikey2_load: %s" % apikey2_load)
         apikey = apikey2_load.read()
         logger.debug("apikey: %s" % apikey)
-        print("Loaded your backup key successfully!")
+        spinner.succeed(text="Successfully loaded your backup key!")
+        spinner.start(text="Loading PyWeather...")
     except FileNotFoundError:
+        spinner.fail(text="Failed to access a primary & backup key!")
+        print("")
         print("When attempting to access your backup API key, PyWeather ran into",
               "an error. Make sure that your backup key file is accessible (wrong",
               "permissions and the file not existing are common issues).", sep="\n")
@@ -851,7 +869,7 @@ if checkforUpdates == True:
                   ", and the latest version is " + version_latestVersion + ".")
             print("")
     except:
-        spinner.warn(text="Couldn't check for updates.")
+        spinner.warn(text="Couldn't check for PyWeather updates!")
         print("")
         spinner.start(text="Loading PyWeather...")
         print("Couldn't check for updates. Make sure raw.githubusercontent.com is unblocked on your network,",
@@ -1018,8 +1036,10 @@ if geoip_enabled == True:
         logger.debug("useGeocoder: %s" % useGeocoder)
     except:
         spinner.warn(text="Failed to get current location! Current location is disabled.")
+        print("")
         geoip_available = False
         logger.debug("geoip_available: %s" % geoip_available)
+        spinner.start(text="Loading PyWeather...")
 
     # If geoip is available (the except block wasn't run), check for a bad geolocation (a straight up comma)
     if geoip_available == True:
@@ -1944,11 +1964,6 @@ if showTideOnSummary == True:
 else:
     tidedata_prefetched = False
     logger.debug("tidedata_prefetched: %s" % tidedata_prefetched)
-
-
-
-yesterday_prefetched = False
-logger.debug("yesterday_prefetched: %s" % yesterday_prefetched)
 
 # Parse basic yesterday weather information.
 if yesterdaydata_onsummary is True:
@@ -6262,18 +6277,17 @@ while True:
         yesterday_totalloops = 0
         logger.debug("yesterday_loops: %s ; yesterday_totalloops: %s"
                      % (yesterday_loops, yesterday_totalloops))
-
         logger.debug("yesterdayurl: %s" % yesterdayurl)
-
-        if (yesterday_prefetched is False or refresh_yesterdaydataflagged is True or time.time() - cachetime_yesterday >= cache_yesterdaytime):
+        if (yesterdaydata_prefetched is False or refresh_yesterdaydataflagged is True or time.time() - cachetime_yesterday >= cache_yesterdaytime):
             spinner.start(text="Refreshing yesterday's weather data...")
             try:
                 yesterdayJSON = requests.get(yesterdayurl)
-                yesterday_prefetched = True
+                yesterdaydata_prefetched = True
                 cachetime_yesterday = time.time()
                 refresh_yesterdaydataflagged = False
-                logger.debug("yesterday_prefetched: %s ; refresh_yesterdaydataflagged: %s" %
-                             (yesterday_prefetched, refresh_yesterdaydataflagged))
+                logger.debug("yesterdaydata_prefetched: %s ; refresh_yesterdaydataflagged: %s" %
+                             (yesterdaydata_prefetched, refresh_yesterdaydataflagged))
+                spinner.stop()
             except:
                 spinner.warn("Failed to refresh yesterday's weather data!")
                 print("")
@@ -6296,8 +6310,8 @@ while True:
             logger.debug("Loaded 1 JSON.")
         yesterday_date = yesterday_json['history']['date']['pretty']
         logger.debug("yesterday_date: %s" % yesterday_date)
+        spinner.stop()
         for data in yesterday_json['history']['dailysummary']:
-            print("")
             yesterday_avgTempF = str(data['meantempi'])
             yesterday_avgTempC = str(data['meantempm'])
             yesterday_avgDewpointF = str(data['meandewpti'])
@@ -6386,7 +6400,7 @@ while True:
             else:
                 yesterday_precipdata = True
             logger.debug("yesterday_precipdata: %s" % yesterday_precipdata)
-        spinner.stop()
+
         print(Fore.YELLOW + "Here's yesterday's weather for " + Fore.CYAN +
               str(location) + Fore.YELLOW + " on "
               + Fore.CYAN + yesterday_date)
@@ -6630,45 +6644,63 @@ while True:
 
     elif moreoptions == "extratools:1":
         print(Fore.YELLOW + Style.BRIGHT + "Listing all cache times:")
-        print(Fore.YELLOW + Style.BRIGHT + "Current conditions: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+        print(Fore.YELLOW + Style.BRIGHT + "Current conditions: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
               (round(time.time() - cachetime_current, 2), round((time.time() - cachetime_current) / 60, 2), cache_currenttime, cache_currenttime / 60))
         # The variables in order: The raw cache time in seconds (rounded down to 2 decimal places, the raw cache time divided by 60, rounded to 2 (current cache time in mins)
         # After that, display the configured refresh cache limit, and divide the variable by 60 to get it in minutes.
-        print(Fore.YELLOW + Style.BRIGHT + "Forecast data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+        print(Fore.YELLOW + Style.BRIGHT + "Forecast data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
               (round(time.time() - cachetime_forecast, 2), round((time.time() - cachetime_forecast) / 60, 2), cache_forecasttime, cache_forecasttime / 60))
         try:
-            print(Fore.YELLOW + Style.BRIGHT + "Astronomy (sundata) data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+            print(Fore.YELLOW + Style.BRIGHT + "Astronomy (sundata) data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
                   round(time.time() - cachetime_sundata, 2), round((time.time() - cachetime_sundata) / 60, 2), cache_sundatatime, cache_sundatatime / 60)
         except NameError:
             print(Fore.YELLOW + Style.BRIGHT + "Astronomy (sundata) data: Data not cached / limit %s seconds (%s minutes)" %
                   (cache_sundatatime, cache_sundatatime / 60))
 
         try:
-            print(Fore.YELLOW + Style.BRIGHT + "10-day hourly data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+            print(Fore.YELLOW + Style.BRIGHT + "10-day hourly data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
                   (round(time.time() - cachetime_hourly10, 2), round((time.time() - cachetime_hourly10) / 60, 2), cache_tendayhourly, cache_tendayhourly / 60))
         except NameError:
             print(Fore.YELLOW + Style.BRIGHT + "10-day hourly data: Data not cached / limit %s seconds (%s minutes)" %
                   (cache_tendayhourly, cache_tendayhourly / 60))
 
-        print(Fore.YELLOW + Style.BRIGHT + "1.5 day hourly data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+        print(Fore.YELLOW + Style.BRIGHT + "1.5 day hourly data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
               (round(time.time() - cachetime_hourly36, 2), round((time.time() - cachetime_hourly36) / 60, 2), cache_threedayhourly, cache_threedayhourly / 60))
 
         try:
-            print(Fore.YELLOW + Style.BRIGHT + "Almanac data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
-                  (round(time.time() - cachetime_almanac / 60), round((time.time() - cachetime_almanac) / 60, 2), cache_almanactime, cache_almanactime / 60))
+            print(Fore.YELLOW + Style.BRIGHT + "Almanac data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_almanac, 2), round((time.time() - cachetime_almanac) / 60, 2), cache_almanactime, cache_almanactime / 60))
         except NameError:
             print(Fore.YELLOW + Style.BRIGHT + "Almanac data: Data not cached / limit %s seconds (%s minutes)" %
                   (cache_almanactime, cache_almanactime / 60))
 
         try:
-            print(Fore.YELLOW + Style.BRIGHT + "Alerts data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
-                  (round(time.time() - cachetime_alerts / 60), round((time.time() - cachetime_alerts) / 60, 2), cache_alertstime, cache_alertstime / 60))
+            print(Fore.YELLOW + Style.BRIGHT + "Alerts data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_alerts, 2), round((time.time() - cachetime_alerts) / 60, 2), cache_alertstime, cache_alertstime / 60))
         except NameError:
             print(Fore.YELLOW + Style.BRIGHT + "Alerts data: Data not cached / limit %s seconds (%s minutes)" %
                   (cache_alertstime, cache_alertstime / 60))
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "Tide data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_tide, 2), round((time.time() - cachetime_tide) / 60, 2), cache_tidetime, cache_tidetime / 60))
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "Tide data: Data not cached / limit %s secnods (%s minutes)" %
+                  (cache_tidetime, cache_tidetime / 60))
 
-        print(Fore.YELLOW + Style.BRIGHT + "Tide data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
-              (round(time.time() - cachetime_tide / 60), round((time.time() - cachetime_tide) / 60, 2), cache_tidetime, cache_tidetime / 60))
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "Hurricane data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_hurricane, 2), round((time.time() - cachetime_hurricane) / 60, 2), cache_hurricanetime, cache_hurricanetime / 60))
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "Hurricane data: Data not cached / limit %s seconds (%s minutes)" %
+                  (cache_hurricanetime, cache_hurricanetime / 60))
+
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "Yesterday data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_yesterday, 2), round((time.time() - cachetime_yesterday) / 60, 2), cache_yesterdaytime, cache_yesterdaytime / 60))
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "Yesterday data: Data not cached / limit %s seconds (%s minutes)" %
+                  (cache_yesterdaytime, cache_yesterdaytime / 60))
+
 
     else:
         logger.warn("Input could not be understood!")

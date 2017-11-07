@@ -149,6 +149,7 @@ def configprovision():
     config['UI']['alerts_usiterations'] = '1'
     config['UI']['alerts_euiterations'] = '2'
     config['PREFETCH']['10dayfetch_atboot'] = 'False'
+    config['PREFETCH']['yesterdaydata_atboot'] = 'False'
     config['UPDATER']['autocheckforupdates'] = 'False'
     config['UPDATER']['show_updaterreleasetag'] = 'False'
     config['KEYBACKUP']['savedirectory'] = 'backup//'
@@ -167,7 +168,7 @@ def configprovision():
     config['CACHE']['sundata_cachedtime'] = '480'
     config['CACHE']['tide_cachedtime'] = '480'
     config['CACHE']['hurricane_cachedtime'] = '180'
-    config['CACHE']['yesterday_cachedtime'] = '720' # This value is just a guess, change it pls.
+    config['CACHE']['yesterday_cachedtime'] = '720'
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['GEOCODER']['scheme'] = 'https'
@@ -1276,7 +1277,7 @@ else:
         config['CACHE']['hurricane_cachedtime'] = '180'
         logger.debug("Hurricane data cache time now 180 minutes.")
 
-    print("", "(19/30)", "Please enter the cache time for yesterday's weather data in minutes (default = 240)", sep="\n")
+    print("", "(19/30)", "Please enter the cache time for yesterday's weather data in minutes (default = 720)", sep="\n")
     yesterdaycachedtime = input("Input here: ").lower()
     try:
         yesterdaycachedtime = float(yesterdaycachedtime)
@@ -1286,9 +1287,9 @@ else:
         logger.debug("Yesterday cache time now %s minutess" % yesterdaycachedtime)
     except:
         print("", "Your input couldn't be converted into a number. Setting yesterday's weather data",
-                "cache time to it's default value of 240.", sep="\n")
-        config['CACHE']['yesterday_cachedtime'] = '240'
-        logger.debug("Yesterday data cache time now 240 minutes.")
+                "cache time to it's default value of 720.", sep="\n")
+        config['CACHE']['yesterday_cachedtime'] = '720'
+        logger.debug("Yesterday data cache time now 720 minutes.")
 
 
 
@@ -1766,27 +1767,9 @@ else:
             logger.debug("GEOCODER/scheme is now 'http'")
             print("Changes saved.")
 
-print("", "(40/40)", "On the summary screen, would you like me to show yesterday's weather?",
-        "By default, this is disabled.",
-        "Yes or No.", sep="\n")
-yesterday_Summary = input("Input here: ").lower()
-logger.debug("yesterday_Summary: %s" % yesterday_Summary)
-if yesterday_Summary == "yes":
-    config["SUMMARY"]["showyesterdayonsummary"] = "True"
-    print("Changes saved.")
-    logger.debug("Yesterday data on the summary is now ENABLED.")
-
-elif yesterday_Summary == "no":
-    config["SUMMARY"]["showyesterdayonsummary"] = "False"
-    print("Changes saved.")
-    logger.debug("Yesterday data on the summary is now DISABLED")
-
-else:
-    print("Could not understand what you inputted.",
-          "Defaulting to False", sep="\n")
-    config['SUMMARY']['showyesterdayonsummary'] = 'False'
-    print("Changes saved.")
-    logger.debug("Could not recognize input. Defaulting to DISABLED.")
+# show yesterday on summary blah blah blah
+# if showing yesterday is disabled show prefetch yesterday
+# if show yest. on sum. is enabled enable prefetch too basically the same code
 
 print("","That's it! Now commiting config changes...", sep="\n")
 try:

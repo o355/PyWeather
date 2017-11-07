@@ -5,20 +5,24 @@
 * Adds a nearby location feature to hurricane data (300km out)
 * Will push the API key validation code up further thanks to new features.
 * Adding a much nicer progress indicator.
-* Adds the ability to prefetch yesterday's weather at boot, and a caching system - 80% done
-    * Need to add options to all the usual scripts that work with the config
+* Adds the ability to prefetch yesterday's weather at boot, and a caching system - 85% done
+    * Adding config options - Will be done on 10/7
 * Adds the ability to view your current location through a GeoIP service
 * Adds the ability to view data through a PWS at boot.
 * Adds the ability to have up to 5 favorite locations.
 * Adds the ability to manually define a Google Maps API key
-* Adds the ability to show cache timings when enabled - 0% done, Should be finished by 11/18
 * Much better error catching for the config file
-* Adding a new loader - 95% done
 * Adds the ability to view the chance of precipitation on the forecast page.
-* Adding the ability to show cache timings - 25% done
-    * Initial implementation
-    * Adding config stuff
-* Final menu additions - 0% done
+* Adding the ability to show cache timings - 50% done
+    * Initial code - Done
+    * Adding menu stuff & user enabling in PyWeather - Will be done on 10/7
+    * Adding config stuff - Will be done on 10/8
+* Adding a new loader - Will be done on 10/8
+    * Adding remaining color to yesterday's weather - will be done 10/8
+    * Adding library update to configupdate - Will be done 10/9
+* Final additions - Will be done 10/9
+    * Final menu options - Will be done 10/9
+    * Setup options with proper counting - Will be done 10/9
    
 
 **BUG FIXES**
