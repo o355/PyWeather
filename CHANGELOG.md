@@ -1,7 +1,7 @@
 # PyWeather changelog
 **Note: The changelog being used for tracking PyWeather progress has been retiredish. Please check the projects tab of PyWeather for progress on the next versions of PyWeather.**
 
-## version 0.6.3 beta - Should be released late November/early December 2017:
+## version 0.6.3 beta - Should be released on November 30, 2017:
 * Adds a nearby location feature to hurricane data (300km out)
 * Will push the API key validation code up further thanks to new features.
 * Adding a much nicer progress indicator.
@@ -17,7 +17,7 @@
 * Final additions - Will be done 10/9
     * Final menu options - Will be done 10/9
     * Setup options with proper counting - Will be done 10/9
-   
+    * Final version additions - Will be done 10/9
 
 **BUG FIXES**
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
