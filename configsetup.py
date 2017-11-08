@@ -153,6 +153,7 @@ if cd_confirmation == "yes":
     config['UI']['show_completediterations'] = 'False'
     config['UI']['alerts_usiterations'] = '1'
     config['UI']['alerts_euiterations'] = '2'
+    config['UI']['extratools_enabled'] = 'False'
     config['UPDATER']['autocheckforupdates'] = 'False'
     config['UPDATER']['show_updaterreleasetag'] = 'False'
     config['KEYBACKUP']['savedirectory'] = 'backup//'

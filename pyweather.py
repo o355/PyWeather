@@ -692,6 +692,9 @@ elif geopyScheme == "https" and geocoder_customkeyEnabled is True:
               "Falling back to no API key...", sep="\n")
         printException()
         geolocator = GoogleV3(scheme='https')
+        # Sleep the loading process for 100ms, this should give enough time to let the traceback get
+        # printed, and let the loader continue
+        time.sleep(0.1)
         spinner.start(text="Loading PyWeather...")
     except:
         spinner.warn(text="Failed to validate geocoder API key!")
@@ -701,6 +704,7 @@ elif geopyScheme == "https" and geocoder_customkeyEnabled is True:
         printException()
         logger.debug("Failed to validate API key.")
         geolocator = GoogleV3(scheme='https')
+        time.sleep(0.1)
         spinner.start(text="Loading PyWeather...")
 elif geopyScheme == "http" and geocoder_customkeyEnabled is False:
     geolocator = GoogleV3(scheme='http')
@@ -724,6 +728,7 @@ elif geopyScheme == "http" and geocoder_customkeyEnabled is True:
               "Falling back to no API key...", sep="\n")
         printException()
         geolocator = GoogleV3(scheme='http')
+        time.sleep(0.1)
         spinner.start(text="Loading PyWeather...")
     except:
         spinner.warn(text="Failed to validate geocoder API key!")
@@ -733,6 +738,7 @@ elif geopyScheme == "http" and geocoder_customkeyEnabled is True:
         printException()
         logger.debug("Failed to validate API key.")
         geolocator = GoogleV3(scheme='http')
+        time.sleep(0.1)
         spinner.start(text="Loading PyWeather...")
 else:
     print("Geocoder scheme variable couldn't be understood.",
@@ -2232,6 +2238,12 @@ while True:
     print(Fore.YELLOW + Style.BRIGHT + "- Check PyWeather's cache timings - Enter " + Fore.CYAN + Style.BRIGHT + "15")
     print(Fore.YELLOW + Style.BRIGHT + "- View the about page for PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "16 (14)")
     print(Fore.YELLOW + Style.BRIGHT + "- Close PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "17 (15)")
+    if extratools_enabled is True:
+        print(Fore.YELLOW + Style.BRIGHT + "Extra tools:")
+        print(Fore.YELLOW + Style.BRIGHT + "- View the cache timings for all data types - Enter " + Fore.CYAN + Style.BRIGHT + "extratools:1")
+        print("")
+    else:
+        print("")
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
@@ -5718,16 +5730,26 @@ while True:
             logger.debug("enablefavoritelocations: %s" % enablefavoritelocations)
             if enablefavoritelocations == "yes":
                 config['FAVORITE LOCATIONS']['enabled'] = 'True'
-            try:
-                with open('storage//config.ini', 'w') as configfile:
-                    config.write(configfile)
-                print(Fore.YELLOW + Style.BRIGHT + "Favorite locations is now enabled, and will be operational when you next boot up PyWeather.")
+                logger.info("FAVORITE LOCATIONS/enabled is now 'True'.")
+                try:
+                    with open('storage//config.ini', 'w') as configfile:
+                        config.write(configfile)
+                    print(Fore.YELLOW + Style.BRIGHT + "Favorite locations is now enabled, and will be operational when you next boot up PyWeather.")
+                    continue
+                except:
+                    print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to save new configuration options.",
+                          Fore.RED + Style.BRIGHT + "Please enable favorite locations in the config file. In the FAVORITE LOCATIONS",
+                          Fore.RED + Style.BRIGHT + "section, change enabled to True.")
+                    continue
+            elif enablefavoritelocations == "no":
+                print(Fore.YELLOW + Style.BRIGHT + "Not enabling favorite locations. Returning to the main menu.",
+                      "You can come back to this menu to reenable favorite locations, or go into your config file and",
+                      "enable FAVORITE LOCATIONS/enabled (set it to True).", sep="\n")
                 continue
-            except:
-                print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to save new configuration options.",
-                      Fore.RED + Style.BRIGHT + "Please enable favorite locations in the config file. In the FAVORITE LOCATIONS",
-                      Fore.RED + Style.BRIGHT + "section, change enabled to True.")
-                continue
+            else:
+                print(Fore.YELLOW + Style.BRIGHT + "Your input wasn't understood, and as such favorite locations will not be enabled.",
+                      "You can come back to this menu to reenable favorite locations, or go into your config file and",
+                      "enable FAVORITE LOCATIONS/enabled (set it to True).")
 
         while True:
             # Get up-to-date configuration information about favorite locations.
@@ -6643,6 +6665,34 @@ while True:
                      (refresh_hurricanedataflagged, refresh_yesterdaydataflagged))
 
     elif moreoptions == "extratools:1":
+        if extratools_enabled is False:
+            print(Fore.RED + "Whoops! Extra tools isn't enabled at this time.",
+                  "If you'd like, I can enable the extra tools feature for you. Would you like the extratools feature at this time?",
+                  "Yes or No.", sep="\n")
+            extratools_enableinput = input("Input here: ").lower()
+            logger.debug("extratools_enableinput: %s" % extratools_enableinput)
+            if extratools_enableinput == "yes":
+                config['UI']['extratools_enabled'] = 'True'
+                logger.info("UI/extratools_enabled is now 'True'.")
+                try:
+                    with open('storage//config.ini', 'w') as configfile:
+                        config.write(configfile)
+                    print(Fore.YELLOW + Style.BRIGHT + "Extra tools is now enabled, and will be operational when you next boot up PyWeather.")
+                    continue
+                except:
+                    print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to save new configuration options.",
+                          Fore.RED + Style.BRIGHT + "Please enable favorite locations in the config file. In the UI section, change",
+                          Fore.RED + Style.BRIGHT + "extratools_enabled to 'True'.")
+                    continue
+            elif extratools_enableinput == "no":
+                print(Fore.YELLOW + Style.BRIGHT + "Not enabling extra tools. Returning to the main menu.",
+                      "You can come back to this menu to reenable extra tools, or go into your config file and",
+                      "enable UI/extratools_enabled (set it to True).", sep="\n")
+            else:
+                print(Fore.YELLOW + Style.BRIGHT + "Your input wasn't understood, and as such favorite locations will not be enabled.",
+                      "You can come back to this menu to reenable extra tools, or go into your config file and",
+                      "enable UI/extratools_enabled (set it to True).")
+
         print(Fore.YELLOW + Style.BRIGHT + "Listing all cache times:")
         print(Fore.YELLOW + Style.BRIGHT + "Current conditions: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
               (round(time.time() - cachetime_current, 2), round((time.time() - cachetime_current) / 60, 2), cache_currenttime, cache_currenttime / 60))

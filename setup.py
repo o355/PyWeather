@@ -148,6 +148,7 @@ def configprovision():
     config['UI']['show_completediterations'] = 'False'
     config['UI']['alerts_usiterations'] = '1'
     config['UI']['alerts_euiterations'] = '2'
+    config['UI']['extratools_enabled'] = 'False'
     config['PREFETCH']['10dayfetch_atboot'] = 'False'
     config['PREFETCH']['yesterdaydata_atboot'] = 'False'
     config['UPDATER']['autocheckforupdates'] = 'False'
@@ -1903,6 +1904,26 @@ if showyesterdayonsummary is False:
         config['PREFETCH']['yesterdaydata_atboot'] = 'False'
         logger.info("PREFETCH/yesterdaydata_atboot is now 'False'.")
         print("Changes saved.")
+
+print("", "(42/42)", "In 0.6.3 beta and newer, you have the option to enable extra tools for PyWeather."
+      "Extra tools are diagnostic tools, and so far you can see cache timings in PyWeather, and more extra tools",
+      "will be added as time goes on. Would you like to enable the ability to use extra tools? Yes or No. By default",
+      "this is disabled.", sep="\n")
+enableextratools = input("Input here: ").lower()
+logger.debug("enableextratools: %s" % enableextratools)
+if enableextratools == "yes":
+    config['UI']['extratools_enabled'] = 'True'
+    logger.info("UI/extratools_enabled is now 'True'.")
+    print("Changes saved.")
+elif enableextratools == "no":
+    config['UI']['extratools_enabled'] = 'False'
+    logger.info("UI/extratools_enabled is now 'False'.")
+    print("Changes saved.")
+else:
+    print("Could not understand your input. Defaulting to 'False'.")
+    config['UI']['extratools_enabled'] = 'False'
+    logger.info("UI/extratools_enabled is now 'False'.")
+    print("Changes saved.")
 
 # if showing yesterday is disabled show prefetch yesterday
 # if show yest. on sum. is enabled enable prefetch too basically the same code

@@ -127,7 +127,7 @@ if "0.6.2 beta" in versioninfo2:
     except configparser.DuplicateSectionError:
         print("Failed to add the hurricane section. Does it exist?")
 
-    print("17 new configuration options have been added from 0.6.2 beta to 0.6.3 beta.",
+    print("18 new configuration options have been added from 0.6.2 beta to 0.6.3 beta.",
           "Details:",
           "- FIRSTINPUT/geoipservice_enabled - Sets if the service to allow current location queries is enabled - Defaults to False",
           "- FIRSTINPUT/allow_pwsqueries - Sets if PyWeather will allow PWS queries - Defaults to True",
@@ -145,7 +145,8 @@ if "0.6.2 beta" in versioninfo2:
           "- GEOCODER API/customkey - Sets the custom API key for the geocoder, if enabled - Defaults to 'None'.",
           "- SUMMARY/showyesterdayonsummary - Sets if yesterday's weather data should be shown on the summary screen - Defaults to 'False'.",
           "- PREFETCH/yesterdaydata_atboot - Sets if yesterday's weather data should be prefetched at boot. - Defaults to 'False'.",
-          "- CACHE/yesterday_cachedtime - Sets the cache time for yesterday's weather - Defaults to '720'.", sep="\n")
+          "- CACHE/yesterday_cachedtime - Sets the cache time for yesterday's weather - Defaults to '720'.",
+          "- UI/extratools_enabled - Sets if PyWeather's extra tools is enabled. - Defaults to 'False'.", sep="\n")
 
     print("", "One old configuration option has been removed - Please delete this options from your config file.",
           "- UPDATER/allowGitForUpdating - Used to set if the Git updater was enabled - Now removed", sep="\n")
@@ -167,6 +168,7 @@ if "0.6.2 beta" in versioninfo2:
     config['SUMMARY']['showyesterdayonsummary'] = 'False'
     config['PREFETCH']['yesterdaydata_atboot'] = 'False'
     config['CACHE']['yesterday_cachedtime'] = '720'
+    config['UI']['extratools_enabled'] = 'False'
 
 elif "0.6.1 beta" in versioninfo2:
     try:
@@ -199,7 +201,7 @@ elif "0.6.1 beta" in versioninfo2:
     except configparser.DuplicateSectionError:
         print("Failed to add the hurricane section. Does it exist?")
 
-    print("23 new configuration options have been added from 0.6.1 beta to 0.6.3 beta.",
+    print("24 new configuration options have been added from 0.6.1 beta to 0.6.3 beta.",
           "Details:",
           "- CACHE/tide_cachedtime - Sets the cache time on tide data - Defaults to 480",
           "- SUMMARY/showtideonsummary - Sets if tide data should be shown on the summary screen - Defaults to False",
@@ -225,7 +227,8 @@ elif "0.6.1 beta" in versioninfo2:
           "- GEOCODER API/customkey - Sets the custom API key for the geocoder, if enabled - Defaults to 'None'.",
           "- SUMMARY/showyesterdayonsummary - Sets if yesterday's weather data should be shown on the summary screen - Defaults to 'False'.",
           "- PREFETCH/yesterdaydata_atboot - Sets if yesterday's weather data should be prefetched at boot. - Defaults to 'False'.",
-          "- CACHE/yesterday_cachedtime - Sets the cache time for yesterday's weather - Defaults to '720'.", sep="\n")
+          "- CACHE/yesterday_cachedtime - Sets the cache time for yesterday's weather - Defaults to '720'.",
+          "- UI/extratools_enabled - Sets if PyWeather's extra tools is enabled. - Defaults to 'False'.", sep="\n")
 
     print("")
     print("3 old configuration options, and 2 sections have been removed. Please delete these options from your config file.",
@@ -260,6 +263,7 @@ elif "0.6.1 beta" in versioninfo2:
     config['SUMMARY']['showyesterdayonsummary'] = 'False'
     config['PREFETCH']['yesterdaydata_atboot'] = 'False'
     config['CACHE']['yesterday_cachedtime'] = '720'
+    config['UI']['extratools_enabled'] = 'False'
     geopycheck()
 elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     # A usual input() and sys.exit() isn't present here, as it's assumed this
@@ -304,7 +308,7 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     except configparser.DuplicateSectionError:
         print("Failed to add the hurricane section. Does it exist?")
         
-    print("31 new configuration options have been added from 0.6 beta to 0.6.3 beta.",
+    print("32 new configuration options have been added from 0.6 beta to 0.6.3 beta.",
           "Details:",
           "- CACHE/alerts_cachedtime - Sets the cache time on alert data - Defaults to 5",
           "- CACHE/current_cachedtime - Sets the cache time on current data - Defaults to 10",
@@ -338,7 +342,8 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
           "- GEOCODER API/customkey - Sets the custom API key for the geocoder, if enabled - Defaults to 'None'.",
           "- SUMMARY/showyesterdayonsummary - Sets if yesterday's weather data should be shown on the summary screen - Defaults to 'False'.",
           "- PREFETCH/yesterdaydata_atboot - Sets if yesterday's weather data should be prefetched at boot. - Defaults to 'False'.",
-          "- CACHE/yesterday_cachedtime - Sets the cache time for yesterday's weather - Defaults to '720'.", sep="\n")
+          "- CACHE/yesterday_cachedtime - Sets the cache time for yesterday's weather - Defaults to '720'.",
+          "- UI/extratools_enabled - Sets if PyWeather's extra tools is enabled. - Defaults to 'False'.", sep="\n")
 
     print("")
     print("3 old configuration options, and 2 sections are now removed. Please delete these options from your config file.",
@@ -381,6 +386,7 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     config['SUMMARY']['showyesterdayonsummary'] = 'False'
     config['PREFETCH']['yesterdaydata_atboot'] = 'False'
     config['CACHE']['yesterday_cachedtime'] = '720'
+    config['UI']['extratools_enabled'] = 'False'
     geopycheck()
 else:
     print("Hmm. Your version identifier didn't match any known versions.",
