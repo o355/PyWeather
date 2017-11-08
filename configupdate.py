@@ -22,6 +22,7 @@
 import sys
 import configparser
 import traceback
+import pip
 
 try:
     versioninfo = open("updater//versioninfo.txt")
@@ -53,6 +54,7 @@ except:
 config = configparser.ConfigParser()
 config.read("storage//config.ini")
 
+# Define the geopycheck code.
 def geopycheck():
     print("In version 0.6.2 beta and above, your geocoder scheme needs to get set, based on your OS.",
           "PyWeather can automatically do this now, or you can manually define your scheme.",
@@ -106,6 +108,50 @@ def geopycheck():
                       "Defaulting to HTTP as the geopy scheme...", sep="\n")
                 config['GEOCODER']['scheme'] = 'http'
                 print("Changes saved.")
+
+# Define the code to install halo
+def installhalo():
+    # Check if halo is installed.
+    try:
+        import halo
+        print("For PyWeather 0.6.3 beta nad above, a new library called 'halo' is required for PyWeather to operate.",
+              "This library controls the new loaders that are present in PyWeather. However, you already installed halo",
+              "and there is no need to do an automatic install of halo.", sep="\n")
+        return
+    except:
+        foobar = 1
+        # Placeholder code i guess?
+    print("For PyWeather 0.6.3 beta and above, a new library called 'halo' is required for PyWeather to operate.",
+          "This library controls the new loader that is present in PyWeather, and 'halo' is now required for PyWeather",
+          "to properly operate. If you'd like, halo can be automatically installed for you. However, please note that sometimes",
+          "this may fail, and you'll need to manually install halo in a command line before starting up PyWeather. Would you",
+          "like this automatic install to continue? Yes or No.", sep="\n")
+    haloinstall = input("Input here: ").lower()
+    if haloinstall == "yes":
+        print("Now installing halo using pip's built-in installer.")
+        pip.main(['install', 'halo'])
+        print("Now checking for if pip was properly installed...")
+        try:
+            import halo
+            print("Halo is now installed!")
+            return
+        except ImportError:
+            print("Whoops! Halo wasn't installed properly. To use PyWeather, you'll need",
+                  "to manually use a command line and install halo. The command to do so is",
+                  "'pip3 install halo' on most platforms. If you are seeing errors about your pip install,",
+                  "try using a search engine to fix your install error.", sep="\n")
+            return
+    elif haloinstall == "no":
+        print("To use PyWeather, you'll need to install halo in a command line.",
+              "The command to do this is 'pip3 install halo' on most platforms.",
+              "Please do note that without halo PyWeather cannot operate.", sep="\n")
+        return
+    else:
+        print("Your input could not be understood. As a precaution, the automatic install will not be carried out.",
+              "PyWeather requires halo, and won't work without it. As such, you'll need to manually use a command line",
+              "and install halo. The command to do this is 'pip3 install halo' on most platforms.", sep="\n")
+        return
+
 if "0.6.2 beta" in versioninfo2:
     try:
         config.add_section("GEOCODER API")
@@ -169,6 +215,8 @@ if "0.6.2 beta" in versioninfo2:
     config['PREFETCH']['yesterdaydata_atboot'] = 'False'
     config['CACHE']['yesterday_cachedtime'] = '720'
     config['UI']['extratools_enabled'] = 'False'
+    print("")
+    installhalo()
 
 elif "0.6.1 beta" in versioninfo2:
     try:
@@ -264,7 +312,10 @@ elif "0.6.1 beta" in versioninfo2:
     config['PREFETCH']['yesterdaydata_atboot'] = 'False'
     config['CACHE']['yesterday_cachedtime'] = '720'
     config['UI']['extratools_enabled'] = 'False'
+    print("")
     geopycheck()
+    print("")
+    installhalo()
 elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     # A usual input() and sys.exit() isn't present here, as it's assumed this
     # is getting executed inside of the updater.
@@ -387,7 +438,10 @@ elif "0.6 beta" or "0.6.0.1 beta" in versioninfo2:
     config['PREFETCH']['yesterdaydata_atboot'] = 'False'
     config['CACHE']['yesterday_cachedtime'] = '720'
     config['UI']['extratools_enabled'] = 'False'
+    print("")
     geopycheck()
+    print("")
+    installhalo()
 else:
     print("Hmm. Your version identifier didn't match any known versions.",
           "Try deleting your versioninfo.txt file in the updater folder, and then",
