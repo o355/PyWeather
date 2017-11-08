@@ -12,12 +12,9 @@
 * Adds the ability to manually define a Google Maps API key
 * Much better error catching for the config file
 * Adds the ability to view the chance of precipitation on the forecast page.
-* Adding the ability to show cache timings - 50% done
-    * Initial code - Done
-    * Adding menu stuff & user enabling in PyWeather - Done
-    * Adding config stuff - Will be done on 10/8
+* Adding the ability to show cache timings - Done
 * Adding a new loader - Will be done on 10/9
-    * Adding remaining color to yesterday's weather - will be done 10/8
+    * Adding remaining color to yesterday's weather - Done
     * Adding library update to configupdate - Will be done 10/9
 * Final additions - Will be done 10/9
     * Final menu options - Will be done 10/9

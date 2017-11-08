@@ -675,6 +675,8 @@ if geopyScheme == "https" and geocoder_customkeyEnabled is False:
 # The option to turn this off will be added in 0.6.4 beta.
 elif geopyScheme == "https" and geocoder_customkeyEnabled is True:
     geolocator = GoogleV3(api_key=geocoder_customkey, scheme='https')
+    spinner.stop()
+    spinner.start(text="Validating geocoder API key...")
     logger.debug("geocoder scheme is now https, custom key. Validating...")
     # Do a warm-up geocode
     try:
@@ -712,6 +714,8 @@ elif geopyScheme == "http" and geocoder_customkeyEnabled is False:
 elif geopyScheme == "http" and geocoder_customkeyEnabled is True:
     geolocator = GoogleV3(api_key=geocoder_customkey, scheme='http')
     logger.debug("geocoder scheme is now http, custom key. Validating...")
+    spinner.stop()
+    spinner.start(text="Validating geocoder API key...")
     # Do a warm-up geocode
     try:
         location = geolocator.geocode("123 5th Avenue, New York, NY")
@@ -2239,11 +2243,7 @@ while True:
     print(Fore.YELLOW + Style.BRIGHT + "- View the about page for PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "16 (14)")
     print(Fore.YELLOW + Style.BRIGHT + "- Close PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "17 (15)")
     if extratools_enabled is True:
-        print(Fore.YELLOW + Style.BRIGHT + "Extra tools:")
         print(Fore.YELLOW + Style.BRIGHT + "- View the cache timings for all data types - Enter " + Fore.CYAN + Style.BRIGHT + "extratools:1")
-        print("")
-    else:
-        print("")
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
@@ -6423,55 +6423,55 @@ while True:
                 yesterday_precipdata = True
             logger.debug("yesterday_precipdata: %s" % yesterday_precipdata)
 
-        print(Fore.YELLOW + "Here's yesterday's weather for " + Fore.CYAN +
-              str(location) + Fore.YELLOW + " on "
-              + Fore.CYAN + yesterday_date)
+        print(Fore.YELLOW + Style.BRIGHT + "Here's yesterday's weather for " + Fore.CYAN + Style.BRIGHT +
+              str(location) + Fore.YELLOW + Style.BRIGHT + " on "
+              + Fore.CYAN + Style.BRIGHT + yesterday_date)
         print("")
-        print(Fore.YELLOW + "Here's the summary for the day.")
-        print(Fore.YELLOW + "Minimum Temperature: " + Fore.CYAN + yesterday_minTempF
+        print(Fore.YELLOW + Style.BRIGHT + "Here's the summary for the day.")
+        print(Fore.YELLOW + Style.BRIGHT + "Minimum Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_minTempF
               + "°F (" + yesterday_minTempC + "°C)")
-        print(Fore.YELLOW + "Average Temperature: " + Fore.CYAN + yesterday_avgTempF
+        print(Fore.YELLOW + Style.BRIGHT + "Average Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_avgTempF
               + "°F (" + yesterday_avgTempC + "°C)")
-        print(Fore.YELLOW + "Maxmimum Temperature: " + Fore.CYAN + yesterday_maxTempF
+        print(Fore.YELLOW + Style.BRIGHT + "Maxmimum Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_maxTempF
               + "°F (" + yesterday_maxTempC + "°C)")
-        print(Fore.YELLOW + "Minimum Dew Point: " + Fore.CYAN + yesterday_minDewpointF
+        print(Fore.YELLOW + Style.BRIGHT + "Minimum Dew Point: " + Fore.CYAN + Style.BRIGHT + yesterday_minDewpointF
               + "°F (" + yesterday_minDewpointC + "°C)")
-        print(Fore.YELLOW + "Average Dew Point: " + Fore.CYAN + yesterday_avgDewpointF
+        print(Fore.YELLOW + Style.BRIGHT + "Average Dew Point: " + Fore.CYAN + Style.BRIGHT + yesterday_avgDewpointF
               + "°F (" + yesterday_avgDewpointC + "°C)")
-        print(Fore.YELLOW + "Maximum Dew Point: " + Fore.CYAN + yesterday_maxDewpointF
+        print(Fore.YELLOW + Style.BRIGHT + "Maximum Dew Point: " + Fore.CYAN + Style.BRIGHT + yesterday_maxDewpointF
               + "°F (" + yesterday_maxDewpointC + "°C)")
-        print(Fore.YELLOW + "Minimum Humidity: " + Fore.CYAN + yesterday_minHumidity
+        print(Fore.YELLOW + Style.BRIGHT + "Minimum Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_minHumidity
               + "%")
-        print(Fore.YELLOW + "Average Humidity: " + Fore.CYAN + yesterday_avgHumidity
+        print(Fore.YELLOW + Style.BRIGHT + "Average Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_avgHumidity
               + "%")
-        print(Fore.YELLOW + "Maximum Humidity: " + Fore.CYAN + yesterday_maxHumidity
+        print(Fore.YELLOW + Style.BRIGHT + "Maximum Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_maxHumidity
               + "%")
-        print(Fore.YELLOW + "Minimum Wind Speed: " + Fore.CYAN + yesterday_minWindMPH
+        print(Fore.YELLOW + Style.BRIGHT + "Minimum Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_minWindMPH
               + " mph (" + yesterday_minWindKPH + " kph)")
-        print(Fore.YELLOW + "Average Wind Speed: " + Fore.CYAN + yesterday_avgWindSpeedMPH
+        print(Fore.YELLOW + Style.BRIGHT + "Average Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_avgWindSpeedMPH
               + " mph (" + yesterday_avgWindSpeedKPH + " kph)")
-        print(Fore.YELLOW + "Maximum Wind Speed: " + Fore.CYAN + yesterday_maxWindMPH
+        print(Fore.YELLOW + Style.BRIGHT + "Maximum Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_maxWindMPH
               + " mph (" + yesterday_maxWindKPH + " kph)")
-        print(Fore.YELLOW + "Minimum Visibility: " + Fore.CYAN + yesterday_minVisibilityMI
+        print(Fore.YELLOW + Style.BRIGHT + "Minimum Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_minVisibilityMI
               + " mi (" + yesterday_minVisibilityKM + " kph)")
-        print(Fore.YELLOW + "Average Visibility: " + Fore.CYAN + yesterday_avgVisibilityMI
+        print(Fore.YELLOW + Style.BRIGHT + "Average Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_avgVisibilityMI
               + " mi (" + yesterday_avgVisibilityKM + " kph)")
-        print(Fore.YELLOW + "Maximum Visibility: " + Fore.CYAN + yesterday_maxVisibilityMI
+        print(Fore.YELLOW + Style.BRIGHT + "Maximum Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_maxVisibilityMI
               + " mi (" + yesterday_maxVisibilityKM + " kph)")
-        print(Fore.YELLOW + "Minimum Pressure: " + Fore.CYAN + yesterday_minPressureInHg
+        print(Fore.YELLOW + Style.BRIGHT + "Minimum Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_minPressureInHg
               + " inHg (" + yesterday_minPressureMB + " mb)")
-        print(Fore.YELLOW + "Average Pressure: " + Fore.CYAN + yesterday_avgPressureInHg
+        print(Fore.YELLOW + Style.BRIGHT + "Average Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_avgPressureInHg
               + " inHg (" + yesterday_avgPressureMB + " mb)")
-        print(Fore.YELLOW + "Maximum Pressure: " + Fore.CYAN + yesterday_maxPressureInHg
+        print(Fore.YELLOW + Style.BRIGHT + "Maximum Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_maxPressureInHg
               + " inHg (" + yesterday_maxPressureMB + " mb)")
         if yesterday_precipdata is True:
-            print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + yesterday_precipIN
+            print(Fore.YELLOW + Style.BRIGHT + "Total Precipitation: " + Fore.CYAN + Style.BRIGHT + yesterday_precipIN
                   + " in (" + yesterday_precipMM + " mm)")
         else:
-            print(Fore.YELLOW + "Total precipitation data is not available.")
+            print(Fore.YELLOW + Style.BRIGHT + "Total precipitation data is not available.")
         print("")
-        print(Fore.RED + "To view hourly data for yesterday's weather, please press enter.")
-        print(Fore.RED + "If you want to return to the main menu, press Control + C.")
+        print(Fore.RED + Style.BRIGHT + "To view hourly data for yesterday's weather, please press enter.")
+        print(Fore.RED + Style.BRIGHT + "If you want to return to the main menu, press Control + C.")
         try:
             input()
         except KeyboardInterrupt:
@@ -6587,24 +6587,24 @@ while True:
             logger.debug("yesterday_condition: %s" % yesterday_condition)
             logger.info("Now printing weather data...")
             print("")
-            print(Fore.YELLOW + yesterday_time + ":")
-            print(Fore.YELLOW + "Conditions: " + Fore.CYAN + yesterday_condition)
-            print(Fore.YELLOW + "Temperature: " + Fore.CYAN + yesterday_tempF
+            print(Fore.YELLOW + Style.BRIGHT + yesterday_time + ":")
+            print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT + yesterday_condition)
+            print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_tempF
                   + " °F (" + yesterday_tempC + " °C)")
-            print(Fore.YELLOW + "Dew point: " + Fore.CYAN + yesterday_dewpointF
+            print(Fore.YELLOW + Style.BRIGHT + "Dew point: " + Fore.CYAN + Style.BRIGHT + yesterday_dewpointF
                   + " °F (" + yesterday_dewpointC + " °C)")
-            print(Fore.YELLOW + "Wind speed: " + Fore.CYAN + yesterday_windspeedMPH
+            print(Fore.YELLOW + Style.BRIGHT + "Wind speed: " + Fore.CYAN + Style.BRIGHT + yesterday_windspeedMPH
                   + " mph (" + yesterday_windspeedKPH + " kph)")
             if yesterday_windgustdata == True:
-                print(Fore.YELLOW + "Wind gusts: " + Fore.CYAN + yesterday_windgustMPH
+                print(Fore.YELLOW + Style.BRIGHT + "Wind gusts: " + Fore.CYAN + Style.BRIGHT + yesterday_windgustMPH
                       + " mph (" + yesterday_windgustKPH + " kph)")
             if yesterday_windchilldata == True:
-                print(Fore.YELLOW + "Wind chill: " + Fore.CYAN + yesterday_windchillF
+                print(Fore.YELLOW + Style.BRIGHT + "Wind chill: " + Fore.CYAN + Style.BRIGHT + yesterday_windchillF
                       + " °F (" + yesterday_windchillC + " °C)")
             if yesterday_heatindexdata == True:
-                print(Fore.YELLOW + "Heat index: " + Fore.CYAN + yesterday_heatindexF
+                print(Fore.YELLOW + Style.BRIGHT + "Heat index: " + Fore.CYAN + Style.BRIGHT + yesterday_heatindexF
                       + " °F (" + yesterday_heatindexC + " °C)")
-            print(Fore.YELLOW + "Precipitation: " + Fore.CYAN + yesterday_precipIN
+            print(Fore.YELLOW + Style.BRIGHT + "Precipitation: " + Fore.CYAN + Style.BRIGHT + yesterday_precipIN
                   + " in (" + yesterday_precipMM + " mm)")
 
             yesterday_loops = yesterday_loops + 1
@@ -6617,9 +6617,8 @@ while True:
                              % (yesterday_totalloops, yesterdayhourlyLoops))
 
             if user_showCompletedIterations == True:
-                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s"
+                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s"
                       % (yesterday_totalloops, yesterdayhourlyLoops))
-                print(Fore.RESET)
 
             if user_enterToContinue == True:
                 if yesterday_totalloops == yesterdayhourlyLoops:
@@ -6629,9 +6628,9 @@ while True:
                     logger.info("Asking user to continue.")
                     try:
                         print("")
-                        print(Fore.RED + "Press enter to view the next", user_loopIterations
-                              , "iterations of yesterday weather information.")
-                        print("Otherwise, press Control + C to get back to the main menu.")
+                        print(Fore.RED + Style.BRIGHT + "Press enter to view the next " + str(user_loopIterations) +
+                              " iterations of yesterday weather information.")
+                        print(Fore.RED + Style.BRIGHT + "Otherwise, press Control + C to get back to the main menu.")
                         input()
                         yesterday_loops = 0
                         logger.info("Printing more weather data. yesterday_loops is now: %s"
@@ -6666,7 +6665,7 @@ while True:
 
     elif moreoptions == "extratools:1":
         if extratools_enabled is False:
-            print(Fore.RED + "Whoops! Extra tools isn't enabled at this time.",
+            print(Fore.RED + Style.BRIGHT + "Whoops! Extra tools isn't enabled at this time.",
                   "If you'd like, I can enable the extra tools feature for you. Would you like the extratools feature at this time?",
                   "Yes or No.", sep="\n")
             extratools_enableinput = input("Input here: ").lower()
