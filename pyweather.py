@@ -79,7 +79,7 @@ try:
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.2 beta")
+        out.write("0.6.3 beta")
         out.close()
 
 
@@ -541,7 +541,7 @@ spinner = Halo(text='Loading PyWeather...', spinner='dots')
 spinner.start()
 
 # List config options for those who have verbosity enabled. - Section 9
-logger.info("PyWeather 0.6.2 beta now starting.")
+logger.info("PyWeather 0.6.3 beta now starting.")
 logger.info("Configuration options are as follows: ")
 logger.debug("sundata_summary: %s ; almanac_summary: %s" %
              (sundata_summary, almanac_summary))
@@ -890,21 +890,24 @@ if checkforUpdates == True:
 logger.info("Defining about variables...")
 about_buildnumber = "63"
 about_version = "0.6.3 beta"
-about_releasedate = "September 24, 2017"
+about_releasedate = "November 30, 2018"
 about_maindevelopers = "o355"
 logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))
 logger.debug("about_releasedate: %s ; about_maindevelopers: %s" %
              (about_releasedate, about_maindevelopers))
-about_awesomecontributors = "ModoUnreal" # Oh look I'm on TV, HI MOM!!!!
+about_awesomecontributors = "ModoUnreal, TheLetterAndrew" # Oh look I'm on TV, HI MOM!!!!
 about_contributors = "gsilvapt, creepersbane"
 about_releasetype = "beta"
-about_librariesinuse = "Colorama, Geopy, Requests"
+about_librariesinuse = "Colorama, Geopy, appJar, Requests, Halo"
+about_apisinuse = "freegeoip.net, GeoNames"
 logger.debug("about_contributors: %s ; about_releasetype: %s" %
              (about_contributors, about_releasetype))
 logger.debug("about_librariesinuse: %s ; about_awesomecontributors: %s" % 
             (about_librariesinuse, about_awesomecontributors))
+logger.debug("about_apisinuse: %s" % about_apisinuse)
 geoip_url = "https://freegeoip.net/json/"
+logger.debug("geoip_url: %s" % geoip_url)
 
 # Set up the initial variables that dictate availability, using PWS URLs,
 # or using the geocoder.
@@ -2238,10 +2241,9 @@ while True:
     print(Fore.YELLOW + Style.BRIGHT + "- Launch PyWeather's experimental radar - Enter " + Fore.CYAN + Style.BRIGHT + "11")
     print(Fore.YELLOW + Style.BRIGHT + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + Style.BRIGHT + "12")
     print(Fore.YELLOW + Style.BRIGHT + "- Manage your favorite locations - Enter " + Fore.CYAN + Style.BRIGHT + "13")
-    print(Fore.YELLOW + Style.BRIGHT + "- Check for PyWeather updates - Enter " + Fore.CYAN + Style.BRIGHT + "14 (13)")
-    print(Fore.YELLOW + Style.BRIGHT + "- Check PyWeather's cache timings - Enter " + Fore.CYAN + Style.BRIGHT + "15")
-    print(Fore.YELLOW + Style.BRIGHT + "- View the about page for PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "16 (14)")
-    print(Fore.YELLOW + Style.BRIGHT + "- Close PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "17 (15)")
+    print(Fore.YELLOW + Style.BRIGHT + "- Check for PyWeather updates - Enter " + Fore.CYAN + Style.BRIGHT + "14")
+    print(Fore.YELLOW + Style.BRIGHT + "- View the about page for PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "15")
+    print(Fore.YELLOW + Style.BRIGHT + "- Close PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "16")
     if extratools_enabled is True:
         print(Fore.YELLOW + Style.BRIGHT + "- View the cache timings for all data types - Enter " + Fore.CYAN + Style.BRIGHT + "extratools:1")
     moreoptions = input("Enter here: ").lower()
@@ -3851,11 +3853,11 @@ while True:
         frontend.go()
 #<--- Radar is above | Exit PyWeather is below --->
 
-    elif moreoptions == "15":
+    elif moreoptions == "16":
         sys.exit()
 
 #<--- Exit PyWeather is above | Updater is below --->
-    elif moreoptions == "13":
+    elif moreoptions == "14":
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
                     (buildnumber, buildversion))
@@ -5722,7 +5724,7 @@ while True:
                                     break
                         else:
                             continue
-    elif moreoptions == "20":
+    elif moreoptions == "13":
         if favoritelocation_enabled is False:
             print("", Fore.RED + Style.BRIGHT + "To manage favorite locations, you'll need to enable the favorite locations feature.",
                   Fore.RED + Style.BRIGHT + "Would you like me to enable favorite locations for you?", sep="\n")
@@ -6185,9 +6187,9 @@ while True:
                 break
 
 #<--- Hurricane is above | About is below --->
-    elif moreoptions == "14":
+    elif moreoptions == "15":
         print("", Fore.YELLOW + Style.BRIGHT + "-=-=- " + Fore.CYAN + Style.BRIGHT + "PyWeather" + Fore.YELLOW + Style.BRIGHT + " -=-=-",
-              Fore.CYAN + Style.BRIGHT + "version " + about_version, "",
+              Fore.CYAN + Style.BRIGHT + "version " + about_version,
               Fore.YELLOW + Style.BRIGHT + "Build Number: " + Fore.CYAN + Style.BRIGHT + about_buildnumber,
               Fore.YELLOW + Style.BRIGHT + "Release Date: " + Fore.CYAN + Style.BRIGHT + about_releasedate,
               Fore.YELLOW + Style.BRIGHT + "Release Type: " + Fore.CYAN + Style.BRIGHT + about_releasetype,
@@ -6195,9 +6197,14 @@ while True:
               Fore.YELLOW + Style.BRIGHT + "Created, and mostly coded by: " + Style.BRIGHT + Fore.CYAN + about_maindevelopers,
               Fore.YELLOW + Style.BRIGHT + "Awesome contributors: " + Fore.CYAN + Style.BRIGHT + about_awesomecontributors,
               Fore.YELLOW + Style.BRIGHT + "Contributors: " + Fore.CYAN + Style.BRIGHT + about_contributors,
+              "",
+              Fore.YELLOW + Style.BRIGHT + "PyWeather is powered by Weather Underground (Wunderground)",
               Fore.YELLOW + Style.BRIGHT + "A special thanks to the developers of these libraries",
               "that are used in PyWeather: ",
-              Fore.CYAN + Style.BRIGHT + about_librariesinuse + Fore.RESET, sep="\n")
+              Fore.CYAN + Style.BRIGHT + about_librariesinuse + Fore.RESET,
+              Fore.YELLOW + Style.BRIGHT + "A special thanks to the developers & maintainers of these APIs",
+              "that are used in PyWeather: ",
+              Fore.CYAN + Style.BRIGHT + about_apisinuse + Fore.RESET, sep="\n")
 #<--- About is above, jokes are below --->
     elif moreoptions == "tell me a joke":
         logger.debug("moreoptions: %s" % moreoptions)
