@@ -465,7 +465,7 @@ except:
     try:
         open("updater//versioninfo.txt", 'w').close()
         with open("updater//versioninfo.txt", 'a') as out:
-            out.write("0.6.2 beta")
+            out.write("0.6.3 beta")
             out.close()
     except:
         print("Could not write out an updated versioninfo text file. Please",
@@ -474,7 +474,7 @@ except:
 try:
     open("updater//versioninfo.txt", 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.2 beta")
+        out.write("0.6.3 beta")
         out.close()
 except:
     print("Could not write out an updated versioninfo text file. Please",

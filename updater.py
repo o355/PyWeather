@@ -55,7 +55,7 @@ try:
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.2 beta")
+        out.write("0.6.3 beta")
         out.close()
         
 # See if the config is "provisioned". If it isn't, a KeyError will occur,
@@ -167,8 +167,8 @@ logger.debug("showReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: %s" %
 logger.debug("showReleaseNotes: %s" %
              (showReleaseNotes))
 
-buildnumber = 62
-buildversion = "0.6.2 beta"
+buildnumber = 63
+buildversion = "0.6.3 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))

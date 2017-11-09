@@ -28,7 +28,7 @@ try:
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.2 beta")
+        out.write("0.6.3 beta")
         out.close()
     input()
     sys.exit()

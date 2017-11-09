@@ -44,7 +44,7 @@ import urllib
 try:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.2 beta")
+        out.write("0.6.3 beta")
         out.close()
 except:
     print("Couldn't write the versioninfo file. This may cause issues with PyWeather down the road.")
@@ -1053,7 +1053,7 @@ while True:
 print("Let's configure PyWeather to your liking.")
 logger.debug("config: %s" % config)
 
-print("", "(1/30)","On the summary screen, would you like to show sunrise/sunset times?",
+print("", "(1/42)","On the summary screen, would you like to show sunrise/sunset times?",
       "By default, this is disabled.",
       "Yes or No.", sep="\n")
 sundata_Summary = input("Input here: ").lower()
@@ -1073,7 +1073,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("", "(2/30)","On the summary screen, would you like to show almanac data?",
+print("", "(2/42)","On the summary screen, would you like to show almanac data?",
       "By default, this is disabled.",
       "Yes or no:", sep="\n")
 almanacdata_Summary = input("Input here: ").lower()
@@ -1093,7 +1093,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("", "(3/30)", "On the summary screen, would you like to show alerts data?",
+print("", "(3/42)", "On the summary screen, would you like to show alerts data?",
       "By default, this is enabled. Please note, Wunderground",
       "only supports alert data in the US and EU at this time.",
       "Yes or No.", sep="\n")
@@ -1112,7 +1112,7 @@ else:
           "Defaulting to 'True'", sep="\n")
     config['SUMMARY']['showAlertsOnSummary'] = 'True'
 
-print("", "(4/30)","On boot, would you like PyWeather to check for updates?",
+print("", "(4/42)","On boot, would you like PyWeather to check for updates?",
       "By default, this is disabled, due to a load time increase of ~2-5 seconds.",
       "Yes or No.", sep="\n")
 checkForUpdates = input("Input here: ").lower()
@@ -1132,7 +1132,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("", "(5/30)","When an error occurs, would you like PyWeather to show the full error?",
+print("", "(5/42)","When an error occurs, would you like PyWeather to show the full error?",
       "When enabled, you'll have easier access to the full error for reporting",
       "the bug on GitHub.",
       "By default, this is disabled, as errors look less pretty when enabled.",
@@ -1165,7 +1165,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(6/30)", "When booting PyWeather up initially, would you like PyWeather to",
+print("", "(6/42)", "When booting PyWeather up initially, would you like PyWeather to",
       "fetch the 10-day hourly forecast, instead of the 3-day forecast?",
       "This is disabled by default. When enabled, initial loading times are",
       "increased. However, when you view the 10-day hourly forecast, you won't",
@@ -1187,7 +1187,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(7/30)", "When viewing detailed hourly, 10-day hourly, and historical hourly,",
+print("", "(7/42)", "When viewing detailed hourly, 10-day hourly, and historical hourly,",
       "detailed information, how many iterations should PyWeather go through",
       "before asking you to continue?",
       "By default, this is 6. An input above 10",
@@ -1206,7 +1206,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed info loops now 6.")
 
-print("", "(8/30)", "When viewing detailed 10-day forecast information, how many",
+print("", "(8/42)", "When viewing detailed 10-day forecast information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
       "By default, this is 5. An input above 10 will not prompt",
@@ -1225,7 +1225,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed forecast info loops now 5.")
 
-print("", "(9/30)", "PyWeather has a caching system, in which if you're gone for some time",
+print("", "(9/42)", "PyWeather has a caching system, in which if you're gone for some time",
       "data will automatically refresh. Would you like to turn this on?",
       "This is enabled by default. Yes or No.", sep="\n")
 enablecache = input("Input here: ").lower()
@@ -1240,7 +1240,7 @@ else:
           "certain types of data, before a data refresh is automatically requested.",
           "If you want to leave cache values to their defaults, press enter at any prompt.", sep="\n")
 
-    print("", "(10/30)", "Please enter the cache time for alerts data in minutes (default = 5)", sep="\n")
+    print("", "(10/42)", "Please enter the cache time for alerts data in minutes (default = 5)", sep="\n")
     alertscachetime = input("Input here: ").lower()
     try:
         alertscachetime = float(alertscachetime)
@@ -1254,7 +1254,7 @@ else:
         config['CACHE']['alerts_cachedtime'] = '5'
         logger.debug("Alerts cache time now 5 minutes.")
 
-    print("", "(11/30)", "Please enter the cache time for current data in minutes (default = 10)", sep="\n")
+    print("", "(11/42)", "Please enter the cache time for current data in minutes (default = 10)", sep="\n")
     currentcachetime = input("Input here: ").lower()
     try:
         currentcachetime = float(currentcachetime)
@@ -1268,7 +1268,7 @@ else:
         config['CACHE']['current_cachedtime'] = '10'
         logger.debug("Current cache time now 10 minutes.")
 
-    print("", "(12/30)", "Please enter the cache time for forecast data in minutes (default = 60)", sep="\n")
+    print("", "(12/42)", "Please enter the cache time for forecast data in minutes (default = 60)", sep="\n")
     forecastcachetime = input("Input here: ").lower()
     try:
         forecastcachetime = float(forecastcachetime)
@@ -1282,7 +1282,7 @@ else:
         config['CACHE']['forecast_cachedtime'] = '60'
         logger.debug("Forecast cache time now 60 minutes.")
 
-    print("", "(13/30)", "Please enter the cache time for almanac data in minutes (default = 240)", sep="\n")
+    print("", "(13/42)", "Please enter the cache time for almanac data in minutes (default = 240)", sep="\n")
     almanaccachetime = input("Input here: ").lower()
     try:
         almanaccachetime = float(almanaccachetime)
@@ -1296,7 +1296,7 @@ else:
         config['CACHE']['almanac_cachedtime'] = '240'
         logger.debug("Almanac cache time now 240 minutes.")
 
-    print("", "(14/30)", "Please enter the cache time for 1.5 day hourly data in minutes (default = 60)", sep="\n")
+    print("", "(14/42)", "Please enter the cache time for 1.5 day hourly data in minutes (default = 60)", sep="\n")
     threedayhourly_cachedtime = input("Input here: ").lower()
 
     try:
@@ -1311,7 +1311,7 @@ else:
         config['CACHE']['threedayhourly_cachedtime'] = "60"
         logger.debug("3 day hourly cache time now 60 minutes")
 
-    print("", "(15/30)", "Please enter the cache time for the ten day hourly data in minutes (default = 60)", sep="\n")
+    print("", "(15/42)", "Please enter the cache time for the ten day hourly data in minutes (default = 60)", sep="\n")
     tendayhourly_cachedtime = input("Input here: ").lower()
     try:
         tendayhourly = float(tendayhourly_cachedtime)
@@ -1325,7 +1325,7 @@ else:
         config['CACHE']['tendayhourly_cachedtime'] = "60"
         logger.debug("10 day hourly cache time now 60 minutes")
 
-    print("", "(16/30)", "Please enter the cache time for sun data in minutes (default = 480)", sep="\n")
+    print("", "(16/42)", "Please enter the cache time for sun data in minutes (default = 480)", sep="\n")
     sundatacachetime = input("Input here: ").lower()
     try:
         sundatacachetime = float(sundatacachetime)
@@ -1338,7 +1338,7 @@ else:
               "cache time to it's default value of '480'.", sep="\n")
         config['CACHE']['sundata_cachedtime'] = '480'
         logger.debug("Sun data cache time now 480 minutes.")
-    print("", "(17/30)", "Please enter the cache time for tide data in minutes (default = 480)", sep="\n")
+    print("", "(17/42)", "Please enter the cache time for tide data in minutes (default = 480)", sep="\n")
     tidecachetime = input("Input here: ").lower()
     try:
         tidecachetime = float(tidecachetime)
@@ -1351,7 +1351,7 @@ else:
               "cache time to it's default value of '480'.", sep="\n")
         config['CACHE']['tide_cachedtime'] = '480'
         logger.debug("Tide data cache time now 480 minutes.")
-    print("", "(18/30)", "Please enter the cache time for hurricane data in minutes (default = 480)", sep="\n")
+    print("", "(18/42)", "Please enter the cache time for hurricane data in minutes (default = 480)", sep="\n")
     hurricanecachetime = input("Input here: ").lower()
     try:
         hurricanecachetime = float(hurricanecachetime)
@@ -1365,7 +1365,7 @@ else:
         config['CACHE']['hurricane_cachedtime'] = '180'
         logger.debug("Hurricane data cache time now 180 minutes.")
 
-    print("", "(19/30)", "Please enter the cache time for yesterday's weather data in minutes (default = 720)", sep="\n")
+    print("", "(19/42)", "Please enter the cache time for yesterday's weather data in minutes (default = 720)", sep="\n")
     yesterdaycachedtime = input("Input here: ").lower()
     try:
         yesterdaycachedtime = float(yesterdaycachedtime)
@@ -1381,7 +1381,7 @@ else:
 
 
 
-print("", "(19/30)", "When viewing detailed EU alerts information, how many",
+print("", "(20/42)", "When viewing detailed EU alerts information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
       "By default, this is 2.", sep="\n")
@@ -1399,7 +1399,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed EU alert iterations now 2.")
 
-print("", "(20/30)", "When viewing detailed US alerts information, how many",
+print("", "(21/42)", "When viewing detailed US alerts information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
       "By default, this is 1.", sep="\n")
@@ -1417,7 +1417,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed US alert iterations now 1.")
 
-print("", "(21/30)","When PyWeather is going through detailed information, it can show",
+print("", "(22/42)","When PyWeather is going through detailed information, it can show",
       "how many iterations are completed.",
       "By default, this is disabled.",
       "Yes or No.", sep="\n")
@@ -1437,7 +1437,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(22/30)", "When PyWeather is going through detailed information, would",
+print("", "(23/42)", "When PyWeather is going through detailed information, would",
       "you like the 'Enter to Continue' prompts to pop up?",
       "By default, this is enabled.",
       "Yes or No.", sep="\n")
@@ -1457,7 +1457,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to ENABLED.")
 
-print("", "(23/30)", "In the PyWeather Updater, the updater can show the release tag",
+print("", "(24/42)", "In the PyWeather Updater, the updater can show the release tag",
       "associated with the latest release. Helpful for those using Git to",
       "update PyWeather. By default, this is disabled.",
       "Yes or No.", sep="\n")
@@ -1477,7 +1477,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(25/30)", "When PyWeather boots, it can validate your API key. If PyWeather",
+print("", "(25/42)", "When PyWeather boots, it can validate your API key. If PyWeather",
       "finds your primary API key is invalid, it'll attempt to validate your",
       "backup key, and load that if it's validated successfully.",
       "By default, this is enabled, as it's well worth the 1 API call to make",
@@ -1499,7 +1499,7 @@ else:
     config['PYWEATHER BOOT']['validateAPIKey'] = 'False'
     logger.debug("Could not understand input. Defaulting to ENABLED.")
 
-print("", "(26/30)", "PyWeather now has a radar feature, which opens up a GUI on supported",
+print("", "(26/42)", "PyWeather now has a radar feature, which opens up a GUI on supported",
       "platforms. Depending on your screen resolution, you'll have to set how large",
       "the radar picture is when rendered. In the prompt below, enter one of five sizes.",
       "extrasmall - 320x240 window",
@@ -1524,7 +1524,7 @@ for x in range(0, 4):
         config['RADAR GUI']['radar_imagesize'] = 'normal'
         print("Changes saved.")
 
-print("", "(27/30)", "PyWeather's radar feature is unfortunately experimental as of PyWeather 0.6.3 beta.",
+print("", "(27/42)", "PyWeather's radar feature is unfortunately experimental as of PyWeather 0.6.3 beta.",
       "By default, a confirmation message will always appear when attempting to launch the radar.",
       "However, this can be turned off, if you plan to use the experimental radar on a regular basis.",
       "By default, bypassing the confirmation message is disabled. Yes or No.", sep="\n")
@@ -1546,7 +1546,7 @@ else:
 
 
 
-print("", "(28/30)", "On the summary screen, would you like tide data to be shown?",
+print("", "(28/42)", "On the summary screen, would you like tide data to be shown?",
       "This uses an extra API call when enabled. By default, this is disabled.",
       "Yes or No.", sep="\n")
 tideonsummary = input("Input here: ").lower()
@@ -1565,7 +1565,7 @@ else:
     logger.debug("SUMMARY/showtideonsummary is now FALSE")
     print("Changes saved.")
 
-print("", "(29/30)", "When PyWeather boots, would you like hurricane data to be fetched?",
+print("", "(29/42)", "When PyWeather boots, would you like hurricane data to be fetched?",
       "Initial loading times will increase when this is on, but hurricane data will load faster.",
       "This can use an extra API call, especially when you fetch hurricane data but don't check it",
       "in PyWeather. By default, this is disabled.",
@@ -1586,7 +1586,7 @@ else:
     logger.debug("PREFETCH/hurricanedata_atboot is now FALSE.")
     print("Changes saved.")
 
-print("", "(30/32)", "PyWeather has a new feature where you can now easily call your current location at boot.",
+print("", "(30/42)", "PyWeather has a new feature where you can now easily call your current location at boot.",
       "The current location feature allows you to enter 'currentlocation' at boot, and view the weather for your",
       "approximate location. However, GeoIP lookups might be inaccurate, especially for mobile users. The GeoIP service",
       "uses freegeoip.net. Would you like to enable this service? By default, this is disabled. Yes or No.", sep="\n")
@@ -1605,7 +1605,7 @@ else:
     logger.debug("FIRSTINPUT/geoipservice_enabled is now FALSE.")
     print("Changes saved.")
 
-print("", "(31/32)", "PyWeather has a new feature where you can query indivdiual Wunderground PWS stations.",
+print("", "(31/42)", "PyWeather has a new feature where you can query indivdiual Wunderground PWS stations.",
       "You can query any PWS globally by entering pws:<pws ID> when enabled, and where <pws ID> is the ID of the",
       "PWS you want to query. However, this can be turned off if you don't want to have extra lines of text at boot,",
       "or don't want the ability to query PWSes. By default, this is enabled. Yes or No.", sep="\n")
@@ -1625,7 +1625,7 @@ else:
     logger.debug("FIRSTINPUT/allow_pwsqueries is now TRUE.")
     print("Changes saved.")
 
-print("", "(32/36)", "PyWeather has a new feature where in hurricane data, you can see the nearest city that a hurricane is to.",
+print("", "(32/42)", "PyWeather has a new feature where in hurricane data, you can see the nearest city that a hurricane is to.",
       "However, this feature uses a separate API (geonames.org), can only work when the hurricane is within 300km of a city,",
       "and will drastically increase loading times. You may also run into issues with the default API key hitting rate limits.",
       "Despite all of this, would you like to enable the nearest city features for non-forecast hurricane data?",
@@ -1655,7 +1655,7 @@ else:
 # <--- Additional options for nearest city feature --->
 
 if additional_ncoptions is True:
-    print("", "(33/36)", "By default, the nearest city feature is only enabled on the current data screen of hurricane data.",
+    print("", "(33/42)", "By default, the nearest city feature is only enabled on the current data screen of hurricane data.",
           "You can enable the nearest city feature to be enabled on forecast data. However, loading hurricane data becomes much",
           "slower. By default, this is disabled. Yes or No.", sep="\n")
     enable_ncforecast = input("Input here: ").lower()
@@ -1673,7 +1673,7 @@ if additional_ncoptions is True:
         logger.debug("HURRICANE/enablenearestcity_forecast is now FALSE.")
         print("Changes saved.")
 
-    print("", "(34/36)", "By default, PyWeather uses it's own API username for the nearest city features, which should be able to",
+    print("", "(34/42)", "By default, PyWeather uses it's own API username for the nearest city features, which should be able to",
           "handle PyWeather's user demands just fine. However, if you'd like to use your own account for the API, you may.",
           "You can sign up at geonames.org, and follow all the steps. The confirmation letter may take some time to hit your inbox.",
           "Would you like to define your own API username? Yes or No. By default, this is no.", sep="\n")
@@ -1710,7 +1710,7 @@ if additional_ncoptions is True:
         print("Input not understood.",
               "Defaulting to the default username for the geonames API.", sep="\n")
 
-    print("", "(35/36)", "For the nearest city feature, you can define how large a city has to be to show up as a nearest city.",
+    print("", "(35/42)", "For the nearest city feature, you can define how large a city has to be to show up as a nearest city.",
           "You have three options for this. 'small' will set the threshold to cities with a 1,000 population and greater, but this",
           "tends to include cities with very few or no people. 'medium' will set the threshold to cities with a 5,000 population",
           "and greater, and 'large' for cities that have a population of 10,000 or greater. Please enter either 'small', 'medium'",
@@ -1731,7 +1731,7 @@ if additional_ncoptions is True:
         logger.debug("HURRICANE/nearestcitysize is now 'medium'.")
         print("Changes saved.")
 
-print("", "(36/37)", "PyWeather will now let you enable a favorite locations feature, which allows",
+print("", "(36/42)", "PyWeather will now let you enable a favorite locations feature, which allows",
       "you to quickly call up to 5 locations in PyWeather. You have the ability to configure your",
       "favorite locations in a menu option in PyWeather. By default, this feature is enabled.",
       "Yes or No.", sep="\n")
@@ -1751,14 +1751,14 @@ else:
     logger.debug("FAVORITE LOCATIONS/enabled is now 'True'.")
     print("Changes saved!")
 
-print("", "(37/39", "PyWeather by default uses Google's geocoder, which can occasionally have rate limiting issues.",
+print("", "(37/42)", "PyWeather by default uses Google's geocoder, which can occasionally have rate limiting issues.",
       "To get around this, you can manually use your own API key that you sign up for with Google. This is completely",
       "optional, and you can continue past this step and not impede PyWeather's functionality. However, would you like",
       "to enable the use of a custom API key for the geocoder? Yes or No.", sep="\n")
 enablecustomgeocoderkey = input("Input here: ").lower()
 logger.debug("enablecustomgeocoderkey: %s" % enablecustomgeocoderkey)
 if enablecustomgeocoderkey == "yes":
-    print("", "(38/39)", "To sign up for a Google Maps API key, please visit this link: ",
+    print("", "(38/42)", "To sign up for a Google Maps API key, please visit this link: ",
           "https://developers.google.com/maps/documentation/javascript/get-api-key",
           "Press the button 'Get Key', and wait a minute. Copy and paste the key into the input",
           "below. Your API key will NOT be validated. Enter 'exit' to exit this process, and to disable",
@@ -1798,7 +1798,7 @@ else:
     logger.debug("GEOCODER API/customkey_enabled is now FALSE.")
     print("Changes saved.")
     
-print("", "(30/39)", "PyWeather's geocoder usually uses https, but issues have been discovered",
+print("", "(39/42)", "PyWeather's geocoder usually uses https, but issues have been discovered",
       "on some platforms, where the geocoder cannot operate in the https mode. If you press enter",
       "PyWeather will automatically detect which scheme to use. If you are an advanced user, and want",
       "to configure the scheme yourself, enter advancedconfig at the prompt below.", sep="\n")
@@ -1855,7 +1855,7 @@ else:
             logger.debug("GEOCODER/scheme is now 'http'")
             print("Changes saved.")
 
-print("", "(40/41)", "On the summary screen, you can now view a summary of the weather that occurred yesterday.",
+print("", "(40/42)", "On the summary screen, you can now view a summary of the weather that occurred yesterday.",
       "Enabling this will also enable the option to prefetch yesterday's weather at boot in the config file.",
       "Please note that enabling this uses 1 extra API call at boot, and will increase PyWeather's loading time.",
       "Would you like to turn on showing yesterday's weather on the summary screen? Yes or No. By default, this is",
@@ -1885,7 +1885,7 @@ else:
     print("Changes saved.")
 
 if showyesterdayonsummary is False:
-    print("", "(41/41)", "When PyWeather boots up, you can have the option to have yesterday's weather data",
+    print("", "(41/42)", "When PyWeather boots up, you can have the option to have yesterday's weather data",
           "prefetched during bootup. Enabling this will use 1 extra API call at boot, and will increase PyWeather's",
           "loading time. Would you like to enable prefetching yesterday's weather data on boot? Yes or No.",
           "By default, this is disabled.", sep="\n")

@@ -14,10 +14,7 @@
 * Adds the ability to view the chance of precipitation on the forecast page.
 * Adding the ability to show cache timings.
 * Adds a new loader, which makes loading things in PyWeather a lot more nice. 
-* Final additions - Will be done 10/9
-    * Final menu options - Will be done 10/9
-    * Setup options with proper counting - Will be done 10/9
-    * Final version additions - Will be done 10/9
+* Final additions
 
 **BUG FIXES**
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
