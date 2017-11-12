@@ -54,76 +54,82 @@ config.read('storage//config.ini')
 
 def configprovision():
     try:
+        config.add_section("GEOCODER API")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the Geocoder API section.")
+
+    try:
         config.add_section("FAVORITE LOCATIONS")
     except configparser.DuplicateSectionError:
-        print("Failed to add the favorite locations section. Does it exist?")
+        print("Failed to add the favorite locations section.")
     try:
         config.add_section("HURRICANE")
     except configparser.DuplicateSectionError:
-        print("Failed to add the hurricane section. Does it exist?")
+        print("Failed to add the hurricane section.")
 
     try:
         config.add_section("FIRSTINPUT")
     except configparser.DuplicateSectionError:
-        print("Firstinput section could not be added.")
+        print("Failed to add the firstinput section.")
     try:
         config.add_section('SUMMARY')
     except configparser.DuplicateSectionError:
-        print("Cache section could not be added.")
+        print("Failed to add the summary section.")
 
     try:
         config.add_section('VERBOSITY')
     except configparser.DuplicateSectionError:
-        print("Verbosity section could not be added.")
+        print("Failed to add the verbosity section.")
 
     try:
         config.add_section('TRACEBACK')
     except configparser.DuplicateSectionError:
-        print("Traceback section could not be added.")
+        print("Failed to add the traceback section.")
 
     try:
         config.add_section('UI')
     except configparser.DuplicateSectionError:
-        print("UI section could not be added.")
+        print("Failed to add the UI section.")
 
     try:
         config.add_section('PREFETCH')
     except configparser.DuplicateSectionError:
-        print("Hourly section could not be added.")
+        print("Failed to add the prefetch section.")
 
     try:
         config.add_section('UPDATER')
     except configparser.DuplicateSectionError:
-        print("Updater section could not be added.")
+        print("Failed to add the updater section.")
 
     try:
         config.add_section('KEYBACKUP')
     except configparser.DuplicateSectionError:
-        print("Key Backup section could not be added.")
+        print("Failed to add the keybackup section.")
 
     try:
         config.add_section('PYWEATHER BOOT')
     except configparser.DuplicateSectionError:
-        print("PyWeather Boot section could not be added.")
+        print("Failed to add the PyWeather Boot section.")
 
     try:
         config.add_section('USER')
     except configparser.DuplicateSectionError:
-        print("User section could not be added.")
+        print("Failed to add the user section.")
+
     try:
         config.add_section('CACHE')
     except configparser.DuplicateSectionError:
-        print("Cache section could not be added.")
+        print("Failed to add the cache section.")
 
     try:
         config.add_section('RADAR GUI')
     except configparser.DuplicateSectionError:
-        print("Radar GUI section could not be added.")
+        print("Failed to add the Radar GUI section.")
 
     try:
         config.add_section('GEOCODER')
     except configparser.DuplicateSectionError:
-        print("Geocoder section could not be added.")
+        print("Failed to add the Geocoder section.")
 
     config['SUMMARY']['sundata_summary'] = 'False'
     config['SUMMARY']['almanac_summary'] = 'False'
@@ -173,6 +179,8 @@ def configprovision():
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['GEOCODER']['scheme'] = 'https'
+    config['GEOCODER']['customapi_enabled'] = 'False'
+    config['GEOCODER']['customkey'] = 'None'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
     config['FIRSTINPUT']['allow_pwsqueries'] = 'True'

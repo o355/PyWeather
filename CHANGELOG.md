@@ -21,6 +21,7 @@
 * Fixed a potential bug where if there were two or more storms, on the last storm there wasn't code to let the storm go into extended forecast data.
 * Fixed potential bugs where PyWeather wouldn't properly display precip information for hurricane data - The algorithm was reworked.
 * Fixed a bug where if you manually flagged all data types to refresh, hurricane data wouldn't be refreshed.
+* Fixed a minor bug where if the summary section couldn't be added in the setup file, the print statement indicated that the cache section wasn't added.
 
 **OTHER CHANGES**
 * The Git Updater has been completely removed, as it's been unreliable. A universal updater will be introduced later in time.
