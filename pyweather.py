@@ -1143,7 +1143,7 @@ if geoip_available is True:
     print("You can also enter this to view weather for your current location:")
     print("currentlocation - " + currentlocation)
     print("")
-elif geoip_available is False:
+elif geoip_available is False and geoip_enabled is True:
     logger.debug("geoip isn't available, show an error message.")
     print("")
     print("The GeoIP service used for your current location gave an invalid location.")
@@ -1166,6 +1166,7 @@ if favoritelocation_available is True:
     print("")
 if pws_enabled is True:
     logger.debug("pws queries have been enabled. Showing option...")
+    print("")
     print("You can also query a Wunderground PWS by entering this:")
     print("pws:<PWS ID>")
     print("")
@@ -1183,21 +1184,39 @@ logger.debug("pws_query: %s" % pws_query)
 # I understand that eggs.find("ham") isn't the most pythonic thing ever, but it's more reliable
 # and easier to work with than if "ham" in eggs. Multiple conditions are needed to support the short
 # shortcuts? Basically favloc: instead of favoritelocation:.
-if (geoip_available is False and locinput.find("currentlocation") == 0 or
-    geoip_available is False and locinput.find("curloc") == 0):
+if (geoip_enabled is False and locinput.find("currentlocation") == 0 or
+    geoip_enabled is False and locinput.find("curloc") == 0):
     spinner.fail(text="PyWeather query failed!")
     print("")
     print("Whoops! You entered the query to access your current location, but",
-          "your current location isn't available. Press enter to exit.", sep="\n")
+          "the current location feature is disabled. To enable the current location feature",
+          "in your config file make FIRSTINPUT/geoipservice_enabled True. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+elif (geoip_available is False and locinput.find("currentlocation") == 0 or
+      geoip_available is False and locinput.find("curloc") == 0):
+    spinner.fail(text="PyWeather query failed!")
+    print("")
+    print("Whoops! You entered the query to access your current location, there isn't any current location",
+          "data at this time. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+elif (favoritelocation_enabled is False and locinput.find("favoritelocation:") == 0 or
+      favoritelocation_enabled is False and locinput.find("favloc:") == 0):
+    spinner.fail(text="PyWeather query failed!")
+    print("")
+    print("Whoops! You entered the query to access a favorite location, but the favorite locations",
+          "feature isn't on. If you'd like to enable favorite locations, you can do so by booting up",
+          "PyWeather, and selecting the favorite locations option. Alternatively, you can go into",
+          "your config file and set FAVORITE LOCATIONS/enabled to True. Press enter to exit.", sep="\n")
     input()
     sys.exit()
 elif (favoritelocation_available is False and locinput.find("favoritelocation:") == 0 or
         favoritelocation_available is False and locinput.find("favloc:") == 0):
     spinner.fail(text="PyWeather query failed!")
     print("")
-    print("Whoops! You entered the query to access one of your favorite locations, but",
-          "favorite locations isn't on (either you have no favorite locations, or it's disabled",
-          "entirely). Press enter to exit.", sep="\n")
+    print("Whoops! You entered the query to access a favorite location, but you don't have any favorite",
+          "locations at this time. Press enter to exit.", sep="\n")
     input()
     sys.exit()
 
@@ -1205,12 +1224,12 @@ elif (favoritelocation_available is True and locinput.find("favoritelocation:") 
         favoritelocation_available is True and locinput.find("favloc:") == 0):
     haveFavoriteLocation = False
     logger.debug("haveFavoriteLocation: %s" % haveFavoriteLocation)
-    if locinput == "favoritelocation:1" and favoritelocation_1 != "None":
+    if locinput == "favoritelocation:1" or locinput == "favloc:1" and favoritelocation_1 != "None":
         locinput = favoritelocation_1
         haveFavoriteLocation = True
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
                      (locinput, haveFavoriteLocation))
-    elif locinput == "favoritelocation:1" and favoritelocation_1 == "None":
+    elif locinput == "favoritelocation:1" or locinput == "favloc:1" and favoritelocation_1 == "None":
         spinner.fail(text="PyWeather query failed!")
         print("")
         print("Whoops! You entered the query to access your first favorite location, but",
@@ -1218,7 +1237,7 @@ elif (favoritelocation_available is True and locinput.find("favoritelocation:") 
         input()
         sys.exit()
 
-    if locinput == "favoritelocation:2" and favoritelocation_2 != "None" and haveFavoriteLocation is False:
+    if locinput == "favoritelocation:2" or locinput == "favloc:2" and favoritelocation_2 != "None" and haveFavoriteLocation is False:
         locinput = favoritelocation_2
         haveFavoriteLocation = True
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
@@ -1231,7 +1250,7 @@ elif (favoritelocation_available is True and locinput.find("favoritelocation:") 
         input()
         sys.exit()
 
-    if locinput == "favoritelocation:3" and favoritelocation_3 != "None" and haveFavoriteLocation is False:
+    if locinput == "favoritelocation:3" or locinput == "favloc:3" and favoritelocation_3 != "None" and haveFavoriteLocation is False:
         locinput = favoritelocation_3
         haveFavoriteLocation = True
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
@@ -1244,7 +1263,7 @@ elif (favoritelocation_available is True and locinput.find("favoritelocation:") 
         input()
         sys.exit()
 
-    if locinput == "favoritelocation:4" and favoritelocation_4 != "None" and haveFavoriteLocation is False:
+    if locinput == "favoritelocation:4" or locinput == "favloc:4" and favoritelocation_4 != "None" and haveFavoriteLocation is False:
         locinput = favoritelocation_4
         haveFavoriteLocation = True
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
@@ -1257,7 +1276,7 @@ elif (favoritelocation_available is True and locinput.find("favoritelocation:") 
         input()
         sys.exit()
 
-    if locinput == "favoritelocation:5" and favoritelocation_5 != "None" and haveFavoriteLocation is False:
+    if locinput == "favoritelocation:5" or locinput == "favloc:5" and favoritelocation_5 != "None" and haveFavoriteLocation is False:
         locinput = favoritelocation_5
         haveFavoriteLocation = True
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
@@ -3017,6 +3036,19 @@ while True:
                          (forecast10_showsnowdataday, forecast10_showsnowdatanight))
             logger.debug("forecast10_showraindataday: %s ; forecast10_showraindatanight: %s" %
                          (forecast10_showraindataday, forecast10_showraindatanight))
+            # Set the data available variables to true
+            forecast10_snowtotalavail = True
+            forecast10_raintotalavail = True
+            forecast10_snowdayavail = True
+            forecast10_snownightavail = True
+            forecast10_raindayavail = True
+            forecast10_rainnightavail = True
+            logger.debug("forecast10_snowtotalavail: %s ; forecast10_raintotalavail: %s" %
+                         (forecast10_snowtotalavail, forecast10_raintotalavail))
+            logger.debug("forecast10_snowdayavail: %s ; forecast10_snownightavail: %s" %
+                         (forecast10_snowdayavail, forecast10_snownightavail))
+            logger.debug("forecast10_raindayavail: %s ; forecast10_rainnightavail: %s" %
+                         (forecast10_raindayavail, forecast10_rainnightavail))
             # Begin checking for available data - Start with int conversions.
             # If a ValueError occurs, set the display variable to false.
             try:
@@ -3024,57 +3056,78 @@ while True:
                 logger.debug("forecast10_snowtotalCheck: %s" % forecast10_snowtotalCheck)
             except ValueError:
                 logger.warning("Failed to convert total snow into float, not displaying...")
+                printException_loggerwarn()
                 forecast10_showsnowdatatotal = False
-                logger.debug("forecast10_showsnowdatatotal: %s" % forecast10_showsnowdatatotal)
+                forecast10_snowtotalavail = False
+                logger.debug("forecast10_showsnowdatatotal: %s ; forecast10_snowtotalavail: %s" %
+                             (forecast10_showsnowdatatotal, forecast10_snowtotalavail))
 
             try:
                 forecast10_raintotalCheck = float(forecast10_precipTotalIn)
                 logger.debug("forecast10_raintotalCheck: %s" % forecast10_raintotalCheck)
             except ValueError:
                 logger.warning("Failed to convert total precip into float, not displaying...")
+                printException_loggerwarn()
                 forecast10_showraindatatotal = False
-                logger.debug("forecast10_showraindatatotal: %s" % forecast10_showraindatatotal)
+                forecast10_raintotalavail = False
+                logger.debug("forecast10_showraindatatotal: %s ; forecast10_raintotalavail: %s" %
+                             (forecast10_showraindatatotal, forecast10_raintotalavail))
 
             try:
                 forecast10_snowdayCheck = float(forecast10_snowDayIn)
                 logger.debug("forecast10_snowdayCheck: %s" % forecast10_snowdayCheck)
             except ValueError:
                 logger.warning("Failed to convert day-only snow into float, not displaying...")
+                printException_loggerwarn()
                 forecast10_showsnowdataday = False
-                logger.debug("forecast10_showsnowdataday: %s" % forecast10_showsnowdataday)
+                forecast10_snowdayavail = False
+                logger.debug("forecast10_showsnowdataday: %s ; forecast10_snowdayavail: %s" %
+                             (forecast10_showsnowdataday, forecast10_snowdayavail))
 
             try:
                 forecast10_snownightCheck = float(forecast10_snowNightIn)
                 logger.debug("forecast10_snownightCheck: %s" % forecast10_snownightCheck)
             except ValueError:
                 logger.warning("Failed to convert night-only snow into float, not displaying...")
+                printException_loggerwarn()
                 forecast10_showsnowdatanight = False
-                logger.debug("forecast10_showsnowdatanight: %s" % forecast10_showsnowdatanight)
+                forecast10_snownightavail = False
+                logger.debug("forecast10_showsnowdatanight: %s ; forecast10_snownightavail: %s" %
+                             (forecast10_showsnowdatanight, forecast10_snownightavail))
+
 
             try:
                 forecast10_raindayCheck = float(forecast10_precipDayIn)
                 logger.debug("forecast10_raindayCheck: %s" % forecast10_raindayCheck)
             except ValueError:
                 logger.warning("Failed to convert day-only rain into float, not displaying...")
+                printException_loggerwarn()
                 forecast10_showraindataday = False
-                logger.debug("forecast10_showraindataday: %s" % forecast10_showraindataday)
+                forecast10_raindayavail = False
+                logger.debug("forecast10_showraindataday: %s ; forecast10_raindayavail: %s" %
+                             (forecast10_showraindataday, forecast10_raindayavail))
+
 
             try:
                 forecast10_rainnightCheck = float(forecast10_precipNightIn)
                 logger.debug("forecast10_rainnightCheck: %s" % forecast10_rainnightCheck)
             except ValueError:
                 logger.warning("Failed to convert night-only rain into float, not displaying...")
+                printException_loggerwarn()
                 forecast10_showraindatanight = False
-                logger.debug("forecast10_showraindatanight: %s" % forecast10_showraindatanight)
+                forecast10_rainnightavail = False
+                logger.debug("forecast10_showraindatanight: %s ; forecast10_rainnightavail: %s" %
+                             (forecast10_showraindatanight, forecast10_rainnightavail))
+
 
             # Determine if we'll show total precip amounts
 
             # If snow total amount is above 0.01, show it regardless of temp
-            if forecast10_snowtotalCheck >= 0.01:
+            if forecast10_snowtotalCheck >= 0.01 and forecast10_snowtotalavail is True:
                 logger.info("forecast10_snowtotalCheck is >= 0.01.")
 
             # Have a completely separate block of code for calculating displaying snow data
-            if forecast10_snowtotalCheck == 0.00:
+            if forecast10_snowtotalCheck == 0.00 and forecast10_snowtotalavail is True:
                 logger.info("forecast10_snowtotalCheck is 0.00")
                 if forecast10_highfcheck > 32 and forecast10_lowfcheck > 32:
                     forecast10_showsnowdatatotal = False
@@ -3084,10 +3137,10 @@ while True:
                     forecast10_showsnowdatatotal = True
                 logger.debug("forecast10_showsnowdatatotal: %s" % forecast10_showsnowdatatotal)
 
-            if forecast10_raintotalCheck >= 0.01:
+            if forecast10_raintotalCheck >= 0.01 and forecast10_raintotalavail is True:
                 logger.info("forecast10_raintotalCheck is >= 0.01.")
 
-            if forecast10_raintotalCheck == 0.00:
+            if forecast10_raintotalCheck == 0.00 and forecast10_raintotalavail is True:
                 logger.info("forecast10_raintotalCheck is 0.00")
                 if forecast10_highfcheck <= 32 and forecast10_lowfcheck <= 32:
                     forecast10_showraindatatotal = False
@@ -3095,10 +3148,10 @@ while True:
                     forecast10_showraindatatotal = True
                 logger.debug("forecast10_showraindatatotal: %s" % forecast10_showraindatatotal)
 
-            if forecast10_snowdayCheck >= 0.01:
+            if forecast10_snowdayCheck >= 0.01 and forecast10_snowdayavail is True:
                 logger.info("forecast10_snowdayCheck is >= 0.01.")
 
-            if forecast10_snowdayCheck == 0.00:
+            if forecast10_snowdayCheck == 0.00 and forecast10_snowdayavail is True:
                 logger.info("forecast10_snowdayCheck is 0.00")
                 if forecast10_highfcheck >= 32:
                     forecast10_showsnowdataday = False
@@ -3106,11 +3159,11 @@ while True:
                     forecast10_showsnowdataday = True
                 logger.debug("forecast10_showsnowdataday: %s" % forecast10_showsnowdataday)
 
-            if forecast10_snownightCheck >= 0.01:
+            if forecast10_snownightCheck >= 0.01 and forecast10_snownightavail is True:
                 logger.info("forecast10_snownightCheck is >= 0.01.")
                 forecast10_showsnowdatanight = True
 
-            if forecast10_snownightCheck == 0.00:
+            if forecast10_snownightCheck == 0.00 and forecast10_snownightavail is True:
                 logger.info("forecast10_snownightCheck is 0.00")
                 if forecast10_lowfcheck >= 32:
                     forecast10_showsnowdatanight = False
@@ -3118,10 +3171,10 @@ while True:
                     forecast10_showsnowdatanight = True
                 logger.debug("forecast10_showsnowdatanight: %s" % forecast10_showsnowdatanight)
 
-            if forecast10_raindayCheck >= 0.01:
+            if forecast10_raindayCheck >= 0.01 and forecast10_raindayavail is True:
                 logger.info("forecast10_raindayCheck is >= 0.01")
 
-            if forecast10_raindayCheck == 0.00:
+            if forecast10_raindayCheck == 0.00 and forecast10_raindayavail is True:
                 logger.info("forecast10_raindayCheck is 0.00")
                 if forecast10_highfcheck < 32:
                     forecast10_showraindataday = False
@@ -3129,10 +3182,10 @@ while True:
                     forecast10_showraindataday = True
                 logger.debug("forecast10_showraindataday: %s" % forecast10_showraindataday)
 
-            if forecast10_rainnightCheck >= 0.01:
+            if forecast10_rainnightCheck >= 0.01 and forecast10_rainnightavail is True:
                 logger.info("forecast10_rainnightCheck is >= 0.01")
 
-            if forecast10_rainnightCheck == 0.00:
+            if forecast10_rainnightCheck == 0.00 and forecast10_rainnightavail is True:
                 logger.info("forecast10_rainnightCheck is 0.00")
                 if forecast10_lowfcheck < 32:
                     forecast10_showraindatanight = False
@@ -3180,26 +3233,41 @@ while True:
                   Fore.YELLOW + Style.BRIGHT + " and a low of " + Fore.CYAN + Style.BRIGHT + forecast10_lowf + "°F (" +
                   forecast10_lowc + "°C)" + ".")
             print(Fore.YELLOW + Style.BRIGHT + "Precipitation chance: " + Fore.CYAN + Style.BRIGHT + forecast10_precipChance + "%")
-            if forecast10_showsnowdatatotal == True:
+            if forecast10_showsnowdatatotal is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Snow in total: " + Fore.CYAN + Style.BRIGHT + forecast10_snowTotalIn
                       + " in (" + forecast10_snowTotalCm + " cm)")
-            if forecast10_showraindatatotal == True:
-                print(Fore.YELLOW + Style.BRIGHT +  "Rain in total: " + Fore.CYAN + Style.BRIGHT +  forecast10_precipTotalIn
+            elif forecast10_snowtotalavail is False:
+                print(Fore.YELLOW + Style.BRIGHT + "Total snow precipitation data is not available for this date.")
+
+            if forecast10_showraindatatotal is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Rain in total: " + Fore.CYAN + Style.BRIGHT +  forecast10_precipTotalIn
                       + " in (" + forecast10_precipTotalMm + " mm)")
+            elif forecast10_raintotalavail is False:
+                print(Fore.YELLOW + Style.BRIGHT + "Total rain precipitation data is not available for this date.")
                 
-            if forecast10_showraindataday == True:
+            if forecast10_showraindataday is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Rain for the day: " + Fore.CYAN + Style.BRIGHT + forecast10_precipDayIn
                       + " in (" + forecast10_precipDayMm + " mm)")
-            if forecast10_showsnowdataday == True:
+            elif forecast10_raindayavail is False:
+                print(Fore.YELLOW + Style.BRIGHT + "Rain precipitation data during the day is not available for this date.")
+
+            if forecast10_showsnowdataday is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Snow for the day: " + Fore.CYAN + Style.BRIGHT + forecast10_snowDayIn
                       + " in (" + forecast10_snowDayCm + " cm)")
+            elif forecast10_snowdayavail is False:
+                print(Fore.YELLOW + Style.BRIGHT + "Snow precipitation data during the day is not available for this date.")
             
-            if forecast10_showraindatanight == True:
+            if forecast10_showraindatanight is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Rain for the night: " + Fore.CYAN + Style.BRIGHT + forecast10_precipNightIn
                       + " in (" + forecast10_precipNightMm + " mm)")
-            if forecast10_showsnowdatanight == True:
+            elif forecast10_rainnightavail is False:
+                print(Fore.YELLOW + Style.BRIGHT + "Rain precipitation data during the night is not available for this date.")
+
+            if forecast10_showsnowdatanight is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Snow for the night: " + Fore.CYAN + Style.BRIGHT + forecast10_snowNightIn
                       + " in (" + forecast10_snowNightCm + " cm)")
+            elif forecast10_snownightavail is False:
+                print(Fore.YELLOW + Style.BRIGHT + "Snow precipitation data during the night is not available for this date.")
 
             if forecast10_avgWindDir == "Variable":
                 print(Fore.YELLOW + Style.BRIGHT + "Winds: " + Fore.CYAN + Style.BRIGHT +
