@@ -1,7 +1,7 @@
 [Subscribe to PyWeather's Weekly Newsletter, for all the latest in PyWeather news on a weekly basis!](https://owenthe.ninja/sign-pyweathers-weekly-newsletter/)
 
 ## Welcome to PyWeather (0.6.2 beta)!
-Welcome to PyWeather, and thanks for being here! Don't worry, we're super happy that you're here.
+Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
 
 PyWeather is the culmination of thousands of hours of work poured into a silly little project that got more advanced over time.
 
