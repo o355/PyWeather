@@ -2934,7 +2934,6 @@ while True:
 # <--- 10 day hourly is above | 10 day forecast is below --->
     elif moreoptions == "4":
         logger.info("Selected view more 10 day...")
-        print("")
         logger.debug("refresh_forecastflagged: %s ; forecast cache time: %s" %
                     (refresh_forecastflagged, time.time() - cachetime_forecast))
         if (refresh_forecastflagged == True 
@@ -3343,7 +3342,7 @@ while True:
                       "be launched.", sep="\n")
                 continue
 
-
+        spinner.start(text="Loading radar GUI...")
         try:
             os.mkdir("temp")
         except:
@@ -3355,21 +3354,24 @@ while True:
             from appJar import gui
             frontend = gui()
         except ImportError:
-            print(Fore.RED + Style.BRIGHT + "Cannot launch a GUI on this platform. If you don't have",
+            spinner.fail(text="Failed to load radar GUI, an import error occurred!")
+            print("")
+            print(Fore.RED + Style.BRIGHT + "Cannot launch a GUI on this platform, as an import error occurred. If you don't have",
                   Fore.RED + Style.BRIGHT + "a GUI on Linux, this is expected. Otherwise, investigate into why",
                   Fore.RED + Style.BRIGHT + "tkinter won't launch.", sep="\n" + Fore.RESET)
-            printException()
+            printException_loggerwarn()
             continue
         except:
-            printException()
+            spinner.fail(text="Failed to load radar GUI!")
+            print("")
             print(Fore.RED + Style.BRIGHT + "Cannot launch the GUI. This is probably occurring as a result of being in a terminal,",
                   Fore.RED + Style.BRIGHT + "and not having a display for the GUI to initialize on. If this is not the case, and you have a GUI,",
                   Fore.RED + Style.BRIGHT + "turn on tracebacks in the configuration file, and report the traceback on GitHub if the issue persists.",
                   Fore.RED + Style.BRIGHT + "Press enter to continue.")
+            printException()
             input()
             continue
-            
-        print(Fore.YELLOW + "Defining variables...")
+
         # A quick note about cache variables.
         # The syntax goes like this:
         # (mode)(zoom)cached, where r = radar only, s = satellite only
@@ -3393,17 +3395,19 @@ while True:
         logger.debug("r80url: %s ; r100url: %s" %
                      (r80url, r100url))      
         
-        
-        print(Fore.YELLOW + "Defining functions...")
+
                 
         def frontend_zoomswitch(btnName):
+            # Globalize cache variables
             global r10cached; global r20cached; global r40cached
             global r60cached; global r80cached; global r100cached
             global radar_zoomlevel
             logger.debug("btnName: %s" % btnName)
+            # If button name equals a zoom level enter this code
             if btnName == "10 km":
                 logger.debug("r10cached: %s" % r10cached)
                 if r10cached == False:
+                    # If the radar image isn't cached fetch the image.
                     logger.debug("r10cached is false, fetching...")
                     frontend.setStatusbar("Zoom: 10 km", 0)
                     frontend.setStatusbar("Status: Fetching image...", 1)
@@ -3431,6 +3435,7 @@ while True:
                     logger.debug("r10cached: %s ; radar_zoomlevel: %s" %
                                  (r10cached, radar_zoomlevel))
                 elif r10cached == True:
+                    # If it is cached load the image. If it's not cached show the image failed to load.
                     logger.debug("r10cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 10 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
@@ -3930,6 +3935,7 @@ while True:
         frontend.addStatusbar(fields=2)
         frontend.setStatusbar("Zoom: Not selected", 0)
         frontend.setStatusbar("Status: Idle", 1)
+        spinner.stop()
         frontend.go()
 #<--- Radar is above | Exit PyWeather is below --->
 
@@ -3941,13 +3947,15 @@ while True:
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
                     (buildnumber, buildversion))
-        print(Fore.YELLOW + Style.BRIGHT + "Checking for updates. This should only take a few seconds.")
+        spinner.start(text="Checking for updates...")
         try:
             versioncheck = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
             releasenotes = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/releasenotes.txt")
             logger.debug("versioncheck: %s" % versioncheck)
         except:
-            logger.warn("Couldn't check for updates! Is there an internet connection?")
+            spinner.fail(text="Failed to check for updates!")
+            print("")
+            logger.warning("Couldn't check for updates! Is there an internet connection?")
             print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the update data file, PyWeather",
                   Fore.YELLOW + Style.BRIGHT + "ran into an error. If you're on a network with a filter,",
                   Fore.YELLOW + Style.BRIGHT + "make sure that 'raw.githubusercontent.com' is unblocked. Otherwise,",
@@ -3957,7 +3965,8 @@ while True:
         versionJSON = json.loads(versioncheck.text)
         if jsonVerbosity == True:
             logger.debug("versionJSON: %s" % versionJSON)
-        logger.debug("Loaded versionJSON with reader %s" % reader)
+        else:
+            logger.debug("versionJSON loaded.")
         version_buildNumber = float(versionJSON['updater']['latestbuild'])
         version_latestVersion = versionJSON['updater']['latestversion']
         version_latestURL = versionJSON['updater']['latesturl']
@@ -3973,6 +3982,7 @@ while True:
                      (version_latestReleaseTag))
         logger.debug("version_newversionreleasedate: %s ; version_latestReleaseDate: %s" %
                      (version_newversionreleasedate, version_latestReleaseDate))
+        spinner.stop()
         if buildnumber >= version_buildNumber:
             logger.info("PyWeather is up to date.")
             logger.info("local build (%s) >= latest build (%s)"
@@ -4065,7 +4075,8 @@ while True:
                 #              "downloading the latest version with a .zip.", sep="\n")
                 print("")
                 logger.debug("Downloading latest version...")
-                print(Fore.YELLOW + Style.BRIGHT + "Downloading the latest version of PyWeather...")
+                # This will eventually get replaced with a real progress bar with size indicating and all that cool stuff.
+                spinner.start(text="Downloading the latest version of PyWeather...")
                 try:
                     updatezip = requests.get(version_latestURL)
                     with open(version_latestFileName, 'wb') as fw:
@@ -4073,8 +4084,10 @@ while True:
                             fw.write(chunk)
                         fw.close()
                 except:
-                    logger.warn("Couldn't download the latest version!")
-                    logger.warn("Is the internet online?")
+                    spinner.fail("Failed to download the latest version of PyWeather!")
+                    print("")
+                    logger.warning("Couldn't download the latest version!")
+                    logger.warning("Is the internet online?")
                     print(Fore.RED + Style.BRIGHT + "When attempting to download the latest .zip file",
                           Fore.RED + Style.BRIGHT + "for PyWeather, an error occurred. If you're on a",
                           Fore.RED + Style.BRIGHT + "network with a filter, make sure that",
@@ -4086,6 +4099,7 @@ while True:
                     continue
                 logger.debug("Latest version was saved, filename: %s"
                             % version_latestFileName)
+                spinner.stop()
                 print(Fore.YELLOW + Style.BRIGHT + "The latest version of PyWeather was downloaded " +
                       "to the base directory of PyWeather, and saved as " +
                       Fore.CYAN + Style.BRIGHT + version_latestFileName + Fore.YELLOW + ".")
@@ -4101,16 +4115,19 @@ while True:
                 print(Fore.RED + Style.BRIGHT + "Your input couldn't be understood.")
                 continue
         else:
-            logger.warn("PW updater failed. Variables corrupt, maybe?")
+            spinner.fail("Failed to check for updates!")
+            print("")
+            logger.warning("PW updater failed. Variables corrupt, maybe?")
             print(Fore.YELLOW + Style.BRIGHT + "When attempting to compare version variables, PyWeather ran",
                   Fore.YELLOW + Style.BRIGHT + "into an error. This error is extremely rare. Make sure you're",
                   Fore.YELLOW + Style.BRIGHT + "not trying to travel through a wormhole with Cooper, and report",
-                  Fore.YELLOW + Style.BRIGHT + "the error on GitHub, while it's around.", sep='\n')
+                  Fore.YELLOW + Style.BRIGHT + "the error on GitHub, while it's around. Make sure to turn on verbosity and report",
+                  Fore.YELLOW + Style.BRIGHT + "variable data after selecting the updater option.", sep='\n')
+            input()
             continue
 # <--- Updater is above | Almanac is below --->
     elif moreoptions == "7":
         logger.info("Selected option: almanac")
-        print(Fore.RED + "Loading...")
         try:
             logger.debug("almanac_prefetched: %s ; almanac cache time: %s" %
                          (almanac_prefetched, time.time() - cachetime_almanac))
@@ -4251,8 +4268,6 @@ while True:
         print("")
 #<--- Almanac is above | Sundata is below --->
     elif moreoptions == "10":
-        print(Fore.RED + "Loading...")
-
         try:
             logger.debug("sundata_prefetched: %s ; sundata cache time: %s" %
                          (sundata_prefetched, time.time() - cachetime_sundata))
@@ -4892,8 +4907,8 @@ while True:
                     logger.info("Asking user to continue.")
                     try:
                         print("")
-                        print(Fore.RED + Style.BRIGHT + "Press enter to view the next", user_loopIterations
-                              , "iterations of historical weather information.")
+                        print(Fore.RED + Style.BRIGHT + "Press enter to view the next " + str(user_loopIterations)
+                              + " iterations of historical weather information.")
                         print(Fore.RED + Style.BRIGHT + "Otherwise, press Control + C to get back to the main menu.")
                         input()
                         historical_loops = 0
@@ -4971,6 +4986,7 @@ while True:
             tide_date = data['date']['pretty']
             tide_type = data['data']['type']
             logger.debug("tide_date: %s ; tide_type: %s" % (tide_date, tide_type))
+            print("")
             print(Fore.YELLOW + Style.BRIGHT + tide_date + ":")
             print(Fore.YELLOW + Style.BRIGHT + "Event: " + Fore.CYAN + Style.BRIGHT + tide_type)
             if tide_type == "Low Tide" or tide_type == "High Tide":

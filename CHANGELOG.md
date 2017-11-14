@@ -13,8 +13,7 @@
 * Much better error catching for the config file
 * Adds the ability to view the chance of precipitation on the forecast page.
 * Adding the ability to show cache timings.
-* Adds a new loader, which makes loading things in PyWeather a lot more nice. 
-* Final additions
+* Adds a new loader, which makes loading things in PyWeather a lot more nice.
 
 **BUG FIXES**
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
