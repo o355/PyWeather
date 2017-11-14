@@ -6589,29 +6589,44 @@ while True:
             if yesterday_minWindMPH == "":
                 logger.info("yesterday_mindWindMPH is ''.")
                 yesterday_showMinWind = False
+                logger.debug("yesterday_showMInWind: %s" % yesterday_showMinWind)
 
             if yesterday_avgWindSpeedMPH == "":
                 logger.info("yesterday_avgWindSpeedMPH is ''.")
                 yesterday_showAvgWind = False
+                logger.debug("yesterday_showAvgWind: %s" % yesterday_showAvgWind)
 
             if yesterday_maxWindMPH == "":
                 logger.info("yesterday_maxWindMPH is ''.")
                 yesterday_showMaxWind = False
+                logger.debug("yesterday_showMaxWind: %s" % yesterday_showMaxWind)
 
             if yesterday_minVisibilityMI == "":
                 logger.info("yesterday_minVisibilityMI is ''.")
                 yesterday_showMinVis = False
+                logger.debug("yesterday_showMinVis: %s" % yesterday_showMinVis)
 
             if yesterday_avgVisibilityMI == "":
                 logger.info("yesterday_avgVisibilityMI is ''.")
                 yesterday_showAvgVis = False
+                logger.debug("yesterday_showAvgVis: %s" % yesterday_showAvgVis)
 
             if yesterday_maxVisibilityMI == "":
                 logger.info("yesterday_maxVisibilityMI is ''.")
                 yesterday_showMaxVis = False
+                logger.debug("yesterday_showMaxVis: %s" % yesterday_showMaxVis)
 
             if yesterday_minPressureMB == "":
                 logger.info("yesterday_minPressureMB is ''.")
+                yesterday_showMinPress = False
+
+            if yesterday_avgPressureMB == "":
+                logger.info("yesterday_avgPressureMB is ''.")
+                yesterday_showAvgPress = False
+
+            if yesterday_maxPressureMB == "":
+                logger.info("yesterday_maxPressureMB is ''.")
+                yesterday_showMaxPress = False
 
             if yesterday_precipMM == "T":
                 yesterday_precipdata = False
