@@ -3123,75 +3123,87 @@ while True:
             # Determine if we'll show total precip amounts
 
             # If snow total amount is above 0.01, show it regardless of temp
-            if forecast10_snowtotalCheck >= 0.01 and forecast10_snowtotalavail is True:
-                logger.info("forecast10_snowtotalCheck is >= 0.01.")
+            if forecast10_snowtotalavail is True:
+                if forecast10_snowtotalCheck >= 0.01:
+                    logger.info("forecast10_snowtotalCheck is >= 0.01.")
 
             # Have a completely separate block of code for calculating displaying snow data
-            if forecast10_snowtotalCheck == 0.00 and forecast10_snowtotalavail is True:
-                logger.info("forecast10_snowtotalCheck is 0.00")
-                if forecast10_highfcheck > 32 and forecast10_lowfcheck > 32:
-                    forecast10_showsnowdatatotal = False
-                else:
-                    # Every other possible combination will lead to showing snow data to be true.
-                    # Put the else here as a way to keep things compact.
-                    forecast10_showsnowdatatotal = True
-                logger.debug("forecast10_showsnowdatatotal: %s" % forecast10_showsnowdatatotal)
+            if forecast10_snowtotalavail is True:
+                if forecast10_snowtotalCheck == 0.00:
+                    logger.info("forecast10_snowtotalCheck is 0.00")
+                    if forecast10_highfcheck > 32 and forecast10_lowfcheck > 32:
+                        forecast10_showsnowdatatotal = False
+                    else:
+                        # Every other possible combination will lead to showing snow data to be true.
+                        # Put the else here as a way to keep things compact.
+                        forecast10_showsnowdatatotal = True
+                    logger.debug("forecast10_showsnowdatatotal: %s" % forecast10_showsnowdatatotal)
 
-            if forecast10_raintotalCheck >= 0.01 and forecast10_raintotalavail is True:
-                logger.info("forecast10_raintotalCheck is >= 0.01.")
+            if forecast10_raintotalavail is True:
+                if forecast10_raintotalCheck >= 0.01:
+                    logger.info("forecast10_raintotalCheck is >= 0.01.")
 
-            if forecast10_raintotalCheck == 0.00 and forecast10_raintotalavail is True:
-                logger.info("forecast10_raintotalCheck is 0.00")
-                if forecast10_highfcheck <= 32 and forecast10_lowfcheck <= 32:
-                    forecast10_showraindatatotal = False
-                else:
-                    forecast10_showraindatatotal = True
-                logger.debug("forecast10_showraindatatotal: %s" % forecast10_showraindatatotal)
+            if forecast10_raintotalavail is True:
+                if forecast10_raintotalCheck == 0.00:
+                    logger.info("forecast10_raintotalCheck is 0.00")
+                    if forecast10_highfcheck <= 32 and forecast10_lowfcheck <= 32:
+                        forecast10_showraindatatotal = False
+                    else:
+                        forecast10_showraindatatotal = True
+                    logger.debug("forecast10_showraindatatotal: %s" % forecast10_showraindatatotal)
 
-            if forecast10_snowdayCheck >= 0.01 and forecast10_snowdayavail is True:
-                logger.info("forecast10_snowdayCheck is >= 0.01.")
+            if forecast10_snowdayavail is True:
+                if forecast10_snowdayCheck >= 0.01:
+                    logger.info("forecast10_snowdayCheck is >= 0.01.")
 
-            if forecast10_snowdayCheck == 0.00 and forecast10_snowdayavail is True:
-                logger.info("forecast10_snowdayCheck is 0.00")
-                if forecast10_highfcheck >= 32:
-                    forecast10_showsnowdataday = False
-                else:
-                    forecast10_showsnowdataday = True
-                logger.debug("forecast10_showsnowdataday: %s" % forecast10_showsnowdataday)
+            if forecast10_snowdayavail is True:
+                if forecast10_snowdayCheck == 0.00:
+                    logger.info("forecast10_snowdayCheck is 0.00")
+                    if forecast10_highfcheck >= 32:
+                        forecast10_showsnowdataday = False
+                    else:
+                        forecast10_showsnowdataday = True
+                    logger.debug("forecast10_showsnowdataday: %s" % forecast10_showsnowdataday)
 
-            if forecast10_snownightCheck >= 0.01 and forecast10_snownightavail is True:
-                logger.info("forecast10_snownightCheck is >= 0.01.")
-                forecast10_showsnowdatanight = True
-
-            if forecast10_snownightCheck == 0.00 and forecast10_snownightavail is True:
-                logger.info("forecast10_snownightCheck is 0.00")
-                if forecast10_lowfcheck >= 32:
-                    forecast10_showsnowdatanight = False
-                else:
+            if forecast10_snownightavail is True:
+                if forecast10_snownightCheck >= 0.01:
+                    logger.info("forecast10_snownightCheck is >= 0.01.")
                     forecast10_showsnowdatanight = True
-                logger.debug("forecast10_showsnowdatanight: %s" % forecast10_showsnowdatanight)
 
-            if forecast10_raindayCheck >= 0.01 and forecast10_raindayavail is True:
-                logger.info("forecast10_raindayCheck is >= 0.01")
+            if forecast10_snownightavail is True:
+                if forecast10_snownightCheck == 0.00:
+                    logger.info("forecast10_snownightCheck is 0.00")
+                    if forecast10_lowfcheck >= 32:
+                        forecast10_showsnowdatanight = False
+                    else:
+                        forecast10_showsnowdatanight = True
+                    logger.debug("forecast10_showsnowdatanight: %s" % forecast10_showsnowdatanight)
 
-            if forecast10_raindayCheck == 0.00 and forecast10_raindayavail is True:
-                logger.info("forecast10_raindayCheck is 0.00")
-                if forecast10_highfcheck < 32:
-                    forecast10_showraindataday = False
-                else:
-                    forecast10_showraindataday = True
-                logger.debug("forecast10_showraindataday: %s" % forecast10_showraindataday)
+            if forecast10_raindayavail is True:
+                if forecast10_raindayCheck >= 0.01:
+                    logger.info("forecast10_raindayCheck is >= 0.01")
 
-            if forecast10_rainnightCheck >= 0.01 and forecast10_rainnightavail is True:
-                logger.info("forecast10_rainnightCheck is >= 0.01")
+            if forecast10_raindayavail is True:
+                if forecast10_raindayCheck == 0.00:
+                    logger.info("forecast10_raindayCheck is 0.00")
+                    if forecast10_highfcheck < 32:
+                        forecast10_showraindataday = False
+                    else:
+                        forecast10_showraindataday = True
+                    logger.debug("forecast10_showraindataday: %s" % forecast10_showraindataday)
 
-            if forecast10_rainnightCheck == 0.00 and forecast10_rainnightavail is True:
-                logger.info("forecast10_rainnightCheck is 0.00")
-                if forecast10_lowfcheck < 32:
-                    forecast10_showraindatanight = False
-                else:
-                    forecast10_showraindatanight = True
-                logger.debug("forecast10_showraindatanight: %s" % forecast10_showraindatanight)
+            if forecast10_rainnightavail is True:
+                if forecast10_rainnightCheck >= 0.01:
+                    logger.info("forecast10_rainnightCheck is >= 0.01")
+
+            if forecast10_rainnightavail is True:
+                if forecast10_rainnightCheck == 0.00:
+                    logger.info("forecast10_rainnightCheck is 0.00")
+                    if forecast10_lowfcheck < 32:
+                        forecast10_showraindatanight = False
+                    else:
+                        forecast10_showraindatanight = True
+                    logger.debug("forecast10_showraindatanight: %s" % forecast10_showraindatanight)
 
 
             forecast10_maxWindMPH = str(day['maxwind']['mph'])
