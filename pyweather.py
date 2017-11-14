@@ -6619,14 +6619,17 @@ while True:
             if yesterday_minPressureMB == "":
                 logger.info("yesterday_minPressureMB is ''.")
                 yesterday_showMinPress = False
+                logger.debug("yesterday_showMinPress: %s" % yesterday_showMinPress)
 
             if yesterday_avgPressureMB == "":
                 logger.info("yesterday_avgPressureMB is ''.")
                 yesterday_showAvgPress = False
+                logger.debug("yesterday_showAvgPress: %s" % yesterday_showAvgPress)
 
             if yesterday_maxPressureMB == "":
                 logger.info("yesterday_maxPressureMB is ''.")
                 yesterday_showMaxPress = False
+                logger.debug("yesterday_showMaxPress: %s" % yesterday_showMaxPress)
 
             if yesterday_precipMM == "T":
                 yesterday_precipdata = False
@@ -6657,24 +6660,60 @@ while True:
               + "%")
         print(Fore.YELLOW + Style.BRIGHT + "Maximum Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_maxHumidity
               + "%")
-        print(Fore.YELLOW + Style.BRIGHT + "Minimum Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_minWindMPH
-              + " mph (" + yesterday_minWindKPH + " kph)")
-        print(Fore.YELLOW + Style.BRIGHT + "Average Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_avgWindSpeedMPH
-              + " mph (" + yesterday_avgWindSpeedKPH + " kph)")
-        print(Fore.YELLOW + Style.BRIGHT + "Maximum Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_maxWindMPH
-              + " mph (" + yesterday_maxWindKPH + " kph)")
-        print(Fore.YELLOW + Style.BRIGHT + "Minimum Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_minVisibilityMI
-              + " mi (" + yesterday_minVisibilityKM + " kph)")
-        print(Fore.YELLOW + Style.BRIGHT + "Average Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_avgVisibilityMI
-              + " mi (" + yesterday_avgVisibilityKM + " kph)")
-        print(Fore.YELLOW + Style.BRIGHT + "Maximum Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_maxVisibilityMI
-              + " mi (" + yesterday_maxVisibilityKM + " kph)")
-        print(Fore.YELLOW + Style.BRIGHT + "Minimum Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_minPressureInHg
-              + " inHg (" + yesterday_minPressureMB + " mb)")
-        print(Fore.YELLOW + Style.BRIGHT + "Average Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_avgPressureInHg
-              + " inHg (" + yesterday_avgPressureMB + " mb)")
-        print(Fore.YELLOW + Style.BRIGHT + "Maximum Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_maxPressureInHg
-              + " inHg (" + yesterday_maxPressureMB + " mb)")
+        if yesterday_showMinWind is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_minWindMPH
+                  + " mph (" + yesterday_minWindKPH + " kph)")
+        else:
+            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's minimum wind speed data is not available for this location.")
+
+        if yesterday_showAvgWind is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_avgWindSpeedMPH
+                  + " mph (" + yesterday_avgWindSpeedKPH + " kph)")
+        else:
+            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's average wind speed data is not available for this location.")
+
+        if yesterday_showMaxWind is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_maxWindMPH
+                  + " mph (" + yesterday_maxWindKPH + " kph)")
+        else:
+            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's maximum wind speed data is not available for this location.")
+
+        if yesterday_showMinVis is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_minVisibilityMI
+                  + " mi (" + yesterday_minVisibilityKM + " km)")
+        else:
+            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's minimum visibility data is not available for this location.")
+
+        if yesterday_showAvgVis is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_avgVisibilityMI
+                  + " mi (" + yesterday_avgVisibilityKM + " km)")
+        else:
+            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's average visibility data is not available for this location.")
+
+        if yesterday_showMaxVis is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_maxVisibilityMI
+                  + " mi (" + yesterday_maxVisibilityKM + " km)")
+        else:
+            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's maximum visibility data is not available for this location.")
+
+        if yesterday_showMinPress is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_minPressureInHg
+                  + " inHg (" + yesterday_minPressureMB + " mb)")
+        else:
+            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's minimum pressure data is not available for this location.")
+
+        if yesterday_showAvgPress is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_avgPressureInHg
+                  + " inHg (" + yesterday_avgPressureMB + " mb)")
+        else:
+            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's average pressure data is not available for this location.")
+
+        if yesterday_showMaxPress is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_maxPressureInHg
+                  + " inHg (" + yesterday_maxPressureMB + " mb)")
+        else:
+            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's maximum pressure data is not available for this location.")
+
         if yesterday_precipdata is True:
             print(Fore.YELLOW + Style.BRIGHT + "Total Precipitation: " + Fore.CYAN + Style.BRIGHT + yesterday_precipIN
                   + " in (" + yesterday_precipMM + " mm)")
