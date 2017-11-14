@@ -6835,25 +6835,48 @@ while True:
 
             yesterday_condition = str(data['conds'])
             logger.debug("yesterday_condition: %s" % yesterday_condition)
+
+            # Check for invalid wind/conditions data
+            yesterday_showHourlyWind = True
+            yesterday_showHourlyConditions = True
+            logger.debug("yesterday_showHourlyWind: %s ; yesterday_showHourlyConditions: %s" %
+                         (yesterday_showHourlyWind, yesterday_showHourlyConditions))
+
+            if yesterday_condition == "":
+                logger.info("yesterday_condition is ''.")
+                yesterday_showHourlyConditions = False
+                logger.debug("yesterday_showHourlyConditions: %s" % yesterday_showHourlyConditions)
+
+            if yesterday_windspeedMPH == "":
+                logger.info("yesterday_windspeedMPH is ''.")
+                yesterday_showHourlyWind = False
+                logger.debug("yesterday_showHourlyWind: %s" % yesterday_showHourlyWind)
+
             logger.info("Now printing weather data...")
             print("")
             print(Fore.YELLOW + Style.BRIGHT + yesterday_time + ":")
             print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT + yesterday_condition)
             print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_tempF
-                  + " °F (" + yesterday_tempC + " °C)")
+                  + "°F (" + yesterday_tempC + "°C)")
             print(Fore.YELLOW + Style.BRIGHT + "Dew point: " + Fore.CYAN + Style.BRIGHT + yesterday_dewpointF
-                  + " °F (" + yesterday_dewpointC + " °C)")
-            print(Fore.YELLOW + Style.BRIGHT + "Wind speed: " + Fore.CYAN + Style.BRIGHT + yesterday_windspeedMPH
-                  + " mph (" + yesterday_windspeedKPH + " kph)")
+                  + "°F (" + yesterday_dewpointC + "°C)")
+            if yesterday_showHourlyWind is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Wind speed: " + Fore.CYAN + Style.BRIGHT + yesterday_windspeedMPH
+                      + " mph (" + yesterday_windspeedKPH + " kph)")
+            else:
+                print(Fore.YELLOW + Style.BRIGHT + "Yesterday's wind speed data is not available for this hour.")
+
             if yesterday_windgustdata == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Wind gusts: " + Fore.CYAN + Style.BRIGHT + yesterday_windgustMPH
                       + " mph (" + yesterday_windgustKPH + " kph)")
+
             if yesterday_windchilldata == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Wind chill: " + Fore.CYAN + Style.BRIGHT + yesterday_windchillF
-                      + " °F (" + yesterday_windchillC + " °C)")
+                      + "°F (" + yesterday_windchillC + "°C)")
+
             if yesterday_heatindexdata == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Heat index: " + Fore.CYAN + Style.BRIGHT + yesterday_heatindexF
-                      + " °F (" + yesterday_heatindexC + " °C)")
+                      + "°F (" + yesterday_heatindexC + "°C)")
             print(Fore.YELLOW + Style.BRIGHT + "Precipitation: " + Fore.CYAN + Style.BRIGHT + yesterday_precipIN
                   + " in (" + yesterday_precipMM + " mm)")
 
