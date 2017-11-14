@@ -1,7 +1,21 @@
-# PyWeather - version 0.6.3 beta
-# Copyright (C) 2017 o355
+'''
+_______
+|      \  \           /         @@@;
+|       \  \         /        `#....@
+|        |  \       /       ,;@.....;,;
+|        |   \     /       @..@........@`           PyWeather
+|        |    \   /        .............@           version 0.6.3 beta
+|        /     \ /         .............@           (c) 2017 - o355
+|_______/       |          @...........#`
+|               |           .+@@++++@#;
+|               |             @ ;  ,
+|               |             : ' .
+|               |            @ # .`
+|               |           @ # .`
+'''
 
-# Section 0 - The license
+# The second part of the ASCII art you see was converted to ASCII from Wunderground's J icon set - the sleet icon.
+# Some minor tweaking was done to straighten up the rain.
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -890,13 +904,22 @@ if checkforUpdates == True:
 logger.info("Defining about variables...")
 about_buildnumber = "63"
 about_version = "0.6.3 beta"
-about_releasedate = "November 30, 2018"
-about_maindevelopers = "o355"
+about_releasedate = "November 30, 2017"
+about_maindevelopers = "o355" # Oh look, I'm also on TV, HI MOM!!!!!!!!!!!!
 logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))
 logger.debug("about_releasedate: %s ; about_maindevelopers: %s" %
              (about_releasedate, about_maindevelopers))
 about_awesomecontributors = "ModoUnreal, TheLetterAndrew" # Oh look I'm on TV, HI MOM!!!!
+# The winner of the explaination point contest for 0.6.3 beta:
+#
+#             o355
+#          ___________
+#          |   1st    | ModoUnreal
+#  No one  |          |___________
+# ---------               2nd     |
+# |  3rd                          |
+# |_______________________________|
 about_contributors = "gsilvapt, creepersbane"
 about_releasetype = "beta"
 about_librariesinuse = "Colorama, Geopy, appJar, Requests, Halo"
@@ -6294,12 +6317,12 @@ while True:
               Fore.YELLOW + Style.BRIGHT + "Awesome contributors: " + Fore.CYAN + Style.BRIGHT + about_awesomecontributors,
               Fore.YELLOW + Style.BRIGHT + "Contributors: " + Fore.CYAN + Style.BRIGHT + about_contributors,
               "",
-              Fore.YELLOW + Style.BRIGHT + "PyWeather is powered by Weather Underground (Wunderground)",
-              Fore.YELLOW + Style.BRIGHT + "A special thanks to the developers of these libraries",
-              "that are used in PyWeather: ",
+              Fore.YELLOW + Style.BRIGHT + "Powered by Weather Underground (wunderground.com)",
+              "",
+              Fore.YELLOW + Style.BRIGHT + "A special thanks to the developers of these libraries that are used in PyWeather:",
               Fore.CYAN + Style.BRIGHT + about_librariesinuse + Fore.RESET,
-              Fore.YELLOW + Style.BRIGHT + "A special thanks to the developers & maintainers of these APIs",
-              "that are used in PyWeather: ",
+              "",
+              Fore.YELLOW + Style.BRIGHT + "A special thanks to the developers & maintainers of these APIs that are used in PyWeather:",
               Fore.CYAN + Style.BRIGHT + about_apisinuse + Fore.RESET, sep="\n")
 #<--- About is above, jokes are below --->
     elif moreoptions == "tell me a joke":

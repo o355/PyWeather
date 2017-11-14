@@ -1,5 +1,18 @@
-# PyWeather Updater - version 0.6.3 beta
-# Copyright (C) 2017 o355
+'''
+_______
+|      \  \           /         @@@;
+|       \  \         /        `#....@
+|        |  \       /       ,;@.....;,;
+|        |   \     /       @..@........@`           PyWeather Updater
+|        |    \   /        .............@           version 0.6.3 beta
+|        /     \ /         .............@           (c) 2017 - o355
+|_______/       |          @...........#`
+|               |           .+@@++++@#;
+|               |             @ ;  ,
+|               |             : ' .
+|               |            @ # .`
+|               |           @ # .`
+'''
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
