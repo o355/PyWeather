@@ -21,6 +21,13 @@
 * Fixed potential bugs where PyWeather wouldn't properly display precip information for hurricane data - The algorithm was reworked.
 * Fixed a bug where if you manually flagged all data types to refresh, hurricane data wouldn't be refreshed.
 * Fixed a minor bug where if the summary section couldn't be added in the setup file, the print statement indicated that the cache section wasn't added.
+* Fixed a bug where PyWeather didn't catch bad visibility data on the detailed current weather screen. - 95% done - Needs testing
+* Fixed a bug where PyWeather didn't catch bad UV index data on the detailed current weather screen. - 95% done - Needs testing
+* Fixing a bug where PyWeather didn't catch bad wind speed, visibility, and pressure data on the yesterday's weather summary screen.
+* Fixing a bug where the visibility in km on the yesterday's summary screen read as "kph".
+* Fixing a bug where PyWeather didn't catch bad current conditions data on yesterday's weather hourly data.
+* Fixing a bug where PyWeather didn't catch bad wind speed data on yesterday's weather hourly data.
+* Fixing a minor bug where on yesterday's weather hourly data, the degree symbol was placed too far right by 1 character.
 
 **OTHER CHANGES**
 * The Git Updater has been completely removed, as it's been unreliable. A universal updater will be introduced later in time.

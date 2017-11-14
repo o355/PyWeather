@@ -1165,13 +1165,11 @@ if geoip_available is True:
     print("")
     print("You can also enter this to view weather for your current location:")
     print("currentlocation - " + currentlocation)
-    print("")
 elif geoip_available is False and geoip_enabled is True:
     logger.debug("geoip isn't available, show an error message.")
     print("")
     print("The GeoIP service used for your current location gave an invalid location.")
     print("If this error continues, you can turn off the current location feature to avoid these error messages.")
-    print("")
 if favoritelocation_available is True:
     logger.debug("favorite locations are enabled and available. showing option...")
     print("")
@@ -1186,13 +1184,13 @@ if favoritelocation_available is True:
         print("favoritelocation:4 - " + favoritelocation_4d)
     if favoritelocation_5 != "None":
         print("favoritelocation:5 - " + favoritelocation_5d)
-    print("")
 if pws_enabled is True:
     logger.debug("pws queries have been enabled. Showing option...")
     print("")
     print("You can also query a Wunderground PWS by entering this:")
     print("pws:<PWS ID>")
-    print("")
+
+print("")
 locinput = input("Input here: ")
 locinput = str(locinput)
 
@@ -2291,7 +2289,7 @@ while True:
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
-        
+#<--- Menu is above | Current is below --->
     if moreoptions == "0":
         logger.info("Selected view more currently...")
         logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
@@ -2409,6 +2407,21 @@ while True:
                     % (current_precip1HrIn, current_precip1HrMm))
         logger.debug("current_precipTodayIn: %s ; current_precipTodayMm: %s"
                      % (current_precipTodayIn, current_precipTodayMm))
+        # Check for bad visibility data
+        current_showvisibilitydata = True
+        logger.debug("current_showvisibilitydata: %s" % current_showvisibilitydata)
+        if current_visibilityMi == "" or current_visibilityMi == "N/A":
+            logger.info("current_visibilityMi is either '' or 'N/A'.")
+            current_showvisibilitydata = False
+            logger.debug("current_showvisibilitydata: %s" % current_showvisibilitydata)
+
+        # Check for bad UV index data
+        current_showuvindex = True
+        logger.debug("current_showuvindex: %s" % current_showuvindex)
+        if current_UVIndex == "-1" or current_UVIndex == "--":
+            logger.info("current_UVindex is either '-1' or '--'.")
+            current_showuvindex = False
+            logger.debug("current_showuvindex: %s" % current_showuvindex)
 
         spinner.stop()
         print("")
@@ -2434,10 +2447,18 @@ while True:
         print(Fore.YELLOW + Style.BRIGHT + "Current humidity: " + Fore.CYAN + Style.BRIGHT + summary_humidity)
         print(Fore.YELLOW + Style.BRIGHT + "Current pressure: " + Fore.CYAN + Style.BRIGHT + current_pressureInHg
               + " inHg (" + current_pressureMb + " mb), " + current_pressureTrend2)
-        print(Fore.YELLOW + Style.BRIGHT + "Current visibility: " + Fore.CYAN + Style.BRIGHT + current_visibilityMi
-              + " miles (" + current_visibilityKm + " km)")
-        print(Fore.YELLOW + Style.BRIGHT + "UV Index: " + Fore.CYAN + Style.BRIGHT + current_UVIndex)
-        if current_precip1Hrdata == True:
+        if current_showvisibilitydata is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Current visibility: " + Fore.CYAN + Style.BRIGHT + current_visibilityMi
+                  + " miles (" + current_visibilityKm + " km)")
+        else:
+            print(Fore.YELLOW + Style.BRIGHT + "Current visibility data is not available for this location.")
+
+        if current_showuvindex is True:
+            print(Fore.YELLOW + Style.BRIGHT + "UV Index: " + Fore.CYAN + Style.BRIGHT + current_UVIndex)
+        else:
+            print(Fore.YELLOW + Style.BRIGHT + "Current UV index data is not available for this location.")
+
+        if current_precip1Hrdata is True:
             print(Fore.YELLOW + Style.BRIGHT + "Precipitation in the last hour: " + Fore.CYAN + Style.BRIGHT
                   + current_precip1HrIn + " inches (" + current_precip1HrMm
                   + " mm)")
@@ -5022,12 +5043,12 @@ while True:
                 print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s"
                       % (tide_completediterations, tide_totaliterations))
                 print(Fore.RESET)
-            print("")
             logger.debug("tide_currentiterations: %s ; tide_completediterations: %s" %
                          (tide_currentiterations, tide_completediterations))
             if user_enterToContinue == True:
                 if tide_currentiterations == user_loopIterations:
                     try:
+                        print("")
                         print(Fore.RED + Style.BRIGHT + "Press enter to view the next %s iterations of tide data." % user_loopIterations,
                               Fore.RED + Style.BRIGHT + "Otherwise, press Control + C to head back to the main menu.", sep="\n")
                         input()
