@@ -6563,6 +6563,55 @@ while True:
             yesterday_precipIN = str(data['precipi'])
             logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s" %
                          (yesterday_precipMM, yesterday_precipIN))
+            # Check for 9 invalid data types
+
+            # Start by defining variables for showing data
+            yesterday_showMinWind = True
+            yesterday_showAvgWind = True
+            logger.debug("yesterday_showMinWind: %s ; yesterday_showAvgWind: %s" %
+                         (yesterday_showMinWind, yesterday_showAvgWind))
+            yesterday_showMaxWind = True
+            yesterday_showMinVis = True
+            logger.debug("yesterday_showMaxWind: %s ; yesterday_showMinVis: %s" %
+                         (yesterday_showMaxWind, yesterday_showMinVis))
+            yesterday_showAvgVis = True
+            yesterday_showMaxVis = True
+            logger.debug("yesterday_showAvgVis: %s ; yesterday_showMaxVis: %s" %
+                         (yesterday_showAvgVis, yesterday_showMaxVis))
+            yesterday_showMinPress = True
+            yesterday_showAvgPress = True
+            logger.debug("yesterday_showMinPress: %s ; yesterday_showAvgPress: %s" %
+                         (yesterday_showMinPress, yesterday_showAvgPress))
+            yesterday_showMaxPress = True
+            logger.debug("yesterday_showMaxPress: %s" % yesterday_showMaxPress)
+
+            # Check one by one for "" in each data type. If it's a match, flag for the data type not to be shown
+            if yesterday_minWindMPH == "":
+                logger.info("yesterday_mindWindMPH is ''.")
+                yesterday_showMinWind = False
+
+            if yesterday_avgWindSpeedMPH == "":
+                logger.info("yesterday_avgWindSpeedMPH is ''.")
+                yesterday_showAvgWind = False
+
+            if yesterday_maxWindMPH == "":
+                logger.info("yesterday_maxWindMPH is ''.")
+                yesterday_showMaxWind = False
+
+            if yesterday_minVisibilityMI == "":
+                logger.info("yesterday_minVisibilityMI is ''.")
+                yesterday_showMinVis = False
+
+            if yesterday_avgVisibilityMI == "":
+                logger.info("yesterday_avgVisibilityMI is ''.")
+                yesterday_showAvgVis = False
+
+            if yesterday_maxVisibilityMI == "":
+                logger.info("yesterday_maxVisibilityMI is ''.")
+                yesterday_showMaxVis = False
+
+            if yesterday_minPressureMB == "":
+                logger.info("yesterday_minPressureMB is ''.")
 
             if yesterday_precipMM == "T":
                 yesterday_precipdata = False
