@@ -2033,17 +2033,25 @@ if yesterdaydata_onsummary is True:
         # Parse the weather given that we found '00' in the hour.
         if yesterdaysummary_hour.find("00") == 0 and yesterdaysummary_nightcondfetched is False:
             logger.info("'00' was found in yesterdaysummary_hour and yesterdaysummary_nightcondfetched is False.")
-            yesterdaysummary_nightconditions = data['conds']
-            yesterdaysummary_nightcondfetched = True
-            logger.debug("yesterdaysummary_nightconditions: %s ; yesterdaysummary_nightcondfetched: %s" %
-                         (yesterdaysummary_nightconditions, yesterdaysummary_nightcondfetched))
+            try:
+                yesterdaysummary_nightconditions = data['conds']
+                yesterdaysummary_nightcondfetched = True
+                logger.debug("yesterdaysummary_nightconditions: %s ; yesterdaysummary_nightcondfetched: %s" %
+                             (yesterdaysummary_nightconditions, yesterdaysummary_nightcondfetched))
+            except KeyError:
+                yesterdaysummary_nightcondfetched = False
+                logger.debug("yesterdaysummary_nightcondfetched: %s" % yesterdaysummary_nightcondfetched)
 
         if yesterdaysummary_hour.find("12") == 0 and yesterdaysummary_daycondfetched is False:
             logger.info("'12' was found in yesterdaysummary_hour and yesterdaysummary_daycondfetched is False.")
-            yesterdaysummary_dayconditions = data['conds']
-            yesterdaysummary_daycondfetched = True
-            logger.debug("yesterdaysummary_dayconditions: %s ; yesterdaysummary_daycondfetched: %s" %
-                         (yesterdaysummary_dayconditions, yesterdaysummary_daycondfetched))
+            try:
+                yesterdaysummary_dayconditions = data['conds']
+                yesterdaysummary_daycondfetched = True
+                logger.debug("yesterdaysummary_dayconditions: %s ; yesterdaysummary_daycondfetched: %s" %
+                             (yesterdaysummary_dayconditions, yesterdaysummary_daycondfetched))
+            except:
+                yesterdaysummary_daycondfetched = False
+                logger.debug("yesterdaysummary_daycondfetched: %s" % yesterdaysummary_daycondfetched)
 
         # We have data for both day/night conditions, break the loop.
         if yesterdaysummary_nightcondfetched is True and yesterdaysummary_daycondfetched is True:
@@ -6489,22 +6497,64 @@ while True:
                          (yesterday_avgTempF, yesterday_avgTempC))
             logger.debug("yesterday_avgDewpointF: %s ; yesterday_avgDewpointC: %s" %
                          (yesterday_avgDewpointF, yesterday_avgDewpointC))
-            yesterday_avgPressureMB = str(data['meanpressurem'])
-            yesterday_avgPressureInHg = str(data['meanpressurei'])
-            yesterday_avgWindSpeedMPH = str(data['meanwindspdi'])
-            yesterday_avgWindSpeedKPH = str(data['meanwindspdm'])
-            logger.debug("yesterday_avgPressureMB: %s ; yesterday_avgPressureInHg: %s" %
-                         (yesterday_avgPressureMB, yesterday_avgPressureInHg))
-            logger.debug("yesterday_avgWindSpeedMPH: %s ; yesterday_avgWindSpeedKPH: %s" %
-                         (yesterday_avgWindSpeedMPH, yesterday_avgWindSpeedKPH))
-            yesterday_avgWindDegrees = str(data['meanwdird'])
-            yesterday_avgWindDirection = str(data['meanwdire'])
-            yesterday_avgVisibilityMI = str(data['meanvisi'])
-            yesterday_avgVisibilityKM = str(data['meanvism'])
-            logger.debug("yesterday_avgWindDegrees: %s ; yesterday_avgWindDirection: %s" %
-                         (yesterday_avgWindDegrees, yesterday_avgWindDirection))
-            logger.debug("yesterday_avgVisibilityMI: %s ; yesterday_avgVisibilityKM: %s" %
-                         (yesterday_avgVisibilityMI, yesterday_avgVisibilityKM))
+            # Lay out display variables for yesterday's weather stuff.
+            yesterday_showMinWind = True
+            yesterday_showAvgWind = True
+            logger.debug("yesterday_showMinWind: %s ; yesterday_showAvgWind: %s" %
+                         (yesterday_showMinWind, yesterday_showAvgWind))
+            yesterday_showMaxWind = True
+            yesterday_showMinVis = True
+            logger.debug("yesterday_showMaxWind: %s ; yesterday_showMinVis: %s" %
+                         (yesterday_showMaxWind, yesterday_showMinVis))
+            yesterday_showAvgVis = True
+            yesterday_showMaxVis = True
+            logger.debug("yesterday_showAvgVis: %s ; yesterday_showMaxVis: %s" %
+                         (yesterday_showAvgVis, yesterday_showMaxVis))
+            yesterday_showMinPress = True
+            yesterday_showAvgPress = True
+            logger.debug("yesterday_showMinPress: %s ; yesterday_showAvgPress: %s" %
+                         (yesterday_showMinPress, yesterday_showAvgPress))
+            yesterday_showMaxPress = True
+            logger.debug("yesterday_showMaxPress: %s" % yesterday_showMaxPress)
+
+            try:
+                yesterday_avgPressureMB = str(data['meanpressurem'])
+                logger.debug("yesterday_avgPressureMB: %s" % yesterday_avgPressureMB)
+            except KeyError:
+                yesterday_showAvgPress = False
+                logger.debug("yesterday_showAvgPress: %s" % yesterday_showAvgPress)
+
+            try:
+                yesterday_avgPressureInHg = str(data['meanpressurei'])
+            except KeyError:
+                yesterday_showAvgPress = False
+
+            try:
+                yesterday_avgWindSpeedKPH = str(data['meanwindspdm'])
+            except KeyError:
+                yesterday_showAvgWind = False
+
+            try:
+                yesterday_avgWindDegrees = str(data['meanwdird'])
+            except KeyError:
+                yesterday_showAvgWind = False
+
+            try:
+                yesterday_avgWindDirection = str(data['meanwdire'])
+            except KeyError:
+                yesterday_showAvgWind = False
+
+
+            try:
+                yesterday_avgVisibilityMI = str(data['meanvisi'])
+            except KeyError:
+                yesterday_showAvgVis = False
+
+            try:
+                yesterday_avgVisibilityKM = str(data['meanvism'])
+            except KeyError:
+                yesterday_showAvgVis = False
+
             yesterday_maxHumidity = int(data['maxhumidity'])
             yesterday_minHumidity = int(data['minhumidity'])
             logger.debug("yesterday_maxHumidity: %s ; yesterday_minHumidity: %s" %
@@ -6535,55 +6585,72 @@ while True:
                          (yesterday_maxDewpointF, yesterday_maxDewpointC))
             logger.debug("yesterday_minDewpointF: %s ; yesterday_minDewpointC: %s" %
                          (yesterday_minDewpointF, yesterday_minDewpointC))
-            yesterday_maxPressureInHg = str(data['maxpressurei'])
-            yesterday_maxPressureMB = str(data['maxpressurem'])
-            yesterday_minPressureInHg = str(data['minpressurei'])
-            yesterday_minPressureMB = str(data['minpressurem'])
-            logger.debug("yesterday_maxPressureInHg: %s ; yesterday_maxPressureMB: %s" %
-                         (yesterday_maxPressureInHg, yesterday_maxPressureMB))
-            logger.debug("yesterday_minPressureInHg: %s ; yesterday_minPressureMB: %s" %
-                         (yesterday_minPressureInHg, yesterday_minPressureMB))
-            yesterday_maxWindMPH = str(data['maxwspdi'])
-            yesterday_maxWindKPH = str(data['maxwspdm'])
-            yesterday_minWindMPH = str(data['minwspdi'])
-            yesterday_minWindKPH = str(data['minwspdm'])
-            logger.debug("yesterday_maxWindMPH: %s ; yesterday_maxWindKPH: %s" %
-                         (yesterday_maxWindMPH, yesterday_maxWindMPH))
-            logger.debug("yesterday_minWindMPH: %s ; yesterday_minWindKPH: %s" %
-                         (yesterday_minWindMPH, yesterday_minWindKPH))
-            yesterday_maxVisibilityMI = str(data['maxvisi'])
-            yesterday_maxVisibilityKM = str(data['maxvism'])
-            yesterday_minVisibilityMI = str(data['minvisi'])
-            yesterday_minVisibilityKM = str(data['minvism'])
-            logger.debug("yesterday_maxVisibilityMI: %s ; yesterday_maxVisibilityKM: %s" %
-                         (yesterday_maxVisibilityMI, yesterday_maxVisibilityKM))
-            logger.debug("yesterday_minVisibilityMI: %s ; yesterday_minVisibilityKM: %s" %
-                         (yesterday_minVisibilityMI, yesterday_minVisibilityKM))
+
+            try:
+                yesterday_maxPressureInHg = str(data['maxpressurei'])
+            except KeyError:
+                yesterday_showMaxPress = False
+
+            try:
+                yesterday_maxPressureMB = str(data['maxpressurem'])
+            except KeyError:
+                yesterday_showMaxPress = False
+
+            try:
+                yesterday_minPressureInHg = str(data['minpressurei'])
+            except KeyError:
+                yesterday_showMinPress = False
+
+            try:
+                yesterday_minPressureMB = str(data['minpressurem'])
+            except KeyError:
+                yesterday_showMinPress = False
+
+            try:
+                yesterday_maxWindMPH = str(data['maxwspdi'])
+            except KeyError:
+                yesterday_showMaxWind = False
+
+            try:
+                yesterday_maxWindKPH = str(data['maxwspdm'])
+            except KeyError:
+                yesterday_showMaxWind = False
+
+            try:
+                yesterday_minWindMPH = str(data['minwspdi'])
+            except KeyError:
+                yesterday_showMinWind = False
+
+            try:
+                yesterday_minWindKPH = str(data['minwspdm'])
+            except KeyError:
+                yesterday_showMinWind = False
+
+            try:
+                yesterday_maxVisibilityMI = str(data['maxvisi'])
+            except KeyError:
+                yesterday_showMaxVis = False
+
+            try:
+                yesterday_maxVisibilityKM = str(data['maxvism'])
+            except KeyError:
+                yesterday_showMaxVis = False
+
+            try:
+                yesterday_minVisibilityMI = str(data['minvisi'])
+            except KeyError:
+                yesterday_showMinVis = False
+
+            try:
+                yesterday_minVisibilityKM = str(data['minvism'])
+            except KeyError:
+                yesterday_showMinVis = False
+
             yesterday_precipMM = str(data['precipm'])
             yesterday_precipIN = str(data['precipi'])
             logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s" %
                          (yesterday_precipMM, yesterday_precipIN))
-            # Check for 9 invalid data types
 
-            # Start by defining variables for showing data
-            yesterday_showMinWind = True
-            yesterday_showAvgWind = True
-            logger.debug("yesterday_showMinWind: %s ; yesterday_showAvgWind: %s" %
-                         (yesterday_showMinWind, yesterday_showAvgWind))
-            yesterday_showMaxWind = True
-            yesterday_showMinVis = True
-            logger.debug("yesterday_showMaxWind: %s ; yesterday_showMinVis: %s" %
-                         (yesterday_showMaxWind, yesterday_showMinVis))
-            yesterday_showAvgVis = True
-            yesterday_showMaxVis = True
-            logger.debug("yesterday_showAvgVis: %s ; yesterday_showMaxVis: %s" %
-                         (yesterday_showAvgVis, yesterday_showMaxVis))
-            yesterday_showMinPress = True
-            yesterday_showAvgPress = True
-            logger.debug("yesterday_showMinPress: %s ; yesterday_showAvgPress: %s" %
-                         (yesterday_showMinPress, yesterday_showAvgPress))
-            yesterday_showMaxPress = True
-            logger.debug("yesterday_showMaxPress: %s" % yesterday_showMaxPress)
 
             # Check one by one for "" in each data type. If it's a match, flag for the data type not to be shown
             if yesterday_minWindMPH == "":
@@ -6663,62 +6730,43 @@ while True:
         if yesterday_showMinWind is True:
             print(Fore.YELLOW + Style.BRIGHT + "Minimum Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_minWindMPH
                   + " mph (" + yesterday_minWindKPH + " kph)")
-        else:
-            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's minimum wind speed data is not available for this location.")
 
         if yesterday_showAvgWind is True:
             print(Fore.YELLOW + Style.BRIGHT + "Average Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_avgWindSpeedMPH
                   + " mph (" + yesterday_avgWindSpeedKPH + " kph)")
-        else:
-            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's average wind speed data is not available for this location.")
 
         if yesterday_showMaxWind is True:
             print(Fore.YELLOW + Style.BRIGHT + "Maximum Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_maxWindMPH
                   + " mph (" + yesterday_maxWindKPH + " kph)")
-        else:
-            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's maximum wind speed data is not available for this location.")
 
         if yesterday_showMinVis is True:
             print(Fore.YELLOW + Style.BRIGHT + "Minimum Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_minVisibilityMI
                   + " mi (" + yesterday_minVisibilityKM + " km)")
-        else:
-            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's minimum visibility data is not available for this location.")
 
         if yesterday_showAvgVis is True:
             print(Fore.YELLOW + Style.BRIGHT + "Average Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_avgVisibilityMI
                   + " mi (" + yesterday_avgVisibilityKM + " km)")
-        else:
-            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's average visibility data is not available for this location.")
 
         if yesterday_showMaxVis is True:
             print(Fore.YELLOW + Style.BRIGHT + "Maximum Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_maxVisibilityMI
                   + " mi (" + yesterday_maxVisibilityKM + " km)")
-        else:
-            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's maximum visibility data is not available for this location.")
 
         if yesterday_showMinPress is True:
             print(Fore.YELLOW + Style.BRIGHT + "Minimum Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_minPressureInHg
                   + " inHg (" + yesterday_minPressureMB + " mb)")
-        else:
-            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's minimum pressure data is not available for this location.")
 
         if yesterday_showAvgPress is True:
             print(Fore.YELLOW + Style.BRIGHT + "Average Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_avgPressureInHg
                   + " inHg (" + yesterday_avgPressureMB + " mb)")
-        else:
-            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's average pressure data is not available for this location.")
 
         if yesterday_showMaxPress is True:
             print(Fore.YELLOW + Style.BRIGHT + "Maximum Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_maxPressureInHg
                   + " inHg (" + yesterday_maxPressureMB + " mb)")
-        else:
-            print(Fore.YELLOW + Style.BRIGHT + "Yesterday's maximum pressure data is not available for this location.")
 
         if yesterday_precipdata is True:
             print(Fore.YELLOW + Style.BRIGHT + "Total Precipitation: " + Fore.CYAN + Style.BRIGHT + yesterday_precipIN
                   + " in (" + yesterday_precipMM + " mm)")
-        else:
-            print(Fore.YELLOW + Style.BRIGHT + "Total precipitation data is not available.")
+
         print("")
         print(Fore.RED + Style.BRIGHT + "To view hourly data for yesterday's weather, please press enter.")
         print(Fore.RED + Style.BRIGHT + "If you want to return to the main menu, press Control + C.")
@@ -6855,7 +6903,9 @@ while True:
             logger.info("Now printing weather data...")
             print("")
             print(Fore.YELLOW + Style.BRIGHT + yesterday_time + ":")
-            print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT + yesterday_condition)
+            if yesterday_showHourlyConditions is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT + yesterday_condition)
+
             print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_tempF
                   + "°F (" + yesterday_tempC + "°C)")
             print(Fore.YELLOW + Style.BRIGHT + "Dew point: " + Fore.CYAN + Style.BRIGHT + yesterday_dewpointF
@@ -6863,8 +6913,6 @@ while True:
             if yesterday_showHourlyWind is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Wind speed: " + Fore.CYAN + Style.BRIGHT + yesterday_windspeedMPH
                       + " mph (" + yesterday_windspeedKPH + " kph)")
-            else:
-                print(Fore.YELLOW + Style.BRIGHT + "Yesterday's wind speed data is not available for this hour.")
 
             if yesterday_windgustdata == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Wind gusts: " + Fore.CYAN + Style.BRIGHT + yesterday_windgustMPH

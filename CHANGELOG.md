@@ -24,10 +24,10 @@
 * Fixed a bug where PyWeather didn't catch bad visibility data on the detailed current weather screen.
 * Fixed a bug where PyWeather didn't catch bad UV index data on the detailed current weather screen.
 * Fixed a bug where PyWeather didn't catch bad wind speed, visibility, and pressure data on the yesterday's weather summary screen. - 95% done, need to test
-* Fixing a bug where the visibility in km on the yesterday's summary screen read as "kph". - 95% done, need to test
-* Fixing a bug where PyWeather didn't catch bad current conditions data on yesterday's weather hourly data.
-* Fixing a bug where PyWeather didn't catch bad wind speed data on yesterday's weather hourly data.
-* Fixing a minor bug where on yesterday's weather hourly data, the degree symbol was placed too far right by 1 character.
+* Fixed a bug where the visibility in km on the yesterday's summary screen read as "kph". - 95% done, need to test
+* Fixed a bug where PyWeather didn't catch bad current conditions data on yesterday's weather hourly data.
+* Fixed a bug where PyWeather didn't catch bad wind speed data on yesterday's weather hourly data.
+* Fixed a minor bug where on yesterday's weather hourly data, the degree symbol was placed too far right by 1 character.
 
 **OTHER CHANGES**
 * The Git Updater has been completely removed, as it's been unreliable. A universal updater will be introduced later in time.
