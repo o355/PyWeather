@@ -6734,15 +6734,17 @@ while True:
                     yesterday_showMinPress = False
                     logger.debug("yesterday_showMinPress: %s" % yesterday_showMinPress)
 
-            if yesterday_avgPressureMB == "" and yesterday_showAvgPress is True:
-                logger.info("yesterday_avgPressureMB is ''.")
-                yesterday_showAvgPress = False
-                logger.debug("yesterday_showAvgPress: %s" % yesterday_showAvgPress)
+            if yesterday_showAvgPress is True:
+                if yesterday_avgPressureMB == "":
+                    logger.info("yesterday_avgPressureMB is ''.")
+                    yesterday_showAvgPress = False
+                    logger.debug("yesterday_showAvgPress: %s" % yesterday_showAvgPress)
 
-            if yesterday_maxPressureMB == "" and yesterday_showMaxPress is True:
-                logger.info("yesterday_maxPressureMB is ''.")
-                yesterday_showMaxPress = False
-                logger.debug("yesterday_showMaxPress: %s" % yesterday_showMaxPress)
+            if yesterday_showMaxPress is True:
+                if yesterday_maxPressureMB == "":
+                    logger.info("yesterday_maxPressureMB is ''.")
+                    yesterday_showMaxPress = False
+                    logger.debug("yesterday_showMaxPress: %s" % yesterday_showMaxPress)
 
             if yesterday_precipMM == "T":
                 yesterday_precipdata = False
