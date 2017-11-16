@@ -6539,6 +6539,13 @@ while True:
                 logger.debug("yesterday_showAvgWind: %s" % yesterday_showAvgWind)
 
             try:
+                yesterday_avgWindSpeedMPH = str(data['meanwindspdi'])
+                logger.debug("yesterday_avgWindSpeedMPH: %s" % yesterday_avgWindSpeedMPH)
+            except KeyError:
+                yesterday_showAvgWind = False
+                logger.debug("yesterday_showAvgWind: %s" % yesterday_showAvgWind)
+
+            try:
                 yesterday_avgWindDegrees = str(data['meanwdird'])
                 logger.debug("yesterday_avgWindDegrees: %s" % yesterday_avgWindDegrees)
             except KeyError:
