@@ -52,10 +52,12 @@ However, during times of non-severe weather, PyWeather is a fun way to check the
 ## Notices
 Notices are important things you'll want to know about PyWeather.
 
-### PyWeather 0.6.3 beta may be delayed
-I'd like to let you know that PyWeather 0.6.3 beta may not be released on November 30, 2017. I've picked up extra work from a contributor who is too busy, and I'll be trying to complete the few features in PyWeather as fast as I can.
+### PyWeather 0.6.3 beta is probably going to be delayed
+I've discovered some issues with PWS mode and yesterday's weather & historical weather information, where PyWeather entirely crashes. Because of this, I've had to spend extra time working on yesterday's weather.
 
-QA is now scheduled to start on November 11, 2017. Depending on how many bugs I find and how long QA takes (ideally 1 OS per 3-4 days), 0.6.3 beta may be delayed until early December 2017. 
+In the interest of not delaying PyWeather 0.6.3 beta even further, historical data for PWS queries will be temporarily disabled. I'll add the code to handle PWS queries in 0.6.4 beta.
+
+The range for PyWeather 0.6.3 beta's release is now December 1 - December 14.
 
 ### PyWeather's GitHub page will be discontinued on December 1, 2017
 No one use it, so I'll be turning off GitHub pages for this repo on December 1, 2017.

@@ -14,6 +14,7 @@
 * Adds the ability to view the chance of precipitation on the forecast page.
 * Adding the ability to show cache timings.
 * Adds a new loader, which makes loading things in PyWeather a lot more nice.
+* Additional data has been added to yesterday's weather hour-by-hour report:  
 
 **BUG FIXES**
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.

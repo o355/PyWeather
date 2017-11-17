@@ -4593,6 +4593,10 @@ while True:
               moon_phase)
 #<--- Sundata is above | Historical data is below --->
     elif moreoptions == "8":
+        if pws_query is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Sorry! Looking at historical data for PWS queries is not yet available.",
+                  "You'll be able to look at historical data for PWS queries in PyWeather 0.6.4 beta.")
+            continue
         print(Fore.YELLOW + Style.BRIGHT + "To show historical data for this location, please enter a date to show the data.")
         print(Fore.YELLOW + Style.BRIGHT + "The date must be in the format YYYYMMDD.")
         print(Fore.YELLOW + Style.BRIGHT + "E.g: If I wanted to see the weather for February 15, 2013, you'd enter 20130215.")
@@ -6842,66 +6846,107 @@ while True:
             logger.debug("yesterday_tempC: %s ; yesterday_dewpointF: %s"
                          % (yesterday_tempC, yesterday_dewpointF))
             yesterday_dewpointC = str(data['dewptm'])
+            # Again, set up the display variables.
+            yesterday_showWindSpeed = True
+            yesterday_showWindGust = True
+            yesterday_showVisibility = True
+            yesterday_showWindChill = True
+            yesterday_showHeatIndex = True
+            yesterday_showPressure = True
+            logger.debug("yesterday_showWindSpeed: %s ; yesterday_showWindGust: %s" %
+                         (yesterday_showWindSpeed, yesterday_showWindGust))
+            logger.debug("yesterday_showVisibility: %s ; yesterday_showWindChill: %s" %
+                         (yesterday_showVisibility, yesterday_showWindChill))
+            logger.debug("yesterday_showHeatIndex: %s" % yesterday_showHeatIndex)
             yesterday_windspeedKPH = str(data['wspdm'])
             yesterday_windspeedMPH = str(data['wspdi'])
+            logger.debug("yesterday_windspeedKPH: %s ; yesterday_windspeedMPH: %s" %
+                         (yesterday_windspeedKPH, yesterday_windspeedMPH))
+
             try:
                 yesterday_gustcheck = float(data['wgustm'])
+                logger.debug("yesterday_gustcheck: %s" % yesterday_gustcheck)
             except ValueError:
                 printException_loggerwarn()
                 yesterday_gustcheck = -9999
-            logger.debug("yesterday_dewpointC: %s ; yesterday_windspeedKPH: %s"
-                         % (yesterday_dewpointC, yesterday_windspeedKPH))
-            logger.debug("yesterday_windspeedMPH: %s ; yesterday_gustcheck: %s"
-                         % (yesterday_windspeedMPH, yesterday_gustcheck))
+                logger.debug("yesterday_gustcheck: %s" % yesterday_gustcheck)
+
             if yesterday_gustcheck == -9999:
-                yesterday_windgustdata = False
-                logger.warn("Wind gust data is not present! yesterday_windgustdata: %s"
-                            % yesterday_windgustdata)
+                yesterday_showWindGust = False
+                logger.debug("No wind gust data is present.")
+                logger.debug("yesterday_showWindGust: %s" % yesterday_showWindGust)
             else:
-                yesterday_windgustdata = True
+                yesterday_showWindGust = True
+                logger.debug("yesterday_showWindGust: %s" % yesterday_showWindGust)
                 yesterday_windgustKPH = str(data['wgustm'])
                 yesterday_windgustMPH = str(data['wgusti'])
                 logger.info("Wind gust data is present.")
                 logger.debug("yesterday_windgustKPH: %s ; yesterday_windgustMPH: %s"
                              % (yesterday_windgustKPH, yesterday_windgustMPH))
-            yesterday_windDegrees = str(data['wdird'])
-            yesterday_windDirection = data['wdire']
-            yesterday_visibilityKM = str(data['vism'])
-            yesterday_visibilityMI = str(data['visi'])
-            logger.debug("yesterday_windDegrees: %s ; yesterday_windDirection: %s"
-                         % (yesterday_windDegrees, yesterday_windDirection))
-            logger.debug("yesterday_visibilityKM: %s ; yesterday_visibilityMI: %s"
-                         % (yesterday_visibilityKM, yesterday_visibilityMI))
-            yesterday_pressureMB = str(data['pressurem'])
-            yesterday_pressureInHg = str(data['pressurei'])
-            yesterday_windchillcheck = float(data['windchillm'])
-            logger.debug("yesterday_pressureMB: %s ; yesterday_pressureInHg: %s"
-                         % (yesterday_pressureMB, yesterday_pressureInHg))
-            logger.debug("yesterday_windchillcheck: %s" % yesterday_windchillcheck)
-            if yesterday_windchillcheck == -999:
-                yesterday_windchilldata = False
-                logger.warn("Wind chill data is not present! yesterday_windchilldata: %s"
-                            % yesterday_windchilldata)
-            else:
-                yesterday_windchilldata = True
-                yesterday_windchillC = str(data['windchillm'])
-                yesterday_windchillF = str(data['windchilli'])
-                logger.info("Wind chill data is present.")
-                logger.debug("yesterday_windchillC: %s ; yesterday_windchillF: %s"
-                             % (yesterday_windchillC, yesterday_windchillF))
-            yesterday_heatindexcheck = float(data['heatindexm'])
-            logger.debug("yesterday_heatindexcheck: %s" % yesterday_heatindexcheck)
-            if yesterday_heatindexcheck == -9999:
-                yesterday_heatindexdata = False
-                logger.warn("Heat index data is not present! yesterday_heatindexdata: %s"
-                            % yesterday_heatindexdata)
-            else:
-                yesterday_heatindexdata = True
-                yesterday_heatindexC = str(data['heatindexm'])
-                yesterday_heatindexF = str(data['heatindexi'])
-                logger.info("Heat index data is present.")
-                logger.debug("yesterday_heatindexC: %s ; yesterday_heatindexF: %s"
-                             % (yesterday_heatindexC, yesterday_heatindexF))
+
+            try:
+                yesterday_windDegrees = str(data['wdird'])
+            except KeyError:
+                yesterday_showWindSpeed = False
+
+            try:
+                yesterday_windDirection = data['wdire']
+            except KeyError:
+                yesterday_showWindSpeed = False
+
+            try:
+                yesterday_visibilityKM = str(data['vism'])
+            except KeyError:
+                yesterday_showVisibility = False
+
+            try:
+                yesterday_visibilityMI = str(data['visi'])
+            except KeyError:
+                yesterday_showVisibility = False
+
+            try:
+                yesterday_pressureMB = str(data['pressurem'])
+            except KeyError:
+                yesterday_showPressure = False
+
+            try:
+                yesterday_pressureInHg = str(data['pressurei'])
+            except KeyError:
+                yesterday_showPressure = False
+
+            try:
+                yesterday_windchillcheck = float(data['windchillm'])
+            except KeyError:
+                yesterday_showWindChill = False
+
+            if yesterday_showWindChill is True:
+                if yesterday_windchillcheck == -999:
+                    yesterday_showWindChill = False
+                    logger.debug("yesterday_showWindChill: %s" % yesterday_showWindChill)
+                else:
+                    yesterday_showWindChill = False
+                    yesterday_windchillC = str(data['windchillm'])
+                    yesterday_windchillF = str(data['windchilli'])
+                    logger.debug("yesterday_showWindChill: %s" % yesterday_showWindChill)
+                    logger.debug("yesterday_windchillC: %s ; yesterday_windchillF: %s"
+                                 % (yesterday_windchillC, yesterday_windchillF))
+
+            try:
+                yesterday_heatindexcheck = float(data['heatindexm'])
+            except KeyError:
+                yesterday_showHeatIndex = False
+
+            if yesterday_showHeatIndex is True:
+                if yesterday_heatindexcheck == -9999:
+                    yesterday_showHeatIndex = False
+                    logger.debug("yesterday_showHeatIndex: %s" % yesterday_showHeatIndex)
+                else:
+                    yesterday_heatindexdata = True
+                    yesterday_heatindexC = str(data['heatindexm'])
+                    yesterday_heatindexF = str(data['heatindexi'])
+                    logger.info("Heat index data is present.")
+                    logger.debug("yesterday_heatindexC: %s ; yesterday_heatindexF: %s"
+                                 % (yesterday_heatindexC, yesterday_heatindexF))
             try:
                 yesterday_precipMM = float(data['precipm'])
                 yesterday_precipIN = float(data['precipi'])
