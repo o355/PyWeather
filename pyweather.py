@@ -1950,8 +1950,7 @@ if sundata_summary == True:
 # enabled in the config. --->
 
 if almanac_summary == True:
-    almanac_prefetched = False
-    
+    almanac_prefetched = True
     logger.debug("Parsing almanac data...")
     almanac_airportCode = almanac_json['almanac']['airport_code']
     logger.debug("almanac_airportCode: %s" % almanac_airportCode)
