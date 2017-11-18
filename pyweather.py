@@ -2752,7 +2752,6 @@ while True:
             logger.debug("hourly_pressureMb: %s ; hourly_condition: %s" 
                          % (hourly_pressureMb, hourly_condition))
             logger.info("Now printing weather data...")
-            print("")
             # If you have verbosity on, there's a chance that the next
             # hourly iteration will start BEFORE the previous iteration
             # prints out. This is normal, and no issues are caused by such.
@@ -7088,6 +7087,10 @@ while True:
                       "enable UI/extratools_enabled (set it to True).")
 
         print(Fore.YELLOW + Style.BRIGHT + "Listing all cache times:")
+        if cache_enabled is True:
+            print(Fore.YELLOW + Style.BRIGHT + "PyWeather cache is ON (data will be automatically refreshed)")
+        elif cache_enabled is False:
+            print(Fore.YELLOW + Style.BRIGHT + "PyWeather cache is OFF (data will not be automatically refreshed)")
         print(Fore.YELLOW + Style.BRIGHT + "Current conditions: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
               (round(time.time() - cachetime_current, 2), round((time.time() - cachetime_current) / 60, 2), cache_currenttime, cache_currenttime / 60))
         # The variables in order: The raw cache time in seconds (rounded down to 2 decimal places, the raw cache time divided by 60, rounded to 2 (current cache time in mins)
@@ -7096,7 +7099,7 @@ while True:
               (round(time.time() - cachetime_forecast, 2), round((time.time() - cachetime_forecast) / 60, 2), cache_forecasttime, cache_forecasttime / 60))
         try:
             print(Fore.YELLOW + Style.BRIGHT + "Astronomy (sundata) data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
-                  round(time.time() - cachetime_sundata, 2), round((time.time() - cachetime_sundata) / 60, 2), cache_sundatatime, cache_sundatatime / 60)
+                  (round(time.time() - cachetime_sundata, 2), round((time.time() - cachetime_sundata) / 60, 2), cache_sundatatime, cache_sundatatime / 60))
         except NameError:
             print(Fore.YELLOW + Style.BRIGHT + "Astronomy (sundata) data: Data not cached / limit %s seconds (%s minutes)" %
                   (cache_sundatatime, cache_sundatatime / 60))

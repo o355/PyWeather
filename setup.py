@@ -1533,14 +1533,14 @@ print("", "(26/42)", "PyWeather now has a radar feature, which opens up a GUI on
 radar_resolutions = ["extrasmall", "small", "normal", "large", "extralarge"]
 logger.debug("radar_resolutions: %s" % radar_resolutions)
 radar_resolutioninput = input("Input here: ").lower()
-for x in range(0, 4):
+for x in range(0, 5):
     if radar_resolutioninput == radar_resolutions[x]:
         logger.debug("Resolution input matched, end result: %s" % radar_resolutions[x])
         config['RADAR GUI']['radar_imagesize'] = radar_resolutions[x]
         print("Changes saved.")
         break
     # This works by design. If x = 4 (extralarge), the if would catch first.
-    elif x == 4:
+    elif x == 5:
         print("Could not understand what you inputted. Defaulting to 'normal'.")
         config['RADAR GUI']['radar_imagesize'] = 'normal'
         print("Changes saved.")
@@ -1809,6 +1809,7 @@ if enablecustomgeocoderkey == "yes":
         config['GEOCODER API']['customkey_enabled'] = 'True'
         config['GEOCODER API']['customkey'] = str(customgeocoderkey)
         logger.debug("GEOCODER API/customkey_enabled is now TRUE.")
+        print("Changes saved.")
 elif enablecustomgeocoderkey == "no":
     config['GEOCODER API']['customkey_enabled'] = 'False'
     logger.debug("GEOCODER API/customkey_enabled is now FALSE.")
