@@ -4594,8 +4594,8 @@ while True:
 #<--- Sundata is above | Historical data is below --->
     elif moreoptions == "8":
         if pws_query is True:
-            print(Fore.YELLOW + Style.BRIGHT + "Sorry! Looking at historical data for PWS queries is not yet available.",
-                  "You'll be able to look at historical data for PWS queries in PyWeather 0.6.4 beta.")
+            print(Fore.YELLOW + Style.BRIGHT + "Sorry! Looking at historical data for PWS queries isn't supported yet.",
+                  Fore.YELLOW + Style.BRIGHT + "You'll be able to look at historical data for PWS queries in PyWeather 0.6.4 beta.", sep="\n")
             continue
         print(Fore.YELLOW + Style.BRIGHT + "To show historical data for this location, please enter a date to show the data.")
         print(Fore.YELLOW + Style.BRIGHT + "The date must be in the format YYYYMMDD.")
