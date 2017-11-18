@@ -2329,7 +2329,7 @@ while True:
     print(Fore.YELLOW + Style.BRIGHT + "- View the about page for PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "15")
     print(Fore.YELLOW + Style.BRIGHT + "- Close PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "16")
     if extratools_enabled is True:
-        print(Fore.YELLOW + Style.BRIGHT + "- View the cache timings for all data types - Enter " + Fore.CYAN + Style.BRIGHT + "extratools:1")
+        print(Fore.YELLOW + Style.BRIGHT + "- View cache timings - Enter " + Fore.CYAN + Style.BRIGHT + "extratools:1")
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
@@ -4835,7 +4835,7 @@ while True:
         print(Fore.YELLOW + Style.BRIGHT + "Maximum Pressure: " + Fore.CYAN + Style.BRIGHT + historicals_maxPressureInHg
               + " inHg (" + historicals_maxPressureMB + " mb)")
         print(Fore.YELLOW + Style.BRIGHT + "Total Precipitation: " + Fore.CYAN + Style.BRIGHT + historicals_precipIN
-              + " in (" + historicals_precipMM + "mb)")
+              + " in (" + historicals_precipMM + " mm)")
         print("")
         print(Fore.RED + Style.BRIGHT + "To view hourly historical data, please press enter.")
         print(Fore.RED + Style.BRIGHT + "If you want to return to the main menu, press Control + C.")
@@ -5055,6 +5055,7 @@ while True:
         if tide_site == "":
             spinner.fail("Tide data is not available for this location.")
             continue
+
 
         # Get the iteration count
         # Total iterations is the actual number of iterations, completed is how many have been completed
@@ -6911,8 +6912,8 @@ while True:
                 yesterday_showWindSpeed = False
                 logger.debug("yesterday_showWindSpeed: %s" % yesterday_showWindSpeed)
 
-            if yesterday_windgustMPH == "-999.0":
-                logger.info("yesterday_windgustMPH is '-999.0'")
+            if yesterday_windgustMPH == "-999.0" or yesterday_windgustMPH == "-9999.0":
+                logger.info("yesterday_windgustMPH is '-999.0' or yesterday_windgustMPH is '-9999.0'")
                 yesterday_showWindGust = False
                 logger.debug("yesterday_showWindGust: %s" % yesterday_showWindGust)
 
