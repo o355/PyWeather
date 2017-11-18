@@ -6867,37 +6867,31 @@ while True:
             yesterday_windspeedMPH = str(data['wspdi'])
             logger.debug("yesterday_windspeedKPH: %s ; yesterday_windspeedMPH: %s" %
                          (yesterday_windspeedKPH, yesterday_windspeedMPH))
+            yesterday_windgustKPH = str(data['wgustm'])
+            yesterday_windgustMPH = str(data['wgusti'])
+            logger.debug("yesterday_windgustKPH: %s ; yesterday_windgustMPH: %s" %
+                         (yesterday_windgustKPH, yesterday_windguestMPH))
+            if yesterday_windspeedMPH == "-999.9":
+                logger.info("yesterday_windspeedMPH is '-999.9'")
+                yesterday_showWindSpeed = False
+                logger.debug("yesterday_showWindSpeed: %s" % yesterday_showWindSpeed)
 
-            try:
-                yesterday_gustcheck = float(data['wgustm'])
-                logger.debug("yesterday_gustcheck: %s" % yesterday_gustcheck)
-            except ValueError:
-                printException_loggerwarn()
-                yesterday_gustcheck = -9999
-                logger.debug("yesterday_gustcheck: %s" % yesterday_gustcheck)
-
-            if yesterday_gustcheck == -9999:
+            if yesterday_windgustMPH == "-999.0":
+                logger.info("yesterday_windgustMPH is '-999.0'")
                 yesterday_showWindGust = False
-                logger.debug("No wind gust data is present.")
                 logger.debug("yesterday_showWindGust: %s" % yesterday_showWindGust)
-            else:
-                yesterday_showWindGust = True
-                logger.debug("yesterday_showWindGust: %s" % yesterday_showWindGust)
-                yesterday_windgustKPH = str(data['wgustm'])
-                yesterday_windgustMPH = str(data['wgusti'])
-                logger.info("Wind gust data is present.")
-                logger.debug("yesterday_windgustKPH: %s ; yesterday_windgustMPH: %s"
-                             % (yesterday_windgustKPH, yesterday_windgustMPH))
 
             try:
                 yesterday_windDegrees = str(data['wdird'])
             except KeyError:
                 yesterday_showWindSpeed = False
+                logger.debug("yesterday_showWindSpeed: %s" % yesterday_showWindSpeed)
 
             try:
                 yesterday_windDirection = data['wdire']
             except KeyError:
                 yesterday_showWindSpeed = False
+                logger.debug("yesterday_showWindSpeed: %s" % yesterday_showWindSpeed)
 
             try:
                 yesterday_visibilityKM = str(data['vism'])
@@ -6985,7 +6979,8 @@ while True:
                   + "°F (" + yesterday_dewpointC + "°C)")
             if yesterday_showWindSpeed is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Wind speed: " + Fore.CYAN + Style.BRIGHT + yesterday_windspeedMPH
-                      + " mph (" + yesterday_windspeedKPH + " kph)")
+                      + " mph (" + yesterday_windspeedKPH + " kph) blowing to the " + yesterday_windDirection + " ("
+                      + yesterday_windDegrees + "°)")
 
             if yesterday_showWindGust is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Wind gusts: " + Fore.CYAN + Style.BRIGHT + yesterday_windgustMPH
