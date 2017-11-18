@@ -6985,6 +6985,8 @@ while True:
             try:
                 yesterday_precipMM = float(data['precipm'])
                 yesterday_precipIN = float(data['precipi'])
+                yesterday_precipMM = str(yesterday_precipMM)
+                yesterday_precipIN = str(yesterday_precipIN)
                 logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s" %
                              (yesterday_precipMM, yesterday_precipIN))
             except ValueError:
