@@ -551,7 +551,7 @@ else:
     logger.setLevel(logging.CRITICAL)
 
 # Initialize the halo spinner - Section 8
-spinner = Halo(text='Loading PyWeather...', spinner='dots')
+spinner = Halo(text='Loading PyWeather...', spinner='line')
 spinner.start()
 
 # List config options for those who have verbosity enabled. - Section 9
@@ -6854,13 +6854,15 @@ while True:
             yesterday_showHeatIndex = True
             yesterday_showPressure = True
             yesterday_showPrecip = True
+            yesterday_showConditions = True
             logger.debug("yesterday_showWindSpeed: %s ; yesterday_showWindGust: %s" %
                          (yesterday_showWindSpeed, yesterday_showWindGust))
             logger.debug("yesterday_showVisibility: %s ; yesterday_showWindChill: %s" %
                          (yesterday_showVisibility, yesterday_showWindChill))
             logger.debug("yesterday_showHeatIndex: %s ; yesterday_showPressure: %s" %
                          (yesterday_showHeatIndex, yesterday_showPressure))
-            logger.debug("yesterday_showPrecip: %s" % yesterday_showPrecip)
+            logger.debug("yesterday_showPrecip: %s ; yesterday_showConditions: %s" %
+                         (yesterday_showPrecip, yesterday_showConditions))
             yesterday_windspeedKPH = str(data['wspdm'])
             yesterday_windspeedMPH = str(data['wspdi'])
             logger.debug("yesterday_windspeedKPH: %s ; yesterday_windspeedMPH: %s" %
@@ -6953,43 +6955,28 @@ while True:
             try:
                 yesterday_precipMM = float(data['precipm'])
                 yesterday_precipIN = float(data['precipi'])
-            except ValueError:
-                printException_loggerwarn()
-                yesterday_precipMM = -9999
-                yesterday_precipIN = -9999
                 logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s" %
                              (yesterday_precipMM, yesterday_precipIN))
+            except ValueError:
+                printException_loggerwarn()
+                yesterday_showPrecip = False
+                logger.debug("yesterday_showPrecip: %s" % yesterday_showPrecip)
             except KeyError:
                 yesterday_showPrecip = False
                 logger.debug("yesterday_showPrecip: %s" % yesterday_showPrecip)
-            logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s"
-                         % (yesterday_precipMM, yesterday_precipIN))
 
-            
 
-            yesterday_condition = str(data['conds'])
-            logger.debug("yesterday_condition: %s" % yesterday_condition)
-
-            # Check for invalid wind/conditions data
-            yesterday_showHourlyWind = True
-            yesterday_showHourlyConditions = True
-            logger.debug("yesterday_showHourlyWind: %s ; yesterday_showHourlyConditions: %s" %
-                         (yesterday_showHourlyWind, yesterday_showHourlyConditions))
-
-            if yesterday_condition == "":
-                logger.info("yesterday_condition is ''.")
-                yesterday_showHourlyConditions = False
-                logger.debug("yesterday_showHourlyConditions: %s" % yesterday_showHourlyConditions)
-
-            if yesterday_windspeedMPH == "":
-                logger.info("yesterday_windspeedMPH is ''.")
-                yesterday_showHourlyWind = False
-                logger.debug("yesterday_showHourlyWind: %s" % yesterday_showHourlyWind)
+            try:
+                yesterday_condition = str(data['conds'])
+                logger.debug("yesterday_condition: %s" % yesterday_condition)
+            except KeyError:
+                yesterday_showConditions = False
+                logger.debug("yesterday_showConditions: %s" % yesterday_showConditions)
 
             logger.info("Now printing weather data...")
             print("")
             print(Fore.YELLOW + Style.BRIGHT + yesterday_time + ":")
-            if yesterday_showHourlyConditions is True:
+            if yesterday_showConditions is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT + yesterday_condition)
 
             print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_tempF
@@ -7011,8 +6998,14 @@ while True:
             if yesterday_showHeatIndex is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Heat index: " + Fore.CYAN + Style.BRIGHT + yesterday_heatindexF
                       + "°F (" + yesterday_heatindexC + "°C)")
-            print(Fore.YELLOW + Style.BRIGHT + "Precipitation: " + Fore.CYAN + Style.BRIGHT + yesterday_precipIN
-                  + " in (" + yesterday_precipMM + " mm)")
+
+            if yesterday_showPrecip is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Precipitation: " + Fore.CYAN + Style.BRIGHT + yesterday_precipIN
+                      + " in (" + yesterday_precipMM + " mm)")
+
+            if yesterday_showVisibility is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_visibilityMI
+                      + " mi (" + yesterday_visibilityKM + " km)")
 
             yesterday_loops = yesterday_loops + 1
             yesterday_totalloops = yesterday_totalloops + 1
