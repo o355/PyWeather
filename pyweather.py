@@ -6870,7 +6870,7 @@ while True:
             yesterday_windgustKPH = str(data['wgustm'])
             yesterday_windgustMPH = str(data['wgusti'])
             logger.debug("yesterday_windgustKPH: %s ; yesterday_windgustMPH: %s" %
-                         (yesterday_windgustKPH, yesterday_windguestMPH))
+                         (yesterday_windgustKPH, yesterday_windgustMPH))
             if yesterday_windspeedMPH == "-999.9":
                 logger.info("yesterday_windspeedMPH is '-999.9'")
                 yesterday_showWindSpeed = False
