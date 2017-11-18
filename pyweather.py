@@ -2044,9 +2044,9 @@ if showTideOnSummary == True:
                              (tide_hightidetime, tide_hightideheight))
                 logger.debug("tide_hightideacq: %s" % tide_hightideacq)
 
-            if tide_hightideacq == False and tide_lowtideacq == False:
-                tide_dataavailable = False
-                logger.debug("tide_dataavailable: %s")
+        if tide_hightideacq == False and tide_lowtideacq == False:
+            tide_dataavailable = False
+            logger.debug("tide_dataavailable: %s")
     else:
         tide_dataavailable = False
         logger.debug("tide_dataavailable: %s" % tide_dataavailable)
@@ -3434,8 +3434,7 @@ while True:
             os.mkdir("temp")
         except:
             printException_loggerwarn()
-            
-        print(Fore.YELLOW + Style.BRIGHT + "Loading the GUI. This should take around 5 seconds.")
+
         radar_clearImages()
         try:
             from appJar import gui
@@ -6996,6 +6995,12 @@ while True:
             except KeyError:
                 yesterday_showPrecip = False
                 logger.debug("yesterday_showPrecip: %s" % yesterday_showPrecip)
+
+            if yesterday_showPrecip is True:
+                if yesterday_precipIN == "-9999.0":
+                    logger.info("yesterday_precipIN: %s" % yesterday_precipIN)
+                    yesterday_showPrecip = False
+                    logger.debug("yesterday_showPrecip: %s" % yesterday_showPrecip)
 
 
             try:

@@ -1,4 +1,4 @@
-[Subscribe to PyWeather's Weekly Newsletter, for all the latest in PyWeather news on a weekly basis!](https://owenthe.ninja/sign-pyweathers-weekly-newsletter/)
+[Subscribe to the PyWeather Weekly Update, for all the latest in PyWeather news on a weekly basis!](https://owenthe.ninja/sign-pyweathers-weekly-newsletter/)
 
 ## Welcome to PyWeather (0.6.2 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
@@ -52,12 +52,17 @@ However, during times of non-severe weather, PyWeather is a fun way to check the
 ## Notices
 Notices are important things you'll want to know about PyWeather.
 
-### PyWeather 0.6.3 beta is probably going to be delayed
-I've discovered some issues with PWS mode and yesterday's weather & historical weather information, where PyWeather entirely crashes. Because of this, I've had to spend extra time working on yesterday's weather.
+### PyWeather 0.6.3 beta is probably not going to be delayed
+QA is now going smoothly, and we're back on target for a December 1, 2017 release date. We jumped over the yesterday's weather hurdle, and things are mostly smooth flowing now.
 
-In the interest of not delaying PyWeather 0.6.3 beta even further, historical data for PWS queries will be temporarily disabled. I'll add the code to handle PWS queries in 0.6.4 beta.
+I am finding some bugs from time to time, but most of these bugs are minor, and are easy enough to fix. Here's the timeline for finishing QAs at this point:
+* Windows 10 - November 19
+* OS X - November 21
+* Ubuntu 16.04.2 - November 24
+* FreeNAS 11 - November 27
+* Raspbian 9 - November 30
 
-The range for PyWeather 0.6.3 beta's release is now December 1 - December 14.
+This is not a definitive schedule, and is subject to change. It's also subject to my moral, laziness, and if I want to do QA in a car.
 
 ### PyWeather's GitHub page will be discontinued on December 1, 2017
 No one use it, so I'll be turning off GitHub pages for this repo on December 1, 2017.
