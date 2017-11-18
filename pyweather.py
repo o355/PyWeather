@@ -4237,6 +4237,7 @@ while True:
                              (almanac_recordHighF, almanac_recordHighC))
                 almanac_recordHighdata = True
             except:
+                printException_loggerwarn()
                 almanac_recordHighdata = False
             logger.debug("almanac_recordHighdata: %s" % almanac_recordHighdata)
             try:
