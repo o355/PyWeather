@@ -30,7 +30,7 @@
 * Fixed a bug where PyWeather didn't catch bad wind speed data on yesterday's weather hourly data.
 * Fixed a minor bug where on yesterday's weather hourly data, the degree symbol was placed too far right by 1 character.
 * Fixed a potential bug where missing data on yesterday's weather would cause a crash.
-* Fixed a bug where if almanac data is prefetched, it wouldn't display when viewing it in detail, and PyWeather would crash.
+* Fixed a potential bug where if almanac data is prefetched, it wouldn't display when viewing it in detail, and PyWeather would crash.
 * Fixed a minor bug where on the historical weather summary, total precipitation data in mm had a "mb" label.
 
 **OTHER CHANGES**

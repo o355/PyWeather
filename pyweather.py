@@ -1951,8 +1951,13 @@ if sundata_summary == True:
 
 if almanac_summary == True:
     almanac_prefetched = True
+    almanac_data = True
+    logger.debug("almanac_prefetched: %s ; almanac_data: %s" %
+                 (almanac_prefetched, almanac_data))
     logger.debug("Parsing almanac data...")
     almanac_airportCode = almanac_json['almanac']['airport_code']
+    if almanac_airportCode == "":
+        almanac_data = False
     logger.debug("almanac_airportCode: %s" % almanac_airportCode)
     try:
         almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
@@ -2271,18 +2276,35 @@ for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
     if summary_forecastIterations == 5:
         break
 
-print("")
-
-if almanac_summary == True:
+if almanac_summary is True and almanac_data is True:
+    print("")
     print(Fore.YELLOW + Style.BRIGHT + "The almanac:")
     print(Fore.YELLOW + Style.BRIGHT + "Data from: " + Fore.CYAN + Style.BRIGHT + almanac_airportCode
           + Fore.YELLOW + Style.BRIGHT + " (the nearest airport)")
-    print(Fore.YELLOW + Style.BRIGHT + "Record high for today: " + Fore.CYAN + Style.BRIGHT + almanac_recordHighF
-          + "°F (" + almanac_recordHighC + "°C)")
-    print(Fore.YELLOW + Style.BRIGHT + "It was set in: " + Fore.CYAN + Style.BRIGHT + almanac_recordHighYear)
-    print(Fore.YELLOW + Style.BRIGHT + "Record low for today: " + Fore.CYAN + Style.BRIGHT + almanac_recordLowF
-          + "°F (" + almanac_recordLowC + "°C)")
-    print(Fore.YELLOW + Style.BRIGHT + "It was set in: " + Fore.CYAN + Style.BRIGHT + almanac_recordLowYear)
+    if almanac_recordHighdata is True:
+        print(Fore.YELLOW + Style.BRIGHT + "Record high for today: " + Fore.CYAN + Style.BRIGHT + almanac_recordHighF
+              + "°F (" + almanac_recordHighC + "°C)")
+    else:
+        print(Fore.YELLOW + Style.BRIGHT + "Record high data is not available for this location.")
+
+    if almanac_recordHighYeardata is True:
+        print(Fore.YELLOW + Style.BRIGHT + "It was set in: " + Fore.CYAN + Style.BRIGHT + almanac_recordHighYear)
+    else:
+        print(Fore.YELLOW + Style.BRIGHT + "Record high year data is not available for this location.")
+
+    if almanac_recordLowdata is True:
+        print(Fore.YELLOW + Style.BRIGHT + "Record low for today: " + Fore.CYAN + Style.BRIGHT + almanac_recordLowF
+              + "°F (" + almanac_recordLowC + "°C)")
+    else:
+        print(Fore.YELLOW + Style.BRIGHT + "Record low data is not available for this location.")
+
+    if almanac_recordLowYeardata is True:
+        print(Fore.YELLOW + Style.BRIGHT + "It was set in: " + Fore.CYAN + Style.BRIGHT + almanac_recordLowYear)
+    else:
+        print(Fore.YELLOW + Style.BRIGHT + "Record low year data is not available for this location.")
+elif almanac_summary is True and almanac_data is False:
+    print("")
+    print(Fore.YELLOW + Style.BRIGHT + "** Almanac data is not available for the location you entered. **")
 
 if sundata_summary == True:
     print("")
@@ -4245,6 +4267,8 @@ while True:
             refresh_almanacflagged = False
             logger.debug("almanac_prefetched: %s ; refresh_almanacflagged: %s" %
                          (almanac_prefetched, refresh_almanacflagged))
+            almanac_data = True
+            logger.debug("almanac_data: %s" % almanac_data)
             almanac_json = json.loads(almanacJSON.text)
             if jsonVerbosity == True:
                 logger.debug("almanac_json: %s" % almanac_json)
@@ -4252,6 +4276,11 @@ while True:
                 logger.debug("1 JSON loaded successfully.")
             
             almanac_airportCode = almanac_json['almanac']['airport_code']
+            if almanac_airportCode == "":
+                almanac_data = False
+                logger.debug("almanac_data: %s" % almanac_data)
+
+
             logger.debug("almanac_airportCode: %s" % almanac_airportCode)
             try:
                 almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
@@ -4311,6 +4340,11 @@ while True:
                 almanac_recordLowYeardata = False
             logger.debug("almanac_recordLowYeardata: %s" % almanac_recordLowYeardata)
         spinner.start(text="Loading the almanac...")
+        # If the airport code was "" (no data), exit almanac data.
+        if almanac_data is False:
+            spinner.fail(text="Almanac data is not available for this location.")
+            continue
+
         spinner.stop()
         print(Fore.YELLOW + Style.BRIGHT + "Here's the almanac for: " + Fore.CYAN + Style.BRIGHT +
               almanac_airportCode + Fore.YELLOW + " (the nearest airport)")
