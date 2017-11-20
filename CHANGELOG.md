@@ -32,6 +32,7 @@
 * Fixed a potential bug where missing data on yesterday's weather would cause a crash.
 * Fixed a potential bug where if almanac data is prefetched, it wouldn't display when viewing it in detail, and PyWeather would crash.
 * Fixed a minor bug where on the historical weather summary, total precipitation data in mm had a "mb" label.
+* Fixed a minor bug where historical hourly data wouldn't break when the current iterations equaled the total iterations.
 
 **OTHER CHANGES**
 * The Git Updater has been completely removed, as it's been unreliable. A universal updater will be introduced later in time.

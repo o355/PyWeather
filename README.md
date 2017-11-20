@@ -99,7 +99,7 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 	* Yesterday's weather
 	* Tide data
 	* Hurricane data
-	* Webcam images - Coming in either 0.6.4 beta or 0.6.5 beta
+	* Webcam images - Scrapped: Wunderground is removing this feature and the API on December 15, 2017.
 	
 * PyWeather is pretty modular. As I said earlier with the super-configurable config file, this also translates into modularity. PyWeather's features can be turned on and off at will.
 * PyWeather has a built-in updater, provided you have git installed. I hope to eventually incorporate a universal "download the zip and unzip it" system down the road.

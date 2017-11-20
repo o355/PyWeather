@@ -5021,6 +5021,7 @@ while True:
             if historical_totalloops == historicalhourlyLoops:
                 logger.debug("Iterations now %s. Total iterations %s. Breaking..."
                              % (historical_totalloops, historicalhourlyLoops))
+                break
                              
             if user_showCompletedIterations == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s"
@@ -6946,7 +6947,7 @@ while True:
                 yesterday_showWindSpeed = False
                 logger.debug("yesterday_showWindSpeed: %s" % yesterday_showWindSpeed)
 
-            if yesterday_windgustMPH == "-999.0" or yesterday_windgustMPH == "-9999.0":
+            if yesterday_windgustMPH == "-999.0" or yesterday_windgustMPH == "-9999.0" or yesterday_windgustMPH == "":
                 logger.info("yesterday_windgustMPH is '-999.0' or yesterday_windgustMPH is '-9999.0'")
                 yesterday_showWindGust = False
                 logger.debug("yesterday_showWindGust: %s" % yesterday_showWindGust)
