@@ -6974,6 +6974,12 @@ while True:
             except KeyError:
                 yesterday_showVisibility = False
 
+            # Turn off showing yesterday's weather if visibility is -9999.0 mi (no data)
+            if yesterday_showVisibility is True:
+                if yesterday_visibilityMI == "-9999.0":
+                    yesterday_showVisibility = False
+                    logger.debug("yesterday_showVisibility: %s" % yesterday_showVisibility)
+
             try:
                 yesterday_pressureMB = str(data['pressurem'])
             except KeyError:

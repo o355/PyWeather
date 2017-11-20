@@ -70,6 +70,11 @@ if cd_confirmation == "yes":
         print("Setting up your config...")
 
     try:
+        config.add_section("HURRICANE")
+    except configparser.DuplicateSectionError:
+        print("Hurricane section could not be added.")
+
+    try:
         config.add_section("GEOCODER API")
     except configparser.DuplicateSectionError:
         print("Geocoder API section could not be added.")
