@@ -1819,8 +1819,78 @@ else:
     config['GEOCODER API']['customkey_enabled'] = 'False'
     logger.debug("GEOCODER API/customkey_enabled is now FALSE.")
     print("Changes saved.")
-    
-print("", "(39/42)", "PyWeather's geocoder usually uses https, but issues have been discovered",
+
+print("", "(39/42)", "On the summary screen, you can now view a summary of the weather that occurred yesterday.",
+      "Enabling this will also enable the option to prefetch yesterday's weather at boot in the config file.",
+      "Please note that enabling this uses 1 extra API call at boot, and will increase PyWeather's loading time.",
+      "Would you like to turn on showing yesterday's weather on the summary screen? Yes or No. By default, this is",
+      "disabled.", sep="\n")
+showyesterdayonsummary = input("Input here: ").lower()
+logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
+if showyesterdayonsummary == "yes":
+    config['SUMMARY']['showyesterdayonsummary'] = 'True'
+    logger.info("SUMMARY/showyesterdayonsummary is now 'True'.")
+    config['PREFETCH']['yesterdaydata_atboot'] = 'True'
+    logger.info("PREFETCH/yesterdaydata_atboot is now 'True'.")
+    showyesterdayonsummary = True
+    logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
+    print("Changes saved.")
+elif showyesterdayonsummary == "no":
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
+    logger.info("SUMMARY/showyesterdayonsummary is now 'False'.")
+    showyesterdayonsummary = False
+    logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
+    print("Changes saved.")
+else:
+    print("Your input could not be understood. Defaulting to 'False'.")
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
+    logger.info("SUMMARY/showyesterdayonsumary is now 'False'.")
+    showyesterdayonsummary = False
+    logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
+    print("Changes saved.")
+
+if showyesterdayonsummary is False:
+    print("", "(40/42)", "When PyWeather boots up, you can have the option to have yesterday's weather data",
+          "prefetched during bootup. Enabling this will use 1 extra API call at boot, and will increase PyWeather's",
+          "loading time. Would you like to enable prefetching yesterday's weather data on boot? Yes or No.",
+          "By default, this is disabled.", sep="\n")
+    prefetchyesterdayatboot = input("Input here: ").lower()
+    logger.debug("prefetchyesterdayatboot: %s" % prefetchyesterdayatboot)
+    if prefetchyesterdayatboot == "yes":
+        config['PREFETCH']['yesterdaydata_atboot'] = 'True'
+        logger.info("PREFETCH/yesterdaydata_atboot is now 'True'.")
+        print("Changes saved.")
+    elif prefetchyesterdayatboot == "no":
+        config['PREFETCH']['yesterdaydata_atboot'] = 'False'
+        logger.info("PREFETCH/yesterdaydata_atboot is now 'False'.")
+        print("Changes saved.")
+    else:
+        print("Your input could not be understood. Defaulting to 'False'.")
+        config['PREFETCH']['yesterdaydata_atboot'] = 'False'
+        logger.info("PREFETCH/yesterdaydata_atboot is now 'False'.")
+        print("Changes saved.")
+
+print("", "(41/42)", "In 0.6.3 beta and newer, you have the option to enable extra tools for PyWeather."
+      "Extra tools are diagnostic tools, and so far you can see cache timings in PyWeather, and more extra tools",
+      "will be added as time goes on. Would you like to enable the ability to use extra tools? Yes or No. By default",
+      "this is disabled.", sep="\n")
+enableextratools = input("Input here: ").lower()
+logger.debug("enableextratools: %s" % enableextratools)
+if enableextratools == "yes":
+    config['UI']['extratools_enabled'] = 'True'
+    logger.info("UI/extratools_enabled is now 'True'.")
+    print("Changes saved.")
+elif enableextratools == "no":
+    config['UI']['extratools_enabled'] = 'False'
+    logger.info("UI/extratools_enabled is now 'False'.")
+    print("Changes saved.")
+else:
+    print("Could not understand your input. Defaulting to 'False'.")
+    config['UI']['extratools_enabled'] = 'False'
+    logger.info("UI/extratools_enabled is now 'False'.")
+    print("Changes saved.")
+
+print("", "(42/42)", "PyWeather's geocoder usually uses https, but issues have been discovered",
       "on some platforms, where the geocoder cannot operate in the https mode. If you press enter",
       "PyWeather will automatically detect which scheme to use. If you are an advanced user, and want",
       "to configure the scheme yourself, enter advancedconfig at the prompt below.", sep="\n")
@@ -1876,76 +1946,6 @@ else:
             config['GEOCODER']['scheme'] = 'http'
             logger.debug("GEOCODER/scheme is now 'http'")
             print("Changes saved.")
-
-print("", "(40/42)", "On the summary screen, you can now view a summary of the weather that occurred yesterday.",
-      "Enabling this will also enable the option to prefetch yesterday's weather at boot in the config file.",
-      "Please note that enabling this uses 1 extra API call at boot, and will increase PyWeather's loading time.",
-      "Would you like to turn on showing yesterday's weather on the summary screen? Yes or No. By default, this is",
-      "disabled.", sep="\n")
-showyesterdayonsummary = input("Input here: ").lower()
-logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
-if showyesterdayonsummary == "yes":
-    config['SUMMARY']['showyesterdayonsummary'] = 'True'
-    logger.info("SUMMARY/showyesterdayonsummary is now 'True'.")
-    config['PREFETCH']['yesterdaydata_atboot'] = 'True'
-    logger.info("PREFETCH/yesterdaydata_atboot is now 'True'.")
-    showyesterdayonsummary = True
-    logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
-    print("Changes saved.")
-elif showyesterdayonsummary == "no":
-    config['SUMMARY']['showyesterdayonsummary'] = 'False'
-    logger.info("SUMMARY/showyesterdayonsummary is now 'False'.")
-    showyesterdayonsummary = False
-    logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
-    print("Changes saved.")
-else:
-    print("Your input could not be understood. Defaulting to 'False'.")
-    config['SUMMARY']['showyesterdayonsummary'] = 'False'
-    logger.info("SUMMARY/showyesterdayonsumary is now 'False'.")
-    showyesterdayonsummary = False
-    logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
-    print("Changes saved.")
-
-if showyesterdayonsummary is False:
-    print("", "(41/42)", "When PyWeather boots up, you can have the option to have yesterday's weather data",
-          "prefetched during bootup. Enabling this will use 1 extra API call at boot, and will increase PyWeather's",
-          "loading time. Would you like to enable prefetching yesterday's weather data on boot? Yes or No.",
-          "By default, this is disabled.", sep="\n")
-    prefetchyesterdayatboot = input("Input here: ").lower()
-    logger.debug("prefetchyesterdayatboot: %s" % prefetchyesterdayatboot)
-    if prefetchyesterdayatboot == "yes":
-        config['PREFETCH']['yesterdaydata_atboot'] = 'True'
-        logger.info("PREFETCH/yesterdaydata_atboot is now 'True'.")
-        print("Changes saved.")
-    elif prefetchyesterdayatboot == "no":
-        config['PREFETCH']['yesterdaydata_atboot'] = 'False'
-        logger.info("PREFETCH/yesterdaydata_atboot is now 'False'.")
-        print("Changes saved.")
-    else:
-        print("Your input could not be understood. Defaulting to 'False'.")
-        config['PREFETCH']['yesterdaydata_atboot'] = 'False'
-        logger.info("PREFETCH/yesterdaydata_atboot is now 'False'.")
-        print("Changes saved.")
-
-print("", "(42/42)", "In 0.6.3 beta and newer, you have the option to enable extra tools for PyWeather."
-      "Extra tools are diagnostic tools, and so far you can see cache timings in PyWeather, and more extra tools",
-      "will be added as time goes on. Would you like to enable the ability to use extra tools? Yes or No. By default",
-      "this is disabled.", sep="\n")
-enableextratools = input("Input here: ").lower()
-logger.debug("enableextratools: %s" % enableextratools)
-if enableextratools == "yes":
-    config['UI']['extratools_enabled'] = 'True'
-    logger.info("UI/extratools_enabled is now 'True'.")
-    print("Changes saved.")
-elif enableextratools == "no":
-    config['UI']['extratools_enabled'] = 'False'
-    logger.info("UI/extratools_enabled is now 'False'.")
-    print("Changes saved.")
-else:
-    print("Could not understand your input. Defaulting to 'False'.")
-    config['UI']['extratools_enabled'] = 'False'
-    logger.info("UI/extratools_enabled is now 'False'.")
-    print("Changes saved.")
 
 # if showing yesterday is disabled show prefetch yesterday
 # if show yest. on sum. is enabled enable prefetch too basically the same code
