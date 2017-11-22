@@ -814,7 +814,7 @@ else:
 print("", "Would you like PyWeather to update all your PIP packages?",
       "If you had necessary libraries previously installed, it's best",
       "to update your PIP packages. Please note: This may not work",
-      "on all platforms.", sep="\n")
+      "on all platforms, and can take a while. Yes or No.", sep="\n")
 confirm_updatepip = input("Input here: ").lower()
 logger.debug("confirm_updatepip: %s" % confirm_updatepip)
 if confirm_updatepip == "yes":

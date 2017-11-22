@@ -2754,6 +2754,7 @@ while True:
         print("")
         print(Fore.YELLOW + Style.BRIGHT + "Here's the detailed hourly forecast for: " + Fore.CYAN + Style.BRIGHT + str(location))
         for hour in hourly36_json['hourly_forecast']:
+            print("")
             logger.info("We're on iteration: %s" % detailedHourlyIterations)
             hourly_time = hour['FCTTIME']['civil']
             hourly_tempf = hour['temp']['english']
@@ -4831,6 +4832,15 @@ while True:
             logger.debug("historicals_precipMM: %s ; historicals_precipIN: %s" %
                          (historicals_precipMM, historicals_precipIN))
 
+            # Check for invalid precip data - Don't show it if it equals "T".
+            historicals_showPrecipData = True
+            logger.debug("historicals_showPrecipData: %s" % historicals_showPrecipData)
+            if historicals_precipIN == "T":
+                logger.info("historicals_precipIN is 'T'.")
+                historicals_showPrecipData = False
+                logger.debug("historicals_showPrecipData: %s" % historicals_showPrecipData)
+
+
         print(Fore.YELLOW + Style.BRIGHT + "Here's the summary for the day.")
         print(Fore.YELLOW + Style.BRIGHT + "Minimum Temperature: " + Fore.CYAN + Style.BRIGHT + historicals_minTempF
               + "°F (" + historicals_minTempC + "°C)")
@@ -4868,8 +4878,9 @@ while True:
               + " inHg (" + historicals_avgPressureMB + " mb)")
         print(Fore.YELLOW + Style.BRIGHT + "Maximum Pressure: " + Fore.CYAN + Style.BRIGHT + historicals_maxPressureInHg
               + " inHg (" + historicals_maxPressureMB + " mb)")
-        print(Fore.YELLOW + Style.BRIGHT + "Total Precipitation: " + Fore.CYAN + Style.BRIGHT + historicals_precipIN
-              + " in (" + historicals_precipMM + " mm)")
+        if historicals_showPrecipData is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Total Precipitation: " + Fore.CYAN + Style.BRIGHT + historicals_precipIN
+                  + " in (" + historicals_precipMM + " mm)")
         print("")
         print(Fore.RED + Style.BRIGHT + "To view hourly historical data, please press enter.")
         print(Fore.RED + Style.BRIGHT + "If you want to return to the main menu, press Control + C.")

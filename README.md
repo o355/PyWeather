@@ -52,17 +52,14 @@ However, during times of non-severe weather, PyWeather is a fun way to check the
 ## Notices
 Notices are important things you'll want to know about PyWeather.
 
-### PyWeather 0.6.3 beta is probably not going to be delayed
-QA is now going smoothly, and we're back on target for a December 1, 2017 release date. We jumped over the yesterday's weather hurdle, and things are mostly smooth flowing now.
+### QA update - November 21, 2017
+Windows 10 QA has wrapped up, and I'm now starting FreeNAS & Mac OS X QA at this time. Things are so far going well, and FreeNAS & OS X QA will both start today. Here's the updated timeline for when QA will be done:
+* FreeNAS - November 23 or 24
+* OS X - November 23 or 24
+* Ubuntu - November 27
+* Raspbian - November 30
 
-I am finding some bugs from time to time, but most of these bugs are minor, and are easy enough to fix. Here's the timeline for finishing QAs at this point:
-* Windows 10 - November 19
-* OS X - November 21
-* Ubuntu 16.04.2 - November 24
-* FreeNAS 11 - November 27
-* Raspbian 9 - November 30
-
-This is not a definitive schedule, and is subject to change. It's also subject to my moral, laziness, and if I want to do QA in a car.
+Things are now going quite smoothly, and few bugs are now being discovered. It's now just a matter of hitting enter a bunch of times, and trying not to exceed the 10 requests/min rate limit.
 
 ### PyWeather's GitHub page will be discontinued on December 1, 2017
 No one use it, so I'll be turning off GitHub pages for this repo on December 1, 2017.
