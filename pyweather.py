@@ -2489,6 +2489,14 @@ while True:
             current_showuvindex = False
             logger.debug("current_showuvindex: %s" % current_showuvindex)
 
+        # Check for bad precip so far today data - "" for in and "--" for mm.
+        current_showPrecipData = True
+        logger.debug("current_showPrecipData: %s" % current_showPrecipData)
+        if current_precipTodayIn == "" or current_precipTodayMm == "--":
+            logger.info("current_precipTodayIn is '' or current_precipTodayMm is '--'.")
+            current_showPrecipData = False
+            logger.debug("current_showPrecipData: %s" % current_showPrecipData)
+
         spinner.stop()
         print("")
         print(Fore.YELLOW + Style.BRIGHT + "Here's the detailed current weather for: " + Fore.CYAN + Style.BRIGHT + str(location))
@@ -2530,9 +2538,11 @@ while True:
                   + " mm)")
         else:
             print(Fore.YELLOW + Style.BRIGHT + "Precipitation data in the last hour is not available.")
-        print(Fore.YELLOW + Style.BRIGHT + "Precipitation so far today: " + Fore.CYAN + Style.BRIGHT
-              + current_precipTodayIn + " inches (" + current_precipTodayMm
-              + " mm)")
+
+        if current_showPrecipData is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Precipitation so far today: " + Fore.CYAN + Style.BRIGHT
+                  + current_precipTodayIn + " inches (" + current_precipTodayMm
+                  + " mm)")
         continue
 
     elif moreoptions == "1":
@@ -4687,12 +4697,13 @@ while True:
         historical_skipfetch = False
         logger.debug("historical_skipfetch: %s" % historical_skipfetch)
 
-        # Don't get scared. Payload is the cached data.
-        for historical_cacheddate, payload in historical_cache.items():
+        # Find out if we already have cached data for the date as inputted
+        for historical_cacheddate, historical_data in historical_cache.items():
             logger.debug("historical_cacheddate: %s")
+            # If we have a match, make the historical_json file equal "historical_data" as defined above.
             if historical_cacheddate == historical_input:
                 print(Fore.RED + "Loading cached data...")
-                historical_json = payload
+                historical_json = historical_data
                 if jsonVerbosity == True:
                     logger.debug("historical_json: %s" % historical_json)
                 historical_skipfetch = True
@@ -4702,7 +4713,7 @@ while True:
                 historical_skipfetch = False
                 logger.debug("historical_skipfetch: %s" % historical_skipfetch)
                 
-                
+        # No cached data, fetch the file.
         if historical_skipfetch == False:
             try:
                 historicalJSON = requests.get(historicalurl)
@@ -4726,7 +4737,9 @@ while True:
                 print(Fore.RED + Style.BRIGHT + "There was an issue parsing the data for the date requested. Try requesting another date."
                       + Fore.RESET)
                 continue
-
+            # Append the cache date into the historical cache (if it wasn't cached already). Set the data as the json.
+            # Example: If we're getting the data for 1/1/2017 (20170101), historical_input is 20170101, and we're appending a 'section'
+            # Called 20170101, the key being the entire historical json file.
             historical_cache[historical_input] = historical_json
             logger.debug("Appended new key to historal cache: %s with value historical json"
                          % historical_input)
@@ -4749,88 +4762,230 @@ while True:
             print("")
             # historicals: historical Summary
             #                         ^
+
+            # Declare show variables - we'll need 17 of them!
+            historicals_showMinTemp = True
+            historicals_showAvgTemp = True
+            logger.debug("historicals_showMinTemp: %s ; historicals_showAvgTemp: %s" %
+                         (historicals_showMinTemp, historicals_showAvgTemp))
+            historicals_showMaxTemp = True
+            historicals_showMinDewPoint = True
+            logger.debug("historicals_showMaxTemp: %s ; historicals_showMinDewPoint: %s" %
+                         (historicals_showMaxTemp, historicals_showMinDewPoint))
+            historicals_showAvgDewPoint = True
+            historicals_showMaxDewPoint = True
+            logger.debug("historicals_showAvgDewPoint: %s ; historicals_showMaxDewPoint: %s" %
+                         (historicals_showAvgDewPoint, historicals_showMaxDewPoint))
+            historicals_showMinVis = True
+            historicals_showAvgVis = True
+            logger.debug("historicals_showMinVis: %s ; historicals_showAvgVis: %s" %
+                         (historicals_showMinVis, historicals_showAvgVis))
+            historicals_showMaxVis = True
+            historicals_showMinPress = True
+            logegr.debug("historicals_showMaxVis: %s ; historicals_showMinPress: %s" %
+                         (historicals_showMaxVis, historicals_showMinPress))
+            historicals_showAvgPress = True
+            historicals_showMaxPress = True
+            logger.debug("historicals_showAvgPress: %s ; historicals_showMaxPress: %s" %
+                         (historicals_showAvgPress, historicals_showMaxPress))
+            historicals_showHumidity = True
+            historicals_showMinWind = True
+            logger.debug("historicals_showHumidity: %s ; historicals_showMinWind: %s" %
+                         (historicals_showHumidity, historicals_showMinWind))
+            historicals_showAvgWind = True
+            historicals_showMaxWind = True
+            logger.debug("historicals_showAvgWind: %s ; historicals_showMaxWind: %s" %
+                         (historicals_showAvgWind, historicals_showMaxWind))
+            historicals_showWindDir = True
+            logger.debug("historicals_showWindDir: %s" % historicals_showWindDir)
             historicals_avgTempF = str(data['meantempi'])
             historicals_avgTempC = str(data['meantempm'])
-            historicals_avgDewpointF = str(data['meandewpti'])
-            historicals_avgDewpointC = str(data['meandewptm'])
             logger.debug("historicals_avgTempF: %s ; historicals_avgTempC: %s" %
                          (historicals_avgTempF, historicals_avgTempC))
+            # With historical summary, Wunderground doesn't remove the key, but instead puts nothing ("") as the data.
+            # Check for "" for each data type. If the data turns out to be "", don't show the data type.
+            if historicals_avgTempF == "" or historicals_avgTempC == "":
+                logger.info("historicals_avgTempF is '' or historicals_avgTempC is ''.")
+                historicals_showAvgTemp = False
+                logger.debug("historicals_showAvgTemp: %s" % historicals_showAvgTemp)
+
+            historicals_avgDewpointF = str(data['meandewpti'])
+            historicals_avgDewpointC = str(data['meandewptm'])
             logger.debug("historicals_avgDewpointF: %s ; historicals_avgDewpointC: %s" %
                          (historicals_avgDewpointF, historicals_avgDewpointC))
+            if historicals_avgDewpointF == "" or historicals_avgDewpointC == "":
+                logger.info("historicals_avgDewpointF is '' or historicals_avgDewpointC is ''.")
+                historicals_showAvgDewPoint = False
+                logger.debug("historicals_showAvgDewPoint: %s" % historicals_showAvgDewPoint)
+
             historicals_avgPressureMB = str(data['meanpressurem'])
             historicals_avgPressureInHg = str(data['meanpressurei'])
-            historicals_avgWindSpeedMPH = str(data['meanwindspdi'])
-            historicals_avgWindSpeedKPH = str(data['meanwindspdm'])
             logger.debug("historicals_avgPressureMB: %s ; historicals_avgPressureInHg: %s" %
                          (historicals_avgPressureMB, historicals_avgPressureInHg))
+            if historicals_avgPressureMB == "" or historicals_avgPressureInHg == "":
+                logger.info("historicals_avgPressureMB is '' or historicals_avgPressureInHg is ''.")
+                historicals_showAvgPress = False
+                logger.debug("historicals_showAvgPress: %s" % historicals_showAvgPress)
+
+            historicals_avgWindSpeedMPH = str(data['meanwindspdi'])
+            historicals_avgWindSpeedKPH = str(data['meanwindspdm'])
             logger.debug("historicals_avgWindSpeedMPH: %s ; historicals_avgWindSpeedKPH: %s" %
                          (historicals_avgWindSpeedMPH, historicals_avgWindSpeedKPH))
+            if historicals_avgWindSpeedMPH == "" or historicals_avgWindSpeedKPH == "":
+                logger.info("historicals_avgWindSpeedMPH is '' or historicals_avgWindSpeedKPH is ''.")
+                historicals_showAvgWind = False
+                logger.debug("historicals_showAvgWind: %s" % historicals_showAvgWind)
+
             historicals_avgWindDegrees = str(data['meanwdird'])
             historicals_avgWindDirection = data['meanwdire']
+            logger.debug("historicals_avgWindDegrees: %s ; historicals_avgWindDirection: %s" %
+                         (historicals_avgWindDegrees, historicals_avgWindDirection))
+            if historicals_avgWindDegrees == "" or historicals_avgWindDirection == "":
+                logger.info("historicals_avgWindDegrees is '' or historicals_avgWindDirection is ''.")
+                historicals_showWindDir = False
+                logger.debug("historicals_showWindDir: %s" % historicals_showWindDir)
+
+
             historicals_avgVisibilityMI = str(data['meanvisi'])
             historicals_avgVisibilityKM = str(data['meanvism'])
-            logger.debug("historicals_avgWindDegrees: %s ; historicals_avgWindDirection: %s" % 
-                         (historicals_avgWindDegrees, historicals_avgWindDirection))
             logger.debug("historicals_avgVisibilityMI: %s ; historicals_avgVisibilityKM: %s" %
                          (historicals_avgVisibilityMI, historicals_avgVisibilityKM))
-            historicals_maxHumidity = int(data['maxhumidity'])
-            historicals_minHumidity = int(data['minhumidity'])
-            logger.debug("historicals_maxHumidity: %s ; historicals_minHumidity: %s" %
-                         (historicals_maxHumidity, historicals_minHumidity))
+            if historicals_avgVisibilityMI == "" or historicals_avgVisibilityKM == "":
+                logger.info("historicals_avgVisibilityMI is '' or historicals_avgVisibilityKM is ''.")
+                historicals_showAvgVis = False
+                logger.debug("historicals_showAvgVis: %s" % historicals_showAvgVis)
+
+            # Check for good humidity data. if there is good humidity data, we then will do our
+            # nieve way of finding the average humidity. If there is no good data, don't show humidity
+            # during the summary screen, and don't do the average humidity code.
+
+
+            try:
+                historicals_maxHumidity = int(data['maxhumidity'])
+                historicals_minHumidity = int(data['minhumidity'])
+                logger.debug("historicals_maxHumidity: %s ; historicals_minHumidity: %s" %
+                             (historicals_maxHumidity, historicals_minHumidity))
+            except ValueError:
+                historicals_showHumidity = False
+                logger.debug("historicals_showHumidity: %s" % historicals_showHumidity)
             # This is a really nieve way of calculating the average humidity. Sue me.
             # In reality, WU spits out nothing for average humidity.
-            historicals_avgHumidity = (historicals_maxHumidity + 
-                                       historicals_minHumidity)
-            historicals_avgHumidity = (historicals_avgHumidity / 2)
-            logger.debug("historicals_avgHumidity: %s" % historicals_avgHumidity)
-            historicals_maxHumidity = str(data['maxhumidity'])
-            historicals_minHumidity = str(data['minhumidity'])
-            historicals_avgHumidity = str(historicals_avgHumidity)
-            logger.info("Converted 3 vars to str.")
+            if historicals_showHumidity is True:
+                logger.info("historicals_showHumidity is True.")
+                historicals_avgHumidity = (historicals_maxHumidity +
+                                           historicals_minHumidity)
+                historicals_avgHumidity = (historicals_avgHumidity / 2)
+                logger.debug("historicals_avgHumidity: %s" % historicals_avgHumidity)
+                historicals_maxHumidity = str(data['maxhumidity'])
+                historicals_minHumidity = str(data['minhumidity'])
+                historicals_avgHumidity = str(historicals_avgHumidity)
+                logger.info("Converted 3 vars to str.")
+
             historicals_maxTempF = str(data['maxtempi'])
             historicals_maxTempC = str(data['maxtempm'])
-            historicals_minTempF = str(data['mintempi'])
-            historicals_minTempC = str(data['mintempm'])
             logger.debug("historicals_maxTempF: %s ; historicals_maxTempC: %s" %
                          (historicals_maxTempF, historicals_maxTempC))
+
+            if historicals_maxTempF == "" or historicals_maxTempC == "":
+                logger.info("historicals_maxTempF is '' or historicals_maxTempC is ''.")
+                historicals_showMinTemp = False
+                logger.debug("historicals_showMinTemp: %s" % historicals_showMinTemp)
+
+            historicals_minTempF = str(data['mintempi'])
+            historicals_minTempC = str(data['mintempm'])
             logger.debug("historicals_minTempF: %s ; historicals_minTempC: %s" %
                          (historicals_minTempF, historicals_minTempC))
+
+            if historicals_minTempF == "" or historicals_minTempC == "":
+                logger.info("historicals_minTempF is '' or historicals_minTempC is ''.")
+                historicals_showMinTemp = False
+                logger.debug("historicals_showMinTemp: %s" % historicals_showMinTemp)
+
             historicals_maxDewpointF = str(data['maxdewpti'])
             historicals_maxDewpointC = str(data['maxdewptm'])
-            historicals_minDewpointF = str(data['mindewpti'])
-            historicals_minDewpointC = str(data['mindewptm'])
             logger.debug("historicals_maxDewpointF: %s ; historicals_maxDewpointC: %s" %
                          (historicals_maxDewpointF, historicals_maxDewpointC))
+
+            if historicals_maxDewpointF == "" or historicals_maxDewpointC == "":
+                logger.info("historicals_maxDewpointF is '' or historicals_maxDewpointC is ''.")
+                historicals_showMaxDewPoint = False
+                logger.debug("historicals_showMaxDewPoint: %s" % historicals_showMaxDewPoint)
+
+            historicals_minDewpointF = str(data['mindewpti'])
+            historicals_minDewpointC = str(data['mindewptm'])
             logger.debug("historicals_minDewpointF: %s ; historicals_minDewpointC: %s" %
                          (historicals_minDewpointF, historicals_minDewpointC))
+
+            if historicals_minDewpointF == "" or historicals_minDewpointC == "":
+                logger.info("historicals_minDewpointF is '' or historicals_minDewpointC is ''.")
+                historicals_showMinDewPoint = False
+                logger.debug("historicals_showMinDewPoint: %s" % historicals_showMinDewPoint)
+
             historicals_maxPressureInHg = str(data['maxpressurei'])
             historicals_maxPressureMB = str(data['maxpressurem'])
-            historicals_minPressureInHg = str(data['minpressurei'])
-            historicals_minPressureMB = str(data['minpressurem'])
             logger.debug("historicals_maxPressureInHg: %s ; historicals_maxPressureMB: %s" %
                          (historicals_maxPressureInHg, historicals_maxPressureMB))
+
+            if historicals_maxPressureInHg == "" or historicals_maxPressureMB == "":
+                logger.info("historicals_maxPressureInHg is '' or historicals_maxPressureMB is ''.")
+                historicals_showMaxPress = False
+                logger.debug("historicals_showMaxPress: %s" % historicals_showMaxPress)
+
+            historicals_minPressureInHg = str(data['minpressurei'])
+            historicals_minPressureMB = str(data['minpressurem'])
             logger.debug("historicals_minPressureInHg: %s ; historicals_minPressureMB: %s" %
                          (historicals_minPressureInHg, historicals_minPressureMB))
+
+            if historicals_minPressureInHg == "" or historicals_minPressureMB == "":
+                logger.info("historicals_minPressureInHg is '' or historicals_minPressureMB is ''.")
+                historicals_showMinPress = False
+                logger.debug("historicals_showMinPress: %s" % historicals_showMinPress)
+
             historicals_maxWindMPH = str(data['maxwspdi'])
             historicals_maxWindKPH = str(data['maxwspdm'])
-            historicals_minWindMPH = str(data['minwspdi'])
-            historicals_minWindKPH = str(data['minwspdm'])
             logger.debug("historicals_maxWindMPH: %s ; historicals_maxWindKPH: %s" %
                          (historicals_maxWindMPH, historicals_maxWindMPH))
+
+            if historicals_maxWindMPH == "" or historicals_maxWindKPH == "":
+                logger.info("historicals_maxWindMPH is '' or historicals_maxWindKPH is ''.")
+                historicals_showMaxWind = False
+                logger.debug("historicals_showMaxWind: %s" % historicals_showMaxWind)
+
+            historicals_minWindMPH = str(data['minwspdi'])
+            historicals_minWindKPH = str(data['minwspdm'])
             logger.debug("historicals_minWindMPH: %s ; historicals_minWindKPH: %s" %
                          (historicals_minWindMPH, historicals_minWindKPH))
+
+            if historicals_minWindMPH == "" or historicals_minWindKPH == "":
+                logger.info("historicals_minWindMPH is '' or historicals_minWindKPH is ''.")
+                historicals_showMinWind = False
+                logger.debug("historicals_showMinWind: %s" % historicals_showMinWind)
+
             historicals_maxVisibilityMI = str(data['maxvisi'])
             historicals_maxVisibilityKM = str(data['maxvism'])
-            historicals_minVisibilityMI = str(data['minvisi'])
-            historicals_minVisibilityKM = str(data['minvism'])
             logger.debug("historicals_maxVisibilityMI: %s ; historicals_maxVisibilityKM: %s" %
                          (historicals_maxVisibilityMI, historicals_maxVisibilityKM))
+
+            if historicals_maxVisibilityMI == "" or historicals_maxVisibilityKM == "":
+                logger.info("historicals_maxVisibilityMI is '' or historicals_maxVisibilityKM is ''.")
+                historicals_showMaxVis = False
+                logger.debug("historicals_showMaxVis: %s" % historicals_showMaxVis)
+
+            historicals_minVisibilityMI = str(data['minvisi'])
+            historicals_minVisibilityKM = str(data['minvism'])
             logger.debug("historicals_minVisibilityMI: %s ; historicals_minVisibilityKM: %s" %
                          (historicals_minVisibilityMI, historicals_minVisibilityKM))
+
+            if historicals_minVisibilityMI == "" or historicals_minVisibilityKM == "":
+                logger.info("historicals_minVisibilityMI is '' or historicals_minVisibilityKM is ''.")
+                historicals_showMinVis = False
+                logger.debug("historicals_showMinVis: %s" % historicals_showMinVis)
+
             historicals_precipMM = str(data['precipm'])
             historicals_precipIN = str(data['precipi'])
             logger.debug("historicals_precipMM: %s ; historicals_precipIN: %s" %
                          (historicals_precipMM, historicals_precipIN))
+
 
             # Check for invalid precip data - Don't show it if it equals "T".
             historicals_showPrecipData = True
@@ -4842,42 +4997,58 @@ while True:
 
 
         print(Fore.YELLOW + Style.BRIGHT + "Here's the summary for the day.")
-        print(Fore.YELLOW + Style.BRIGHT + "Minimum Temperature: " + Fore.CYAN + Style.BRIGHT + historicals_minTempF
-              + "°F (" + historicals_minTempC + "°C)")
-        print(Fore.YELLOW + Style.BRIGHT + "Average Temperature: " + Fore.CYAN + Style.BRIGHT + historicals_avgTempF
-              + "°F (" + historicals_avgTempC + "°C)")
-        print(Fore.YELLOW + Style.BRIGHT + "Maxmimum Temperature: " + Fore.CYAN + Style.BRIGHT + historicals_maxTempF
-              + "°F (" + historicals_maxTempC + "°C)")
-        print(Fore.YELLOW + Style.BRIGHT + "Minimum Dew Point: " + Fore.CYAN + Style.BRIGHT + historicals_minDewpointF
-              + "°F (" + historicals_minDewpointC + "°C)")
-        print(Fore.YELLOW + Style.BRIGHT + "Average Dew Point: " + Fore.CYAN + Style.BRIGHT + historicals_avgDewpointF
-              + "°F (" + historicals_avgDewpointC + "°C)")
-        print(Fore.YELLOW + Style.BRIGHT + "Maximum Dew Point: " + Fore.CYAN + Style.BRIGHT + historicals_maxDewpointF
-              + "°F (" + historicals_maxDewpointC + "°C)")
-        print(Fore.YELLOW + Style.BRIGHT + "Minimum Humidity: " + Fore.CYAN + Style.BRIGHT + historicals_minHumidity
-              + "%")
-        print(Fore.YELLOW + Style.BRIGHT + "Average Humidity: " + Fore.CYAN + Style.BRIGHT + historicals_avgHumidity
-              + "%")
-        print(Fore.YELLOW + Style.BRIGHT + "Maximum Humidity: " + Fore.CYAN + Style.BRIGHT + historicals_maxHumidity
-              + "%")
-        print(Fore.YELLOW + Style.BRIGHT + "Minimum Wind Speed: " + Fore.CYAN + Style.BRIGHT + historicals_minWindMPH
-              + " mph (" + historicals_minWindKPH + " kph)")
-        print(Fore.YELLOW + Style.BRIGHT + "Average Wind Speed: " + Fore.CYAN + Style.BRIGHT + historicals_avgWindSpeedMPH
-              + " mph (" + historicals_avgWindSpeedKPH + " kph)")
-        print(Fore.YELLOW + Style.BRIGHT + "Maximum Wind Speed: " + Fore.CYAN + Style.BRIGHT + historicals_maxWindMPH
-              + " mph (" + historicals_maxWindKPH + " kph)")
-        print(Fore.YELLOW + Style.BRIGHT + "Minimum Visibility: " + Fore.CYAN + Style.BRIGHT + historicals_minVisibilityMI
-              + " mi (" + historicals_minVisibilityKM + " kph)")
-        print(Fore.YELLOW + Style.BRIGHT + "Average Visibility: " + Fore.CYAN + Style.BRIGHT + historicals_avgVisibilityMI
-              + " mi (" + historicals_avgVisibilityKM + " kph)")
-        print(Fore.YELLOW + Style.BRIGHT + "Maximum Visibility: " + Fore.CYAN + Style.BRIGHT + historicals_maxVisibilityMI
-              + " mi (" + historicals_maxVisibilityKM + " kph)")
-        print(Fore.YELLOW + Style.BRIGHT + "Minimum Pressure: " + Fore.CYAN + Style.BRIGHT + historicals_minPressureInHg
-              + " inHg (" + historicals_minPressureMB + " mb)")
-        print(Fore.YELLOW + Style.BRIGHT + "Average Pressure: " + Fore.CYAN + Style.BRIGHT + historicals_avgPressureInHg
-              + " inHg (" + historicals_avgPressureMB + " mb)")
-        print(Fore.YELLOW + Style.BRIGHT + "Maximum Pressure: " + Fore.CYAN + Style.BRIGHT + historicals_maxPressureInHg
-              + " inHg (" + historicals_maxPressureMB + " mb)")
+        if historicals_showMinTemp is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Temperature: " + Fore.CYAN + Style.BRIGHT + historicals_minTempF
+                  + "°F (" + historicals_minTempC + "°C)")
+        if historicals_showAvgTemp is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Temperature: " + Fore.CYAN + Style.BRIGHT + historicals_avgTempF
+                  + "°F (" + historicals_avgTempC + "°C)")
+        if historicals_showMaxTemp is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maxmimum Temperature: " + Fore.CYAN + Style.BRIGHT + historicals_maxTempF
+                  + "°F (" + historicals_maxTempC + "°C)")
+        if historicals_showMinDewPoint is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Dew Point: " + Fore.CYAN + Style.BRIGHT + historicals_minDewpointF
+                  + "°F (" + historicals_minDewpointC + "°C)")
+        if historicals_showAvgDewPoint is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Dew Point: " + Fore.CYAN + Style.BRIGHT + historicals_avgDewpointF
+                  + "°F (" + historicals_avgDewpointC + "°C)")
+        if historicals_showMaxDewPoint is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Dew Point: " + Fore.CYAN + Style.BRIGHT + historicals_maxDewpointF
+                  + "°F (" + historicals_maxDewpointC + "°C)")
+        if historicals_humidityData is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Humidity: " + Fore.CYAN + Style.BRIGHT + historicals_minHumidity
+                  + "%")
+            print(Fore.YELLOW + Style.BRIGHT + "Average Humidity: " + Fore.CYAN + Style.BRIGHT + historicals_avgHumidity
+                  + "%")
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Humidity: " + Fore.CYAN + Style.BRIGHT + historicals_maxHumidity
+                  + "%")
+        if historicals_showMinWind is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Wind Speed: " + Fore.CYAN + Style.BRIGHT + historicals_minWindMPH
+                  + " mph (" + historicals_minWindKPH + " kph)")
+        if historicals_showAvgWind is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Wind Speed: " + Fore.CYAN + Style.BRIGHT + historicals_avgWindSpeedMPH
+                  + " mph (" + historicals_avgWindSpeedKPH + " kph)")
+        if historicals_showMaxWind is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Wind Speed: " + Fore.CYAN + Style.BRIGHT + historicals_maxWindMPH
+                  + " mph (" + historicals_maxWindKPH + " kph)")
+        if historicals_showMinVis is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Visibility: " + Fore.CYAN + Style.BRIGHT + historicals_minVisibilityMI
+                  + " mi (" + historicals_minVisibilityKM + " kph)")
+        if historicals_showAvgVis is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Visibility: " + Fore.CYAN + Style.BRIGHT + historicals_avgVisibilityMI
+                  + " mi (" + historicals_avgVisibilityKM + " kph)")
+        if historicals_showMaxVis is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Visibility: " + Fore.CYAN + Style.BRIGHT + historicals_maxVisibilityMI
+                  + " mi (" + historicals_maxVisibilityKM + " kph)")
+        if historicals_showMinPress is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Pressure: " + Fore.CYAN + Style.BRIGHT + historicals_minPressureInHg
+                  + " inHg (" + historicals_minPressureMB + " mb)")
+        if historicals_showAvgPress is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Pressure: " + Fore.CYAN + Style.BRIGHT + historicals_avgPressureInHg
+                  + " inHg (" + historicals_avgPressureMB + " mb)")
+        if historicals_showMaxPress is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Pressure: " + Fore.CYAN + Style.BRIGHT + historicals_maxPressureInHg
+                  + " inHg (" + historicals_maxPressureMB + " mb)")
         if historicals_showPrecipData is True:
             print(Fore.YELLOW + Style.BRIGHT + "Total Precipitation: " + Fore.CYAN + Style.BRIGHT + historicals_precipIN
                   + " in (" + historicals_precipMM + " mm)")

@@ -17,6 +17,7 @@
 * Additional data has been added to yesterday's weather hour-by-hour report:  
 
 **BUG FIXES**
+* Fixing multiple major bugs regarding invalid historical summary data & historical hourly data.
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
 * Fixed a potential bug where if there were two or more storms, on the last storm there wasn't code to let the storm go into extended forecast data.
 * Fixed potential bugs where PyWeather wouldn't properly display precip information for hurricane data - The algorithm was reworked.
@@ -28,7 +29,7 @@
 * Fixed a bug where the visibility in km on the yesterday's summary screen read as "kph". - 95% done, need to test
 * Fixed a bug where PyWeather didn't catch bad current conditions data on yesterday's weather hourly data.
 * Fixed a bug where PyWeather didn't catch bad wind speed data on yesterday's weather hourly data.
-* Fixed a minor bug where on yesterday's weather hourly data, the degree symbol was placed too far right by 1 character.
+* Fixing a minor bug where on yesterday's weather hourly data, the degree symbol was placed too far right by 1 character.
 * Fixed a potential bug where missing data on yesterday's weather would cause a crash.
 * Fixed a potential bug where if almanac data is prefetched, it wouldn't display when viewing it in detail, and PyWeather would crash.
 * Fixed a minor bug where on the historical weather summary, total precipitation data in mm had a "mb" label.
