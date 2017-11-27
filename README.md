@@ -53,9 +53,9 @@ However, during times of non-severe weather, PyWeather is a fun way to check the
 Notices are important things you'll want to know about PyWeather.
 
 ### PyWeather 0.6.3 beta is now delayed
-Right now, PyWeather 0.6.3 beta is officially delayed. This is due to a city I'm doing QA on that has a lot of bad data that I need to start catching.
+Right now, PyWeather 0.6.3 beta is officially delayed. This is due to a city I'm doing QA on that has a lot of bad data that I need to start catching. On the flipside, viewing historical data with PWSes will be available in 0.6.3 beta.
 
-The ETA for the release is December 7.
+The ETA for the release is December 7, but this might be delayed as far back as December 14.
 
 ### PyWeather's GitHub page will be discontinued on December 1, 2017
 No one use it, so I'll be turning off GitHub pages for this repo on December 1, 2017.
