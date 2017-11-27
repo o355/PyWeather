@@ -4782,7 +4782,7 @@ while True:
                          (historicals_showMinVis, historicals_showAvgVis))
             historicals_showMaxVis = True
             historicals_showMinPress = True
-            logegr.debug("historicals_showMaxVis: %s ; historicals_showMinPress: %s" %
+            logger.debug("historicals_showMaxVis: %s ; historicals_showMinPress: %s" %
                          (historicals_showMaxVis, historicals_showMinPress))
             historicals_showAvgPress = True
             historicals_showMaxPress = True
@@ -4888,8 +4888,8 @@ while True:
 
             if historicals_maxTempF == "" or historicals_maxTempC == "":
                 logger.info("historicals_maxTempF is '' or historicals_maxTempC is ''.")
-                historicals_showMinTemp = False
-                logger.debug("historicals_showMinTemp: %s" % historicals_showMinTemp)
+                historicals_showMaxTemp = False
+                logger.debug("historicals_showMaxTemp: %s" % historicals_showMaxTemp)
 
             historicals_minTempF = str(data['mintempi'])
             historicals_minTempC = str(data['mintempm'])
@@ -5015,7 +5015,7 @@ while True:
         if historicals_showMaxDewPoint is True:
             print(Fore.YELLOW + Style.BRIGHT + "Maximum Dew Point: " + Fore.CYAN + Style.BRIGHT + historicals_maxDewpointF
                   + "°F (" + historicals_maxDewpointC + "°C)")
-        if historicals_humidityData is True:
+        if historicals_showHumidity is True:
             print(Fore.YELLOW + Style.BRIGHT + "Minimum Humidity: " + Fore.CYAN + Style.BRIGHT + historicals_minHumidity
                   + "%")
             print(Fore.YELLOW + Style.BRIGHT + "Average Humidity: " + Fore.CYAN + Style.BRIGHT + historicals_avgHumidity
@@ -5071,32 +5071,61 @@ while True:
         for data in historical_json['history']['observations']:
             logger.info("We're on iteration %s/%s. User iteration limit: %s."
                         % (historical_totalloops, historicalhourlyLoops, user_loopIterations))
+            # Define all the show variables up here.
+            # Do note that some of these are here for future use.
+            historical_showConditions = True
+            historical_showTemp = True
+            historical_showDewpoint = True
+            historical_showWindSpeed = True
+            historical_showWindGust = True
+            historical_showWindDegrees = True
+            historical_showVis = True
+            historical_showWindChill = True
+            historical_showHeatIndex = True
+            historical_showPressure = True
+            historical_showPrecip = True
+            logger.debug("historical_showConditions: %s ; historical_showTemp: %s" %
+                         (historical_showConditions, historical_showTemp))
+            logger.debug("historcial_showDewpoint: %s ; historical_showWindSpeed: %s" %
+                         (historical_showDewpoint, historical_showWindSpeed))
+            logger.debug("historical_showWindGust: %s ; historical_showWindDegrees: %s" %
+                         (historical_showWindGust, historical_showWindDegrees))
+            logger.debug("historical_showVis: %s ; historical_showWindChill: %s" %
+                         (historical_showVis, historical_showWindChill))
+            logger.debug("historical_showPressure: %s ; historical_showPrecip: %s" %
+                         (historical_showPressure, historical_showPrecip))
             historical_time = data['date']['pretty']
+            logger.debug("historical_time: %s" % historical_time)
             historical_tempF = str(data['tempi'])
             historical_tempC = str(data['tempm'])
+            logger.debug("historical_tempF: %s ; historical_tempC: %s" %
+                         (historical_tempF, historical_tempC))
+            if historical_tempF == "-9999" or historical_tempC == "-9999":
+                logger.info("historical_tempF is '-9999' or historical_tempC is '-9999'.")
+                historical_showTemp = False
+                logger.debug("historical_showTemp: %s" % historical_showTemp)
+
             historical_dewpointF = str(data['dewpti'])
-            logger.debug("historical_time: %s ; historical_tempF: %s"
-                         % (historical_time, historical_tempF))
-            logger.debug("historical_tempC: %s ; historical_dewpointF: %s"
-                         % (historical_tempC, historical_dewpointF))
             historical_dewpointC = str(data['dewptm'])
+            logger.debug("historical_dewpointF: %s ; historical_dewpointC: %s" %
+                         (historical_dewpointF, historical_dewpointC))
+
+            if historical_dewpointF == "-9999" or historical_dewpointC == "-9999":
+                logger.info("historical_dewpointF is '-9999' or historical_dewpointC is '-9999'.")
+                historical_showDewpoint = False
+                logger.debug("historical_showDewpoint: %s" % historical_showDewpoint)
             historical_windspeedKPH = str(data['wspdm'])
             historical_windspeedMPH = str(data['wspdi'])
             try:
                 historical_gustcheck = float(data['wgustm'])
             except ValueError:
                 printException_loggerwarn()
-                historical_gustcheck = -9999
-            logger.debug("historical_dewpointC: %s ; historical_windspeedKPH: %s"
-                         % (historical_dewpointC, historical_windspeedKPH))
-            logger.debug("historical_windspeedMPH: %s ; historical_gustcheck: %s"
-                         % (historical_windspeedMPH, historical_gustcheck))
-            if historical_gustcheck == -9999:
-                historical_windgustdata = False
-                logger.warn("Wind gust data is not present! historical_windgustdata: %s"
-                            % historical_windgustdata)
+                historical_showWindGust = False
+                logger.debug("historical_showWindGust: %s" % historical_showWindGust)
+
+            if historical_showWindGust is False:
+                logger.warning("Wind gust data is not available!")
             else:
-                historical_windgustdata = True
                 historical_windgustKPH = str(data['wgustm'])
                 historical_windgustMPH = str(data['wgusti'])
                 logger.info("Wind gust data is present.")
@@ -5104,40 +5133,52 @@ while True:
                              % (historical_windgustKPH, historical_windgustMPH))
             historical_windDegrees = str(data['wdird'])
             historical_windDirection = data['wdire']
-            historical_visibilityKM = str(data['vism'])
-            historical_visibilityMI = str(data['visi'])
             logger.debug("historical_windDegrees: %s ; historical_windDirection: %s"
                          % (historical_windDegrees, historical_windDirection))
+
+            historical_visibilityKM = str(data['vism'])
+            historical_visibilityMI = str(data['visi'])
             logger.debug("historical_visibilityKM: %s ; historical_visibilityMI: %s"
                          % (historical_visibilityKM, historical_visibilityMI))
+
+            if historical_visibilityMI == "-9999.0" or historical_visibilityKM == "-9999.0":
+                logger.info("historical_visibilityMI is '-9999.0' or historical_visibilityKM is '-9999.0'.")
+                historical_showVis = False
+                logger.debug("historical_showVis: %s" % historical_showVis)
+
             historical_pressureMB = str(data['pressurem'])
             historical_pressureInHg = str(data['pressurei'])
-            historical_windchillcheck = float(data['windchillm'])
             logger.debug("historical_pressureMB: %s ; historical_pressureInHg: %s"
                          % (historical_pressureMB, historical_pressureInHg))
+
+            if historical_pressureMB == "-9999" or historical_pressureInHg == "-9999":
+                logger.info("historical_pressureMB: %s ; historical_pressureInHg: %s" %
+                            (historical_pressureMB, historical_pressureInHg))
+            historical_windchillcheck = float(data['windchillm'])
             logger.debug("historical_windchillcheck: %s" % historical_windchillcheck)
             if historical_windchillcheck == -999:
-                historical_windchilldata = False
-                logger.warn("Wind chill data is not present! historical_windchilldata: %s"
-                            % historical_windchilldata)
+                logger.info("historical_windchillcheck is '-999'.")
+                historical_showWindChill = False
+                logger.debug("historical_showWindChill: %s" % historical_showWindChill)
             else:
-                historical_windchilldata = True
+                historical_showWindChill = True
                 historical_windchillC = str(data['windchillm'])
                 historical_windchillF = str(data['windchilli'])
-                logger.info("Wind chill data is present.")
+                logger.info("Wind chill data is present. historical_showWindChill: %s" % historical_showWindChill)
                 logger.debug("historical_windchillC: %s ; historical_windchillF: %s"
                              % (historical_windchillC, historical_windchillF))
+
             historical_heatindexcheck = float(data['heatindexm'])
             logger.debug("historical_heatindexcheck: %s" % historical_heatindexcheck)
             if historical_heatindexcheck == -9999:
-                historical_heatindexdata = False
-                logger.warn("Heat index data is not present! historical_heatindexdata: %s"
-                            % historical_heatindexdata)
+                logger.info("historical_heatindexcheck is '-9999'.")
+                historical_showHeatIndex = False
+                logger.debug("historical_showHeatIndex: %s" % historical_showHeatIndex)
             else:
                 historical_heatindexdata = True
                 historical_heatindexC = str(data['heatindexm'])
                 historical_heatindexF = str(data['heatindexi'])
-                logger.info("Heat index data is present.")
+                logger.info("Heat index data is present. historical_heatindexdata: %s" % historical_heatindexdata)
                 logger.debug("historical_heatindexC: %s ; historical_heatindexF: %s"
                              % (historical_heatindexC, historical_heatindexF))
             try:
@@ -5145,38 +5186,35 @@ while True:
                 historical_precipIN = float(data['precipi'])
             except ValueError:
                 printException_loggerwarn()
-                historical_precipMM = -9999
-                historical_precipIN = -9999
+                historical_showPrecip = False
+                logger.debug("historical_showPrecip: %s" % historical_showPrecip)
             logger.debug("historical_precipMM: %s ; historical_precipIN: %s"
                          % (historical_precipMM, historical_precipIN))
-            if historical_precipMM == -9999:
-                historical_precipMM = "0.0"
-                logger.warn("historical_precipMM was -9999. It's now: %s"
-                            % historical_precipMM)
+            if historical_showPrecip is False:
+                logger.info("historical_showPrecip is False. We have no data.")
             else:
                 historical_precipMM = str(historical_precipMM)
-                logger.info("historical_precipMM converted to str. It's now: %s"
-                            % historical_precipMM)
-            
-            if historical_precipIN == -9999:
-                historical_precipIN = "0.0"
-                logger.warn("historical_precipIN was -9999. It's now: %s"
-                            % historical_precipIN)
-            else:
                 historical_precipIN = str(historical_precipIN)
-                logger.info("historical_precipIN converted to str. It's now: %s"
-                            % historical_precipIN)
+                logger.info("Converted 2 vars into strings.")
+                logger.debug("historical_precipMM: %s ; historical_precipIN: %s" %
+                             (historical_precipMM, historical_precipIN))
+
             
             historical_condition = str(data['conds'])
             logger.debug("historical_condition: %s" % historical_condition)
+
+            if historical_condition == "" or historical_condition == "Unknown":
+                logger.info("historical_condition is '' or historical_condition is 'Unknown'.")
+                historical_showConditions = False
+                logger.debug("historical_showConditions: %s" % historical_showConditions)
             logger.info("Now printing weather data...")
             print("")
             print(Fore.YELLOW + Style.BRIGHT + historical_time + ":")
             print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT + historical_condition)
             print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + historical_tempF
-                  + " °F (" + historical_tempC + " °C)")
+                  + "°F (" + historical_tempC + "°C)")
             print(Fore.YELLOW + Style.BRIGHT + "Dew point: " + Fore.CYAN + Style.BRIGHT + historical_dewpointF
-                  + " °F (" + historical_dewpointC + " °C)")
+                  + "°F (" + historical_dewpointC + "°C)")
             print(Fore.YELLOW + Style.BRIGHT + "Wind speed: " + Fore.CYAN + Style.BRIGHT + historical_windspeedMPH
                   + " mph (" + historical_windspeedKPH + " kph)")
             if historical_windDirection == "Variable":
@@ -5189,10 +5227,10 @@ while True:
                       + " mph (" + historical_windgustKPH + " kph)")
             if historical_windchilldata == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Wind chill: " + Fore.CYAN + Style.BRIGHT + historical_windchillF
-                      + " °F (" + historical_windchillC + " °C)")
+                      + "°F (" + historical_windchillC + "°C)")
             if historical_heatindexdata == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Heat index: " + Fore.CYAN + Style.BRIGHT + historical_heatindexF
-                      + " °F (" + historical_heatindexC + " °C)")
+                      + "°F (" + historical_heatindexC + "°C)")
             print(Fore.YELLOW + Style.BRIGHT + "Precipitation: " + Fore.CYAN + Style.BRIGHT + historical_precipIN
                   + " in (" + historical_precipMM + " mm)")
             historical_loops = historical_loops + 1

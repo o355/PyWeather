@@ -52,14 +52,10 @@ However, during times of non-severe weather, PyWeather is a fun way to check the
 ## Notices
 Notices are important things you'll want to know about PyWeather.
 
-### QA update - November 21, 2017
-Windows 10 QA has wrapped up, and I'm now starting FreeNAS & Mac OS X QA at this time. Things are so far going well, and FreeNAS & OS X QA will both start today. Here's the updated timeline for when QA will be done:
-* FreeNAS - November 23 or 24
-* OS X - November 23 or 24
-* Ubuntu - November 27
-* Raspbian - November 30
+### PyWeather 0.6.3 beta is now delayed
+Right now, PyWeather 0.6.3 beta is officially delayed. This is due to a city I'm doing QA on that has a lot of bad data that I need to start catching.
 
-Things are now going quite smoothly, and few bugs are now being discovered. It's now just a matter of hitting enter a bunch of times, and trying not to exceed the 10 requests/min rate limit.
+The ETA for the release is December 7.
 
 ### PyWeather's GitHub page will be discontinued on December 1, 2017
 No one use it, so I'll be turning off GitHub pages for this repo on December 1, 2017.

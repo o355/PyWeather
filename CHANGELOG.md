@@ -1,7 +1,7 @@
 # PyWeather changelog
 **Note: The changelog being used for tracking PyWeather progress has been retiredish. Please check the projects tab of PyWeather for progress on the next versions of PyWeather.**
 
-## version 0.6.3 beta - Should be released on November 30, 2017:
+## version 0.6.3 beta - Should be released on on December 7:
 * Adds a nearby location feature to hurricane data (300km out)
 * Will push the API key validation code up further thanks to new features.
 * Adding a much nicer progress indicator.
@@ -17,7 +17,7 @@
 * Additional data has been added to yesterday's weather hour-by-hour report:  
 
 **BUG FIXES**
-* Fixing multiple major bugs regarding invalid historical summary data & historical hourly data.
+* Fixing multiple major bugs regarding invalid historical summary data & historical hourly data. - 30% done
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
 * Fixed a potential bug where if there were two or more storms, on the last storm there wasn't code to let the storm go into extended forecast data.
 * Fixed potential bugs where PyWeather wouldn't properly display precip information for hurricane data - The algorithm was reworked.
