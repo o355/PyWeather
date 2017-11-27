@@ -6837,7 +6837,8 @@ while True:
             logger.debug("yesterday_showMinPress: %s ; yesterday_showAvgPress: %s" %
                          (yesterday_showMinPress, yesterday_showAvgPress))
             yesterday_showMaxPress = True
-            logger.debug("yesterday_showMaxPress: %s" % yesterday_showMaxPress)
+            yesterday_showHumidity = True
+
 
             try:
                 yesterday_avgPressureMB = str(data['meanpressurem'])
@@ -6901,21 +6902,29 @@ while True:
                 printException_loggerwarn()
                 yesterday_showAvgVis = False
                 logger.debug("yesterday_showAvgVis: %s" % yesterday_showAvgVis)
-
-            yesterday_maxHumidity = int(data['maxhumidity'])
-            yesterday_minHumidity = int(data['minhumidity'])
-            logger.debug("yesterday_maxHumidity: %s ; yesterday_minHumidity: %s" %
-                         (yesterday_maxHumidity, yesterday_minHumidity))
+            try:
+                yesterday_maxHumidity = int(data['maxhumidity'])
+                yesterday_minHumidity = int(data['minhumidity'])
+                logger.debug("yesterday_maxHumidity: %s ; yesterday_minHumidity: %s" %
+                             (yesterday_maxHumidity, yesterday_minHumidity))
+            except ValueError:
+                printException_loggerwarn()
+                yesterday_showHumidity = False
+                logger.debug("yesterday_showHumidity: %s" % yesterday_showHumidity)
             # This is a really nieve way of calculating the average humidity. Sue me.
             # In reality, WU spits out nothing for average humidity.
-            yesterday_avgHumidity = (yesterday_maxHumidity +
-                                     yesterday_minHumidity)
-            yesterday_avgHumidity = (yesterday_avgHumidity / 2)
-            logger.debug("yesterday_avgHumidity: %s" % yesterday_avgHumidity)
-            yesterday_maxHumidity = str(data['maxhumidity'])
-            yesterday_minHumidity = str(data['minhumidity'])
-            yesterday_avgHumidity = str(yesterday_avgHumidity)
-            logger.info("Converted 3 vars to str.")
+
+            # Run this code only if we have data.
+            if yesterday_showHumidity is True:
+                yesterday_avgHumidity = (yesterday_maxHumidity +
+                                         yesterday_minHumidity)
+                yesterday_avgHumidity = (yesterday_avgHumidity / 2)
+                logger.debug("yesterday_avgHumidity: %s" % yesterday_avgHumidity)
+                yesterday_maxHumidity = str(data['maxhumidity'])
+                yesterday_minHumidity = str(data['minhumidity'])
+                yesterday_avgHumidity = str(yesterday_avgHumidity)
+                logger.info("Converted 3 vars to str.")
+
             yesterday_maxTempF = str(data['maxtempi'])
             yesterday_maxTempC = str(data['maxtempm'])
             yesterday_minTempF = str(data['mintempi'])
@@ -7120,12 +7129,13 @@ while True:
               + "°F (" + yesterday_avgDewpointC + "°C)")
         print(Fore.YELLOW + Style.BRIGHT + "Maximum Dew Point: " + Fore.CYAN + Style.BRIGHT + yesterday_maxDewpointF
               + "°F (" + yesterday_maxDewpointC + "°C)")
-        print(Fore.YELLOW + Style.BRIGHT + "Minimum Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_minHumidity
-              + "%")
-        print(Fore.YELLOW + Style.BRIGHT + "Average Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_avgHumidity
-              + "%")
-        print(Fore.YELLOW + Style.BRIGHT + "Maximum Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_maxHumidity
-              + "%")
+        if yesterday_showHumidity is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_minHumidity
+                  + "%")
+            print(Fore.YELLOW + Style.BRIGHT + "Average Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_avgHumidity
+                  + "%")
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_maxHumidity
+                  + "%")
         if yesterday_showMinWind is True:
             print(Fore.YELLOW + Style.BRIGHT + "Minimum Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_minWindMPH
                   + " mph (" + yesterday_minWindKPH + " kph)")

@@ -53,12 +53,18 @@ However, during times of non-severe weather, PyWeather is a fun way to check the
 Notices are important things you'll want to know about PyWeather.
 
 ### PyWeather 0.6.3 beta is now delayed
-Right now, PyWeather 0.6.3 beta is officially delayed. This is due to a city I'm doing QA on that has a lot of bad data that I need to start catching. On the flipside, viewing historical data with PWSes will be available in 0.6.3 beta.
+Right now, PyWeather 0.6.3 beta is officially delayed.
 
-The ETA for the release is December 7, but this might be delayed as far back as December 14.
+QA is taking a lot longer than expected. I've ran into invalid data errors with a lot of PWSes and some cities that I have to add invalid data catching to. This is a lengthy and tedious process, and it isn't easy.
 
-### PyWeather's GitHub page will be discontinued on December 1, 2017
-No one use it, so I'll be turning off GitHub pages for this repo on December 1, 2017.
+In addition, there's new and existing features that need to get changed. I've also got QA to wrap up as well. OS X, FreeNAS, Ubuntu 16.04, and Raspbian 9 are left.
+
+Unless I can somehow magically finish QA, and everything else goes smoothly (it won't), PyWeather 0.6.3 beta will be delayed.
+
+PyWeather 0.6.3 beta will be released on or before December 15, 2017.
+
+### PyWeather's GitHub page will be discontinued whenever 0.6.3 beta is released
+cool!
 
 ### Beta notice
 If you haven't noticed, PyWeather is in beta. Basic features should work completely fine, but more advanced and newer features may not work 100% of the time.
@@ -72,7 +78,7 @@ PyWeather is a Python script that fetches the weather using Wunderground's API. 
 As such, PyWeather was born. After 40,000 lines of code getting removed and added by 3 people, getting called a hacker a few times, and having a few teachers yell at me, this is what happened.
 
 ## Images and Demo
-Just kidding, they're not here. I'll get around to capturing screencaps of 0.6.2 beta and running an asciinema demo soon.
+Just kidding, they're not here. I'll get around to capturing screencaps of 0.6.3 beta and running an asciinema demo soon.
 
 ## What features does PyWeather have?
 PyWeather has lots of them, and the list is ever expanding. Here's the present feature list:
