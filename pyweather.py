@@ -6811,14 +6811,6 @@ while True:
         logger.debug("yesterday_date: %s" % yesterday_date)
         spinner.stop()
         for data in yesterday_json['history']['dailysummary']:
-            yesterday_avgTempF = str(data['meantempi'])
-            yesterday_avgTempC = str(data['meantempm'])
-            yesterday_avgDewpointF = str(data['meandewpti'])
-            yesterday_avgDewpointC = str(data['meandewptm'])
-            logger.debug("yesterday_avgTempF: %s ; yesterday_avgTempC: %s" %
-                         (yesterday_avgTempF, yesterday_avgTempC))
-            logger.debug("yesterday_avgDewpointF: %s ; yesterday_avgDewpointC: %s" %
-                         (yesterday_avgDewpointF, yesterday_avgDewpointC))
             # Lay out display variables for yesterday's weather stuff.
             yesterday_showMinWind = True
             yesterday_showAvgWind = True
@@ -6838,7 +6830,40 @@ while True:
                          (yesterday_showMinPress, yesterday_showAvgPress))
             yesterday_showMaxPress = True
             yesterday_showHumidity = True
+            logger.debug("yesterday_showMaxPress: %s ; yesterday_showHumidity: %s" %
+                         (yesterday_showMaxPress, yesterday_showHumidity))
+            yesterday_showMinTemp = True
+            yesterday_showAvgTemp = True
+            logger.debug("yesterday_showMinTemp: %s ; yesterday_showAvgTemp: %s" %
+                         (yesterday_showMinTemp, yesterday_showAvgTemp))
+            yesterday_showMaxTemp = True
+            yesterday_showMinDewpoint = True
+            logger.debug("yesterday_showMaxTemp: %s ; yesterday_showMinDewpoint: %s" %
+                         (yesterday_showMaxTemp, yesterday_showMinDewpoint))
+            yesterday_showAvgDewpoint = True
+            yesterday_showMaxDewpoint = True
+            logger.debug("yesterday_showAvgDewpoint: %s ; yesterday_showMaxDewpoint: %s" %
+                         (yesterday_showAvgDewpoint, yesterday_showMaxDewpoint))
 
+            yesterday_avgTempF = str(data['meantempi'])
+            yesterday_avgTempC = str(data['meantempm'])
+            logger.debug("yesterday_avgTempF: %s ; yesterday_avgTempC: %s" %
+                         (yesterday_avgTempF, yesterday_avgTempC))
+
+            if yesterday_avgTempF == "" or yesterday_avgTempC == "":
+                logger.info("yesterday_avgTempF is '' or yesterday_avgTempC is ''.")
+                yesterday_showAvgTemp = False
+                logger.debug("yesterday_showAvgTemp: %s" % yesterday_showAvgTemp)
+
+            yesterday_avgDewpointF = str(data['meandewpti'])
+            yesterday_avgDewpointC = str(data['meandewptm'])
+            logger.debug("yesterday_avgDewpointF: %s ; yesterday_avgDewpointC: %s" %
+                         (yesterday_avgDewpointF, yesterday_avgDewpointC))
+
+            if yesterday_avgDewpointF == "" or yesterday_avgDewpointC == "":
+                logger.info("yesterday_avgDewpointF is '' or yesterday_avgDewpointC is ''.")
+                yesterday_showAvgDewpoint = False
+                logger.debug("yesterday_showAvgDewpoint: %s" % yesterday_showAvgDewpoint)
 
             try:
                 yesterday_avgPressureMB = str(data['meanpressurem'])
@@ -6927,20 +6952,43 @@ while True:
 
             yesterday_maxTempF = str(data['maxtempi'])
             yesterday_maxTempC = str(data['maxtempm'])
-            yesterday_minTempF = str(data['mintempi'])
-            yesterday_minTempC = str(data['mintempm'])
             logger.debug("yesterday_maxTempF: %s ; yesterday_maxTempC: %s" %
                          (yesterday_maxTempF, yesterday_maxTempC))
+
+            if yesterday_maxTempF == "" or yesterday_maxTempC == "":
+                logger.info("yesterday_maxTempF is '' or yesterday_maxTempC is ''.")
+                yesterday_showMaxTemp = False
+                logger.debug("yesterday_showMaxTemp: %s" % yesterday_showMaxTemp)
+
+            yesterday_minTempF = str(data['mintempi'])
+            yesterday_minTempC = str(data['mintempm'])
             logger.debug("yesterday_minTempF: %s ; yesterday_minTempC: %s" %
                          (yesterday_minTempF, yesterday_minTempC))
+
+            if yesterday_minTempF == "" or yesterday_minTempC == "":
+                logger.info("yesterday_minTempF is '' or yesterday_minTempC is ''.")
+                yesterday_showMinTemp = False
+                logger.debug("yesterday_showMinTemp: %s" % yesterday_showMinTemp)
+
             yesterday_maxDewpointF = str(data['maxdewpti'])
             yesterday_maxDewpointC = str(data['maxdewptm'])
-            yesterday_minDewpointF = str(data['mindewpti'])
-            yesterday_minDewpointC = str(data['mindewptm'])
             logger.debug("yesterday_maxDewpointF: %s ; yesterday_maxDewpointC: %s" %
                          (yesterday_maxDewpointF, yesterday_maxDewpointC))
+
+            if yesterday_maxDewpointF == "" or yesterday_maxDewpointC == "":
+                logger.info("yesterday_maxDewpointF is '' or yesterday_maxDewpointC is ''.")
+                yesterday_showMaxDewpoint = False
+                logger.debug("yesterday_showMaxDewpoint: %s" % yesterday_showMaxDewpoint)
+
+            yesterday_minDewpointF = str(data['mindewpti'])
+            yesterday_minDewpointC = str(data['mindewptm'])
             logger.debug("yesterday_minDewpointF: %s ; yesterday_minDewpointC: %s" %
                          (yesterday_minDewpointF, yesterday_minDewpointC))
+
+            if yesterday_minDewpointF == "" or yesterday_minDewpointC == "":
+                logger.info("yesterday_minDewpointF is '' or yesterday_minDewpointC is ''.")
+                yesterday_showMinDewpoint = False
+                logger.debug("yesterday_showMinDewpoint: %s" % yesterday_showMinDewpoint)
 
             try:
                 yesterday_maxPressureInHg = str(data['maxpressurei'])
@@ -7117,18 +7165,24 @@ while True:
               + Fore.CYAN + Style.BRIGHT + yesterday_date)
         print("")
         print(Fore.YELLOW + Style.BRIGHT + "Here's the summary for the day.")
-        print(Fore.YELLOW + Style.BRIGHT + "Minimum Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_minTempF
-              + "°F (" + yesterday_minTempC + "°C)")
-        print(Fore.YELLOW + Style.BRIGHT + "Average Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_avgTempF
-              + "°F (" + yesterday_avgTempC + "°C)")
-        print(Fore.YELLOW + Style.BRIGHT + "Maxmimum Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_maxTempF
-              + "°F (" + yesterday_maxTempC + "°C)")
-        print(Fore.YELLOW + Style.BRIGHT + "Minimum Dew Point: " + Fore.CYAN + Style.BRIGHT + yesterday_minDewpointF
-              + "°F (" + yesterday_minDewpointC + "°C)")
-        print(Fore.YELLOW + Style.BRIGHT + "Average Dew Point: " + Fore.CYAN + Style.BRIGHT + yesterday_avgDewpointF
-              + "°F (" + yesterday_avgDewpointC + "°C)")
-        print(Fore.YELLOW + Style.BRIGHT + "Maximum Dew Point: " + Fore.CYAN + Style.BRIGHT + yesterday_maxDewpointF
-              + "°F (" + yesterday_maxDewpointC + "°C)")
+        if yesterday_showMinTemp is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_minTempF
+                  + "°F (" + yesterday_minTempC + "°C)")
+        if yesterday_showAvgTemp is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_avgTempF
+                  + "°F (" + yesterday_avgTempC + "°C)")
+        if yesterday_showMaxTemp is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maxmimum Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_maxTempF
+                  + "°F (" + yesterday_maxTempC + "°C)")
+        if yesterday_showMinDewpoint is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Dew Point: " + Fore.CYAN + Style.BRIGHT + yesterday_minDewpointF
+                  + "°F (" + yesterday_minDewpointC + "°C)")
+        if yesterday_showAvgDewpoint is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Dew Point: " + Fore.CYAN + Style.BRIGHT + yesterday_avgDewpointF
+                  + "°F (" + yesterday_avgDewpointC + "°C)")
+        if yesterday_showMaxDewpoint is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Dew Point: " + Fore.CYAN + Style.BRIGHT + yesterday_maxDewpointF
+                  + "°F (" + yesterday_maxDewpointC + "°C)")
         if yesterday_showHumidity is True:
             print(Fore.YELLOW + Style.BRIGHT + "Minimum Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_minHumidity
                   + "%")
