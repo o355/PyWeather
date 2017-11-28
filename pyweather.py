@@ -2064,8 +2064,12 @@ if yesterdaydata_onsummary is True:
     # Parse the weather conditions, which is actually quite interesting to do.
     # For the day/night conditions, parse what the weather was at 12pm and 12am, and find the conditions given that '12:' and 'PM', etc are found.
     # If it matches, say the data was fetched, and move on.
+    yesterdaysummary_dayconddata = True
+    yesterdaysummary_nightconddata = True
     yesterdaysummary_daycondfetched = False
     yesterdaysummary_nightcondfetched = False
+    logger.debug("yesterdaysummary_dayconddata: %s ; yesterdaysummary_nightconddata: %s" %
+                 (yesterdaysummary_dayconddata, yesterdaysummary_nightconddata))
     logger.debug("yesterdaysummary_daycondfetched: %s ; yesterdaysummary_nightcondfetched: %s" %
                  (yesterdaysummary_daycondfetched, yesterdaysummary_nightcondfetched))
     for data in yesterday_json['history']['observations']:
@@ -2074,25 +2078,44 @@ if yesterdaydata_onsummary is True:
         # Parse the weather given that we found '00' in the hour.
         if yesterdaysummary_hour.find("00") == 0 and yesterdaysummary_nightcondfetched is False:
             logger.info("'00' was found in yesterdaysummary_hour and yesterdaysummary_nightcondfetched is False.")
+            yesterdaysummary_nightcondfetched = True
+            logger.debug("yesterdaysummary_nightcondfetched: %s" % yesterdaysummary_nightcondfetched)
+
             try:
                 yesterdaysummary_nightconditions = data['conds']
-                yesterdaysummary_nightcondfetched = True
-                logger.debug("yesterdaysummary_nightconditions: %s ; yesterdaysummary_nightcondfetched: %s" %
-                             (yesterdaysummary_nightconditions, yesterdaysummary_nightcondfetched))
+                logger.debug("yesterdaysummary_nightconditions: %s ; yesterdaysummary_nightconddata: %s" %
+                             (yesterdaysummary_nightconditions, yesterdaysummary_nightconddata))
+
+                if yesterdaysummary_nightconditions == "" or yesterdaysummary_nightconditions == "Unknown":
+                    logger.info(
+                        "yesterdaysumary_nightconditions is '' or yesterdaysummary_nightconditions is 'Unknown'.")
+                    yesterdaysummary_nightconddata = False
+                    logger.debug("yesterdaysummary_nightconddata: %s" % yesterdaysummary_nightconddata)
+
             except KeyError:
-                yesterdaysummary_nightcondfetched = False
-                logger.debug("yesterdaysummary_nightcondfetched: %s" % yesterdaysummary_nightcondfetched)
+                printException_loggerwarn()
+                yesterdaysummary_nightconddata = False
+                logger.debug("yesterdaysummary_nightconddata: %s" % yesterdaysummary_nightconddata)
+
 
         if yesterdaysummary_hour.find("12") == 0 and yesterdaysummary_daycondfetched is False:
             logger.info("'12' was found in yesterdaysummary_hour and yesterdaysummary_daycondfetched is False.")
+            yesterdaysummary_daycondfetched = True
+            logger.debug("yesterdaysummary_daycondfetched: %s" % yesterdaysummary_daycondfetched)
+
             try:
                 yesterdaysummary_dayconditions = data['conds']
-                yesterdaysummary_daycondfetched = True
                 logger.debug("yesterdaysummary_dayconditions: %s ; yesterdaysummary_daycondfetched: %s" %
                              (yesterdaysummary_dayconditions, yesterdaysummary_daycondfetched))
-            except:
-                yesterdaysummary_daycondfetched = False
-                logger.debug("yesterdaysummary_daycondfetched: %s" % yesterdaysummary_daycondfetched)
+
+                if yesterdaysummary_dayconditions == "" or yesterdaysummary_dayconditions == "Unknown":
+                    logger.info("yesterdaysummary_dayconditions is '' or yesterdaysummary_dayconditions is 'Unknown'.")
+                    yesterdaysummary_dayconddata = False
+                    logger.debug("yesterdaysummary_dayconddata: %s" % yesterdaysummary_dayconddata)
+            except KeyError:
+                printException_loggerwarn()
+                yesterdaysummary_dayconddata = False
+                logger.debug("yesterdaysummary_dayconddata: %s" % yesterdaysummary_dayconddata)
 
         # We have data for both day/night conditions, break the loop.
         if yesterdaysummary_nightcondfetched is True and yesterdaysummary_daycondfetched is True:
@@ -2103,21 +2126,37 @@ if yesterdaydata_onsummary is True:
 
     if yesterdaysummary_nightcondfetched is False:
         logger.info("yesterdaysummary_nightcondfetched is False.")
-        yesterdaysummary_nightconditions = "Not available"
-        logger.debug("yesterdaysummary_nightconditions: %s" % yesterdaysummary_nightconditions)
+        yesterdaysummary_nightconddata = False
+        logger.debug("yesterdaysummary_nightconddata: %s" % yesterdaysummary_nightconddata)
 
     if yesterdaysummary_daycondfetched is False:
         logger.info("yesterdaysummary_daycondfetched is False.")
-        yesterdaysummary_dayconditions = "Not available"
-        logger.debug("yesterdaysummary_dayconditions: %s" % yesterdaysummary_dayconditions)
+        yesterdaysummary_dayconddata = False
+        logger.debug("yesterdaysummary_dayconddata: %s" % yesterdaysummary_dayconddata)
+
+    # Set the display variables for yesterdaysummary
+    yesterdaysummary_showHighTemp = True
+    yesterdaysummary_showLowTemp = True
+    yesterdaysummary_showHumidity = True
+    logger.debug("yesterdaysummary_showHighTemp: %s ; yesterdaysummary_showLowTemp: %s" %
+                 (yesterdaysummary_showHighTemp, yesterdaysummary_showLowTemp))
+    logger.debug("yesterdaysummary_showHumidity: %s" % yesterdaysummary_showHumidity)
 
     # Get the high/low weather, the average wind/max wind, and average humidity for the previous day.
-    # While t
+
     for data in yesterday_json['history']['dailysummary']:
         yesterdaysummary_hightempf = str(data['maxtempi'])
         yesterdaysummary_hightempc = str(data['maxtempm'])
+        if yesterdaysummary_hightempf == "" or yesterdaysummary_hightempc == "":
+            logger.info("yesterdaysummary_hightempf is '' yesterdaysummary_hightempc is ''.")
+            yesterdaysummary_showHighTemp = False
+            logger.debug("yesterdaysummary_showHighTemp: %s" % yesterdaysummary_showHighTemp)
         yesterdaysummary_lowtempf = str(data['mintempi'])
         yesterdaysummary_lowtempc = str(data['mintempm'])
+        if yesterdaysummary_lowtempf == "" or yesterdaysummary_lowtempc == "":
+            logger.info("yesterdaysummary_lowtempf is '' or yesterdaysummary_lowtempc is ''.")
+            yesterdaysummary_showLowTemp = False
+            logger.debug("yesterdaysummary_showLowTemp: %s" % yesterdaysummary_showLowTemp)
         yesterdaysummary_windmph = str(data['meanwindspdi'])
         yesterdaysummary_windkph = str(data['meanwindspdm'])
         # Wunderground WHY DID YOU DO THIS?!?!! KEEP THINGS CONSTANT!
@@ -2129,13 +2168,12 @@ if yesterdaydata_onsummary is True:
             yesterdaysummary_minhumidity = int(data['minhumidity'])
             logger.debug("yesterdaysummary_maxhumidity: %s ; yesterdaysummary_minhumidity: %s" %
                          (yesterdaysummary_maxhumidity, yesterdaysummary_minhumidity))
-            yesterdaysummary_avghumidity = "None"
         except ValueError:
             printException_loggerwarn()
-            yesterdaysummary_avghumidity = "Not available"
-            logger.debug("yesterdaysummary_avghumidity: %s" % yesterdaysummary_avghumidity)
+            yesterdaysummary_showHumidity = False
+            logger.debug("yesterdaysummary_showHumidity: %s" % yesterdaysummary_showHumidity)
 
-        if yesterdaysummary_avghumidity != "Not available":
+        if yesterdaysummary_showHumidity is True:
             # Enter this block if we have valid humidity data, which basically means
             # yesterdaysummary_avghumidity isn't 'Not available'.
             logger.info("yesterdaysummary_avghumidity != 'Not available'")
@@ -2147,9 +2185,6 @@ if yesterdaydata_onsummary is True:
             # Round to the 0th digit, then int it, and THEN str it. This removes the trailing zero.
             yesterdaysummary_avghumidity = str(int(round(yesterdaysummary_avghumidity, 0)))
             logger.debug("yesterdaysummary_avghumidity: %s" % yesterdaysummary_avghumidity)
-
-
-
 
 
 logger.info("Initalize color...")
@@ -2234,13 +2269,18 @@ print("")
 
 if yesterdaydata_onsummary is True:
     print(Fore.YELLOW + Style.BRIGHT + "The weather that occurred yesterday: ")
-    print(Fore.YELLOW + Style.BRIGHT + "It was " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_dayconditions + Fore.YELLOW + Style.BRIGHT + " during the day, and "
-          + Fore.CYAN + Style.BRIGHT + yesterdaysummary_nightconditions + Fore.YELLOW + Style.BRIGHT + " during the night.")
-    print(Fore.YELLOW + Style.BRIGHT + "The high temperature yesterday: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_hightempf + "°F (" + yesterdaysummary_hightempc + "°C)")
-    print(Fore.YELLOW + Style.BRIGHT + "The low temperature yesterday: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_lowtempf + "°F (" + yesterdaysummary_lowtempc + "°C)")
-    print(Fore.YELLOW + Style.BRIGHT + "The wind speed yesterday: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_windmph + " mph (" + yesterdaysummary_windkph + " kph)"
+    if yesterdaysummary_dayconddata is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The conditions during the day: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_dayconditions)
+    if yesterdaysummary_nightconddata is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The conditions during the night: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_nightconditions)
+    if yesterdaysummary_showHighTemp is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The high temperature: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_hightempf + "°F (" + yesterdaysummary_hightempc + "°C)")
+    if yesterdaysummary_showLowTemp is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The low temperature: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_lowtempf + "°F (" + yesterdaysummary_lowtempc + "°C)")
+    print(Fore.YELLOW + Style.BRIGHT + "The wind speed: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_windmph + " mph (" + yesterdaysummary_windkph + " kph)"
           + Fore.CYAN + Style.BRIGHT + " gusting up to " + yesterdaysummary_gustmph + " mph (" + yesterdaysummary_gustkph + " kph)")
-    print(Fore.YELLOW + Style.BRIGHT + "The humidity yesterday: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_avghumidity + "%")
+    if yesterdaysummary_showHighTemp is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The humidity: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_avghumidity + "%")
     print("")
 
 print(Fore.YELLOW + Style.BRIGHT + "The hourly forecast:")
@@ -7248,32 +7288,50 @@ while True:
         for data in yesterday_json['history']['observations']:
             logger.info("We're on iteration %s/%s. User iteration limit: %s."
                         % (yesterday_totalloops, yesterdayhourlyLoops, user_loopIterations))
-            yesterday_time = data['date']['pretty']
-            yesterday_tempF = str(data['tempi'])
-            yesterday_tempC = str(data['tempm'])
-            yesterday_dewpointF = str(data['dewpti'])
-            logger.debug("yesterday_time: %s ; yesterday_tempF: %s"
-                         % (yesterday_time, yesterday_tempF))
-            logger.debug("yesterday_tempC: %s ; yesterday_dewpointF: %s"
-                         % (yesterday_tempC, yesterday_dewpointF))
-            yesterday_dewpointC = str(data['dewptm'])
             # Again, set up the display variables.
             yesterday_showWindSpeed = True
             yesterday_showWindGust = True
-            yesterday_showVisibility = True
-            yesterday_showWindChill = True
-            yesterday_showHeatIndex = True
-            yesterday_showPressure = True
-            yesterday_showPrecip = True
-            yesterday_showConditions = True
             logger.debug("yesterday_showWindSpeed: %s ; yesterday_showWindGust: %s" %
                          (yesterday_showWindSpeed, yesterday_showWindGust))
+            yesterday_showVisibility = True
+            yesterday_showWindChill = True
             logger.debug("yesterday_showVisibility: %s ; yesterday_showWindChill: %s" %
                          (yesterday_showVisibility, yesterday_showWindChill))
+            yesterday_showHeatIndex = True
+            yesterday_showPressure = True
             logger.debug("yesterday_showHeatIndex: %s ; yesterday_showPressure: %s" %
                          (yesterday_showHeatIndex, yesterday_showPressure))
+            yesterday_showPrecip = True
+            yesterday_showConditions = True
             logger.debug("yesterday_showPrecip: %s ; yesterday_showConditions: %s" %
                          (yesterday_showPrecip, yesterday_showConditions))
+            yesterday_showTemp = True
+            yesterday_showDewpoint = True
+            logger.debug("yesterday_showTemp: %s ; yesterday_showDewpoint: %s" %
+                         (yesterday_showTemp, yesterday_showDewpoint))
+
+            yesterday_time = data['date']['pretty']
+            logger.debug("yesterday_time: %s" % yesterday_time)
+
+            yesterday_tempF = str(data['tempi'])
+            yesterday_tempC = str(data['tempm'])
+            logger.debug("yesterday_tempF: %s ; yesterday_tempC: %s" %
+                         (yesterday_tempF, yesterday_tempC))
+            if yesterday_tempF == "-9999" or yesterday_tempF == "" or yesterday_tempC == "-9999" or yesterday_tempC == "":
+                logger.info("yesterday_tempF is '-9999' or yesterday_tempF is '' or yesterday_tempC is '-9999' or yesterday_tempC is ''.")
+                yesterday_showTemp = False
+                logger.debug("yesterday_showTemp: %s" % yesterday_showTemp)
+
+            yesterday_dewpointF = str(data['dewpti'])
+            yesterday_dewpointC = str(data['dewptm'])
+            logger.debug("yesterday_dewpointF: %s ; yesterday_dewpointC: %s" %
+                         (yesterday_dewpointF, yesterday_dewpointC))
+
+            if yesterday_dewpointF == "-9999" or yesterday_dewpointF == "" or yesterday_dewpointC == "-9999" or yesterday_dewpointC == "":
+                logger.info("yesterday_dewpointF is '-9999' or yesterday_dewpointF is '' or yesterday_dewpointC is '-9999' or yesterday_dewpointC is ''.")
+                yesterday_showDewpoint = False
+                logger.debug("yesterday_showDewpoint: %s" % yesterday_showDewpoint)
+
             yesterday_windspeedKPH = str(data['wspdm'])
             yesterday_windspeedMPH = str(data['wspdi'])
             logger.debug("yesterday_windspeedKPH: %s ; yesterday_windspeedMPH: %s" %
@@ -7320,10 +7378,10 @@ while True:
                 yesterday_showVisibility = False
                 logger.debug("yesterday_showVisibility: %s" % yesterday_showVisibility)
 
-            # Turn off showing yesterday's weather if visibility is -9999.0 mi (no data)
+            # Turn off showing yesterday's weather if visibility is -9999.0 mi or "" (no data)
             if yesterday_showVisibility is True:
-                if yesterday_visibilityMI == "-9999.0":
-                    logger.info("yesterday_visibilityMI is '-9999.0'.")
+                if yesterday_visibilityMI == "-9999.0" or yesterday_visibilityMI == "":
+                    logger.info("yesterday_visibilityMI is '-9999.0' or yesterday_visibilityMI is ''.")
                     yesterday_showVisibility = False
                     logger.debug("yesterday_showVisibility: %s" % yesterday_showVisibility)
 
@@ -7414,16 +7472,26 @@ while True:
                 yesterday_showConditions = False
                 logger.debug("yesterday_showConditions: %s" % yesterday_showConditions)
 
+            # Check for weather condition "" or "Unknown" - No data
+
+            if yesterday_showConditions is True:
+                logger.info("yesterday_showConditions is True.")
+                if yesterday_condition == "" or yesterday_condition == "Unknown":
+                    logger.info("yesterday_condition is '' or yesterday_condition is 'Unknown'.")
+                    yesterday_showConditions = False
+                    logger.debug("yesterday_showConditions: %s" % yesterday_showConditions)
+
             logger.info("Now printing weather data...")
             print("")
             print(Fore.YELLOW + Style.BRIGHT + yesterday_time + ":")
             if yesterday_showConditions is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT + yesterday_condition)
-
-            print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_tempF
-                  + "°F (" + yesterday_tempC + "°C)")
-            print(Fore.YELLOW + Style.BRIGHT + "Dew point: " + Fore.CYAN + Style.BRIGHT + yesterday_dewpointF
-                  + "°F (" + yesterday_dewpointC + "°C)")
+            if yesterday_showTemp is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_tempF
+                      + "°F (" + yesterday_tempC + "°C)")
+            if yesterday_showDewpoint is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Dew point: " + Fore.CYAN + Style.BRIGHT + yesterday_dewpointF
+                      + "°F (" + yesterday_dewpointC + "°C)")
             if yesterday_showWindSpeed is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Wind speed: " + Fore.CYAN + Style.BRIGHT + yesterday_windspeedMPH
                       + " mph (" + yesterday_windspeedKPH + " kph) blowing to the " + yesterday_windDirection + " ("
