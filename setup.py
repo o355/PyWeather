@@ -811,25 +811,25 @@ else:
         input()
         sys.exit()
 
-print("", "Would you like PyWeather to update all your PIP packages?",
-      "If you had necessary libraries previously installed, it's best",
-      "to update your PIP packages. Please note: This may not work",
-      "on all platforms, and can take a while. Yes or No.", sep="\n")
+# Previously this updated all your pip packages. I then did this on my NAS (on FreeNAS 11).
+# It broke my NAS! Woo hoo!
+print("", "Would you like PyWeather to automatically update it's required packages?",
+      "Doing this is generally recommended, and will have benefits down the line when",
+      "some libraries fix known issues that occur in PyWeather. Yes or No.", sep="\n")
 confirm_updatepip = input("Input here: ").lower()
 logger.debug("confirm_updatepip: %s" % confirm_updatepip)
 if confirm_updatepip == "yes":
     print("")
     print("Updating PIP packages.")
-    totalpackages = 0
+    totalpackages = 5
     updatecount = 1
-    for pkgname in pip.get_installed_distributions():
-        totalpackages = totalpackages + 1
-        logger.debug("total package count now: %s" % totalpackages)
 
-    for pkgname in pip.get_installed_distributions():
+    pip_requiredlibraries = ['requests', 'halo', 'appjar', 'colorama', 'geopy']
+
+    for pkgname in pip_requiredlibraries:
         print("Now updating package: %s (Update %s/%s)" %
               (pkgname, updatecount, totalpackages))
-        pip.main(['install', '--upgrade', '%s' % pkgname.project_name])
+        pip.main(['install', '--upgrade', '%s' % pkgname])
         updatecount = updatecount + 1
 elif confirm_updatepip == "no":
     print("Not updating PIP packages. You may run into issues with non-updated",
