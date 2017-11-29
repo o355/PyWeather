@@ -2664,6 +2664,7 @@ while True:
             alerts_totaliterations = 0
             alerts_completediterations = 0
             alerts_tempiterations = 0
+            spinner.stop()
             for data in alerts_json['alerts']:
                 alerts_totaliterations = alerts_totaliterations + 1
                 logger.debug("alerts_totaliterations: %s" % alerts_totaliterations)
@@ -2711,6 +2712,7 @@ while True:
             alerts_totaliterations = 0
             alerts_completediterations = 0
             alerts_tempiterations = 0
+            spinner.stop()
             for data in alerts_json['alerts']:
                 alerts_totaliterations = alerts_totaliterations + 1
                 logger.debug("alerts_totaliterations: %s" % alerts_totaliterations)
@@ -2729,7 +2731,6 @@ while True:
                              % (alerts_description, alerts_issuedtime))
                 alerts_expiretime = data['expires']
                 logger.debug("alerts_expiretime: %s" % alerts_expiretime)
-                spinner.stop()
                 print(Fore.RED + Style.BRIGHT + "Alert %s/%s:" %
                       (alerts_completediterations, alerts_totaliterations))
                 print(Fore.YELLOW + Style.BRIGHT + "-----")
@@ -2760,6 +2761,8 @@ while True:
                   Fore.RED + Style.BRIGHT + "for the location inputted.",
                   Fore.RED + Style.BRIGHT + "As a quick note, Wunderground only supports alerts in the US/EU.", sep="\n")
         else:
+            spinner.fail(text="No alert data is available!")
+            print("")
             print(Fore.YELLOW + Style.BRIGHT + "Something went wrong when launching the correct conditional",
                   Fore.YELLOW + Style.BRIGHT + "for the alert data type involved.",
                   Fore.YELLOW + Style.BRIGHT + "For error reporting, this is what the variable 'alerts_type' is currently storing.",
