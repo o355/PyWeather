@@ -40,9 +40,6 @@ _______
 # <---- Preload starts here ---->
 
 # See if we're running Python 2. If so, exit out of the script.
-import sys
-if sys.version_info[0] < 3:
-    raise "Sorry, you can only use PyWeather with Python 3."
 
 # Begin the import process. - Section 1
 import configparser
