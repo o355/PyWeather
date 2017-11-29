@@ -5231,25 +5231,28 @@ while True:
                 logger.info("Heat index data is present. historical_heatindexdata: %s" % historical_heatindexdata)
                 logger.debug("historical_heatindexC: %s ; historical_heatindexF: %s"
                              % (historical_heatindexC, historical_heatindexF))
+
             try:
                 historical_precipMM = float(data['precipm'])
                 historical_precipIN = float(data['precipi'])
+                logger.debug("historical_precipMM: %s ; historical_precipIN: %s"
+                             % (historical_precipMM, historical_precipIN))
             except ValueError:
                 printException_loggerwarn()
                 historical_showPrecip = False
                 logger.debug("historical_showPrecip: %s" % historical_showPrecip)
-            logger.debug("historical_precipMM: %s ; historical_precipIN: %s"
-                         % (historical_precipMM, historical_precipIN))
+
             if historical_showPrecip is False:
                 logger.info("historical_showPrecip is False. We have no data.")
             else:
+                # Convert into strings for the sake of easy checking & display
                 historical_precipMM = str(historical_precipMM)
                 historical_precipIN = str(historical_precipIN)
                 logger.info("Converted 2 vars into strings.")
                 logger.debug("historical_precipMM: %s ; historical_precipIN: %s" %
                              (historical_precipMM, historical_precipIN))
 
-            # Data check for invalid precip data
+            # Data check for invalid precip data, given we didn't hit the traceback above.
             if historical_showPrecip is True:
                 logger.info("historical_showPrecip is True.")
                 if historical_precipIN == "-9999.0" or historical_precipMM == "-9999.0":

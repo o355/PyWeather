@@ -53,15 +53,11 @@ However, during times of non-severe weather, PyWeather is a fun way to check the
 Notices are important things you'll want to know about PyWeather.
 
 ### PyWeather 0.6.3 beta is now delayed
-Right now, PyWeather 0.6.3 beta is officially delayed.
+Right now, PyWeather 0.6.3 beta is officially delayed, and will most likely not be released on Friday.
 
-QA is taking a lot longer than expected. I've ran into invalid data errors with a lot of PWSes and some cities that I have to add invalid data catching to. This is a lengthy and tedious process, and it isn't easy.
+FreeNAS 11 QA has just started. The only way 0.6.3 beta is getting released on December 1 (by 11:59pm EST) is if I find no bugs, and if I'm up to doing QA every day until Friday.
 
-In addition, there's new and existing features that need to get changed. I've also got QA to wrap up as well. OS X, FreeNAS, Ubuntu 16.04, and Raspbian 9 are left.
-
-Unless I can somehow magically finish QA, and everything else goes smoothly (it won't), PyWeather 0.6.3 beta will be delayed.
-
-PyWeather 0.6.3 beta will be released on or before December 15, 2017.
+The estimated release time for PyWeather 0.6.3 beta is December 5, 2017.
 
 ### PyWeather's GitHub page will be discontinued whenever 0.6.3 beta is released
 cool!
