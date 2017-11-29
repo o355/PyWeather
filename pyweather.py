@@ -45,6 +45,7 @@ _______
 import configparser
 import subprocess
 import traceback
+import sys
 try:
     import requests
 except ImportError:
