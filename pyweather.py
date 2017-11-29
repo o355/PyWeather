@@ -701,7 +701,7 @@ elif geopyScheme == "https" and geocoder_customkeyEnabled is True:
     try:
         location = geolocator.geocode("123 5th Avenue, New York, NY")
     except geopy.exc.GeocoderQueryError:
-        spinner.warn(text="Geocoder API key is invalid!")
+        spinner.fail(text="Geocoder API key is invalid!")
         print("")
         logger.debug("API key is invalid, falling back to no API key...")
         print("Your geocoder API key failed to validate, since it is wrong.",
@@ -713,7 +713,7 @@ elif geopyScheme == "https" and geocoder_customkeyEnabled is True:
         time.sleep(0.1)
         spinner.start(text="Loading PyWeather...")
     except:
-        spinner.warn(text="Failed to validate geocoder API key!")
+        spinner.fail(text="Failed to validate geocoder API key!")
         print("")
         print("When trying to validate your geocoder API key, something went wrong.",
               "Falling back to no API key...", sep="\n")
@@ -739,7 +739,7 @@ elif geopyScheme == "http" and geocoder_customkeyEnabled is True:
     try:
         location = geolocator.geocode("123 5th Avenue, New York, NY")
     except geopy.exc.GeocoderQueryError:
-        spinner.warn(text="Geocoder API key is invalid!")
+        spinner.fail(text="Geocoder API key is invalid!")
         print("")
         logger.debug("API key is invalid, falling back to no API key...")
         print("Your geocoder API key failed to validate, since it is wrong.",
@@ -749,7 +749,7 @@ elif geopyScheme == "http" and geocoder_customkeyEnabled is True:
         time.sleep(0.1)
         spinner.start(text="Loading PyWeather...")
     except:
-        spinner.warn(text="Failed to validate geocoder API key!")
+        spinner.fail(text="Failed to validate geocoder API key!")
         print("")
         print("When trying to validate your geocoder API key, something went wrong.",
               "Falling back to no API key...", sep="\n")
@@ -785,7 +785,7 @@ try:
     logger.debug("apikey_load = %s" % apikey_load)
     apikey = apikey_load.read()
 except FileNotFoundError:
-    spinner.warn(text="Failed to access your primary API key!")
+    spinner.fail(text="Failed to access your primary API key!")
     print("")
     print("Your primary API key couldn't be loaded, as PyWeather ran into",
           "an error when attempting to access it. Make sure that your primary key",
@@ -893,7 +893,7 @@ if checkforUpdates == True:
                   ", and the latest version is " + version_latestVersion + ".")
             print("")
     except:
-        spinner.warn(text="Couldn't check for PyWeather updates!")
+        spinner.fail(text="Couldn't check for PyWeather updates!")
         print("")
         spinner.start(text="Loading PyWeather...")
         print("Couldn't check for updates. Make sure raw.githubusercontent.com is unblocked on your network,",
@@ -974,7 +974,7 @@ if validateAPIKey == True and backupKeyLoaded == True:
         logger.debug("test_conditions: %s" % test_conditions)
         logger.info("API key is valid!")
     except:
-        spinner.warn(text="Primary API key is not valid!")
+        spinner.fail(text="Primary API key is not valid!")
         logger.warn("API key is NOT valid. Attempting to revalidate API key...")
         if backupKeyLoaded == True:
             spinner.start(text="Validating backup API key...")
@@ -1071,7 +1071,7 @@ if geoip_enabled == True:
         logger.debug("latstr: %s ; lonstr: %s" % (latstr, lonstr))
         logger.debug("useGeocoder: %s" % useGeocoder)
     except:
-        spinner.warn(text="Failed to get current location! Current location is disabled.")
+        spinner.fail(text="Failed to get current location! Current location is disabled.")
         print("")
         geoip_available = False
         logger.debug("geoip_available: %s" % geoip_available)
@@ -2411,7 +2411,7 @@ while True:
                 logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
                              (refresh_currentflagged, time.time() - cachetime_current))
             except:
-                spinner.warn("Failed to refresh current information!")
+                spinner.fail("Failed to refresh current information!")
                 print("")
                 print(Fore.YELLOW + Style.BRIGHT + "Whoops! PyWeather ran into an error when refetching current",
                       Fore.YELLOW + Style.BRIGHT + "weather. Make sure that you have an internet connection, and",
@@ -2607,7 +2607,7 @@ while True:
                 refresh_alertsflagged = False
                 logger.debug("alertsPrefetched: %s" % alertsPrefetched)
             except:
-                spinner.warn(text="Failed to refresh alerts information!")
+                spinner.fail(text="Failed to refresh alerts information!")
                 print("")
                 print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the alerts JSON file to parse,",
                       Fore.YELLOW + Style.BRIGHT + "PyWeather ran into an error. If you're on a network with a",
@@ -2751,7 +2751,7 @@ while True:
                         logger.debug("User issued KeyboardInterrupt. Breaking...")
                         break
         elif alerts_type == "None":
-            spinner.warn(text="No alert data is available!")
+            spinner.fail(text="No alert data is available!")
             print("")
             print(Fore.RED + Style.BRIGHT + "No data available! Either there are no alerts",
                   Fore.RED + Style.BRIGHT + "at the location inputted, or Wunderground doesn't support alerts",
@@ -2777,7 +2777,7 @@ while True:
                 logger.debug("hourly36JSON acquired, end result: %s" % hourly36JSON)
                 cachetime_hourly36 = time.time()
             except:
-                spinner.warn(text="Failed to refresh 36-hour hourly information!")
+                spinner.fail(text="Failed to refresh 36-hour hourly information!")
                 print("")
                 print(Fore.YELLOW + Style.BRIGHT + "Whoops! A problem occurred when trying to refresh 36 hour",
                       Fore.YELLOW + Style.BRIGHT + "hourly data. Make sure you have an internet connection, and if",
@@ -2939,7 +2939,7 @@ while True:
                 logger.debug("Retrieved hourly 10 JSON with end result: %s" % tendayJSON)
                 cachetime_hourly10 = time.time()
             except:
-                spinner.warn(text="Failed to refresh ten-day hourly information!")
+                spinner.fail(text="Failed to refresh ten-day hourly information!")
                 print("")
                 print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the 10-day hourly forecast data, PyWeather ran",
                       Fore.YELLOW + Style.BRIGHT + "info an error. If you're on a network with a filter, make sure that",
@@ -3104,7 +3104,7 @@ while True:
                 cachetime_forecast = time.time()
                 logger.debug("forecast10JSON acquired, end result: %s" % forecast10JSON)
             except:
-                spinner.warn(text="Failed to refresh forecast data!")
+                spinner.fail(text="Failed to refresh forecast data!")
                 print("")
                 print(Fore.YELLOW + Style.BRIGHT + "PyWeather ran into an error when trying to refetch forecast",
                       Fore.YELLOW + Style.BRIGHT + "data. If you're on a filtered network, make sure that",
@@ -4302,7 +4302,7 @@ while True:
                 logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
                 cachetime_almanac = time.time()
             except:
-                spinner.warn(text="Failed to load almanac data!")
+                spinner.fail(text="Failed to load almanac data!")
                 print("")
                 logger.warn("Couldn't contact Wunderground's API! Is the internet offline?")
                 print(Fore.RED + Style.BRIGHT + "When fetching the almanac data from Wunderground, PyWeather ran into",
@@ -4458,7 +4458,7 @@ while True:
                 cachetime_sundata = time.time()
                 
             except:
-                spinner.warn(text="Failed to load astronomy data!")
+                spinner.fail(text="Failed to load astronomy data!")
                 print("")
                 print(Fore.RED + Style.BRIGHT + "When attempting to fetch the 'sundata' from Wunderground,",
                       Fore.RED + Style.BRIGHT + "PyWeather ran into an error. If you're on a network with",
@@ -5118,7 +5118,7 @@ while True:
             historical_showDewpoint = True
             historical_showWindSpeed = True
             historical_showWindGust = True
-            historical_showWindDegrees = True
+            historical_showWindDirection = True
             historical_showVis = True
             historical_showWindChill = True
             historical_showHeatIndex = True
@@ -5128,8 +5128,8 @@ while True:
                          (historical_showConditions, historical_showTemp))
             logger.debug("historcial_showDewpoint: %s ; historical_showWindSpeed: %s" %
                          (historical_showDewpoint, historical_showWindSpeed))
-            logger.debug("historical_showWindGust: %s ; historical_showWindDegrees: %s" %
-                         (historical_showWindGust, historical_showWindDegrees))
+            logger.debug("historical_showWindGust: %s ; historical_showWindDirection: %s" %
+                         (historical_showWindGust, historical_showWindDirection))
             logger.debug("historical_showVis: %s ; historical_showWindChill: %s" %
                          (historical_showVis, historical_showWindChill))
             logger.debug("historical_showPressure: %s ; historical_showPrecip: %s" %
@@ -5180,10 +5180,16 @@ while True:
                     logger.info("historical_windgustMPH is '-9999.0' or historical_windgustKPH is '-9999.0'.")
                     historical_showWindGust = False
                     logger.debug("historical_showWindGust")
+
             historical_windDegrees = str(data['wdird'])
             historical_windDirection = data['wdire']
             logger.debug("historical_windDegrees: %s ; historical_windDirection: %s"
                          % (historical_windDegrees, historical_windDirection))
+
+            if historical_windDegrees == "" or historical_windDirection == "":
+                logger.info("historical_windDegrees is '' or historical_windDirection is ''.")
+                historical_showWindDirection = False
+                logger.debug("historical_showWindDirection: %s" % historical_showWindDirection)
 
             historical_visibilityKM = str(data['vism'])
             historical_visibilityMI = str(data['visi'])
@@ -5280,11 +5286,12 @@ while True:
                       + "°F (" + historical_dewpointC + "°C)")
             print(Fore.YELLOW + Style.BRIGHT + "Wind speed: " + Fore.CYAN + Style.BRIGHT + historical_windspeedMPH
                   + " mph (" + historical_windspeedKPH + " kph)")
-            if historical_windDirection == "Variable":
-                print(Fore.YELLOW + Style.BRIGHT + "Wind direction: " + Fore.CYAN + Style.BRIGHT + "Variable directions")
-            else:
-                print(Fore.YELLOW + Style.BRIGHT + "Wind direction: " + Fore.CYAN + Style.BRIGHT + historical_windDirection
-                      + " (" + historical_windDegrees + "°)")
+            if historical_showWindDirection is True:
+                if historical_windDirection == "Variable":
+                    print(Fore.YELLOW + Style.BRIGHT + "Wind direction: " + Fore.CYAN + Style.BRIGHT + "Variable directions")
+                else:
+                    print(Fore.YELLOW + Style.BRIGHT + "Wind direction: " + Fore.CYAN + Style.BRIGHT + historical_windDirection
+                          + " (" + historical_windDegrees + "°)")
             if historical_showWindGust is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Wind gusts: " + Fore.CYAN + Style.BRIGHT + historical_windgustMPH
                       + " mph (" + historical_windgustKPH + " kph)")
@@ -5352,7 +5359,7 @@ while True:
                 cachetime_tide = time.time()
 
             except:
-                spinner.warn(text="Failed to refresh tide data!")
+                spinner.fail(text="Failed to refresh tide data!")
                 print("")
                 print(Fore.RED + Style.BRIGHT + "When attempting to fetch tide data from Wunderground,",
                       Fore.RED + Style.BRIGHT + "PyWeather ran into an error. If you're on a network with",
@@ -5453,7 +5460,7 @@ while True:
                 hurricanePrefetched = True
                 refresh_hurricanedataflagged = False
             except:
-                spinner.warn(text="Failed to refresh hurricane data!")
+                spinner.fail(text="Failed to refresh hurricane data!")
                 print("")
                 print(Fore.RED + Style.BRIGHT + "When attempting to fetch hurricane data, PyWeather ran into an error.",
                       Fore.RED + Style.BRIGHT + "you have an internet connection, and that api.wunderground.com is unblocked",
@@ -6831,7 +6838,7 @@ while True:
                              (yesterdaydata_prefetched, refresh_yesterdaydataflagged))
                 spinner.stop()
             except:
-                spinner.warn("Failed to refresh yesterday's weather data!")
+                spinner.fail("Failed to refresh yesterday's weather data!")
                 print("")
                 print("When attempting to fetch yesterday's data, PyWeather ran into",
                       "an error. If you're on a network with a filter make sure that",
