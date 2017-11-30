@@ -1926,9 +1926,9 @@ else:
         logger.debug("Warm up geocode failed.")
 
     print("I've just completed a warm-up geocode. However, sometimes a rate limit will",
-          "occur after this geocode. I've paused the setup process for 15 seconds. This",
+          "occur after this geocode. I've paused the setup process for 10 seconds. This",
           "should help with figuring out what scheme works on your OS.", sep="\n")
-    time.sleep(15)
+    time.sleep(10)
 
     try:
         geocoder.geocode("123 5th Avenue, New York, NY")
@@ -1939,8 +1939,8 @@ else:
     except geopy.exc.GeocoderServiceError:
         print("Geopy probably can't run without HTTPS (or your internet went down). Trying HTTP as the scheme...")
         geocoder = GoogleV3(scheme='http')
-        print("Waiting 15 seconds to avoid rate limiting after the previous geocode...")
-        time.sleep(15)
+        print("Waiting 10 seconds to avoid rate limiting after the previous geocode...")
+        time.sleep(10)
         try:
             geocoder.geocode("123 5th Avenue, New York, NY")
             print("The geocoder can operate, but without HTTPS enabled on your OS. Saving these changes...")

@@ -2902,7 +2902,6 @@ while True:
             if user_showCompletedIterations == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/36"
                       % totaldetailedHourlyIterations)
-                print(Fore.RESET)
             if user_enterToContinue == True:
                 if totaldetailedHourlyIterations == 36:
                     logger.debug("Total iterations is 36. Breaking...")
@@ -3073,7 +3072,6 @@ while True:
             if user_showCompletedIterations == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/240"
                       % totaldetailedHourly10Iterations)
-                print(Fore.RESET)
             print("")
             if user_enterToContinue == True:
                 if totaldetailedHourly10Iterations == 240:
@@ -3465,7 +3463,6 @@ while True:
             if user_showCompletedIterations == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/10"
                       % totaldetailedForecastIterations)
-                print(Fore.RESET)
             if totaldetailedForecastIterations == 10:
                 logger.debug("Total iterations is 10. Breaking...")
                 break
@@ -5329,7 +5326,6 @@ while True:
             if user_showCompletedIterations == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s"
                       % (historical_totalloops, historicalhourlyLoops))
-                print(Fore.RESET)
                 
             if user_enterToContinue == True:
                 if historical_loops == user_loopIterations:
@@ -5428,7 +5424,6 @@ while True:
             if user_showCompletedIterations == True:
                 print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s"
                       % (tide_completediterations, tide_totaliterations))
-                print(Fore.RESET)
             logger.debug("tide_currentiterations: %s ; tide_completediterations: %s" %
                          (tide_currentiterations, tide_completediterations))
             if user_enterToContinue == True:
@@ -5690,7 +5685,6 @@ while True:
             if user_showCompletedIterations is True:
                 print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s" %
                       (currentstormiterations, activestorms))
-                print(Fore.RESET)
 
             # <--- Current storm data to forecast --->
             if activestorms > 1 and currentstormiterations != activestorms:
