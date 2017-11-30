@@ -5415,8 +5415,8 @@ while True:
         for data in tide_json['tide']['tideSummary']:
             tide_date = data['date']['pretty']
             tide_type = data['data']['type']
-            logger.debug("tide_date: %s ; tide_type: %s" % (tide_date, tide_type))
             print("")
+            logger.debug("tide_date: %s ; tide_type: %s" % (tide_date, tide_type))
             print(Fore.YELLOW + Style.BRIGHT + tide_date + ":")
             print(Fore.YELLOW + Style.BRIGHT + "Event: " + Fore.CYAN + Style.BRIGHT + tide_type)
             if tide_type == "Low Tide" or tide_type == "High Tide":

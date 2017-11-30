@@ -192,7 +192,7 @@ def configprovision():
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['GEOCODER']['scheme'] = 'https'
-    config['GEOCODER API']['customapi_enabled'] = 'False'
+    config['GEOCODER API']['customkey_enabled'] = 'False'
     config['GEOCODER API']['customkey'] = 'None'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
@@ -1870,7 +1870,7 @@ if showyesterdayonsummary is False:
         logger.info("PREFETCH/yesterdaydata_atboot is now 'False'.")
         print("Changes saved.")
 
-print("", "(41/42)", "In 0.6.3 beta and newer, you have the option to enable extra tools for PyWeather."
+print("", "(41/42)", "In 0.6.3 beta and newer, you have the option to enable extra tools for PyWeather.",
       "Extra tools are diagnostic tools, and so far you can see cache timings in PyWeather, and more extra tools",
       "will be added as time goes on. Would you like to enable the ability to use extra tools? Yes or No. By default",
       "this is disabled.", sep="\n")
@@ -1919,11 +1919,16 @@ else:
     # HTTPS validation
     from geopy import GoogleV3
     geocoder = GoogleV3(scheme='https')
-    # I've found that one "warm up request" somehow helps determine if a platform is HTTP/HTTPS compatible.
+    # I've found that one "warm up request", and then waiting ~15 seconds somehow helps determine if a platform is HTTP/HTTPS compatible.
     try:
         geocoder.geocode("123 5th Avenue, New York, NY")
     except:
         logger.debug("Warm up geocode failed.")
+
+    print("I've just completed a warm-up geocode. However, sometimes a rate limit will",
+          "occur after this geocode. I've paused the setup process for 15 seconds. This",
+          "should help with figuring out what scheme works on your OS.", sep="\n")
+    time.sleep(15)
 
     try:
         geocoder.geocode("123 5th Avenue, New York, NY")
@@ -1934,6 +1939,8 @@ else:
     except geopy.exc.GeocoderServiceError:
         print("Geopy probably can't run without HTTPS (or your internet went down). Trying HTTP as the scheme...")
         geocoder = GoogleV3(scheme='http')
+        print("Waiting 15 seconds to avoid rate limiting after the previous geocode...")
+        time.sleep(15)
         try:
             geocoder.geocode("123 5th Avenue, New York, NY")
             print("The geocoder can operate, but without HTTPS enabled on your OS. Saving these changes...")
