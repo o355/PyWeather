@@ -5427,7 +5427,10 @@ while True:
             logger.debug("tide_currentiterations: %s ; tide_completediterations: %s" %
                          (tide_currentiterations, tide_completediterations))
             if user_enterToContinue == True:
-                if tide_currentiterations == user_loopIterations:
+                if tide_completediterations == tide_totaliterations:
+                    logger.debug("tide_completediterations is equal to tide_totaliterations. Breaking.")
+                    break
+                elif tide_currentiterations == user_loopIterations:
                     try:
                         print("")
                         print(Fore.RED + Style.BRIGHT + "Press enter to view the next %s iterations of tide data." % user_loopIterations,
@@ -5437,9 +5440,6 @@ while True:
                         logger.debug("tide_currentiterations: %s" % tide_currentiterations)
                     except KeyboardInterrupt:
                         break
-            elif tide_completediterations == tide_totaliterations:
-                logger.debug("tide_completediterations is equal to tide_totaliterations. Breaking.")
-                break
 #<--- Tide data is above | Hurricane data is below --->
     elif moreoptions == "5":
         try:
