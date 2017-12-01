@@ -2140,9 +2140,13 @@ if yesterdaydata_onsummary is True:
     yesterdaysummary_showHighTemp = True
     yesterdaysummary_showLowTemp = True
     yesterdaysummary_showHumidity = True
+    yesterdaysummary_showWindSpeed = True
+    yesterdaysummary_showWindGust = True
     logger.debug("yesterdaysummary_showHighTemp: %s ; yesterdaysummary_showLowTemp: %s" %
                  (yesterdaysummary_showHighTemp, yesterdaysummary_showLowTemp))
-    logger.debug("yesterdaysummary_showHumidity: %s" % yesterdaysummary_showHumidity)
+    logger.debug("yesterdaysummary_showHumidity: %s ; yesterdaysummary_showWindSpeed: %s" %
+                 (yesterdaysummary_showHumidity, yesterdaysummary_showWindSpeed))
+    logger.debug("yesterdaysummary_showWindGust: %s" % yesterdaysummary_showWindGust)
 
     # Get the high/low weather, the average wind/max wind, and average humidity for the previous day.
 
@@ -2164,6 +2168,17 @@ if yesterdaydata_onsummary is True:
         # Wunderground WHY DID YOU DO THIS?!?!! KEEP THINGS CONSTANT!
         yesterdaysummary_gustmph = str(data['maxwspdi'])
         yesterdaysummary_gustkph = str(data['maxwspdm'])
+
+        # Check for bad wind data, since of course that's a thing!
+        if yesterdaysummary_windmph == "" or yesterdaysummary_windkph == "":
+            logger.info("yesterdaysummary_windmph is '' or yesterdaysummary_windkph is ''.")
+            yesterdaysummary_showWindSpeed = False
+            logger.debug("yesterdaysummary_showWindSpeed: %s" % yesterdaysummary_showWindSpeed)
+
+        if yesterdaysummary_gustmph == "" or yesterdaysummary_gustkph == "":
+            logger.info("yesterdaysumary_gustmph is '' or yesterdaysummary_gustkph is ''.")
+            yesterdaysummary_showWindGust = False
+            logger.debug("yesterdaysummary_showWindGust: %s" % yesterdaysummary_showWindGust)
         # Do what we do best - Guess the average humidity
         try:
             yesterdaysummary_maxhumidity = int(data['maxhumidity'])
@@ -2279,8 +2294,10 @@ if yesterdaydata_onsummary is True:
         print(Fore.YELLOW + Style.BRIGHT + "The high temperature: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_hightempf + "°F (" + yesterdaysummary_hightempc + "°C)")
     if yesterdaysummary_showLowTemp is True:
         print(Fore.YELLOW + Style.BRIGHT + "The low temperature: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_lowtempf + "°F (" + yesterdaysummary_lowtempc + "°C)")
-    print(Fore.YELLOW + Style.BRIGHT + "The wind speed: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_windmph + " mph (" + yesterdaysummary_windkph + " kph)"
-          + Fore.CYAN + Style.BRIGHT + " gusting up to " + yesterdaysummary_gustmph + " mph (" + yesterdaysummary_gustkph + " kph)")
+    if yesterdaysummary_showWindSpeed is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The wind speed: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_windmph + " mph (" + yesterdaysummary_windkph + " kph)")
+    if yesterdaysummary_showWindGust is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The wind gust: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_gustmph + " mph (" + yesterdaysummary_gustkph + " kph)")
     if yesterdaysummary_showHighTemp is True:
         print(Fore.YELLOW + Style.BRIGHT + "The humidity: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_avghumidity + "%")
     print("")
