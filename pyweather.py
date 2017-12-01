@@ -2153,21 +2153,29 @@ if yesterdaydata_onsummary is True:
     for data in yesterday_json['history']['dailysummary']:
         yesterdaysummary_hightempf = str(data['maxtempi'])
         yesterdaysummary_hightempc = str(data['maxtempm'])
+        logger.debug("yesterdaysummary_hightempf: %s ; yesterdaysummary_hightempc: %s" %
+                     (yesterdaysummary_hightempf, yesterdaysummary_hightempc))
         if yesterdaysummary_hightempf == "" or yesterdaysummary_hightempc == "":
             logger.info("yesterdaysummary_hightempf is '' yesterdaysummary_hightempc is ''.")
             yesterdaysummary_showHighTemp = False
             logger.debug("yesterdaysummary_showHighTemp: %s" % yesterdaysummary_showHighTemp)
         yesterdaysummary_lowtempf = str(data['mintempi'])
         yesterdaysummary_lowtempc = str(data['mintempm'])
+        logger.debug("yesterdaysummary_lowtempf: %s ; yesterdaysummary_lowtempc: %s" %
+                     (yesterdaysummary_lowtempf, yesterdaysummary_lowtempc))
         if yesterdaysummary_lowtempf == "" or yesterdaysummary_lowtempc == "":
             logger.info("yesterdaysummary_lowtempf is '' or yesterdaysummary_lowtempc is ''.")
             yesterdaysummary_showLowTemp = False
             logger.debug("yesterdaysummary_showLowTemp: %s" % yesterdaysummary_showLowTemp)
         yesterdaysummary_windmph = str(data['meanwindspdi'])
         yesterdaysummary_windkph = str(data['meanwindspdm'])
+        logger.debug("yesterdaysummary_windmph: %s ; yesterdaysummary_windkph: %s" %
+                     (yesterdaysummary_windmph, yesterdaysummary_windkph))
         # Wunderground WHY DID YOU DO THIS?!?!! KEEP THINGS CONSTANT!
         yesterdaysummary_gustmph = str(data['maxwspdi'])
         yesterdaysummary_gustkph = str(data['maxwspdm'])
+        logger.debug("yesterdaysummary_gustmph: %s ; yesterdaysummary_gustkph: %s" %
+                     (yesterdaysummary_gustmph, yesterdaysummary_gustkph))
 
         # Check for bad wind data, since of course that's a thing!
         if yesterdaysummary_windmph == "" or yesterdaysummary_windkph == "":
