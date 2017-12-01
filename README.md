@@ -52,12 +52,10 @@ However, during times of non-severe weather, PyWeather is a fun way to check the
 ## Notices
 Notices are important things you'll want to know about PyWeather.
 
-### PyWeather 0.6.3 beta is now delayed
-Right now, PyWeather 0.6.3 beta is officially delayed, and will most likely not be released on Friday.
+### PyWeather 0.6.3 beta is now not delayed - Hopefully
+I'm on a pretty rigorous schedule to try and release PyWeather today, and I'm doing my best to do QA on 3 OSes today.
 
-FreeNAS 11 QA has just started. The only way 0.6.3 beta is getting released on December 1 (by 11:59pm EST) is if I find no bugs, and if I'm up to doing QA every day until Friday.
-
-The estimated release time for PyWeather 0.6.3 beta is December 5, 2017.
+PyWeather 0.6.3 beta will be hopefully released by 11:59pm EST on December 1, given no major bugs appear. 
 
 ### PyWeather's GitHub page will be discontinued whenever 0.6.3 beta is released
 cool!

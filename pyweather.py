@@ -7418,8 +7418,8 @@ while True:
                 # Encase this inside of a true statement if we haven't hit a keyerror yet (yesterday_showWindDir is true).
                 # This prevents variable errors to occur if there isn't any data.
                 logger.info("yesterday_showWindDirection is True.")
-                if yesterday_windDegrees == "" or yesterday_windDirection == "":
-                    logger.info("yesterday_windDegrees is '' or yesterday_windDirection is ''.")
+                if yesterday_windDegrees == "" or yesterday_windDirection == "" or yesterday_windDegrees == "-9999":
+                    logger.info("yesterday_windDegrees is '' or yesterday_windDirection is '' or yesterday_windDegrees is '-9999'.")
                     yesterday_showWindDirection = False
                     logger.debug("yesterday_showWindDirection: %s" % yesterday_showWindDirection)
 

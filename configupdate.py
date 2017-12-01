@@ -133,12 +133,12 @@ def installhalo():
         return
     except:
         foobar = 1
-        # Placeholder code i guess?
+        # Placeholder code
     print("For PyWeather 0.6.3 beta and above, a new library called 'halo' is required for PyWeather to operate.",
-          "This library controls the new loader that is present in PyWeather, and 'halo' is now required for PyWeather",
-          "to properly operate. If you'd like, halo can be automatically installed for you. However, please note that sometimes",
-          "this may fail, and you'll need to manually install halo in a command line before starting up PyWeather. Would you",
-          "like this automatic install to continue? Yes or No.", sep="\n")
+          "This library controls the new loader that is present in PyWeather.",
+          "to properly operate. If you'd like, halo can be automatically installed for you. "
+          "However, please note that sometimes this may fail, and you'll need to manually install halo in a",
+          "command line before starting up PyWeather. Would you like this automatic install to continue? Yes or No.", sep="\n")
     haloinstall = input("Input here: ").lower()
     if haloinstall == "yes":
         print("Now installing halo using pip's built-in installer.")
