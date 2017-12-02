@@ -1,7 +1,21 @@
 # PyWeather changelog
 **Note: The changelog being used for tracking PyWeather progress has been retiredish. Please check the projects tab of PyWeather for progress on the next versions of PyWeather.**
 
-## version 0.6.3 beta - Should be released on on December 7:
+## version 0.6.4 beta - Should be released in late January 2018:
+* Adds the ability to see the weather for airports
+* Adds the ability to see and call the weather for previously looked up locations
+* Adds the ability to see historical data for PWSes
+* Adds the ability to see the weather on Mars!
+* Adds further refinement to favorite locations (Instead of your location input being the shown favorite location, it'll be the official location given by Google's geocoder)
+* Adds the ability to change your radar image size on the fly
+* Adds the brand new Universal PyWeather Updater, making it a ton easier to update to new versions of PyWeather
+* Improves the UI of the configuration updater. New configuration options are put on 2 lines of text.
+* Lowers the default iterations for data down to 4 to prevent scrolling.
+* Adds the ability for configsetup to run an automatic geocoder scheme
+* Improves the disabling of having a custom geocoder API key, even though the scheme is set to HTTP (custom geocoder keys only work with HTTPS.
+* Improves the UI in the setup file to not have overflowing lines of text.
+
+## version 0.6.3 beta - Should be released on on December 2:
 * Adds a nearby location feature to hurricane data (300km out)
 * Will push the API key validation code up further thanks to new features.
 * Adding a much nicer progress indicator.
@@ -15,26 +29,25 @@
 * Adding the ability to show cache timings.
 * Adds a new loader, which makes loading things in PyWeather a lot more nice.
 * The ability to see pressure and visibility data has been added to historical hourly & yesterday hourly information. 
+* Adds an attribution to Meteoalarm for EU-based alerts
+* Minor UI changes.
 
 **BUG FIXES**
 * Fixed multiple major bugs regarding invalid historical summary data & historical hourly data
+* Fixed multiple major bugs regarding invalid yesterday summary data & yesterday hourly data
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
-* Fixed a potential bug where if there were two or more storms, on the last storm there wasn't code to let the storm go into extended forecast data.
-* Fixed potential bugs where PyWeather wouldn't properly display precip information for hurricane data - The algorithm was reworked.
+* Fixed potential bugs where PyWeather wouldn't properly display precip information for forecast data - The algorithm was reworked.
 * Fixed a bug where if you manually flagged all data types to refresh, hurricane data wouldn't be refreshed.
 * Fixed a minor bug where if the summary section couldn't be added in the setup file, the print statement indicated that the cache section wasn't added.
-* Fixed a bug where PyWeather didn't catch bad visibility data on the detailed current weather screen.
-* Fixed a bug where PyWeather didn't catch bad UV index data on the detailed current weather screen.
-* Fixed a bug where PyWeather didn't catch bad wind speed, visibility, and pressure data on the yesterday's weather summary screen.
+* Fixed a bug where PyWeather didn't catch bad visibility, UV index, and humidity data for current weather
 * Fixed a bug where the visibility in km on the yesterday's summary screen read as "kph".
-* Fixed a bug where PyWeather didn't catch bad current conditions data on yesterday's weather hourly data.
-* Fixed a bug where PyWeather didn't catch bad wind speed data on yesterday's weather hourly data.
 * Fixed a minor bug where on yesterday's weather hourly data, the degree symbol was placed too far right by 1 character.
 * Fixed a potential bug where missing data on yesterday's weather would cause a crash.
 * Fixed a potential bug where if almanac data is prefetched, it wouldn't display when viewing it in detail, and PyWeather would crash.
 * Fixed a minor bug where on the historical weather summary, total precipitation data in mm had a "mb" label.
 * Fixed a minor bug where historical hourly data wouldn't break when the current iterations equaled the total iterations.
 * Fixed a minor bug where PyWeather wouldn't catch bad humidity data for current conditions.
+* Fixed a bug where configsetup script set the default geocoder scheme to https, which caused issues on platforms that don't support the geocoder running in the HTTPS scheme.
 
 
 **OTHER CHANGES**
