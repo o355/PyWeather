@@ -1817,11 +1817,22 @@ summary_tempc = str(current_json['current_observation']['temp_c'])
 # Since parsing the json spits out a float as the summary, a conversion to string is
 # necessary to properly display it in the summary.
 # summary_dewpointf = current_json['current_observation']
-summary_humidity = str(current_json['current_observation']['relative_humidity'])
 logger.debug("summary_overall: %s ; summary_lastupdated: %s"
              % (summary_overall, summary_lastupdated))
 logger.debug("summary_tempf: %s ; summary_tempc: %s"
              % (summary_tempf, summary_tempc))
+
+summary_humidity = str(current_json['current_observation']['relative_humidity'])
+logger.debug("summary_humidity: %s" % summary_humidity)
+# Check for bad humidity data
+currentcond_showHumidity = True
+logger.debug("currentcond_showHumidity: %s" % currentcond_showHumidity)
+
+if summary_humidity == "-999%":
+    logger.info("summary_humidity is '-999%'.")
+    currentcond_showHumidity = False
+    logger.debug("currentcond_showHumidity: %s" % currentcond_showHumidity)
+
 summary_winddir = current_json['current_observation']['wind_dir']
 summary_windmph = current_json['current_observation']['wind_mph']
 summary_windmphstr = str(summary_windmph)
@@ -2289,7 +2300,8 @@ if winddata == True:
         print(Fore.YELLOW + Style.BRIGHT + "Current wind: " + Fore.CYAN + Style.BRIGHT + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
 else:
     print(Fore.YELLOW + Style.BRIGHT + "Wind data is not available for this location.")
-print(Fore.YELLOW + Style.BRIGHT + "Current humidity: " + Fore.CYAN + Style.BRIGHT + summary_humidity)
+if currentcond_showHumidity is True:
+    print(Fore.YELLOW + Style.BRIGHT + "Current humidity: " + Fore.CYAN + Style.BRIGHT + summary_humidity)
 print("")
 
 if yesterdaydata_onsummary is True:
@@ -2458,11 +2470,20 @@ while True:
         summary_lastupdated = current_json['current_observation']['observation_time']
         summary_tempf = str(current_json['current_observation']['temp_f'])
         summary_tempc = str(current_json['current_observation']['temp_c'])
-        summary_humidity = str(current_json['current_observation']['relative_humidity'])
         logger.debug("summary_overall: %s ; summary_lastupdated: %s"
                      % (summary_overall, summary_lastupdated))
         logger.debug("summary_tempf: %s ; summary_tempc: %s"
                      % (summary_tempf, summary_tempc))
+
+        summary_humidity = str(current_json['current_observation']['relative_humidity'])
+        logger.debug("summary_humidity: %s" % summary_humidity)
+        # Check again for bad humidity data. The variable is already defined in any condition at the start
+        # of PyWeather.
+        if summary_humidity == "-999%":
+            logger.info("summary_humidity is '-999%'.")
+            currentcond_showHumidity = False
+            logger.debug("currentcond_showHumidity: %s" % currentcond_showHumidity)
+
         summary_winddir = current_json['current_observation']['wind_dir']
         summary_windmph = current_json['current_observation']['wind_mph']
         summary_windmphstr = str(summary_windmph)
@@ -2585,7 +2606,8 @@ while True:
                       + " (" + current_windDegrees + " degrees)")
         else:
             print(Fore.YELLOW + Style.BRIGHT + "Wind data is not available for this location.")
-        print(Fore.YELLOW + Style.BRIGHT + "Current humidity: " + Fore.CYAN + Style.BRIGHT + summary_humidity)
+        if currentcond_showHumidity is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Current humidity: " + Fore.CYAN + Style.BRIGHT + summary_humidity)
         print(Fore.YELLOW + Style.BRIGHT + "Current pressure: " + Fore.CYAN + Style.BRIGHT + current_pressureInHg
               + " inHg (" + current_pressureMb + " mb), " + current_pressureTrend2)
         if current_showvisibilitydata is True:
@@ -5189,9 +5211,8 @@ while True:
 
             # Check for bad wind data in the hourly - it's "".
 
-            if historical_windspeedKPH == "" or historical_windspeedMPH == "":
-                logger.info("historical_windspeedKPH: %s ; historical_windspeedMPH: %s" %
-                            (historical_windspeedKPH, historical_windspeedMPH))
+            if historical_windspeedKPH == "" or historical_windspeedKPH == "-9999.0" or historical_windspeedMPH == "" or historical_windspeedMPH == "-9999.0":
+                logger.info("historical_windspeedKPH is '' or historical_windspeedKPH is '-9999.0' or historical_windspeedMPH is '' or historical_windspeedMPH is '-9999.0")
                 historical_showWindSpeed = False
                 logger.debug("historical_showWindSpeed: %s" % historical_showWindSpeed)
 
@@ -5354,15 +5375,14 @@ while True:
             historical_totalloops = historical_totalloops + 1
             logger.debug("historical_loops: %s ; historical_totalloops: %s"
                          % (historical_loops, historical_totalloops))
+            if user_showCompletedIterations == True:
+                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s"
+                      % (historical_totalloops, historicalhourlyLoops))
                          
             if historical_totalloops == historicalhourlyLoops:
                 logger.debug("Iterations now %s. Total iterations %s. Breaking..."
                              % (historical_totalloops, historicalhourlyLoops))
                 break
-                             
-            if user_showCompletedIterations == True:
-                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s"
-                      % (historical_totalloops, historicalhourlyLoops))
                 
             if user_enterToContinue == True:
                 if historical_loops == user_loopIterations:

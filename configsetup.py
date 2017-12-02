@@ -192,7 +192,7 @@ if cd_confirmation == "yes":
     config['CACHE']['yesterday_cachedtime'] = '720'
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
-    config['GEOCODER']['scheme'] = 'https'
+    config['GEOCODER']['scheme'] = 'http'
     config['PREFETCH']['10dayfetch_atboot']= 'False'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
     config['PREFETCH']['yesterdaydata_atboot'] = 'False'
