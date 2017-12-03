@@ -35,16 +35,6 @@ import os
 config = configparser.ConfigParser()
 config.read("storage//config.ini")
 
-
-try:
-    versioninfo = open('updater//versioninfo.txt').close()
-except:
-    open('updater//versioninfo.txt', 'w').close()
-    with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.3 beta")
-        out.close()
-    input()
-    sys.exit()
 # Verbosity and all that fun stuff isn't available here.
 # If the config isn't set up, and by default, verbosity is off
 # why should I code it in?
@@ -224,6 +214,14 @@ if cd_confirmation == "yes":
         print("Press enter to exit.")
         input()
         sys.exit()
+    try:
+        open('updater//versioninfo.txt', 'w').close()
+        with open("updater//versioninfo.txt", 'a') as out:
+            out.write("0.6.3 beta")
+            out.close()
+    except:
+        print("Couldn't write the versioninfo file. This may cause issues with PyWeather down the road.")
+
     print("All done! Try relaunching the script that asked you to",
           "provision your config file.",
           "Press enter to exit.", sep="\n")

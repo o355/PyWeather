@@ -18,6 +18,7 @@
 * Adds better exiting at multiple input prompts throughout PyWeather
 
 ## version 0.6.3 beta - Released on 12/3/2017:
+**NEW FEATURES/REMOVALS:**
 * Adds a nearby location feature to hurricane data (300km out)
 * Will push the API key validation code up further thanks to new features.
 * Adding a much nicer progress indicator.
@@ -29,11 +30,10 @@
 * Much better error catching for the config file (thanks to @TheLetterAndrew for coding this in!)
 * Adds the ability to view the chance of precipitation on the forecast page.
 * Adding the ability to show cache timings.
-* Adds a new loader, which makes loading things in PyWeather a lot more nice.
 * The ability to see pressure and visibility data has been added to historical hourly & yesterday hourly information. 
 * Minor UI changes.
 
-**BUG FIXES**
+**BUG FIXES:**
 * Fixed multiple major bugs regarding invalid historical summary data & historical hourly data
 * Fixed multiple major bugs regarding invalid yesterday summary data & yesterday hourly data
 * Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
