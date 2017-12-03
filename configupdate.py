@@ -61,7 +61,7 @@ except:
         print("Updating PyWeather using version identifier: 0.6.1 beta")
         versioninfo2 = "0.6.1 beta"
     elif versioninfo2 == "3":
-        print("Updating PoyWeather using version identifier: 0.6.2 beta")
+        print("Updating PyWeather using version identifier: 0.6.2 beta")
         versioninfo2 = "0.6.2 beta"
 
 config = configparser.ConfigParser()
@@ -493,6 +493,7 @@ except:
     print("Could not write out an updated versioninfo text file. Please",
           "modify 'updater/versioninfo.txt' to display '0.6.2 beta'.", sep="\n")
 
+print("")
 print("Ta-da! PyWeather is all up-to-date. Enjoy the new features and bug fixes!",
       "Press enter to exit.", sep="\n")
 input()

@@ -14,8 +14,10 @@
 * Adds the ability for configsetup to run an automatic geocoder scheme
 * Improves the disabling of having a custom geocoder API key, even though the scheme is set to HTTP (custom geocoder keys only work with HTTPS.
 * Improves the UI in the setup file to not have overflowing lines of text.
+* Adds an attribution to Meteoalarm for EU-based alerts
+* Adds better exiting at multiple input prompts throughout PyWeather
 
-## version 0.6.3 beta - Should be released on on December 2:
+## version 0.6.3 beta - Released on 12/2/2017:
 * Adds a nearby location feature to hurricane data (300km out)
 * Will push the API key validation code up further thanks to new features.
 * Adding a much nicer progress indicator.
@@ -29,7 +31,6 @@
 * Adding the ability to show cache timings.
 * Adds a new loader, which makes loading things in PyWeather a lot more nice.
 * The ability to see pressure and visibility data has been added to historical hourly & yesterday hourly information. 
-* Adds an attribution to Meteoalarm for EU-based alerts
 * Minor UI changes.
 
 **BUG FIXES**
@@ -49,11 +50,14 @@
 * Fixed a minor bug where PyWeather wouldn't catch bad humidity data for current conditions.
 * Fixed a bug where configsetup script set the default geocoder scheme to https, which caused issues on platforms that don't support the geocoder running in the HTTPS scheme.
 
-
-**OTHER CHANGES**
+**OTHER CHANGES:**
 * The Git Updater has been completely removed, as it's been unreliable. A universal updater will be introduced later in time.
 * The configupdate file will now properly catch a bad section error (not a plain except)
 
+**KNOWN ISSUES:**
+* Tide data may not be fully available for some cities. I'm working on a fix for 0.6.4 beta.
+* Attempting to exit out of historical weather is bugged. I'm also working on a fix for 0.6.4 beta.
+* Hurricanes in hurricane data will show up twice. I've already contacted Wunderground about the issue, but they haven't responded back. A fix is coming in 0.6.4 beta.
 
 ## version 0.6.2 beta - Released on 9/24/2017
 **NEW FEATURES/REMOVALS**

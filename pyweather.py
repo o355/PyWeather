@@ -728,38 +728,12 @@ elif geopyScheme == "http" and geocoder_customkeyEnabled is False:
     geolocator = GoogleV3(scheme='http')
     logger.debug("geocoder scheme is now http.")
 elif geopyScheme == "http" and geocoder_customkeyEnabled is True:
-    geolocator = GoogleV3(api_key=geocoder_customkey, scheme='http')
-    logger.debug("geocoder scheme is now http, custom key. Validating...")
-    spinner.stop()
-    spinner.start(text="Validating geocoder API key...")
-    # Do a warm-up geocode
-    try:
-        location = geolocator.geocode("123 5th Avenue, New York, NY")
-    except:
-        logger.debug("warmup geocode failed.")
-    # Do the actual geocode
-    try:
-        location = geolocator.geocode("123 5th Avenue, New York, NY")
-    except geopy.exc.GeocoderQueryError:
-        spinner.fail(text="Geocoder API key is invalid!")
-        print("")
-        logger.debug("API key is invalid, falling back to no API key...")
-        print("Your geocoder API key failed to validate, since it is wrong.",
-              "Falling back to no API key...", sep="\n")
-        printException()
-        geolocator = GoogleV3(scheme='http')
-        time.sleep(0.1)
-        spinner.start(text="Loading PyWeather...")
-    except:
-        spinner.fail(text="Failed to validate geocoder API key!")
-        print("")
-        print("When trying to validate your geocoder API key, something went wrong.",
-              "Falling back to no API key...", sep="\n")
-        printException()
-        logger.debug("Failed to validate API key.")
-        geolocator = GoogleV3(scheme='http')
-        time.sleep(0.1)
-        spinner.start(text="Loading PyWeather...")
+    spinner.fail(text="A custom geocoder key on a HTTP scheme isn't allowed!")
+    print("Sorry! Having a custom geocoder key on a HTTP scheme is not supported by",
+          "Google. If you want to get rid of these error messages, please set GEOCODER API/",
+          "customkeyenabled to False.", sep="\n")
+    print("")
+    geolocator = GoogleV3(scheme='http')
 else:
     print("Geocoder scheme variable couldn't be understood.",
           "Defaulting to the https scheme.", sep="\n")
@@ -906,7 +880,7 @@ if checkforUpdates == True:
 logger.info("Defining about variables...")
 about_buildnumber = "63"
 about_version = "0.6.3 beta"
-about_releasedate = "November 30, 2017"
+about_releasedate = "December 2, 2017"
 about_maindevelopers = "o355" # Oh look, I'm also on TV, HI MOM!!!!!!!!!!!!
 logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))
