@@ -880,7 +880,7 @@ if checkforUpdates == True:
 logger.info("Defining about variables...")
 about_buildnumber = "63"
 about_version = "0.6.3 beta"
-about_releasedate = "December 2, 2017"
+about_releasedate = "December 3, 2017"
 about_maindevelopers = "o355" # Oh look, I'm also on TV, HI MOM!!!!!!!!!!!!
 logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))

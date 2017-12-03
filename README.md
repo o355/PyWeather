@@ -1,6 +1,6 @@
 [Subscribe to the PyWeather Weekly Update, for all the latest in PyWeather news on a weekly basis!](https://owenthe.ninja/sign-pyweathers-weekly-newsletter/)
 
-## Welcome to PyWeather (0.6.2 beta)!
+## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
 
 PyWeather is the culmination of thousands of hours of work poured into a silly little project that got more advanced over time.
@@ -22,7 +22,7 @@ If you'd rather, you can also download PyWeather with Git, using the following c
 ```
 git clone https://github.com/o355/pyweather.git ./pyweather
 cd pyweather
-git checkout 0.6.2-beta
+git checkout 0.6.3-beta
 ```
 
 After that, run `setup.py`, and the setup file will guide you through setting up PyWeather. After that, run `pyweather.py`, and enjoy the magic of PyWeather! It's as easy as that.
@@ -49,18 +49,7 @@ Please listen to local authorities, and your country's weather service (NWS in t
 
 However, during times of non-severe weather, PyWeather is a fun way to check the weather.
 
-## Notices
-Notices are important things you'll want to know about PyWeather.
-
-### PyWeather 0.6.3 beta is now not delayed - Hopefully
-I'm on a pretty rigorous schedule to try and release PyWeather today, and I'm doing my best to do QA on 3 OSes today.
-
-PyWeather 0.6.3 beta will be hopefully released by 11:59pm EST on December 1, given no major bugs appear. 
-
-### PyWeather's GitHub page will be discontinued whenever 0.6.3 beta is released
-cool!
-
-### Beta notice
+###Beta notice
 If you haven't noticed, PyWeather is in beta. Basic features should work completely fine, but more advanced and newer features may not work 100% of the time.
 
 ## What's PyWeather?
@@ -78,7 +67,7 @@ Just kidding, they're not here. I'll get around to capturing screencaps of 0.6.3
 PyWeather has lots of them, and the list is ever expanding. Here's the present feature list:
 * Easy setups. The one-run setup script will install necessary libraries (only two (three on some setups) extra libraries are required to run PyWeather), guide you through obtaining an API key easily, and letting you configure PyWeather to your liking.
 * On the subject of API keys, PyWeather uses Wunderground's API, meaning you'll get accurate weather information. I find Wunderground to be the perfect API for this project, as it has accurate weather information, and has a free developer tier.
-* PyWeather can be configured easily, and has lots of options to configure. You can fine tune nearly 25 variables of how PyWeather works, across different scripts. The config file being used is a .ini file, and a descriptive configuration readme is also provided.
+* PyWeather can be configured easily, and has lots of options to configure. You can fine tune nearly 40 variables of how PyWeather works, across different scripts. The config file being used is a .ini file, and a descriptive configuration readme is also provided.
 * PyWeather is simple to use. I've tried to make PyWeather appeal to both people who don't know what Python is, to people who know how to use software. Either way, you can use PyWeather easily.
 * Lots of data types. All these data types as a matter of a fact!
 	* Current information
@@ -87,24 +76,25 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 	* 10-day forecasts
 	* Almanac information
 	* Astronomy (sunrise/sunset/moonrise/moonset + moon) information
-	* Historical weather information, including hourly weather for a historical date
+	* Historical weather information, including hourly weather for a historical date (PWSes are NOT supported at this time.)
 	* Radar information (experimental, for now)
 	* Yesterday's weather
 	* Tide data
 	* Hurricane data
-	* Webcam images - Scrapped: Wunderground is removing this feature and the API on December 15, 2017.
 	
 * PyWeather is pretty modular. As I said earlier with the super-configurable config file, this also translates into modularity. PyWeather's features can be turned on and off at will.
 * PyWeather has a built-in updater, provided you have git installed. I hope to eventually incorporate a universal "download the zip and unzip it" system down the road.
 * PyWeather has a robust built-in debugger/logger. When turned on, it'll spam your console with verbosityness, or whatever that's called.
-* PyWeather has a built-in geoIP service, which can detect your approximate location for even faster weather access. However, this may not be 100% accurate, especially on mobile networks. - Coming in 0.6.3 beta, the code is done!
-* PyWeather supports the viewing of weather data for individual Wunderground Personal Weather Stations. You'll soon be able to also use PWSes as favorite locations! - Coming in 0.6.3 beta, the code is done!
+* PyWeather has a built-in geoIP service, which can detect your approximate location for even faster weather access. However, this may not be 100% accurate, especially on mobile networks.
+* PyWeather supports the viewing of weather data for individual Wunderground Personal Weather Stations. You'll soon be able to also use PWSes as favorite locations!
+* PyWeather can store 5 favorite locations of yours, and can easily call up those favorite locations when you boot up PyWeather.
+* PyWeather can tell you which city a tropical storm is closest to, at a range of up to 300km.
 
 In addition, these features will soon be coming to PyWeather:
-* PyWeather will soon be able to store 5 favorite locations of yours, and you can easily call your favorite locations when you boot up PyWeather. - Coming in 0.6.3 beta
-* PyWeather will soon be able to tell the user the closest city that a tropical system is to (up to 300km) - Coming in 0.6.3 beta
 * PyWeather will soon be able to show you the 5 previous locations you entered. - Coming in 0.6.3 beta
 * PyWeather will soon have a universal updater that's not reliant on Git. This should increase the reliability of the updater, and will let Windows users be able to have an automatic updater. - Coming in 0.6.4 beta
+* PyWeather will soon be able to view the weather ON MARS! - Coming in 0.6.4 beta
+* PyWeather will soon be able to show weather for airports worldwide. - Coming in 0.6.4 beta.
 
 ## Why actually use PyWeather over Wunderground, or other apps?
 PyWeather has lots of advantages over using websites on your desktop, or even weather apps on mobile (PyWeather is compatible with Termux for Android, and other SSH apps of course)
@@ -132,23 +122,23 @@ PyWeather's main data types are done, so now it's on to rapid development of new
 This stage of PyWeather will last a few versions, and span at last 6 months.    
 
 ## Contributing
-Sadly, being a Python developer isn't my day job. I can't work on PyWeather for 8 hours a day, and about 45 hours a week. I have to go to school, do homework, sleep, eat, and other various things. I can't work on PyWeather for 5 hours afterschool, I'd be exhausted.
+Sadly, being a Python developer isn't my day job, and I can't manage to code for 8 hours a day. Thanks school...
 
-So, here's the deal. I can only work on PyWeather at max for 10 hours/week usually. At max, 6 hours during the workweek, and 4 hours on the weekend. This is usually lower, at around 3-5 hours/week. It's a lot, but it's not a lot.
+In the end, I usually work on PyWeather for 1-2 hours daily, and that isn't a ton of time. Each new release usually takes at least 40 hours to code in new features, and at least another 10 hours to run QA.
 
-I anticipate PyWeather 0.6.3 beta to consume about 50 hours to code in new features, but this might be even higher. QA will take another 10-15 hours. Given the usual 5 hours/week coding time, you can see why PyWeather releases take about 8-10 weeks to complete. Of course, these numbers are not set in stone, and will never be.
+It's a lot going solo and having limited time to find bugs, do QA, and code in new features. This all usually results in delayed releases, and having to wait 2-3 months for a new release of PyWeather.
 
-Here's the deal. I want faster releases as much as you do. I'd like releases to drop in 3-4 weeks while maintaining the code quality presented in 0.6.2 beta. If that could happen, I'd need more time for PyWeather. This is where you help.
+However, you can help! Contributing to PyWeather is a great way to help with my limited time, shorten release waits, and help out with PyWeather. The best part? You don't need to know Python to get started!
 
-If you don't know how to code Python, you can help report issues. I can't possibly catch every error with every setup. If you see a bug, report it! Every report improves PyWeather.
+Reporting bugs is always highly appreciated, as each bug report makes PyWeather more stable. Making a bug report is easy, click the Issues tab and follow the template provided.
 
-If you know some basic Python, try coding in some smaller features. As an example, adding prefetching yesterday's weather, caching yesterday's weather, and caching hurricane data are all features that are simple to add (you can easily copy/paste code and change a few variables around). Doing this helps tremendously, and lets me focus on more advanced features that take longer to code.
+If you know some Python, small pull requests are always highly appreciated, especially if they go along with a bug report. Even the smallest PRs are still highly appreciated.
 
-As another basic Python example, if you find a bug caused by a typo, a missing variable, etc, you're more than welcome to fix the bug.
+If you'd like to take it up to the next level, you can code in entire features into PyWeather! It's best to contact me to arrange how the feature will be done, however.
 
-If you know a solid chunk of Python, you might want to consider coding in more advanced features. However, if you're new to PyWeather, I'd suggest working on smaller features to get a feel for the program. If you're up to coding more advanced features, you'll want to contact me on Reddit, /u/therealo355. I'll give you a full explaination of what needs to get added.
+You can get an incomplete rundown of contributing in the CONTRIBUTING.md file in the .github folder, including contact information.
 
-To get a rundown of things, read the CONTRIBUTING.md file in the .github folder. Just know what by contributing code to PyWeather, you're helping to bring the delay between releases down, and reduces my time working a feature from multiple hours to >15 mins.
+If you have any questions about contributing, please don't hesitate to get in touch.
 
 ## Contributers
 Thanks to these awesome people, they've helped out PyWeather by coding in bug fixes, new features, reporting bugs, and suggesting new stuff.
@@ -160,6 +150,6 @@ Thanks to these awesome people, they've helped out PyWeather by coding in bug fi
 * DiSiqueira - Contributor - Has made 1 report.
 
 ## Sharing
-I've, among others have poured in over 1,000 hours into making PyWeather what it is, and I plan to spend hundreds of more hours refining PyWeather.
+I've, among others have poured in hundreds of hours into making PyWeather what it is, and I plan to spend hundreds of more hours refining PyWeather.
 
 If you'd like, please consider telling your friends, social media followers, whomever about PyWeather. Every star, fork, and user keeps me motivated to keep working on PyWeather.

@@ -17,7 +17,7 @@
 * Adds an attribution to Meteoalarm for EU-based alerts
 * Adds better exiting at multiple input prompts throughout PyWeather
 
-## version 0.6.3 beta - Released on 12/2/2017:
+## version 0.6.3 beta - Released on 12/3/2017:
 * Adds a nearby location feature to hurricane data (300km out)
 * Will push the API key validation code up further thanks to new features.
 * Adding a much nicer progress indicator.
@@ -58,6 +58,8 @@
 * Tide data may not be fully available for some cities. I'm working on a fix for 0.6.4 beta.
 * Attempting to exit out of historical weather is bugged. I'm also working on a fix for 0.6.4 beta.
 * Hurricanes in hurricane data will show up twice. I've already contacted Wunderground about the issue, but they haven't responded back. A fix is coming in 0.6.4 beta.
+* A custom geocoder key won't work without an https-enabled scheme. There is a temporary fix in 0.6.3 beta, but a more comprehensive fix will be coming in 0.6.4 beta.
+* The configsetup script will default to an http scheme regardless of if your OS is https compatible or not. A more comprehensive fix will be coming in 0.6.4 beta.
 
 ## version 0.6.2 beta - Released on 9/24/2017
 **NEW FEATURES/REMOVALS**
