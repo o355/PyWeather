@@ -1,11 +1,14 @@
 [Subscribe to the PyWeather Weekly Update, for all the latest in PyWeather news on a weekly basis!](https://owenthe.ninja/sign-pyweathers-weekly-newsletter/)
 
-## Welcome to PyWeather (0.6.3 beta)!
+## Welcome to PyWeather (0.6.2 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
 
 PyWeather is the culmination of thousands of hours of work poured into a silly little project that got more advanced over time.
 
 I hope that you can enjoy PyWeather as much as I enjoy making PyWeather, so, let's get started!
+
+## Hey! PyWeather 0.6.3 beta is coming out by 3pm EST on December 3rd!
+Writing release notes is a tiring and long process.
 
 ## Requirements
 To run PyWeather, you'll need:
@@ -22,7 +25,7 @@ If you'd rather, you can also download PyWeather with Git, using the following c
 ```
 git clone https://github.com/o355/pyweather.git ./pyweather
 cd pyweather
-git checkout 0.6.3-beta
+git checkout 0.6.2-beta
 ```
 
 After that, run `setup.py`, and the setup file will guide you through setting up PyWeather. After that, run `pyweather.py`, and enjoy the magic of PyWeather! It's as easy as that.

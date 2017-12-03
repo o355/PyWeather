@@ -21,12 +21,12 @@
 * Adds a nearby location feature to hurricane data (300km out)
 * Will push the API key validation code up further thanks to new features.
 * Adding a much nicer progress indicator.
-* Adds the ability to prefetch yesterday's weather at boot, and a caching system.
+* Adds the ability to prefetch yesterday's weather at boot, and a caching system. (thanks to @ModoUnreal for partially coding this in!)
 * Adds the ability to view your current location through a GeoIP service
 * Adds the ability to view data through a PWS at boot.
 * Adds the ability to have up to 5 favorite locations.
 * Adds the ability to manually define a Google Maps API key
-* Much better error catching for the config file
+* Much better error catching for the config file (thanks to @TheLetterAndrew for coding this in!)
 * Adds the ability to view the chance of precipitation on the forecast page.
 * Adding the ability to show cache timings.
 * Adds a new loader, which makes loading things in PyWeather a lot more nice.
