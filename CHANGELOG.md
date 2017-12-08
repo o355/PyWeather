@@ -3,7 +3,7 @@
 
 ## version 0.6.4 beta - Should be released in early 2018:
 * Adds the ability to see the weather for airports - Should be done on 12/12
-    * Adding initial support for airport queries - Should be done on 12/8
+    * Adding initial support for airport queries - Done!
     * Adding support for favorite location calling (& working on favloc refinements) - Should be done on 12/10
     * Adding config options - Should be done on 12/12
 * Adds further refinement to favorite locations (Instead of your location input being the shown favorite location, it'll be the official location given by Google's geocoder) - Should be done ~12/15

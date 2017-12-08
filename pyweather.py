@@ -1413,7 +1413,7 @@ if (airports_enabled is True and locinput.find("airport:") == 0
     spinner.start(text="Validating airport query...")
     if locinput.find("airport:") == 0:
         airport_locinput = locinput.strip("airport:").upper()
-    elif locinput.find("airport:") == 0:
+    elif locinput.find("arpt:") == 0:
         airport_locinput = locinput.strip("arpt:").upper()
     logger.debug("airport_locinput: %s" % airport_locinput)
     airportinfourl = pwsinfourl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
@@ -1558,6 +1558,17 @@ if pws_urls is False:
     alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + latstr + ',' + lonstr + '.json'
     yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
     tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
+    hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
+elif airport_urls is True:
+    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + airport_locinput + '.json'
+    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + airport_locinput + '.json'
+    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + airport_locinput + '.json'
+    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + airport_locinput + '.json'
+    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + airport_locinput + '.json'
+    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + airport_locinput + '.json'
+    alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + airport_locinput + '.json'
+    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + airport_locinput + '.json'
+    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + airport_locinput + '.json'
     hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
 elif pws_urls is True:
     currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + locinput.lower() + '.json'
@@ -2309,6 +2320,9 @@ summaryHourlyIterations = 0
 if pws_available is True:
     location = pws_id + " (located in " + pws_location + ")"
     location2 = "PWS " + pws_id
+elif airport_available is True:
+    location = airport_name
+    location2 = airport_code
 else:
     location2 = str(location)
 logger.debug("location2: %s" % location2)
