@@ -293,6 +293,7 @@ except:
     cache_forecasttime = 3600
 try:
     cache_almanactime = config.getfloat('CACHE', 'almanac_cachedtime')
+    cache_almanactime = cache_almanactime * 60
 except:
     print("When attempting to load your configuration file, an error",
           "occurred. CACHE/almanac_cachedtime failed to load. Defaulting to 14400.", sep="\n")
@@ -300,6 +301,7 @@ except:
     cache_almanactime = 1440
 try:
     cache_threedayhourly = config.getfloat('CACHE', 'threedayhourly_cachedtime')
+    cache_threedayhourly = cache_threedayhourly * 60
 except:
     print("When attempting to load your configuration file, an error",
           "occurred. CACHE/threedayhourly_cachedtime failed to load. Defaulting to 3600.", sep="\n")
@@ -530,6 +532,14 @@ except:
     configerrorcount += 1
     yesterdaydata_onsummary = False
 
+try:
+    airports_enabled = config.getboolean('FIRSTINPUT', 'allow_airportqueries')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FIRSTINPUT/allow_airportqueries failed to load. Defaulting to 'True'.", sep="\n")
+    configerrorcount += 1
+    airports_enabled = True
+
 if configerrorcount >= 1:
     print("", "When trying to load your configuration file, error(s) occurred.",
           "Try making sure that there are no typos in your config file, and try setting values",
@@ -607,7 +617,8 @@ logger.debug("favoritelocation_4: %s ; favoritelocation_5: %s" %
              (favoritelocation_4, favoritelocation_5))
 logger.debug("geocoder_customkeyEnabled: %s ; geocoder_customkey: %s" %
              (geocoder_customkeyEnabled, geocoder_customkey))
-logger.debug("extratools_enabled: %s" % extratools_enabled)
+logger.debug("extratools_enabled: %s ; airports_enabled: %s" %
+             (extratools_enabled, airports_enabled))
 
 
 logger.info("Setting gif x and y resolution for radar...")
@@ -913,11 +924,15 @@ logger.debug("geoip_url: %s" % geoip_url)
 geoip_available = False
 pws_available = False
 pws_urls = False
+airport_available = False
+airport_urls = False
 useGeocoder = True
 logger.debug("geoip_available: %s ; pws_available: %s" %
              (geoip_available, pws_available))
-logger.debug("pws_urls: %s ; useGeocoder: %s" %
-             (pws_urls, useGeocoder))
+logger.debug("pws_urls: %s ; airport_available: %s" %
+             (pws_urls, airport_available))
+logger.debug("airport_urls: %s ; useGeocoder: %s" %
+             (airport_urls, useGeocoder))
 
 # Validate the API key before boot. It's now up here due to the new features at boot.
 if validateAPIKey == True and backupKeyLoaded == True:
@@ -1165,6 +1180,11 @@ if pws_enabled is True:
     print("")
     print("You can also query a Wunderground PWS by entering this:")
     print("pws:<PWS ID>")
+if airports_enabled is True:
+    logger.debug("Airport queries have been enabled. Showing option...")
+    print("")
+    print("You can also query airport weather information by entering this:")
+    print("airport:<IATA or ICAO code>")
 
 print("")
 locinput = input("Input here: ")
@@ -1173,9 +1193,11 @@ locinput = str(locinput)
 print("Checking the weather, it'll take a few seconds!")
 print("")
 
-# Set if the query is a PWS at the beginning. It'll flip to True if a PWS query is detected.
+# Define query types to false at the start. If a certain query type is found, it'll be marked as True later in the script.
 pws_query = False
-logger.debug("pws_query: %s" % pws_query)
+airport_query = False
+logger.debug("pws_query: %s ; airport_query: %s" %
+             (pws_query, airport_query))
 
 # Tell users their query isn't supported nicely
 # I understand that eggs.find("ham") isn't the most pythonic thing ever, but it's more reliable
@@ -1198,6 +1220,7 @@ elif (geoip_available is False and locinput.find("currentlocation") == 0 or
           "data at this time. Press enter to exit.", sep="\n")
     input()
     sys.exit()
+# Here we're just looking to see if favloc isn't enabled, and display an error message if it's off.
 elif (favoritelocation_enabled is False and locinput.find("favoritelocation:") == 0 or
       favoritelocation_enabled is False and locinput.find("favloc:") == 0):
     spinner.fail(text="PyWeather query failed!")
@@ -1208,6 +1231,7 @@ elif (favoritelocation_enabled is False and locinput.find("favoritelocation:") =
           "your config file and set FAVORITE LOCATIONS/enabled to True. Press enter to exit.", sep="\n")
     input()
     sys.exit()
+# If favorite locations is on, but there aren't any favorite locations, then throw an error.
 elif (favoritelocation_available is False and locinput.find("favoritelocation:") == 0 or
         favoritelocation_available is False and locinput.find("favloc:") == 0):
     spinner.fail(text="PyWeather query failed!")
@@ -1217,7 +1241,7 @@ elif (favoritelocation_available is False and locinput.find("favoritelocation:")
     input()
     sys.exit()
 
-elif (favoritelocation_available is True and locinput.find("favoritelocation:") == 0 or
+if (favoritelocation_available is True and locinput.find("favoritelocation:") == 0 or
         favoritelocation_available is True and locinput.find("favloc:") == 0):
     haveFavoriteLocation = False
     logger.debug("haveFavoriteLocation: %s" % haveFavoriteLocation)
@@ -1297,10 +1321,20 @@ elif (favoritelocation_available is True and locinput.find("favoritelocation:") 
     useGeocoder = True
     logger.debug("useGeocoder: %s" % useGeocoder)
 
-elif pws_enabled is False and locinput.find("pws:") == 0:
+if pws_enabled is False and locinput.find("pws:") == 0:
     spinner.fail(text="PyWeather query failed!")
     print("")
     print("Whoops! You entered the query to access a PWS, but PWS queries are currently",
+          "disabled. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+
+# Check for an airport query and if airports aren't enabled.
+if (airports_enabled is False and locinput.find("airport:") == 0 or
+    airports_enabled is False and locinput.find("arpt:") == 0):
+    spinner.fail(text="PyWeather query failed!")
+    print("")
+    print("Whoops! You entered the query to access an airport, but airport queries are currently",
           "disabled. Press enter to exit.", sep="\n")
     input()
     sys.exit()
@@ -1313,9 +1347,8 @@ if (geoip_available is True and locinput.find("currentlocation") == 0 or
     logger.debug("locinput: %s ; useGeocoder: %s" %
                  (locinput, useGeocoder))
     logger.debug("location: %s" % currentlocation)
-elif pws_enabled is True and locinput.find("pws:") == 0:
-    pws_query = True
-    logger.debug("pws_query: %s" % pws_query)
+
+if pws_enabled is True and locinput.find("pws:") == 0:
     # Just for safety, query Wunderground's geolocator to get the lat/lon of the PWS.
     # This also helps to validate the PWS.
     # Use a .lower() on the PWS query for safety. It works when in lower-case.
@@ -1323,7 +1356,6 @@ elif pws_enabled is True and locinput.find("pws:") == 0:
     logger.debug("pwsinfourl: %s" % pwsinfourl)
     spinner.start(text="Validating PWS query...")
     try:
-
         pwsinfoJSON = requests.get(pwsinfourl)
         logger.debug("pwsinfoJSON acquired with: %s" % pwsinfoJSON)
         pwsinfo_json = json.loads(pwsinfoJSON.text)
@@ -1375,6 +1407,72 @@ elif pws_enabled is True and locinput.find("pws:") == 0:
     useGeocoder = False
     logger.debug("pws_urls: %s ; useGeocoder: %s" % (pws_urls, useGeocoder))
 
+if (airports_enabled is True and locinput.find("airport:") == 0
+    or airports_enabled is True and locinput.find("arpt:") == 0):
+    # In the location input trim off "airport:" or "arpt:", as we can't call the API with that being included
+    spinner.start(text="Validating airport query...")
+    if locinput.find("airport:") == 0:
+        airport_locinput = locinput.strip("airport:").upper()
+    elif locinput.find("airport:") == 0:
+        airport_locinput = locinput.strip("arpt:").upper()
+    logger.debug("airport_locinput: %s" % airport_locinput)
+    airportinfourl = pwsinfourl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
+    try:
+        airportJSON = requests.get(airportinfourl)
+        logger.debug("airport information JSON (airportJSON) acquired with end result: %s" % airportJSON)
+        airportinfo_json = json.loads(airportJSON.text)
+        if jsonVerbosity is True:
+            logger.debug("airportinfo_json: %s" % airportinfo_json)
+        else:
+            logger.debug("airportinfo_json has been loaded.")
+    except:
+        spinner.fail(text='Failed to validate airport query!')
+        print("")
+        print("Couldn't query Wunderground to validate your inputted airport. Make sure that you have",
+              "an internet connection, and that api.wunderground.com is unblocked."
+              "Press enter to exit.", sep="\n")
+        printException()
+        input()
+        sys.exit()
+
+    try:
+        airport_invalid = airportinfo_json['location']['lat']
+        logger.debug("We have good airport data!")
+    except:
+        spinner.fail(text="Failed to validate airport query!")
+        print("")
+        print("The airport that you entered doesn't have an active weather service, or doesn't exist",
+              "Please try entering an airport with an active weather service or one that exists next",
+              "time you use PyWeather. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+    airport_available = True
+    logger.debug("airport_available: %s" % airport_available)
+    # Extract data about lat/lon. Use the airport_lat/airport_lon vars as raw data. latstr/lonstr are compatibility
+    # strings.
+
+    airport_lat = airportinfo_json['location']['lat']
+    airport_lon = airportinfo_json['location']['lon']
+    logger.debug("airport_lat: %s ; airport_lon: %s" % (airport_lat, airport_lon))
+    # Standard lat/lon stuff here
+    latstr = str(airportinfo_json['location']['lat'])
+    lonstr = str(airportinfo_json['location']['lon'])
+    logger.debug("latstr: %s ; lonstr: %s" % (latstr, lonstr))
+    # Extract data about the airport location
+    airport_city = airportinfo_json['location']['city']
+    airport_state = airportinfo_json['location']['state']
+    logger.debug("airport_city: %s ; airport_state: %s" %
+                 (airport_city, airport_state))
+    # Having this as the airport name works very well so far. The "city" that Wunderground
+    # provides for airports is the name of an airport without "Airport" included.
+    airport_name = airport_city + " Airport"
+    airport_code = airportinfo_json['location']['nearby_weather_stations']['airport']['station'][0]['icao']
+    logger.debug("airport_name: %s ; airport_code: %s" %
+                 (airport_name, airport_code))
+    airport_urls = True
+    useGeocoder = False
+    logger.debug("airport_urls: %s ; useGeocoder: %s" %
+                 (airport_urls, useGeocoder))
 
 # Start the geocoder. If we don't have a connection, exit nicely.
 # After we get location data, store it in latstr and lonstr, and store
@@ -1472,6 +1570,7 @@ elif pws_urls is True:
     yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + locinput.lower() + '.json'
     tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + locinput.lower() + '.json'
     hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
+
 
 logger.debug("currenturl: %s" % currenturl)
 logger.debug("f10dayurl: %s" % f10dayurl)

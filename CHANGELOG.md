@@ -1,21 +1,24 @@
 # PyWeather changelog
 **Note: The changelog being used for tracking PyWeather progress has been retiredish. Please check the projects tab of PyWeather for progress on the next versions of PyWeather.**
 
-## version 0.6.4 beta - Should be released in late January 2018:
-* Adds the ability to see the weather for airports
-* Adds the ability to see and call the weather for previously looked up locations
-* Adds the ability to see historical data for PWSes
-* Adds the ability to see the weather on Mars!
-* Adds further refinement to favorite locations (Instead of your location input being the shown favorite location, it'll be the official location given by Google's geocoder)
-* Adds the ability to change your radar image size on the fly
-* Adds the brand new Universal PyWeather Updater, making it a ton easier to update to new versions of PyWeather
-* Improves the UI of the configuration updater. New configuration options are put on 2 lines of text.
-* Lowers the default iterations for data down to 4 to prevent scrolling.
-* Adds the ability for configsetup to run an automatic geocoder scheme
-* Improves the disabling of having a custom geocoder API key, even though the scheme is set to HTTP (custom geocoder keys only work with HTTPS.
-* Improves the UI in the setup file to not have overflowing lines of text.
-* Adds an attribution to Meteoalarm for EU-based alerts
-* Adds better exiting at multiple input prompts throughout PyWeather
+## version 0.6.4 beta - Should be released in early 2018:
+* Adds the ability to see the weather for airports - Should be done on 12/12
+    * Adding initial support for airport queries - Should be done on 12/8
+    * Adding support for favorite location calling (& working on favloc refinements) - Should be done on 12/10
+    * Adding config options - Should be done on 12/12
+* Adds further refinement to favorite locations (Instead of your location input being the shown favorite location, it'll be the official location given by Google's geocoder) - Should be done ~12/15
+* Adds the ability to see and call the weather for previously looked up locations - Should be done on 12/20
+* Adds the ability to see historical data for PWSes - Should be done on 12/28
+* Adds the ability to see the weather on Mars! - Should be done on 1/6/18
+* Adds the ability to change your radar image size on the fly - Should be done on 1/13/18
+* Adds the brand new Universal PyWeather Updater, making it a ton easier to update to new versions of PyWeather - Should be done on 1/28/18
+* Improves the UI of the configuration updater. New configuration options are put on 2 lines of text. - Should be done on 2/1/18
+* Lowers the default iterations for data down to 4 to prevent scrolling. - Should be done on 2/3/18
+* Adds the ability for configsetup to run an automatic geocoder scheme - Should be done on 2/5/18
+* Improves the disabling of having a custom geocoder API key, even though the scheme is set to HTTP (custom geocoder keys only work with HTTPS). - Should be done on 2/9/18
+* Improves the UI in the setup file to not have overflowing lines of text. - Should be done on 2/12/18
+* Adds an attribution to Meteoalarm for EU-based alerts - Should be done on 2/15/18
+* Adds better exiting at multiple input prompts throughout PyWeather - Should be done on 2/17/18
 
 ## version 0.6.3 beta - Released on 12/3/2017:
 **NEW FEATURES/REMOVALS:**
