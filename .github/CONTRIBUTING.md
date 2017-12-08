@@ -157,13 +157,9 @@ On Linux, if it's not preinstalled, use your package manager to install Git.
 
 You can set up Git in a command line by using this guide: https://help.github.com/articles/set-up-git/
 
-## Forking
-To fork PyWeather, press the big fork button. It's forked, hurray!
-
-
-
 ## Forking PyWeather
-Forking PyWeather is easy. Hit the fork button. Done!
+Forking PyWeather is easy, press the big fork button. It's forked, hurray!
+
 
 ## QA
 At this time, contributing to PyWeather QA is not figured out.
