@@ -1,5 +1,31 @@
-# PyWeather Config Setup - 0.6.2 beta
-# (c) 2017, o355. GNU GPL.
+'''
+_______
+|      \  \           /         @@@;
+|       \  \         /        `#....@
+|        |  \       /       ,;@.....;,;
+|        |   \     /       @..@........@`           PyWeather Config Setup
+|        |    \   /        .............@           version 0.6.3 beta
+|        /     \ /         .............@           (c) 2017 - o355
+|_______/       |          @...........#`
+|               |           .+@@++++@#;
+|               |             @ ;  ,
+|               |             : ' .
+|               |            @ # .`
+|               |           @ # .`
+'''
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
 import configparser
@@ -9,16 +35,6 @@ import os
 config = configparser.ConfigParser()
 config.read("storage//config.ini")
 
-
-try:
-    versioninfo = open('updater//versioninfo.txt').close()
-except:
-    open('updater//versioninfo.txt', 'w').close()
-    with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.2 beta")
-        out.close()
-    input()
-    sys.exit()
 # Verbosity and all that fun stuff isn't available here.
 # If the config isn't set up, and by default, verbosity is off
 # why should I code it in?
@@ -42,6 +58,26 @@ if cd_confirmation == "yes":
             sys.exit()
     except:
         print("Setting up your config...")
+
+    try:
+        config.add_section("HURRICANE")
+    except configparser.DuplicateSectionError:
+        print("Hurricane section could not be added.")
+
+    try:
+        config.add_section("GEOCODER API")
+    except configparser.DuplicateSectionError:
+        print("Geocoder API section could not be added.")
+
+    try:
+        config.add_section("FAVORITE LOCATIONS")
+    except configparser.DuplicateSectionError:
+        print("Favorite locations section could not be added.")
+
+    try:
+        config.add_section("FIRSTINPUT")
+    except configparser.DuplicateSectionError:
+        print("Firstinput section could not be added.")
     
     try:
         config.add_section('SUMMARY')
@@ -106,6 +142,7 @@ if cd_confirmation == "yes":
     config['SUMMARY']['almanac_summary'] = 'False'
     config['SUMMARY']['showalertsonsummary'] = 'True'
     config['SUMMARY']['showtideonsummary'] = 'False'
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
     config['VERBOSITY']['verbosity'] = 'False'
     config['VERBOSITY']['json_verbosity'] = 'False'
     config['VERBOSITY']['setup_verbosity'] = 'False'
@@ -124,10 +161,10 @@ if cd_confirmation == "yes":
     config['UI']['show_completediterations'] = 'False'
     config['UI']['alerts_usiterations'] = '1'
     config['UI']['alerts_euiterations'] = '2'
+    config['UI']['extratools_enabled'] = 'False'
     config['UPDATER']['autocheckforupdates'] = 'False'
     config['UPDATER']['show_updaterreleasetag'] = 'False'
     config['KEYBACKUP']['savedirectory'] = 'backup//'
-    config['UPDATER']['allowGitForUpdating'] = 'False'
     config['PYWEATHER BOOT']['validateapikey'] = 'True'
     config['UPDATER']['showReleaseNotes'] = 'True'
     config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
@@ -142,12 +179,29 @@ if cd_confirmation == "yes":
     config['CACHE']['almanac_cachedtime'] = '240'
     config['CACHE']['sundata_cachedtime'] = '480'
     config['CACHE']['tide_cachedtime'] = '480'
+    config['CACHE']['yesterday_cachedtime'] = '720'
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
-    config['GEOCODER']['scheme'] = 'https'
+    config['GEOCODER']['scheme'] = 'http'
     config['PREFETCH']['10dayfetch_atboot']= 'False'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
+    config['PREFETCH']['yesterdaydata_atboot'] = 'False'
     config['CACHE']['hurricane_cachedtime'] = '180'
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
+    config['HURRICANE']['enablenearestcity'] = 'False'
+    config['HURRICANE']['enablenearestcity_forecast'] = 'False'
+    config['HURRICANE']['api_username'] = 'pyweather_proj'
+    config['HURRICANE']['nearestcitysize'] = 'medium'
+    config['FAVORITE LOCATIONS']['enabled'] = 'True'
+    config['FAVORITE LOCATIONS']['favloc1'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc2'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc3'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc4'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc5'] = 'None'
+    config['GEOCODER API']['customkey_enabled'] = 'False'
+    config['GEOCODER API']['customkey'] = 'None'
+
     try:
         with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)
@@ -160,6 +214,14 @@ if cd_confirmation == "yes":
         print("Press enter to exit.")
         input()
         sys.exit()
+    try:
+        open('updater//versioninfo.txt', 'w').close()
+        with open("updater//versioninfo.txt", 'a') as out:
+            out.write("0.6.3 beta")
+            out.close()
+    except:
+        print("Couldn't write the versioninfo file. This may cause issues with PyWeather down the road.")
+
     print("All done! Try relaunching the script that asked you to",
           "provision your config file.",
           "Press enter to exit.", sep="\n")

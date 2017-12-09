@@ -1,19 +1,65 @@
-
 # PyWeather changelog
+**Note: The changelog being used for tracking PyWeather progress has been retiredish. Please check the projects tab of PyWeather for progress on the next versions of PyWeather.**
 
-## version 0.6.3 beta - Should be released late October/early November 2017:
-* Adds a nearby location feature to hurricane data (300km out) - 0% done, should be finished by 10/8
-* Adds the ability to prefetch yesterday's weather at boot - 0% done, should be finished by 10/14
-* Adds a caching system for yesterday's weather (12hrs by default) - 0% done, should be finished by 10/19
-* Adds a caching system for hurricane data (3hrs by default) - 0% done, should be finished by 10/26
-* Adds the ability to view your current location through a GeoIP service - Done!
-* Adds the ability to view data through a PWS at boot. - 0% done, should be finished by 10/3
-    * Adding basic functionality for PWS viewing up to the summary screen - 0% done, should be finished by 9/28
-    * Adding functionality for PWS location viewing in the radar, and other areas of PyWeather - 0% done, should be finished by 9/30
-    * Adding PWS validation when entered at the main input - 0% done, should be finished by 10/3
-* MAYBE (if not in 0.6.4) adds the ability to have up to 5 favorite locations. - Should be finished by 11/2
+## version 0.6.4 beta - Should be released in late January 2018:
+* Adds the ability to see the weather for airports
+* Adds the ability to see and call the weather for previously looked up locations
+* Adds the ability to see historical data for PWSes
+* Adds the ability to see the weather on Mars!
+* Adds further refinement to favorite locations (Instead of your location input being the shown favorite location, it'll be the official location given by Google's geocoder)
+* Adds the ability to change your radar image size on the fly
+* Adds the brand new Universal PyWeather Updater, making it a ton easier to update to new versions of PyWeather
+* Improves the UI of the configuration updater. New configuration options are put on 2 lines of text.
+* Lowers the default iterations for data down to 4 to prevent scrolling.
+* Adds the ability for configsetup to run an automatic geocoder scheme
+* Improves the disabling of having a custom geocoder API key, even though the scheme is set to HTTP (custom geocoder keys only work with HTTPS.
+* Improves the UI in the setup file to not have overflowing lines of text.
+* Adds an attribution to Meteoalarm for EU-based alerts
+* Adds better exiting at multiple input prompts throughout PyWeather
 
-* Will fix a bug where the updater would fail on some platforms due to a print statement.
+## version 0.6.3 beta - Released on 12/3/2017:
+**NEW FEATURES/REMOVALS:**
+* Adds a nearby location feature to hurricane data (300km out)
+* Will push the API key validation code up further thanks to new features.
+* Adding a much nicer progress indicator.
+* Adds the ability to prefetch yesterday's weather at boot, and a caching system. (thanks to @ModoUnreal for partially coding this in!)
+* Adds the ability to view your current location through a GeoIP service
+* Adds the ability to view data through a PWS at boot.
+* Adds the ability to have up to 5 favorite locations.
+* Adds the ability to manually define a Google Maps API key
+* Much better error catching for the config file (thanks to @TheLetterAndrew for coding this in!)
+* Adds the ability to view the chance of precipitation on the forecast page.
+* Adding the ability to show cache timings.
+* The ability to see pressure and visibility data has been added to historical hourly & yesterday hourly information. 
+* Minor UI changes.
+
+**BUG FIXES:**
+* Fixed multiple major bugs regarding invalid historical summary data & historical hourly data
+* Fixed multiple major bugs regarding invalid yesterday summary data & yesterday hourly data
+* Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
+* Fixed potential bugs where PyWeather wouldn't properly display precip information for forecast data - The algorithm was reworked.
+* Fixed a bug where if you manually flagged all data types to refresh, hurricane data wouldn't be refreshed.
+* Fixed a minor bug where if the summary section couldn't be added in the setup file, the print statement indicated that the cache section wasn't added.
+* Fixed a bug where PyWeather didn't catch bad visibility, UV index, and humidity data for current weather
+* Fixed a bug where the visibility in km on the yesterday's summary screen read as "kph".
+* Fixed a minor bug where on yesterday's weather hourly data, the degree symbol was placed too far right by 1 character.
+* Fixed a potential bug where missing data on yesterday's weather would cause a crash.
+* Fixed a potential bug where if almanac data is prefetched, it wouldn't display when viewing it in detail, and PyWeather would crash.
+* Fixed a minor bug where on the historical weather summary, total precipitation data in mm had a "mb" label.
+* Fixed a minor bug where historical hourly data wouldn't break when the current iterations equaled the total iterations.
+* Fixed a minor bug where PyWeather wouldn't catch bad humidity data for current conditions.
+* Fixed a bug where configsetup script set the default geocoder scheme to https, which caused issues on platforms that don't support the geocoder running in the HTTPS scheme.
+
+**OTHER CHANGES:**
+* The Git Updater has been completely removed, as it's been unreliable. A universal updater will be introduced later in time.
+* The configupdate file will now properly catch a bad section error (not a plain except)
+
+**KNOWN ISSUES:**
+* Tide data may not be fully available for some cities. I'm working on a fix for 0.6.4 beta.
+* Attempting to exit out of historical weather is bugged. I'm also working on a fix for 0.6.4 beta.
+* Hurricanes in hurricane data will show up twice. I've already contacted Wunderground about the issue, but they haven't responded back. A fix is coming in 0.6.4 beta.
+* A custom geocoder key won't work without an https-enabled scheme. There is a temporary fix in 0.6.3 beta, but a more comprehensive fix will be coming in 0.6.4 beta.
+* The configsetup script will default to an http scheme regardless of if your OS is https compatible or not. A more comprehensive fix will be coming in 0.6.4 beta.
 
 ## version 0.6.2 beta - Released on 9/24/2017
 **NEW FEATURES/REMOVALS**

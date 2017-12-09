@@ -1,34 +1,47 @@
-**WHEN UPDATING FROM 0.6.1 BETA TO 0.6.2 BETA, YOU WILL NEED TO ENTER "2" IN THE INPUT PROMPT (also when you run configupdate separately)**
-**THE GIT UPDATER WILL BREAK AFTER YOUR CONFIG IS UPDATED. ENTER "NO", THEN EXIT OUT OF PYWEATHER.**
-**The updater will break on most platforms (Windows however is completely fine!)**
+**THE GIT UPDATER IS STILL BROKEN, AND IS REMOVED IN 0.6.3 BETA. A NEW UPDATER WILL BE COMING IN THE NEXT VERSION.**
 
-**NEW FEATURES/REMOVALS**
-* Adds the ability to view yesterday's weather. - Thanks to @ModoUnreal for coding this in!
-* Adds the ability to view hurricane data in PyWeather.
-* Adds the ability to view tide data in PyWeather.
-* Adds the manual configuration of 3-day and 10-day hourly cache times. - Thanks to @ModoUnreal for coding this in!
-* Fixes a major issue with a geocoder scheme issue. PyWeather can automatically select a geocoder scheme, depending on your OS.
-* Adds the ability to input decimal numbers into cache times during setup.
-* Adds the ability to manually define a version you're upgrading to in the configupdate script in the event your versioncheck file is gone.
-* Removed the configdefault script. The configsetup script has taken it's place now.
-* Added up-to-date and no matching version messages in the configupdate script.
-* Minor UI updates
+**PyWeather 0.6.3 beta requires a new library, halo. The configupdate script should automatically install this, but you
+can (or might need to) install it yourself. The configupdate script will still update your config, even if halo can't be installed.**
 
-**BUG FIXES**
-* Fixed a critical bug where if geopy wasn't installed before setup, Pyweather Setup would install geocoder INSTEAD of geopy, and throw an error.
-* Fixed a bug where I forgot to globalize variables relating to emptying the radar cache.
-* Fixed a bug where if your configuration file failed to load, cache times were set insanely high (5 seconds for alert data, etc)
-* Fixed a bug where if you entered nothing for the backup key directory, an error would occur. Thanks to @creepersbane for reporting the error!
-* Fixed a bug where if your configuration file failed to load, enter to continue prompts were disabled by default.
-* Fixed a bug where the last step in the setup process (bypassing radar confirmation) didn't have proper else catching, and if a "yes" or "no" was entered, PyWeather setup would crash.
-* Fixed a bug where you weren't able to exit out of the summary screen when viewing historical data.
-* Fixed a bug where wind chill data in celsius in historical hourly displayed "kph" instead of a degree C symbol.
-* Fixed a bug where the 10 day forecast cache expire time was running off of the hourly cache time.
-* Fixed a bug where PyWeather wouldn't properly catch no moonrise data, resulting in a crash.
-* Fixed a bug where if alerts data wasn't getting prefetched at boot, when detailed alerts data was called up PyWeather would crash.
-* Fixed a bug where if you had 10-day hourly prefetch enabled at boot, when you viewed detailed 10-day hourly information PyWeather would crash.
-* Fixed a potential bug where the configupdate script might not at all work when you manually edit the version info file. It now searches the file instead of an exact match.
-* Fixed a bug where yesterday precipitation data could say "T" on the summary screen. A data check has been added.
-* Fixing a bug where if some almanac data wasn't available, PyWeather would crash - 80% done. Thanks to @ModoUnreal for reporting the error!
-* Fixing a "bug" where if you had no connection to the updater at boot with it enabled, PyWeather would exit instead of continue - 0% done. Thanks to @creepersbane for reporting the error!
-* Fixed a potential bug where proper code to catch invalid sunrise/sunset data was not implemented.
+**NEW FEATURES/REMOVALS:**
+* Adds a nearby location feature to hurricane data (300km out)
+* Will push the API key validation code up further thanks to new features.
+* Adding a much nicer progress indicator.
+* Adds the ability to prefetch yesterday's weather at boot, and a caching system. (thanks to @ModoUnreal for partially coding this in!)
+* Adds the ability to view your current location through a GeoIP service
+* Adds the ability to view data through a PWS at boot.
+* Adds the ability to have up to 5 favorite locations.
+* Adds the ability to manually define a Google Maps API key
+* Much better error catching for the config file (thanks to @TheLetterAndrew for coding this in!)
+* Adds the ability to view the chance of precipitation on the forecast page.
+* Adding the ability to show cache timings.
+* The ability to see pressure and visibility data has been added to historical hourly & yesterday hourly information.
+* Minor UI changes.
+
+**BUG FIXES:**
+* Fixed multiple major bugs regarding invalid historical summary data & historical hourly data
+* Fixed multiple major bugs regarding invalid yesterday summary data & yesterday hourly data
+* Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
+* Fixed potential bugs where PyWeather wouldn't properly display precip information for forecast data - The algorithm was reworked.
+* Fixed a bug where if you manually flagged all data types to refresh, hurricane data wouldn't be refreshed.
+* Fixed a minor bug where if the summary section couldn't be added in the setup file, the print statement indicated that the cache section wasn't added.
+* Fixed a bug where PyWeather didn't catch bad visibility, UV index, and humidity data for current weather
+* Fixed a bug where the visibility in km on the yesterday's summary screen read as "kph".
+* Fixed a minor bug where on yesterday's weather hourly data, the degree symbol was placed too far right by 1 character.
+* Fixed a potential bug where missing data on yesterday's weather would cause a crash.
+* Fixed a potential bug where if almanac data is prefetched, it wouldn't display when viewing it in detail, and PyWeather would crash.
+* Fixed a minor bug where on the historical weather summary, total precipitation data in mm had a "mb" label.
+* Fixed a minor bug where historical hourly data wouldn't break when the current iterations equaled the total iterations.
+* Fixed a minor bug where PyWeather wouldn't catch bad humidity data for current conditions.
+* Fixed a bug where configsetup script set the default geocoder scheme to https, which caused issues on platforms that don't support the geocoder running in the HTTPS scheme.
+
+**OTHER CHANGES:**
+* The Git Updater has been completely removed, as it's been unreliable. A universal updater will be introduced later in time.
+* The configupdate file will now properly catch a bad section error (not a plain except)
+
+**KNOWN ISSUES:**
+* Tide data may not be fully available for some cities. I'm working on a fix for 0.6.4 beta.
+* Attempting to exit out of historical weather is bugged. I'm also working on a fix for 0.6.4 beta.
+* Hurricanes in hurricane data will show up twice. I've already contacted Wunderground about the issue, but they haven't responded back. A fix is coming in 0.6.4 beta.
+* A custom geocoder key won't work without an https-enabled scheme. There is a temporary fix in 0.6.3 beta, but a more comprehensive fix will be coming in 0.6.4 beta.
+* The configsetup script will default to an http scheme regardless of if your OS is https compatible or not. A more comprehensive fix will be coming in 0.6.4 beta.

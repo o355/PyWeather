@@ -1,5 +1,31 @@
-# PyWeather Setup - version 0.6.2 beta
-# (c) 2017, o355, licensed under GNU GPL v3
+'''
+_______
+|      \  \           /         @@@;
+|       \  \         /        `#....@
+|        |  \       /       ,;@.....;,;
+|        |   \     /       @..@........@`           PyWeather Setup
+|        |    \   /        .............@           version 0.6.3 beta
+|        /     \ /         .............@           (c) 2017 - o355
+|_______/       |          @...........#`
+|               |           .+@@++++@#;
+|               |             @ ;  ,
+|               |             : ' .
+|               |            @ # .`
+|               |           @ # .`
+'''
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
 if sys.version_info < (3, 0, 0):
@@ -31,7 +57,7 @@ import urllib
 try:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.2 beta")
+        out.write("0.6.3 beta")
         out.close()
 except:
     print("Couldn't write the versioninfo file. This may cause issues with PyWeather down the road.")
@@ -41,68 +67,88 @@ config.read('storage//config.ini')
 
 def configprovision():
     try:
+        config.add_section("GEOCODER API")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the Geocoder API section.")
+
+    try:
+        config.add_section("FAVORITE LOCATIONS")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the favorite locations section.")
+    try:
+        config.add_section("HURRICANE")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the hurricane section.")
+
+    try:
+        config.add_section("FIRSTINPUT")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the firstinput section.")
+    try:
         config.add_section('SUMMARY')
     except configparser.DuplicateSectionError:
-        print("Cache section could not be added.")
+        print("Failed to add the summary section.")
 
     try:
         config.add_section('VERBOSITY')
     except configparser.DuplicateSectionError:
-        print("Verbosity section could not be added.")
+        print("Failed to add the verbosity section.")
 
     try:
         config.add_section('TRACEBACK')
     except configparser.DuplicateSectionError:
-        print("Traceback section could not be added.")
+        print("Failed to add the traceback section.")
 
     try:
         config.add_section('UI')
     except configparser.DuplicateSectionError:
-        print("UI section could not be added.")
+        print("Failed to add the UI section.")
 
     try:
         config.add_section('PREFETCH')
     except configparser.DuplicateSectionError:
-        print("Hourly section could not be added.")
+        print("Failed to add the prefetch section.")
 
     try:
         config.add_section('UPDATER')
     except configparser.DuplicateSectionError:
-        print("Updater section could not be added.")
+        print("Failed to add the updater section.")
 
     try:
         config.add_section('KEYBACKUP')
     except configparser.DuplicateSectionError:
-        print("Key Backup section could not be added.")
+        print("Failed to add the keybackup section.")
 
     try:
         config.add_section('PYWEATHER BOOT')
     except configparser.DuplicateSectionError:
-        print("PyWeather Boot section could not be added.")
+        print("Failed to add the PyWeather Boot section.")
 
     try:
         config.add_section('USER')
     except configparser.DuplicateSectionError:
-        print("User section could not be added.")
+        print("Failed to add the user section.")
+
     try:
         config.add_section('CACHE')
     except configparser.DuplicateSectionError:
-        print("Cache section could not be added.")
+        print("Failed to add the cache section.")
 
     try:
         config.add_section('RADAR GUI')
     except configparser.DuplicateSectionError:
-        print("Radar GUI section could not be added.")
+        print("Failed to add the Radar GUI section.")
 
     try:
         config.add_section('GEOCODER')
     except configparser.DuplicateSectionError:
-        print("Geocoder section could not be added.")
+        print("Failed to add the Geocoder section.")
 
     config['SUMMARY']['sundata_summary'] = 'False'
     config['SUMMARY']['almanac_summary'] = 'False'
     config['SUMMARY']['showalertsonsummary'] = 'True'
     config['SUMMARY']['showtideonsummary'] = 'False'
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
     config['VERBOSITY']['verbosity'] = 'False'
     config['VERBOSITY']['json_verbosity'] = 'False'
     config['VERBOSITY']['setup_verbosity'] = 'False'
@@ -121,11 +167,12 @@ def configprovision():
     config['UI']['show_completediterations'] = 'False'
     config['UI']['alerts_usiterations'] = '1'
     config['UI']['alerts_euiterations'] = '2'
+    config['UI']['extratools_enabled'] = 'False'
     config['PREFETCH']['10dayfetch_atboot'] = 'False'
+    config['PREFETCH']['yesterdaydata_atboot'] = 'False'
     config['UPDATER']['autocheckforupdates'] = 'False'
     config['UPDATER']['show_updaterreleasetag'] = 'False'
     config['KEYBACKUP']['savedirectory'] = 'backup//'
-    config['UPDATER']['allowGitForUpdating'] = 'False'
     config['PYWEATHER BOOT']['validateapikey'] = 'True'
     config['UPDATER']['showReleaseNotes'] = 'True'
     config['UPDATER']['showReleaseNotes_uptodate'] = 'False'
@@ -141,10 +188,25 @@ def configprovision():
     config['CACHE']['sundata_cachedtime'] = '480'
     config['CACHE']['tide_cachedtime'] = '480'
     config['CACHE']['hurricane_cachedtime'] = '180'
+    config['CACHE']['yesterday_cachedtime'] = '720'
     config['RADAR GUI']['radar_imagesize'] = 'normal'
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     config['GEOCODER']['scheme'] = 'https'
+    config['GEOCODER API']['customkey_enabled'] = 'False'
+    config['GEOCODER API']['customkey'] = 'None'
     config['PREFETCH']['hurricanedata_atboot'] = 'False'
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
+    config['HURRICANE']['enablenearestcity'] = 'False'
+    config['HURRICANE']['enablenearestcity_forecast'] = 'False'
+    config['HURRICANE']['api_username'] = 'pyweather_proj'
+    config['HURRICANE']['nearestcitysize'] = 'medium'
+    config['FAVORITE LOCATIONS']['enabled'] = 'True'
+    config['FAVORITE LOCATIONS']['favloc1'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc2'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc3'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc4'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc5'] = 'None'
     try:
         with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)
@@ -244,7 +306,7 @@ logger.debug("verbosity: %s ; jsonVerbosity: %s" %
 logger.debug("tracebacksEnabled: %s" %
              tracebacksEnabled)
 
-print("Hi! Welcome to PyWeather 0.6.2 beta! Glad that you're here.",
+print("Hi! Welcome to PyWeather 0.6.3 beta! Glad that you're here.",
       "I'm here to help set up PyWeather, and let you configure it to your liking.",
       "Let's begin!", sep="\n")
 
@@ -255,8 +317,8 @@ import json
 import codecs
 
 
-buildnumber = 62
-buildversion = "0.6.2 beta"
+buildnumber = 63
+buildversion = "0.6.3 beta"
 
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
@@ -409,10 +471,23 @@ try:
 except:
     requestsInstalled = False
     neededLibraries = neededLibraries + 1
-    logger.debug("requests is NOT isntalled.")
+    logger.debug("requests is NOT installed.")
     printException_loggerwarn()
     logger.debug("requestsInstalled: %s ; neededLibraries: %s" %
                  (requestsInstalled, neededLibraries))
+
+try:
+    import halo
+    haloInstalled = True
+    logger.debug("halo is installed.")
+    logger.debug("haloInstalled: %s" % haloInstalled)
+except:
+    haloInstalled = False
+    neededLibraries += 1
+    logger.debug("halo is NOT installed.")
+    printException_loggerwarn()
+    logger.debug("haloInstalled: %s ; neededLibraries: %s" %
+                 (haloInstalled, neededLibraries))
 
 
 print("All done!")
@@ -422,20 +497,22 @@ if neededLibraries == 0:
 else:
     logger.debug("Libraries need to be installed.")
     print("Shucks. Not all necessary libraries are installed. Here's what needs to be installed:")
-    if coloramaInstalled == False:
+    if coloramaInstalled is False:
         print("- Colorama")
-    if geopyInstalled == False:
+    if geopyInstalled is False:
         print("- Geopy")
-    if appjarInstalled == False:
+    if appjarInstalled is False:
         print("- appJar")
-    if requestsInstalled == False:
+    if requestsInstalled is False:
         print("- Requests")
+    if haloInstalled is False:
+        print("- Halo")
     print("If you want me to, I can automatically install these libraries.",
     "Would you like me to do such? Yes or No.", sep="\n")
     neededLibrariesConfirm = input("Input here: ").lower()
     logger.debug("neededLibrariesConfirm: %s" % neededLibrariesConfirm)
     if neededLibrariesConfirm == "no":
-        logger.warn("Not installing necessary libraries. Now exiting...")
+        logger.warning("Not installing necessary libraries. Now exiting...")
         print("Okay. I needed to install necessary libraries to continue.",
         "Now quitting...",
         "Press enter to exit.", sep="\n")
@@ -443,18 +520,21 @@ else:
         sys.exit()
     elif neededLibrariesConfirm == "yes":
         print("Now installing necessary libraries...")
-        if coloramaInstalled == False:
+        if coloramaInstalled is False:
             print("Installing Colorama...")
             pip.main(['install', 'colorama'])
-        if geopyInstalled == False:
+        if geopyInstalled is False:
             print("Installing geopy...")
             pip.main(['install', 'geopy'])
-        if appjarInstalled == False:
+        if appjarInstalled is False:
             print("Installing appJar...")
             pip.main(['install', 'appJar'])
-        if requestsInstalled == False:
+        if requestsInstalled is False:
             print("Installing requests...")
             pip.main(['install', 'requests'])
+        if haloInstalled is False:
+            print("Installing halo...")
+            pip.main(['install', 'halo'])
 
         logger.info("Running the double check on libraries...")
         print("Sweet! All libraries should be installed.",
@@ -588,6 +668,9 @@ else:
                       "Press enter to exit.")
                 input()
                 sys.exit()
+        # Why is appJar not here? When appJar is straight up imported in a non-GUI environment, it'll throw an error
+        # even when it's installed. I don't check for an install because of this reason.
+
 
         try:
             import requests
@@ -655,32 +738,98 @@ else:
                 input()
                 sys.exit()
 
+        try:
+            import halo
+            logger.info("Halo installed successfully.")
+        except ImportError:
+            logger.warn("halo was not installed successfully.")
+            print("Hmm...Halo didn't install properly.")
+            printException()
+            print("As a last resort, we can use sudo -H to install packages.",
+            "Do you want to use the shell option to install halo?",
+            "WARNING: Using the last-resort method may screw up PIP, and",
+            "may require you to reinstall PIP on your machine."
+            "Yes or No.", sep="\n")
+            halo_lastresort = input("Input here: ").lower()
+            logger.debug("halo_lastresort: %s" % halo_lastresort)
+            if halo_lastresort == "yes":
+                try:
+                    print("Now executing `sudo -H pip3 install halo`.",
+                          "Please enter the password for sudo when the prompt",
+                          "comes up. Press Control + C to cancel.",
+                          "Starting in 5 seconds...", sep="\n")
+                    time.sleep(5)
+                    try:
+                        subprocess.call(["sudo -H pip3 install halo"], shell=True)
+                        try:
+                            print("Attempting to reimport halo.")
+                            import colorama
+                            print("Halo is now installed!")
+                        except:
+                            print("Halo still wasn't successfully installed.",
+                                  "Cannot continue without Halo.",
+                                  "Try doing a manual install of Halo with PIP.", sep="\n")
+                            printException()
+                            print("Press enter to exit.")
+                            input()
+                            sys.exit()
+                    except:
+                        print("When running the command, an error occurred",
+                              "Try doing a manual install of Halo with PIP.", sep="\n")
+                        printException()
+                        print("Press enter to exit.")
+                        input()
+                        sys.exit()
+                except KeyboardInterrupt:
+                    print("Command execution aborted.",
+                          "Cannot continue without Halo.",
+                          "Try and do a manual install of Halo with PIP",
+                          "in a command line.", sep="\n")
+                    printException()
+                    print("Press enter to exit.")
+                    input()
+                    sys.exit()
+            elif halo_lastresort == "no":
+                print("Not installing Halo with a shell command.",
+                      "Cannot continue without Halo.",
+                      "Press enter to exit.", sep="\n")
+                input()
+                sys.exit()
+            else:
+                print("Did not understand your input. Defaulting to not installing",
+                      "via the shell. Cannot continue without Halo.",
+                      "Try installing Halo with PIP.",
+                      "Press enter to exit.")
+                input()
+                sys.exit()
+
         print("","All libraries are installed!", sep="\n")
     else:
         logger.warn("Input was not understood. Closing...")
-        print("I'm not sure what you said.",
-        "As a precaution, I'm now closing.", sep="\n")
+        print("Your input wasn't understood for if you wanted to automatically import libraries.",
+              "As a precaution PyWeather Setup needs to now close. Press enter to exit.", sep="\n")
+        input()
         sys.exit()
 
-print("", "Would you like PyWeather to update all your PIP packages?",
-      "If you had necessary libraries previously installed, it's best",
-      "to update your PIP packages. Please note: This may not work",
-      "on all platforms.", sep="\n")
+# Previously this updated all your pip packages. I then did this on my NAS (on FreeNAS 11).
+# It broke my NAS! Woo hoo!
+print("", "Would you like PyWeather to automatically update it's required packages?",
+      "Doing this is generally recommended, and will have benefits down the line when",
+      "some libraries fix known issues that occur in PyWeather. Yes or No.", sep="\n")
 confirm_updatepip = input("Input here: ").lower()
 logger.debug("confirm_updatepip: %s" % confirm_updatepip)
 if confirm_updatepip == "yes":
     print("")
     print("Updating PIP packages.")
-    totalpackages = 0
+    totalpackages = 5
     updatecount = 1
-    for pkgname in pip.get_installed_distributions():
-        totalpackages = totalpackages + 1
-        logger.debug("total package count now: %s" % totalpackages)
 
-    for pkgname in pip.get_installed_distributions():
+    pip_requiredlibraries = ['requests', 'halo', 'appjar', 'colorama', 'geopy']
+
+    for pkgname in pip_requiredlibraries:
         print("Now updating package: %s (Update %s/%s)" %
               (pkgname, updatecount, totalpackages))
-        pip.main(['install', '--upgrade', '%s' % pkgname.project_name])
+        pip.main(['install', '--upgrade', '%s' % pkgname])
         updatecount = updatecount + 1
 elif confirm_updatepip == "no":
     print("Not updating PIP packages. You may run into issues with non-updated",
@@ -692,6 +841,9 @@ else:
 # Verbosity is not needed here.
 print("I'm now going to guide you through obtaining an API key.",
 "Please carefully read my detailed instructions, so you don't mess anything up.", sep="\n")
+
+print("","If you know how to acquire a Wunderground API key, or are resetting PyWeather,",
+      "hit enter 14 times to get to the API key entry.", sep="\n")
 
 print("Let's begin.",
 "Start by opening a web browser, and going to https://www.wunderground.com/weather/api/.",
@@ -922,7 +1074,7 @@ while True:
 print("Let's configure PyWeather to your liking.")
 logger.debug("config: %s" % config)
 
-print("", "(1/30)","On the summary screen, would you like to show sunrise/sunset times?",
+print("", "(1/42)","On the summary screen, would you like to show sunrise/sunset times?",
       "By default, this is disabled.",
       "Yes or No.", sep="\n")
 sundata_Summary = input("Input here: ").lower()
@@ -942,7 +1094,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("", "(2/30)","On the summary screen, would you like to show almanac data?",
+print("", "(2/42)","On the summary screen, would you like to show almanac data?",
       "By default, this is disabled.",
       "Yes or no:", sep="\n")
 almanacdata_Summary = input("Input here: ").lower()
@@ -962,7 +1114,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("", "(3/30)", "On the summary screen, would you like to show alerts data?",
+print("", "(3/42)", "On the summary screen, would you like to show alerts data?",
       "By default, this is enabled. Please note, Wunderground",
       "only supports alert data in the US and EU at this time.",
       "Yes or No.", sep="\n")
@@ -981,7 +1133,7 @@ else:
           "Defaulting to 'True'", sep="\n")
     config['SUMMARY']['showAlertsOnSummary'] = 'True'
 
-print("", "(4/30)","On boot, would you like PyWeather to check for updates?",
+print("", "(4/42)","On boot, would you like PyWeather to check for updates?",
       "By default, this is disabled, due to a load time increase of ~2-5 seconds.",
       "Yes or No.", sep="\n")
 checkForUpdates = input("Input here: ").lower()
@@ -1001,7 +1153,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
-print("", "(5/30)","When an error occurs, would you like PyWeather to show the full error?",
+print("", "(5/42)","When an error occurs, would you like PyWeather to show the full error?",
       "When enabled, you'll have easier access to the full error for reporting",
       "the bug on GitHub.",
       "By default, this is disabled, as errors look less pretty when enabled.",
@@ -1034,7 +1186,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(6/30)", "When booting PyWeather up initially, would you like PyWeather to",
+print("", "(6/42)", "When booting PyWeather up initially, would you like PyWeather to",
       "fetch the 10-day hourly forecast, instead of the 3-day forecast?",
       "This is disabled by default. When enabled, initial loading times are",
       "increased. However, when you view the 10-day hourly forecast, you won't",
@@ -1056,7 +1208,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(7/30)", "When viewing detailed hourly, 10-day hourly, and historical hourly,",
+print("", "(7/42)", "When viewing detailed hourly, 10-day hourly, and historical hourly,",
       "detailed information, how many iterations should PyWeather go through",
       "before asking you to continue?",
       "By default, this is 6. An input above 10",
@@ -1075,7 +1227,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed info loops now 6.")
 
-print("", "(8/30)", "When viewing detailed 10-day forecast information, how many",
+print("", "(8/42)", "When viewing detailed 10-day forecast information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
       "By default, this is 5. An input above 10 will not prompt",
@@ -1094,7 +1246,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed forecast info loops now 5.")
 
-print("", "(9/30)", "PyWeather has a caching system, in which if you're gone for some time",
+print("", "(9/42)", "PyWeather has a caching system, in which if you're gone for some time",
       "data will automatically refresh. Would you like to turn this on?",
       "This is enabled by default. Yes or No.", sep="\n")
 enablecache = input("Input here: ").lower()
@@ -1109,7 +1261,7 @@ else:
           "certain types of data, before a data refresh is automatically requested.",
           "If you want to leave cache values to their defaults, press enter at any prompt.", sep="\n")
 
-    print("", "(10/30)", "Please enter the cache time for alerts data in minutes (default = 5)", sep="\n")
+    print("", "(10/42)", "Please enter the cache time for alerts data in minutes (default = 5)", sep="\n")
     alertscachetime = input("Input here: ").lower()
     try:
         alertscachetime = float(alertscachetime)
@@ -1123,7 +1275,7 @@ else:
         config['CACHE']['alerts_cachedtime'] = '5'
         logger.debug("Alerts cache time now 5 minutes.")
 
-    print("", "(11/30)", "Please enter the cache time for current data in minutes (default = 10)", sep="\n")
+    print("", "(11/42)", "Please enter the cache time for current data in minutes (default = 10)", sep="\n")
     currentcachetime = input("Input here: ").lower()
     try:
         currentcachetime = float(currentcachetime)
@@ -1137,7 +1289,7 @@ else:
         config['CACHE']['current_cachedtime'] = '10'
         logger.debug("Current cache time now 10 minutes.")
 
-    print("", "(12/30)", "Please enter the cache time for forecast data in minutes (default = 60)", sep="\n")
+    print("", "(12/42)", "Please enter the cache time for forecast data in minutes (default = 60)", sep="\n")
     forecastcachetime = input("Input here: ").lower()
     try:
         forecastcachetime = float(forecastcachetime)
@@ -1151,7 +1303,7 @@ else:
         config['CACHE']['forecast_cachedtime'] = '60'
         logger.debug("Forecast cache time now 60 minutes.")
 
-    print("", "(13/30)", "Please enter the cache time for almanac data in minutes (default = 240)", sep="\n")
+    print("", "(13/42)", "Please enter the cache time for almanac data in minutes (default = 240)", sep="\n")
     almanaccachetime = input("Input here: ").lower()
     try:
         almanaccachetime = float(almanaccachetime)
@@ -1165,7 +1317,7 @@ else:
         config['CACHE']['almanac_cachedtime'] = '240'
         logger.debug("Almanac cache time now 240 minutes.")
 
-    print("", "(14/30)", "Please enter the cache time for 1.5 day hourly data in minutes (default = 60)", sep="\n")
+    print("", "(14/42)", "Please enter the cache time for 1.5 day hourly data in minutes (default = 60)", sep="\n")
     threedayhourly_cachedtime = input("Input here: ").lower()
 
     try:
@@ -1180,7 +1332,7 @@ else:
         config['CACHE']['threedayhourly_cachedtime'] = "60"
         logger.debug("3 day hourly cache time now 60 minutes")
 
-    print("", "(15/30)", "Please enter the cache time for the ten day hourly data in minutes (default = 60)", sep="\n")
+    print("", "(15/42)", "Please enter the cache time for the ten day hourly data in minutes (default = 60)", sep="\n")
     tendayhourly_cachedtime = input("Input here: ").lower()
     try:
         tendayhourly = float(tendayhourly_cachedtime)
@@ -1194,7 +1346,7 @@ else:
         config['CACHE']['tendayhourly_cachedtime'] = "60"
         logger.debug("10 day hourly cache time now 60 minutes")
 
-    print("", "(16/30)", "Please enter the cache time for sun data in minutes (default = 480)", sep="\n")
+    print("", "(16/42)", "Please enter the cache time for sun data in minutes (default = 480)", sep="\n")
     sundatacachetime = input("Input here: ").lower()
     try:
         sundatacachetime = float(sundatacachetime)
@@ -1207,7 +1359,7 @@ else:
               "cache time to it's default value of '480'.", sep="\n")
         config['CACHE']['sundata_cachedtime'] = '480'
         logger.debug("Sun data cache time now 480 minutes.")
-    print("", "(17/30)", "Please enter the cache time for tide data in minutes (default = 480)", sep="\n")
+    print("", "(17/42)", "Please enter the cache time for tide data in minutes (default = 480)", sep="\n")
     tidecachetime = input("Input here: ").lower()
     try:
         tidecachetime = float(tidecachetime)
@@ -1220,7 +1372,7 @@ else:
               "cache time to it's default value of '480'.", sep="\n")
         config['CACHE']['tide_cachedtime'] = '480'
         logger.debug("Tide data cache time now 480 minutes.")
-    print("", "(18/30)", "Please enter the cache time for hurricane data in minutes (default = 480)", sep="\n")
+    print("", "(18/42)", "Please enter the cache time for hurricane data in minutes (default = 480)", sep="\n")
     hurricanecachetime = input("Input here: ").lower()
     try:
         hurricanecachetime = float(hurricanecachetime)
@@ -1234,8 +1386,23 @@ else:
         config['CACHE']['hurricane_cachedtime'] = '180'
         logger.debug("Hurricane data cache time now 180 minutes.")
 
+    print("", "(19/42)", "Please enter the cache time for yesterday's weather data in minutes (default = 720)", sep="\n")
+    yesterdaycachedtime = input("Input here: ").lower()
+    try:
+        yesterdaycachedtime = float(yesterdaycachedtime)
+        yesterdaycachedtime = str(yesterdaycachedtime)
+        config['CACHE']['yesterday_cachedtime'] = yesterdaycachedtime
+        print("Changes saved.")
+        logger.debug("Yesterday cache time now %s minutess" % yesterdaycachedtime)
+    except:
+        print("", "Your input couldn't be converted into a number. Setting yesterday's weather data",
+                "cache time to it's default value of 720.", sep="\n")
+        config['CACHE']['yesterday_cachedtime'] = '720'
+        logger.debug("Yesterday data cache time now 720 minutes.")
 
-print("", "(19/30)", "When viewing detailed EU alerts information, how many",
+
+
+print("", "(20/42)", "When viewing detailed EU alerts information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
       "By default, this is 2.", sep="\n")
@@ -1253,7 +1420,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed EU alert iterations now 2.")
 
-print("", "(20/30)", "When viewing detailed US alerts information, how many",
+print("", "(21/42)", "When viewing detailed US alerts information, how many",
       "iterations should PyWeather go through, before asking you to",
       "continue?",
       "By default, this is 1.", sep="\n")
@@ -1271,7 +1438,7 @@ except:
     print("Changes saved.")
     logger.debug("Detailed US alert iterations now 1.")
 
-print("", "(21/30)","When PyWeather is going through detailed information, it can show",
+print("", "(22/42)","When PyWeather is going through detailed information, it can show",
       "how many iterations are completed.",
       "By default, this is disabled.",
       "Yes or No.", sep="\n")
@@ -1291,7 +1458,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(22/30)", "When PyWeather is going through detailed information, would",
+print("", "(23/42)", "When PyWeather is going through detailed information, would",
       "you like the 'Enter to Continue' prompts to pop up?",
       "By default, this is enabled.",
       "Yes or No.", sep="\n")
@@ -1311,7 +1478,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to ENABLED.")
 
-print("", "(23/30)", "In the PyWeather Updater, the updater can show the release tag",
+print("", "(24/42)", "In the PyWeather Updater, the updater can show the release tag",
       "associated with the latest release. Helpful for those using Git to",
       "update PyWeather. By default, this is disabled.",
       "Yes or No.", sep="\n")
@@ -1331,29 +1498,7 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(24/30)", "When you check for updates, and PyWeather notices",
-      "a new version is out, PyWeather can use Git to update",
-      "itself. Make sure you have Git installed if you enable this.",
-      "By default, this is disabled. Keep this disabled if you're unsure",
-      "you have Git installed.",
-      "Yes or No.", sep="\n")
-allowGitUpdating = input("Input here: ").lower()
-if allowGitUpdating == "yes":
-    config['UPDATER']['allowGitForUpdating'] = 'True'
-    print("Changes saved.")
-    logger.debug("Allowing updates with Git is ENABLED.")
-elif allowGitUpdating == "no":
-    config['UPDATER']['allowGitForUpdating'] = 'False'
-    print("Changes saved.")
-    logger.debug("Allowing updates with Git is DISABLED.")
-else:
-    print("Could not understand what you inputted.",
-          "Defaulting to 'False'.", sep="\n")
-    config['UPDATER']['allowGitForUpdating'] = 'False'
-    print("Changes saved.")
-    logger.debug("Could not understand input. Defaulting to DISABLED.")
-
-print("", "(25/30)", "When PyWeather boots, it can validate your API key. If PyWeather",
+print("", "(25/42)", "When PyWeather boots, it can validate your API key. If PyWeather",
       "finds your primary API key is invalid, it'll attempt to validate your",
       "backup key, and load that if it's validated successfully.",
       "By default, this is enabled, as it's well worth the 1 API call to make",
@@ -1375,7 +1520,7 @@ else:
     config['PYWEATHER BOOT']['validateAPIKey'] = 'False'
     logger.debug("Could not understand input. Defaulting to ENABLED.")
 
-print("", "(26/30)", "PyWeather now has a radar feature, which opens up a GUI on supported",
+print("", "(26/42)", "PyWeather now has a radar feature, which opens up a GUI on supported",
       "platforms. Depending on your screen resolution, you'll have to set how large",
       "the radar picture is when rendered. In the prompt below, enter one of five sizes.",
       "extrasmall - 320x240 window",
@@ -1388,19 +1533,19 @@ print("", "(26/30)", "PyWeather now has a radar feature, which opens up a GUI on
 radar_resolutions = ["extrasmall", "small", "normal", "large", "extralarge"]
 logger.debug("radar_resolutions: %s" % radar_resolutions)
 radar_resolutioninput = input("Input here: ").lower()
-for x in range(0, 4):
+for x in range(0, 5):
     if radar_resolutioninput == radar_resolutions[x]:
         logger.debug("Resolution input matched, end result: %s" % radar_resolutions[x])
         config['RADAR GUI']['radar_imagesize'] = radar_resolutions[x]
         print("Changes saved.")
         break
     # This works by design. If x = 4 (extralarge), the if would catch first.
-    elif x == 4:
+    elif x == 5:
         print("Could not understand what you inputted. Defaulting to 'normal'.")
         config['RADAR GUI']['radar_imagesize'] = 'normal'
         print("Changes saved.")
 
-print("", "(27/30)", "PyWeather's radar feature is unfortunately experimental as of PyWeather 0.6.1 beta.",
+print("", "(27/42)", "PyWeather's radar feature is unfortunately experimental as of PyWeather 0.6.3 beta.",
       "By default, a confirmation message will always appear when attempting to launch the radar.",
       "However, this can be turned off, if you plan to use the experimental radar on a regular basis.",
       "By default, bypassing the confirmation message is disabled. Yes or No.", sep="\n")
@@ -1422,7 +1567,7 @@ else:
 
 
 
-print("", "(28/30)", "On the summary screen, would you like tide data to be shown?",
+print("", "(28/42)", "On the summary screen, would you like tide data to be shown?",
       "This uses an extra API call when enabled. By default, this is disabled.",
       "Yes or No.", sep="\n")
 tideonsummary = input("Input here: ").lower()
@@ -1441,7 +1586,7 @@ else:
     logger.debug("SUMMARY/showtideonsummary is now FALSE")
     print("Changes saved.")
 
-print("", "(29/30)", "When PyWeather boots, would you like hurricane data to be fetched?",
+print("", "(29/42)", "When PyWeather boots, would you like hurricane data to be fetched?",
       "Initial loading times will increase when this is on, but hurricane data will load faster.",
       "This can use an extra API call, especially when you fetch hurricane data but don't check it",
       "in PyWeather. By default, this is disabled.",
@@ -1462,7 +1607,290 @@ else:
     logger.debug("PREFETCH/hurricanedata_atboot is now FALSE.")
     print("Changes saved.")
 
-print("", "(30/30)", "PyWeather's geocoder usually uses https, but issues have been discovered",
+print("", "(30/42)", "PyWeather has a new feature where you can now easily call your current location at boot.",
+      "The current location feature allows you to enter 'currentlocation' at boot, and view the weather for your",
+      "approximate location. However, GeoIP lookups might be inaccurate, especially for mobile users. The GeoIP service",
+      "uses freegeoip.net. Would you like to enable this service? By default, this is disabled. Yes or No.", sep="\n")
+allowgeoipservice = input("Input here: ").lower()
+logger.debug("allowgeoipservice: %s" % allowgeoipservice)
+if allowgeoipservice == "yes":
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'True'
+    logger.debug("FIRSTINPUT/geoipservice_enabled is now TRUE.")
+    print("Changes saved.")
+elif allowgeoipservice == "no":
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
+    logger.debug("FIRSTINPUT/geoipservice_enabled is now FALSE.")
+else:
+    print("Could not understand what you inputted. Defaulting to 'False'.")
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
+    logger.debug("FIRSTINPUT/geoipservice_enabled is now FALSE.")
+    print("Changes saved.")
+
+print("", "(31/42)", "PyWeather has a new feature where you can query indivdiual Wunderground PWS stations.",
+      "You can query any PWS globally by entering pws:<pws ID> when enabled, and where <pws ID> is the ID of the",
+      "PWS you want to query. However, this can be turned off if you don't want to have extra lines of text at boot,",
+      "or don't want the ability to query PWSes. By default, this is enabled. Yes or No.", sep="\n")
+allowpwsqueries = input("Input here: ").lower()
+logger.debug("allowpwsqueries: %s" % allowpwsqueries)
+if allowpwsqueries == "yes":
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
+    logger.debug("FIRSTINPUT/allow_pwsqueries is now TRUE.")
+    print("Changes saved.")
+elif allowpwsqueries == "no":
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'False'
+    logger.debug("FIRSTINPUT/allow_pwsqueries is now FALSE.")
+    print("Changes saved.")
+else:
+    print("Could not understand what you inputted. Defaulting to 'True'.")
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
+    logger.debug("FIRSTINPUT/allow_pwsqueries is now TRUE.")
+    print("Changes saved.")
+
+print("", "(32/42)", "PyWeather has a new feature where in hurricane data, you can see the nearest city that a hurricane is to.",
+      "However, this feature uses a separate API (geonames.org), can only work when the hurricane is within 300km of a city,",
+      "and will drastically increase loading times. You may also run into issues with the default API key hitting rate limits.",
+      "Despite all of this, would you like to enable the nearest city features for non-forecast hurricane data?",
+      "Yes or No. By default, this is disabled.", sep="\n")
+allownearestcities = input("Input here: ").lower()
+logger.debug("allownearestcities: %s" % allownearestcities)
+if allownearestcities == "yes":
+    additional_ncoptions = True
+    logger.debug("additional_ncoptions: %s" % additional_ncoptions)
+    config['HURRICANE']['enablenearestcity'] = 'True'
+    logger.debug("HURRICANE/enablenearestcity is now TRUE.")
+    print("Changes saved.")
+elif allownearestcities == "no":
+    additional_ncoptions = False
+    logger.debug("additional_ncoptions: %s" % additional_ncoptions)
+    config['HURRICANE']['enablenearestcity'] = 'False'
+    logger.debug("HURRICANE/enablenearestcity is now FALSE.")
+    print("Changes saved.")
+else:
+    additional_ncoptions = False
+    logger.debug("additional_ncoptions: %s" % additional_ncoptions)
+    print("Could not understand what you inputted. Defaulting to 'False'.")
+    config['HURRICANE']['enablenearestcity'] = 'False'
+    logger.debug("HURRICANE/enablenearestcity is now FALSE.")
+    print("Changes saved.")
+
+# <--- Additional options for nearest city feature --->
+
+if additional_ncoptions is True:
+    print("", "(33/42)", "By default, the nearest city feature is only enabled on the current data screen of hurricane data.",
+          "You can enable the nearest city feature to be enabled on forecast data. However, loading hurricane data becomes much",
+          "slower. By default, this is disabled. Yes or No.", sep="\n")
+    enable_ncforecast = input("Input here: ").lower()
+    if enable_ncforecast == "yes":
+        config['HURRICANE']['enablenearestcity_forecast'] = 'True'
+        logger.debug("HURRICANE/enablenearestcity_forecast is now TRUE.")
+        print("Changes saved.")
+    elif enable_ncforecast == "no":
+        config['HURRICANE']['enablenearestcity_forecast'] = 'False'
+        logger.debug("HURRICANE/enablenearestcity_forecast is now FALSE.")
+        print("Changes saved.")
+    else:
+        print("Could not understand your input. Defaulting to 'False'.")
+        config['HURRICANE']['enablenearestcity_forecast'] = 'False'
+        logger.debug("HURRICANE/enablenearestcity_forecast is now FALSE.")
+        print("Changes saved.")
+
+    print("", "(34/42)", "By default, PyWeather uses it's own API username for the nearest city features, which should be able to",
+          "handle PyWeather's user demands just fine. However, if you'd like to use your own account for the API, you may.",
+          "You can sign up at geonames.org, and follow all the steps. The confirmation letter may take some time to hit your inbox.",
+          "Would you like to define your own API username? Yes or No. By default, this is no.", sep="\n")
+    definegeonamesusername = input("Input here: ").lower()
+    logger.debug("definegeonamesusername: %s" % definegeonamesusername)
+    if definegeonamesusername == "yes":
+        # Enter into confirmation loop
+        while True:
+            print("Please enter the username that you'll use to access the geonames API.")
+            geonamesusername = input("Input here: ").lower()
+            logger.debug("geonamesusername: %s" % geonamesusername)
+            print("The API username you gave me was: %s" % geonamesusername,
+                  "Is this the username that you'd like to use? Yes or No.",
+                  "Please note that your username will not be validated.", sep="\n")
+            geonamesconfirmation = input("Input here: ").lower()
+            confirmurl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=19.3&lng=102.2&username= ' + geonamesusername + '&radius=300&maxRows=1&cities=cities5000'
+            logger.debug("geonamesconfirmation: %s ; confirmurl: %s" %
+                         (geonamesconfirmation, confirmurl))
+            if geonamesconfirmation == "yes":
+                config['HURRICANE']['api_username'] = geonamesusername
+                logger.debug("HURRICANE/api_username is now %s" % geonamesusername)
+                print("Changes saved.")
+            elif geonamesconfirmation == "no":
+                continue
+            else:
+                print("Input not understood. Will not validate username. If the username is",
+                      "invalid, please change the HURRICANE/api_username option in the config.", sep="\n")
+                config['HURRICANE']['api_username'] = geonamesusername
+                logger.debug("HURRICANE/api_username is now %s" % geonamesusername)
+                print("Changes saved.")
+    elif definegeonamesusername == "no":
+        print("Defaulting to the default username for the geonames API.")
+    else:
+        print("Input not understood.",
+              "Defaulting to the default username for the geonames API.", sep="\n")
+
+    print("", "(35/42)", "For the nearest city feature, you can define how large a city has to be to show up as a nearest city.",
+          "You have three options for this. 'small' will set the threshold to cities with a 1,000 population and greater, but this",
+          "tends to include cities with very few or no people. 'medium' will set the threshold to cities with a 5,000 population",
+          "and greater, and 'large' for cities that have a population of 10,000 or greater. Please enter either 'small', 'medium'",
+          "or 'large' below. Default is 'medium'.", sep="\n")
+    nearestcitysize = input("Input here: ").lower()
+    logger.debug("nearestcitysize: %s" % nearestcitysize)
+    if nearestcitysize == "small":
+        config['HURRICANE']['nearestcitysize'] = 'small'
+        logger.debug("HURRICANE/nearestcitysize is now 'small'.")
+        print("Changes saved.")
+    elif nearestcitysize == "medium":
+        config['HURRICANE']['nearestcitysize'] = 'medium'
+        logger.debug("HURRICANE/nearestcitysize is now 'medium'")
+        print("Changes saved.")
+    else:
+        print("Could not understand your input. Defaulting to 'medium'.")
+        config['HURRICANE']['nearestcitysize'] = 'medium'
+        logger.debug("HURRICANE/nearestcitysize is now 'medium'.")
+        print("Changes saved.")
+
+print("", "(36/42)", "PyWeather will now let you enable a favorite locations feature, which allows",
+      "you to quickly call up to 5 locations in PyWeather. You have the ability to configure your",
+      "favorite locations in a menu option in PyWeather. By default, this feature is enabled.",
+      "Yes or No.", sep="\n")
+enable_favoritelocations = input("Input here: ").lower()
+logger.debug("enable_favoritelocations: %s" % enable_favoritelocations)
+if enable_favoritelocations == "yes":
+    config['FAVORITE LOCATIONS']['enabled'] = 'True'
+    logger.debug("FAVORITE LOCATIONS/enabled is now 'True'.")
+    print("Changes saved!")
+elif enable_favoritelocations == "no":
+    config['FAVORITE LOCATIONS']['enabled'] = 'False'
+    logger.debug("FAVORITE LOCATIONS/enabled is now 'False'.")
+    print("Changes saved!")
+else:
+    print("Could not understand your input. Defaulting to 'True'.")
+    config['FAVORITE LOCATIONS']['enabled'] = 'True'
+    logger.debug("FAVORITE LOCATIONS/enabled is now 'True'.")
+    print("Changes saved!")
+
+print("", "(37/42)", "PyWeather by default uses Google's geocoder, which can occasionally have rate limiting issues.",
+      "To get around this, you can manually use your own API key that you sign up for with Google. This is completely",
+      "optional, and you can continue past this step and not impede PyWeather's functionality. However, would you like",
+      "to enable the use of a custom API key for the geocoder? Yes or No.", sep="\n")
+enablecustomgeocoderkey = input("Input here: ").lower()
+logger.debug("enablecustomgeocoderkey: %s" % enablecustomgeocoderkey)
+if enablecustomgeocoderkey == "yes":
+    print("", "(38/42)", "To sign up for a Google Maps API key, please visit this link: ",
+          "https://developers.google.com/maps/documentation/javascript/get-api-key",
+          "Press the button 'Get Key', and wait a minute. Copy and paste the key into the input",
+          "below. Your API key will NOT be validated. Enter 'exit' to exit this process, and to disable",
+          "a custom API key.", sep="\n")
+    customgeocoderkey = input("Input here: ")
+    logger.debug("customgeocoderkey: %s" % customgeocoderkey)
+    while True:
+        print("", "The API key you entered is: %s" % customgeocoderkey,
+              "Is this the API key you want to use? Yes or No.", sep="\n")
+        confirmcustomgeocoderkey = input("Input here: ").lower()
+        logger.debug("confirmcustomgeocoderkey: %s" % confirmcustomgeocoderkey)
+        if confirmcustomgeocoderkey == "yes":
+            break
+        else:
+            if confirmcustomgeocoderkey != "no":
+                print("Couldn't understand your input. Please input your API key again.")
+            print("Please enter the API key you want to use below.")
+            customgeocoderkey = input("Input here: ")
+            logger.debug("customgeocoderkey: %s" % customgeocoderkey)
+
+    if customgeocoderkey == "exit":
+        print("Exiting the custom geocoder key process, and disabling a custom geocoder key.")
+        config['GEOCODER API']['customkey_enabled'] = 'False'
+        logger.debug("GEOCODER API/customkey_enabled is now FALSE.")
+        print("Changes saved.")
+    else:
+        config['GEOCODER API']['customkey_enabled'] = 'True'
+        config['GEOCODER API']['customkey'] = str(customgeocoderkey)
+        logger.debug("GEOCODER API/customkey_enabled is now TRUE.")
+        print("Changes saved.")
+elif enablecustomgeocoderkey == "no":
+    config['GEOCODER API']['customkey_enabled'] = 'False'
+    logger.debug("GEOCODER API/customkey_enabled is now FALSE.")
+    print("Changes saved.")
+else:
+    print("Your input could not be understood. Defaulting to 'False'.")
+    config['GEOCODER API']['customkey_enabled'] = 'False'
+    logger.debug("GEOCODER API/customkey_enabled is now FALSE.")
+    print("Changes saved.")
+
+print("", "(39/42)", "On the summary screen, you can now view a summary of the weather that occurred yesterday.",
+      "Enabling this will also enable the option to prefetch yesterday's weather at boot in the config file.",
+      "Please note that enabling this uses 1 extra API call at boot, and will increase PyWeather's loading time.",
+      "Would you like to turn on showing yesterday's weather on the summary screen? Yes or No. By default, this is",
+      "disabled.", sep="\n")
+showyesterdayonsummary = input("Input here: ").lower()
+logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
+if showyesterdayonsummary == "yes":
+    config['SUMMARY']['showyesterdayonsummary'] = 'True'
+    logger.info("SUMMARY/showyesterdayonsummary is now 'True'.")
+    config['PREFETCH']['yesterdaydata_atboot'] = 'True'
+    logger.info("PREFETCH/yesterdaydata_atboot is now 'True'.")
+    showyesterdayonsummary = True
+    logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
+    print("Changes saved.")
+elif showyesterdayonsummary == "no":
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
+    logger.info("SUMMARY/showyesterdayonsummary is now 'False'.")
+    showyesterdayonsummary = False
+    logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
+    print("Changes saved.")
+else:
+    print("Your input could not be understood. Defaulting to 'False'.")
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
+    logger.info("SUMMARY/showyesterdayonsumary is now 'False'.")
+    showyesterdayonsummary = False
+    logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
+    print("Changes saved.")
+
+if showyesterdayonsummary is False:
+    print("", "(40/42)", "When PyWeather boots up, you can have the option to have yesterday's weather data",
+          "prefetched during bootup. Enabling this will use 1 extra API call at boot, and will increase PyWeather's",
+          "loading time. Would you like to enable prefetching yesterday's weather data on boot? Yes or No.",
+          "By default, this is disabled.", sep="\n")
+    prefetchyesterdayatboot = input("Input here: ").lower()
+    logger.debug("prefetchyesterdayatboot: %s" % prefetchyesterdayatboot)
+    if prefetchyesterdayatboot == "yes":
+        config['PREFETCH']['yesterdaydata_atboot'] = 'True'
+        logger.info("PREFETCH/yesterdaydata_atboot is now 'True'.")
+        print("Changes saved.")
+    elif prefetchyesterdayatboot == "no":
+        config['PREFETCH']['yesterdaydata_atboot'] = 'False'
+        logger.info("PREFETCH/yesterdaydata_atboot is now 'False'.")
+        print("Changes saved.")
+    else:
+        print("Your input could not be understood. Defaulting to 'False'.")
+        config['PREFETCH']['yesterdaydata_atboot'] = 'False'
+        logger.info("PREFETCH/yesterdaydata_atboot is now 'False'.")
+        print("Changes saved.")
+
+print("", "(41/42)", "In 0.6.3 beta and newer, you have the option to enable extra tools for PyWeather.",
+      "Extra tools are diagnostic tools, and so far you can see cache timings in PyWeather, and more extra tools",
+      "will be added as time goes on. Would you like to enable the ability to use extra tools? Yes or No. By default",
+      "this is disabled.", sep="\n")
+enableextratools = input("Input here: ").lower()
+logger.debug("enableextratools: %s" % enableextratools)
+if enableextratools == "yes":
+    config['UI']['extratools_enabled'] = 'True'
+    logger.info("UI/extratools_enabled is now 'True'.")
+    print("Changes saved.")
+elif enableextratools == "no":
+    config['UI']['extratools_enabled'] = 'False'
+    logger.info("UI/extratools_enabled is now 'False'.")
+    print("Changes saved.")
+else:
+    print("Could not understand your input. Defaulting to 'False'.")
+    config['UI']['extratools_enabled'] = 'False'
+    logger.info("UI/extratools_enabled is now 'False'.")
+    print("Changes saved.")
+
+print("", "(42/42)", "PyWeather's geocoder usually uses https, but issues have been discovered",
       "on some platforms, where the geocoder cannot operate in the https mode. If you press enter",
       "PyWeather will automatically detect which scheme to use. If you are an advanced user, and want",
       "to configure the scheme yourself, enter advancedconfig at the prompt below.", sep="\n")
@@ -1491,11 +1919,16 @@ else:
     # HTTPS validation
     from geopy import GoogleV3
     geocoder = GoogleV3(scheme='https')
-    # I've found that one "warm up request" somehow helps determine if a platform is HTTP/HTTPS compatible.
+    # I've found that one "warm up request", and then waiting ~15 seconds somehow helps determine if a platform is HTTP/HTTPS compatible.
     try:
         geocoder.geocode("123 5th Avenue, New York, NY")
     except:
         logger.debug("Warm up geocode failed.")
+
+    print("I've just completed a warm-up geocode. However, sometimes a rate limit will",
+          "occur after this geocode. I've paused the setup process for 10 seconds. This",
+          "should help with figuring out what scheme works on your OS.", sep="\n")
+    time.sleep(10)
 
     try:
         geocoder.geocode("123 5th Avenue, New York, NY")
@@ -1506,6 +1939,8 @@ else:
     except geopy.exc.GeocoderServiceError:
         print("Geopy probably can't run without HTTPS (or your internet went down). Trying HTTP as the scheme...")
         geocoder = GoogleV3(scheme='http')
+        print("Waiting 10 seconds to avoid rate limiting after the previous geocode...")
+        time.sleep(10)
         try:
             geocoder.geocode("123 5th Avenue, New York, NY")
             print("The geocoder can operate, but without HTTPS enabled on your OS. Saving these changes...")
@@ -1519,6 +1954,8 @@ else:
             logger.debug("GEOCODER/scheme is now 'http'")
             print("Changes saved.")
 
+# if showing yesterday is disabled show prefetch yesterday
+# if show yest. on sum. is enabled enable prefetch too basically the same code
 
 print("","That's it! Now commiting config changes...", sep="\n")
 try:

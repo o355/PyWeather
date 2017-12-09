@@ -1,5 +1,34 @@
-# PyWeather - version 0.6.3 beta
-# (c) 2017 o355, GNU GPL 3.0.
+'''
+_______
+|      \  \           /         @@@;
+|       \  \         /        `#....@
+|        |  \       /       ,;@.....;,;
+|        |   \     /       @..@........@`           PyWeather
+|        |    \   /        .............@           version 0.6.3 beta
+|        /     \ /         .............@           (c) 2017 - o355
+|_______/       |          @...........#`
+|               |           .+@@++++@#;
+|               |             @ ;  ,
+|               |             : ' .
+|               |            @ # .`
+|               |           @ # .`
+'''
+
+# The second part of the ASCII art you see was converted to ASCII from Wunderground's J icon set - the sleet icon.
+# Some minor tweaking was done to straighten up the rain.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # This line of code was typed in during the solar eclipse, in Eclipse.
 #
@@ -10,7 +39,9 @@
 
 # <---- Preload starts here ---->
 
-# Begin the import process.
+# See if we're running Python 2. If so, exit out of the script.
+
+# Begin the import process. - Section 1
 import configparser
 import subprocess
 import traceback
@@ -28,6 +59,7 @@ import time
 import shutil
 try:
     from colorama import init, Fore, Style
+    import colorama
 except ImportError:
     print("When attempting to import the library colorama, we ran into an import error.",
           "Please make sure that colorama is installed.",
@@ -47,25 +79,33 @@ except:
     input()
     sys.exit()
 
+try:
+    from halo import Halo
+except ImportError:
+    print("When attempting to import the library halo, we ran into an import error.",
+          "Please make sure that halo is installed.",
+          "Press enter to exit.", sep="\n")
+
 
 # Try loading the versioninfo.txt file. If it isn't around, create the file with
-# the present version info.
+# the present version info. - Section 2
 
 try:
     versioninfo = open('updater//versioninfo.txt').close()
 except:
     open('updater//versioninfo.txt', 'w').close()
     with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.2 beta")
+        out.write("0.6.3 beta")
         out.close()
 
 
-# Define configparser under config, and read the config.
+# Define configparser under config, and read the config. - Section 3
 config = configparser.ConfigParser()
 config.read('storage//config.ini')
 
 # See if the config is "provisioned". If it isn't, a KeyError will occur,
-# because it's not created. Creative.
+# because it's not created. Creative. - Section 4
+
 try:
     configprovisioned = config.getboolean('USER', 'configprovisioned')
 except:
@@ -80,127 +120,448 @@ except:
     input()
     sys.exit()
     
-# Try to parse configuration options.    
+# Try to parse configuration options. - Section 5
+
+# Set a variable counting the config issues we run into. Display a message at the bottom
+# of this code if we encounter 1 or more config errors.
+configerrorcount = 0
+
 try:
     sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. SUMMARY/sundata_summary failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
+    sundata_summary = False
+try:
     almanac_summary = config.getboolean('SUMMARY', 'almanac_summary')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. SUMMARY/almanac_summary failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
+    almanac_summary = False
+
+try:
     checkforUpdates = config.getboolean('UPDATER', 'autocheckforupdates')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. UPDATER/autocheckforupdates failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
+    checkforUpdates = False
+try:
     verbosity = config.getboolean('VERBOSITY', 'verbosity')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. VERBOSITY/verbosity failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
+    verbosity = False
+try:
     jsonVerbosity = config.getboolean('VERBOSITY', 'json_verbosity')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. VERBOSITY/json_verbosity failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
+    jsonVerbosity = False
+try:
     tracebacksEnabled = config.getboolean('TRACEBACK', 'tracebacks')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. TRACEBACK/tracebacks failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
+    tracebacksEnabled = False
+try:
     prefetch10Day_atStart = config.getboolean('PREFETCH', '10dayfetch_atboot')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. PREFETCH/10dayfetch_atboot failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
+    prefetch10Day_atStart = False
+try:
     user_loopIterations = config.getint('UI', 'detailedInfoLoops')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. UI/detailedInfoLoops failed to load. Defaulting to 6.", sep="\n")
+    configerrorcount += 1
+    user_loopIterations = 6
+try:
     user_enterToContinue = config.getboolean('UI', 'show_enterToContinue')
-    user_showCompletedIterations = config.getboolean('UI', 
-                                                     'show_completedIterations')
-    user_forecastLoopIterations = config.getint('UI', 
-                                                'forecast_detailedInfoLoops')
-    user_showUpdaterReleaseTag = config.getboolean('UPDATER', 
-                                                   'show_updaterReleaseTag')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. UI/show_enterToContinue failed to load. Defaulting to True.", sep="\n")
+    configerrorcount += 1
+    user_enterToContinue = True
+try:
+    user_showCompletedIterations = config.getboolean('UI', 'show_completedIterations')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. UI/show_completedIterations failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
+    user_showCompletedIterations = False
+try:
+    user_forecastLoopIterations = config.getint('UI', 'forecast_detailedInfoLoops')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. UI/forecast_detailedInfoLoops failed to load. Defaulting to 5.", sep="\n")
+    configerrorcount += 1
+    user_forecastLoopIterations = 5
+try:
+    user_showUpdaterReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. UPDATER/show_updaterReleaseTag failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
+    user_showUpdaterReleaseTag = False
+try:
     user_backupKeyDirectory = config.get('KEYBACKUP', 'savedirectory')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. KEYBACKUP/savedirectory failed to load. Defaulting to 'backup//'.", sep="\n")
+    configerrorcount += 1
+    user_backupKeyDirectory = 'backup//'
+try:
     validateAPIKey = config.getboolean('PYWEATHER BOOT', 'validateAPIKey')
-    allowGitForUpdating = config.getboolean('UPDATER', 'allowGitForUpdating')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. PYWEATHER BOOT/validateAPIKey failed to load. Defaulting to True.", sep="\n")
+    configerrorcount += 1
+    validateAPIKey = True
+
+try:
     showAlertsOnSummary = config.getboolean('SUMMARY', 'showAlertsOnSummary')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. SUMMARY/showAlertsOnSummary failed to load. Defaulting to True.", sep="\n")
+    configerrorcount += 1
+    showAlertsOnSummary = True
+try:
+    showyesterdayonsummary = config.getboolean('SUMMARY', 'showyesterdayonsummary')
+except:
+    print("Whnn attempting to load your configuration file, an error",
+            "occurred. SUMMARY/showyesterdayonsummary failed to load. Defaulting to False", sep="\n")
+    showyesterdayonsummary = False
+try:
     showUpdaterReleaseNotes = config.getboolean('UPDATER', 'showReleaseNotes')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. UPDATER/showReleaseNotes failed to load. Defaulting to True.", sep="\n")
+    configerrorcount += 1
+    showUpdaterReleaseNotes = True
+try:
     showUpdaterReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. UPDATER/showReleaseNotes_uptodate failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
+    showUpdaterReleaseNotes_uptodate = False
+try:
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. UPDATER/showNewVersionReleaseDate failed to load. Defaulting to True.", sep="\n")
+    configerrorcount += 1
+    showNewVersionReleaseDate = True
+try:
     cache_enabled = config.getboolean('CACHE', 'enabled')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. CACHE/enabled failed to load. Defaulting to True.", sep="\n")
+    configerrorcount += 1
+    cache_enabled = True
+try:
     cache_alertstime = config.getfloat('CACHE', 'alerts_cachedtime')
     cache_alertstime = cache_alertstime * 60
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. CACHE/alerts_cachedtime failed to load. Defaulting to 300.", sep="\n")
+    configerrorcount += 1
+    cache_alertstime = 300
+try:
     cache_currenttime = config.getfloat('CACHE', 'current_cachedtime')
     cache_currenttime = cache_currenttime * 60
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. CACHE/current_cachedtime failed to load. Defaulting to 600.", sep="\n")
+    configerrorcount += 1
+    cache_currenttime = 600
+try:
     cache_forecasttime = config.getfloat('CACHE', 'forecast_cachedtime')
     cache_forecasttime = cache_forecasttime * 60
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. CACHE/forecast_cachedtime failed to load. Defaulting to 3600.", sep="\n")
+    configerrorcount += 1
+    cache_forecasttime = 3600
+try:
     cache_almanactime = config.getfloat('CACHE', 'almanac_cachedtime')
-    cache_almanactime = cache_almanactime * 60
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. CACHE/almanac_cachedtime failed to load. Defaulting to 14400.", sep="\n")
+    configerrorcount += 1
+    cache_almanactime = 1440
+try:
     cache_threedayhourly = config.getfloat('CACHE', 'threedayhourly_cachedtime')
-    cache_threedayhourly = cache_threedayhourly * 60
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. CACHE/threedayhourly_cachedtime failed to load. Defaulting to 3600.", sep="\n")
+    configerrorcount += 1
+    cache_threedayhourly = 3600
+try:
     cache_tendayhourly = config.getfloat('CACHE', 'tendayhourly_cachedtime')
     cache_tendayhourly = cache_tendayhourly * 60
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. CACHE/tendayhourly_cachedtime failed to load. Defaulting to 3600.", sep="\n")
+    configerrorcount += 1
+    cache_tendayhourly = 3600
+try:
     cache_sundatatime = config.getfloat('CACHE', 'sundata_cachedtime')
     cache_sundatatime = cache_sundatatime * 60
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. CACHE/sundata_cachedtime failed to load. Defaulting to 28800.", sep="\n")
+    configerrorcount += 1
+    cache_sundatatime = 28800
+try:
     cache_tidetime = config.getfloat('CACHE', 'tide_cachedtime')
     cache_tidetime = cache_tidetime * 60
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. CACHE/tide_cachedtime failed to load. Defaulting to 28800.", sep="\n")
+    configerrorcount += 1
+    cache_tidetime = 28800
+try:
     cache_hurricanetime = config.getfloat('CACHE', 'hurricane_cachedtime')
     cache_hurricanetime = cache_hurricanetime * 60
-    user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
-    user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
-    user_radarImageSize = config.get('RADAR GUI', 'radar_imagesize')
-    radar_bypassconfirmation = config.getboolean('RADAR GUI', 'bypassconfirmation')
-    showTideOnSummary = config.getboolean('SUMMARY', 'showtideonsummary')
-    geopyScheme = config.get('GEOCODER', 'scheme')
-    prefetchHurricane_atboot = config.getboolean('PREFETCH', 'hurricanedata_atboot')
-    geoip_enabled = config.getboolean('UI', 'geoipservice_enabled')
-    pws_enabled = config.getboolean('UI', 'allow_pwsqueries')
-    
+
+
 except:
-    # If it fails (typo or code error), we set all options to default.
     print("When attempting to load your configuration file, an error",
-          "occurred. This could of happened because of a typo, or an error",
-          "in the code. Make sure there aren't any typos in the config file,",
-          "and check the traceback below (report it to GitHub for extra internet",
-          "points).", sep="\n")
-    traceback.print_exc()
-    sundata_summary = False
-    almanac_summary = False
-    verbosity = False
-    jsonVerbosity = False
-    checkforUpdates = False
-    tracebacksEnabled = False
-    prefetch10Day_atStart = False
-    user_loopIterations = 6
-    user_enterToContinue = True
-    user_showCompletedIterations = False
-    user_forecastLoopIterations = 5
-    user_showUpdaterReleaseTag = False
-    user_backupKeyDirectory = 'backup//'
-    validateAPIKey = True
-    allowGitForUpdating = False
-    showAlertsOnSummary = True
-    showUpdaterReleaseNotes = True
-    showUpdaterReleaseNotes_uptodate = False
-    showNewVersionReleaseDate = True
-    cache_enabled = True
-    # Values listed here are seconds for refresh times, not minutes.
-    cache_alertstime = 300
-    cache_currenttime = 600
-    cache_forecasttime = 3600
-    cache_almanactime = 14400
-    cache_threedayhourly = 3600
-    cache_tendayhourly = 3600
-    cache_sundatatime = 28800
-    cache_tidetime = 28800
+          "occurred. CACHE/hurricane_cachedtime failed to load. Defaulting to 10800.", sep="\n")
+    configerrorcount += 1
     cache_hurricanetime = 10800
+
+try:
+    cache_yesterdaytime = config.getfloat('CACHE', 'yesterday_cachedtime')
+    cache_yesterdaytime = cache_yesterdaytime * 60
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. CACHE/yesterday_cachedtime failed to load. Defaulting to 10800.", sep="\n")
+    configerrorcount += 1
+    cache_yesterdaytime = 10800
+
+try:
+    user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. UI/alerts_usiterations failed to load. Defaulting to 2.", sep="\n")
+    configerrorcount += 1
     user_alertsEUiterations = 2
+try:
+    user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. UI/alerts_euiterations failed to load. Defaulting to 1.", sep="\n")
+    configerrorcount += 1
     user_alertsUSiterations = 1
+try:
+    user_radarImageSize = config.get('RADAR GUI', 'radar_imagesize')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. RADAR GUI/radar_imagesize failed to load. Defaulting to 'normal'.", sep="\n")
+    configerrorcount += 1
     user_radarImageSize = "normal"
+try:
+    radar_bypassconfirmation = config.getboolean('RADAR GUI', 'bypassconfirmation')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. RADAR GUI/bypassconfirmation failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
     radar_bypassconfirmation = False
+try:
+    showTideOnSummary = config.getboolean('SUMMARY', 'showtideonsummary')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. SUMMARY/showtideonsummary failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
     showTideOnSummary = False
+try:
+    geopyScheme = config.get('GEOCODER', 'scheme')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. GEOCODER/scheme failed to load. Defaulting to 'https'.", sep="\n")
+    configerrorcount += 1
     geopyScheme = 'https'
+try:
+    prefetchHurricane_atboot = config.getboolean('PREFETCH', 'hurricanedata_atboot')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. PREFETCH/hurricanedata_atboot failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
     prefetchHurricane_atboot = False
+try:
+    geoip_enabled = config.getboolean('FIRSTINPUT', 'geoipservice_enabled')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FIRSTINPUT/geoipservice_enabled failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
     geoip_enabled = False
+
+try:
+    pws_enabled = config.getboolean('FIRSTINPUT', 'allow_pwsqueries')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FIRSTINPUT/allow_pwsqueries failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
     pws_enabled = False
 
-# Import logging, and set up the logger.
+try:
+    hurricanenearestcity_enabled = config.getboolean('HURRICANE', 'enablenearestcity')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. HURRICANE/enablenearestcity failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
+    hurricanenearestcity_enabled = False
+
+try:
+    hurricanenearestcity_fenabled = config.getboolean('HURRICANE', 'enablenearestcity_forecast')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. HURRICANE/enablenearestcity_forecast failed to load. Defaulting to False", sep="\n")
+    configerrorcount += 1
+    hurricanenearestcity_fenabled = False
+try:
+    geonames_apiusername = config.get('HURRICANE', 'api_username')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. HURRICANE/api_username failed to load. Defaulting to 'pyweather_proj'", sep="\n")
+    configerrorcount += 1
+    geonames_apiusername = "pyweather_proj"
+try:
+    hurricane_nearestsize = config.get('HURRICANE', 'nearestcitysize')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. HURRICANE/nearestcitysize failed to load. Defaulting to 'medium'.", sep="\n")
+    configerrorcount += 1
+    hurricane_nearestsize = 'medium'
+try:
+    favoritelocation_enabled = config.getboolean('FAVORITE LOCATIONS', 'enabled')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FAVORITE LOCATIONS/enabled failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
+    favoritelocation_enabled = False
+try:
+    favoritelocation_1 = config.get('FAVORITE LOCATIONS', 'favloc1')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FAVORITE LOCATIONS/favloc1 failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    favoritelocation_1 = "None"
+
+try:
+    favoritelocation_2 = config.get('FAVORITE LOCATIONS', 'favloc2')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FAVORITE LOCATIONS/favloc2 failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    favoritelocation_2 = "None"
+
+try:
+    favoritelocation_3 = config.get('FAVORITE LOCATIONS', 'favloc3')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FAVORITE LOCATIONS/favloc3 failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    favoritelocation_3 = "None"
+
+try:
+    favoritelocation_4 = config.get('FAVORITE LOCATIONS', 'favloc4')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FAVORITE LOCATIONS/favloc4 failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    favoritelocation_4 = "None"
+
+try:
+    favoritelocation_5 = config.get('FAVORITE LOCATIONS', 'favloc5')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FAVORITE LOCATIONS/favloc5 failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    favoritelocation_5 = "None"
+
+try:
+    geocoder_customkeyEnabled = config.getboolean('GEOCODER API', 'customkey_enabled')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. GEOCODER API/customkey_enabled failed to load. Defaulting to False.", sep="\n")
+    configerrorcount += 1
+    geocoder_customkeyEnabled = False
+
+try:
+    geocoder_customkey = config.get('GEOCODER API', 'customkey')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. GEOCODER API/customkey failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    geocoder_customkey = "None"
+
+try:
+    extratools_enabled = config.getboolean('UI', 'extratools_enabled')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. UI/extratools_enabled failed to load. Defaulting to 'False'.", sep="\n")
+    configerrorcount += 1
+    extratools_enabled = False
+
+try:
+    prefetch_yesterdaydata = config.getboolean('PREFETCH', 'yesterdaydata_atboot')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. PREFETCH/yesterdaydata_atboot failed to load. Defaulting to 'False'.", sep="\n")
+    configerrorcount += 1
+    prefetch_yesterdaydata = False
+
+try:
+    yesterdaydata_onsummary = config.getboolean('SUMMARY', 'showyesterdayonsummary')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. SUMMARY/showyesterdayonsummary failed to load. Defaulting to 'False'.", sep="\n")
+    configerrorcount += 1
+    yesterdaydata_onsummary = False
+
+if configerrorcount >= 1:
+    print("", "When trying to load your configuration file, error(s) occurred.",
+          "Try making sure that there are no typos in your config file, and try setting values",
+          "in your config file to the default values as listed above. If all else fails, try using",
+          "configsetup.py to set all config options to their defaults. If issues still occur,",
+          "report the bug on GitHub.", sep="\n")
+
+# Import logging, and set up the logger. - Section 6
 import logging
 logger = logging.getLogger(name='pyweather_0.6.3beta')
 logformat = '%(asctime)s | %(levelname)s | %(message)s'
 logging.basicConfig(format=logformat)
 
 # Set the logger levels by design. Critical works as a non-verbosity
-# option, as I made sure not to have any critical messages.
+# option, as I made sure not to have any critical messages. - Section 7
 if verbosity:
     logger.setLevel(logging.DEBUG)
 elif tracebacksEnabled:
     logger.setLevel(logging.ERROR)
 else:
     logger.setLevel(logging.CRITICAL)
-    
-# List config options for those who have verbosity enabled.    
-logger.info("PyWeather 0.6.2 beta now starting.")
+
+# Initialize the halo spinner - Section 8
+spinner = Halo(text='Loading PyWeather...', spinner='line')
+spinner.start()
+
+# List config options for those who have verbosity enabled. - Section 9
+logger.info("PyWeather 0.6.3 beta now starting.")
 logger.info("Configuration options are as follows: ")
 logger.debug("sundata_summary: %s ; almanac_summary: %s" %
              (sundata_summary, almanac_summary))
+logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
 logger.debug("checkforUpdates: %s ; verbosity: %s" %
              (checkforUpdates, verbosity))
 logger.debug("jsonVerbosity: %s ; tracebacksEnabled: %s" %
@@ -213,8 +574,7 @@ logger.debug("user_forecastLoopIterations: %s ; user_showUpdaterReleaseTag: %s"
              % (user_forecastLoopIterations, user_showUpdaterReleaseTag))
 logger.debug("user_backupKeyDirectory: %s ; validateAPIKey: %s"
              % (user_backupKeyDirectory, validateAPIKey))
-logger.debug("allowGitForUpdating: %s ; showAlertsOnSummary: %s"
-             % (allowGitForUpdating, showAlertsOnSummary))
+logger.debug("showAlertsOnSummary: %s" % showAlertsOnSummary)
 logger.debug("showUpdaterReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: %s"
              % (showUpdaterReleaseNotes_uptodate, showNewVersionReleaseDate))
 logger.debug("showUpdaterReleaseNotes: %s ; cache_enabled: %s" %
@@ -238,10 +598,20 @@ logger.debug("showTideOnSummary: %s ; geopyScheme: %s" %
              (showTideOnSummary, geopyScheme))
 logger.debug("prefetchHurricane_atboot: %s ; cache_hurricanetime: %s" %
              (prefetchHurricane_atboot, cache_hurricanetime))
-logger.debug("geoip_enabled: %s" % geoip_enabled)
+logger.debug("cache_yesterdaytime: %s" % (cache_yesterdaytime))
+logger.debug("favoritelocation_enabled: %s ; favoritelocation_1: %s" %
+             (favoritelocation_enabled, favoritelocation_1))
+logger.debug("favoritelocation_2: %s ; favoritelocation_3: %s" %
+             (favoritelocation_2, favoritelocation_3))
+logger.debug("favoritelocation_4: %s ; favoritelocation_5: %s" %
+             (favoritelocation_4, favoritelocation_5))
+logger.debug("geocoder_customkeyEnabled: %s ; geocoder_customkey: %s" %
+             (geocoder_customkeyEnabled, geocoder_customkey))
+logger.debug("extratools_enabled: %s" % extratools_enabled)
+
 
 logger.info("Setting gif x and y resolution for radar...")
-# Set the size of the radar window.
+# Set the size of the radar window. - Section 10
 if user_radarImageSize == "extrasmall":
     radar_gifx = "320"
     radar_gify = "240"
@@ -263,6 +633,7 @@ else:
 
 logger.info("Defining custom functions...")
 
+# Define custom functions - Section 11
 def printException():
     # We use tracebacksEnabled here, as it just worked.
     if tracebacksEnabled == True:
@@ -309,45 +680,125 @@ def radar_clearImages():
     except:
         printException_loggerwarn()
 
-
+def termuxRound(value):
+    # Made by creepersbane.
+    # Don't kill me.
+	newVal = str(value)
+	try:
+		valInt = newVal.split(".")[0]
+	except:
+		#printException_loggerwarn()
+		return newVal
+	try:
+		valFloat = newVal.split(".")[0]
+		if int(valFloat[0]) >= 5:
+			valInt = str(int(valInt) + 1)
+			return valInt
+		else:
+			return valInt
+	except:
+		#printException_loggerwarn()
+		return valInt
+	return value
 
 logger.info("Declaring geocoder type...")
-if geopyScheme == "https":
+# Declare geocoder type - Section 12
+if geopyScheme == "https" and geocoder_customkeyEnabled is False:
     geolocator = GoogleV3(scheme='https')
-    logger.debug("geocoder scheme is now https.")
-elif geopyScheme == "http":
+    logger.debug("geocoder scheme is now https, no custom key")
+# If the user has a custom key enabled, do a geocode to validate the custom API key.
+# The option to turn this off will be added in 0.6.4 beta.
+elif geopyScheme == "https" and geocoder_customkeyEnabled is True:
+    geolocator = GoogleV3(api_key=geocoder_customkey, scheme='https')
+    spinner.stop()
+    spinner.start(text="Validating geocoder API key...")
+    logger.debug("geocoder scheme is now https, custom key. Validating...")
+    # Do a warm-up geocode
+    try:
+        location = geolocator.geocode("123 5th Avenue, New York, NY")
+    except:
+        logger.debug("warmup geocode failed.")
+    # Do the actual geocode
+    try:
+        location = geolocator.geocode("123 5th Avenue, New York, NY")
+    except geopy.exc.GeocoderQueryError:
+        spinner.fail(text="Geocoder API key is invalid!")
+        print("")
+        logger.debug("API key is invalid, falling back to no API key...")
+        print("Your geocoder API key failed to validate, since it is wrong.",
+              "Falling back to no API key...", sep="\n")
+        printException()
+        geolocator = GoogleV3(scheme='https')
+        # Sleep the loading process for 100ms, this should give enough time to let the traceback get
+        # printed, and let the loader continue
+        time.sleep(0.1)
+        spinner.start(text="Loading PyWeather...")
+    except:
+        spinner.fail(text="Failed to validate geocoder API key!")
+        print("")
+        print("When trying to validate your geocoder API key, something went wrong.",
+              "Falling back to no API key...", sep="\n")
+        printException()
+        logger.debug("Failed to validate API key.")
+        geolocator = GoogleV3(scheme='https')
+        time.sleep(0.1)
+        spinner.start(text="Loading PyWeather...")
+elif geopyScheme == "http" and geocoder_customkeyEnabled is False:
     geolocator = GoogleV3(scheme='http')
     logger.debug("geocoder scheme is now http.")
+elif geopyScheme == "http" and geocoder_customkeyEnabled is True:
+    spinner.fail(text="A custom geocoder key on a HTTP scheme isn't allowed!")
+    print("Sorry! Having a custom geocoder key on a HTTP scheme is not supported by",
+          "Google. If you want to get rid of these error messages, please set GEOCODER API/",
+          "customkeyenabled to False.", sep="\n")
+    print("")
+    geolocator = GoogleV3(scheme='http')
 else:
     print("Geocoder scheme variable couldn't be understood.",
           "Defaulting to the https scheme.", sep="\n")
     geolocator = GoogleV3(scheme='https')
     logger.debug("geocoder scheme is now https.")
 
-# Declare historical cache dictionary
+logger.info("Declaring hurricane nearest city population minimum...")
+# Set hurricane nearest city size depending on the config option - Section 13
+if hurricane_nearestsize == "small":
+    hurricane_citiesamp = "&cities=cities1000"
+elif hurricane_nearestsize == "medium":
+    hurricane_citiesamp = "&cities=cities5000"
+elif hurricane_nearestsize == "large":
+    hurricane_citiesamp = "&cities=cities10000"
+
+# Declare historical cache dictionary - Section 14
 historical_cache = {}
 logger.debug("historical_cache: %s" % historical_cache)
 
 logger.debug("Begin API keyload...")
-# Load the API key.
+# Load the API key - Section 15
 try:
+    # Initially load the key - Section 15a
     apikey_load = open('storage//apikey.txt')
     logger.debug("apikey_load = %s" % apikey_load)
     apikey = apikey_load.read()
 except FileNotFoundError:
+    spinner.fail(text="Failed to access your primary API key!")
+    print("")
     print("Your primary API key couldn't be loaded, as PyWeather ran into",
           "an error when attempting to access it. Make sure that your primary key",
           "file can be accessed (usually found at storage/apikey.txt. Make sure it has",
           "proper permissions, and that it exists). In the mean time, we're attempting",
           "to load your backup API key.", sep="\n")
-    # If the key isn't found, try to find the second key.
+    # If the key isn't found, try to find the second key. - Section 15b
+    spinner.start(text="Loading PyWeather...")
     try:
         apikey2_load = open(user_backupKeyDirectory + "backkey.txt")
         logger.debug("apikey2_load: %s" % apikey2_load)
         apikey = apikey2_load.read()
         logger.debug("apikey: %s" % apikey)
-        print("Loaded your backup key successfully!")
+        spinner.succeed(text="Successfully loaded your backup key!")
+        spinner.start(text="Loading PyWeather...")
     except FileNotFoundError:
+        spinner.fail(text="Failed to access a primary & backup key!")
+        print("")
         print("When attempting to access your backup API key, PyWeather ran into",
               "an error. Make sure that your backup key file is accessible (wrong",
               "permissions and the file not existing are common issues).", sep="\n")
@@ -356,7 +807,8 @@ except FileNotFoundError:
         print("Press enter to continue.")
         input()
         sys.exit()
-        
+
+# Validate the user's API key for the full API key validation - Section 16
 if validateAPIKey == True:
     # If the primary API key is valid, and got through the check,
     # this is here for those who validate their API key, and making sure
@@ -381,8 +833,8 @@ logger.debug("apikey = %s" % apikey)
 
 # Version info gets defined here.
 
-buildnumber = 62
-buildversion = '0.6.2 beta'
+buildnumber = 63
+buildversion = '0.6.3 beta'
 
 # Refresh flag variables go here.
 refresh_currentflagged = False
@@ -394,6 +846,7 @@ refresh_almanacflagged = False
 refresh_sundataflagged = False
 refresh_tidedataflagged = False
 refresh_hurricanedataflagged = False
+refresh_yesterdaydataflagged = False
 
 logger.debug("refresh_currentflagged: %s ; refresh_alertsflagged: %s" %
              (refresh_currentflagged, refresh_alertsflagged))
@@ -403,9 +856,12 @@ logger.debug("refresh_forecastflagged: %s ; refresh_almanacflagged: %s" %
              (refresh_forecastflagged, refresh_almanacflagged))
 logger.debug("refresh_sundataflagged: %s ; refresh_tidedataflagged: %s" %
              (refresh_sundataflagged, refresh_tidedataflagged))
-logger.debug("refresh_hurricanedataflagged: %s" % refresh_hurricanedataflagged)
+logger.debug("refresh_hurricanedataflagged: %s ; refresh_yesterdaydataflagged: %s" %
+             (refresh_hurricanedataflagged, refresh_yesterdaydataflagged))
  
 if checkforUpdates == True:
+    spinner.stop()
+    spinner.start(text='Checking for updates...')
     reader2 = codecs.getreader("utf-8")
     try:
         versioncheck = requests.get("https://raw.githubusercontent.com/o355/"
@@ -432,6 +888,9 @@ if checkforUpdates == True:
                   ", and the latest version is " + version_latestVersion + ".")
             print("")
     except:
+        spinner.fail(text="Couldn't check for PyWeather updates!")
+        print("")
+        spinner.start(text="Loading PyWeather...")
         print("Couldn't check for updates. Make sure raw.githubusercontent.com is unblocked on your network,",
               "and that you have a working internet connection.", sep="\n")
 
@@ -440,23 +899,152 @@ if checkforUpdates == True:
 logger.info("Defining about variables...")
 about_buildnumber = "63"
 about_version = "0.6.3 beta"
-about_releasedate = "September 24, 2017"
-about_maindevelopers = "o355"
+about_releasedate = "December 3, 2017"
+about_maindevelopers = "o355" # Oh look, I'm also on TV, HI MOM!!!!!!!!!!!!
 logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))
 logger.debug("about_releasedate: %s ; about_maindevelopers: %s" %
              (about_releasedate, about_maindevelopers))
-about_awesomecontributors = "ModoUnreal" # Oh look I'm on TV, HI MOM!!!!
+about_awesomecontributors = "ModoUnreal, TheLetterAndrew" # Oh look I'm on TV, HI MOM!!!!
+# The winner of the explaination point contest for 0.6.3 beta:
+#
+#             o355
+#          ___________
+#          |   1st    | ModoUnreal
+#  No one  |          |___________
+# ---------               2nd     |
+# |  3rd                          |
+# |_______________________________|
 about_contributors = "gsilvapt, creepersbane"
 about_releasetype = "beta"
-about_librariesinuse = "Colorama, Geopy, Requests"
+about_librariesinuse = "Colorama, Geopy, appJar, Requests, Halo"
+about_apisinuse = "freegeoip.net, GeoNames"
 logger.debug("about_contributors: %s ; about_releasetype: %s" %
              (about_contributors, about_releasetype))
 logger.debug("about_librariesinuse: %s ; about_awesomecontributors: %s" % 
             (about_librariesinuse, about_awesomecontributors))
+logger.debug("about_apisinuse: %s" % about_apisinuse)
 geoip_url = "https://freegeoip.net/json/"
+logger.debug("geoip_url: %s" % geoip_url)
+
+# Set up the initial variables that dictate availability, using PWS URLs,
+# or using the geocoder.
 geoip_available = False
+pws_available = False
+pws_urls = False
+useGeocoder = True
+logger.debug("geoip_available: %s ; pws_available: %s" %
+             (geoip_available, pws_available))
+logger.debug("pws_urls: %s ; useGeocoder: %s" %
+             (pws_urls, useGeocoder))
+
+# Validate the API key before boot. It's now up here due to the new features at boot.
+if validateAPIKey == True and backupKeyLoaded == True:
+    spinner.stop()
+    spinner.start(text="Validating API key...")
+    logger.info("Beginning API key validation.")
+    testurl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/NY/New_York.json'
+    logger.debug("testurl: %s" % testurl)
+    try:
+        testJSON = requests.get(testurl)
+        logger.debug("Acquired test JSON, end result: %s" % testJSON)
+    except:
+        spinner.fail(text="Failed to validate API key!")
+        print("")
+        logger.warn("Cannot connect to the API! Is the internet down?")
+        print("When attempting to validate your primary API key, PyWeather ran",
+              "into an error when accessing Wunderground's API. If you're",
+              "on a network with a filter, make sure that",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you",
+              "have an internet connection.", sep="\n")
+        printException()
+        print("Press enter to exit.")
+        input()
+        sys.exit()
+    test_json = json.loads(testJSON.text)
+    if jsonVerbosity == True:
+        logger.debug("test_json: %s" % test_json)
+    try:
+        test_conditions = str(test_json['current_observation']['temp_f'])
+        logger.debug("test_conditions: %s" % test_conditions)
+        logger.info("API key is valid!")
+    except:
+        spinner.fail(text="Primary API key is not valid!")
+        logger.warn("API key is NOT valid. Attempting to revalidate API key...")
+        if backupKeyLoaded == True:
+            spinner.start(text="Validating backup API key...")
+            logger.info("Beginning backup API key validation.")
+            testurl = 'http://api.wunderground.com/api/' + apikey2 + '/conditions/q/NY/New_York.json'
+            logger.debug("testurl: %s" % testurl)
+            # What if the user's internet connection was alive during the 1st
+            # validation, but not the 2nd? That's why this is here.
+            try:
+                testJSON = requests.get(testurl)
+                logger.debug("Acquired test JSON, end result: %s" % testJSON)
+            except:
+                spinner.fail(text="Failed to validate backup API key!")
+                print("")
+                print("When attempting to validate your backup API key, PyWeather ran",
+                      "into an error. If you're on a network with a filter, make sure",
+                      "that 'api.wunderground.com' is unblocked. Otherwise, make sure you",
+                      "have an internet conection, that that your internet connection's latency",
+                      "isn't 1.59 days.", sep="\n")
+                printException()
+                print("Press enter to exit.")
+                input()
+                sys.exit()
+            test_json = json.loads(testJSON.text)
+            if jsonVerbosity == True:
+                logger.debug("test_json: %s" % test_json)
+            try:
+                test_conditions = str(test_json['current_observation']['temp_f'])
+                logger.debug("test_conditions: %s" % test_conditions)
+                logger.info("Backup API key is valid!")
+                apikey = apikey2
+                logger.debug("apikey = apikey2. apikey: %s" % apikey)
+                spinner.succeed(text="Backup API key is valid!")
+                # We don't need to define new URLs here. The apikey variable is set before URL declaration.
+            except:
+                spinner.fail(text="Failed to valaidate backup API key!")
+                print("")
+                logger.warn("Backup API key could not be validated!")
+                print("Your primary and backup API key(s) could not be validated.",
+                      "Make sure that your primary API key is valid, either because of a typo",
+                      "or some other reason. Installing Gentoo may help with the validation",
+                      "of your API key.", sep="\n")
+                printException()
+                print("Press enter to exit.")
+                input()
+                sys.exit()
+        elif backupKeyLoaded == False:
+            spinner.fail(text="Failed to validate API key!")
+            print("")
+            print("When attempting to validate your API key, your primary key",
+                  "couldn't be validated, and your backup key wasn't able to",
+                  "load at boot. Make sure that your primary API key is valid,",
+                  "and that your backup API key can be accessed by PyWeather."
+                  "Press enter to exit.", sep="\n")
+            input()
+            sys.exit()
+        else:
+            spinner.fail(text="Failed to validate API key!")
+            print("")
+            logger.warn("Backup key couldn't get loaded!")
+            print("Your primary API key couldn't be validated, and your",
+                  "backup key could not be loaded at startup.",
+                  "Please make sure your primary API key is valid, and that",
+                  "your backup API key can be accessed (common mistakes include",
+                  "wrong permissions, and the file not existing).",
+                  "Press enter to exit.", sep="\n")
+            input()
+            sys.exit()
+
+spinner.stop()
+spinner.start(text="Loading PyWeather...")
 if geoip_enabled == True:
+    spinner.stop()
+    spinner.start(text="Fetching current location...")
+    logger.info("geoip is enabled, attempting to fetch current location...")
     try:
         geoipJSON = requests.get(geoip_url)
         logger.debug("GeoIP JSON requsted with: %s" % geoipJSON)
@@ -473,42 +1061,338 @@ if geoip_enabled == True:
         geoip_available = True
         logger.debug("currentlocation: %s ; geoip_available: %s" %
                      (currentlocation, geoip_available))
+        latstr = str(geoip_json['latitude'])
+        lonstr = str(geoip_json['longitude'])
+        logger.debug("latstr: %s ; lonstr: %s" % (latstr, lonstr))
+        logger.debug("useGeocoder: %s" % useGeocoder)
     except:
-        print("Couldn't get your current location.")
+        spinner.fail(text="Failed to get current location! Current location is disabled.")
+        print("")
         geoip_available = False
         logger.debug("geoip_available: %s" % geoip_available)
+        spinner.start(text="Loading PyWeather...")
+
+    # If geoip is available (the except block wasn't run), check for a bad geolocation (a straight up comma)
+    if geoip_available == True:
+        if geoip_city == "" or geoip_state == "":
+            logger.warning("Bad geolocator data, geoip data is now not available.")
+            geoip_available = False
+            logger.debug("geoip_available: %s" % geoip_available)
+
+
+# Check if we need to fully disable favorite location from having 5 "None" entries, if enabled
+if favoritelocation_enabled is True:
+    logger.debug("Checking favorite locations for invalid locations.")
+    invalidlocations = 0
+    for (key, val) in config.items("FAVORITE LOCATIONS"):
+        logger.debug("key: %s ; val: %s" % (key, val))
+        if val == "None":
+            invalidlocations += 1
+            logger.debug("invalidlocations: %s" % invalidlocations)
+
+    if invalidlocations >= 5:
+        logger.debug("invalidlocations is greater than or above 5. Favorite locations is disabled.")
+        favoritelocation_available = False
+    else:
+        favoritelocation_available = True
+else:
+    favoritelocation_available = False
+
+    logger.debug("favoritelocation_available: %s" % favoritelocation_available)
+
+# Define favorite location display variables.
+favoritelocation_1d = favoritelocation_1
+favoritelocation_2d = favoritelocation_2
+favoritelocation_3d = favoritelocation_3
+favoritelocation_4d = favoritelocation_4
+favoritelocation_5d = favoritelocation_5
+
+logger.debug("favoritelocation_1d: %s ; favoritelocation_2d: %s" %
+             (favoritelocation_1d, favoritelocation_2d))
+logger.debug("favoritelocation_3d: %s ; favoritelocation_4d: %s" %
+             (favoritelocation_3d, favoritelocation_4d))
+logger.debug("favoritelocation_5d: %s" % favoritelocation_5d)
+
+# Parse any favorite locations that contain PWS in their name. Set display variables.
+# This is the same code for viewing favorite locations in the dedicated menu.
+
+if favoritelocation_1d.find("pws:") == 0:
+    # Delete pws: from the display string
+    favoritelocation_1d = favoritelocation_1d[4:]
+    favoritelocation_1d = "PWS " + favoritelocation_1d.upper()
+    logger.debug("favoritelocation_1d: %s" % favoritelocation_1d)
+
+if favoritelocation_2d.find("pws:") == 0:
+    # Delete pws: from the display string
+    favoritelocation_2d = favoritelocation_2d[4:]
+    favoritelocation_2d = "PWS " + favoritelocation_2d.upper()
+    logger.debug("favoritelocation_2d: %s" % favoritelocation_2d)
+
+if favoritelocation_3d.find("pws:") == 0:
+    # Delete pws: from the display string
+    favoritelocation_3d = favoritelocation_3d[4:]
+    favoritelocation_3d = "PWS " + favoritelocation_3d.upper()
+    logger.debug("favoritelocation_3d: %s" % favoritelocation_3d)
+
+if favoritelocation_4d.find("pws:") == 0:
+    # Delete pws: from the display string
+    favoritelocation_4d = favoritelocation_4d[4:]
+    favoritelocation_4d = "PWS " + favoritelocation_4d.upper()
+    logger.debug("favoritelocation_4d: %s" % favoritelocation_4d)
+
+if favoritelocation_5d.find("pws:") == 0:
+    # Delete pws: from the display string
+    favoritelocation_5d = favoritelocation_5d[4:]
+    favoritelocation_5d = "PWS " + favoritelocation_5d.upper()
+    logger.debug("favoritelocation_5d: %s" % favoritelocation_5d)
+
+
 
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
+spinner.stop()
+
 print("Hey, welcome to PyWeather!")
 print("Below, enter a location to check the weather for that location!")
 if geoip_available is True:
+    logger.debug("geoip is available. Showing option...")
     print("")
     print("You can also enter this to view weather for your current location:")
     print("currentlocation - " + currentlocation)
+elif geoip_available is False and geoip_enabled is True:
+    logger.debug("geoip isn't available, show an error message.")
     print("")
+    print("The GeoIP service used for your current location gave an invalid location.")
+    print("If this error continues, you can turn off the current location feature to avoid these error messages.")
+if favoritelocation_available is True:
+    logger.debug("favorite locations are enabled and available. showing option...")
+    print("")
+    print("You can also enter this to show weather for your favorite locations:")
+    if favoritelocation_1 != "None":
+        print("favoritelocation:1 - " + favoritelocation_1d)
+    if favoritelocation_2 != "None":
+        print("favoritelocation:2 - " + favoritelocation_2d)
+    if favoritelocation_3 != "None":
+        print("favoritelocation:3 - " + favoritelocation_3d)
+    if favoritelocation_4 != "None":
+        print("favoritelocation:4 - " + favoritelocation_4d)
+    if favoritelocation_5 != "None":
+        print("favoritelocation:5 - " + favoritelocation_5d)
 if pws_enabled is True:
+    logger.debug("pws queries have been enabled. Showing option...")
     print("")
     print("You can also query a Wunderground PWS by entering this:")
     print("pws:<PWS ID>")
-    print("")
+
+print("")
 locinput = input("Input here: ")
+locinput = str(locinput)
+
 print("Checking the weather, it'll take a few seconds!")
+print("")
 
 # Set if the query is a PWS at the beginning. It'll flip to True if a PWS query is detected.
 pws_query = False
-logger.debug("pws_query")
+logger.debug("pws_query: %s" % pws_query)
 
-if "currentlocation" in locinput and geoip_available is True:
+# Tell users their query isn't supported nicely
+# I understand that eggs.find("ham") isn't the most pythonic thing ever, but it's more reliable
+# and easier to work with than if "ham" in eggs. Multiple conditions are needed to support the short
+# shortcuts? Basically favloc: instead of favoritelocation:.
+if (geoip_enabled is False and locinput.find("currentlocation") == 0 or
+    geoip_enabled is False and locinput.find("curloc") == 0):
+    spinner.fail(text="PyWeather query failed!")
+    print("")
+    print("Whoops! You entered the query to access your current location, but",
+          "the current location feature is disabled. To enable the current location feature",
+          "in your config file make FIRSTINPUT/geoipservice_enabled True. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+elif (geoip_available is False and locinput.find("currentlocation") == 0 or
+      geoip_available is False and locinput.find("curloc") == 0):
+    spinner.fail(text="PyWeather query failed!")
+    print("")
+    print("Whoops! You entered the query to access your current location, there isn't any current location",
+          "data at this time. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+elif (favoritelocation_enabled is False and locinput.find("favoritelocation:") == 0 or
+      favoritelocation_enabled is False and locinput.find("favloc:") == 0):
+    spinner.fail(text="PyWeather query failed!")
+    print("")
+    print("Whoops! You entered the query to access a favorite location, but the favorite locations",
+          "feature isn't on. If you'd like to enable favorite locations, you can do so by booting up",
+          "PyWeather, and selecting the favorite locations option. Alternatively, you can go into",
+          "your config file and set FAVORITE LOCATIONS/enabled to True. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+elif (favoritelocation_available is False and locinput.find("favoritelocation:") == 0 or
+        favoritelocation_available is False and locinput.find("favloc:") == 0):
+    spinner.fail(text="PyWeather query failed!")
+    print("")
+    print("Whoops! You entered the query to access a favorite location, but you don't have any favorite",
+          "locations at this time. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+
+elif (favoritelocation_available is True and locinput.find("favoritelocation:") == 0 or
+        favoritelocation_available is True and locinput.find("favloc:") == 0):
+    haveFavoriteLocation = False
+    logger.debug("haveFavoriteLocation: %s" % haveFavoriteLocation)
+    if locinput == "favoritelocation:1" or locinput == "favloc:1" and favoritelocation_1 != "None":
+        locinput = favoritelocation_1
+        haveFavoriteLocation = True
+        logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
+                     (locinput, haveFavoriteLocation))
+    elif locinput == "favoritelocation:1" or locinput == "favloc:1" and favoritelocation_1 == "None":
+        spinner.fail(text="PyWeather query failed!")
+        print("")
+        print("Whoops! You entered the query to access your first favorite location, but",
+              "it's currently not set to anything. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+
+    if locinput == "favoritelocation:2" or locinput == "favloc:2" and favoritelocation_2 != "None" and haveFavoriteLocation is False:
+        locinput = favoritelocation_2
+        haveFavoriteLocation = True
+        logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
+                     (locinput, haveFavoriteLocation))
+    elif locinput == "favoritelocation:2" and favoritelocation_2 == "None":
+        spinner.fail(text="PyWeather query failed!")
+        print("")
+        print("Whoops! You entered the query to access your second favorite location, but",
+              "it's currently not set to anything. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+
+    if locinput == "favoritelocation:3" or locinput == "favloc:3" and favoritelocation_3 != "None" and haveFavoriteLocation is False:
+        locinput = favoritelocation_3
+        haveFavoriteLocation = True
+        logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
+                     (locinput, haveFavoriteLocation))
+    elif locinput == "favoritelocation:3" and favoritelocation_3 == "None":
+        spinner.fail(text="PyWeather query failed!")
+        print("")
+        print("Whoops! You entered the query to access your third favorite location, but",
+              "it's currently not set to anything. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+
+    if locinput == "favoritelocation:4" or locinput == "favloc:4" and favoritelocation_4 != "None" and haveFavoriteLocation is False:
+        locinput = favoritelocation_4
+        haveFavoriteLocation = True
+        logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
+                     (locinput, haveFavoriteLocation))
+    elif locinput == "favoritelocation:4" and favoritelocation_4 == "None":
+        spinner.fail(text="PyWeather query failed!")
+        print("")
+        print("Whoops! You entered the query to access your fourth favorite location, but",
+              "it's currently not set to anything. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+
+    if locinput == "favoritelocation:5" or locinput == "favloc:5" and favoritelocation_5 != "None" and haveFavoriteLocation is False:
+        locinput = favoritelocation_5
+        haveFavoriteLocation = True
+        logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
+                     (locinput, haveFavoriteLocation))
+    elif locinput == "favoritelocation:5" and favoritelocation_5 == "None":
+        spinner.fail(text="PyWeather query failed!")
+        print("")
+        print("Whoops! You entered the query to access your fifth favorite location, but",
+              "it's currently not set to anything. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+
+    if haveFavoriteLocation is False:
+        spinner.fail(text="PyWeather query failed!")
+        print("")
+        print("Your input didn't match up to a favorite location (you likely entered an invalid character/number past the colon).",
+              "Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+
+    useGeocoder = True
+    logger.debug("useGeocoder: %s" % useGeocoder)
+
+elif pws_enabled is False and locinput.find("pws:") == 0:
+    spinner.fail(text="PyWeather query failed!")
+    print("")
+    print("Whoops! You entered the query to access a PWS, but PWS queries are currently",
+          "disabled. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+
+if (geoip_available is True and locinput.find("currentlocation") == 0 or
+    geoip_available is True and locinput.find("curloc") == 0):
     locinput = currentlocation
-    # I fully understand that Wunderground has a built-in GeoIP locator. However, going this way maintains
-    # compatibility with existing code.
-elif "pws:" in locinput and pws_enabled is True:
+    useGeocoder = False
+    location = currentlocation
+    logger.debug("locinput: %s ; useGeocoder: %s" %
+                 (locinput, useGeocoder))
+    logger.debug("location: %s" % currentlocation)
+elif pws_enabled is True and locinput.find("pws:") == 0:
     pws_query = True
     logger.debug("pws_query: %s" % pws_query)
     # Just for safety, query Wunderground's geolocator to get the lat/lon of the PWS.
     # This also helps to validate the PWS.
+    # Use a .lower() on the PWS query for safety. It works when in lower-case.
+    pwsinfourl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + locinput.lower() + ".json"
+    logger.debug("pwsinfourl: %s" % pwsinfourl)
+    spinner.start(text="Validating PWS query...")
+    try:
+
+        pwsinfoJSON = requests.get(pwsinfourl)
+        logger.debug("pwsinfoJSON acquired with: %s" % pwsinfoJSON)
+        pwsinfo_json = json.loads(pwsinfoJSON.text)
+        if jsonVerbosity is True:
+            logger.debug("pwsinfo_json: %s" % pwsinfo_json)
+        else:
+            logger.debug("pwsinfo_json has been loaded.")
+    except:
+        spinner.fail(text='Failed to validate PWS query!')
+        print("")
+        print("Couldn't query Wunderground to validate your inputted PWS. Make sure that you have",
+              "an internet connection, and that api.wunderground.com is unblocked."
+              "Press enter to exit.", sep="\n")
+        printException()
+        input()
+        sys.exit()
+
+    try:
+        pws_invalid = pwsinfo_json['location']['lat']
+        logger.debug("we have good pws data.")
+    except:
+        spinner.fail(text='Failed to validate PWS query!')
+        print("")
+        print("The PWS you entered isn't online, or is invalid. Please try entering an online",
+              "or valid PWS next time you use PyWeather. Press enter to exit.", sep="\n")
+        input()
+        sys.exit()
+    pws_available = True
+    logger.debug("pws_available: %s" % pws_available)
+    # Extract data about latitude and longitude, if needed in a float format.
+    pws_lat = pwsinfo_json['location']['lat']
+    pws_lon = pwsinfo_json['location']['lon']
+    logger.debug("pws_lat: %s ; pws_lon: %s" % (pws_lat, pws_lon))
+    # Use the standard latstr/lonstr variables for the PWS' lat/lon.
+    latstr = str(pwsinfo_json['location']['lat'])
+    lonstr = str(pwsinfo_json['location']['lon'])
+    logger.debug("latstr: %s ; lonstr: %s" % (latstr, lonstr))
+    # Extract data about the PWS location for outputting to user
+    pws_city = pwsinfo_json['location']['city']
+    pws_state = pwsinfo_json['location']['state']
+    logger.debug("pws_city: %s ; pws_state: %s" %
+                 (pws_city, pws_state))
+    pws_location = pws_city + ", " + pws_state
+    logger.debug("pws_location: %s" % pws_location)
+    pws_id = pwsinfo_json['location']['nearby_weather_stations']['pws']['station'][0]['id']
+    logger.debug("pws_id: %s" % pws_id)
+    # Flag PWS enabled URLs, and not use the geocoder
+    pws_urls = True
+    useGeocoder = False
+    logger.debug("pws_urls: %s ; useGeocoder: %s" % (pws_urls, useGeocoder))
 
 
 # Start the geocoder. If we don't have a connection, exit nicely.
@@ -516,72 +1400,98 @@ elif "pws:" in locinput and pws_enabled is True:
 # it in the table called loccords.
 
 firstfetch = time.time()
-logger.info("Start geolocator...")
-try:
-    location = geolocator.geocode(locinput, language="en", timeout=20)
-    # Since the loading bars interfere with true verbosity logging, we turn
-    # them off if verbosity is enabled (it isn't needed)
-    # :/
-    if verbosity == False:
-        print("[#---------] | 1% |", round(time.time() - firstfetch,1), 
-              "seconds", end="\r")
-except geopy.exc.GeocoderServiceError:
-    logger.warning("Service error from geopy. SSL issue most likely?")
-    print("When attempting to access Google's geocoder, a service error occurred.",
-          "99% of the time, this is due to the geocoder operating in HTTPS mode,",
-          "but not being able to properly operate on your OS in such mode. To fix this",
-          "issue, in the configuration file, change the GEOCODER/scheme option to 'http'.", sep="\n")
-    printException()
-    print("Press enter to continue.")
-    input()
-    sys.exit()
-except:
-    logger.warning("No connection to Google's geocoder!")
-    print("When attempting to access Google's geocoder, PyWeather ran into an error.",
-          "A few things could of happened. If you're on a filter, make sure Google's",
-          "geocoder is unblocked. Otherwise, Make sure your internet connection is online.",
-          sep="\n")
-    printException()
-    print("Press enter to continue.")
-    input()
-    sys.exit()
-logger.debug("location = %s" % location)
+if useGeocoder is True:
+    spinner.start(text='Locating input...')
+    logger.info("Start geolocator...")
+    try:
+        location = geolocator.geocode(locinput, language="en", timeout=20)
+        # Since the loading bars interfere with true verbosity logging, we turn
+        # them off if verbosity is enabled (it isn't needed)
+        # :/
+    except geopy.exc.GeocoderQuotaExceeded:
+        spinner.fail(text='Failed to locate input!')
+        print("")
+        logger.warning("Geocoder quota has been exceeded!")
+        print("When attempting to access Google's geocoder, a quota error was hit. Please",
+              "wait 1-2 minutes, then try using PyWeather again.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+    except geopy.exc.GeocoderServiceError:
+        spinner.fail(text='Failed to locate input!')
+        print("")
+        logger.warning("Service error from geopy. SSL issue most likely?")
+        print("When attempting to access Google's geocoder, a service error occurred.",
+              "99% of the time, this is due to the geocoder operating in HTTPS mode,",
+              "but not being able to properly operate on your OS in such mode. To fix this",
+              "issue, in the configuration file, change the GEOCODER/scheme option to 'http'.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+    except:
+        spinner.fail(text='Failed to locate input!')
+        print("")
+        logger.warning("No connection to Google's geocoder!")
+        print("When attempting to access Google's geocoder, PyWeather ran into an error.",
+              "A few things could of happened. If you're on a filter, make sure Google's",
+              "geocoder is unblocked. Otherwise, Make sure your internet connection is online.",
+              sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+    logger.debug("location = %s" % location)
 
-try:
-    latstr = str(location.latitude)
-    lonstr = str(location.longitude)
-except AttributeError:
-    logger.warning("No lat/long was provided by Google! Bad location?")
-    print("When attempting to parse the location inputted, PyWeather",
-          "ran into an error. Make sure that the location you entered is",
-          "valid, and don't attempt to see the weather at Mark Watney's base.",
-          sep="\n")
-    printException()
-    print("Press enter to continue.")
-    input()
-    sys.exit()
-logger.debug("Latstr: %s ; Lonstr: %s" % (latstr, lonstr))
-loccoords = [latstr, lonstr]
-logger.debug("Loccoords: %s" % loccoords)
-logger.info("End geolocator...")
+    try:
+        latstr = str(location.latitude)
+        lonstr = str(location.longitude)
+    except AttributeError:
+        spinner.fail(text='Failed to locate input!')
+        print("")
+        logger.warning("No lat/long was provided by Google! Bad location?")
+        print("When attempting to parse the location inputted, PyWeather",
+              "ran into an error. Make sure that the location you entered is",
+              "valid, and don't attempt to see the weather at Mark Watney's base.",
+              sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+    logger.debug("Latstr: %s ; Lonstr: %s" % (latstr, lonstr))
+    loccoords = [latstr, lonstr]
+    logger.debug("Loccoords: %s" % loccoords)
+    logger.info("End geolocator...")
 logger.info("Start API var declare...")
 
+spinner.stop()
+spinner.start(text='Declaring API variables...')
+
 # Declare the API URLs with the API key, and latitude/longitude strings from earlier.
+if pws_urls is False:
+    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
+    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
+    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
+    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
+    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
+    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
+    alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + latstr + ',' + lonstr + '.json'
+    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
+    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
+    hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
+elif pws_urls is True:
+    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + locinput.lower() + '.json'
+    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + locinput.lower() + '.json'
+    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + locinput.lower() + '.json'
+    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + locinput.lower() + '.json'
+    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + locinput.lower() + '.json'
+    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + locinput.lower() + '.json'
+    alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + locinput.lower() + '.json'
+    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + locinput.lower() + '.json'
+    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + locinput.lower() + '.json'
+    hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
 
-currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
-f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
-hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
-tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
-astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
-almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
-alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + latstr + ',' + lonstr + '.json'
-yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
-tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
-hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
-yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday' + '/q/' + latstr + "," + lonstr + '.json'
-
-if verbosity == False:
-    print("[##--------] | 6% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 logger.debug("currenturl: %s" % currenturl)
 logger.debug("f10dayurl: %s" % f10dayurl)
 logger.debug("hourlyurl: %s" % hourlyurl)
@@ -593,147 +1503,104 @@ logger.debug("tideurl: %s" % tideurl)
 logger.debug("hurricaneurl: %s" % hurricaneurl)
 logger.debug("yesterdayurl: %s" % yesterdayurl)
 logger.info("End API var declare...")
-logger.info("Start codec change...")
 
-# Due to Python being Python, we have to get the UTF-8 reader 
-# to properly parse the JSON we got.
-reader = codecs.getreader("utf-8")
-if verbosity == False:
-    print("[##--------] | 8% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-logger.debug("reader: %s" % reader)
-logger.info("End codec change...")
 logger.info("Start API fetch...")
 
 # If a user requested their API key to be validated, and the backup key
 # can be loaded (as was checked earlier), we do it here.
-if validateAPIKey == False and backupKeyLoaded == True:
-    logger.info("Beginning API key validation.")
-    testurl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/NY/New_York.json'
-    logger.debug("testurl: %s" % testurl)
-    try:
-        testJSON = requests.get(testurl)
-        logger.debug("Acquired test JSON, end result: %s" % testJSON)
-    except:
-        logger.warn("Cannot connect to the API! Is the internet down?")
-        print("When attempting to validate your primary API key, PyWeather ran",
-              "into an error when accessing Wunderground's API. If you're",
-              "on a network with a filter, make sure that",
-              "'api.wunderground.com' is unblocked. Otherwise, make sure you",
-              "have an internet connection.", sep="\n")
-        printException()
-        print("Press enter to exit.")
-        input()
-        sys.exit()
-    if verbosity == False:
-        print("[##--------] | 9% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    test_json = json.loads(testJSON.text)
-    if jsonVerbosity == True:
-        logger.debug("test_json: %s" % test_json)
-    try:
-        test_conditions = str(test_json['current_observation']['temp_f'])
-        logger.debug("test_conditions: %s" % test_conditions)
-        logger.info("API key is valid!")
-    except:
-        logger.warn("API key is NOT valid. Attempting to revalidate API key...")
-        if backupKeyLoaded == True:
-            logger.info("Beginning backup API key validation.")
-            testurl = 'http://api.wunderground.com/api/' + apikey2 + '/conditions/q/NY/New_York.json'
-            logger.debug("testurl: %s" % testurl)
-            # What if the user's internet connection was alive during the 1st
-            # validation, but not the 2nd? That's why this is here.
-            try:
-                testJSON = requests.get(testurl)
-                logger.debug("Acquired test JSON, end result: %s" % testJSON)
-            except:
-                print("When attempting to validate your backup API key, PyWeather ran",
-                      "into an error. If you're on a network with a filter, make sure",
-                      "that 'api.wunderground.com' is unblocked. Otherwise, make sure you",
-                      "have an internet conection, that that your internet connection's latency",
-                      "isn't 1.59 days.", sep="\n")
-                printException()
-                print("Press enter to exit.")
-                input()
-                sys.exit()
-            if verbosity == False:
-                print("[##--------] | 12% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-            test_json = json.loads(testJSON.text)
-            if jsonVerbosity == True:
-                logger.debug("test_json: %s" % test_json)
-            try:
-                test_conditions = str(test_json['current_observation']['temp_f'])
-                logger.debug("test_conditions: %s" % test_conditions)
-                logger.info("Backup API key is valid!")
-                apikey = apikey2
-                logger.debug("apikey = apikey2. apikey: %s" % apikey)
-                logger.debug("Redefining URL variables...")
-                currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
-                f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
-                hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
-                tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
-                astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
-                almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
-                yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
-                tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
-                hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
 
-                logger.debug("currenturl: %s ; f10dayurl: %s" %
-                             (currenturl, f10dayurl))
-                logger.debug("hourlyurl: %s ; tendayurl: %s" %
-                             (hourlyurl, tendayurl))
-                logger.debug("astronomyurl: %s ; almanacurl: %s" %
-                             (astronomyurl, almanacurl))
-                logger.debug("yesterdayurl: %s ; tideurl: %s" %
-                             (yesterdayurl, tideurl))
-                logger.debug("hurricaneurl: %s" % hurricaneurl)
-            except:
-                logger.warn("Backup API key could not be validated!")
-                print("Your primary and backup API key(s) could not be validated.",
-                      "Make sure that your primary API key is valid, either because of a typo",
-                      "or some other reason. Installing Gentoo may help with the validation",
-                      "of your API key.", sep="\n")
-                printException()
-                print("Press enter to exit.")
-                input()
-                sys.exit()
-        elif backupKeyLoaded == False:
-            print("When attempting to validate your API key, your primary key",
-                  "couldn't be validated, and your backup key wasn't able to",
-                  "load at boot. Make sure that your primary API key is valid,",
-                  "and that your backup API key can be accessed by PyWeather."
-                  "Press enter to exit.", sep="\n")
-            input()
-            sys.exit()
-        else:
-            logger.warn("Backup key couldn't get loaded!")
-            print("Your primary API key couldn't be validated, and your",
-                  "backup key could not be loaded at startup.",
-                  "Please make sure your primary API key is valid, and that",
-                  "your backup API key can be accessed (common mistakes include",
-                  "wrong permissions, and the file not existing).",
-                  "Press enter to exit.", sep="\n")
-            input()
-            sys.exit()
+# Fetch JSON files. Exit if a failure occurs.
 
-# Fetch JSON files. Why not go one by one for each? If we can't fetch one data type, PyWeather can't really work, so an exit is needed anyways.
-# A huge try loop just simplifies things.
+spinner.stop()
+spinner.start(text="Fetching current weather information...")
+
 try:
     summaryJSON = requests.get(currenturl)
     cachetime_current = time.time()
-    if verbosity == False:
-        print("[##--------] | 15% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
+except:
+    spinner.fail("Failed to fetch current weather information!")
+    print("")
+    logger.warning("No connection to the API!! Is the connection offline?")
+    print("When PyWeather attempted to fetch current weather information,",
+          "PyWeather ran into an error. If you're on a network with a filter, make sure",
+          "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+          "connection.", sep="\n")
+    printException()
+    print("Press enter to continue.")
+    input()
+    sys.exit()
+
+if yesterdaydata_onsummary is True or prefetch_yesterdaydata is True:
+    spinner.stop()
+    spinner.start(text="Fetching yesterday's weather information...")
+    # Tell PyWeather that yesterday's weather is prefetched
+    yesterdaydata_prefetched = True
+    logger.debug("yesterdaydata_prefetched: %s" % yesterdaydata_prefetched)
+    try:
+        yesterdayJSON = requests.get(yesterdayurl)
+        cachetime_yesterday = time.time()
+        logger.debug("Acquired yesterday JSON, end result: %s" % yesterdayJSON)
+    except:
+        spinner.fail("Failed to fetch yesterday weather information!")
+        print("")
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch yesterday's weather information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+else:
+    yesterdaydata_prefetched = False
+    logger.debug("yesterdaydata_prefetched: %s" % yesterdaydata_prefetched)
+
+spinner.stop()
+spinner.start(text="Fetching forecast information...")
+try:
     forecast10JSON = requests.get(f10dayurl)
     cachetime_forecast = time.time()
-    if verbosity == False:
-        print("[###-------] | 24% |", round(time.time() - firstfetch,1), "seconds", end="\r")
     logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
-    if sundata_summary == True:
+except:
+    spinner.fail(text="Failed to fetch forecast information!")
+    print("")
+    logger.warning("No connection to the API!! Is the connection offline?")
+    print("When PyWeather attempted to fetch forecast information,",
+          "PyWeather ran into an error. If you're on a network with a filter, make sure",
+          "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+          "connection.", sep="\n")
+    printException()
+    print("Press enter to continue.")
+    input()
+    sys.exit()
+
+
+if sundata_summary == True:
+    spinner.stop()
+    spinner.start(text="Fetching astronomy information...")
+    try:
         cachetime_sundata = time.time()
         sundataJSON = requests.get(astronomyurl)
-        if verbosity == False:
-            print("[###-------] | 32% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
-    if prefetch10Day_atStart == True:
+    except:
+        spinner.fail(text="Failed to fetch astronomy information!")
+        print("")
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch astronomy information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+
+if prefetch10Day_atStart == True:
+    spinner.stop()
+    spinner.start(text="Fetching 10 day/1.5 day hourly information...")
+    try:
         hourly10JSON = requests.get(tendayurl)
         # Special situation: We separate the 3-day/10-day hourly caches, but
         # they use the same cache timer. 
@@ -745,121 +1612,186 @@ try:
         hourly36JSON = requests.get(hourlyurl)
         cachetime_hourly36 = time.time()
         logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
-    else:   
+    except:
+        spinner.fail(text="Failed to fetch 10 day/1.5 day hourly information!")
+        print("")
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch 10 day/1.5 day hourly information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+
+else:
+    spinner.stop()
+    spinner.start(text="Fetching 1.5 day hourly information...")
+    try:
         hourly36JSON = requests.get(hourlyurl)
         cachetime_hourly36 = time.time()
         tenday_prefetched = False
         logger.debug("tenday_prefetched: %s" % tenday_prefetched)
         logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
-    if verbosity == False:
-        print("[####------] | 40% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    if almanac_summary == True:
+    except:
+        spinner.fail(text="Failed to fetch 1.5 day hourly information!")
+        print("")
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to 1.5 day hourly information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+
+if almanac_summary == True:
+    spinner.stop()
+    spinner.start(text="Fetching almanac information...")
+    try:
         almanacJSON = requests.get(almanacurl)
         cachetime_almanac = time.time()
-        if verbosity == False:
-            print("[#####-----] | 49% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
-    if showAlertsOnSummary == True:
+    except:
+        spinner.fail(text="Failed to fetch almanac information!")
+        print("")
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch almanac information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+
+if showAlertsOnSummary == True:
+    spinner.stop()
+    spinner.start(text="Fetching alerts information...")
+    try:
         alertsJSON = requests.get(alertsurl)
         cachetime_alerts = time.time()
         alertsPrefetched = True
-        if verbosity == False:
-            print("[#####-----] | 52% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired alerts JSON, end result: %s" % alertsJSON)
-    else:
-        alertsPrefetched = False
-    logger.debug("alertsPrefetched: %s" % alertsPrefetched)
-    if showTideOnSummary == True:
+    except:
+        spinner.fail(text="Failed to fetch alerts information!")
+        print("")
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch alerts information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+
+else:
+    alertsPrefetched = False
+logger.debug("alertsPrefetched: %s" % alertsPrefetched)
+
+if showTideOnSummary == True:
+    spinner.stop()
+    spinner.start(text="Fetching tide information...")
+    try:
         tideJSON = requests.get(tideurl)
         cachetime_tide = time.time()
         tidePrefetched = True
-        if verbosity == False:
-            print("[#####-----] | 55% | ", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired tide JSON, end result: %s" % tideJSON)
-    else:
-        tidePrefetched = False
-    logger.debug("tidePrefetched: %s" % tidePrefetched)
+    except:
+        spinner.fail(text="Failed to fetch tide information!")
+        print("")
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch tide information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
 
-    if prefetchHurricane_atboot == True:
+else:
+    tidePrefetched = False
+
+logger.debug("tidePrefetched: %s" % tidePrefetched)
+
+if prefetchHurricane_atboot == True:
+    spinner.stop()
+    spinner.start(text="Fetching hurricane information...")
+    try:
         hurricaneJSON = requests.get(hurricaneurl)
         cachetime_hurricane = time.time()
         hurricanePrefetched = True
-        if verbosity == False:
-            print("[######----] | 58% |", round(time.time() - firstfetch,1), "seconds", end="\r")
         logger.debug("Acquired hurricane JSON, end result: %s" % hurricaneJSON)
-    else:
-        hurricanePrefetched = False
-    logger.debug("hurricanePrefetched: %s" % hurricanePrefetched)
+    except:
+        spinner.fail(text="Failed to fetch hurricane information!")
+        print("")
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch hurricane information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
+else:
+    hurricanePrefetched = False
+
+logger.debug("hurricanePrefetched: %s" % hurricanePrefetched)
 
 
-except:
-    logger.warn("No connection to the API!! Is the connection offline?")
-    print("When PyWeather attempted to fetch the .json files to show you the weather,",
-          "PyWeather ran into an error. If you're on a network with a filter, make sure",
-          "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
-          "connection.", sep="\n")
-    printException()
-    print("Press enter to continue.")
-    input()
-    sys.exit()
     
 # And we parse the json using json.load.
 logger.info("End API fetch...")
 logger.info("Start JSON load...")
-if verbosity == False:
-    print("[######----] | 60% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+spinner.stop()
+spinner.start(text="Parsing weather information...")
 current_json = json.loads(summaryJSON.text)
-if jsonVerbosity == True:
+if jsonVerbosity is True:
     logger.debug("current_json loaded with: %s" % current_json)
-if verbosity == False:
-    print("[######----] | 63% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 forecast10_json = json.loads(forecast10JSON.text)
-if jsonVerbosity == True:
+if jsonVerbosity is True:
     logger.debug("forecast10_json loaded with: %s" % forecast10_json)
-if verbosity == False:
-    print("[#######---] | 71% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    
-
-if prefetch10Day_atStart == True: 
+if prefetch10Day_atStart is True:
     tenday_json = json.loads(hourly10JSON.text)
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("tenday_json loaded with: %s" % tenday_json)
     hourly36_json = json.loads(hourly36JSON.text)
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("hourly36_json loaded with: %s" % hourly36_json)
 else:
     hourly36_json = json.loads(hourly36JSON.text)
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("hourly36_json loaded with: %s" % hourly36_json)
-if sundata_summary == True:
+if sundata_summary is True:
     astronomy_json = json.loads(sundataJSON.text)
-    if verbosity == False:
-        print("[########--] | 81% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("astronomy_json loaded with: %s" % astronomy_json)
-if almanac_summary == True:
+
+if yesterdaydata_prefetched is True:
+    yesterday_json = json.loads(yesterdayJSON.text)
+    if jsonVerbosity is True:
+        logger.debug("yesterday_json: %s" % yesterday_json)
+
+if almanac_summary is True:
     almanac_json = json.loads(almanacJSON.text)
-    if verbosity == False:
-        print("[#########-] | 87% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("almanac_json loaded with: %s" % almanac_json)
-if showAlertsOnSummary == True:
+if showAlertsOnSummary is True:
     alerts_json = json.loads(alertsJSON.text)
-    if verbosity == False:
-        print("[#########-] | 90% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("alerts_json loaded with: %s" % alerts_json)
-if showTideOnSummary == True:
+if showTideOnSummary is True:
     tide_json = json.loads(tideJSON.text)
-    if verbosity == False:
-        print("[#########-] | 92% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("tide_json loaded with: %s" % tide_json)
-if prefetchHurricane_atboot == True:
+if prefetchHurricane_atboot is True:
     hurricane_json = json.loads(hurricaneJSON.text)
-    if verbosity == True:
-        print("[#########-] | 94% |", round(time.time() - firstfetch,1), "seconds", end="\r")
-    if jsonVerbosity == True:
+    if jsonVerbosity is True:
         logger.debug("hurricane_json loaded with: %s" % hurricane_json)
 logger.info("Some amount of JSONs loaded...")
 
@@ -878,11 +1810,22 @@ summary_tempc = str(current_json['current_observation']['temp_c'])
 # Since parsing the json spits out a float as the summary, a conversion to string is
 # necessary to properly display it in the summary.
 # summary_dewpointf = current_json['current_observation']
-summary_humidity = str(current_json['current_observation']['relative_humidity'])
 logger.debug("summary_overall: %s ; summary_lastupdated: %s"
              % (summary_overall, summary_lastupdated))
 logger.debug("summary_tempf: %s ; summary_tempc: %s"
              % (summary_tempf, summary_tempc))
+
+summary_humidity = str(current_json['current_observation']['relative_humidity'])
+logger.debug("summary_humidity: %s" % summary_humidity)
+# Check for bad humidity data
+currentcond_showHumidity = True
+logger.debug("currentcond_showHumidity: %s" % currentcond_showHumidity)
+
+if summary_humidity == "-999%":
+    logger.info("summary_humidity is '-999%'.")
+    currentcond_showHumidity = False
+    logger.debug("currentcond_showHumidity: %s" % currentcond_showHumidity)
+
 summary_winddir = current_json['current_observation']['wind_dir']
 summary_windmph = current_json['current_observation']['wind_mph']
 summary_windmphstr = str(summary_windmph)
@@ -893,8 +1836,6 @@ logger.debug("summary_windmphstr: %s ; summary_windkph: %s"
              % (summary_windmphstr, summary_windkph))
 summary_windkphstr = str(summary_windkph)
 logger.debug("summary_windkphstr: %s" % summary_windkphstr)
-if verbosity == False:
-    print("[##########] | 97% |", round(time.time() - firstfetch,1), "seconds", end="\r")
 # Since some PWS stations on WU don't have a wind meter, this method will check if we should display wind data.
 # WU lists the MPH at -9999 if there is no wind data.
 # This method is probably reliable, but I need to see if it'll work by testing it work PWS stations around my area.
@@ -1015,31 +1956,72 @@ if sundata_summary == True:
 # enabled in the config. --->
 
 if almanac_summary == True:
+    almanac_prefetched = True
+    almanac_data = True
+    logger.debug("almanac_prefetched: %s ; almanac_data: %s" %
+                 (almanac_prefetched, almanac_data))
     logger.debug("Parsing almanac data...")
     almanac_airportCode = almanac_json['almanac']['airport_code']
-    almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
-    almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
-    almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
-    logger.debug("almanac_airportCode: %s ; almanac_normalHighF: %s"
-                 % (almanac_airportCode, almanac_normalHighF))
-    logger.debug("almanac_normalHighC: %s ; almanac_recordHighF: %s"
-                 % (almanac_normalHighC, almanac_recordHighF))
-    almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
-    almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
-    almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
-    almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
-    logger.debug("almanac_recordHighC: %s ; almanac_recordHighYear: %s"
-                 % (almanac_recordHighC, almanac_recordHighYear))
-    logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s"
-                 % (almanac_normalLowF, almanac_normalLowC))
-    almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
-    almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
-    almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
-    almanac_prefetched = True
-    logger.debug("almanac_recordLowF: %s ; almanac_recordLowC: %s"
-                 % (almanac_recordLowF, almanac_recordLowC))
-    logger.debug("almanac_recordLowYear: %s ; almanac_prefetched: %s"
-                 % (almanac_recordLowYear, almanac_prefetched))
+    if almanac_airportCode == "":
+        almanac_data = False
+    logger.debug("almanac_airportCode: %s" % almanac_airportCode)
+    try:
+        almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
+        almanac_normalHighC = str(almanac_json['almanac']['temp_high']['normal']['C'])
+        logger.debug("almanac_normalHighF: %s ; almanac_normalHighC: %s" %
+                     (almanac_normalHighF, almanac_normalHighC))
+        if almanac_normalHighF == "":
+            almanac_normalHighdata = False
+        else:
+            almanac_normalHighdata = True
+    except:
+        almanac_normalHighdata = False
+    logger.debug("almanac_normalHighdata: %s" % almanac_normalHighdata)
+    try:
+        almanac_recordHighF = str(almanac_json['almanac']['temp_high']['record']['F'])
+        almanac_recordHighC = str(almanac_json['almanac']['temp_high']['record']['C'])
+        logger.debug("almanac_recordHighF: %s ; almanac_recordHighC: %s" %
+                     (almanac_recordHighF, almanac_recordHighC))
+        almanac_recordHighdata = True
+    except:
+        printException_loggerwarn()
+        almanac_recordHighdata = False
+    logger.debug("almanac_recordHighdata: %s" % almanac_recordHighdata)
+    try:
+        almanac_recordHighYear = str(almanac_json['almanac']['temp_high']['recordyear'])
+        logger.debug("almanac_recordHighYear: %s" % almanac_recordHighYear)
+        almanac_recordHighYeardata = True
+    except:
+        almanac_recordHighYeardata = False
+    logger.debug("almanac_recordHighYeardata: %s" % almanac_recordHighYeardata)
+    try:
+        almanac_normalLowF = str(almanac_json['almanac']['temp_low']['normal']['F'])
+        almanac_normalLowC = str(almanac_json['almanac']['temp_low']['normal']['C'])
+        logger.debug("almanac_normalLowF: %s ; almanac_normalLowC: %s" %
+                     (almanac_normalLowF, almanac_normalLowC))
+        if almanac_normalLowF == "":
+            almanac_normalLowdata = False
+        else:
+            almanac_normalLowdata = True
+    except:
+        almanac_normalLowdata = False
+    logger.debug("almanac_normalLowData: %s" % almanac_normalLowdata)
+    try:
+        almanac_recordLowF = str(almanac_json['almanac']['temp_low']['record']['F'])
+        almanac_recordLowC = str(almanac_json['almanac']['temp_low']['record']['C'])
+        logger.debug("almanac_recordLowF: %s ; almanac_recordLowC: %s" %
+                     (almanac_recordLowF, almanac_recordLowC))
+        almanac_recordLowdata = True
+    except:
+        almanac_recordLowdata = False
+    logger.debug("almanac_recordLowdata: %s" % almanac_recordLowdata)
+    try:
+        almanac_recordLowYear = str(almanac_json['almanac']['temp_low']['recordyear'])
+        logger.debug("almanac_recordLowYear: %s" % almanac_recordLowYear)
+        almanac_recordLowYeardata = True
+    except:
+        almanac_recordLowYeardata = False
+    logger.debug("almanac_recordLowYeardata: %s" % almanac_recordLowYeardata)
 
 # <---- Tide data gets parsed here for the summary. ---->
 
@@ -1073,9 +2055,9 @@ if showTideOnSummary == True:
                              (tide_hightidetime, tide_hightideheight))
                 logger.debug("tide_hightideacq: %s" % tide_hightideacq)
 
-            if tide_hightideacq == False and tide_lowtideacq == False:
-                tide_dataavailable = False
-                logger.debug("tide_dataavailable: %s")
+        if tide_hightideacq == False and tide_lowtideacq == False:
+            tide_dataavailable = False
+            logger.debug("tide_dataavailable: %s")
     else:
         tide_dataavailable = False
         logger.debug("tide_dataavailable: %s" % tide_dataavailable)
@@ -1083,23 +2065,176 @@ else:
     tidedata_prefetched = False
     logger.debug("tidedata_prefetched: %s" % tidedata_prefetched)
 
+# Parse basic yesterday weather information.
+if yesterdaydata_onsummary is True:
+    # Parse the weather conditions, which is actually quite interesting to do.
+    # For the day/night conditions, parse what the weather was at 12pm and 12am, and find the conditions given that '12:' and 'PM', etc are found.
+    # If it matches, say the data was fetched, and move on.
+    yesterdaysummary_dayconddata = True
+    yesterdaysummary_nightconddata = True
+    yesterdaysummary_daycondfetched = False
+    yesterdaysummary_nightcondfetched = False
+    logger.debug("yesterdaysummary_dayconddata: %s ; yesterdaysummary_nightconddata: %s" %
+                 (yesterdaysummary_dayconddata, yesterdaysummary_nightconddata))
+    logger.debug("yesterdaysummary_daycondfetched: %s ; yesterdaysummary_nightcondfetched: %s" %
+                 (yesterdaysummary_daycondfetched, yesterdaysummary_nightcondfetched))
+    for data in yesterday_json['history']['observations']:
+        yesterdaysummary_hour = data['date']['hour']
+        logger.debug("yesterdaysummary_hour: %s" % yesterdaysummary_hour)
+        # Parse the weather given that we found '00' in the hour.
+        if yesterdaysummary_hour.find("00") == 0 and yesterdaysummary_nightcondfetched is False:
+            logger.info("'00' was found in yesterdaysummary_hour and yesterdaysummary_nightcondfetched is False.")
+            yesterdaysummary_nightcondfetched = True
+            logger.debug("yesterdaysummary_nightcondfetched: %s" % yesterdaysummary_nightcondfetched)
+
+            try:
+                yesterdaysummary_nightconditions = data['conds']
+                logger.debug("yesterdaysummary_nightconditions: %s ; yesterdaysummary_nightconddata: %s" %
+                             (yesterdaysummary_nightconditions, yesterdaysummary_nightconddata))
+
+                if yesterdaysummary_nightconditions == "" or yesterdaysummary_nightconditions == "Unknown":
+                    logger.info(
+                        "yesterdaysumary_nightconditions is '' or yesterdaysummary_nightconditions is 'Unknown'.")
+                    yesterdaysummary_nightconddata = False
+                    logger.debug("yesterdaysummary_nightconddata: %s" % yesterdaysummary_nightconddata)
+
+            except KeyError:
+                printException_loggerwarn()
+                yesterdaysummary_nightconddata = False
+                logger.debug("yesterdaysummary_nightconddata: %s" % yesterdaysummary_nightconddata)
 
 
-yesterday_prefetched = False
-logger.debug("yesterday_prefetched: %s" % yesterday_prefetched)
+        if yesterdaysummary_hour.find("12") == 0 and yesterdaysummary_daycondfetched is False:
+            logger.info("'12' was found in yesterdaysummary_hour and yesterdaysummary_daycondfetched is False.")
+            yesterdaysummary_daycondfetched = True
+            logger.debug("yesterdaysummary_daycondfetched: %s" % yesterdaysummary_daycondfetched)
+
+            try:
+                yesterdaysummary_dayconditions = data['conds']
+                logger.debug("yesterdaysummary_dayconditions: %s ; yesterdaysummary_daycondfetched: %s" %
+                             (yesterdaysummary_dayconditions, yesterdaysummary_daycondfetched))
+
+                if yesterdaysummary_dayconditions == "" or yesterdaysummary_dayconditions == "Unknown":
+                    logger.info("yesterdaysummary_dayconditions is '' or yesterdaysummary_dayconditions is 'Unknown'.")
+                    yesterdaysummary_dayconddata = False
+                    logger.debug("yesterdaysummary_dayconddata: %s" % yesterdaysummary_dayconddata)
+            except KeyError:
+                printException_loggerwarn()
+                yesterdaysummary_dayconddata = False
+                logger.debug("yesterdaysummary_dayconddata: %s" % yesterdaysummary_dayconddata)
+
+        # We have data for both day/night conditions, break the loop.
+        if yesterdaysummary_nightcondfetched is True and yesterdaysummary_daycondfetched is True:
+            logger.info("yesterdaysummary_nightcondfetched is True & yesterdaysummary_daycondfetched is True.")
+            break
+
+    # Check from the for loop above if we have data for conditions. If we don't, put 'Not available' as the condition.
+
+    if yesterdaysummary_nightcondfetched is False:
+        logger.info("yesterdaysummary_nightcondfetched is False.")
+        yesterdaysummary_nightconddata = False
+        logger.debug("yesterdaysummary_nightconddata: %s" % yesterdaysummary_nightconddata)
+
+    if yesterdaysummary_daycondfetched is False:
+        logger.info("yesterdaysummary_daycondfetched is False.")
+        yesterdaysummary_dayconddata = False
+        logger.debug("yesterdaysummary_dayconddata: %s" % yesterdaysummary_dayconddata)
+
+    # Set the display variables for yesterdaysummary
+    yesterdaysummary_showHighTemp = True
+    yesterdaysummary_showLowTemp = True
+    yesterdaysummary_showHumidity = True
+    yesterdaysummary_showWindSpeed = True
+    yesterdaysummary_showWindGust = True
+    logger.debug("yesterdaysummary_showHighTemp: %s ; yesterdaysummary_showLowTemp: %s" %
+                 (yesterdaysummary_showHighTemp, yesterdaysummary_showLowTemp))
+    logger.debug("yesterdaysummary_showHumidity: %s ; yesterdaysummary_showWindSpeed: %s" %
+                 (yesterdaysummary_showHumidity, yesterdaysummary_showWindSpeed))
+    logger.debug("yesterdaysummary_showWindGust: %s" % yesterdaysummary_showWindGust)
+
+    # Get the high/low weather, the average wind/max wind, and average humidity for the previous day.
+
+    for data in yesterday_json['history']['dailysummary']:
+        yesterdaysummary_hightempf = str(data['maxtempi'])
+        yesterdaysummary_hightempc = str(data['maxtempm'])
+        logger.debug("yesterdaysummary_hightempf: %s ; yesterdaysummary_hightempc: %s" %
+                     (yesterdaysummary_hightempf, yesterdaysummary_hightempc))
+        if yesterdaysummary_hightempf == "" or yesterdaysummary_hightempc == "":
+            logger.info("yesterdaysummary_hightempf is '' yesterdaysummary_hightempc is ''.")
+            yesterdaysummary_showHighTemp = False
+            logger.debug("yesterdaysummary_showHighTemp: %s" % yesterdaysummary_showHighTemp)
+        yesterdaysummary_lowtempf = str(data['mintempi'])
+        yesterdaysummary_lowtempc = str(data['mintempm'])
+        logger.debug("yesterdaysummary_lowtempf: %s ; yesterdaysummary_lowtempc: %s" %
+                     (yesterdaysummary_lowtempf, yesterdaysummary_lowtempc))
+        if yesterdaysummary_lowtempf == "" or yesterdaysummary_lowtempc == "":
+            logger.info("yesterdaysummary_lowtempf is '' or yesterdaysummary_lowtempc is ''.")
+            yesterdaysummary_showLowTemp = False
+            logger.debug("yesterdaysummary_showLowTemp: %s" % yesterdaysummary_showLowTemp)
+        yesterdaysummary_windmph = str(data['meanwindspdi'])
+        yesterdaysummary_windkph = str(data['meanwindspdm'])
+        logger.debug("yesterdaysummary_windmph: %s ; yesterdaysummary_windkph: %s" %
+                     (yesterdaysummary_windmph, yesterdaysummary_windkph))
+        # Wunderground WHY DID YOU DO THIS?!?!! KEEP THINGS CONSTANT!
+        yesterdaysummary_gustmph = str(data['maxwspdi'])
+        yesterdaysummary_gustkph = str(data['maxwspdm'])
+        logger.debug("yesterdaysummary_gustmph: %s ; yesterdaysummary_gustkph: %s" %
+                     (yesterdaysummary_gustmph, yesterdaysummary_gustkph))
+
+        # Check for bad wind data, since of course that's a thing!
+        if yesterdaysummary_windmph == "" or yesterdaysummary_windkph == "":
+            logger.info("yesterdaysummary_windmph is '' or yesterdaysummary_windkph is ''.")
+            yesterdaysummary_showWindSpeed = False
+            logger.debug("yesterdaysummary_showWindSpeed: %s" % yesterdaysummary_showWindSpeed)
+
+        if yesterdaysummary_gustmph == "" or yesterdaysummary_gustkph == "":
+            logger.info("yesterdaysumary_gustmph is '' or yesterdaysummary_gustkph is ''.")
+            yesterdaysummary_showWindGust = False
+            logger.debug("yesterdaysummary_showWindGust: %s" % yesterdaysummary_showWindGust)
+        # Do what we do best - Guess the average humidity
+        try:
+            yesterdaysummary_maxhumidity = int(data['maxhumidity'])
+            yesterdaysummary_minhumidity = int(data['minhumidity'])
+            logger.debug("yesterdaysummary_maxhumidity: %s ; yesterdaysummary_minhumidity: %s" %
+                         (yesterdaysummary_maxhumidity, yesterdaysummary_minhumidity))
+        except ValueError:
+            printException_loggerwarn()
+            yesterdaysummary_showHumidity = False
+            logger.debug("yesterdaysummary_showHumidity: %s" % yesterdaysummary_showHumidity)
+
+        if yesterdaysummary_showHumidity is True:
+            # Enter this block if we have valid humidity data, which basically means
+            # yesterdaysummary_avghumidity isn't 'Not available'.
+            logger.info("yesterdaysummary_avghumidity != 'Not available'")
+            # Add the humidity, divide by 2
+            yesterdaysummary_avghumidity = yesterdaysummary_maxhumidity + yesterdaysummary_minhumidity
+            logger.debug("yesterdaysummary_avghumidity: %s" % yesterdaysummary_avghumidity)
+            yesterdaysummary_avghumidity = yesterdaysummary_avghumidity / 2
+            logger.debug("yesterdaysummary_avghumidity: %s" % yesterdaysummary_avghumidity)
+            # Round to the 0th digit, then int it, and THEN str it. This removes the trailing zero.
+            yesterdaysummary_avghumidity = str(int(round(yesterdaysummary_avghumidity, 0)))
+            logger.debug("yesterdaysummary_avghumidity: %s" % yesterdaysummary_avghumidity)
+
 
 logger.info("Initalize color...")
 init()
-if verbosity == False:
-    print("[##########] | 100% |", round(time.time() - firstfetch,1), "seconds", end="\r")
+
+spinner.stop()
 logger.info("Printing current conditions...")
     
 # <--------------- This is where we end parsing, and begin printing. ---------->
 
 summaryHourlyIterations = 0
 
-print(Style.BRIGHT + Fore.YELLOW + "Here's the weather for: " + Fore.CYAN + str(location))
-print(Fore.YELLOW + summary_lastupdated)
+if pws_available is True:
+    location = pws_id + " (located in " + pws_location + ")"
+    location2 = "PWS " + pws_id
+else:
+    location2 = str(location)
+logger.debug("location2: %s" % location2)
+
+print(Fore.YELLOW + Style.BRIGHT + "Here's the weather for: " + Fore.CYAN + Style.BRIGHT + str(location))
+print(Fore.YELLOW + Style.BRIGHT + summary_lastupdated)
 print("")
 
 # Attempt to parse alerts here.
@@ -1120,9 +2255,9 @@ if showAlertsOnSummary == True:
             logger.debug("alerts_description: %s ; alerts_expiretime: %s"
                          % (alerts_description, alerts_expiretime))
             logger.debug("alerts_type: %s" % alerts_type)
-            print(Fore.RED + "** A " + alerts_description + " Meteoalarm has been issued" +
+            print(Fore.RED + Style.BRIGHT + "** A " + alerts_description + " Meteoalarm has been issued" +
                   " for " + str(location) + ",", 
-                  "and is in effect until " + alerts_expiretime + ". **", sep="\n")
+                  Fore.RED + Style.BRIGHT + "and is in effect until " + alerts_expiretime + ". **", sep="\n")
             print("")
     except:
         try:
@@ -1134,9 +2269,9 @@ if showAlertsOnSummary == True:
                 logger.debug("alerts_description: %s ; alerts_expiretime: %s"
                              % (alerts_description, alerts_expiretime))
                 logger.debug("alerts_type: %s" % alerts_type)
-                print(Fore.RED + "** A " + alerts_description + " has been issued" + 
+                print(Fore.RED + Style.BRIGHT + "** A " + alerts_description + " has been issued" +
                       " for " + str(location) + ",",
-                      "and is in effect until " + alerts_expiretime + ". **", sep="\n")
+                      Fore.RED + Style.BRIGHT + "and is in effect until " + alerts_expiretime + ". **", sep="\n")
                 print("")
         except:
             # I'll keep this here as a "just in case".
@@ -1144,36 +2279,56 @@ if showAlertsOnSummary == True:
             alerts_type = "None"
             logger.debug("alerts_type: %s" % alerts_type)
     
-print(Fore.YELLOW + "Currently:")
-print(Fore.YELLOW + "Current conditions: " + Fore.CYAN + summary_overall)
-print(Fore.YELLOW + "Current temperature: " + Fore.CYAN + summary_tempf + "°F (" + summary_tempc + "°C)")
-print(Fore.YELLOW + "And it feels like: " + Fore.CYAN + summary_feelslikef
+print(Fore.YELLOW + Style.BRIGHT + "Currently:")
+print(Fore.YELLOW + Style.BRIGHT + "Current conditions: " + Fore.CYAN + Style.BRIGHT + summary_overall)
+print(Fore.YELLOW + Style.BRIGHT + "Current temperature: " + Fore.CYAN + Style.BRIGHT + 
+termuxRound(summary_tempf) + "°F (" + termuxRound(summary_tempc) + "°C)")
+print(Fore.YELLOW + Style.BRIGHT + "And it feels like: " + Fore.CYAN + Style.BRIGHT + summary_feelslikef
       + "°F (" + summary_feelslikec + "°C)")
-print(Fore.YELLOW + "Current dew point: " + Fore.CYAN + summary_dewPointF
+print(Fore.YELLOW + Style.BRIGHT + "Current dew point: " + Fore.CYAN + Style.BRIGHT + summary_dewPointF
       + "°F (" + summary_dewPointC + "°C)")
 if winddata == True:
     if summary_winddir == "Variable":
-        print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing in variable directions.")
+        print(Fore.YELLOW + Style.BRIGHT + "Current wind: " + Fore.CYAN + Style.BRIGHT + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing in variable directions.")
     else:
-        print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
+        print(Fore.YELLOW + Style.BRIGHT + "Current wind: " + Fore.CYAN + Style.BRIGHT + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir + ".")
 else:
-    print(Fore.YELLOW + "Wind data is not available for this location.")
-print(Fore.YELLOW + "Current humidity: " + Fore.CYAN + summary_humidity)
+    print(Fore.YELLOW + Style.BRIGHT + "Wind data is not available for this location.")
+if currentcond_showHumidity is True:
+    print(Fore.YELLOW + Style.BRIGHT + "Current humidity: " + Fore.CYAN + Style.BRIGHT + summary_humidity)
 print("")
 
-print(Fore.YELLOW + "The hourly forecast:")
+if yesterdaydata_onsummary is True:
+    print(Fore.YELLOW + Style.BRIGHT + "The weather that occurred yesterday: ")
+    if yesterdaysummary_dayconddata is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The conditions during the day: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_dayconditions)
+    if yesterdaysummary_nightconddata is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The conditions during the night: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_nightconditions)
+    if yesterdaysummary_showHighTemp is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The high temperature: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_hightempf + "°F (" + yesterdaysummary_hightempc + "°C)")
+    if yesterdaysummary_showLowTemp is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The low temperature: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_lowtempf + "°F (" + yesterdaysummary_lowtempc + "°C)")
+    if yesterdaysummary_showWindSpeed is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The wind speed: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_windmph + " mph (" + yesterdaysummary_windkph + " kph)")
+    if yesterdaysummary_showWindGust is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The wind gust: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_gustmph + " mph (" + yesterdaysummary_gustkph + " kph)")
+    if yesterdaysummary_showHighTemp is True:
+        print(Fore.YELLOW + Style.BRIGHT + "The humidity: " + Fore.CYAN + Style.BRIGHT + yesterdaysummary_avghumidity + "%")
+    print("")
+
+print(Fore.YELLOW + Style.BRIGHT + "The hourly forecast:")
 
 for hour in hourly36_json['hourly_forecast']:
     hourly_time = hour['FCTTIME']['civil']
     hourly_tempf = hour['temp']['english']
     hourly_tempc = hour['temp']['metric']
     hourly_condition = hour['condition']
-    print(Fore.YELLOW + hourly_time + ": " + Fore.CYAN + hourly_condition + " with a temperature of " + hourly_tempf + "°F (" + hourly_tempc + "°C)")
+    print(Fore.YELLOW + Style.BRIGHT + hourly_time + ": " + Fore.CYAN + Style.BRIGHT + hourly_condition + " with a temperature of " + hourly_tempf + "°F (" + hourly_tempc + "°C)")
     summaryHourlyIterations = summaryHourlyIterations + 1
     if summaryHourlyIterations == 6:
         break
 print("")
-print(Fore.YELLOW + "For the next few days:")
+print(Fore.YELLOW + Style.BRIGHT + "For the next few days:")
 
 summary_forecastIterations = 0
 # Iterations are what will have to happen for now...
@@ -1186,80 +2341,101 @@ for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
     forecast10_lowf = str(day['low']['fahrenheit'])
     forecast10_lowc = str(day['low']['celsius'])
     forecast10_conditions = day['conditions']
-    print(Fore.YELLOW + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ": " + Fore.CYAN
-          + forecast10_conditions + " with a high of " + forecast10_highf + "°F (" +
+    print(Fore.YELLOW + Style.BRIGHT + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ": " + Fore.CYAN + Style.BRIGHT +
+          forecast10_conditions + " with a high of " + forecast10_highf + "°F (" +
           forecast10_highc + "°C), and a low of " + forecast10_lowf + "°F (" +
           forecast10_lowc + "°C).")
     summary_forecastIterations = summary_forecastIterations + 1
     if summary_forecastIterations == 5:
         break
-print("")
-if almanac_summary == True:
-    print(Fore.YELLOW + "The almanac:")
-    print(Fore.YELLOW + "Data from: " + Fore.CYAN + almanac_airportCode
-          + Fore.YELLOW + " (the nearest airport)")
-    print(Fore.YELLOW + "Record high for today: " + Fore.CYAN + almanac_recordHighF
-          + "°F (" + almanac_recordHighC + "°C)")
-    print(Fore.YELLOW + "It was set in: " + Fore.CYAN + almanac_recordHighYear)
-    print(Fore.YELLOW + "Record low for today: " + Fore.CYAN + almanac_recordLowF
-          + "°F (" + almanac_recordLowC + "°C)")
-    print(Fore.YELLOW + "It was set in: " + Fore.CYAN + almanac_recordLowYear)
+
+if almanac_summary is True and almanac_data is True:
+    print("")
+    print(Fore.YELLOW + Style.BRIGHT + "The almanac:")
+    print(Fore.YELLOW + Style.BRIGHT + "Data from: " + Fore.CYAN + Style.BRIGHT + almanac_airportCode
+          + Fore.YELLOW + Style.BRIGHT + " (the nearest airport)")
+    if almanac_recordHighdata is True:
+        print(Fore.YELLOW + Style.BRIGHT + "Record high for today: " + Fore.CYAN + Style.BRIGHT + almanac_recordHighF
+              + "°F (" + almanac_recordHighC + "°C)")
+    else:
+        print(Fore.YELLOW + Style.BRIGHT + "Record high data is not available for this location.")
+
+    if almanac_recordHighYeardata is True:
+        print(Fore.YELLOW + Style.BRIGHT + "It was set in: " + Fore.CYAN + Style.BRIGHT + almanac_recordHighYear)
+    else:
+        print(Fore.YELLOW + Style.BRIGHT + "Record high year data is not available for this location.")
+
+    if almanac_recordLowdata is True:
+        print(Fore.YELLOW + Style.BRIGHT + "Record low for today: " + Fore.CYAN + Style.BRIGHT + almanac_recordLowF
+              + "°F (" + almanac_recordLowC + "°C)")
+    else:
+        print(Fore.YELLOW + Style.BRIGHT + "Record low data is not available for this location.")
+
+    if almanac_recordLowYeardata is True:
+        print(Fore.YELLOW + Style.BRIGHT + "It was set in: " + Fore.CYAN + Style.BRIGHT + almanac_recordLowYear)
+    else:
+        print(Fore.YELLOW + Style.BRIGHT + "Record low year data is not available for this location.")
+elif almanac_summary is True and almanac_data is False:
+    print("")
+    print(Fore.YELLOW + Style.BRIGHT + "** Almanac data is not available for the location you entered. **")
 
 if sundata_summary == True:
     print("")
-    print(Fore.YELLOW + "The sunrise and sunset:")
-    print(Fore.YELLOW + "Sunrise: " + Fore.CYAN + sunrise_time)
-    print(Fore.YELLOW + "Sunset: " + Fore.CYAN + sunset_time)
+    print(Fore.YELLOW + Style.BRIGHT + "The sunrise and sunset:")
+    print(Fore.YELLOW + Style.BRIGHT + "Sunrise: " + Fore.CYAN + Style.BRIGHT + sunrise_time)
+    print(Fore.YELLOW + Style.BRIGHT + "Sunset: " + Fore.CYAN + Style.BRIGHT + sunset_time)
 
 if showTideOnSummary == True and tide_dataavailable == True:
     print("")
-    print(Fore.YELLOW + "The tide for " + Fore.CYAN + tide_site + Fore.YELLOW + " (the closest site to you):")
+    print(Fore.YELLOW + Style.BRIGHT + "The tide for " + Fore.CYAN + Style.BRIGHT + tide_site + Fore.YELLOW + Style.BRIGHT + " (the closest site to you):")
     print("")
-    print(Fore.YELLOW + "Low tide:")
-    print(Fore.YELLOW + "Time: " + Fore.CYAN + tide_lowtidetime)
-    print(Fore.YELLOW + "Height: " + Fore.CYAN + tide_lowtideheight)
+    print(Fore.YELLOW + Style.BRIGHT + "Low tide:")
+    print(Fore.YELLOW + Style.BRIGHT + "Time: " + Fore.CYAN + Style.BRIGHT + tide_lowtidetime)
+    print(Fore.YELLOW + Style.BRIGHT + "Height: " + Fore.CYAN + Style.BRIGHT + tide_lowtideheight)
     print("")
-    print(Fore.YELLOW + "High tide:")
-    print(Fore.YELLOW + "Time: " + Fore.CYAN + tide_hightidetime)
-    print(Fore.YELLOW + "Height: " + Fore.CYAN + tide_hightideheight)
+    print(Fore.YELLOW + Style.BRIGHT + "High tide:")
+    print(Fore.YELLOW + Style.BRIGHT + "Time: " + Fore.CYAN + Style.BRIGHT + tide_hightidetime)
+    print(Fore.YELLOW + Style.BRIGHT + "Height: " + Fore.CYAN + Style.BRIGHT + tide_hightideheight)
 elif showTideOnSummary == True and tide_dataavailable == False:
     print("")
-    print(Fore.YELLOW + "** Low/High tide data is not available for the location you entered. **" + Fore.RESET)
+    print(Fore.YELLOW + Style.BRIGHT + "** Low/High tide data is not available for the location you entered. **" + Fore.RESET)
 
 # In this part of PyWeather, you'll find comments indicating where things end/begin.
 # This is to help when coding, and knowing where things are.
 
 while True:
     print("")
-    print(Fore.YELLOW + "What would you like to do now?")
-    print(Fore.YELLOW + "- View detailed current data - Enter " + Fore.CYAN + "0")
-    print(Fore.YELLOW + "- View detailed alerts data - Enter " + Fore.CYAN + "1")
-    print(Fore.YELLOW + "- View detailed hourly data - Enter " + Fore.CYAN + "2")
-    print(Fore.YELLOW + "- View the 10 day hourly forecast - Enter " + Fore.CYAN + "3")
-    print(Fore.YELLOW + "- View the 10 day forecast - Enter " + Fore.CYAN + "4")
-    print(Fore.YELLOW + "- View detailed hurricane data - Enter " + Fore.CYAN + "5")
-    print(Fore.YELLOW + "- View detailed tide data - Enter " + Fore.CYAN + "6")
-    print(Fore.YELLOW + "- View the almanac for today - Enter " + Fore.CYAN + "7")
-    print(Fore.YELLOW + "- View historical weather data - Enter " + Fore.CYAN + "8")
-    print(Fore.YELLOW + "- View yesterday's weather data - Enter " + Fore.CYAN + "9")
-    print(Fore.YELLOW + "- View detailed sun/moon rise/set data - Enter " + Fore.CYAN + "10")
-    print(Fore.YELLOW + "- Launch PyWeather's experimental radar - Enter " + Fore.CYAN + "11")
-    print(Fore.YELLOW + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + "12")
-    print(Fore.YELLOW + "- Check for PyWeather updates - Enter " + Fore.CYAN + "13")
-    print(Fore.YELLOW + "- View the about page for PyWeather - Enter " + Fore.CYAN + "14")
-    print(Fore.YELLOW + "- Close PyWeather - Enter " + Fore.CYAN + "15" + Fore.YELLOW)
+    print(Fore.YELLOW + Style.BRIGHT + "What would you like to do now?")
+    print(Fore.YELLOW + Style.BRIGHT + "- View detailed current data - Enter " + Fore.CYAN + Style.BRIGHT + "0")
+    print(Fore.YELLOW + Style.BRIGHT + "- View detailed alerts data - Enter " + Fore.CYAN + Style.BRIGHT + "1")
+    print(Fore.YELLOW + Style.BRIGHT + "- View detailed hourly data - Enter " + Fore.CYAN + Style.BRIGHT + "2")
+    print(Fore.YELLOW + Style.BRIGHT + "- View the 10 day hourly forecast - Enter " + Fore.CYAN + Style.BRIGHT + "3")
+    print(Fore.YELLOW + Style.BRIGHT + "- View the 10 day forecast - Enter " + Fore.CYAN + Style.BRIGHT + "4")
+    print(Fore.YELLOW + Style.BRIGHT + "- View detailed hurricane data - Enter " + Fore.CYAN + Style.BRIGHT + "5")
+    print(Fore.YELLOW + Style.BRIGHT + "- View detailed tide data - Enter " + Fore.CYAN + Style.BRIGHT + "6")
+    print(Fore.YELLOW + Style.BRIGHT + "- View the almanac for today - Enter " + Fore.CYAN + Style.BRIGHT + "7")
+    print(Fore.YELLOW + Style.BRIGHT + "- View historical weather data - Enter " + Fore.CYAN + Style.BRIGHT + "8")
+    print(Fore.YELLOW + Style.BRIGHT + "- View yesterday's weather data - Enter " + Fore.CYAN + Style.BRIGHT + "9")
+    print(Fore.YELLOW + Style.BRIGHT + "- View detailed sun/moon rise/set data - Enter " + Fore.CYAN + Style.BRIGHT + "10")
+    print(Fore.YELLOW + Style.BRIGHT + "- Launch PyWeather's experimental radar - Enter " + Fore.CYAN + Style.BRIGHT + "11")
+    print(Fore.YELLOW + Style.BRIGHT + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + Style.BRIGHT + "12")
+    print(Fore.YELLOW + Style.BRIGHT + "- Manage your favorite locations - Enter " + Fore.CYAN + Style.BRIGHT + "13")
+    print(Fore.YELLOW + Style.BRIGHT + "- Check for PyWeather updates - Enter " + Fore.CYAN + Style.BRIGHT + "14")
+    print(Fore.YELLOW + Style.BRIGHT + "- View the about page for PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "15")
+    print(Fore.YELLOW + Style.BRIGHT + "- Close PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "16")
+    if extratools_enabled is True:
+        print(Fore.YELLOW + Style.BRIGHT + "- View cache timings - Enter " + Fore.CYAN + Style.BRIGHT + "extratools:1")
     moreoptions = input("Enter here: ").lower()
     logger.debug("moreoptions: %s" % moreoptions)
         
-        
+#<--- Menu is above | Current is below --->
     if moreoptions == "0":
-        print(Fore.RED + "Loading...")
         logger.info("Selected view more currently...")
         logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
                     (refresh_currentflagged, time.time() - cachetime_current))
         if (time.time() - cachetime_current >= cache_currenttime and cache_enabled == True
             or refresh_currentflagged == True):
-            print(Fore.RED + "Refreshing current data...")
+            spinner.start("Refreshing current weather information...")
             try:
                 summaryJSON = requests.get(currenturl)
                 logger.debug("summaryJSON acquired, end result: %s" % summaryJSON)
@@ -1268,29 +2444,40 @@ while True:
                 logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
                              (refresh_currentflagged, time.time() - cachetime_current))
             except:
-                print("Whoops! PyWeather ran into an error when refetching current",
-                      "weather. Make sure that you have an internet connection, and",
-                      "if you're on a filtered network, api.wunderground.com is unblocked.", 
-                      "Press enter to exit to the main menu.", sep="\n")
+                spinner.fail("Failed to refresh current information!")
+                print("")
+                print(Fore.YELLOW + Style.BRIGHT + "Whoops! PyWeather ran into an error when refetching current",
+                      Fore.YELLOW + Style.BRIGHT + "weather. Make sure that you have an internet connection, and",
+                      Fore.YELLOW + Style.BRIGHT + "if you're on a filtered network, api.wunderground.com is unblocked.",
+                      Fore.YELLOW + Style.BRIGHT + "Press enter to exit to the main menu.", sep="\n")
                 input()
                 refresh_currentflagged = True
                 logger.debug("refresh_currentflagged: %s" % refresh_currentflagged)
             current_json = json.loads(summaryJSON.text)
             if jsonVerbosity == True:
                 logger.debug("current_json loaded with: %s" % current_json)
-                   
-        print("")
+            spinner.stop()
+        spinner.start("Loading current weather information...")
         # Parse extra stuff. Variable names are kept the same for the sake of sanity.
         # If the user hasn't refetched, this works out. Vars stay the same.
         summary_overall = current_json['current_observation']['weather']
         summary_lastupdated = current_json['current_observation']['observation_time']
         summary_tempf = str(current_json['current_observation']['temp_f'])
         summary_tempc = str(current_json['current_observation']['temp_c'])
-        summary_humidity = str(current_json['current_observation']['relative_humidity'])
         logger.debug("summary_overall: %s ; summary_lastupdated: %s"
                      % (summary_overall, summary_lastupdated))
         logger.debug("summary_tempf: %s ; summary_tempc: %s"
                      % (summary_tempf, summary_tempc))
+
+        summary_humidity = str(current_json['current_observation']['relative_humidity'])
+        logger.debug("summary_humidity: %s" % summary_humidity)
+        # Check again for bad humidity data. The variable is already defined in any condition at the start
+        # of PyWeather.
+        if summary_humidity == "-999%":
+            logger.info("summary_humidity is '-999%'.")
+            currentcond_showHumidity = False
+            logger.debug("currentcond_showHumidity: %s" % currentcond_showHumidity)
+
         summary_winddir = current_json['current_observation']['wind_dir']
         summary_windmph = current_json['current_observation']['wind_mph']
         summary_windmphstr = str(summary_windmph)
@@ -1368,40 +2555,77 @@ while True:
                     % (current_precip1HrIn, current_precip1HrMm))
         logger.debug("current_precipTodayIn: %s ; current_precipTodayMm: %s"
                      % (current_precipTodayIn, current_precipTodayMm))
-        print(Fore.YELLOW + "Here's the detailed current weather for: " + Fore.CYAN + str(location))
-        print(Fore.YELLOW + summary_lastupdated)
+        # Check for bad visibility data
+        current_showvisibilitydata = True
+        logger.debug("current_showvisibilitydata: %s" % current_showvisibilitydata)
+        if current_visibilityMi == "" or current_visibilityMi == "N/A":
+            logger.info("current_visibilityMi is either '' or 'N/A'.")
+            current_showvisibilitydata = False
+            logger.debug("current_showvisibilitydata: %s" % current_showvisibilitydata)
+
+        # Check for bad UV index data
+        current_showuvindex = True
+        logger.debug("current_showuvindex: %s" % current_showuvindex)
+        if current_UVIndex == "-1" or current_UVIndex == "--":
+            logger.info("current_UVindex is either '-1' or '--'.")
+            current_showuvindex = False
+            logger.debug("current_showuvindex: %s" % current_showuvindex)
+
+        # Check for bad precip so far today data - "" for in and "--" for mm.
+        current_showPrecipData = True
+        logger.debug("current_showPrecipData: %s" % current_showPrecipData)
+        if current_precipTodayIn == "" or current_precipTodayMm == "--":
+            logger.info("current_precipTodayIn is '' or current_precipTodayMm is '--'.")
+            current_showPrecipData = False
+            logger.debug("current_showPrecipData: %s" % current_showPrecipData)
+
+        spinner.stop()
         print("")
-        print(Fore.YELLOW + "Current conditions: " + Fore.CYAN + summary_overall)
-        print(Fore.YELLOW + "Current temperature: " + Fore.CYAN + summary_tempf + "°F (" + summary_tempc + "°C)")
-        print(Fore.YELLOW + "And it feels like: " + Fore.CYAN + current_feelsLikeF
+        print(Fore.YELLOW + Style.BRIGHT + "Here's the detailed current weather for: " + Fore.CYAN + Style.BRIGHT + str(location))
+        print(Fore.YELLOW + Style.BRIGHT + summary_lastupdated)
+        print("")
+        print(Fore.YELLOW + Style.BRIGHT + "Current conditions: " + Fore.CYAN + Style.BRIGHT + summary_overall)
+        print(Fore.YELLOW + Style.BRIGHT + "Current temperature: " + Fore.CYAN + Style.BRIGHT + termuxRound(summary_tempf) + "°F (" + termuxRound(summary_tempc) + "°C)")
+        print(Fore.YELLOW + Style.BRIGHT + "And it feels like: " + Fore.CYAN + Style.BRIGHT + current_feelsLikeF
               + "°F (" + current_feelsLikeC + "°C)")
-        print(Fore.YELLOW + "Current dew point: " + Fore.CYAN + summary_dewPointF
+        print(Fore.YELLOW + Style.BRIGHT + "Current dew point: " + Fore.CYAN + Style.BRIGHT + summary_dewPointF
               + "°F (" + summary_dewPointC + "°C)")
         if winddata == True:
             if summary_winddir == "Variable":
-                print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr +
+                print(Fore.YELLOW + Style.BRIGHT + "Current wind: " + Fore.CYAN + Style.BRIGHT + summary_windmphstr +
                     " mph (" + summary_windkphstr + " kph), blowing in variable directions.")
             else:
-                print(Fore.YELLOW + "Current wind: " + Fore.CYAN + summary_windmphstr +
+                print(Fore.YELLOW + Style.BRIGHT + "Current wind: " + Fore.CYAN + Style.BRIGHT + summary_windmphstr +
                       " mph (" + summary_windkphstr + " kph), blowing " + summary_winddir
                       + " (" + current_windDegrees + " degrees)")
         else:
-            print(Fore.YELLOW + "Wind data is not available for this location.")
-        print(Fore.YELLOW + "Current humidity: " + Fore.CYAN + summary_humidity)
-        print(Fore.YELLOW + "Current pressure: " + Fore.CYAN + current_pressureInHg
+            print(Fore.YELLOW + Style.BRIGHT + "Wind data is not available for this location.")
+        if currentcond_showHumidity is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Current humidity: " + Fore.CYAN + Style.BRIGHT + summary_humidity)
+        print(Fore.YELLOW + Style.BRIGHT + "Current pressure: " + Fore.CYAN + Style.BRIGHT + current_pressureInHg
               + " inHg (" + current_pressureMb + " mb), " + current_pressureTrend2)
-        print(Fore.YELLOW + "Current visibility: " + Fore.CYAN + current_visibilityMi
-              + " miles (" + current_visibilityKm + " km)")
-        print(Fore.YELLOW + "UV Index: " + Fore.CYAN + current_UVIndex)
-        if current_precip1Hrdata == True:
-            print(Fore.YELLOW + "Precipitation in the last hour: " + Fore.CYAN
+        if current_showvisibilitydata is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Current visibility: " + Fore.CYAN + Style.BRIGHT + current_visibilityMi
+                  + " miles (" + current_visibilityKm + " km)")
+        else:
+            print(Fore.YELLOW + Style.BRIGHT + "Current visibility data is not available for this location.")
+
+        if current_showuvindex is True:
+            print(Fore.YELLOW + Style.BRIGHT + "UV Index: " + Fore.CYAN + Style.BRIGHT + current_UVIndex)
+        else:
+            print(Fore.YELLOW + Style.BRIGHT + "Current UV index data is not available for this location.")
+
+        if current_precip1Hrdata is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Precipitation in the last hour: " + Fore.CYAN + Style.BRIGHT
                   + current_precip1HrIn + " inches (" + current_precip1HrMm
                   + " mm)")
         else:
-            print(Fore.YELLOW + "Precipitation data in the last hour is not available.")
-        print(Fore.YELLOW + "Precipitation so far today: " + Fore.CYAN
-              + current_precipTodayIn + " inches (" + current_precipTodayMm
-              + " mm)")
+            print(Fore.YELLOW + Style.BRIGHT + "Precipitation data in the last hour is not available.")
+
+        if current_showPrecipData is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Precipitation so far today: " + Fore.CYAN + Style.BRIGHT
+                  + current_precipTodayIn + " inches (" + current_precipTodayMm
+                  + " mm)")
         continue
 
     elif moreoptions == "1":
@@ -1414,8 +2638,7 @@ while True:
 
         if (alertsPrefetched is False or time.time() - cachetime_alerts >= cache_alertstime and cache_enabled == True
             or refresh_alertsflagged == True):
-            print(Fore.RED + "Alerts wasn't prefetched, the cache expired, or alerts was flagged", 
-                  " for a refresh. Refreshing...", sep="\n")
+            spinner.start(text="Refreshing alerts info...")
             logger.debug("refresh_alertsflagged: %s" % refresh_alertsflagged)
             try:
                 alertsJSON = requests.get(alertsurl)
@@ -1427,16 +2650,18 @@ while True:
                 refresh_alertsflagged = False
                 logger.debug("alertsPrefetched: %s" % alertsPrefetched)
             except:
-                print("When attempting to fetch the alerts JSON file to parse,",
-                      "PyWeather ran into an error. If you're on a network with a",
-                      "filter, make sure that 'api.wunderground.com' is unblocked.",
-                      "Otherwise, make sure you have an internet connection.", sep="\n")
+                spinner.fail(text="Failed to refresh alerts information!")
+                print("")
+                print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the alerts JSON file to parse,",
+                      Fore.YELLOW + Style.BRIGHT + "PyWeather ran into an error. If you're on a network with a",
+                      Fore.YELLOW + Style.BRIGHT + "filter, make sure that 'api.wunderground.com' is unblocked.",
+                      Fore.YELLOW + Style.BRIGHT + "Otherwise, make sure you have an internet connection.", sep="\n")
                 printException()
                 alertsPrefetched = False
                 refresh_alertsflagged = True
                 logger.debug("alertsPrefetched: %s ; refresh_alertsflagged: %s" % 
                              (alertsPrefetched, refresh_alertsflagged))
-                print("Press enter to continue.")
+                print(Fore.YELLOW + Style.BRIGHT + "Press enter to continue.")
                 input()
                 continue
             alerts_json = json.loads(alertsJSON.text)
@@ -1459,10 +2684,10 @@ while True:
                     logger.info("No alert data available!")
                     alerts_type = "None"
                     logger.debug("alerts_type: %s" % alerts_type)
-                    
+            spinner.stop()
         # Because of the oddities of locations with no alerts, we're doing a mini
         # catch the error here. An error would occur when going into the conditional.
-        
+        spinner.start(text="Loading alerts data...")
         try:
             logger.debug("Attempting to see if alert type is declared...")
             if alerts_type == "US":
@@ -1480,6 +2705,7 @@ while True:
             alerts_totaliterations = 0
             alerts_completediterations = 0
             alerts_tempiterations = 0
+            spinner.stop()
             for data in alerts_json['alerts']:
                 alerts_totaliterations = alerts_totaliterations + 1
                 logger.debug("alerts_totaliterations: %s" % alerts_totaliterations)
@@ -1499,14 +2725,15 @@ while True:
                 alerts_expiretime = data['expires']
                 logger.debug("alerts_issuedtime: %s ; alerts_expiretime: %s"
                              % (alerts_issuedtime, alerts_expiretime))
-                print(Fore.YELLOW + "-----")
-                print(Fore.RED + "Alert %s/%s:" % 
+                spinner.stop()
+                print(Fore.YELLOW + Style.BRIGHT + "-----")
+                print(Fore.RED + Style.BRIGHT + "Alert %s/%s:" %
                       (alerts_completediterations, alerts_totaliterations))
-                print("Alert Name: " + Fore.CYAN + alerts_alertname)
-                print(Fore.RED + "Alert Level: " + Fore.CYAN + alerts_alertlevel)
-                print(Fore.RED + "Alert issued at: " + Fore.CYAN + alerts_issuedtime)
-                print(Fore.RED + "Alert expires at: " + Fore.CYAN + alerts_expiretime)
-                print(Fore.RED + "Alert Description: " + Fore.CYAN + alerts_description
+                print(Fore.RED + Style.BRIGHT + "Alert Name: " + Fore.CYAN + Style.BRIGHT + alerts_alertname)
+                print(Fore.RED + Style.BRIGHT + "Alert Level: " + Fore.CYAN + Style.BRIGHT + alerts_alertlevel)
+                print(Fore.RED + Style.BRIGHT + "Alert issued at: " + Fore.CYAN + Style.BRIGHT + alerts_issuedtime)
+                print(Fore.RED + Style.BRIGHT + "Alert expires at: " + Fore.CYAN + Style.BRIGHT + alerts_expiretime)
+                print(Fore.RED + Style.BRIGHT + "Alert Description: " + Fore.CYAN + Style.BRIGHT + alerts_description
                       + Fore.RESET)
                 alerts_tempiterations = alerts_tempiterations + 1
                 if alerts_completediterations == alerts_totaliterations:
@@ -1515,9 +2742,8 @@ while True:
                 if alerts_tempiterations == user_alertsEUiterations:
                     print("")
                     try:
-                        print(Fore.YELLOW + "Please press enter to view the next",
-                              "%s alerts. To exit, press Control + C." % user_alertsEUiterations
-                              ,sep="\n")
+                        print(Fore.YELLOW + Style.BRIGHT + "Please press enter to view the next",
+                              Fore.YELLOW + Style.BRIGHT + "%s alerts. To exit, press Control + C." % user_alertsEUiterations, sep="\n")
                         input()
                         alerts_tempiterations = 0
                     except KeyboardInterrupt:
@@ -1527,6 +2753,7 @@ while True:
             alerts_totaliterations = 0
             alerts_completediterations = 0
             alerts_tempiterations = 0
+            spinner.stop()
             for data in alerts_json['alerts']:
                 alerts_totaliterations = alerts_totaliterations + 1
                 logger.debug("alerts_totaliterations: %s" % alerts_totaliterations)
@@ -1545,14 +2772,14 @@ while True:
                              % (alerts_description, alerts_issuedtime))
                 alerts_expiretime = data['expires']
                 logger.debug("alerts_expiretime: %s" % alerts_expiretime)
-                print(Fore.RED + "Alert %s/%s:" %
+                print(Fore.RED + Style.BRIGHT + "Alert %s/%s:" %
                       (alerts_completediterations, alerts_totaliterations))
-                print(Fore.YELLOW + "-----")
-                print(Fore.RED + "Alert Name: " + Fore.CYAN + alerts_alertname)
-                print(Fore.RED + "Alert Type: " + Fore.CYAN + alerts_alerttype)
-                print(Fore.RED + "Alert issued at: " + Fore.CYAN + alerts_issuedtime)
-                print(Fore.RED + "Alert expires at: " + Fore.CYAN + alerts_expiretime)
-                print(Fore.RED + "Alert Description: " + Fore.CYAN + alerts_description
+                print(Fore.YELLOW + Style.BRIGHT + "-----")
+                print(Fore.RED + Style.BRIGHT + "Alert Name: " + Fore.CYAN + Style.BRIGHT + alerts_alertname)
+                print(Fore.RED + Style.BRIGHT + "Alert Type: " + Fore.CYAN + Style.BRIGHT + alerts_alerttype)
+                print(Fore.RED + Style.BRIGHT + "Alert issued at: " + Fore.CYAN + Style.BRIGHT + alerts_issuedtime)
+                print(Fore.RED + Style.BRIGHT + "Alert expires at: " + Fore.CYAN + Style.BRIGHT + alerts_expiretime)
+                print(Fore.RED + Style.BRIGHT + "Alert Description: " + Fore.CYAN + Style.BRIGHT + alerts_description
                       + Fore.RESET)
                 alerts_tempiterations = alerts_tempiterations + 1
                 if alerts_completediterations == alerts_totaliterations:
@@ -1560,64 +2787,70 @@ while True:
                     break
                 if alerts_tempiterations == user_alertsUSiterations:
                     try:
-                        print(Fore.YELLOW + "Please press enter to view the next",
-                              "%s alert(s). To exit, press Control + C." % user_alertsUSiterations,
-                              sep="\n")
+                        print(Fore.YELLOW + Style.BRIGHT + "Please press enter to view the next",
+                              Fore.YELLOW + Style.BRIGHT + "%s alert(s). To exit, press Control + C." % user_alertsUSiterations, sep="\n")
                         input()
                         alerts_tempiterations = 0
                     except KeyboardInterrupt:
                         logger.debug("User issued KeyboardInterrupt. Breaking...")
                         break
         elif alerts_type == "None":
-            print(Fore.RED + "No data available! Either there are no alerts",
-                  "at the location inputted, or Wunderground doesn't support alerts",
-                  "for the location inputted.",
-                  "As a quick note, Wunderground only supports alerts in the US/EU.", sep="\n")
+            spinner.fail(text="No alert data is available!")
+            print("")
+            print(Fore.RED + Style.BRIGHT + "No data available! Either there are no alerts",
+                  Fore.RED + Style.BRIGHT + "at the location inputted, or Wunderground doesn't support alerts",
+                  Fore.RED + Style.BRIGHT + "for the location inputted.",
+                  Fore.RED + Style.BRIGHT + "As a quick note, Wunderground only supports alerts in the US/EU.", sep="\n")
         else:
-            print(Fore.YELLOW + "Something went wrong when launching the correct conditional",
-                  "for the alert data type involved.",
-                  "For error reporting, this is what the variable 'alerts_type' is currently storing.",
-                  "alerts_type: %s" % alerts_type, sep="\n" + Fore.RESET)  
+            spinner.fail(text="No alert data is available!")
+            print("")
+            print(Fore.YELLOW + Style.BRIGHT + "Something went wrong when launching the correct conditional",
+                  Fore.YELLOW + Style.BRIGHT + "for the alert data type involved.",
+                  Fore.YELLOW + Style.BRIGHT + "For error reporting, this is what the variable 'alerts_type' is currently storing.",
+                  Fore.YELLOW + Style.BRIGHT + "alerts_type: %s" % alerts_type, sep="\n" + Fore.RESET)
 
 # <----- Alerts is above | 36-hour hourly is below ---->
     
     elif moreoptions == "2":
-        print(Fore.RED + "Loading...")
-        print("")
         logger.debug("refresh_hourly36flagged: %s ; hourly36 cache time: %s" %
                     (refresh_hourly36flagged, time.time() - cachetime_hourly36))
         logger.info("Selected view more hourly...")
         if (refresh_hourly36flagged == True or
                         time.time() - cachetime_hourly36 >= cache_threedayhourly and cache_enabled == True):
-            print("")
-            print(Fore.RED + "Refreshing 3 day hourly data...")
+            spinner.start(text="Refreshing 36-hour hourly information...")
             try:
                 hourly36JSON = requests.get(hourlyurl)
                 logger.debug("hourly36JSON acquired, end result: %s" % hourly36JSON)
                 cachetime_hourly36 = time.time()
             except:
-                print("Whoops! A problem occurred when trying to refresh 36 hour",
-                      "hourly data. Make sure you have an internet connection, and if",
-                      "you're on a network with a filter, make sure that api.wunderground.com",
-                      "is unblocked.",
-                      "Press enter to continue.", sep="\n")
+                spinner.fail(text="Failed to refresh 36-hour hourly information!")
+                print("")
+                print(Fore.YELLOW + Style.BRIGHT + "Whoops! A problem occurred when trying to refresh 36 hour",
+                      Fore.YELLOW + Style.BRIGHT + "hourly data. Make sure you have an internet connection, and if",
+                      Fore.YELLOW + Style.BRIGHT + "you're on a network with a filter, make sure that api.wunderground.com",
+                      Fore.YELLOW + Style.BRIGHT + "is unblocked.",
+                      Fore.YELLOW + Style.BRIGHT + "Press enter to continue.", sep="\n")
                 printException()
                 input()
                 refresh_hourly36flagged = False
                 logger.debug("refresh_hourly36flagged: %s" % refresh_hourly36flagged)
                 continue
-            
+
             hourly36_json = json.loads(hourly36JSON.text)
             if jsonVerbosity == True:
                 logger.debug("hourly36_json: %s" % hourly36_json)
             refresh_hourly36flagged = False
             logger.debug("refresh_hourly36flagged: %s" % refresh_hourly36flagged)
+            spinner.stop()
             
-                
+        spinner.start(text="Loading 36-hour hourly information...")
         detailedHourlyIterations = 0
         totaldetailedHourlyIterations = 0
-        print(Fore.YELLOW + "Here's the detailed hourly forecast for: " + Fore.CYAN + str(location))
+        spinner.stop()
+        print("")
+        print(Fore.YELLOW + Style.BRIGHT + "Here's the detailed hourly forecast for: " + Fore.CYAN + Style.BRIGHT + str(location))
         for hour in hourly36_json['hourly_forecast']:
+            print("")
             logger.info("We're on iteration: %s" % detailedHourlyIterations)
             hourly_time = hour['FCTTIME']['civil']
             hourly_tempf = hour['temp']['english']
@@ -1674,44 +2907,42 @@ while True:
             logger.debug("hourly_pressureMb: %s ; hourly_condition: %s" 
                          % (hourly_pressureMb, hourly_condition))
             logger.info("Now printing weather data...")
-            print("")
             # If you have verbosity on, there's a chance that the next
             # hourly iteration will start BEFORE the previous iteration
             # prints out. This is normal, and no issues are caused by such.
-            print(Fore.YELLOW + hourly_time + " on " + hourly_month + " " + hourly_day + ":")
-            print(Fore.YELLOW + "Conditions: " + Fore.CYAN + hourly_condition)
-            print(Fore.YELLOW + "Temperature: " + Fore.CYAN + hourly_tempf 
+            print(Fore.YELLOW + Style.BRIGHT + hourly_time + " on " + hourly_month + " " + hourly_day + ":")
+            print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT + hourly_condition)
+            print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + hourly_tempf
                   + "°F (" + hourly_tempc + "°C)")
-            print(Fore.YELLOW + "Feels like: " + Fore.CYAN + hourly_feelsLikeF
+            print(Fore.YELLOW + Style.BRIGHT + "Feels like: " + Fore.CYAN + Style.BRIGHT + hourly_feelsLikeF
                   + "°F (" + hourly_feelsLikeC + "°C)")
-            print(Fore.YELLOW + "Dew Point: " + Fore.CYAN + hourly_dewpointF
+            print(Fore.YELLOW + Style.BRIGHT + "Dew Point: " + Fore.CYAN + Style.BRIGHT + hourly_dewpointF
                   + "°F (" + hourly_dewpointC + "°C)")
             if hourly_windDir == "Variable":
-                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly_windMPH
+                print(Fore.YELLOW + Style.BRIGHT + "Wind: " + Fore.CYAN + Style.BRIGHT + hourly_windMPH
                     + " mph (" + hourly_windKPH + " kph) blowing in " +
                     "variable directions.")
             else:
-                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly_windMPH
+                print(Fore.YELLOW + Style.BRIGHT + "Wind: " + Fore.CYAN + Style.BRIGHT + hourly_windMPH
                       + " mph (" + hourly_windKPH + " kph) blowing to the " +
                       hourly_windDir + " (" + hourly_windDegrees + "°)")
-            print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly_humidity + "%")
+            print(Fore.YELLOW + Style.BRIGHT + "Humidity: " + Fore.CYAN + Style.BRIGHT + hourly_humidity + "%")
             if hourly_snowData == False:
-                print(Fore.YELLOW + "Rain for the hour: " + Fore.CYAN +
+                print(Fore.YELLOW + Style.BRIGHT + "Rain for the hour: " + Fore.CYAN + Style.BRIGHT +
                       hourly_precipIn + " in (" + hourly_precipMm + " mm)")
             if hourly_snowData == True:
-                print(Fore.YELLOW + "Snow for the hour: " + Fore.CYAN +
+                print(Fore.YELLOW + Style.BRIGHT + "Snow for the hour: " + Fore.CYAN + Style.BRIGHT +
                       hourly_snowIn + " in (" + hourly_snowMm + " mm)")
-            print(Fore.YELLOW + "Precipitation chance: " + Fore.CYAN + 
+            print(Fore.YELLOW + Style.BRIGHT + "Precipitation chance: " + Fore.CYAN + Style.BRIGHT +
                   hourly_precipChance + "%")
-            print(Fore.YELLOW + "Barometric pressure: " + Fore.CYAN +
+            print(Fore.YELLOW + Style.BRIGHT + "Barometric pressure: " + Fore.CYAN + Style.BRIGHT +
                   hourly_pressureInHg + " inHg (" + hourly_pressureMb
                   + " mb)")
             detailedHourlyIterations = detailedHourlyIterations + 1
             totaldetailedHourlyIterations = totaldetailedHourlyIterations + 1
             if user_showCompletedIterations == True:
-                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/36"
+                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/36"
                       % totaldetailedHourlyIterations)
-                print(Fore.RESET)
             if user_enterToContinue == True:
                 if totaldetailedHourlyIterations == 36:
                     logger.debug("Total iterations is 36. Breaking...")
@@ -1721,9 +2952,9 @@ while True:
                     logger.debug("Asking user for continuation...")
                     try:
                         print("")
-                        print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
+                        print(Fore.RED + Style.BRIGHT + "Please press enter to view the next %s hours of hourly data."
                               % user_loopIterations)
-                        print("You can also press Control + C to head back to the input menu.")
+                        print(Fore.RED + Style.BRIGHT + "You can also press Control + C to head back to the input menu.")
                         input()
                         logger.debug("Iterating %s more times..." % user_loopIterations)
                         detailedHourlyIterations = 0
@@ -1736,7 +2967,6 @@ while True:
                     break
 #<-- 36 hour hourly is above | 10 day hourly is below --->
     elif moreoptions == "3":
-        print(Fore.RED + "Loading...")
         logger.info("Selected view more 10 day hourly...")
         detailedHourly10Iterations = 0
         totaldetailedHourly10Iterations = 0
@@ -1748,16 +2978,18 @@ while True:
             logger.debug("no hourly 10 cache time")
         if (tenday_prefetched == False or refresh_hourly10flagged == True or
             time.time() - cachetime_hourly10 >= cache_tendayhourly and cache_enabled == True):
-            print(Fore.RED + "Refreshing (or fetching for the first time) 10 day hourly data...")
+            spinner.start(text="Refreshing ten-day hourly information...")
             try:
                 tendayJSON = requests.get(tendayurl)
                 logger.debug("Retrieved hourly 10 JSON with end result: %s" % tendayJSON)
                 cachetime_hourly10 = time.time()
             except:
-                print("When attempting to fetch the 10-day hourly forecast data, PyWeather ran",
-                      "info an error. If you're on a network with a filter, make sure that",
-                      "'api.wunderground.com' is unblocked. Otherwise, make sure that you have",
-                      "an internet connection.", sep="\n")
+                spinner.fail(text="Failed to refresh ten-day hourly information!")
+                print("")
+                print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the 10-day hourly forecast data, PyWeather ran",
+                      Fore.YELLOW + Style.BRIGHT + "info an error. If you're on a network with a filter, make sure that",
+                      Fore.YELLOW + Style.BRIGHT + "'api.wunderground.com' is unblocked. Otherwise, make sure that you have",
+                      Fore.YELLOW + Style.BRIGHT + "an internet connection.", sep="\n")
                 printException()
                 tenday_prefetched = False
                 refresh_hourly10flagged = False
@@ -1776,8 +3008,12 @@ while True:
             if jsonVerbosity == True:
                 logger.debug("tenday_json: %s" % tenday_json)
             logger.debug("tenday json loaded.")
-            
-        print(Fore.YELLOW + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + str(location))  
+            spinner.stop()
+        # I get it, nothing gets loaded here. Just show the spinner anyways.
+        spinner.start(text="Loading ten-day hourly information...")
+        spinner.stop()
+        print("")
+        print(Fore.YELLOW + Style.BRIGHT + "Here's the detailed 10 day hourly forecast for: " + Fore.CYAN + Style.BRIGHT + str(location))
         for hour in tenday_json['hourly_forecast']:
             logger.info("We're on iteration: %s/24. User iterations: %s." %
                         (detailedHourly10Iterations, user_loopIterations))
@@ -1842,42 +3078,41 @@ while True:
             # If you have verbosity on, there's a chance that the next
             # hourly iteration will start BEFORE the previous iteration
             # prints out. This is normal, and no issues are caused by such.
-            print(Fore.YELLOW + hourly10_time + " on " + hourly10_month + " " 
+            print(Fore.YELLOW + Style.BRIGHT + hourly10_time + " on " + hourly10_month + " "
                   + hourly10_day + ":")
-            print(Fore.YELLOW + "Conditions: " + Fore.CYAN 
+            print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT
                   + hourly10_condition)
-            print(Fore.YELLOW + "Temperature: " + Fore.CYAN + hourly10_tempf 
+            print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + hourly10_tempf
                   + "°F (" + hourly10_tempc + "°C)")
-            print(Fore.YELLOW + "Feels like: " + Fore.CYAN + hourly10_feelsLikeF
+            print(Fore.YELLOW + Style.BRIGHT + "Feels like: " + Fore.CYAN + Style.BRIGHT + hourly10_feelsLikeF
                   + "°F (" + hourly10_feelsLikeC + "°C)")
-            print(Fore.YELLOW + "Dew Point: " + Fore.CYAN + hourly10_dewpointF
+            print(Fore.YELLOW + Style.BRIGHT + "Dew Point: " + Fore.CYAN + Style.BRIGHT + hourly10_dewpointF
                   + "°F (" + hourly10_dewpointC + "°C)")
             if hourly10_windDir == "Variable":
-                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly10_windMPH
+                print(Fore.YELLOW + Style.BRIGHT + "Wind: " + Fore.CYAN + Style.BRIGHT + hourly10_windMPH
                     + " mph (" + hourly10_windKPH + " kph) blowing in " +
                     "variable directions.")
             else:
-                print(Fore.YELLOW + "Wind: " + Fore.CYAN + hourly10_windMPH
+                print(Fore.YELLOW + Style.BRIGHT + "Wind: " + Fore.CYAN + Style.BRIGHT + hourly10_windMPH
                       + " mph (" + hourly10_windKPH + " kph) blowing to the " +
                       hourly10_windDir + " (" + hourly10_windDegrees + "°)")
-            print(Fore.YELLOW + "Humidity: " + Fore.CYAN + hourly10_humidity + "%")
+            print(Fore.YELLOW + Style.BRIGHT + "Humidity: " + Fore.CYAN + Style.BRIGHT + hourly10_humidity + "%")
             if hourly10_snowData == False:
-                print(Fore.YELLOW + "Rain for the hour: " + Fore.CYAN +
+                print(Fore.YELLOW + Style.BRIGHT + "Rain for the hour: " + Fore.CYAN + Style.BRIGHT +
                       hourly10_precipIn + " in (" + hourly10_precipMm + " mm)")
             if hourly10_snowData == True:
-                print(Fore.YELLOW + "Snow for the hour: " + Fore.CYAN +
+                print(Fore.YELLOW + Style.BRIGHT + "Snow for the hour: " + Fore.CYAN + Style.BRIGHT +
                       hourly10_snowIn + " in (" + hourly10_snowMm + " mm)")
-            print(Fore.YELLOW + "Precipitation chance: " + Fore.CYAN + 
+            print(Fore.YELLOW + Style.BRIGHT +"Precipitation chance: " + Fore.CYAN + Style.BRIGHT +
                   hourly10_precipChance + "%")
-            print(Fore.YELLOW + "Barometric pressure: " + Fore.CYAN +
+            print(Fore.YELLOW + Style.BRIGHT + "Barometric pressure: " + Fore.CYAN + Style.BRIGHT +
                   hourly10_pressureInHg + " inHg (" + hourly10_pressureMb
                   + " mb)")
             detailedHourly10Iterations = detailedHourly10Iterations + 1
             totaldetailedHourly10Iterations = totaldetailedHourly10Iterations + 1
             if user_showCompletedIterations == True:
-                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/240"
+                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/240"
                       % totaldetailedHourly10Iterations)
-                print(Fore.RESET)
             print("")
             if user_enterToContinue == True:
                 if totaldetailedHourly10Iterations == 240:
@@ -1887,9 +3122,9 @@ while True:
                     logger.debug("detailedHourly10Iterations: %s" % detailedHourly10Iterations)
                     logger.debug("Asking user for continuation...")
                     try:
-                        print(Fore.RED + "Please press enter to view the next %s hours of hourly data."
+                        print(Fore.RED + Style.BRIGHT + "Please press enter to view the next %s hours of hourly data."
                               % user_loopIterations)
-                        print("You can also press Control + C to head back to the input menu.")
+                        print(Fore.RED + Style.BRIGHT + "You can also press Control + C to head back to the input menu.")
                         input()
                         logger.debug("Iterating %s more times...")
                         detailedHourly10Iterations = 0
@@ -1902,23 +3137,23 @@ while True:
                     break
 # <--- 10 day hourly is above | 10 day forecast is below --->
     elif moreoptions == "4":
-        print(Fore.RED + "Loading, please wait a few seconds.")
         logger.info("Selected view more 10 day...")
-        print("")
         logger.debug("refresh_forecastflagged: %s ; forecast cache time: %s" %
                     (refresh_forecastflagged, time.time() - cachetime_forecast))
         if (refresh_forecastflagged == True 
             or time.time() - cachetime_forecast >= cache_forecasttime and cache_enabled == True):
-            print(Fore.RED + "Refreshing forecast data...")
+            spinner.start(text="Refreshing forecast information...")
             try:
                 forecast10JSON = requests.get(f10dayurl)
                 cachetime_forecast = time.time()
                 logger.debug("forecast10JSON acquired, end result: %s" % forecast10JSON)
             except:
-                print("PyWeather ran into an error when trying to refetch forecast",
-                      "data. If you're on a filtered network, make sure that",
-                      "api.wunderground.com is unblocked. Otherwise, make sure you have",
-                      "an internet connection.", sep="\n")
+                spinner.fail(text="Failed to refresh forecast data!")
+                print("")
+                print(Fore.YELLOW + Style.BRIGHT + "PyWeather ran into an error when trying to refetch forecast",
+                      Fore.YELLOW + Style.BRIGHT + "data. If you're on a filtered network, make sure that",
+                      Fore.YELLOW + Style.BRIGHT + "api.wunderground.com is unblocked. Otherwise, make sure you have",
+                      Fore.YELLOW + Style.BRIGHT + "an internet connection.", sep="\n")
                 printException()
                 refresh_forecastflagged = False
                 logger.debug("refresh_forecastflagged: %s" % refresh_forecastflagged)
@@ -1934,6 +3169,8 @@ while True:
             else:
                 logger.debug("refresh_forecastflagged: %s" % refresh_forecastflagged)
                 logger.debug("forecast10_json loaded.")
+            spinner.stop()
+        spinner.start(text="Loading forecast data...")
         detailedForecastIterations = 0
         totaldetailedForecastIterations = 0
         logger.debug("totaldetailedForecastIterations: %s" % totaldetailedForecastIterations)
@@ -1942,7 +3179,9 @@ while True:
                      (totaldetailedForecastIterations, forecast10_precipDayData))
         forecast10_snowDayData = True
         logger.debug("forecast10_snowDayData: %s" % forecast10_snowDayData)
-        print(Fore.CYAN + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + str(location))
+        spinner.stop()
+        print("")
+        print(Fore.CYAN + Style.BRIGHT + "Here's the detailed 10 day forecast for: " + Fore.YELLOW + Style.BRIGHT + str(location))
         for day in forecast10_json['forecast']['simpleforecast']['forecastday']:
             print("")
             detailedForecastIterations = detailedForecastIterations + 1
@@ -1960,40 +3199,6 @@ while True:
             forecast10_lowf = str(day['low']['fahrenheit'])
             forecast10_lowfcheck = int(day['low']['fahrenheit'])
             forecast10_lowc = str(day['low']['celsius'])
-            forecast10_showsnowdatanight = False
-            forecast10_showsnowdataday = False
-            logger.debug("forecast10_highfcheck: %s ; forecast10_lowfcheck: %s" %
-                         (forecast10_highfcheck, forecast10_lowfcheck))
-            if forecast10_highfcheck > 32:
-                forecast10_showsnowdataday = False
-            else:
-                forecast10_showsnowdataday = True
-                
-            if forecast10_lowfcheck > 32:
-                forecat10_showsnowdatanight = False
-            else:
-                forecast10_showsnowdatanight = True
-                
-            logger.debug("forecast10_showsnowdataday: %s ; forecast10_showsnowdatanight: %s"
-                         % (forecast10_showsnowdataday, forecast10_showsnowdatanight)) 
-               
-            if forecast10_highfcheck < 32 and forecast10_lowfcheck < 32:
-                forecast10_showsnowdatatotal = True
-                forecast10_showraindatatotal = False
-            # It could happen!
-            elif (forecast10_highfcheck > 32 and forecast10_lowfcheck < 32 or
-                  forecast10_highfcheck < 32 and forecast10_lowfcheck > 32):
-                forecast10_showsnowdatatotal = True
-                forecast10_showraindatatotal = True
-            elif forecast10_highfcheck > 32 and forecast10_lowfcheck > 32:
-                forecast10_showsnowdatatotal = False
-                forecast10_showraindatatotal = True
-            else:
-                forecast10_showsnowdatatotal = False
-                forecast10_showraindatatotal = True
-                
-            logger.debug("forecast10_showsnowdatatotal: %s ; forecast10_showraindatatotal: %s" %
-                         (forecast10_showsnowdatatotal, forecast10_showraindatatotal))
             forecast10_conditions = day['conditions']
             logger.debug("forecast10_highc: %s ; forecast10_lowf: %s"
                         % (forecast10_highc, forecast10_lowf))
@@ -2003,14 +3208,6 @@ while True:
             forecast10_precipTotalMm = str(day['qpf_allday']['mm'])
             forecast10_precipDayIn = str(day['qpf_day']['in'])
             forecast10_precipDayMm = str(day['qpf_day']['mm'])
-            if forecast10_precipDayIn == "None":
-                forecast10_precipDayData = False
-                logger.debug("forecast10_precipDayData: %s" 
-                             % forecast10_precipDayData)
-            else:
-                forecast10_precipDayData = True
-                logger.debug("forecast10_precipDayData: %s"
-                             % forecast10_precipDayData)
             logger.debug("forecast10_precipTotalIn: %s ; forecast10_precipTotalMm: %s"
                         % (forecast10_precipTotalIn, forecast10_precipTotalMm))
             logger.debug("forecast10_precipDayIn: %s ; forecast10_precipDayMm: %s"
@@ -2019,30 +3216,199 @@ while True:
             forecast10_precipNightMm = str(day['qpf_night']['mm'])
             logger.debug("forecast10_precipNightIn: %s ; forecast10_precipNightMm: %s"
                         % (forecast10_precipNightIn, forecast10_precipNightMm))
-            forecast10_snowTotalCheck = day['snow_allday']['in']
-            logger.debug("forecast10_snowTotalCheck: %s" % forecast10_snowTotalCheck)
-            forecast10_snowTotalIn = str(forecast10_snowTotalCheck)
+            forecast10_snowTotalIn = str(day['snow_allday']['in'])
             forecast10_snowTotalCm = str(day['snow_allday']['cm'])
-            forecast10_snowDayCheck = day['snow_day']['in']
             logger.debug("forecast10_snowTotalIn: %s ; forecast10_snowTotalCm: %s"
                         % (forecast10_snowTotalIn, forecast10_snowTotalCm))
-            logger.debug("forecast10_snowDayCheck: %s" % forecast10_snowDayCheck)
-            forecast10_snowDayIn = str(forecast10_snowDayCheck)
+            forecast10_snowDayIn = str(day['snow_day']['in'])
             forecast10_snowDayCm = str(day['snow_day']['cm'])
-            if forecast10_snowDayIn == "None":
-                forecast10_snowDayData = False
-                logger.debug("forecast10_snowDayData: %s" % 
-                             forecast10_snowDayData)
-            else:
-                forecast10_snowDayData = True
-                logger.debug("forecast10_snowDayData: %s" %
-                             forecast10_snowDayData)
-            forecast10_snowNightCheck = day['snow_night']['in']
             logger.debug("forecast10_snowDayIn: %s ; forecast10_snowDayCm: %s"
                          % (forecast10_snowDayIn, forecast10_snowDayCm))
-            logger.debug("forecast10_snowNightCheck: %s" % forecast10_snowNightCheck)
-            forecast10_snowNightIn = str(forecast10_snowNightCheck)
+            forecast10_snowNightIn = str(day['snow_night']['in'])
             forecast10_snowNightCm = str(day['snow_night']['cm'])
+            # Set all display variables to true to begin with
+            forecast10_showsnowdatatotal = True
+            forecast10_showraindatatotal = True
+            forecast10_showsnowdataday = True
+            forecast10_showsnowdatanight = True
+            forecast10_showraindataday = True
+            forecast10_showraindatanight = True
+            logger.debug("forecast10_showsnowdatatotal: %s ; forecast10_showraindatatotal: %s" %
+                         (forecast10_showsnowdatatotal, forecast10_showraindatatotal))
+            logger.debug("forecast10_showsnowdataday: %s ; forecast10_showsnowdatanight: %s" %
+                         (forecast10_showsnowdataday, forecast10_showsnowdatanight))
+            logger.debug("forecast10_showraindataday: %s ; forecast10_showraindatanight: %s" %
+                         (forecast10_showraindataday, forecast10_showraindatanight))
+            # Set the data available variables to true
+            forecast10_snowtotalavail = True
+            forecast10_raintotalavail = True
+            forecast10_snowdayavail = True
+            forecast10_snownightavail = True
+            forecast10_raindayavail = True
+            forecast10_rainnightavail = True
+            logger.debug("forecast10_snowtotalavail: %s ; forecast10_raintotalavail: %s" %
+                         (forecast10_snowtotalavail, forecast10_raintotalavail))
+            logger.debug("forecast10_snowdayavail: %s ; forecast10_snownightavail: %s" %
+                         (forecast10_snowdayavail, forecast10_snownightavail))
+            logger.debug("forecast10_raindayavail: %s ; forecast10_rainnightavail: %s" %
+                         (forecast10_raindayavail, forecast10_rainnightavail))
+            # Begin checking for available data - Start with int conversions.
+            # If a ValueError occurs, set the display variable to false.
+            try:
+                forecast10_snowtotalCheck = float(forecast10_snowTotalIn)
+                logger.debug("forecast10_snowtotalCheck: %s" % forecast10_snowtotalCheck)
+            except ValueError:
+                logger.warning("Failed to convert total snow into float, not displaying...")
+                printException_loggerwarn()
+                forecast10_showsnowdatatotal = False
+                forecast10_snowtotalavail = False
+                logger.debug("forecast10_showsnowdatatotal: %s ; forecast10_snowtotalavail: %s" %
+                             (forecast10_showsnowdatatotal, forecast10_snowtotalavail))
+
+            try:
+                forecast10_raintotalCheck = float(forecast10_precipTotalIn)
+                logger.debug("forecast10_raintotalCheck: %s" % forecast10_raintotalCheck)
+            except ValueError:
+                logger.warning("Failed to convert total precip into float, not displaying...")
+                printException_loggerwarn()
+                forecast10_showraindatatotal = False
+                forecast10_raintotalavail = False
+                logger.debug("forecast10_showraindatatotal: %s ; forecast10_raintotalavail: %s" %
+                             (forecast10_showraindatatotal, forecast10_raintotalavail))
+
+            try:
+                forecast10_snowdayCheck = float(forecast10_snowDayIn)
+                logger.debug("forecast10_snowdayCheck: %s" % forecast10_snowdayCheck)
+            except ValueError:
+                logger.warning("Failed to convert day-only snow into float, not displaying...")
+                printException_loggerwarn()
+                forecast10_showsnowdataday = False
+                forecast10_snowdayavail = False
+                logger.debug("forecast10_showsnowdataday: %s ; forecast10_snowdayavail: %s" %
+                             (forecast10_showsnowdataday, forecast10_snowdayavail))
+
+            try:
+                forecast10_snownightCheck = float(forecast10_snowNightIn)
+                logger.debug("forecast10_snownightCheck: %s" % forecast10_snownightCheck)
+            except ValueError:
+                logger.warning("Failed to convert night-only snow into float, not displaying...")
+                printException_loggerwarn()
+                forecast10_showsnowdatanight = False
+                forecast10_snownightavail = False
+                logger.debug("forecast10_showsnowdatanight: %s ; forecast10_snownightavail: %s" %
+                             (forecast10_showsnowdatanight, forecast10_snownightavail))
+
+
+            try:
+                forecast10_raindayCheck = float(forecast10_precipDayIn)
+                logger.debug("forecast10_raindayCheck: %s" % forecast10_raindayCheck)
+            except ValueError:
+                logger.warning("Failed to convert day-only rain into float, not displaying...")
+                printException_loggerwarn()
+                forecast10_showraindataday = False
+                forecast10_raindayavail = False
+                logger.debug("forecast10_showraindataday: %s ; forecast10_raindayavail: %s" %
+                             (forecast10_showraindataday, forecast10_raindayavail))
+
+
+            try:
+                forecast10_rainnightCheck = float(forecast10_precipNightIn)
+                logger.debug("forecast10_rainnightCheck: %s" % forecast10_rainnightCheck)
+            except ValueError:
+                logger.warning("Failed to convert night-only rain into float, not displaying...")
+                printException_loggerwarn()
+                forecast10_showraindatanight = False
+                forecast10_rainnightavail = False
+                logger.debug("forecast10_showraindatanight: %s ; forecast10_rainnightavail: %s" %
+                             (forecast10_showraindatanight, forecast10_rainnightavail))
+
+
+            # Determine if we'll show total precip amounts
+
+            # If snow total amount is above 0.01, show it regardless of temp
+            if forecast10_snowtotalavail is True:
+                if forecast10_snowtotalCheck >= 0.01:
+                    logger.info("forecast10_snowtotalCheck is >= 0.01.")
+
+            # Have a completely separate block of code for calculating displaying snow data
+            if forecast10_snowtotalavail is True:
+                if forecast10_snowtotalCheck == 0.00:
+                    logger.info("forecast10_snowtotalCheck is 0.00")
+                    if forecast10_highfcheck > 32 and forecast10_lowfcheck > 32:
+                        forecast10_showsnowdatatotal = False
+                    else:
+                        # Every other possible combination will lead to showing snow data to be true.
+                        # Put the else here as a way to keep things compact.
+                        forecast10_showsnowdatatotal = True
+                    logger.debug("forecast10_showsnowdatatotal: %s" % forecast10_showsnowdatatotal)
+
+            if forecast10_raintotalavail is True:
+                if forecast10_raintotalCheck >= 0.01:
+                    logger.info("forecast10_raintotalCheck is >= 0.01.")
+
+            if forecast10_raintotalavail is True:
+                if forecast10_raintotalCheck == 0.00:
+                    logger.info("forecast10_raintotalCheck is 0.00")
+                    if forecast10_highfcheck <= 32 and forecast10_lowfcheck <= 32:
+                        forecast10_showraindatatotal = False
+                    else:
+                        forecast10_showraindatatotal = True
+                    logger.debug("forecast10_showraindatatotal: %s" % forecast10_showraindatatotal)
+
+            if forecast10_snowdayavail is True:
+                if forecast10_snowdayCheck >= 0.01:
+                    logger.info("forecast10_snowdayCheck is >= 0.01.")
+
+            if forecast10_snowdayavail is True:
+                if forecast10_snowdayCheck == 0.00:
+                    logger.info("forecast10_snowdayCheck is 0.00")
+                    if forecast10_highfcheck >= 32:
+                        forecast10_showsnowdataday = False
+                    else:
+                        forecast10_showsnowdataday = True
+                    logger.debug("forecast10_showsnowdataday: %s" % forecast10_showsnowdataday)
+
+            if forecast10_snownightavail is True:
+                if forecast10_snownightCheck >= 0.01:
+                    logger.info("forecast10_snownightCheck is >= 0.01.")
+                    forecast10_showsnowdatanight = True
+
+            if forecast10_snownightavail is True:
+                if forecast10_snownightCheck == 0.00:
+                    logger.info("forecast10_snownightCheck is 0.00")
+                    if forecast10_lowfcheck >= 32:
+                        forecast10_showsnowdatanight = False
+                    else:
+                        forecast10_showsnowdatanight = True
+                    logger.debug("forecast10_showsnowdatanight: %s" % forecast10_showsnowdatanight)
+
+            if forecast10_raindayavail is True:
+                if forecast10_raindayCheck >= 0.01:
+                    logger.info("forecast10_raindayCheck is >= 0.01")
+
+            if forecast10_raindayavail is True:
+                if forecast10_raindayCheck == 0.00:
+                    logger.info("forecast10_raindayCheck is 0.00")
+                    if forecast10_highfcheck < 32:
+                        forecast10_showraindataday = False
+                    else:
+                        forecast10_showraindataday = True
+                    logger.debug("forecast10_showraindataday: %s" % forecast10_showraindataday)
+
+            if forecast10_rainnightavail is True:
+                if forecast10_rainnightCheck >= 0.01:
+                    logger.info("forecast10_rainnightCheck is >= 0.01")
+
+            if forecast10_rainnightavail is True:
+                if forecast10_rainnightCheck == 0.00:
+                    logger.info("forecast10_rainnightCheck is 0.00")
+                    if forecast10_lowfcheck < 32:
+                        forecast10_showraindatanight = False
+                    else:
+                        forecast10_showraindatanight = True
+                    logger.debug("forecast10_showraindatanight: %s" % forecast10_showraindatanight)
+
+
             forecast10_maxWindMPH = str(day['maxwind']['mph'])
             forecast10_maxWindKPH = str(day['maxwind']['kph'])
             forecast10_maxMPHcheck = int(forecast10_maxWindMPH)
@@ -2073,65 +3439,71 @@ while True:
             logger.debug("forecast10_avgWindDir: %s ; forecast10_avgWindDegrees: %s"
                         % (forecast10_avgWindDir, forecast10_avgWindDegrees))
             logger.debug("forecast10_avgHumidity: %s" % forecast10_avgHumidity)
+            forecast10_precipChance = str(day['pop'])
+            logger.debug("forecast10_precipChance: %s" % forecast10_precipChance)
             logger.info("Printing weather data...")
-            print(Fore.YELLOW + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ":")
-            print(Fore.CYAN + forecast10_conditions + Fore.YELLOW + " with a high of "
-                  + Fore.CYAN + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
-                  Fore.YELLOW + " and a low of " + Fore.CYAN + forecast10_lowf + "°F (" +
+            print(Fore.YELLOW + Style.BRIGHT + forecast10_weekday + ", " + forecast10_month + "/" + forecast10_day + ":")
+            print(Fore.CYAN + Style.BRIGHT + forecast10_conditions + Fore.YELLOW + Style.BRIGHT + " with a high of "
+                  + Fore.CYAN + Style.BRIGHT + forecast10_highf + "°F (" + forecast10_highc + "°C)" +
+                  Fore.YELLOW + Style.BRIGHT + " and a low of " + Fore.CYAN + Style.BRIGHT + forecast10_lowf + "°F (" +
                   forecast10_lowc + "°C)" + ".")
-            if forecast10_showsnowdatatotal == True and forecast10_showraindatatotal == False:
-                print(Fore.YELLOW + "Snow in total: " + Fore.CYAN + forecast10_snowTotalIn
+            print(Fore.YELLOW + Style.BRIGHT + "Precipitation chance: " + Fore.CYAN + Style.BRIGHT + forecast10_precipChance + "%")
+            if forecast10_showsnowdatatotal is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Snow in total: " + Fore.CYAN + Style.BRIGHT + forecast10_snowTotalIn
                       + " in (" + forecast10_snowTotalCm + " cm)")
-            elif forecast10_showsnowdatatotal == False and forecast10_showraindatatotal == True:
-                print(Fore.YELLOW + "Rain in total: " + Fore.CYAN + forecast10_precipTotalIn
+            elif forecast10_snowtotalavail is False:
+                print(Fore.YELLOW + Style.BRIGHT + "Total snow precipitation data is not available for this date.")
+
+            if forecast10_showraindatatotal is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Rain in total: " + Fore.CYAN + Style.BRIGHT +  forecast10_precipTotalIn
                       + " in (" + forecast10_precipTotalMm + " mm)")
-            elif forecast10_showsnowdatatotal == True and forecast10_showraindatatotal == True:
-                print(Fore.YELLOW + "Snow in total: " + Fore.CYAN + forecast10_snowTotalIn
-                      + " in (" + forecast10_snowTotalCm + " cm)")
-                print(Fore.YELLOW + "Rain in total: " + Fore.CYAN + forecast10_precipTotalIn
-                      + " in (" + forecast10_precipTotalMm + " mm)")
-            else:
-                print(Fore.YELLOW + "Rain in total: " + Fore.CYAN + forecast10_precipTotalIn
-                      + " in (" + forecast10_precipTotalMm + " mm)")
+            elif forecast10_raintotalavail is False:
+                print(Fore.YELLOW + Style.BRIGHT + "Total rain precipitation data is not available for this date.")
                 
-            if forecast10_showsnowdataday == False and forecast10_precipDayData == True:
-                print(Fore.YELLOW + "Rain for the day: " + Fore.CYAN + forecast10_precipDayIn
+            if forecast10_showraindataday is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Rain for the day: " + Fore.CYAN + Style.BRIGHT + forecast10_precipDayIn
                       + " in (" + forecast10_precipDayMm + " mm)")
-            elif forecast10_showsnowdataday == True and forecast10_snowDayData == True:
-                print(Fore.YELLOW + "Snow for the day: " + Fore.CYAN + forecast10_snowDayIn
+            elif forecast10_raindayavail is False:
+                print(Fore.YELLOW + Style.BRIGHT + "Rain precipitation data during the day is not available for this date.")
+
+            if forecast10_showsnowdataday is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Snow for the day: " + Fore.CYAN + Style.BRIGHT + forecast10_snowDayIn
                       + " in (" + forecast10_snowDayCm + " cm)")
+            elif forecast10_snowdayavail is False:
+                print(Fore.YELLOW + Style.BRIGHT + "Snow precipitation data during the day is not available for this date.")
             
-            if forecast10_showsnowdatanight == False:
-                print(Fore.YELLOW + "Rain for the night: " + Fore.CYAN + forecast10_precipNightIn
+            if forecast10_showraindatanight is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Rain for the night: " + Fore.CYAN + Style.BRIGHT + forecast10_precipNightIn
                       + " in (" + forecast10_precipNightMm + " mm)")
-            elif forecast10_showsnowdatanight == True:
-                print(Fore.YELLOW + "Snow for the night: " + Fore.CYAN + forecast10_snowNightIn
+            elif forecast10_rainnightavail is False:
+                print(Fore.YELLOW + Style.BRIGHT + "Rain precipitation data during the night is not available for this date.")
+
+            if forecast10_showsnowdatanight is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Snow for the night: " + Fore.CYAN + Style.BRIGHT + forecast10_snowNightIn
                       + " in (" + forecast10_snowNightCm + " cm)")
-            else:
-                print(Fore.YELLOW + "Rain for the night: " + Fore.CYAN + forecast10_precipNightIn
-                      + " in (" + forecast10_precipNightMm + " mm)")
+            elif forecast10_snownightavail is False:
+                print(Fore.YELLOW + Style.BRIGHT + "Snow precipitation data during the night is not available for this date.")
 
             if forecast10_avgWindDir == "Variable":
-                print(Fore.YELLOW + "Winds: " + Fore.CYAN +
+                print(Fore.YELLOW + Style.BRIGHT + "Winds: " + Fore.CYAN + Style.BRIGHT +
                     forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
                     + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
                     + forecast10_maxWindKPH + " kph), "
                     + "and blowing in variable directions.")
             else:
-                print(Fore.YELLOW + "Winds: " + Fore.CYAN +
+                print(Fore.YELLOW + Style.BRIGHT + "Winds: " + Fore.CYAN + Style.BRIGHT +
                       forecast10_avgWindMPH + " mph (" + forecast10_avgWindKPH
                       + " kph), gusting to " + forecast10_maxWindMPH + " mph ("
                       + forecast10_maxWindKPH + " kph), "
                       + "and blowing " + forecast10_avgWindDir +
                       " (" + forecast10_avgWindDegrees + "°)")
-            print(Fore.YELLOW + "Humidity: " + Fore.CYAN +
+            print(Fore.YELLOW + Style.BRIGHT + "Humidity: " + Fore.CYAN + Style.BRIGHT +
                   forecast10_avgHumidity + "%")
             totaldetailedForecastIterations = totaldetailedForecastIterations + 1
             logger.debug("totaldetailedForecastIterations: %s" % totaldetailedForecastIterations)
             if user_showCompletedIterations == True:
-                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/10"
+                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/10"
                       % totaldetailedForecastIterations)
-                print(Fore.RESET)
             if totaldetailedForecastIterations == 10:
                 logger.debug("Total iterations is 10. Breaking...")
                 break
@@ -2140,9 +3512,9 @@ while True:
                     logger.debug("detailedForecastIterations: %s" % detailedForecastIterations)
                     try:
                         print("")
-                        print(Fore.RED + "Press enter to view the next %s days of weather data."
+                        print(Fore.RED + Style.BRIGHT + "Press enter to view the next %s days of weather data."
                               % user_forecastLoopIterations)
-                        print("You can also press Control + C to return to the input menu.")
+                        print(Fore.RED + Style.BRIGHT +"You can also press Control + C to return to the input menu.")
                         input()
                         logger.info("Iterating %s more times..." 
                                     % user_forecastLoopIterations)
@@ -2155,13 +3527,13 @@ while True:
 
     elif moreoptions == "11":
         if radar_bypassconfirmation == False:
-            print(Fore.RED + "The radar feature is experimental, and may not work properly.",
-                  Fore.RED + "PyWeather may crash when in this feature, and other unexpected",
-                  Fore.RED + "behavior may occur. Despite the radar feature being experimental,",
-                  Fore.RED + "would you like to use the radar?" + Fore.RESET, sep="\n")
+            print(Fore.RED + Style.BRIGHT + "The radar feature is experimental, and may not work properly.",
+                  Fore.RED + Style.BRIGHT + "PyWeather may crash when in this feature, and other unexpected",
+                  Fore.RED + Style.BRIGHT + "behavior may occur. Despite the radar feature being experimental,",
+                  Fore.RED + Style.BRIGHT + "would you like to use the radar?" + Fore.RESET, sep="\n")
             radar_confirmedusage = input("Input here: ").lower()
             if radar_confirmedusage == "yes":
-                print("The radar is now launching.",
+                print("", "The radar is now launching.",
                       "If you want to bypass this confirmation message when",
                       "launching the radar feature, in config.ini, set bypassconfirmation",
                       "under the RADAR GUI section to True.", sep="\n")
@@ -2173,33 +3545,35 @@ while True:
                       "be launched.", sep="\n")
                 continue
 
-
+        spinner.start(text="Loading radar GUI...")
         try:
             os.mkdir("temp")
         except:
             printException_loggerwarn()
-            
-        print(Fore.YELLOW + "Loading the GUI. This should take around 5 seconds.")
+
         radar_clearImages()
         try:
             from appJar import gui
             frontend = gui()
         except ImportError:
-            print(Fore.RED + "Cannot launch a GUI on this platform. If you don't have",
-                  Fore.RED + "a GUI on Linux, this is expected. Otherwise, investigate into why",
-                  Fore.RED + "tkinter won't launch.", sep="\n" + Fore.RESET)
-            printException()
+            spinner.fail(text="Failed to load radar GUI, an import error occurred!")
+            print("")
+            print(Fore.RED + Style.BRIGHT + "Cannot launch a GUI on this platform, as an import error occurred. If you don't have",
+                  Fore.RED + Style.BRIGHT + "a GUI on Linux, this is expected. Otherwise, investigate into why",
+                  Fore.RED + Style.BRIGHT + "tkinter won't launch.", sep="\n" + Fore.RESET)
+            printException_loggerwarn()
             continue
         except:
+            spinner.fail(text="Failed to load radar GUI!")
+            print("")
+            print(Fore.RED + Style.BRIGHT + "Cannot launch the GUI. This is probably occurring as a result of being in a terminal,",
+                  Fore.RED + Style.BRIGHT + "and not having a display for the GUI to initialize on. If this is not the case, and you have a GUI,",
+                  Fore.RED + Style.BRIGHT + "turn on tracebacks in the configuration file, and report the traceback on GitHub if the issue persists.",
+                  Fore.RED + Style.BRIGHT + "Press enter to continue.")
             printException()
-            print(Fore.RED + "Cannot launch the GUI. This is probably occurring as a result of being in a terminal,",
-                  Fore.RED + "and not having a display for the GUI to initialize on. If this is not the case, and you have a GUI,",
-                  Fore.RED + "turn on tracebacks in the configuration file, and report the traceback on GitHub if the issue persists.",
-                  Fore.RED + "Press enter to continue.")
             input()
             continue
-            
-        print(Fore.YELLOW + "Defining variables...")
+
         # A quick note about cache variables.
         # The syntax goes like this:
         # (mode)(zoom)cached, where r = radar only, s = satellite only
@@ -2223,17 +3597,19 @@ while True:
         logger.debug("r80url: %s ; r100url: %s" %
                      (r80url, r100url))      
         
-        
-        print(Fore.YELLOW + "Defining functions...")
+
                 
         def frontend_zoomswitch(btnName):
+            # Globalize cache variables
             global r10cached; global r20cached; global r40cached
             global r60cached; global r80cached; global r100cached
             global radar_zoomlevel
             logger.debug("btnName: %s" % btnName)
+            # If button name equals a zoom level enter this code
             if btnName == "10 km":
                 logger.debug("r10cached: %s" % r10cached)
                 if r10cached == False:
+                    # If the radar image isn't cached fetch the image.
                     logger.debug("r10cached is false, fetching...")
                     frontend.setStatusbar("Zoom: 10 km", 0)
                     frontend.setStatusbar("Status: Fetching image...", 1)
@@ -2261,6 +3637,7 @@ while True:
                     logger.debug("r10cached: %s ; radar_zoomlevel: %s" %
                                  (r10cached, radar_zoomlevel))
                 elif r10cached == True:
+                    # If it is cached load the image. If it's not cached show the image failed to load.
                     logger.debug("r10cached is true, fetching from cache...")
                     frontend.setStatusbar("Zoom: 10 km", 0)
                     frontend.setStatusbar("Status: Loading image...", 1)
@@ -2760,34 +4137,38 @@ while True:
         frontend.addStatusbar(fields=2)
         frontend.setStatusbar("Zoom: Not selected", 0)
         frontend.setStatusbar("Status: Idle", 1)
+        spinner.stop()
         frontend.go()
 #<--- Radar is above | Exit PyWeather is below --->
 
-    elif moreoptions == "15":
+    elif moreoptions == "16":
         sys.exit()
 
 #<--- Exit PyWeather is above | Updater is below --->
-    elif moreoptions == "13":
+    elif moreoptions == "14":
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
                     (buildnumber, buildversion))
-        print("Checking for updates. This should only take a few seconds.")
+        spinner.start(text="Checking for updates...")
         try:
             versioncheck = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
             releasenotes = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/releasenotes.txt")
             logger.debug("versioncheck: %s" % versioncheck)
         except:
-            logger.warn("Couldn't check for updates! Is there an internet connection?")
-            print("When attempting to fetch the update data file, PyWeather",
-                  "ran into an error. If you're on a network with a filter,",
-                  "make sure that 'raw.githubusercontent.com' is unblocked. Otherwise,",
-                  "make sure that you have an internet connecction.", sep="\n")
+            spinner.fail(text="Failed to check for updates!")
+            print("")
+            logger.warning("Couldn't check for updates! Is there an internet connection?")
+            print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the update data file, PyWeather",
+                  Fore.YELLOW + Style.BRIGHT + "ran into an error. If you're on a network with a filter,",
+                  Fore.YELLOW + Style.BRIGHT + "make sure that 'raw.githubusercontent.com' is unblocked. Otherwise,",
+                  Fore.YELLOW + Style.BRIGHT + "make sure that you have an internet connecction.", sep="\n")
             printException()
             continue
         versionJSON = json.loads(versioncheck.text)
         if jsonVerbosity == True:
             logger.debug("versionJSON: %s" % versionJSON)
-        logger.debug("Loaded versionJSON with reader %s" % reader)
+        else:
+            logger.debug("versionJSON loaded.")
         version_buildNumber = float(versionJSON['updater']['latestbuild'])
         version_latestVersion = versionJSON['updater']['latestversion']
         version_latestURL = versionJSON['updater']['latesturl']
@@ -2803,98 +4184,101 @@ while True:
                      (version_latestReleaseTag))
         logger.debug("version_newversionreleasedate: %s ; version_latestReleaseDate: %s" %
                      (version_newversionreleasedate, version_latestReleaseDate))
+        spinner.stop()
         if buildnumber >= version_buildNumber:
             logger.info("PyWeather is up to date.")
             logger.info("local build (%s) >= latest build (%s)"
                         % (buildnumber, version_buildNumber))
             print("")
-            print(Fore.GREEN + "PyWeather is up to date!")
-            print("You have version: " + Fore.CYAN + buildversion)
-            print(Fore.GREEN + "The latest version is: " + Fore.CYAN 
+            print(Fore.GREEN + Style.BRIGHT + "Your PyWeather is up to date! :)")
+            print(Fore.GREEN + Style.BRIGHT + "You have version: " + Fore.CYAN + Style.BRIGHT + buildversion)
+            print(Fore.GREEN + Style.BRIGHT +"The latest version is: " + Fore.CYAN + Style.BRIGHT
                   + version_latestVersion)
             if user_showUpdaterReleaseTag == True:
-                print(Fore.GREEN + "The latest release tag is: " + Fore.CYAN 
+                print(Fore.GREEN + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT
                       + version_latestReleaseTag)
             if showNewVersionReleaseDate == True:
-                print(Fore.GREEN + "Psst, a new version of PyWeather should get released on: "
-                      + Fore.CYAN + version_newversionreleasedate)
+                print(Fore.GREEN + Style.BRIGHT + "Psst, a new version of PyWeather should get released on: "
+                      + Fore.CYAN + Style.BRIGHT + version_newversionreleasedate)
             if showUpdaterReleaseNotes_uptodate == True:
-                print(Fore.GREEN + "Here's the release notes for this release:",
-                      Fore.CYAN + releasenotes.text, sep="\n")
+                print(Fore.GREEN + Style.BRIGHT + "Here's the release notes for this release:",
+                      Fore.CYAN + Style.BRIGHT + releasenotes.text, sep="\n")
         elif buildnumber < version_buildNumber:
             print("")
             logger.warn("PyWeather is NOT up to date.")
             logger.warn("local build (%s) < latest build (%s)"
                         % (buildnumber, version_buildNumber))
-            print(Fore.RED + "PyWeather is not up to date! :(")
-            print(Fore.RED + "You have version: " + Fore.CYAN + buildversion)
-            print(Fore.RED + "The latest version is: " + Fore.CYAN + version_latestVersion)
-            print(Fore.RED + "And it was released on: " + Fore.CYAN + version_latestReleaseDate)
+            print(Fore.RED + Style.BRIGHT + "Your PyWeather is not up to date! :(")
+            print(Fore.RED + Style.BRIGHT + "You have version: " + Fore.CYAN + Style.BRIGHT + buildversion)
+            print(Fore.RED + Style.BRIGHT + "The latest version is: " + Fore.CYAN + Style.BRIGHT + version_latestVersion)
+            print(Fore.RED + Style.BRIGHT + "And it was released on: " + Fore.CYAN + Style.BRIGHT + version_latestReleaseDate)
             if user_showUpdaterReleaseTag == True:
-                print(Fore.RED + "The latest release tag is: " + Fore.CYAN + version_latestReleaseTag)
+                print(Fore.RED + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT + version_latestReleaseTag)
             if showUpdaterReleaseNotes == True:
-                print(Fore.RED + "Here's the release notes for the latest release:",
-                      Fore.CYAN + releasenotes.text, sep="\n")
+                print(Fore.RED + Style.BRIGHT + "Here's the release notes for the latest release:",
+                      Fore.CYAN + Style.BRIGHT + releasenotes.text, sep="\n")
             print("")
-            print(Fore.RED + "Would you like to download the latest version?" + Fore.YELLOW)
+            print(Fore.RED + Style.BRIGHT + "Would you like to download the latest version?")
             downloadLatest = input("Yes or No: ").lower()
             logger.debug("downloadLatest: %s" % downloadLatest)
             if downloadLatest == "yes":
-                if allowGitForUpdating == True:
-                    print("Would you like to use Git to update PyWeather?",
-                          "Yes or No.")
-                    confirmUpdateWithGit = input("Input here: ").lower()
-                    if confirmUpdateWithGit == "yes":
-                        print("Now updating with Git.")
-                        try:
-                            subprocess.call(["git fetch"], shell=True)
-                            subprocess.call(["git stash"], shell=True)
-                            subprocess.call(["git checkout %s" % version_latestReleaseTag],
-                                            shell=True)
-                            print("Now updating your config file.")
-                            exec(open("configupdate.py").read())
-                            print("PyWeather has been successfully updated. To finish updating,",
-                                  "please press enter to exit PyWeather.", sep="\n")
-                            input()
-                            sys.exit()
-                        except:
-                            print("When attempting to update using git, either",
-                                  "when doing `git fetch`, `git checkout`, or to",
-                                  "execute the configupdate script, an error occurred."
-                                  "We can try updating using the .zip method.",
-                                  "Would you like to update PyWeather using the .zip method?",
-                                  "Yes or No.", sep="\n")
-                            printException()
-                            confirmZipDownload = input("Input here: ").lower()
-                            if confirmZipDownload == "yes":
-                                print("Downloading using the .zip method.")
-                            elif confirmZipDownload == "no":
-                                print("Not downloading latest updates using the",
-                                      ".zip method.", sep="\n")
-                                continue
-                            else:
-                                print("Couldn't understand your input. Defaulting",
-                                      "to downloading using a .zip.", sep="\n")
-                    # The unnecessary amounts of confirms was to boost the line count to 2,000.
-                    elif confirmUpdateWithGit == "no":
-                        print("Not updating with Git. Would you like to update",
-                              "PyWeather using the .zip download option?",
-                              "Yes or No.", sep="\n")
-                        confirmZipDownload = input("Input here: ").lower()
-                        if confirmZipDownload == "yes":
-                            print("Downloading the latest update with a .zip.")
-                        elif confirmZipDownload == "no":
-                            print("Not downloading the latest PyWeather updates.")
-                            continue
-                        else:
-                            print("Couldn't understand your input. Defaulting to",
-                                  "downloading the latest version with a .zip.", sep="\n")
-                    else:
-                        print("Couldn't understand your input. Defaulting to",
-                              "downloading the latest version with a .zip.", sep="\n")        
+                # Remove the Git updater - It is no longer needed.
+                #if allowGitForUpdating == True:
+                #    print(Fore.YELLOW + Style.BRIGHT + "Would you like to use Git to update PyWeather?",
+                #          Fore.YELLOW + Style.BRIGHT + "Yes or No.")
+                #    confirmUpdateWithGit = input("Input here: ").lower()
+                #    if confirmUpdateWithGit == "yes":
+                #        print(Fore.YELLOW + Style.BRIGHT + "Now updating with Git.")
+                #        try:
+                #            subprocess.call(["git fetch"], shell=True)
+                #            subprocess.call(["git stash"], shell=True)
+                #            subprocess.call(["git checkout %s" % version_latestReleaseTag],
+                #                            shell=True)
+                #            print(Fore.YELLOW + Style.BRIGHT + "Now updating your config file.")
+                #            exec(open("configupdate.py").read())
+                #            print(Fore.YELLOW + Style.BRIGHT + "PyWeather has been successfully updated. To finish updating,",
+                #                  Fore.YELLOW + Style.BRIGHT + "please press enter to exit PyWeather.", sep="\n")
+                #            input()
+                #            sys.exit()
+                #        except:
+                #            print("When attempting to update using git, either",
+                #                  "when doing `git fetch`, `git checkout`, or to",
+                #                  "execute the configupdate script, an error occurred."
+                #                  "We can try updating using the .zip method.",
+                #                  "Would you like to update PyWeather using the .zip method?",
+                #                  "Yes or No.", sep="\n")
+                #            printException()
+                #            confirmZipDownload = input("Input here: ").lower()
+                #            if confirmZipDownload == "yes":
+                #                print("Downloading using the .zip method.")
+                #            elif confirmZipDownload == "no":
+                #               print("Not downloading latest updates using the",
+                #                     ".zip method.", sep="\n")
+                #                continue
+                #            else:
+                #                print("Couldn't understand your input. Defaulting",
+                #                      "to downloading using a .zip.", sep="\n")
+                #    # The unnecessary amounts of confirms was to boost the line count to 2,000.
+                #    elif confirmUpdateWithGit == "no":
+                #        print("Not updating with Git. Would you like to update",
+                #              "PyWeather using the .zip download option?",
+                #              "Yes or No.", sep="\n")
+                #        confirmZipDownload = input("Input here: ").lower()
+                #        if confirmZipDownload == "yes":
+                #            print("Downloading the latest update with a .zip.")
+                #        elif confirmZipDownload == "no":
+                #            print("Not downloading the latest PyWeather updates.")
+                #            continue
+                #        else:
+                #            print("Couldn't understand your input. Defaulting to",
+                #                  "downloading the latest version with a .zip.", sep="\n")
+                #    else:
+                #        print("Couldn't understand your input. Defaulting to",
+                #              "downloading the latest version with a .zip.", sep="\n")
                 print("")
                 logger.debug("Downloading latest version...")
-                print(Fore.YELLOW + "Downloading the latest version of PyWeather...")
+                # This will eventually get replaced with a real progress bar with size indicating and all that cool stuff.
+                spinner.start(text="Downloading the latest version of PyWeather...")
                 try:
                     updatezip = requests.get(version_latestURL)
                     with open(version_latestFileName, 'wb') as fw:
@@ -2902,44 +4286,50 @@ while True:
                             fw.write(chunk)
                         fw.close()
                 except:
-                    logger.warn("Couldn't download the latest version!")
-                    logger.warn("Is the internet online?")
-                    print("When attempting to download the latest .zip file",
-                          "for PyWeather, an error occurred. If you're on a",
-                          "network with a filter, make sure that",
-                          "'raw.githubusercontent.com' is unblocked.",
-                          "Otherwise, make sure you have an internet connection.",
+                    spinner.fail("Failed to download the latest version of PyWeather!")
+                    print("")
+                    logger.warning("Couldn't download the latest version!")
+                    logger.warning("Is the internet online?")
+                    print(Fore.RED + Style.BRIGHT + "When attempting to download the latest .zip file",
+                          Fore.RED + Style.BRIGHT + "for PyWeather, an error occurred. If you're on a",
+                          Fore.RED + Style.BRIGHT + "network with a filter, make sure that",
+                          Fore.RED + Style.BRIGHT + "'raw.githubusercontent.com' is unblocked.",
+                          Fore.RED + Style.BRIGHT + "Otherwise, make sure you have an internet connection.",
                           sep="\n")
                     logger.error("Here's the full traceback (for bug reports):")
                     printException()
                     continue
                 logger.debug("Latest version was saved, filename: %s"
                             % version_latestFileName)
-                print(Fore.YELLOW + "The latest version of PyWeather was downloaded " +
+                spinner.stop()
+                print(Fore.YELLOW + Style.BRIGHT + "The latest version of PyWeather was downloaded " +
                       "to the base directory of PyWeather, and saved as " +
-                      Fore.CYAN + version_latestFileName + Fore.YELLOW + ".")
+                      Fore.CYAN + Style.BRIGHT + version_latestFileName + Fore.YELLOW + ".")
                 continue
             elif downloadLatest == "no":
                 logger.debug("Not downloading the latest version.")
-                print(Fore.YELLOW + "Not downloading the latest version of PyWeather.")
-                print("For reference, you can download the latest version of PyWeather at:")
-                print(Fore.CYAN + version_latestURL)
+                print(Fore.YELLOW + Style.BRIGHT + "Not downloading the latest version of PyWeather.")
+                print(Fore.YELLOW + Style.BRIGHT + "For reference, you can download the latest version of PyWeather at:")
+                print(Fore.CYAN + Style.BRIGHT + version_latestURL)
                 continue
             else:
                 logger.warn("Input could not be understood!")
-                print(Fore.GREEN + "Your input couldn't be understood.")
+                print(Fore.RED + Style.BRIGHT + "Your input couldn't be understood.")
                 continue
         else:
-            logger.warn("PW updater failed. Variables corrupt, maybe?")
-            print("When attempting to compare version variables, PyWeather ran",
-                  "into an error. This error is extremely rare. Make sure you're",
-                  "not trying to travel through a wormhole with Cooper, and report",
-                  "the error on GitHub, while it's around.", sep='\n')
+            spinner.fail("Failed to check for updates!")
+            print("")
+            logger.warning("PW updater failed. Variables corrupt, maybe?")
+            print(Fore.YELLOW + Style.BRIGHT + "When attempting to compare version variables, PyWeather ran",
+                  Fore.YELLOW + Style.BRIGHT + "into an error. This error is extremely rare. Make sure you're",
+                  Fore.YELLOW + Style.BRIGHT + "not trying to travel through a wormhole with Cooper, and report",
+                  Fore.YELLOW + Style.BRIGHT + "the error on GitHub, while it's around. Make sure to turn on verbosity and report",
+                  Fore.YELLOW + Style.BRIGHT + "variable data after selecting the updater option.", sep='\n')
+            input()
             continue
 # <--- Updater is above | Almanac is below --->
     elif moreoptions == "7":
         logger.info("Selected option: almanac")
-        print(Fore.RED + "Loading...")
         try:
             logger.debug("almanac_prefetched: %s ; almanac cache time: %s" %
                          (almanac_prefetched, time.time() - cachetime_almanac))
@@ -2949,20 +4339,21 @@ while True:
         logger.debug("refresh_almanacflagged: %s" % refresh_almanacflagged)
         if (almanac_prefetched == False or time.time() - cachetime_almanac >= cache_almanactime
             or refresh_almanacflagged == True):
-            print(Fore.RED + "Fetching (or refreshing) almanac data...")
-            print("")
+            spinner.start(text="Refreshing almanac data...")
             try:
                 almanacJSON = requests.get(almanacurl)
                 logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
                 cachetime_almanac = time.time()
             except:
+                spinner.fail(text="Failed to load almanac data!")
+                print("")
                 logger.warn("Couldn't contact Wunderground's API! Is the internet offline?")
-                print("When fetching the almanac data from Wunderground, PyWeather ran into",
-                      "an error. If you're on a network with a filter, make sure that",
-                      "'api.wunderground.com' is unblocked. Otherwise, make sure you have",
-                      "an internet connection, and that Wunderground's HAL9000 is online.")
+                print(Fore.RED + Style.BRIGHT + "When fetching the almanac data from Wunderground, PyWeather ran into",
+                      Fore.RED + Style.BRIGHT + "an error. If you're on a network with a filter, make sure that",
+                      Fore.RED + Style.BRIGHT + "'api.wunderground.com' is unblocked. Otherwise, make sure you have",
+                      Fore.RED + Style.BRIGHT + "an internet connection, and that Wunderground's HAL9000 is online.")
                 printException()
-                print("Press enter to continue.")
+                print(Fore.RED + Style.BRIGHT + "Press enter to continue.")
                 input()
                 continue
             
@@ -2970,6 +4361,8 @@ while True:
             refresh_almanacflagged = False
             logger.debug("almanac_prefetched: %s ; refresh_almanacflagged: %s" %
                          (almanac_prefetched, refresh_almanacflagged))
+            almanac_data = True
+            logger.debug("almanac_data: %s" % almanac_data)
             almanac_json = json.loads(almanacJSON.text)
             if jsonVerbosity == True:
                 logger.debug("almanac_json: %s" % almanac_json)
@@ -2977,6 +4370,11 @@ while True:
                 logger.debug("1 JSON loaded successfully.")
             
             almanac_airportCode = almanac_json['almanac']['airport_code']
+            if almanac_airportCode == "":
+                almanac_data = False
+                logger.debug("almanac_data: %s" % almanac_data)
+
+
             logger.debug("almanac_airportCode: %s" % almanac_airportCode)
             try:
                 almanac_normalHighF = str(almanac_json['almanac']['temp_high']['normal']['F'])
@@ -2997,6 +4395,7 @@ while True:
                              (almanac_recordHighF, almanac_recordHighC))
                 almanac_recordHighdata = True
             except:
+                printException_loggerwarn()
                 almanac_recordHighdata = False
             logger.debug("almanac_recordHighdata: %s" % almanac_recordHighdata)
             try:
@@ -3034,52 +4433,56 @@ while True:
             except:
                 almanac_recordLowYeardata = False
             logger.debug("almanac_recordLowYeardata: %s" % almanac_recordLowYeardata)
-        
-        print(Fore.YELLOW + "Here's the almanac for: " + Fore.CYAN +
+        spinner.start(text="Loading the almanac...")
+        # If the airport code was "" (no data), exit almanac data.
+        if almanac_data is False:
+            spinner.fail(text="Almanac data is not available for this location.")
+            continue
+
+        spinner.stop()
+        print(Fore.YELLOW + Style.BRIGHT + "Here's the almanac for: " + Fore.CYAN + Style.BRIGHT +
               almanac_airportCode + Fore.YELLOW + " (the nearest airport)")
         print("")
         if almanac_recordHighdata is True:
-            print(Fore.YELLOW + "Record High: " + Fore.CYAN + almanac_recordHighF + "°F ("
+            print(Fore.YELLOW + Style.BRIGHT + "Record High: " + Fore.CYAN + Style.BRIGHT + almanac_recordHighF + "°F ("
                   + almanac_recordHighC + "°C)")
         else:
-            print(Fore.YELLOW + "Record high data is not available.")
+            print(Fore.YELLOW + Style.BRIGHT + "Record high data is not available.")
 
         if almanac_recordHighYeardata is True:
-            print(Fore.YELLOW + "With the record being set in: " + Fore.CYAN
+            print(Fore.YELLOW + Style.BRIGHT + "With the record being set in: " + Fore.CYAN + Style.BRIGHT
                   + almanac_recordHighYear)
         else:
-            print(Fore.YELLOW + "Record high year data is not available.")
+            print(Fore.YELLOW + Style.BRIGHT + "Record high year data is not available.")
 
         if almanac_normalHighdata is True:
-            print(Fore.YELLOW + "Normal High: " + Fore.CYAN + almanac_normalHighF
+            print(Fore.YELLOW + Style.BRIGHT + "Normal High: " + Fore.CYAN + Style.BRIGHT + almanac_normalHighF
                   + "°F (" + almanac_normalHighC + "°C)")
         else:
-            print(Fore.YELLOW + "Normal high data is not available.")
+            print(Fore.YELLOW + Style.BRIGHT + "Normal high data is not available.")
 
         print("")
 
         if almanac_recordLowdata is True:
-            print(Fore.YELLOW + "Record Low: " + Fore.CYAN + almanac_recordLowF + "°F ("
+            print(Fore.YELLOW + Style.BRIGHT + "Record Low: " + Fore.CYAN + Style.BRIGHT + almanac_recordLowF + "°F ("
                   + almanac_recordLowC + "°C)")
         else:
-            print(Fore.YELLOW + "Record low data is not available.")
+            print(Fore.YELLOW + Style.BRIGHT + "Record low data is not available.")
 
         if almanac_recordLowYeardata is True:
-            print(Fore.YELLOW + "With the record being set in: " + Fore.CYAN
+            print(Fore.YELLOW + Style.BRIGHT + "With the record being set in: " + Fore.CYAN + Style.BRIGHT
                   + almanac_recordLowYear)
         else:
-            print(Fore.YELLOW + "Record low year data is not available.")
+            print(Fore.YELLOW + Style.BRIGHT + "Record low year data is not available.")
 
         if almanac_normalLowdata is True:
-            print(Fore.YELLOW + "Normal Low: " + Fore.CYAN + almanac_normalLowF + "°F ("
+            print(Fore.YELLOW + Style.BRIGHT + "Normal Low: " + Fore.CYAN + Style.BRIGHT + almanac_normalLowF + "°F ("
                   + almanac_normalLowC + "°C)")
         else:
-            print(Fore.YELLOW + "Normal low year data is not available.")
+            print(Fore.YELLOW + Style.BRIGHT + "Normal low year data is not available.")
         print("")
 #<--- Almanac is above | Sundata is below --->
     elif moreoptions == "10":
-        print(Fore.RED + "Loading...")
-
         try:
             logger.debug("sundata_prefetched: %s ; sundata cache time: %s" %
                          (sundata_prefetched, time.time() - cachetime_sundata))
@@ -3091,19 +4494,21 @@ while True:
         if (sundata_prefetched is False or
             time.time() - cachetime_sundata >= cache_sundatatime and cache_enabled == True or
                 refresh_sundataflagged == True):
-            print(Fore.RED + "Fetching (or refreshing) sun/moon data...")
+            spinner.start(text="Refreshing astronomy data...")
             try:
                 sundataJSON = requests.get(astronomyurl)
                 logger.debug("Retrieved sundata JSON with response: %s" % sundataJSON)
                 cachetime_sundata = time.time()
                 
             except:
-                print("When attempting to fetch the 'sundata' from Wunderground,",
-                      "PyWeather ran into an error. If you're on a network with",
-                      "a filter, make sure 'api.wunderground.com' is unblocked.",
-                      "Otherwise, make sure you have an internet connection.", sep="\n")
+                spinner.fail(text="Failed to load astronomy data!")
+                print("")
+                print(Fore.RED + Style.BRIGHT + "When attempting to fetch the 'sundata' from Wunderground,",
+                      Fore.RED + Style.BRIGHT + "PyWeather ran into an error. If you're on a network with",
+                      Fore.RED + Style.BRIGHT + "a filter, make sure 'api.wunderground.com' is unblocked.",
+                      Fore.RED + Style.BRIGHT + "Otherwise, make sure you have an internet connection.", sep="\n")
                 printException()
-                print("Press enter to continue.")
+                print(Fore.RED + Style.BRIGHT + "Press enter to continue.")
                 input()
                 continue
             
@@ -3216,7 +4621,7 @@ while True:
             else:
                 sunset_time = "Unavailable"
                 logger.debug("sunset_time: %s" % sunset_time)
-                
+        spinner.start(text="Loading astronomy data...")
         moon_percentIlluminated = str(astronomy_json['moon_phase']['percentIlluminated'])
         moon_age = str(astronomy_json['moon_phase']['ageOfMoon'])
         moon_phase = astronomy_json['moon_phase']['phaseofMoon']
@@ -3332,48 +4737,57 @@ while True:
         else:
             moonset_time = "Unavailable"
             logger.debug("moonset_time: %s" % moonset_time)
-        
+        spinner.stop()
         logger.info("Printing data...")
         print("")
-        print(Fore.YELLOW + "Here's the detailed sun/moon data for: " +
+        print(Fore.YELLOW + Style.BRIGHT + "Here's the detailed sun/moon data for: " + Style.BRIGHT +
               Fore.CYAN + str(location))
         print("")
-        print(Fore.YELLOW + "Sunrise time: " + Fore.CYAN + sunrise_time)
-        print(Fore.YELLOW + "Sunset time: " + Fore.CYAN + sunset_time)
-        print(Fore.YELLOW + "Moonrise time: " + Fore.CYAN + moonrise_time)
-        print(Fore.YELLOW + "Moonset time: " + Fore.CYAN + moonset_time)
+        print(Fore.YELLOW + Style.BRIGHT +  "Sunrise time: " + Fore.CYAN + Style.BRIGHT +  sunrise_time)
+        print(Fore.YELLOW + Style.BRIGHT +  "Sunset time: " + Fore.CYAN + Style.BRIGHT +  sunset_time)
+        print(Fore.YELLOW + Style.BRIGHT +  "Moonrise time: " + Fore.CYAN + Style.BRIGHT +  moonrise_time)
+        print(Fore.YELLOW + Style.BRIGHT +  "Moonset time: " + Fore.CYAN + Style.BRIGHT +  moonset_time)
         print("")
-        print(Fore.YELLOW + "Percent of the moon illuminated: "
-              + Fore.CYAN + moon_percentIlluminated + "%")
-        print(Fore.YELLOW + "Age of the moon: " + Fore.CYAN +
+        print(Fore.YELLOW + Style.BRIGHT +  "Percent of the moon illuminated: "
+              + Fore.CYAN + Style.BRIGHT +  moon_percentIlluminated + "%")
+        print(Fore.YELLOW + Style.BRIGHT +  "Age of the moon: " + Fore.CYAN + Style.BRIGHT +
               moon_age + " days")
-        print(Fore.YELLOW + "Phase of the moon: " + Fore.CYAN +
+        print(Fore.YELLOW + Style.BRIGHT +  "Phase of the moon: " + Fore.CYAN + Style.BRIGHT +
               moon_phase)
 #<--- Sundata is above | Historical data is below --->
     elif moreoptions == "8":
-        print(Fore.RESET + "To show historical data for this location, please enter a date to show the data.")
-        print("The date must be in the format YYYYMMDD.")
-        print("E.g: If I wanted to see the weather for February 15, 2013, you'd enter 20130215.")
-        print("Input the desired date below.")
+        # Even with the improved data checking, Wunderground still entirely removes keys for invalid data for PWSes.
+        if pws_query is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Sorry! Looking at historical data for PWS queries isn't supported yet.",
+                  Fore.YELLOW + Style.BRIGHT + "You'll be able to look at historical data for PWS queries in PyWeather 0.6.4 beta.", sep="\n")
+            continue
+        print(Fore.YELLOW + Style.BRIGHT + "To show historical data for this location, please enter a date to show the data.")
+        print(Fore.YELLOW + Style.BRIGHT + "The date must be in the format YYYYMMDD.")
+        print(Fore.YELLOW + Style.BRIGHT + "E.g: If I wanted to see the weather for February 15, 2013, you'd enter 20130215.")
+        print(Fore.YELLOW + Style.BRIGHT + "Input the desired date below.")
         historical_input = input("Input here: ").lower()
         logger.debug("historical_input: %s" % historical_input)
-        print(Fore.RED + "Loading...")
+        spinner.start(text="Loading historical weather data...")
         historical_loops = 0
         historical_totalloops = 0
         logger.debug("historical_loops: %s ; historical_totalloops: %s"
                      % (historical_loops, historical_totalloops))
-        historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historical_input +  '/q/' + latstr + "," + lonstr + '.json'
+        if pws_available is False:
+            historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historical_input + '/q/' + latstr + "," + lonstr + '.json'
+        elif pws_available is True:
+            historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historical_input + '/q/' + locinput.lower() + '.json'
         logger.debug("historicalurl: %s" % historicalurl)
         
         historical_skipfetch = False
         logger.debug("historical_skipfetch: %s" % historical_skipfetch)
 
-        # Don't get scared. Payload is the cached data.
-        for historical_cacheddate, payload in historical_cache.items():
+        # Find out if we already have cached data for the date as inputted
+        for historical_cacheddate, historical_data in historical_cache.items():
             logger.debug("historical_cacheddate: %s")
+            # If we have a match, make the historical_json file equal "historical_data" as defined above.
             if historical_cacheddate == historical_input:
                 print(Fore.RED + "Loading cached data...")
-                historical_json = payload
+                historical_json = historical_data
                 if jsonVerbosity == True:
                     logger.debug("historical_json: %s" % historical_json)
                 historical_skipfetch = True
@@ -3383,29 +4797,33 @@ while True:
                 historical_skipfetch = False
                 logger.debug("historical_skipfetch: %s" % historical_skipfetch)
                 
-                
+        # No cached data, fetch the file.
         if historical_skipfetch == False:
             try:
                 historicalJSON = requests.get(historicalurl)
                 logger.debug("historicalJSON acquired, end response: %s" % historicalJSON)
             except:
-                print("When attempting to fetch historical data, PyWeather ran into",
-                      "an error. If you're on a network with a filter make sure that",
-                      "'api.wunderground.com' is unblocked. Otherwise, make sure that",
-                      "you have an internet connection, and that your DeLorean works.",
+                spinner.fail(text="Failed to load historical weather data!")
+                print("")
+                print(Fore.RED + Style.BRIGHT + "When attempting to fetch historical data, PyWeather ran into",
+                      Fore.RED + Style.BRIGHT + "an error. If you're on a network with a filter make sure that",
+                      Fore.RED + Style.BRIGHT + "'api.wunderground.com' is unblocked. Otherwise, make sure that",
+                      Fore.RED + Style.BRIGHT + "you have an internet connection, and that your DeLorean works.",
                       sep="\n")
                 printException()
-                print("Press enter to continue.")
+                print(Fore.RED + Style.BRIGHT + "Press enter to continue.")
                 input()
                 continue
         
             try:
                 historical_json = json.loads(historicalJSON.text)
             except json.decoder.JSONDecodeError:
-                print(Fore.RED + "There was an issue parsing the data for the date requested. Try requesting another date."
+                print(Fore.RED + Style.BRIGHT + "There was an issue parsing the data for the date requested. Try requesting another date."
                       + Fore.RESET)
                 continue
-
+            # Append the cache date into the historical cache (if it wasn't cached already). Set the data as the json.
+            # Example: If we're getting the data for 1/1/2017 (20170101), historical_input is 20170101, and we're appending a 'section'
+            # Called 20170101, the key being the entire historical json file.
             historical_cache[historical_input] = historical_json
             logger.debug("Appended new key to historal cache: %s with value historical json"
                          % historical_input)
@@ -3415,143 +4833,312 @@ while True:
                 logger.debug("Loaded 1 JSON.")
         historical_date = historical_json['history']['date']['pretty']
         if historical_date == "":
-            print(Fore.RED + "The date you entered was invalid. Please try selecting another date."
+            print(Fore.RED + Style.BRIGHT + "The date you entered was invalid. Please try selecting another date."
                   + Fore.RESET)
             continue
+        spinner.stop()
         print("")
-        print(Fore.YELLOW + "Here's the historical weather for " + Fore.CYAN +
-              str(location) + Fore.YELLOW + " on "
-              + Fore.CYAN + historical_date)
+        print(Fore.YELLOW + Style.BRIGHT + "Here's the historical weather for " + Fore.CYAN + Style.BRIGHT +
+              str(location) + Fore.YELLOW + Style.BRIGHT + " on "
+              + Fore.CYAN + Style.BRIGHT + historical_date)
         logger.debug("historical_date: %s" % historical_date)
         for data in historical_json['history']['dailysummary']:
             print("")
             # historicals: historical Summary
             #                         ^
+
+            # Declare show variables - we'll need 17 of them!
+            historicals_showMinTemp = True
+            historicals_showAvgTemp = True
+            logger.debug("historicals_showMinTemp: %s ; historicals_showAvgTemp: %s" %
+                         (historicals_showMinTemp, historicals_showAvgTemp))
+            historicals_showMaxTemp = True
+            historicals_showMinDewPoint = True
+            logger.debug("historicals_showMaxTemp: %s ; historicals_showMinDewPoint: %s" %
+                         (historicals_showMaxTemp, historicals_showMinDewPoint))
+            historicals_showAvgDewPoint = True
+            historicals_showMaxDewPoint = True
+            logger.debug("historicals_showAvgDewPoint: %s ; historicals_showMaxDewPoint: %s" %
+                         (historicals_showAvgDewPoint, historicals_showMaxDewPoint))
+            historicals_showMinVis = True
+            historicals_showAvgVis = True
+            logger.debug("historicals_showMinVis: %s ; historicals_showAvgVis: %s" %
+                         (historicals_showMinVis, historicals_showAvgVis))
+            historicals_showMaxVis = True
+            historicals_showMinPress = True
+            logger.debug("historicals_showMaxVis: %s ; historicals_showMinPress: %s" %
+                         (historicals_showMaxVis, historicals_showMinPress))
+            historicals_showAvgPress = True
+            historicals_showMaxPress = True
+            logger.debug("historicals_showAvgPress: %s ; historicals_showMaxPress: %s" %
+                         (historicals_showAvgPress, historicals_showMaxPress))
+            historicals_showHumidity = True
+            historicals_showMinWind = True
+            logger.debug("historicals_showHumidity: %s ; historicals_showMinWind: %s" %
+                         (historicals_showHumidity, historicals_showMinWind))
+            historicals_showAvgWind = True
+            historicals_showMaxWind = True
+            logger.debug("historicals_showAvgWind: %s ; historicals_showMaxWind: %s" %
+                         (historicals_showAvgWind, historicals_showMaxWind))
+            historicals_showWindDir = True
+            logger.debug("historicals_showWindDir: %s" % historicals_showWindDir)
             historicals_avgTempF = str(data['meantempi'])
             historicals_avgTempC = str(data['meantempm'])
-            historicals_avgDewpointF = str(data['meandewpti'])
-            historicals_avgDewpointC = str(data['meandewptm'])
             logger.debug("historicals_avgTempF: %s ; historicals_avgTempC: %s" %
                          (historicals_avgTempF, historicals_avgTempC))
+            # With historical summary, Wunderground doesn't remove the key, but instead puts nothing ("") as the data.
+            # Check for "" for each data type. If the data turns out to be "", don't show the data type.
+            if historicals_avgTempF == "" or historicals_avgTempC == "":
+                logger.info("historicals_avgTempF is '' or historicals_avgTempC is ''.")
+                historicals_showAvgTemp = False
+                logger.debug("historicals_showAvgTemp: %s" % historicals_showAvgTemp)
+
+            historicals_avgDewpointF = str(data['meandewpti'])
+            historicals_avgDewpointC = str(data['meandewptm'])
             logger.debug("historicals_avgDewpointF: %s ; historicals_avgDewpointC: %s" %
                          (historicals_avgDewpointF, historicals_avgDewpointC))
+            if historicals_avgDewpointF == "" or historicals_avgDewpointC == "":
+                logger.info("historicals_avgDewpointF is '' or historicals_avgDewpointC is ''.")
+                historicals_showAvgDewPoint = False
+                logger.debug("historicals_showAvgDewPoint: %s" % historicals_showAvgDewPoint)
+
             historicals_avgPressureMB = str(data['meanpressurem'])
             historicals_avgPressureInHg = str(data['meanpressurei'])
-            historicals_avgWindSpeedMPH = str(data['meanwindspdi'])
-            historicals_avgWindSpeedKPH = str(data['meanwindspdm'])
             logger.debug("historicals_avgPressureMB: %s ; historicals_avgPressureInHg: %s" %
                          (historicals_avgPressureMB, historicals_avgPressureInHg))
+            if historicals_avgPressureMB == "" or historicals_avgPressureInHg == "":
+                logger.info("historicals_avgPressureMB is '' or historicals_avgPressureInHg is ''.")
+                historicals_showAvgPress = False
+                logger.debug("historicals_showAvgPress: %s" % historicals_showAvgPress)
+
+            historicals_avgWindSpeedMPH = str(data['meanwindspdi'])
+            historicals_avgWindSpeedKPH = str(data['meanwindspdm'])
             logger.debug("historicals_avgWindSpeedMPH: %s ; historicals_avgWindSpeedKPH: %s" %
                          (historicals_avgWindSpeedMPH, historicals_avgWindSpeedKPH))
+            if historicals_avgWindSpeedMPH == "" or historicals_avgWindSpeedKPH == "":
+                logger.info("historicals_avgWindSpeedMPH is '' or historicals_avgWindSpeedKPH is ''.")
+                historicals_showAvgWind = False
+                logger.debug("historicals_showAvgWind: %s" % historicals_showAvgWind)
+
             historicals_avgWindDegrees = str(data['meanwdird'])
             historicals_avgWindDirection = data['meanwdire']
+            logger.debug("historicals_avgWindDegrees: %s ; historicals_avgWindDirection: %s" %
+                         (historicals_avgWindDegrees, historicals_avgWindDirection))
+            if historicals_avgWindDegrees == "" or historicals_avgWindDirection == "":
+                logger.info("historicals_avgWindDegrees is '' or historicals_avgWindDirection is ''.")
+                historicals_showWindDir = False
+                logger.debug("historicals_showWindDir: %s" % historicals_showWindDir)
+
+
             historicals_avgVisibilityMI = str(data['meanvisi'])
             historicals_avgVisibilityKM = str(data['meanvism'])
-            logger.debug("historicals_avgWindDegrees: %s ; historicals_avgWindDirection: %s" % 
-                         (historicals_avgWindDegrees, historicals_avgWindDirection))
             logger.debug("historicals_avgVisibilityMI: %s ; historicals_avgVisibilityKM: %s" %
                          (historicals_avgVisibilityMI, historicals_avgVisibilityKM))
-            historicals_maxHumidity = int(data['maxhumidity'])
-            historicals_minHumidity = int(data['minhumidity'])
-            logger.debug("historicals_maxHumidity: %s ; historicals_minHumidity: %s" %
-                         (historicals_maxHumidity, historicals_minHumidity))
+            if historicals_avgVisibilityMI == "" or historicals_avgVisibilityKM == "":
+                logger.info("historicals_avgVisibilityMI is '' or historicals_avgVisibilityKM is ''.")
+                historicals_showAvgVis = False
+                logger.debug("historicals_showAvgVis: %s" % historicals_showAvgVis)
+
+            # Check for good humidity data. if there is good humidity data, we then will do our
+            # nieve way of finding the average humidity. If there is no good data, don't show humidity
+            # during the summary screen, and don't do the average humidity code.
+
+
+            try:
+                historicals_maxHumidity = int(data['maxhumidity'])
+                historicals_minHumidity = int(data['minhumidity'])
+                logger.debug("historicals_maxHumidity: %s ; historicals_minHumidity: %s" %
+                             (historicals_maxHumidity, historicals_minHumidity))
+            except ValueError:
+                historicals_showHumidity = False
+                logger.debug("historicals_showHumidity: %s" % historicals_showHumidity)
             # This is a really nieve way of calculating the average humidity. Sue me.
             # In reality, WU spits out nothing for average humidity.
-            historicals_avgHumidity = (historicals_maxHumidity + 
-                                       historicals_minHumidity)
-            historicals_avgHumidity = (historicals_avgHumidity / 2)
-            logger.debug("historicals_avgHumidity: %s" % historicals_avgHumidity)
-            historicals_maxHumidity = str(data['maxhumidity'])
-            historicals_minHumidity = str(data['minhumidity'])
-            historicals_avgHumidity = str(historicals_avgHumidity)
-            logger.info("Converted 3 vars to str.")
+            if historicals_showHumidity is True:
+                logger.info("historicals_showHumidity is True.")
+                historicals_avgHumidity = (historicals_maxHumidity +
+                                           historicals_minHumidity)
+                historicals_avgHumidity = (historicals_avgHumidity / 2)
+                logger.debug("historicals_avgHumidity: %s" % historicals_avgHumidity)
+                historicals_maxHumidity = str(data['maxhumidity'])
+                historicals_minHumidity = str(data['minhumidity'])
+                historicals_avgHumidity = str(historicals_avgHumidity)
+                logger.info("Converted 3 vars to str.")
+
             historicals_maxTempF = str(data['maxtempi'])
             historicals_maxTempC = str(data['maxtempm'])
-            historicals_minTempF = str(data['mintempi'])
-            historicals_minTempC = str(data['mintempm'])
             logger.debug("historicals_maxTempF: %s ; historicals_maxTempC: %s" %
                          (historicals_maxTempF, historicals_maxTempC))
+
+            if historicals_maxTempF == "" or historicals_maxTempC == "":
+                logger.info("historicals_maxTempF is '' or historicals_maxTempC is ''.")
+                historicals_showMaxTemp = False
+                logger.debug("historicals_showMaxTemp: %s" % historicals_showMaxTemp)
+
+            historicals_minTempF = str(data['mintempi'])
+            historicals_minTempC = str(data['mintempm'])
             logger.debug("historicals_minTempF: %s ; historicals_minTempC: %s" %
                          (historicals_minTempF, historicals_minTempC))
+
+            if historicals_minTempF == "" or historicals_minTempC == "":
+                logger.info("historicals_minTempF is '' or historicals_minTempC is ''.")
+                historicals_showMinTemp = False
+                logger.debug("historicals_showMinTemp: %s" % historicals_showMinTemp)
+
             historicals_maxDewpointF = str(data['maxdewpti'])
             historicals_maxDewpointC = str(data['maxdewptm'])
-            historicals_minDewpointF = str(data['mindewpti'])
-            historicals_minDewpointC = str(data['mindewptm'])
             logger.debug("historicals_maxDewpointF: %s ; historicals_maxDewpointC: %s" %
                          (historicals_maxDewpointF, historicals_maxDewpointC))
+
+            if historicals_maxDewpointF == "" or historicals_maxDewpointC == "":
+                logger.info("historicals_maxDewpointF is '' or historicals_maxDewpointC is ''.")
+                historicals_showMaxDewPoint = False
+                logger.debug("historicals_showMaxDewPoint: %s" % historicals_showMaxDewPoint)
+
+            historicals_minDewpointF = str(data['mindewpti'])
+            historicals_minDewpointC = str(data['mindewptm'])
             logger.debug("historicals_minDewpointF: %s ; historicals_minDewpointC: %s" %
                          (historicals_minDewpointF, historicals_minDewpointC))
+
+            if historicals_minDewpointF == "" or historicals_minDewpointC == "":
+                logger.info("historicals_minDewpointF is '' or historicals_minDewpointC is ''.")
+                historicals_showMinDewPoint = False
+                logger.debug("historicals_showMinDewPoint: %s" % historicals_showMinDewPoint)
+
             historicals_maxPressureInHg = str(data['maxpressurei'])
             historicals_maxPressureMB = str(data['maxpressurem'])
-            historicals_minPressureInHg = str(data['minpressurei'])
-            historicals_minPressureMB = str(data['minpressurem'])
             logger.debug("historicals_maxPressureInHg: %s ; historicals_maxPressureMB: %s" %
                          (historicals_maxPressureInHg, historicals_maxPressureMB))
+
+            if historicals_maxPressureInHg == "" or historicals_maxPressureMB == "":
+                logger.info("historicals_maxPressureInHg is '' or historicals_maxPressureMB is ''.")
+                historicals_showMaxPress = False
+                logger.debug("historicals_showMaxPress: %s" % historicals_showMaxPress)
+
+            historicals_minPressureInHg = str(data['minpressurei'])
+            historicals_minPressureMB = str(data['minpressurem'])
             logger.debug("historicals_minPressureInHg: %s ; historicals_minPressureMB: %s" %
                          (historicals_minPressureInHg, historicals_minPressureMB))
+
+            if historicals_minPressureInHg == "" or historicals_minPressureMB == "":
+                logger.info("historicals_minPressureInHg is '' or historicals_minPressureMB is ''.")
+                historicals_showMinPress = False
+                logger.debug("historicals_showMinPress: %s" % historicals_showMinPress)
+
             historicals_maxWindMPH = str(data['maxwspdi'])
             historicals_maxWindKPH = str(data['maxwspdm'])
-            historicals_minWindMPH = str(data['minwspdi'])
-            historicals_minWindKPH = str(data['minwspdm'])
             logger.debug("historicals_maxWindMPH: %s ; historicals_maxWindKPH: %s" %
                          (historicals_maxWindMPH, historicals_maxWindMPH))
+
+            if historicals_maxWindMPH == "" or historicals_maxWindKPH == "":
+                logger.info("historicals_maxWindMPH is '' or historicals_maxWindKPH is ''.")
+                historicals_showMaxWind = False
+                logger.debug("historicals_showMaxWind: %s" % historicals_showMaxWind)
+
+            historicals_minWindMPH = str(data['minwspdi'])
+            historicals_minWindKPH = str(data['minwspdm'])
             logger.debug("historicals_minWindMPH: %s ; historicals_minWindKPH: %s" %
                          (historicals_minWindMPH, historicals_minWindKPH))
+
+            if historicals_minWindMPH == "" or historicals_minWindKPH == "":
+                logger.info("historicals_minWindMPH is '' or historicals_minWindKPH is ''.")
+                historicals_showMinWind = False
+                logger.debug("historicals_showMinWind: %s" % historicals_showMinWind)
+
             historicals_maxVisibilityMI = str(data['maxvisi'])
             historicals_maxVisibilityKM = str(data['maxvism'])
-            historicals_minVisibilityMI = str(data['minvisi'])
-            historicals_minVisibilityKM = str(data['minvism'])
             logger.debug("historicals_maxVisibilityMI: %s ; historicals_maxVisibilityKM: %s" %
                          (historicals_maxVisibilityMI, historicals_maxVisibilityKM))
+
+            if historicals_maxVisibilityMI == "" or historicals_maxVisibilityKM == "":
+                logger.info("historicals_maxVisibilityMI is '' or historicals_maxVisibilityKM is ''.")
+                historicals_showMaxVis = False
+                logger.debug("historicals_showMaxVis: %s" % historicals_showMaxVis)
+
+            historicals_minVisibilityMI = str(data['minvisi'])
+            historicals_minVisibilityKM = str(data['minvism'])
             logger.debug("historicals_minVisibilityMI: %s ; historicals_minVisibilityKM: %s" %
                          (historicals_minVisibilityMI, historicals_minVisibilityKM))
+
+            if historicals_minVisibilityMI == "" or historicals_minVisibilityKM == "":
+                logger.info("historicals_minVisibilityMI is '' or historicals_minVisibilityKM is ''.")
+                historicals_showMinVis = False
+                logger.debug("historicals_showMinVis: %s" % historicals_showMinVis)
+
             historicals_precipMM = str(data['precipm'])
             historicals_precipIN = str(data['precipi'])
             logger.debug("historicals_precipMM: %s ; historicals_precipIN: %s" %
                          (historicals_precipMM, historicals_precipIN))
 
-        print(Fore.YELLOW + "Here's the summary for the day.")
-        print(Fore.YELLOW + "Minimum Temperature: " + Fore.CYAN + historicals_minTempF
-              + "°F (" + historicals_minTempC + "°C)")
-        print(Fore.YELLOW + "Average Temperature: " + Fore.CYAN + historicals_avgTempF
-              + "°F (" + historicals_avgTempC + "°C)")
-        print(Fore.YELLOW + "Maxmimum Temperature: " + Fore.CYAN + historicals_maxTempF
-              + "°F (" + historicals_maxTempC + "°C)")
-        print(Fore.YELLOW + "Minimum Dew Point: " + Fore.CYAN + historicals_minDewpointF
-              + "°F (" + historicals_minDewpointC + "°C)")
-        print(Fore.YELLOW + "Average Dew Point: " + Fore.CYAN + historicals_avgDewpointF
-              + "°F (" + historicals_avgDewpointC + "°C)")
-        print(Fore.YELLOW + "Maximum Dew Point: " + Fore.CYAN + historicals_maxDewpointF
-              + "°F (" + historicals_maxDewpointC + "°C)")
-        print(Fore.YELLOW + "Minimum Humidity: " + Fore.CYAN + historicals_minHumidity
-              + "%")
-        print(Fore.YELLOW + "Average Humidity: " + Fore.CYAN + historicals_avgHumidity
-              + "%")
-        print(Fore.YELLOW + "Maximum Humidity: " + Fore.CYAN + historicals_maxHumidity
-              + "%")
-        print(Fore.YELLOW + "Minimum Wind Speed: " + Fore.CYAN + historicals_minWindMPH
-              + " mph (" + historicals_minWindKPH + " kph)")
-        print(Fore.YELLOW + "Average Wind Speed: " + Fore.CYAN + historicals_avgWindSpeedMPH
-              + " mph (" + historicals_avgWindSpeedKPH + " kph)")
-        print(Fore.YELLOW + "Maximum Wind Speed: " + Fore.CYAN + historicals_maxWindMPH
-              + " mph (" + historicals_maxWindKPH + " kph)")
-        print(Fore.YELLOW + "Minimum Visibility: " + Fore.CYAN + historicals_minVisibilityMI
-              + " mi (" + historicals_minVisibilityKM + " kph)")
-        print(Fore.YELLOW + "Average Visibility: " + Fore.CYAN + historicals_avgVisibilityMI
-              + " mi (" + historicals_avgVisibilityKM + " kph)")
-        print(Fore.YELLOW + "Maximum Visibility: " + Fore.CYAN + historicals_maxVisibilityMI
-              + " mi (" + historicals_maxVisibilityKM + " kph)")
-        print(Fore.YELLOW + "Minimum Pressure: " + Fore.CYAN + historicals_minPressureInHg
-              + " inHg (" + historicals_minPressureMB + " mb)")
-        print(Fore.YELLOW + "Average Pressure: " + Fore.CYAN + historicals_avgPressureInHg
-              + " inHg (" + historicals_avgPressureMB + " mb)")
-        print(Fore.YELLOW + "Maximum Pressure: " + Fore.CYAN + historicals_maxPressureInHg
-              + " inHg (" + historicals_maxPressureMB + " mb)")
-        print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + historicals_precipIN
-              + " in (" + historicals_precipMM + "mb)")
+
+            # Check for invalid precip data - Don't show it if it equals "T".
+            historicals_showPrecipData = True
+            logger.debug("historicals_showPrecipData: %s" % historicals_showPrecipData)
+            if historicals_precipIN == "T":
+                logger.info("historicals_precipIN is 'T'.")
+                historicals_showPrecipData = False
+                logger.debug("historicals_showPrecipData: %s" % historicals_showPrecipData)
+
+
+        print(Fore.YELLOW + Style.BRIGHT + "Here's the summary for the day.")
+        if historicals_showMinTemp is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Temperature: " + Fore.CYAN + Style.BRIGHT + historicals_minTempF
+                  + "°F (" + historicals_minTempC + "°C)")
+        if historicals_showAvgTemp is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Temperature: " + Fore.CYAN + Style.BRIGHT + historicals_avgTempF
+                  + "°F (" + historicals_avgTempC + "°C)")
+        if historicals_showMaxTemp is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maxmimum Temperature: " + Fore.CYAN + Style.BRIGHT + historicals_maxTempF
+                  + "°F (" + historicals_maxTempC + "°C)")
+        if historicals_showMinDewPoint is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Dew Point: " + Fore.CYAN + Style.BRIGHT + historicals_minDewpointF
+                  + "°F (" + historicals_minDewpointC + "°C)")
+        if historicals_showAvgDewPoint is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Dew Point: " + Fore.CYAN + Style.BRIGHT + historicals_avgDewpointF
+                  + "°F (" + historicals_avgDewpointC + "°C)")
+        if historicals_showMaxDewPoint is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Dew Point: " + Fore.CYAN + Style.BRIGHT + historicals_maxDewpointF
+                  + "°F (" + historicals_maxDewpointC + "°C)")
+        if historicals_showHumidity is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Humidity: " + Fore.CYAN + Style.BRIGHT + historicals_minHumidity
+                  + "%")
+            print(Fore.YELLOW + Style.BRIGHT + "Average Humidity: " + Fore.CYAN + Style.BRIGHT + historicals_avgHumidity
+                  + "%")
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Humidity: " + Fore.CYAN + Style.BRIGHT + historicals_maxHumidity
+                  + "%")
+        if historicals_showMinWind is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Wind Speed: " + Fore.CYAN + Style.BRIGHT + historicals_minWindMPH
+                  + " mph (" + historicals_minWindKPH + " kph)")
+        if historicals_showAvgWind is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Wind Speed: " + Fore.CYAN + Style.BRIGHT + historicals_avgWindSpeedMPH
+                  + " mph (" + historicals_avgWindSpeedKPH + " kph)")
+        if historicals_showMaxWind is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Wind Speed: " + Fore.CYAN + Style.BRIGHT + historicals_maxWindMPH
+                  + " mph (" + historicals_maxWindKPH + " kph)")
+        if historicals_showMinVis is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Visibility: " + Fore.CYAN + Style.BRIGHT + historicals_minVisibilityMI
+                  + " mi (" + historicals_minVisibilityKM + " kph)")
+        if historicals_showAvgVis is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Visibility: " + Fore.CYAN + Style.BRIGHT + historicals_avgVisibilityMI
+                  + " mi (" + historicals_avgVisibilityKM + " kph)")
+        if historicals_showMaxVis is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Visibility: " + Fore.CYAN + Style.BRIGHT + historicals_maxVisibilityMI
+                  + " mi (" + historicals_maxVisibilityKM + " kph)")
+        if historicals_showMinPress is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Pressure: " + Fore.CYAN + Style.BRIGHT + historicals_minPressureInHg
+                  + " inHg (" + historicals_minPressureMB + " mb)")
+        if historicals_showAvgPress is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Pressure: " + Fore.CYAN + Style.BRIGHT + historicals_avgPressureInHg
+                  + " inHg (" + historicals_avgPressureMB + " mb)")
+        if historicals_showMaxPress is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Pressure: " + Fore.CYAN + Style.BRIGHT + historicals_maxPressureInHg
+                  + " inHg (" + historicals_maxPressureMB + " mb)")
+        if historicals_showPrecipData is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Total Precipitation: " + Fore.CYAN + Style.BRIGHT + historicals_precipIN
+                  + " in (" + historicals_precipMM + " mm)")
         print("")
-        print(Fore.RED + "To view hourly historical data, please press enter.")
-        print(Fore.RED + "If you want to return to the main menu, press Control + C.")
+        print(Fore.RED + Style.BRIGHT + "To view hourly historical data, please press enter.")
+        print(Fore.RED + Style.BRIGHT + "If you want to return to the main menu, press Control + C.")
         try:
             historicalcontinue = input("Input here: ").lower()
         except KeyboardInterrupt:
@@ -3568,152 +5155,237 @@ while True:
         for data in historical_json['history']['observations']:
             logger.info("We're on iteration %s/%s. User iteration limit: %s."
                         % (historical_totalloops, historicalhourlyLoops, user_loopIterations))
+            # Define all the show variables up here.
+            # Do note that some of these are here for future use.
+            historical_showConditions = True
+            historical_showTemp = True
+            historical_showDewpoint = True
+            historical_showWindSpeed = True
+            historical_showWindGust = True
+            historical_showWindDirection = True
+            historical_showVis = True
+            historical_showWindChill = True
+            historical_showHeatIndex = True
+            historical_showPressure = True
+            historical_showPrecip = True
+            logger.debug("historical_showConditions: %s ; historical_showTemp: %s" %
+                         (historical_showConditions, historical_showTemp))
+            logger.debug("historcial_showDewpoint: %s ; historical_showWindSpeed: %s" %
+                         (historical_showDewpoint, historical_showWindSpeed))
+            logger.debug("historical_showWindGust: %s ; historical_showWindDirection: %s" %
+                         (historical_showWindGust, historical_showWindDirection))
+            logger.debug("historical_showVis: %s ; historical_showWindChill: %s" %
+                         (historical_showVis, historical_showWindChill))
+            logger.debug("historical_showPressure: %s ; historical_showPrecip: %s" %
+                         (historical_showPressure, historical_showPrecip))
             historical_time = data['date']['pretty']
+            logger.debug("historical_time: %s" % historical_time)
             historical_tempF = str(data['tempi'])
             historical_tempC = str(data['tempm'])
+            logger.debug("historical_tempF: %s ; historical_tempC: %s" %
+                         (historical_tempF, historical_tempC))
+            if historical_tempF == "-9999" or historical_tempC == "-9999" or historical_tempF == "" or historical_tempC == "":
+                logger.info("historical_tempF is '-9999' or historical_tempC is '-9999' or historical_tempF is '' or historical_tempC is ''.")
+                historical_showTemp = False
+                logger.debug("historical_showTemp: %s" % historical_showTemp)
+
             historical_dewpointF = str(data['dewpti'])
-            logger.debug("historical_time: %s ; historical_tempF: %s"
-                         % (historical_time, historical_tempF))
-            logger.debug("historical_tempC: %s ; historical_dewpointF: %s"
-                         % (historical_tempC, historical_dewpointF))
             historical_dewpointC = str(data['dewptm'])
+            logger.debug("historical_dewpointF: %s ; historical_dewpointC: %s" %
+                         (historical_dewpointF, historical_dewpointC))
+
+            if historical_dewpointF == "-9999" or historical_dewpointC == "-9999" or historical_dewpointF == "" or historical_dewpointC == "":
+                logger.info("historical_dewpointF is '-9999' or historical_dewpointC is '-9999' or historical_dewpointF is '' or historical_dewpointC is ''.")
+                historical_showDewpoint = False
+                logger.debug("historical_showDewpoint: %s" % historical_showDewpoint)
             historical_windspeedKPH = str(data['wspdm'])
             historical_windspeedMPH = str(data['wspdi'])
+            logger.debug("historical_windspeedKPH: %s ; historical_windspeedMPH: %s" %
+                         (historical_windspeedKPH, historical_windspeedMPH))
+
+            # Check for bad wind data in the hourly - it's "".
+
+            if historical_windspeedKPH == "" or historical_windspeedKPH == "-9999.0" or historical_windspeedMPH == "" or historical_windspeedMPH == "-9999.0":
+                logger.info("historical_windspeedKPH is '' or historical_windspeedKPH is '-9999.0' or historical_windspeedMPH is '' or historical_windspeedMPH is '-9999.0")
+                historical_showWindSpeed = False
+                logger.debug("historical_showWindSpeed: %s" % historical_showWindSpeed)
+
             try:
                 historical_gustcheck = float(data['wgustm'])
             except ValueError:
                 printException_loggerwarn()
-                historical_gustcheck = -9999
-            logger.debug("historical_dewpointC: %s ; historical_windspeedKPH: %s"
-                         % (historical_dewpointC, historical_windspeedKPH))
-            logger.debug("historical_windspeedMPH: %s ; historical_gustcheck: %s"
-                         % (historical_windspeedMPH, historical_gustcheck))
-            if historical_gustcheck == -9999:
-                historical_windgustdata = False
-                logger.warn("Wind gust data is not present! historical_windgustdata: %s"
-                            % historical_windgustdata)
+                historical_showWindGust = False
+                logger.debug("historical_showWindGust: %s" % historical_showWindGust)
+
+
+            if historical_showWindGust is False:
+                logger.warning("Wind gust data is not available!")
             else:
-                historical_windgustdata = True
                 historical_windgustKPH = str(data['wgustm'])
                 historical_windgustMPH = str(data['wgusti'])
                 logger.info("Wind gust data is present.")
                 logger.debug("historical_windgustKPH: %s ; historical_windgustMPH: %s"
                              % (historical_windgustKPH, historical_windgustMPH))
+
+            # Do yet ANOTHER check for data.
+            if historical_showWindGust is True:
+                logger.info("historical_showWindGust: %s" % historical_showWindGust)
+                if historical_windgustMPH == "-9999.0" or historical_windgustKPH == "-9999.0":
+                    logger.info("historical_windgustMPH is '-9999.0' or historical_windgustKPH is '-9999.0'.")
+                    historical_showWindGust = False
+                    logger.debug("historical_showWindGust")
+
             historical_windDegrees = str(data['wdird'])
             historical_windDirection = data['wdire']
-            historical_visibilityKM = str(data['vism'])
-            historical_visibilityMI = str(data['visi'])
             logger.debug("historical_windDegrees: %s ; historical_windDirection: %s"
                          % (historical_windDegrees, historical_windDirection))
+
+            if historical_windDegrees == "" or historical_windDirection == "":
+                logger.info("historical_windDegrees is '' or historical_windDirection is ''.")
+                historical_showWindDirection = False
+                logger.debug("historical_showWindDirection: %s" % historical_showWindDirection)
+
+            historical_visibilityKM = str(data['vism'])
+            historical_visibilityMI = str(data['visi'])
             logger.debug("historical_visibilityKM: %s ; historical_visibilityMI: %s"
                          % (historical_visibilityKM, historical_visibilityMI))
+
+            if historical_visibilityMI == "-9999.0" or historical_visibilityKM == "-9999.0" or historical_visibilityKM == "" or historical_visibilityMI == "":
+                logger.info("historical_visibilityMI is '-9999.0' or historical_visibilityKM is '-9999.0' or historical_visibilityKM is '' or historical_visibilityMI is ''.")
+                historical_showVis = False
+                logger.debug("historical_showVis: %s" % historical_showVis)
+
             historical_pressureMB = str(data['pressurem'])
             historical_pressureInHg = str(data['pressurei'])
-            historical_windchillcheck = float(data['windchillm'])
             logger.debug("historical_pressureMB: %s ; historical_pressureInHg: %s"
                          % (historical_pressureMB, historical_pressureInHg))
+
+            if historical_pressureMB == "-9999" or historical_pressureInHg == "-9999" or historical_pressureMB == "" or historical_pressureInHg == "":
+                logger.info("historical_pressureMB is '-9999' or historical_pressureInHg is '-9999' or historical_pressureMB is '' or historical_pressureInHg is ''.")
+                historical_showPressure = False
+                logger.debug("historical_showPressure: %s" % historical_showPressure)
+            historical_windchillcheck = float(data['windchillm'])
             logger.debug("historical_windchillcheck: %s" % historical_windchillcheck)
             if historical_windchillcheck == -999:
-                historical_windchilldata = False
-                logger.warn("Wind chill data is not present! historical_windchilldata: %s"
-                            % historical_windchilldata)
+                logger.info("historical_windchillcheck is '-999'.")
+                historical_showWindChill = False
+                logger.debug("historical_showWindChill: %s" % historical_showWindChill)
             else:
-                historical_windchilldata = True
+                historical_showWindChill = True
                 historical_windchillC = str(data['windchillm'])
                 historical_windchillF = str(data['windchilli'])
-                logger.info("Wind chill data is present.")
+                logger.info("Wind chill data is present. historical_showWindChill: %s" % historical_showWindChill)
                 logger.debug("historical_windchillC: %s ; historical_windchillF: %s"
                              % (historical_windchillC, historical_windchillF))
+
             historical_heatindexcheck = float(data['heatindexm'])
             logger.debug("historical_heatindexcheck: %s" % historical_heatindexcheck)
             if historical_heatindexcheck == -9999:
-                historical_heatindexdata = False
-                logger.warn("Heat index data is not present! historical_heatindexdata: %s"
-                            % historical_heatindexdata)
+                logger.info("historical_heatindexcheck is '-9999'.")
+                historical_showHeatIndex = False
+                logger.debug("historical_showHeatIndex: %s" % historical_showHeatIndex)
             else:
                 historical_heatindexdata = True
                 historical_heatindexC = str(data['heatindexm'])
                 historical_heatindexF = str(data['heatindexi'])
-                logger.info("Heat index data is present.")
+                logger.info("Heat index data is present. historical_heatindexdata: %s" % historical_heatindexdata)
                 logger.debug("historical_heatindexC: %s ; historical_heatindexF: %s"
                              % (historical_heatindexC, historical_heatindexF))
+
             try:
                 historical_precipMM = float(data['precipm'])
                 historical_precipIN = float(data['precipi'])
+                logger.debug("historical_precipMM: %s ; historical_precipIN: %s"
+                             % (historical_precipMM, historical_precipIN))
             except ValueError:
                 printException_loggerwarn()
-                historical_precipMM = -9999
-                historical_precipIN = -9999
-            logger.debug("historical_precipMM: %s ; historical_precipIN: %s"
-                         % (historical_precipMM, historical_precipIN))
-            if historical_precipMM == -9999:
-                historical_precipMM = "0.0"
-                logger.warn("historical_precipMM was -9999. It's now: %s"
-                            % historical_precipMM)
+                historical_showPrecip = False
+                logger.debug("historical_showPrecip: %s" % historical_showPrecip)
+
+            if historical_showPrecip is False:
+                logger.info("historical_showPrecip is False. We have no data.")
             else:
+                # Convert into strings for the sake of easy checking & display
                 historical_precipMM = str(historical_precipMM)
-                logger.info("historical_precipMM converted to str. It's now: %s"
-                            % historical_precipMM)
-            
-            if historical_precipIN == -9999:
-                historical_precipIN = "0.0"
-                logger.warn("historical_precipIN was -9999. It's now: %s"
-                            % historical_precipIN)
-            else:
                 historical_precipIN = str(historical_precipIN)
-                logger.info("historical_precipIN converted to str. It's now: %s"
-                            % historical_precipIN)
+                logger.info("Converted 2 vars into strings.")
+                logger.debug("historical_precipMM: %s ; historical_precipIN: %s" %
+                             (historical_precipMM, historical_precipIN))
+
+            # Data check for invalid precip data, given we didn't hit the traceback above.
+            if historical_showPrecip is True:
+                logger.info("historical_showPrecip is True.")
+                if historical_precipIN == "-9999.0" or historical_precipMM == "-9999.0":
+                    logger.info("historical_precipIN is '-9999.0' or historical_precipMM is '-9999.0'.")
+                    historical_showPrecip = False
+                    logger.debug("historical_showPrecip: %s" % historical_showPrecip)
             
             historical_condition = str(data['conds'])
             logger.debug("historical_condition: %s" % historical_condition)
+
+            if historical_condition == "" or historical_condition == "Unknown":
+                logger.info("historical_condition is '' or historical_condition is 'Unknown'.")
+                historical_showConditions = False
+                logger.debug("historical_showConditions: %s" % historical_showConditions)
             logger.info("Now printing weather data...")
             print("")
-            print(Fore.YELLOW + historical_time + ":")
-            print(Fore.YELLOW + "Conditions: " + Fore.CYAN + historical_condition)
-            print(Fore.YELLOW + "Temperature: " + Fore.CYAN + historical_tempF
-                  + " °F (" + historical_tempC + " °C)")
-            print(Fore.YELLOW + "Dew point: " + Fore.CYAN + historical_dewpointF
-                  + " °F (" + historical_dewpointC + " °C)")
-            print(Fore.YELLOW + "Wind speed: " + Fore.CYAN + historical_windspeedMPH
-                  + " mph (" + historical_windspeedKPH + " kph)")
-            if historical_windDirection == "Variable":
-                print(Fore.YELLOW + "Wind direction: " + Fore.CYAN + "Variable directions")
-            else:
-                print(Fore.YELLOW + "Wind direction: " + Fore.CYAN + historical_windDirection
-                      + " (" + historical_windDegrees + "°)")
-            if historical_windgustdata == True:
-                print(Fore.YELLOW + "Wind gusts: " + Fore.CYAN + historical_windgustMPH
+            print(Fore.YELLOW + Style.BRIGHT + historical_time + ":")
+            if historical_showConditions is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT + historical_condition)
+            if historical_showTemp is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + historical_tempF
+                      + "°F (" + historical_tempC + "°C)")
+            if historical_showDewpoint is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Dew point: " + Fore.CYAN + Style.BRIGHT + historical_dewpointF
+                      + "°F (" + historical_dewpointC + "°C)")
+            if historical_showWindSpeed is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Wind speed: " + Fore.CYAN + Style.BRIGHT + historical_windspeedMPH
+                      + " mph (" + historical_windspeedKPH + " kph)")
+            if historical_showWindDirection is True:
+                if historical_windDirection == "Variable":
+                    print(Fore.YELLOW + Style.BRIGHT + "Wind direction: " + Fore.CYAN + Style.BRIGHT + "Variable directions")
+                else:
+                    print(Fore.YELLOW + Style.BRIGHT + "Wind direction: " + Fore.CYAN + Style.BRIGHT + historical_windDirection
+                          + " (" + historical_windDegrees + "°)")
+            if historical_showWindGust is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Wind gusts: " + Fore.CYAN + Style.BRIGHT + historical_windgustMPH
                       + " mph (" + historical_windgustKPH + " kph)")
-            if historical_windchilldata == True:
-                print(Fore.YELLOW + "Wind chill: " + Fore.CYAN + historical_windchillF
-                      + " °F (" + historical_windchillC + " °C)")
-            if historical_heatindexdata == True:
-                print(Fore.YELLOW + "Heat index: " + Fore.CYAN + historical_heatindexF
-                      + " °F (" + historical_heatindexC + " °C)")
-            print(Fore.YELLOW + "Precipitation: " + Fore.CYAN + historical_precipIN
-                  + " in (" + historical_precipMM + " mm)")
+            if historical_showWindChill is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Wind chill: " + Fore.CYAN + Style.BRIGHT + historical_windchillF
+                      + "°F (" + historical_windchillC + "°C)")
+            if historical_showHeatIndex is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Heat index: " + Fore.CYAN + Style.BRIGHT + historical_heatindexF
+                      + "°F (" + historical_heatindexC + "°C)")
+            if historical_showPrecip is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Precipitation: " + Fore.CYAN + Style.BRIGHT + historical_precipIN
+                      + " in (" + historical_precipMM + " mm)")
+            if historical_showPressure is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Barometric pressure: " + Fore.CYAN + Style.BRIGHT + historical_pressureInHg
+                      + " inHg (" + historical_pressureMB + " mb)")
+            if historical_showVis is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Visibility: " + Fore.CYAN + Style.BRIGHT + historical_visibilityMI + " mi ("
+                      + historical_visibilityKM + " km)")
             historical_loops = historical_loops + 1
             historical_totalloops = historical_totalloops + 1
             logger.debug("historical_loops: %s ; historical_totalloops: %s"
                          % (historical_loops, historical_totalloops))
+            if user_showCompletedIterations == True:
+                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s"
+                      % (historical_totalloops, historicalhourlyLoops))
                          
             if historical_totalloops == historicalhourlyLoops:
                 logger.debug("Iterations now %s. Total iterations %s. Breaking..."
                              % (historical_totalloops, historicalhourlyLoops))
-                             
-            if user_showCompletedIterations == True:
-                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s"
-                      % (historical_totalloops, historicalhourlyLoops))
-                print(Fore.RESET)
+                break
                 
             if user_enterToContinue == True:
                 if historical_loops == user_loopIterations:
                     logger.info("Asking user to continue.")
                     try:
                         print("")
-                        print(Fore.RED + "Press enter to view the next", user_loopIterations
-                              , "iterations of historical weather information.")
-                        print("Otherwise, press Control + C to get back to the main menu.")
+                        print(Fore.RED + Style.BRIGHT + "Press enter to view the next " + str(user_loopIterations)
+                              + " iterations of historical weather information.")
+                        print(Fore.RED + Style.BRIGHT + "Otherwise, press Control + C to get back to the main menu.")
                         input()
                         historical_loops = 0
                         logger.info("Printing more weather data. historical_loops is now: %s"
@@ -3723,7 +5395,6 @@ while True:
                         break
 #<--- Historical is above | Tide is below --->
     elif moreoptions == "6":
-        print(Fore.RED + "Loading...")
         try:
             logger.debug("tidedata_prefetched: %s ; tide data cache time: %s" %
                          (tidedata_prefetched, time.time() - cachetime_tide))
@@ -3734,20 +5405,21 @@ while True:
         if (tidedata_prefetched is False or
                             time.time() - cachetime_tide >= cache_tidetime and cache_enabled == True or
                     refresh_tidedataflagged == True):
-            print(Fore.RED + "Fetching (or refreshing) tide data...")
-            print("")
+            spinner.start(text="Refreshing tide data...")
             try:
                 tideJSON = requests.get(tideurl)
                 logger.debug("Retrieved tide JSON with response: %s" % tideJSON)
                 cachetime_tide = time.time()
 
             except:
-                print("When attempting to fetch tide data from Wunderground,",
-                      "PyWeather ran into an error. If you're on a network with",
-                      "a filter, make sure 'api.wunderground.com' is unblocked.",
-                      "Otherwise, make sure you have an internet connection.", sep="\n")
+                spinner.fail(text="Failed to refresh tide data!")
+                print("")
+                print(Fore.RED + Style.BRIGHT + "When attempting to fetch tide data from Wunderground,",
+                      Fore.RED + Style.BRIGHT + "PyWeather ran into an error. If you're on a network with",
+                      Fore.RED + Style.BRIGHT + "a filter, make sure 'api.wunderground.com' is unblocked.",
+                      Fore.RED + Style.BRIGHT + "Otherwise, make sure you have an internet connection.", sep="\n")
                 printException()
-                print("Press enter to continue.")
+                print(Fore.RED + Style.BRIGHT + "Press enter to continue.")
                 input()
                 continue
 
@@ -3761,13 +5433,14 @@ while True:
                 logger.debug("tide_json: %s" % astronomy_json)
             else:
                 logger.debug("tide json loaded.")
-
+        spinner.start(text="Loading tide data...")
         for data in tide_json['tide']['tideInfo']:
             tide_site = data['tideSite']
 
         if tide_site == "":
-            print(Fore.RED + "Tide data is not available for this location." + Fore.RESET)
+            spinner.fail("Tide data is not available for this location.")
             continue
+
 
         # Get the iteration count
         # Total iterations is the actual number of iterations, completed is how many have been completed
@@ -3781,45 +5454,53 @@ while True:
         for data in tide_json['tide']['tideSummary']:
             tide_totaliterations = tide_totaliterations + 1
         logger.debug("tide_totaliterations: %s" % tide_totaliterations)
+        spinner.stop()
 
+        print("")
+        print(Fore.YELLOW + Style.BRIGHT + "Here's the tide data at " + Fore.CYAN + Style.BRIGHT + tide_site
+              + Fore.YELLOW + Style.BRIGHT + " (the closest site to you)")
         for data in tide_json['tide']['tideSummary']:
             tide_date = data['date']['pretty']
             tide_type = data['data']['type']
+            print("")
             logger.debug("tide_date: %s ; tide_type: %s" % (tide_date, tide_type))
-            print(Fore.YELLOW + tide_date + ":")
-            print(Fore.YELLOW + "Event: " + Fore.CYAN + tide_type)
+            print(Fore.YELLOW + Style.BRIGHT + tide_date + ":")
+            print(Fore.YELLOW + Style.BRIGHT + "Event: " + Fore.CYAN + Style.BRIGHT + tide_type)
             if tide_type == "Low Tide" or tide_type == "High Tide":
                 tide_height = data['data']['height']
                 logger.debug("tide_height: %s" % tide_height)
-                print(Fore.YELLOW + "Height: " + Fore.CYAN + tide_height)
+                print(Fore.YELLOW + Style.BRIGHT + "Height: " + Fore.CYAN + Style.BRIGHT + tide_height)
             tide_currentiterations = tide_currentiterations + 1
             tide_completediterations = tide_completediterations + 1
             if user_showCompletedIterations == True:
-                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s"
+                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s"
                       % (tide_completediterations, tide_totaliterations))
-                print(Fore.RESET)
-            print("")
             logger.debug("tide_currentiterations: %s ; tide_completediterations: %s" %
                          (tide_currentiterations, tide_completediterations))
             if user_enterToContinue == True:
-                if tide_currentiterations == user_loopIterations:
+                if tide_completediterations == tide_totaliterations:
+                    logger.debug("tide_completediterations is equal to tide_totaliterations. Breaking.")
+                    break
+                elif tide_currentiterations == user_loopIterations:
                     try:
-                        print(Fore.RED + "Press enter to view the next %s iterations of tide data." % user_loopIterations,
-                            "Otherwise, press Control + C to head back to the main menu.", sep="\n")
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "Press enter to view the next %s iterations of tide data." % user_loopIterations,
+                              Fore.RED + Style.BRIGHT + "Otherwise, press Control + C to head back to the main menu.", sep="\n")
                         input()
                         tide_currentiterations = 0
                         logger.debug("tide_currentiterations: %s" % tide_currentiterations)
                     except KeyboardInterrupt:
                         break
-            elif tide_completediterations == tide_totaliterations:
-                logger.debug("tide_completediterations is equal to tide_totaliterations. Breaking.")
-                break
 #<--- Tide data is above | Hurricane data is below --->
     elif moreoptions == "5":
-        # I get it, this part is poorly coded in. You know what? It works!5
-        print(Fore.RED + "Loading...")
+        try:
+            logger.debug("hurricane cache time: %s ; hurricane cache limit: %s" %
+                         (time.time() - cachetime_hurricane, cache_hurricanetime))
+        except:
+            logger.debug("hurricane cache limit: %s" % cache_hurricanetime)
+        # I get it, this part is poorly coded in. You know what? It works!
         if (hurricanePrefetched == False or refresh_hurricanedataflagged == True or time.time() - cachetime_hurricane >= cache_hurricanetime):
-            print(Fore.RED + "Fetching (or refreshing) hurricane data...")
+            spinner.start(text="Refreshing hurricane data...")
             try:
                 hurricaneJSON = requests.get(hurricaneurl)
                 cachetime_hurricane = time.time()
@@ -3831,13 +5512,16 @@ while True:
                 hurricanePrefetched = True
                 refresh_hurricanedataflagged = False
             except:
-                print("When attempting to fetch hurricane data, PyWeather ran into an error.",
-                      "you have an internet connection, and that api.wunderground.com is unblocked",
-                      "on your network. Press enter to continue.", sep="\n")
+                spinner.fail(text="Failed to refresh hurricane data!")
+                print("")
+                print(Fore.RED + Style.BRIGHT + "When attempting to fetch hurricane data, PyWeather ran into an error.",
+                      Fore.RED + Style.BRIGHT + "you have an internet connection, and that api.wunderground.com is unblocked",
+                      Fore.RED + Style.BRIGHT + "on your network. Press enter to continue.", sep="\n")
                 printException()
                 input()
                 continue
 
+        spinner.start(text="Loading hurricane data!")
         activestorms = 0
         currentstormiterations = 0
         logger.debug("activestorms: %s ; currentstormiterations: %s" %
@@ -3847,19 +5531,120 @@ while True:
         logger.debug("activestorms: %s" % activestorms)
 
         if activestorms == 0:
-            print(Fore.RED + "There are presently no active tropical systems around the world.")
+            spinner.fail(text="There are no active tropical storms at this time.")
             continue
-
-        print(Fore.YELLOW + "Here are the active tropical systems around the world:")
+        spinner.stop()
+        print(Fore.YELLOW + Style.BRIGHT + "Here are the active tropical systems around the world:")
         print("")
         # <--- Current data --->
         for data in hurricane_json['currenthurricane']:
             stormname = data['stormInfo']['stormName_Nice']
             logger.debug("stormname: %s" % stormname)
             stormlat = float(data['Current']['lat'])
+            # Make a *url variable to store the raw lat/lon in str() format.
+            stormlaturl = str(stormlat)
+            logger.debug("stormlat: %s ; stormlaturl: %s" %
+                         (stormlat, stormlaturl))
             stormlon = float(data['Current']['lon'])
-            logger.debug("stormlat: %s ; stormlon: %s" %
-                         (stormlat, stormlon))
+            stormlonurl = str(stormlon)
+            logger.debug("stormlon: %s ; stormlonurl: %s" %
+                         (stormlon, stormlonurl))
+            # Declare the URL for nearest city data
+            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + stormlaturl + '&lng=' + stormlonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
+            logger.debug("nearesturl: %s" % nearesturl)
+            # Enter in here if the nearest city option is enabled
+            if hurricanenearestcity_enabled is True:
+                logger.info("hurricanenearestcity_enabled is True, loading up data...")
+                try:
+                    # Get the JSON file. If all goes well, set the nearest_data variable to true.
+                    nearestJSON = requests.get(nearesturl)
+                    logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
+                    nearest_json = json.loads(nearestJSON.text)
+                    if jsonVerbosity == True:
+                        logger.debug("nearest_json: %s" % nearest_json)
+                    else:
+                        logger.debug("nearest_json loaded.")
+                    nearest_data = True
+                    logger.debug("nearest_data: %s" % nearest_data)
+                except:
+                    # Have an issue, we have no data. Set the variable to false.
+                    printException_loggerwarn()
+                    nearest_data = False
+                    logger.debug("nearest_data: %s" % nearest_data)
+
+                if nearest_data is True:
+                    try:
+                        errorvalue = str(nearest_json['status']['value'])
+                        if errorvalue == "10":
+                            nearest_errortext = "The username for the API wasn't authorized."
+                        elif errorvalue == "11":
+                            nearest_errortext = "The record doesn't exist."
+                        elif errorvalue == "12":
+                            nearest_errortext = "An undefined error occurred."
+                        elif errorvalue == "13":
+                            nearest_errortext = "The database timed out."
+                        elif errorvalue == "15":
+                            nearest_errortext = "No result was found."
+                        elif errorvalue == "18":
+                            nearest_errortext = "The daily limit of lookups was exceeded. Please try again tomorrow."
+                        elif errorvalue == "19":
+                            nearest_errortext = "The hourly limit of lookups was exceeded. Please try again in an hour."
+                        elif errorvalue == "20":
+                            nearest_errortext = "The weekly limit of lookups was exceeded. Please try again at the start of next week."
+                        elif errorvalue == "22":
+                            nearest_errortext = "The geonames server was overloaded. Please try again in a bit."
+                        else:
+                            nearest_errortext = "A strange error occurred. That's strange!"
+                        nearest_error = True
+                        logger.debug("nearest_errortext: %s ; nearest_error: %s" %
+                                     (nearest_errortext, nearest_error))
+                        nearest_data = False
+                        nearest_cityavailable = False
+                        logger.debug("nearest_data: %s ; nearest_cityavailable: %s" %
+                                     (nearest_data, nearest_cityavailable))
+
+                    except:
+                        logger.debug("No error.")
+                        nearest_error = False
+                        logger.debug("nearest_error: %s" % nearest_error)
+
+                # If we have the raw data, start parsing.
+                if nearest_data is True and nearest_error is False:
+                    logger.debug("nearest_data is True, parsing data...")
+                    try:
+                        nearest_cityname = nearest_json['geonames'][0]['name']
+                        nearest_citycountry = nearest_json['geonames'][0]['countryName']
+                        logger.debug("nearest_cityname: %s ; nearest_citycountry: %s" %
+                                     (nearest_cityname, nearest_citycountry))
+                        nearest_kmdistance = float(nearest_json['geonames'][0]['distance'])
+                        nearest_city = nearest_cityname + ", " + nearest_citycountry
+                        logger.debug("nearest_kmdistance: %s ; nearest_city: %s" %
+                                     (nearest_kmdistance, nearest_city))
+                        nearest_cityavailable = True
+                        logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
+                    except:
+                        # If we can't parse data, set the cityavailable variable to False. This shows a different
+                        # error message to the user.
+                        printException_loggerwarn()
+                        nearest_cityavailable = False
+                        logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
+
+                # Final data parsing if the nearest city is available. 
+                if nearest_cityavailable is True and nearest_error is False:
+                    logger.debug("nearest_cityavailable is true. Doing some conversions...")
+                    # Convert distance into imperial units for 3% of the world, round down to single digit
+                    nearest_midistance = nearest_kmdistance * 0.621371
+                    logger.debug("nearest_midistance: %s" % nearest_midistance)
+                    nearest_kmdistance = round(nearest_kmdistance, 1)
+                    nearest_midistance = round(nearest_midistance, 1)
+                    logger.debug("nearest_kmdistance: %s ; nearest_midistance: %s" %
+                                 (nearest_kmdistance, nearest_midistance))
+                    nearest_kmdistance = str(nearest_kmdistance)
+                    nearest_midistance = str(nearest_midistance)
+                    logger.info("Converted nearest_kmdistance and nearest_midistance to str")
+            else:
+                logger.debug("closest city is disabled.")
+
             # Prefix direction cardinals to the lat/lon
             if stormlat >= 0:
                 stormlat = str(stormlat) + "° N"
@@ -3922,34 +5707,43 @@ while True:
             else:
                 stormpressuredataavail = True
             logger.debug("stormpressuredataavail: %s" % stormpressuredataavail)
-            print(Fore.YELLOW + stormname + ":")
-            print(Fore.YELLOW + "Last updated: " + Fore.CYAN + stormtime)
-            print(Fore.YELLOW + "Storm Type: " + Fore.CYAN + stormtype)
-            print(Fore.YELLOW + "Wind speed: " + Fore.CYAN + stormwindspeedmph + " mph ("
+            print(Fore.YELLOW + Style.BRIGHT + stormname + ":")
+            print(Fore.YELLOW + Style.BRIGHT + "Last updated: " + Fore.CYAN + Style.BRIGHT + stormtime)
+            print(Fore.YELLOW + Style.BRIGHT + "Storm Type: " + Fore.CYAN + Style.BRIGHT + stormtype)
+            print(Fore.YELLOW + Style.BRIGHT + "Wind speed: " + Fore.CYAN + Style.BRIGHT + stormwindspeedmph + " mph ("
                   + stormwindspeedkph + " kph, " + stormwindspeedkts + " kts)")
-            print(Fore.YELLOW + "Wind Gust: " + Fore.CYAN + stormgustspeedmph + " mph ("
+            print(Fore.YELLOW + Style.BRIGHT + "Wind Gust: " + Fore.CYAN + Style.BRIGHT + stormgustspeedmph + " mph ("
                   + stormgustspeedkph + " kph, " + stormgustspeedkts + " kts)")
-            print(Fore.YELLOW + "Storm Movement: " + Fore.CYAN + "Moving to the " +
+            print(Fore.YELLOW + Style.BRIGHT + "Storm Movement: " + Fore.CYAN + Style.BRIGHT + "Moving to the " +
                   stormdirection + " (" + stormdirectiondegrees + "°) at " + stormdirectionmph + " mph ("
                   + stormdirectionkph + " kph, " + stormdirectionkts + " kts)")
             if stormpressuredataavail == True:
-                print(Fore.YELLOW + "Pressure: " + Fore.CYAN + stormpressuremb + " mb ("
+                print(Fore.YELLOW + Style.BRIGHT + "Pressure: " + Fore.CYAN + Style.BRIGHT + stormpressuremb + " mb ("
                       + stormpressureinches + " inHg)")
-            print(Fore.YELLOW + "Location: " + Fore.CYAN + stormlat + ", " + stormlon)
+            print(Fore.YELLOW + Style.BRIGHT + "Location: " + Fore.CYAN + Style.BRIGHT + stormlat + ", " + stormlon)
+            if hurricanenearestcity_enabled is True:
+                if nearest_error is True and nearest_data is False:
+                    print(Fore.RED + Style.BRIGHT + "Nearest city error: " + Fore.CYAN + Style.BRIGHT + nearest_errortext)
+                elif nearest_data is False:
+                    print(Fore.YELLOW + Style.BRIGHT + "No data is available for this tropical storm's nearest city.")
+                elif nearest_data is True and nearest_cityavailable is False:
+                    print(Fore.YELLOW + Style.BRIGHT + "This tropical system is further than 300 km (186.411 mi) from a city.")
+                elif nearest_data is True and nearest_cityavailable is True:
+                    print(Fore.YELLOW + Style.BRIGHT + "Nearest city: " + Fore.CYAN + Style.BRIGHT + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
+                          + " away from " + nearest_city + ".")
             currentstormiterations += 1
             logger.debug("currentstormiterations: %s" % currentstormiterations)
             if user_showCompletedIterations is True:
-                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
+                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s" %
                       (currentstormiterations, activestorms))
-                print(Fore.RESET)
 
             # <--- Current storm data to forecast --->
             if activestorms > 1 and currentstormiterations != activestorms:
                 logger.info("activestorms > 1 and currentstormiterations != activestorms.")
                 print("")
-                print(Fore.RED + "Press enter to view forecast data for " + stormname + ".",
-                      "Enter 'nextstorm' to view data for the next storm. Press Control + C to exit",
-                      "to the main menu.", sep="\n")
+                print(Fore.RED + Style.BRIGHT + "Press enter to view forecast data for " + stormname + ".",
+                      Fore.RED + Style.BRIGHT + "Enter 'nextstorm' to view data for the next storm. Press Control + C to exit",
+                      Fore.RED + Style.BRIGHT + "to the main menu.", sep="\n")
                 try:
                     selection = input("Input here: ").lower()
                     print("")
@@ -3961,13 +5755,13 @@ while True:
                     continue
                 else:
                     if selection != "":
-                        print("Couldn't understand your input. Listing forecast data...")
+                        print(Fore.RED + Style.BRIGHT + "Couldn't understand your input. Listing forecast data...")
                         selection = ""
             elif activestorms == 1 or currentstormiterations == activestorms:
                 logger.info("activestorms is 1 or currentstormiterations is activestorms.")
                 print("")
-                print(Fore.RED + "Press enter to view forecast data for " + stormname + ".",
-                      "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep="\n")
+                print(Fore.RED + Style.BRIGHT + "Press enter to view forecast data for " + stormname + ".",
+                      Fore.RED + Style.BRIGHT + "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep="\n")
                 try:
                     selection = input("Input here: ").lower()
                     print("")
@@ -3980,7 +5774,7 @@ while True:
                     break
                 else:
                     if selection != "":
-                        print("Couldn't understand your input. Listing forecast data...")
+                        print(Fore.RED + Style.BRIGHT + "Couldn't understand your input. Listing forecast data...")
                         selection = ""
 
             # <--- Where the forecast is looped into --->
@@ -3996,7 +5790,7 @@ while True:
                 elif hurricanetotaliterations >= 6:
                     hurricane_hasExtDataInForecast = True
 
-                print(Fore.YELLOW + "Here's the forecast for " + stormname + ".")
+                print(Fore.YELLOW + Style.BRIGHT + "Here's the forecast for " + stormname + ".")
                 for forecast in data['forecast']:
                     print("")
                     hurricaneforecasttime = forecast['ForecastHour']
@@ -4021,10 +5815,16 @@ while True:
                                  (hurricaneforecasttime, hurricane_hasExtDataInForecast))
                     hurricaneforecasttime_detail = forecast['Time']['pretty']
                     hurricaneforecast_lat = float(forecast['lat'])
-                    hurricaneforecast_lon = float(forecast['lon'])
                     logger.debug("hurricaneforecasttime_detail: %s ; hurricaneforecast_lat: %s" %
                                  (hurricaneforecasttime_detail, hurricaneforecast_lat))
-                    logger.debug("hurricaneforecast_lon: %s" % hurricaneforecast_lon)
+                    hurricaneforecast_laturl = str(hurricaneforecast_lat)
+                    hurricaneforecast_lon = float(forecast['lon'])
+                    logger.debug("hurricaneforecast_laturl: %s ; hurricaneforecast_lon: %s" %
+                                 (hurricaneforecast_laturl, hurricaneforecast_lon))
+                    hurricaneforecast_lonurl = str(hurricaneforecast_lon)
+                    logger.debug("hurricaneforecast_lonurl: %s" % hurricaneforecast_lonurl)
+                    nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneforecast_laturl + '&lng=' + hurricaneforecast_lonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
+                    logger.debug("nearesturl: %s" % nearesturl)
 
                     if hurricaneforecast_lat >= 0:
                         hurricaneforecast_lat = str(hurricaneforecast_lat) + "° N"
@@ -4076,22 +5876,116 @@ while True:
                     logger.debug("hurricaneforecast_gustkph: %s ; hurricaneforecast_gustkts: %s" %
                                  (hurricaneforecast_gustkph, hurricaneforecast_gustkts))
 
-                    print(Fore.YELLOW + hurricaneforecasttime_detail + " (" + hurricaneforecasttime + ")")
-                    print(Fore.YELLOW + "Storm Type: " + Fore.CYAN + hurricaneforecast_type)
-                    print(Fore.YELLOW + "Wind Speed: " + Fore.CYAN + hurricaneforecast_windmph + " mph (" + hurricaneforecast_windkph + " kph, "
+                    if hurricanenearestcity_fenabled is True:
+                        logger.info("hurricanenearestcity_fenabled is True, loading up data...")
+                        try:
+                            nearestJSON = requests.get(nearesturl)
+                            logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
+                            nearest_json = json.loads(nearestJSON.text)
+                            if jsonVerbosity == True:
+                                logger.debug("nearest_json: %s" % nearest_json)
+                            else:
+                                logger.debug("nearest_json loaded.")
+                            nearest_data = True
+                            logger.debug("nearest_data: %s" % nearest_data)
+                        except:
+                            printException_loggerwarn()
+                            nearest_data = False
+                            logger.debug("nearest_data: %s" % nearest_data)
+
+                        if nearest_data is True:
+                            try:
+                                errorvalue = str(nearest_json['status']['value'])
+                                if errorvalue == "10":
+                                    nearest_errortext = "The username for the API wasn't authorized."
+                                elif errorvalue == "11":
+                                    nearest_errortext = "The record doesn't exist."
+                                elif errorvalue == "12":
+                                    nearest_errortext = "An undefined error occurred."
+                                elif errorvalue == "13":
+                                    nearest_errortext = "The database timed out."
+                                elif errorvalue == "15":
+                                    nearest_errortext = "No result was found."
+                                elif errorvalue == "18":
+                                    nearest_errortext = "The daily limit of lookups was exceeded. Please try again tomorrow."
+                                elif errorvalue == "19":
+                                    nearest_errortext = "The hourly limit of lookups was exceeded. Please try again in an hour."
+                                elif errorvalue == "20":
+                                    nearest_errortext = "The weekly limit of lookups was exceeded. Please try again at the start of next week."
+                                elif errorvalue == "22":
+                                    nearest_errortext = "The geonames server was overloaded. Please try again in a bit."
+                                else:
+                                    nearest_errortext = "A strange error occurred. That's strange!"
+                                nearest_error = True
+                                logger.debug("nearest_errortext: %s ; nearest_error: %s" %
+                                             (nearest_errortext, nearest_error))
+                                nearest_data = False
+                                logger.debug("nearest_data: %s" % nearest_data)
+                            except:
+                                logger.debug("No error.")
+                                nearest_error = False
+                                logger.debug("nearest_error: %s" % nearest_error)
+
+                        if nearest_data is True:
+                            logger.debug("nearest_data is True, parsing data...")
+                            try:
+                                nearest_cityname = nearest_json['geonames'][0]['name']
+                                nearest_citycountry = nearest_json['geonames'][0]['countryName']
+                                logger.debug("nearest_cityname: %s ; nearest_citycountry: %s" %
+                                             (nearest_cityname, nearest_citycountry))
+                                nearest_kmdistance = float(nearest_json['geonames'][0]['distance'])
+                                nearest_city = nearest_cityname + ", " + nearest_citycountry
+                                logger.debug("nearest_kmdistance: %s ; nearest_city: %s" %
+                                             (nearest_kmdistance, nearest_city))
+                                nearest_cityavailable = True
+                                logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
+                            except:
+                                printException_loggerwarn()
+                                nearest_cityavailable = False
+                                logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
+
+                        if nearest_cityavailable is True:
+                            logger.debug("nearest_cityavailable is true. Doing some conversions...")
+                            # Convert distance into imperial units for 3% of the world, round down to single digit
+                            nearest_midistance = nearest_kmdistance * 0.621371
+                            logger.debug("nearest_midistance: %s" % nearest_midistance)
+                            nearest_kmdistance = round(nearest_kmdistance, 1)
+                            nearest_midistance = round(nearest_midistance, 1)
+                            logger.debug("nearest_kmdistance: %s ; nearest_midistance: %s" %
+                                         (nearest_kmdistance, nearest_midistance))
+                            nearest_kmdistance = str(nearest_kmdistance)
+                            nearest_midistance = str(nearest_midistance)
+                            logger.info("Converted nearest_kmdistance and nearest_midistance to str")
+                    else:
+                        logger.debug("closest city is disabled.")
+
+                    print(Fore.YELLOW + Style.BRIGHT + hurricaneforecasttime_detail + " (" + hurricaneforecasttime + ")")
+                    print(Fore.YELLOW + Style.BRIGHT + "Storm Type: " + Fore.CYAN + Style.BRIGHT + hurricaneforecast_type)
+                    print(Fore.YELLOW + Style.BRIGHT + "Wind Speed: " + Fore.CYAN + Style.BRIGHT + hurricaneforecast_windmph + " mph (" + hurricaneforecast_windkph + " kph, "
                           + hurricaneforecast_windkts + " kts)")
-                    print(Fore.YELLOW + "Wind Gusts: " + Fore.CYAN + hurricaneforecast_gustmph + " mph (" + hurricaneforecast_gustkph + " kph, "
+                    print(Fore.YELLOW + Style.BRIGHT + "Wind Gusts: " + Fore.CYAN + Style.BRIGHT + hurricaneforecast_gustmph + " mph (" + hurricaneforecast_gustkph + " kph, "
                           + hurricaneforecast_gustkts + " kts)")
-                    print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneforecast_lat + ", " + hurricaneforecast_lon)
+                    print(Fore.YELLOW + Style.BRIGHT + "Location: " + Fore.CYAN + Style.BRIGHT + hurricaneforecast_lat + ", " + hurricaneforecast_lon)
+                    if hurricanenearestcity_fenabled is True:
+                        if nearest_error is True and nearest_data is False:
+                            print(Fore.RED + Style.BRIGHT + "Nearest city error: " + Fore.CYAN + Style.BRIGHT + nearest_errortext)
+                        elif nearest_data is False:
+                            print(Fore.YELLOW + Style.BRIGHT + "No data is available for this tropical storm's nearest city.")
+                        elif nearest_data is True and nearest_cityavailable is False:
+                            print(
+                                Fore.YELLOW + Style.BRIGHT + "This tropical system is further than 300 km (186.411 mi) from a city.")
+                        elif nearest_data is True and nearest_cityavailable is True:
+                            print(
+                                Fore.YELLOW + Style.BRIGHT + "Nearest city: " + Fore.CYAN + Style.BRIGHT + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
+                                + " away from " + nearest_city + ".")
                     hurricanecurrentiterations += 1
                     logger.debug("hurricanecurrentiterations: %s" % hurricanecurrentiterations)
                     if user_showCompletedIterations is True:
-                        print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
+                        print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s" %
                               (hurricanecurrentiterations, hurricanetotaliterations))
 
                     # <--- Forecast data ends, loop into extended forecast data --->
                     # Have a detection for if extended data is available here.
-
 
                     # Basically says if activestorms are two and above, and we're not on the last iteration, and we've gone through all
                     # loops, and 4/5 day forecast data was not before the extended forecast enter this dialogue.
@@ -4100,9 +5994,9 @@ while True:
                         if hurricane_hasExtDataInForecast == False:
                             logger.debug("hurricane_hasExtDataInForecast = False")
                             print("")
-                            print(Fore.RED + "Press enter to view the extended forecast for " + stormname + ".",
-                                  "Enter 'nextstorm' to view details about the next storm.",
-                                  "Otherwise, press Control + C twice to exit to the main menu.", sep="\n")
+                            print(Fore.RED + Style.BRIGHT + "Press enter to view the extended forecast for " + stormname + ".",
+                                  Fore.RED + Style.BRIGHT + "Enter 'nextstorm' to view details about the next storm.",
+                                  Fore.RED + Style.BRIGHT + "Otherwise, press Control + C twice to exit to the main menu.", sep="\n")
 
                             try:
                                 forecastselection = input("Input here: ").lower()
@@ -4117,13 +6011,13 @@ while True:
                                 continue
                             else:
                                 if forecastselection != "":
-                                    print(Fore.RED + "Your input couldn't be understood. Listing extended forecast data.")
+                                    print(Fore.RED + Style.BRIGHT + "Your input couldn't be understood. Listing extended forecast data.")
                                     forecastselection = ""
                         elif hurricane_hasExtDataInForecast == True:
                             logger.debug("hurricane_hasExtDataInForecast - True")
                             print("")
-                            print(Fore.RED + "Press enter to view data for the next storm.",
-                                  "Otherwise, press Control + C to exit to the main menu.", sep="\n")
+                            print(Fore.RED + Style.BRIGHT + "Press enter to view data for the next storm.",
+                                  Fore.RED + Style.BRIGHT + "Otherwise, press Control + C to exit to the main menu.", sep="\n")
 
                             try:
                                 forecastselection = input("Input here: ").lower()
@@ -4135,18 +6029,18 @@ while True:
                                 break
 
                             if forecastselection != "":
-                                print("Your input could not be understood. Listing data for the next storm...")
+                                print(Fore.RED + Style.BRIGHT + "Your input could not be understood. Listing data for the next storm...")
                             continue
 
                     # This says if activestorms are just one, or if we're on the last storm, and we've gone through all loops, and 4/5 day
                     # forecast data was not before the extended forecast, enter this dialogue.
-                    elif (activestorms == 1 or currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations):
+                    elif (currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations):
                         logger.debug("activestorms is 1, or currentstormiterations == activestorms and hurricanecurrentiterations == hurricanetotaliterations")
                         print("")
                         if hurricane_hasExtDataInForecast == False:
                             logger.debug("hurricane_hasExtDataInForecast is False")
-                            print(Fore.RED + "Press enter to see extended forecast for " + stormname + ".",
-                            "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
+                            print(Fore.RED + Style.BRIGHT + "Press enter to see extended forecast for " + stormname + ".",
+                            Fore.RED + Style.BRIGHT + "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
                             try:
                                 forecastselection = input("Input here: ").lower()
                                 logger.debug("forecastselection: %s" % forecastselection)
@@ -4156,15 +6050,15 @@ while True:
                                 break
 
                             if forecastselection != "":
-                                print(Fore.RED + "Your input could not be understood. Listing extended forecast data.")
+                                print(Fore.RED + Style.BRIGHT + "Your input could not be understood. Listing extended forecast data.")
 
                         elif hurricane_hasExtDataInForecast == True:
                             logger.debug("hurricane_hasExtDataInForecast is True.")
                             break
-
                     else:
                         # This has to be none for this entire thing to work.
                         forecastselection = "none"
+
 
                     if forecastselection == "":
                         extendedforecastloops = 0
@@ -4173,9 +6067,16 @@ while True:
                                      (extendedforecastloops, extendedcurrentloops))
                         for extforecast in data['ExtendedForecast']:
                             extendedforecastloops += 1
-                        if extendedforecastloops == 0:
-                            print(Fore.RED + "Extended forecast data is not available for " + stormname + ".",
-                                  "Press enter to view data for the next storm. Press Control + C to exit to the main menu.", sep="\n")
+
+                        if extendedforecastloops == 0 and currentstormiterations == activestorms:
+                            print(Fore.RED + Style.BRIGHT + "Extended forecast data is not available for " + stormname + ".",
+                                  Fore.RED + Style.BRIGHT + "Since this is the last storm, press enter to exit.", sep='\n')
+                            input()
+                            break
+
+                        elif extendedforecastloops == 0:
+                            print(Fore.RED + Style.BRIGHT + "Extended forecast data is not available for " + stormname + ".",
+                                  Fore.RED + Style.BRIGHT + "Press enter to view data for the next storm. Press Control + C to exit to the main menu.", sep="\n")
                             try:
                                 extnodata = input("Input here: ").lower()
                                 print("")
@@ -4185,11 +6086,6 @@ while True:
                                 print("")
                                 break
                         # If we're on the last storm, and there isn't an extended forecast, press enter to exit.
-                        elif extendedforecastloops == 0 and currentstormiterations == activestorms:
-                            print(Fore.RED + "Extended forecast data is not available for " + stormname + ".",
-                                  "Since this is the last storm, press enter to exit.", sep='\n')
-                            input()
-                            break
 
                         for extforecast in data['ExtendedForecast']:
                             print("")
@@ -4204,10 +6100,13 @@ while True:
                             logger.debug("hurricaneextforecasttime: %s" % hurricaneextforecasttime)
                             hurricaneextforecasttime_detail = extforecast['Time']['pretty']
                             hurricaneextforecast_lat = float(extforecast['lat'])
+                            hurricaneextforecast_urllat = str(hurricaneextforecast_lat)
                             hurricaneextforecast_lon = float(extforecast['lon'])
+                            hurricaneextforecast_urllon = str(hurricaneextforecast_lon)
                             logger.debug("hurricaneextforecasttime_detail: %s ; hurricaneextforecast_lat: %s" %
                                          (hurricaneextforecasttime_detail, hurricaneextforecast_lat))
                             logger.debug("hurricaneextforecast_lon: %s" % hurricaneextforecast_lon)
+                            nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneextforecast_urllat + '&lng=' + hurricaneextforecast_urllon + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
 
                             if hurricaneextforecast_lat >= 0:
                                 hurricaneextforecast_lat = str(hurricaneextforecast_lat) + "° N"
@@ -4244,7 +6143,6 @@ while True:
                                 hurricaneextforecast_type = "Invest"
                             elif hurricaneextforecast_category == -5:
                                 hurricaneextforecast_type = "Remnants"
-                            logger.debug("hurricaneextforecast_type: %s" % hurricaneextforecast_type)
 
                             hurricaneextforecast_windmph = str(extforecast['WindSpeed']['Mph'])
                             hurricaneextforecast_windkph = str(extforecast['WindSpeed']['Kph'])
@@ -4259,19 +6157,114 @@ while True:
                             logger.debug("hurricaneextforecast_gustkph: %s ; hurricaneextforecast_gustkts: %s" %
                                          (hurricaneextforecast_gustkph, hurricaneextforecast_gustkts))
 
-                            print(Fore.YELLOW + hurricaneextforecasttime_detail + " (" + hurricaneextforecasttime + ")")
-                            print(Fore.YELLOW + "Storm Type: " + Fore.CYAN + hurricaneextforecast_type)
+                            if hurricanenearestcity_fenabled is True:
+                                logger.info("hurricanenearestcity_fenabled is True, loading up data...")
+                                try:
+                                    nearestJSON = requests.get(nearesturl)
+                                    logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
+                                    nearest_json = json.loads(nearestJSON.text)
+                                    if jsonVerbosity == True:
+                                        logger.debug("nearest_json: %s" % nearest_json)
+                                    else:
+                                        logger.debug("nearest_json loaded.")
+                                    nearest_data = True
+                                    logger.debug("nearest_data: %s" % nearest_data)
+                                except:
+                                    printException_loggerwarn()
+                                    nearest_data = False
+                                    logger.debug("nearest_data: %s" % nearest_data)
+
+                                if nearest_data is True:
+                                    try:
+                                        errorvalue = str(nearest_json['status']['value'])
+                                        if errorvalue == "10":
+                                            nearest_errortext = "The username for the API wasn't authorized."
+                                        elif errorvalue == "11":
+                                            nearest_errortext = "The record doesn't exist."
+                                        elif errorvalue == "12":
+                                            nearest_errortext = "An undefined error occurred."
+                                        elif errorvalue == "13":
+                                            nearest_errortext = "The database timed out."
+                                        elif errorvalue == "15":
+                                            nearest_errortext = "No result was found."
+                                        elif errorvalue == "18":
+                                            nearest_errortext = "The daily limit of lookups was exceeded. Please try again tomorrow."
+                                        elif errorvalue == "19":
+                                            nearest_errortext = "The hourly limit of lookups was exceeded. Please try again in an hour."
+                                        elif errorvalue == "20":
+                                            nearest_errortext = "The weekly limit of lookups was exceeded. Please try again at the start of next week."
+                                        elif errorvalue == "22":
+                                            nearest_errortext = "The geonames server was overloaded. Please try again in a bit."
+                                        else:
+                                            nearest_errortext = "A strange error occurred. That's strange!"
+                                        nearest_error = True
+                                        logger.debug("nearest_errortext: %s ; nearest_error: %s" %
+                                                     (nearest_errortext, nearest_error))
+                                        nearest_data = False
+                                        logger.debug("nearest_data: %s" % nearest_data)
+                                    except:
+                                        logger.debug("No error.")
+                                        nearest_error = False
+                                        logger.debug("nearest_error: %s" % nearest_error)
+
+                                if nearest_data is True:
+                                    logger.debug("nearest_data is True, parsing data...")
+                                    try:
+                                        nearest_cityname = nearest_json['geonames'][0]['name']
+                                        nearest_citycountry = nearest_json['geonames'][0]['countryName']
+                                        logger.debug("nearest_cityname: %s ; nearest_citycountry: %s" %
+                                                     (nearest_cityname, nearest_citycountry))
+                                        nearest_kmdistance = float(nearest_json['geonames'][0]['distance'])
+                                        nearest_city = nearest_cityname + ", " + nearest_citycountry
+                                        logger.debug("nearest_kmdistance: %s ; nearest_city: %s" %
+                                                     (nearest_kmdistance, nearest_city))
+                                        nearest_cityavailable = True
+                                        logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
+                                    except:
+                                        printException_loggerwarn()
+                                        nearest_cityavailable = False
+                                        logger.debug("nearest_cityavailable: %s" % nearest_cityavailable)
+
+                                if nearest_cityavailable is True:
+                                    logger.debug("nearest_cityavailable is true. Doing some conversions...")
+                                    # Convert distance into imperial units for 3% of the world, round down to single digit
+                                    nearest_midistance = nearest_kmdistance * 0.621371
+                                    logger.debug("nearest_midistance: %s" % nearest_midistance)
+                                    nearest_kmdistance = round(nearest_kmdistance, 1)
+                                    nearest_midistance = round(nearest_midistance, 1)
+                                    logger.debug("nearest_kmdistance: %s ; nearest_midistance: %s" %
+                                                 (nearest_kmdistance, nearest_midistance))
+                                    nearest_kmdistance = str(nearest_kmdistance)
+                                    nearest_midistance = str(nearest_midistance)
+                                    logger.info("Converted nearest_kmdistance and nearest_midistance to str")
+                            else:
+                                logger.debug("closest city is disabled.")
+
+                            print(Fore.YELLOW + Style.BRIGHT + hurricaneextforecasttime_detail + " (" + hurricaneextforecasttime + ")")
+                            print(Fore.YELLOW + Style.BRIGHT + "Storm Type: " + Fore.CYAN + Style.BRIGHT + hurricaneextforecast_type)
                             print(
-                                Fore.YELLOW + "Wind Speed: " + Fore.CYAN + hurricaneextforecast_windmph + " mph (" + hurricaneextforecast_windkph + " kph, "
+                                Fore.YELLOW + Style.BRIGHT + "Wind Speed: " + Fore.CYAN + Style.BRIGHT + hurricaneextforecast_windmph + " mph (" + hurricaneextforecast_windkph + " kph, "
                                 + hurricaneextforecast_windkts + " kts)")
                             print(
-                                Fore.YELLOW + "Wind Gusts: " + Fore.CYAN + hurricaneextforecast_gustmph + " mph (" + hurricaneextforecast_gustkph + " kph, "
+                                Fore.YELLOW + Style.BRIGHT + "Wind Gusts: " + Fore.CYAN + Style.BRIGHT + hurricaneextforecast_gustmph + " mph (" + hurricaneextforecast_gustkph + " kph, "
                                 + hurricaneextforecast_gustkts + " kts)")
-                            print(Fore.YELLOW + "Location: " + Fore.CYAN + hurricaneextforecast_lat + ", " + hurricaneextforecast_lon)
+                            print(Fore.YELLOW + Style.BRIGHT + "Location: " + Fore.CYAN + Style.BRIGHT + hurricaneextforecast_lat + ", " + hurricaneextforecast_lon)
+                            if hurricanenearestcity_fenabled is True:
+                                if nearest_error is True and nearest_data is False:
+                                    print(Fore.RED + Style.BRIGHT + "Nearest city error: " + Fore.CYAN + Style.BRIGHT + nearest_errortext)
+                                elif nearest_data is False:
+                                    print(Fore.YELLOW + Style.BRIGHT + "No data is available for this tropical storm's nearest city.")
+                                elif nearest_data is True and nearest_cityavailable is False:
+                                    print(
+                                        Fore.YELLOW + Style.BRIGHT + "This tropical system is further than 300 km (186.411 mi) from a city.")
+                                elif nearest_data is True and nearest_cityavailable is True:
+                                    print(
+                                        Fore.YELLOW + Style.BRIGHT + "Nearest city: " + Fore.CYAN + Style.BRIGHT + nearest_midistance + " mi (" + nearest_kmdistance + " km)"
+                                        + " away from " + nearest_city + ".")
                             extendedcurrentloops += 1
                             logger.debug("extendedcurrentloops: %s" % extendedcurrentloops)
                             if user_showCompletedIterations == True:
-                                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s" %
+                                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s" %
                                       (extendedcurrentloops, extendedforecastloops))
 
                             if extendedcurrentloops == extendedforecastloops:
@@ -4279,8 +6272,8 @@ while True:
                                 print("")
                                 if currentstormiterations != activestorms:
                                     logger.debug("currentstormiterations != activestorms")
-                                    print(Fore.RED + "Press enter to view data for the next storm.",
-                                          "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
+                                    print(Fore.RED + Style.BRIGHT + "Press enter to view data for the next storm.",
+                                          Fore.RED + Style.BRIGHT + "Otherwise, enter 'exit' or press Control + C to exit to the main menu.", sep='\n')
 
                                     try:
                                         extforecastinput = input("Input here: ").lower()
@@ -4294,27 +6287,495 @@ while True:
                                         break
                                     else:
                                         if extforecastinput != "":
-                                            print(Fore.RED + "Your input could not be understood. Viewing data for the next storm...")
+                                            print(Fore.RED + Style.BRIGHT + "Your input could not be understood. Viewing data for the next storm...")
                                         print("")
                                         continue
                                 elif currentstormiterations == activestorms:
                                     logger.debug("currentstormiterations == activestorms")
                                     break
+                        else:
+                            continue
+    elif moreoptions == "13":
+        if favoritelocation_enabled is False:
+            print("", Fore.RED + Style.BRIGHT + "To manage favorite locations, you'll need to enable the favorite locations feature.",
+                  Fore.RED + Style.BRIGHT + "Would you like me to enable favorite locations for you?", sep="\n")
+            enablefavoritelocations = input("Input here: ").lower()
+            logger.debug("enablefavoritelocations: %s" % enablefavoritelocations)
+            if enablefavoritelocations == "yes":
+                config['FAVORITE LOCATIONS']['enabled'] = 'True'
+                logger.info("FAVORITE LOCATIONS/enabled is now 'True'.")
+                try:
+                    with open('storage//config.ini', 'w') as configfile:
+                        config.write(configfile)
+                    print(Fore.YELLOW + Style.BRIGHT + "Favorite locations is now enabled, and will be operational when you next boot up PyWeather.")
+                    continue
+                except:
+                    print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to save new configuration options.",
+                          Fore.RED + Style.BRIGHT + "Please enable favorite locations in the config file. In the FAVORITE LOCATIONS",
+                          Fore.RED + Style.BRIGHT + "section, change enabled to True.")
+                    continue
+            elif enablefavoritelocations == "no":
+                print(Fore.YELLOW + Style.BRIGHT + "Not enabling favorite locations. Returning to the main menu.",
+                      "You can come back to this menu to reenable favorite locations, or go into your config file and",
+                      "enable FAVORITE LOCATIONS/enabled (set it to True).", sep="\n")
+                continue
+            else:
+                print(Fore.YELLOW + Style.BRIGHT + "Your input wasn't understood, and as such favorite locations will not be enabled.",
+                      "You can come back to this menu to reenable favorite locations, or go into your config file and",
+                      "enable FAVORITE LOCATIONS/enabled (set it to True).")
+
+        while True:
+            # Get up-to-date configuration information about favorite locations.
+            spinner.start(text="Loading your favorite locations...")
+            try:
+                favoritelocation_1 = config.get('FAVORITE LOCATIONS', 'favloc1')
+                favoritelocation_1d = favoritelocation_1
+                favoritelocation_2 = config.get('FAVORITE LOCATIONS', 'favloc2')
+                favoritelocation_2d = favoritelocation_2
+                favoritelocation_3 = config.get('FAVORITE LOCATIONS', 'favloc3')
+                favoritelocation_3d = favoritelocation_3
+                favoritelocation_4 = config.get('FAVORITE LOCATIONS', 'favloc4')
+                favoritelocation_4d = favoritelocation_4
+                favoritelocation_5 = config.get('FAVORITE LOCATIONS', 'favloc5')
+                favoritelocation_5d = favoritelocation_5
+            except:
+                spinner.fail(text="Failed to load your favorite locations!")
+                print("")
+                print(Fore.RED + Style.BRIGHT + "An error with your configuration file occurred when",
+                      Fore.RED + Style.BRIGHT + "we tried to refresh current location information. For safety,",
+                      Fore.RED + Style.BRIGHT +"the favorite location configurator will be exited out of.")
+                printException()
+                break
+
+            logger.debug("favoritelocation_1: %s ; favoritelocation_1d: %s" %
+                         (favoritelocation_1, favoritelocation_1d))
+            logger.debug("favoritelocation_2: %s ; favoritelocation_2d: %s" %
+                         (favoritelocation_2, favoritelocation_2d))
+            logger.debug("favoritelocation_3: %s ; favoritelocation_3d: %s" %
+                         (favoritelocation_3, favoritelocation_3d))
+            logger.debug("favoritelocation_4: %s ; favoritelocation_4d: %s" %
+                         (favoritelocation_4, favoritelocation_4d))
+            logger.debug("favoritelocation_5: %s ; favoritelocation_5d: %s" %
+                         (favoritelocation_5, favoritelocation_5d))
+
+            if "pws:" in favoritelocation_1d:
+                # Delete pws: from the display string
+                favoritelocation_1d = favoritelocation_1d[4:]
+                favoritelocation_1d = "PWS " + favoritelocation_1d.upper()
+                logger.debug("favoritelocation_1d: %s" % favoritelocation_1d)
+
+            if "pws:" in favoritelocation_2d:
+                # Delete pws: from the display string
+                favoritelocation_2d = favoritelocation_2d[4:]
+                favoritelocation_2d = "PWS " + favoritelocation_2d.upper()
+                logger.debug("favoritelocation_2d: %s" % favoritelocation_2d)
+
+            if "pws:" in favoritelocation_3d:
+                # Delete pws: from the display string
+                favoritelocation_3d = favoritelocation_3d[4:]
+                favoritelocation_3d = "PWS " + favoritelocation_3d.upper()
+                logger.debug("favoritelocation_3d: %s" % favoritelocation_3d)
+
+            if "pws:" in favoritelocation_4d:
+                # Delete pws: from the display string
+                favoritelocation_4d = favoritelocation_4d[4:]
+                favoritelocation_4d = "PWS " + favoritelocation_4d.upper()
+                logger.debug("favoritelocation_4d: %s" % favoritelocation_4d)
+
+            if "pws:" in favoritelocation_5d:
+                # Delete pws: from the display string
+                favoritelocation_5d = favoritelocation_5d[4:]
+                favoritelocation_5d = "PWS " + favoritelocation_5d.upper()
+                logger.debug("favoritelocation_5d: %s" % favoritelocation_5d)
+
+            spinner.stop()
+            print("")
+            print(Fore.YELLOW + Style.BRIGHT + "Your current favorite locations configuration:")
+            print(Fore.YELLOW + Style.BRIGHT + "Favorite Location 1 - " + Fore.CYAN + Style.BRIGHT + favoritelocation_1d)
+            print(Fore.YELLOW + Style.BRIGHT + "Favorite Location 2 - " + Fore.CYAN + Style.BRIGHT + favoritelocation_2d)
+            print(Fore.YELLOW + Style.BRIGHT + "Favorite Location 3 - " + Fore.CYAN + Style.BRIGHT + favoritelocation_3d)
+            print(Fore.YELLOW + Style.BRIGHT + "Favorite Location 4 - " + Fore.CYAN + Style.BRIGHT + favoritelocation_4d)
+            print(Fore.YELLOW + Style.BRIGHT + "Favorite Location 5 - " + Fore.CYAN + Style.BRIGHT + favoritelocation_5d)
+            print("")
+            print(Fore.YELLOW + Style.BRIGHT + "What would you like to do with your favorite locations?")
+            print(Fore.YELLOW + Style.BRIGHT + "- Add this location (" + Fore.CYAN + Style.BRIGHT + location2 + Fore.YELLOW
+                  + Style.BRIGHT + ") as a favorite location - Enter " + Fore.CYAN + "1")
+            print(Fore.YELLOW + Style.BRIGHT + "- Add a location as a favorite location - Enter " + Fore.CYAN + Style.BRIGHT + "2")
+            print(Fore.YELLOW + Style.BRIGHT + "- Edit a favorite location - Enter " + Fore.CYAN + Style.BRIGHT + "3")
+            print(Fore.YELLOW + Style.BRIGHT + "- Remove a favorite location - Enter " + Fore.CYAN + Style.BRIGHT + "4")
+            print(Fore.YELLOW + Style.BRIGHT + "- Return to PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "5")
+            favconfig_menuinput = input("Input here: ").lower()
+            logger.debug("favconfig_menuinput: %s" % favconfig_menuinput)
+            if favconfig_menuinput == "1":
+                # Code for adding current location as a favorite location
+                print(Fore.YELLOW + Style.BRIGHT + "Would you like to add " + Fore.CYAN + Style.BRIGHT + str(location) + Fore.YELLOW
+                      + Style.BRIGHT + " as a favorite location? Yes or No.", sep="\n")
+                favconfig_confirmadd = input("Input here: ").lower()
+                logger.debug("favconfig_confirmadd: %s" % favconfig_confirmadd)
+                if favconfig_confirmadd != "yes":
+                    if favconfig_confirmadd != "no":
+                        print("", Fore.YELLOW + Style.BRIGHT + "Couldn't understand your input. Not adding " + Fore.CYAN + Style.BRIGHT + location2 +
+                              Fore.YELLOW + Style.BRIGHT + " to your location list.", sep="\n")
+                    else:
+                        print("", Fore.YELLOW + Style.BRIGHT + "Not adding " + Fore.CYAN + Style.BRIGHT +
+                              str(location) + Fore.YELLOW + Style.BRIGHT + " to your location list.", sep="\n")
+                    continue
+
+                # Add location to favorite locations
+                config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_1
+                logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favoritelocation_1)
+                config['FAVORITE LOCATIONS']['favloc3'] = favoritelocation_2
+                logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favoritelocation_2)
+                config['FAVORITE LOCATIONS']['favloc4'] = favoritelocation_3
+                logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favoritelocation_3)
+                config['FAVORITE LOCATIONS']['favloc5'] = favoritelocation_4
+                logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favoritelocation_4)
+                # Use locinput instead of location, as the raw PWS query is in locinput.
+                config['FAVORITE LOCATIONS']['favloc1'] = locinput
+                logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % locinput)
+
+                try:
+                    with open('storage//config.ini', 'w') as configfile:
+                        config.write(configfile)
+                    print(Fore.YELLOW + Style.BRIGHT + "Changes saved!")
+                    continue
+                except:
+                    print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
+                          "Please note that no changes were made to your config file.", sep="\n")
+                    continue
+            elif favconfig_menuinput == "2":
+                # Code for adding a separate current location as a favorite location
+                print(Fore.YELLOW + Style.BRIGHT + "Please enter the location that you'd like to add as a favorite location.",
+                      Fore.YELLOW + Style.BRIGHT + "For a PWS, you'd enter pws:<PWS ID>, where <PWS ID> is the ID of the PWS.",
+                      Fore.YELLOW + Style.BRIGHT + "Queries for favoritelocation:, currentlocation, and previouslocation: are not supported.",
+                      Fore.YELLOW + Style.BRIGHT + "Please note that your input WILL NOT be validated. To exit, enter 'exit' in the input.", sep="\n")
+                favloc_manualinput = input("Input here: ")
+                favloc_manualinputLower = favloc_manualinput.lower()
+                logger.debug("favloc_manualinput: %s ; favloc_manualinputLower: %s" %
+                             (favloc_manualinput, favloc_manualinputLower))
+                if favloc_manualinputLower == "exit":
+                    print("", Fore.YELLOW + Style.BRIGHT + "Exiting to main menu...", sep="\n")
+                    continune
+
+                if favloc_manualinputLower.find("pws:") == 0:
+                    logger.debug("PWS query detected.")
+                    print("", Fore.YELLOW + Style.BRIGHT + "Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
+                          Fore.YELLOW + Style.BRIGHT + "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
+                    config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_1
+                    logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favoritelocation_1)
+                    config['FAVORITE LOCATIONS']['favloc3'] = favoritelocation_2
+                    logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favoritelocation_2)
+                    config['FAVORITE LOCATIONS']['favloc4'] = favoritelocation_3
+                    logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favoritelocation_3)
+                    config['FAVORITE LOCATIONS']['favloc5'] = favoritelocation_4
+                    logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favoritelocation_4)
+                    # Use lowercase for a PWS
+                    config['FAVORITE LOCATIONS']['favloc1'] = favloc_manualinputLower
+                    logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_manualinputLower)
+                    try:
+                        with open('storage//config.ini', 'w') as configfile:
+                            config.write(configfile)
+                        print(Fore.YELLOW + Style.BRIGHT + "Changes saved!")
+                        continue
+                    except:
+                        print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
+                              Fore.RED + Style.BRIGHT + "Please note that no changes were made to your config file.", sep="\n")
+                        continue
+
+                if favloc_manualinputLower.find("favoritelocation:") == 0 or favloc_manualinputLower.find("favloc:") == 0:
+                    logger.debug("Invalid query detected - favorite location")
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! You can't use a favorite location query as a favorite location.",
+                          Fore.RED + Style.BRIGHT + "Makes sense, right? Returning to main menu.", sep="\n")
+                    continue
+                if favloc_manualinputLower.find("currentlocation") == 0 or favloc_manualinputLower.find("curloc") == 0:
+                    logger.debug("Invalid query detected - current location")
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! You can't use a current location query as a favorite location.",
+                          Fore.RED + Style.BRIGHT + "If you'd like to use your current location at boot, make sure that the",
+                          Fore.RED + Style.BRIGHT + "current location feature is enabled (FIRSTINPUT/geoipservice_enabled should be True).",
+                          Fore.RED + Style.BRIGHT + "Returning to main menu.", sep="\n")
+                    continue
+
+                config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_1
+                logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favoritelocation_1)
+                config['FAVORITE LOCATIONS']['favloc3'] = favoritelocation_2
+                logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favoritelocation_2)
+                config['FAVORITE LOCATIONS']['favloc4'] = favoritelocation_3
+                logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favoritelocation_3)
+                config['FAVORITE LOCATIONS']['favloc5'] = favoritelocation_4
+                logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favoritelocation_4)
+                # Use the non-lowercased variable as the favorite location here.
+                # I guess it's important? I don't know.
+                config['FAVORITE LOCATIONS']['favloc1'] = favloc_manualinput
+                logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_manualinput)
+                try:
+                    with open('storage//config.ini', 'w') as configfile:
+                        config.write(configfile)
+                    print(Fore.YELLOW + Style.BRIGHT + "Changes saved!")
+                    continue
+                except:
+                    print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
+                          Fore.RED + Style.BRIGHT + "Please note that no changes were made to your config file.", sep="\n")
+                    continue
+            elif favconfig_menuinput == "3":
+                print(Fore.YELLOW + Style.BRIGHT + "Which favorite location would you like to modify? Enter a number 1-5 representing",
+                      Fore.YELLOW + Style.BRIGHT + "the favorite locations 1-5.", sep="\n")
+                favloc_editinputnum = input("Input here: ").lower()
+                logger.debug("favloc_editinputnum: %s" % favloc_editinputnum)
+                # Convert the number to an integer to see if the user entered a number. If a ValueError is catched,
+                # return to the main menu. Floats will be rounded down to the first number.
+
+                try:
+                    favloc_editinputnum = int(favloc_editinputnum)
+                except ValueError:
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! Your input didn't seem to be a number. Returning to the",
+                          Fore.RED + Style.BRIGHT + "main menu.", sep="\n")
+                    continue
+
+                # Validate the number is between 1-5
+                if 1 < favloc_editinputnum < 5:
+                    print(Fore.RED + Style.BRIGHT + "Whoops! You entered a favorite location to input that was not between 1-5.",
+                          Fore.RED + Style.BRIGHT + "Returning to the main menu...", sep="\n")
+                    continue
+
+                # Confirm to the user which favorite location we're editing.
+                if favloc_editinputnum is 1:
+                    favloc_editdisplay = favoritelocation_1d
+                elif favloc_editinputnum is 2:
+                    favloc_editdisplay = favoritelocation_2d
+                elif favloc_editinputnum is 3:
+                    favloc_editdisplay = favoritelocation_3d
+                elif favloc_editinputnum is 4:
+                    favloc_editdisplay = favoritelocation_4d
+                elif favloc_editinputnum is 5:
+                    favloc_editdisplay = favoritelocation_5d
+                logger.debug("favloc_editdisplay: %s" % favloc_editdisplay)
+
+                print(Fore.YELLOW + Style.BRIGHT + "Just to confirm, you're editing favorite location " + Fore.CYAN + Style.BRIGHT + str(favloc_editdisplay)
+                      + Fore.YELLOW + Style.BRIGHT + ".",
+                      Fore.YELLOW + Style.BRIGHT + "This favorite location is currently: " + Fore.CYAN + Style.BRIGHT + favloc_editdisplay +
+                      Fore.YELLOW + Style.BRIGHT + ".",
+                      Fore.YELLOW + Style.BRIGHT + "Would you like to edit this favorite location? Yes or No.", sep="\n")
+                favloc_editconfirm = input("Input here: ").lower()
+                logger.debug("favloc_editconfirm: %s" % favloc_editconfirm)
+                if favloc_editconfirm == "yes":
+                    logger.debug("moving to the final input...")
+                elif favloc_editconfirm == "no":
+                    print(Fore.YELLOW + Style.BRIGHT + "", "Not editing favorite location " + Fore.CYAN + Style.BRIGHT + str(favloc_editinputnum)
+                          + Fore.YELLOW + Style.BRIGHT + ".",
+                          Fore.YELLOW + Style.BRIGHT + "Returning to the main menu.", sep="\n")
+                    continue
+                else:
+                    print("", Fore.RED + Style.BRIGHT + "Could not understand your input. Returning to the main menu.", sep="\n")
+                    continue
+
+
+                # User input for the change goes here.
+                print(Fore.YELLOW + Style.BRIGHT + "What would you like to change favorite location " + Fore.CYAN + Style.BRIGHT + str(favloc_editdisplay) + Fore.YELLOW + Style.BRIGHT + " to?",
+                      Fore.YELLOW + Style.BRIGHT + "For a PWS, you'd enter pws:<PWS ID>, where <PWS ID> is the ID of the PWS.",
+                      Fore.YELLOW + Style.BRIGHT + "Queries for favoritelocation:, currentlocation, and previouslocation: are not supported.",
+                      Fore.YELLOW + Style.BRIGHT + "Please note that your input WILL NOT be validated. To exit, enter 'exit' in the input.", sep="\n")
+                favloc_editinput = input("Input here: ")
+                favloc_editinputLower = favloc_editinput.lower()
+                logger.debug("favloc_editinput: %s ; favloc_editinputLower: %s" %
+                             (favloc_editinput, favloc_editinputLower))
+
+                # Validate the user input, do special conversions for PWSes.
+                if favloc_editinputLower == "exit":
+                    print("", Fore.YELLOW + Style.BRIGHT + "Exiting to the main menu.", sep="\n")
+
+                if favloc_editinputLower.find("pws:") == 0:
+                    logger.debug("PWS query has been detected.")
+                    print("", Fore.YELLOW + Style.BRIGHT +"Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
+                          Fore.YELLOW + Style.BRIGHT + "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
+                    if favloc_editinputnum == 1:
+                        config['FAVORITE LOCATIONS']['favloc1'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_editinputLower)
+                    elif favloc_editinputnum == 2:
+                        config['FAVORITE LOCATIONS']['favloc2'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favloc_editinputLower)
+                    elif favloc_editinputnum == 3:
+                        config['FAVORITE LOCATIONS']['favloc3'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favloc_editinputLower)
+                    elif favloc_editinputnum == 4:
+                        config['FAVORITE LOCATIONS']['favloc4'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favloc_editinputLower)
+                    elif favloc_editinputnum == 5:
+                        config['FAVORITE LOCATIONS']['favloc5'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favloc_editinputLower)
+
+                    try:
+                        with open('storage//config.ini', 'w') as configfile:
+                            config.write(configfile)
+                        print(Fore.YELLOW + Style.BRIGHT +"Changes saved!")
+                        continue
+                    except:
+                        print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
+                              Fore.RED + Style.BRIGHT + "Please note that no changes were made to your config file.", sep="\n")
+                        continue
+                if favloc_editinputLower.find("favoritelocation:") == 0 or favloc_editinputLower.find(
+                        "favloc:") == 0:
+                    logger.debug("Invalid query detected - favorite location")
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! You can't use a favorite location query as a favorite location.",
+                          Fore.RED + Style.BRIGHT + "Makes sense, right? Returning to main menu.", sep="\n")
+                    continue
+                if favloc_editinputLower.find("currentlocation") == 0 or favloc_editinputLower.find(
+                        "curloc") == 0:
+                    logger.debug("Invalid query detected - current location")
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! You can't use a current location query as a favorite location.",
+                          Fore.RED + Style.BRIGHT + "If you'd like to use your current location at boot, make sure that the",
+                          Fore.RED + Style.BRIGHT + "current location feature is enabled (FIRSTINPUT/geoipservice_enabled should be True).",
+                          Fore.RED + Style.BRIGHT + "Returning to main menu.", sep="\n")
+                    continue
+
+                # Commit to the config, if anything isn't catched. A favorite location is committed to based on what
+                # number a user entered.
+
+                if favloc_editinputnum == 1:
+                    config['FAVORITE LOCATIONS']['favloc1'] = favloc_editinput
+                    logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_editinput)
+                elif favloc_editinputnum == 2:
+                    config['FAVORITE LOCATIONS']['favloc2'] = favloc_editinput
+                    logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favloc_editinput)
+                elif favloc_editinputnum == 3:
+                    config['FAVORITE LOCATIONS']['favloc3'] = favloc_editinput
+                    logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favloc_editinput)
+                elif favloc_editinputnum == 4:
+                    config['FAVORITE LOCATIONS']['favloc4'] = favloc_editinput
+                    logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favloc_editinput)
+                elif favloc_editinputnum == 5:
+                    config['FAVORITE LOCATIONS']['favloc5'] = favloc_editinput
+                    logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favloc_editinput)
+
+                try:
+                    with open('storage//config.ini', 'w') as configfile:
+                        config.write(configfile)
+                    print(Fore.YELLOW + Style.BRIGHT + "Changes saved!")
+                    continue
+                except:
+                    print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
+                          Fore.RED + Style.BRIGHT + "Please note that no changes were made to your config file.", sep="\n")
+                    continue
+            elif favconfig_menuinput == "4":
+                print(Fore.YELLOW + Style.BRIGHT + "Which favorite location would you like to remove? Enter a number 1-5 representing",
+                      Fore.YELLOW + Style.BRIGHT + "the favorite locations 1-5.", sep="\n")
+                favloc_removeinputnum = input("Input here: ").lower()
+                logger.debug("favloc_removeinputnum: %s" % favloc_removeinputnum)
+                # Convert the input number to an integer, see if the user entered a number.
+                # Floats get converted down to the first number.
+
+                try:
+                    favloc_removeinputnum = int(favloc_removeinputnum)
+                except ValueError:
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! Your input didn't seem to be a number. Returning to the",
+                          Fore.RED + Style.BRIGHT + "main menu.", sep="\n")
+                    continue
+
+                # Validate the input number is between 1 and 5
+                if 1 < favloc_removeinputnum < 5:
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! You entered a favorite location to remove that was not between 1-5.",
+                          Fore.RED + Style.BRIGHT + "Returning to the main menu.", sep="\n")
+                    continue
+
+                # Validate that the location that a user is trying to remove isn't "None".
+                favloc_remove_isNone = False
+                if favloc_removeinputnum == 1 and favoritelocation_1 == "None":
+                    favloc_remove_isNone = True
+                elif favloc_removeinputnum == 2 and favoritelocation_2 == "None":
+                    favloc_remove_isNone = True
+                elif favloc_removeinputnum == 3 and favoritelocation_3 == "None":
+                    favloc_remove_isNone = True
+                elif favloc_removeinputnum == 4 and favoritelocation_4 == "None":
+                    favloc_remove_isNone = True
+                elif favloc_removeinputnum == 5 and favoritelocation_5 == "None":
+                    favloc_remove_isNone = True
+
+                logger.debug("favloc_remove_isNone: %s" % favloc_remove_isNone)
+                if favloc_remove_isNone is True:
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! The favorite location you're trying to remove isn't set to anything.",
+                          Fore.RED + Style.BRIGHT + "Returning to the main menu.", sep="\n")
+                    continue
+
+                # Display variable for when we display what favorite location we're removing.
+                if favloc_removeinputnum == 1:
+                    favloc_removedisplay = favoritelocation_1d
+                elif favloc_removeinputnum == 2:
+                    favloc_removedisplay = favoritelocation_2d
+                elif favloc_removeinputnum == 3:
+                    favloc_removedisplay = favoritelocation_3d
+                elif favloc_removeinputnum == 4:
+                    favloc_removedisplay = favoritelocation_4d
+                elif favloc_removeinputnum == 5:
+                    favloc_removedisplay = favoritelocation_5d
+                logger.debug("favloc_removedisplay: %s" % favloc_removedisplay)
+
+                print(Fore.YELLOW + Style.BRIGHT + "Are you sure you want to delete favorite location " + Fore.CYAN + Style.BRIGHT + str(favloc_removeinputnum)
+                      + Fore.YELLOW + Style.BRIGHT + "?",
+                      Fore.YELLOW + Style.BRIGHT + "This favorite location is presently set to: " + Fore.CYAN + Style.BRIGHT + favloc_removedisplay,
+                      Fore.YELLOW + Style.BRIGHT + "This action cannot be undone! Yes or No.", sep="\n")
+                favloc_removeconfirm = input("Input here: ").lower()
+                logger.debug("favloc_removeconfirm: %s" % favloc_removeconfirm)
+                if favloc_removeconfirm == "yes":
+                    logger.debug("removing favorite location...")
+                elif favloc_removeconfirm == "no":
+                    print("", Fore.YELLOW + Style.BRIGHT + "Not deleting favorite location " +
+                          Fore.CYAN + Style.BRIGHT + str(favloc_removeinputnum) + Fore.YELLOW + Style.BRIGHT + ".",
+                          Fore.CYAN + Style.BRIGHT + "Returning to the main menu.", sep="\n")
+                    continue
+                else:
+                    print("", Fore.YELLOW + Style.BRIGHT + "Couldn't understand your input, and not deleting favorite location "
+                          + Fore.CYAN + Style.BRIGHT + str(favloc_removeinputnum) + Fore.CYAN + Style.BRIGHT + ".",
+                          Fore.YELLOW + Style.BRIGHT + "Returning to the main menu.", sep="\n")
+
+                # Delete certain favorite locations based on what favorite location we're trying to delete.
+
+                if favloc_removeinputnum <= 1:
+                    config['FAVORITE LOCATIONS']['favloc1'] = favoritelocation_2
+                    logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favoritelocation_2)
+                if favloc_removeinputnum <= 2:
+                    config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_3
+                    logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favoritelocation_3)
+                if favloc_removeinputnum <= 3:
+                    config['FAVORITE LOCATIONS']['favloc3'] = favoritelocation_4
+                    logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favoritelocation_4)
+                if favloc_removeinputnum <= 4:
+                    config['FAVORITE LOCATIONS']['favloc4'] = favoritelocation_5
+                    logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favoritelocation_5)
+                if favloc_removeinputnum <= 5:
+                    config['FAVORITE LOCATIONS']['favloc5'] = "None"
+                    logger.debug('FAVORITE LOCATIONS/favloc5 is now: "None"')
+
+                try:
+                    with open('storage//config.ini', 'w') as configfile:
+                        config.write(configfile)
+                    print(Fore.YELLOW + Style.BRIGHT + "Changes saved!")
+                    continue
+                except:
+                    print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
+                          Fore.RED + Style.BRIGHT + "Please note that no changes were made to your config file.", sep="\n")
+                    continue
+
+            elif favconfig_menuinput == "5":
+                break
 
 #<--- Hurricane is above | About is below --->
-    elif moreoptions == "14":
-        print("", Fore.YELLOW + "-=-=- " + Fore.CYAN + "PyWeather" + Fore.YELLOW + " -=-=-",
-              Fore.CYAN + "version " + about_version, "",
-              Fore.YELLOW + "Build Number: " + Fore.CYAN + about_buildnumber,
-              Fore.YELLOW + "Release Date: " + Fore.CYAN + about_releasedate,
-              Fore.YELLOW + "Release Type: " + Fore.CYAN + about_releasetype,
+    elif moreoptions == "15":
+        print("", Fore.YELLOW + Style.BRIGHT + "-=-=- " + Fore.CYAN + Style.BRIGHT + "PyWeather" + Fore.YELLOW + Style.BRIGHT + " -=-=-",
+              Fore.CYAN + Style.BRIGHT + "version " + about_version,
+              Fore.YELLOW + Style.BRIGHT + "Build Number: " + Fore.CYAN + Style.BRIGHT + about_buildnumber,
+              Fore.YELLOW + Style.BRIGHT + "Release Date: " + Fore.CYAN + Style.BRIGHT + about_releasedate,
+              Fore.YELLOW + Style.BRIGHT + "Release Type: " + Fore.CYAN + Style.BRIGHT + about_releasetype,
               "",
-              Fore.YELLOW + "Created, and mostly coded by: " + Fore.CYAN + about_maindevelopers,
-              Fore.YELLOW + "Awesome contributors: " + Fore.CYAN + about_awesomecontributors,
-              Fore.YELLOW + "Contributors: " + Fore.CYAN + about_contributors,
-              Fore.YELLOW + "A special thanks to the developers of these libraries",
-              "that are used in PyWeather: " + Fore.CYAN,
-              about_librariesinuse + Fore.RESET, sep="\n")
+              Fore.YELLOW + Style.BRIGHT + "Created, and mostly coded by: " + Style.BRIGHT + Fore.CYAN + about_maindevelopers,
+              Fore.YELLOW + Style.BRIGHT + "Awesome contributors: " + Fore.CYAN + Style.BRIGHT + about_awesomecontributors,
+              Fore.YELLOW + Style.BRIGHT + "Contributors: " + Fore.CYAN + Style.BRIGHT + about_contributors,
+              "",
+              Fore.YELLOW + Style.BRIGHT + "Powered by Weather Underground (wunderground.com)",
+              "",
+              Fore.YELLOW + Style.BRIGHT + "A special thanks to the developers of these libraries that are used in PyWeather:",
+              Fore.CYAN + Style.BRIGHT + about_librariesinuse + Fore.RESET,
+              "",
+              Fore.YELLOW + Style.BRIGHT + "A special thanks to the developers & maintainers of these APIs that are used in PyWeather:",
+              Fore.CYAN + Style.BRIGHT + about_apisinuse + Fore.RESET, sep="\n")
 #<--- About is above, jokes are below --->
     elif moreoptions == "tell me a joke":
         logger.debug("moreoptions: %s" % moreoptions)
@@ -4324,60 +6785,112 @@ while True:
         logger.debug("jokenum: %s" % jokenum)
         print("")
         if jokenum == 0:
-            print("How do hurricanes see?",
-                  "With one eye!", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "How do hurricanes see?",
+                  Fore.YELLOW + Style.BRIGHT + "With one eye!", sep="\n")
         elif jokenum == 1:
-            print("What does a cloud wear under his raincoat?",
-                  "Thunderwear!", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What does a cloud wear under his raincoat?",
+                  Fore.YELLOW + Style.BRIGHT + "Thunderwear!", sep="\n")
         elif jokenum == 2:
-            print("What type of lightning likes to play sports?",
-                  "Ball lightning!", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What type of lightning likes to play sports?",
+                  Fore.YELLOW + Style.BRIGHT + "Ball lightning!", sep="\n")
         elif jokenum == 3:
-            print("What type of cloud is so lazy, because it will never get up?",
-                  "Fog!", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What type of cloud is so lazy, because it will never get up?",
+                  Fore.YELLOW + Style.BRIGHT + "Fog!", sep="\n")
         elif jokenum == 4:
-            print("What did the lightning bolt say to the other lightning bolt?",
-                  "You're shocking!", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What did the lightning bolt say to the other lightning bolt?",
+                  Fore.YELLOW + Style.BRIGHT + "You're shocking!", sep="\n")
         elif jokenum == 5:
-            print("Whatever happened to the cow that was lifted into the tornado?",
-                  "Udder disaster!", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "Whatever happened to the cow that was lifted into the tornado?",
+                  Fore.YELLOW + Style.BRIGHT + "Udder disaster!", sep="\n")
         elif jokenum == 6:
-            print("What did the one tornado say to the other?",
-                  "Let's twist again like we did last summer.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What did the one tornado say to the other?",
+                  Fore.YELLOW + Style.BRIGHT + "Let's twist again like we did last summer.", sep="\n")
         elif jokenum == 7:
-            print("What did the thermometer say to the other thermometer?",
-                  "You make my temperature rise.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What did the thermometer say to the other thermometer?",
+                  Fore.YELLOW + Style.BRIGHT + "You make my temperature rise.", sep="\n")
         elif jokenum == 8:
-            print("What's the difference between a horse and the weather?",
-                  "One is reined up and the other rains down.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What's the difference between a horse and the weather?",
+                  Fore.YELLOW + Style.BRIGHT + "One is reined up and the other rains down.", sep="\n")
         elif jokenum == 9:
-            print("What did the one raindrop say to the other raindrop?",
-                  "My plop is bigger than your plop.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What did the one raindrop say to the other raindrop?",
+                  Fore.YELLOW + Style.BRIGHT + "My plop is bigger than your plop.", sep="\n")
         elif jokenum == 10:
-            print("Why did the woman go outdoors with her purse open?",
-                  "Because she expected some change in the weather.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "Why did the woman go outdoors with her purse open?",
+                  Fore.YELLOW + Style.BRIGHT + "Because she expected some change in the weather.", sep="\n")
         elif jokenum == 11:
-            print("What's the different between weather and climate?",
-                  "You can't weather a tree, but you can climate.", sep="\n")
+            print(Fore.YELLOW + Style.BRIGHT + "What's the different between weather and climate?",
+                  Fore.YELLOW + Style.BRIGHT + "You can't weather a tree, but you can climate.", sep="\n")
         elif jokenum == 12:
-            print("What did the hurricane say to the other hurricane?",
-                  "I have my eye on you.", sep="\n")
-# <--- Jokes are above | Yesterday is below --->
+            print(Fore.YELLOW + Style.BRIGHT + "What did the hurricane say to the other hurricane?",
+                  Fore.YELLOW + Style.BRIGHT + "I have my eye on you.", sep="\n")
+# <--- Jokes are above | Programmer dad jokes is below --->
+    elif moreoptions == "tell me a dad joke":
+        logger.debug("moreoptions: %s" % moreoptions)
+        dadjokenum = randint(0, 12)
+        logger.debug("dadjokenum: %s" % dadjokenum)
+        # Jokes from /r/programmerdadjokes top 12 posts
+        # Top list fetched in late October 2017
+        print("")
+        if dadjokenum == 0:
+            print(Fore.YELLOW + Style.BRIGHT + '["hip", "hip"]',
+                  Fore.YELLOW + Style.BRIGHT + 'hip hip array!', sep="\n")
+        elif dadjokenum == 1:
+            print(Fore.YELLOW + Style.BRIGHT + "How did pirates collaborate before computers?",
+                  Fore.YELLOW + Style.BRIGHT + "Pier to pier networking", sep="\n")
+        elif dadjokenum == 2:
+            print(Fore.YELLOW + Style.BRIGHT + "As a programmer, sometimes I feel a void",
+                  Fore.YELLOW + Style.BRIGHT + "And I know I've reached the point of no return", sep="\n")
+        elif dadjokenum == 3:
+            print(Fore.YELLOW + Style.BRIGHT + "Why are 'i' and 'j' a good source of information?",
+                  Fore.YELLOW + Style.BRIGHT + "They're always in the loop", sep="\n")
+        elif dadjokenum == 4:
+            print(Fore.YELLOW + Style.BRIGHT + "Two SQL developers walk into a bar & then walk straight out...",
+                  Fore.YELLOW + Style.BRIGHT + "Because there were no tables they could join", sep="\n")
+        elif dadjokenum == 5:
+            print(Fore.YELLOW + Style.BRIGHT + "I'm starting a band called HTML Encoder",
+                  Fore.YELLOW + Style.BRIGHT + "Looking to buy a guitar &amp;", sep="\n")
+        elif dadjokenum == 6:
+            print(Fore.YELLOW + Style.BRIGHT + "Why did the functions stop calling each other?",
+                  Fore.YELLOW + Style.BRIGHT + "Because they had constant arguments.", sep="\n")
+        elif dadjokenum == 7:
+            print(Fore.YELLOW + Style.BRIGHT + "Why don't bachelors like Git?",
+                  Fore.YELLOW + Style.BRIGHT + "Because they are afraid to commit.", sep="\n")
+        elif dadjokenum == 8:
+            print(Fore.YELLOW + Style.BRIGHT + "What do you call a skinny ghost?",
+                  Fore.YELLOW + Style.BRIGHT + "BOOLEAN.", sep="\n")
+        elif dadjokenum == 9:
+            print(Fore.YELLOW + Style.BRIGHT + "You should be careful with functions that don't return a value.",
+                  Fore.YELLOW + Style.BRIGHT + "In fact, I would just a void them.", sep="\n")
+        elif dadjokenum == 10:
+            print(Fore.YELLOW + Style.BRIGHT + "Kernel programming is like buying from IKEA.",
+                  Fore.YELLOW + Style.BRIGHT + "Some assembly required.", sep="\n")
+        elif dadjokenum == 11:
+            print(Fore.YELLOW + Style.BRIGHT + "A man is sent to town by his wife to get bread",
+                  Fore.YELLOW + Style.BRIGHT + "She says, 'oh and while you're there, get some eggs.'",
+                  Fore.YELLOW + Style.BRIGHT + "He never came back.", sep="\n")
+        elif dadjokenum == 12:
+            print(Fore.YELLOW + Style.BRIGHT + "Why is gorillas' vision useful to programmers?",
+                  Fore.YELLOW + Style.BRIGHT + "They have an apey eye.", sep="\n")
+# <--- Programmer dad jokes is above | Yesterday's weather is below --->
     elif moreoptions == "9":
-        print(Fore.RED + "Loading...")
         yesterday_loops = 0
         yesterday_totalloops = 0
         logger.debug("yesterday_loops: %s ; yesterday_totalloops: %s"
                      % (yesterday_loops, yesterday_totalloops))
-
         logger.debug("yesterdayurl: %s" % yesterdayurl)
-
-        if yesterday_prefetched == False:
+        if (yesterdaydata_prefetched is False or refresh_yesterdaydataflagged is True or time.time() - cachetime_yesterday >= cache_yesterdaytime):
+            spinner.start(text="Refreshing yesterday's weather data...")
             try:
                 yesterdayJSON = requests.get(yesterdayurl)
-                yesterday_prefetched = True
-                logger.debug("yesterday_prefetched: %s" % yesterday_prefetched)
+                yesterdaydata_prefetched = True
+                cachetime_yesterday = time.time()
+                refresh_yesterdaydataflagged = False
+                logger.debug("yesterdaydata_prefetched: %s ; refresh_yesterdaydataflagged: %s" %
+                             (yesterdaydata_prefetched, refresh_yesterdaydataflagged))
+                spinner.stop()
             except:
+                spinner.fail("Failed to refresh yesterday's weather data!")
+                print("")
                 print("When attempting to fetch yesterday's data, PyWeather ran into",
                       "an error. If you're on a network with a filter make sure that",
                       "'api.wunderground.com' is unblocked. Otherwise, make sure that",
@@ -4388,6 +6901,7 @@ while True:
                 input()
                 continue
 
+        spinner.start(text="Loading yesterday's weather information...")
         logger.debug("yesterdayJSON loaded with: %s" % yesterdayJSON)
         yesterday_json = json.loads(yesterdayJSON.text)
         if jsonVerbosity == True:
@@ -4395,146 +6909,431 @@ while True:
         else:
             logger.debug("Loaded 1 JSON.")
         yesterday_date = yesterday_json['history']['date']['pretty']
-        print(Fore.YELLOW + "Here's yesterday's weather for " + Fore.CYAN +
-              str(location) + Fore.YELLOW + " on "
-              + Fore.CYAN + yesterday_date)
         logger.debug("yesterday_date: %s" % yesterday_date)
+        spinner.stop()
         for data in yesterday_json['history']['dailysummary']:
-            print("")
+            # Lay out display variables for yesterday's weather stuff.
+            yesterday_showMinWind = True
+            yesterday_showAvgWind = True
+            logger.debug("yesterday_showMinWind: %s ; yesterday_showAvgWind: %s" %
+                         (yesterday_showMinWind, yesterday_showAvgWind))
+            yesterday_showMaxWind = True
+            yesterday_showMinVis = True
+            logger.debug("yesterday_showMaxWind: %s ; yesterday_showMinVis: %s" %
+                         (yesterday_showMaxWind, yesterday_showMinVis))
+            yesterday_showAvgVis = True
+            yesterday_showMaxVis = True
+            logger.debug("yesterday_showAvgVis: %s ; yesterday_showMaxVis: %s" %
+                         (yesterday_showAvgVis, yesterday_showMaxVis))
+            yesterday_showMinPress = True
+            yesterday_showAvgPress = True
+            logger.debug("yesterday_showMinPress: %s ; yesterday_showAvgPress: %s" %
+                         (yesterday_showMinPress, yesterday_showAvgPress))
+            yesterday_showMaxPress = True
+            yesterday_showHumidity = True
+            logger.debug("yesterday_showMaxPress: %s ; yesterday_showHumidity: %s" %
+                         (yesterday_showMaxPress, yesterday_showHumidity))
+            yesterday_showMinTemp = True
+            yesterday_showAvgTemp = True
+            logger.debug("yesterday_showMinTemp: %s ; yesterday_showAvgTemp: %s" %
+                         (yesterday_showMinTemp, yesterday_showAvgTemp))
+            yesterday_showMaxTemp = True
+            yesterday_showMinDewpoint = True
+            logger.debug("yesterday_showMaxTemp: %s ; yesterday_showMinDewpoint: %s" %
+                         (yesterday_showMaxTemp, yesterday_showMinDewpoint))
+            yesterday_showAvgDewpoint = True
+            yesterday_showMaxDewpoint = True
+            logger.debug("yesterday_showAvgDewpoint: %s ; yesterday_showMaxDewpoint: %s" %
+                         (yesterday_showAvgDewpoint, yesterday_showMaxDewpoint))
+
             yesterday_avgTempF = str(data['meantempi'])
             yesterday_avgTempC = str(data['meantempm'])
-            yesterday_avgDewpointF = str(data['meandewpti'])
-            yesterday_avgDewpointC = str(data['meandewptm'])
             logger.debug("yesterday_avgTempF: %s ; yesterday_avgTempC: %s" %
                          (yesterday_avgTempF, yesterday_avgTempC))
+
+            if yesterday_avgTempF == "" or yesterday_avgTempC == "":
+                logger.info("yesterday_avgTempF is '' or yesterday_avgTempC is ''.")
+                yesterday_showAvgTemp = False
+                logger.debug("yesterday_showAvgTemp: %s" % yesterday_showAvgTemp)
+
+            yesterday_avgDewpointF = str(data['meandewpti'])
+            yesterday_avgDewpointC = str(data['meandewptm'])
             logger.debug("yesterday_avgDewpointF: %s ; yesterday_avgDewpointC: %s" %
                          (yesterday_avgDewpointF, yesterday_avgDewpointC))
-            yesterday_avgPressureMB = str(data['meanpressurem'])
-            yesterday_avgPressureInHg = str(data['meanpressurei'])
-            yesterday_avgWindSpeedMPH = str(data['meanwindspdi'])
-            yesterday_avgWindSpeedKPH = str(data['meanwindspdm'])
-            logger.debug("yesterday_avgPressureMB: %s ; yesterday_avgPressureInHg: %s" %
-                         (yesterday_avgPressureMB, yesterday_avgPressureInHg))
-            logger.debug("yesterday_avgWindSpeedMPH: %s ; yesterday_avgWindSpeedKPH: %s" %
-                         (yesterday_avgWindSpeedMPH, yesterday_avgWindSpeedKPH))
-            yesterday_avgWindDegrees = str(data['meanwdird'])
-            yesterday_avgWindDirection = str(data['meanwdire'])
-            yesterday_avgVisibilityMI = str(data['meanvisi'])
-            yesterday_avgVisibilityKM = str(data['meanvism'])
-            logger.debug("yesterday_avgWindDegrees: %s ; yesterday_avgWindDirection: %s" %
-                         (yesterday_avgWindDegrees, yesterday_avgWindDirection))
-            logger.debug("yesterday_avgVisibilityMI: %s ; yesterday_avgVisibilityKM: %s" %
-                         (yesterday_avgVisibilityMI, yesterday_avgVisibilityKM))
-            yesterday_maxHumidity = int(data['maxhumidity'])
-            yesterday_minHumidity = int(data['minhumidity'])
-            logger.debug("yesterday_maxHumidity: %s ; yesterday_minHumidity: %s" %
-                         (yesterday_maxHumidity, yesterday_minHumidity))
+
+            if yesterday_avgDewpointF == "" or yesterday_avgDewpointC == "":
+                logger.info("yesterday_avgDewpointF is '' or yesterday_avgDewpointC is ''.")
+                yesterday_showAvgDewpoint = False
+                logger.debug("yesterday_showAvgDewpoint: %s" % yesterday_showAvgDewpoint)
+
+            try:
+                yesterday_avgPressureMB = str(data['meanpressurem'])
+                logger.debug("yesterday_avgPressureMB: %s" % yesterday_avgPressureMB)
+            except KeyError:
+                yesterday_showAvgPress = False
+                logger.debug("yesterday_showAvgPress: %s" % yesterday_showAvgPress)
+
+            try:
+                yesterday_avgPressureInHg = str(data['meanpressurei'])
+                logger.debug("yesterday_avgPressureInHg: %s" % yesterday_avgPressureInHg)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showAvgPress = False
+                logger.debug("yesterday_showAvgPress: %s" % yesterday_showAvgPress)
+
+            try:
+                yesterday_avgWindSpeedKPH = str(data['meanwindspdm'])
+                logger.debug("yesterday_avgWindSpeedKPH: %s" % yesterday_avgWindSpeedKPH)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showAvgWind = False
+                logger.debug("yesterday_showAvgWind: %s" % yesterday_showAvgWind)
+
+            try:
+                yesterday_avgWindSpeedMPH = str(data['meanwindspdi'])
+                logger.debug("yesterday_avgWindSpeedMPH: %s" % yesterday_avgWindSpeedMPH)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showAvgWind = False
+                logger.debug("yesterday_showAvgWind: %s" % yesterday_showAvgWind)
+
+            try:
+                yesterday_avgWindDegrees = str(data['meanwdird'])
+                logger.debug("yesterday_avgWindDegrees: %s" % yesterday_avgWindDegrees)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showAvgWind = False
+                logger.debug("yesterday_showAvgWind: %s" % yesterday_showAvgWind)
+
+            try:
+                yesterday_avgWindDirection = str(data['meanwdire'])
+                logger.debug("yesterday_avgWindDirection: %s" % yesterday_avgWindDirection)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showAvgWind = False
+                logger.debug("yesterday_showAvgWind: %s" % yesterday_showAvgWind)
+
+            try:
+                yesterday_avgVisibilityMI = str(data['meanvisi'])
+                logger.debug("yesterday_AvgVisibilityMI: %s" % yesterday_avgVisibilityMI)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showAvgVis = False
+                logger.debug("yesterday_showAvgVis: %s" % yesterday_showAvgVis)
+
+            try:
+                yesterday_avgVisibilityKM = str(data['meanvism'])
+                logger.debug("yesterday_avgVisibilityKM: %s" % yesterday_avgVisibilityKM)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showAvgVis = False
+                logger.debug("yesterday_showAvgVis: %s" % yesterday_showAvgVis)
+            try:
+                yesterday_maxHumidity = int(data['maxhumidity'])
+                yesterday_minHumidity = int(data['minhumidity'])
+                logger.debug("yesterday_maxHumidity: %s ; yesterday_minHumidity: %s" %
+                             (yesterday_maxHumidity, yesterday_minHumidity))
+            except ValueError:
+                printException_loggerwarn()
+                yesterday_showHumidity = False
+                logger.debug("yesterday_showHumidity: %s" % yesterday_showHumidity)
             # This is a really nieve way of calculating the average humidity. Sue me.
             # In reality, WU spits out nothing for average humidity.
-            yesterday_avgHumidity = (yesterday_maxHumidity +
-                                     yesterday_minHumidity)
-            yesterday_avgHumidity = (yesterday_avgHumidity / 2)
-            logger.debug("yesterday_avgHumidity: %s" % yesterday_avgHumidity)
-            yesterday_maxHumidity = str(data['maxhumidity'])
-            yesterday_minHumidity = str(data['minhumidity'])
-            yesterday_avgHumidity = str(yesterday_avgHumidity)
-            logger.info("Converted 3 vars to str.")
+
+            # Run this code only if we have data.
+            if yesterday_showHumidity is True:
+                yesterday_avgHumidity = (yesterday_maxHumidity +
+                                         yesterday_minHumidity)
+                yesterday_avgHumidity = (yesterday_avgHumidity / 2)
+                logger.debug("yesterday_avgHumidity: %s" % yesterday_avgHumidity)
+                yesterday_maxHumidity = str(data['maxhumidity'])
+                yesterday_minHumidity = str(data['minhumidity'])
+                yesterday_avgHumidity = str(yesterday_avgHumidity)
+                logger.info("Converted 3 vars to str.")
+
             yesterday_maxTempF = str(data['maxtempi'])
             yesterday_maxTempC = str(data['maxtempm'])
-            yesterday_minTempF = str(data['mintempi'])
-            yesterday_minTempC = str(data['mintempm'])
             logger.debug("yesterday_maxTempF: %s ; yesterday_maxTempC: %s" %
                          (yesterday_maxTempF, yesterday_maxTempC))
+
+            if yesterday_maxTempF == "" or yesterday_maxTempC == "":
+                logger.info("yesterday_maxTempF is '' or yesterday_maxTempC is ''.")
+                yesterday_showMaxTemp = False
+                logger.debug("yesterday_showMaxTemp: %s" % yesterday_showMaxTemp)
+
+            yesterday_minTempF = str(data['mintempi'])
+            yesterday_minTempC = str(data['mintempm'])
             logger.debug("yesterday_minTempF: %s ; yesterday_minTempC: %s" %
                          (yesterday_minTempF, yesterday_minTempC))
+
+            if yesterday_minTempF == "" or yesterday_minTempC == "":
+                logger.info("yesterday_minTempF is '' or yesterday_minTempC is ''.")
+                yesterday_showMinTemp = False
+                logger.debug("yesterday_showMinTemp: %s" % yesterday_showMinTemp)
+
             yesterday_maxDewpointF = str(data['maxdewpti'])
             yesterday_maxDewpointC = str(data['maxdewptm'])
-            yesterday_minDewpointF = str(data['mindewpti'])
-            yesterday_minDewpointC = str(data['mindewptm'])
             logger.debug("yesterday_maxDewpointF: %s ; yesterday_maxDewpointC: %s" %
                          (yesterday_maxDewpointF, yesterday_maxDewpointC))
+
+            if yesterday_maxDewpointF == "" or yesterday_maxDewpointC == "":
+                logger.info("yesterday_maxDewpointF is '' or yesterday_maxDewpointC is ''.")
+                yesterday_showMaxDewpoint = False
+                logger.debug("yesterday_showMaxDewpoint: %s" % yesterday_showMaxDewpoint)
+
+            yesterday_minDewpointF = str(data['mindewpti'])
+            yesterday_minDewpointC = str(data['mindewptm'])
             logger.debug("yesterday_minDewpointF: %s ; yesterday_minDewpointC: %s" %
                          (yesterday_minDewpointF, yesterday_minDewpointC))
-            yesterday_maxPressureInHg = str(data['maxpressurei'])
-            yesterday_maxPressureMB = str(data['maxpressurem'])
-            yesterday_minPressureInHg = str(data['minpressurei'])
-            yesterday_minPressureMB = str(data['minpressurem'])
-            logger.debug("yesterday_maxPressureInHg: %s ; yesterday_maxPressureMB: %s" %
-                         (yesterday_maxPressureInHg, yesterday_maxPressureMB))
-            logger.debug("yesterday_minPressureInHg: %s ; yesterday_minPressureMB: %s" %
-                         (yesterday_minPressureInHg, yesterday_minPressureMB))
-            yesterday_maxWindMPH = str(data['maxwspdi'])
-            yesterday_maxWindKPH = str(data['maxwspdm'])
-            yesterday_minWindMPH = str(data['minwspdi'])
-            yesterday_minWindKPH = str(data['minwspdm'])
-            logger.debug("yesterday_maxWindMPH: %s ; yesterday_maxWindKPH: %s" %
-                         (yesterday_maxWindMPH, yesterday_maxWindMPH))
-            logger.debug("yesterday_minWindMPH: %s ; yesterday_minWindKPH: %s" %
-                         (yesterday_minWindMPH, yesterday_minWindKPH))
-            yesterday_maxVisibilityMI = str(data['maxvisi'])
-            yesterday_maxVisibilityKM = str(data['maxvism'])
-            yesterday_minVisibilityMI = str(data['minvisi'])
-            yesterday_minVisibilityKM = str(data['minvism'])
-            logger.debug("yesterday_maxVisibilityMI: %s ; yesterday_maxVisibilityKM: %s" %
-                         (yesterday_maxVisibilityMI, yesterday_maxVisibilityKM))
-            logger.debug("yesterday_minVisibilityMI: %s ; yesterday_minVisibilityKM: %s" %
-                         (yesterday_minVisibilityMI, yesterday_minVisibilityKM))
+
+            if yesterday_minDewpointF == "" or yesterday_minDewpointC == "":
+                logger.info("yesterday_minDewpointF is '' or yesterday_minDewpointC is ''.")
+                yesterday_showMinDewpoint = False
+                logger.debug("yesterday_showMinDewpoint: %s" % yesterday_showMinDewpoint)
+
+            try:
+                yesterday_maxPressureInHg = str(data['maxpressurei'])
+                logger.debug("yesterday_maxPressureInHg: %s" % yesterday_maxPressureInHg)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showMaxPress = False
+                logger.debug("yesterday_showMaxPress: %s" % yesterday_showMaxPress)
+
+            try:
+                yesterday_maxPressureMB = str(data['maxpressurem'])
+                logger.debug("yesterday_maxPressureMB: %s" % yesterday_maxPressureMB)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showMaxPress = False
+                logger.debug("yesterday_showMaxPress: %s" % yesterday_showMaxPress)
+
+            try:
+                yesterday_minPressureInHg = str(data['minpressurei'])
+                logger.debug("yesterday_minPressureInHg: %s" % yesterday_minPressureInHg)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showMinPress = False
+                logger.debug("yesterday_showMinPress: %s" % yesterday_showMinPress)
+
+            try:
+                yesterday_minPressureMB = str(data['minpressurem'])
+                logger.debug("yesterday_minPressureMB: %s" % yesterday_minPressureMB)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showMinPress = False
+                logger.debug("yesterday_showMinPress: %s" % yesterday_showMinPress)
+
+            try:
+                yesterday_maxWindMPH = str(data['maxwspdi'])
+                logger.debug("yesterday_maxWindMPH: %s" % yesterday_maxWindMPH)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showMaxWind = False
+                logger.debug("yesterday_showMaxWind: %s" % yesterday_showMaxWind)
+
+            try:
+                yesterday_maxWindKPH = str(data['maxwspdm'])
+                logger.debug("yesterday_maxWindKPH: %s" % yesterday_maxWindKPH)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showMaxWind = False
+                logger.debug("yesterday_showMaxWind: %s" % yesterday_showMaxWind)
+
+            try:
+                yesterday_minWindMPH = str(data['minwspdi'])
+                logger.debug("yesterday_minWindMPH: %s" % yesterday_minWindMPH)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showMinWind = False
+                logger.debug("yesterday_showMinWind: %s" % yesterday_showMinWind)
+
+            try:
+                yesterday_minWindKPH = str(data['minwspdm'])
+                logger.debug("yesterday_minWindKPH: %s" % yesterday_minWindKPH)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showMinWind = False
+                logger.debug("yesterday_showMinWind: %s" % yesterday_showMinWind)
+
+            try:
+                yesterday_maxVisibilityMI = str(data['maxvisi'])
+                logger.debug("yesterday_maxVisibilityMI: %s" % yesterday_maxVisibilityMI)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showMaxVis = False
+                logger.debug("yesterday_showMaxVis: %s" % yesterday_showMaxVis)
+
+            try:
+                yesterday_maxVisibilityKM = str(data['maxvism'])
+                logger.debug("yesterday_maxVisibilityKM: %s" % yesterday_maxVisibilityKM)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showMaxVis = False
+                logger.debug("yesterday_showMaxVis: %s" % yesterday_showMaxVis)
+
+            try:
+                yesterday_minVisibilityMI = str(data['minvisi'])
+                logger.debug("yesterday_minVisibilityMI: %s" % yesterday_minVisibilityMI)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showMinVis = False
+                logger.debug("yesterday_showMinVis: %s" % yesterday_showMinVis)
+
+            try:
+                yesterday_minVisibilityKM = str(data['minvism'])
+                logger.debug("yesterday_minVisibilityKM: %s" % yesterday_minVisibilityKM)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showMinVis = False
+                logger.debug("yesterday_showMinVis: %s" % yesterday_showMinVis)
+
             yesterday_precipMM = str(data['precipm'])
             yesterday_precipIN = str(data['precipi'])
             logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s" %
                          (yesterday_precipMM, yesterday_precipIN))
 
+
+            # If the variable does exist (and a key error hasn't occurred), then validate the data.
+            if yesterday_showMinWind is True:
+                logger.info("yesterday_showMinWind is True.")
+                if yesterday_minWindMPH == "":
+                    logger.info("yesterday_mindWindMPH is ''.")
+                    yesterday_showMinWind = False
+                    logger.debug("yesterday_showMInWind: %s" % yesterday_showMinWind)
+            if yesterday_showAvgWind is True:
+                logger.info("yesterday_showAvgWind is True.")
+                if yesterday_avgWindSpeedMPH == "":
+                    logger.info("yesterday_avgWindSpeedMPH is ''.")
+                    yesterday_showAvgWind = False
+                    logger.debug("yesterday_showAvgWind: %s" % yesterday_showAvgWind)
+            if yesterday_showMaxWind is True:
+                logger.info("yesterday_showMaxWind is True.")
+                if yesterday_maxWindMPH == "":
+                    logger.info("yesterday_maxWindMPH is ''.")
+                    yesterday_showMaxWind = False
+                    logger.debug("yesterday_showMaxWind: %s" % yesterday_showMaxWind)
+            if yesterday_showMinVis is True:
+                logger.info("yesterday_showMinVis is True.")
+                if yesterday_minVisibilityMI == "":
+                    logger.info("yesterday_minVisibilityMI is ''.")
+                    yesterday_showMinVis = False
+                    logger.debug("yesterday_showMinVis: %s" % yesterday_showMinVis)
+
+            if yesterday_showAvgVis is True:
+                logger.info("yesterday_showAvgVis is True.")
+                if yesterday_avgVisibilityMI == "":
+                    logger.info("yesterday_avgVisibilityMI is ''.")
+                    yesterday_showAvgVis = False
+                    logger.debug("yesterday_showAvgVis: %s" % yesterday_showAvgVis)
+
+            if yesterday_showMaxVis is True:
+                logger.info("yesterday_showMaxVis is True.")
+                if yesterday_maxVisibilityMI == "":
+                    logger.info("yesterday_maxVisibilityMI is ''.")
+                    yesterday_showMaxVis = False
+                    logger.debug("yesterday_showMaxVis: %s" % yesterday_showMaxVis)
+
+            if yesterday_showMinPress is True:
+                logger.info("yesterday_showMinPress is True.")
+                if yesterday_minPressureMB == "":
+                    logger.info("yesterday_minPressureMB is ''.")
+                    yesterday_showMinPress = False
+                    logger.debug("yesterday_showMinPress: %s" % yesterday_showMinPress)
+
+            if yesterday_showAvgPress is True:
+                logger.info("yesterday_showAvgPress is True.")
+                if yesterday_avgPressureMB == "":
+                    logger.info("yesterday_avgPressureMB is ''.")
+                    yesterday_showAvgPress = False
+                    logger.debug("yesterday_showAvgPress: %s" % yesterday_showAvgPress)
+
+            if yesterday_showMaxPress is True:
+                logger.info("yesterday_showMaxPress is True.")
+                if yesterday_maxPressureMB == "":
+                    logger.info("yesterday_maxPressureMB is ''.")
+                    yesterday_showMaxPress = False
+                    logger.debug("yesterday_showMaxPress: %s" % yesterday_showMaxPress)
+
             if yesterday_precipMM == "T":
+                logger.info("yesterday_precipMM is 'T'.")
                 yesterday_precipdata = False
             else:
                 yesterday_precipdata = True
             logger.debug("yesterday_precipdata: %s" % yesterday_precipdata)
 
-        print(Fore.YELLOW + "Here's the summary for the day.")
-        print(Fore.YELLOW + "Minimum Temperature: " + Fore.CYAN + yesterday_minTempF
-              + "°F (" + yesterday_minTempC + "°C)")
-        print(Fore.YELLOW + "Average Temperature: " + Fore.CYAN + yesterday_avgTempF
-              + "°F (" + yesterday_avgTempC + "°C)")
-        print(Fore.YELLOW + "Maxmimum Temperature: " + Fore.CYAN + yesterday_maxTempF
-              + "°F (" + yesterday_maxTempC + "°C)")
-        print(Fore.YELLOW + "Minimum Dew Point: " + Fore.CYAN + yesterday_minDewpointF
-              + "°F (" + yesterday_minDewpointC + "°C)")
-        print(Fore.YELLOW + "Average Dew Point: " + Fore.CYAN + yesterday_avgDewpointF
-              + "°F (" + yesterday_avgDewpointC + "°C)")
-        print(Fore.YELLOW + "Maximum Dew Point: " + Fore.CYAN + yesterday_maxDewpointF
-              + "°F (" + yesterday_maxDewpointC + "°C)")
-        print(Fore.YELLOW + "Minimum Humidity: " + Fore.CYAN + yesterday_minHumidity
-              + "%")
-        print(Fore.YELLOW + "Average Humidity: " + Fore.CYAN + yesterday_avgHumidity
-              + "%")
-        print(Fore.YELLOW + "Maximum Humidity: " + Fore.CYAN + yesterday_maxHumidity
-              + "%")
-        print(Fore.YELLOW + "Minimum Wind Speed: " + Fore.CYAN + yesterday_minWindMPH
-              + " mph (" + yesterday_minWindKPH + " kph)")
-        print(Fore.YELLOW + "Average Wind Speed: " + Fore.CYAN + yesterday_avgWindSpeedMPH
-              + " mph (" + yesterday_avgWindSpeedKPH + " kph)")
-        print(Fore.YELLOW + "Maximum Wind Speed: " + Fore.CYAN + yesterday_maxWindMPH
-              + " mph (" + yesterday_maxWindKPH + " kph)")
-        print(Fore.YELLOW + "Minimum Visibility: " + Fore.CYAN + yesterday_minVisibilityMI
-              + " mi (" + yesterday_minVisibilityKM + " kph)")
-        print(Fore.YELLOW + "Average Visibility: " + Fore.CYAN + yesterday_avgVisibilityMI
-              + " mi (" + yesterday_avgVisibilityKM + " kph)")
-        print(Fore.YELLOW + "Maximum Visibility: " + Fore.CYAN + yesterday_maxVisibilityMI
-              + " mi (" + yesterday_maxVisibilityKM + " kph)")
-        print(Fore.YELLOW + "Minimum Pressure: " + Fore.CYAN + yesterday_minPressureInHg
-              + " inHg (" + yesterday_minPressureMB + " mb)")
-        print(Fore.YELLOW + "Average Pressure: " + Fore.CYAN + yesterday_avgPressureInHg
-              + " inHg (" + yesterday_avgPressureMB + " mb)")
-        print(Fore.YELLOW + "Maximum Pressure: " + Fore.CYAN + yesterday_maxPressureInHg
-              + " inHg (" + yesterday_maxPressureMB + " mb)")
-        if yesterday_precipdata is True:
-            print(Fore.YELLOW + "Total Precipitation: " + Fore.CYAN + yesterday_precipIN
-                  + " in (" + yesterday_precipMM + " mm)")
-        else:
-            print(Fore.YELLOW + "Total precipitation data is not available.")
+        print(Fore.YELLOW + Style.BRIGHT + "Here's yesterday's weather for " + Fore.CYAN + Style.BRIGHT +
+              str(location) + Fore.YELLOW + Style.BRIGHT + " on "
+              + Fore.CYAN + Style.BRIGHT + yesterday_date)
         print("")
-        print(Fore.RED + "To view hourly data for yesterday's weather, please press enter.")
-        print(Fore.RED + "If you want to return to the main menu, press Control + C.")
+        print(Fore.YELLOW + Style.BRIGHT + "Here's the summary for the day.")
+        if yesterday_showMinTemp is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_minTempF
+                  + "°F (" + yesterday_minTempC + "°C)")
+        if yesterday_showAvgTemp is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_avgTempF
+                  + "°F (" + yesterday_avgTempC + "°C)")
+        if yesterday_showMaxTemp is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maxmimum Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_maxTempF
+                  + "°F (" + yesterday_maxTempC + "°C)")
+        if yesterday_showMinDewpoint is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Dew Point: " + Fore.CYAN + Style.BRIGHT + yesterday_minDewpointF
+                  + "°F (" + yesterday_minDewpointC + "°C)")
+        if yesterday_showAvgDewpoint is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Dew Point: " + Fore.CYAN + Style.BRIGHT + yesterday_avgDewpointF
+                  + "°F (" + yesterday_avgDewpointC + "°C)")
+        if yesterday_showMaxDewpoint is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Dew Point: " + Fore.CYAN + Style.BRIGHT + yesterday_maxDewpointF
+                  + "°F (" + yesterday_maxDewpointC + "°C)")
+        if yesterday_showHumidity is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_minHumidity
+                  + "%")
+            print(Fore.YELLOW + Style.BRIGHT + "Average Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_avgHumidity
+                  + "%")
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Humidity: " + Fore.CYAN + Style.BRIGHT + yesterday_maxHumidity
+                  + "%")
+        if yesterday_showMinWind is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_minWindMPH
+                  + " mph (" + yesterday_minWindKPH + " kph)")
+
+        if yesterday_showAvgWind is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_avgWindSpeedMPH
+                  + " mph (" + yesterday_avgWindSpeedKPH + " kph)")
+
+        if yesterday_showMaxWind is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Wind Speed: " + Fore.CYAN + Style.BRIGHT + yesterday_maxWindMPH
+                  + " mph (" + yesterday_maxWindKPH + " kph)")
+
+        if yesterday_showMinVis is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_minVisibilityMI
+                  + " mi (" + yesterday_minVisibilityKM + " km)")
+
+        if yesterday_showAvgVis is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_avgVisibilityMI
+                  + " mi (" + yesterday_avgVisibilityKM + " km)")
+
+        if yesterday_showMaxVis is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_maxVisibilityMI
+                  + " mi (" + yesterday_maxVisibilityKM + " km)")
+
+        if yesterday_showMinPress is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Minimum Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_minPressureInHg
+                  + " inHg (" + yesterday_minPressureMB + " mb)")
+
+        if yesterday_showAvgPress is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Average Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_avgPressureInHg
+                  + " inHg (" + yesterday_avgPressureMB + " mb)")
+
+        if yesterday_showMaxPress is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Maximum Pressure: " + Fore.CYAN + Style.BRIGHT + yesterday_maxPressureInHg
+                  + " inHg (" + yesterday_maxPressureMB + " mb)")
+
+        if yesterday_precipdata is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Total Precipitation: " + Fore.CYAN + Style.BRIGHT + yesterday_precipIN
+                  + " in (" + yesterday_precipMM + " mm)")
+
+        print("")
+        print(Fore.RED + Style.BRIGHT + "To view hourly data for yesterday's weather, please press enter.")
+        print(Fore.RED + Style.BRIGHT + "If you want to return to the main menu, press Control + C.")
         try:
             input()
         except KeyboardInterrupt:
@@ -4550,125 +7349,249 @@ while True:
         for data in yesterday_json['history']['observations']:
             logger.info("We're on iteration %s/%s. User iteration limit: %s."
                         % (yesterday_totalloops, yesterdayhourlyLoops, user_loopIterations))
+            # Again, set up the display variables.
+            yesterday_showWindSpeed = True
+            yesterday_showWindGust = True
+            logger.debug("yesterday_showWindSpeed: %s ; yesterday_showWindGust: %s" %
+                         (yesterday_showWindSpeed, yesterday_showWindGust))
+            yesterday_showVisibility = True
+            yesterday_showWindChill = True
+            logger.debug("yesterday_showVisibility: %s ; yesterday_showWindChill: %s" %
+                         (yesterday_showVisibility, yesterday_showWindChill))
+            yesterday_showHeatIndex = True
+            yesterday_showPressure = True
+            logger.debug("yesterday_showHeatIndex: %s ; yesterday_showPressure: %s" %
+                         (yesterday_showHeatIndex, yesterday_showPressure))
+            yesterday_showPrecip = True
+            yesterday_showConditions = True
+            logger.debug("yesterday_showPrecip: %s ; yesterday_showConditions: %s" %
+                         (yesterday_showPrecip, yesterday_showConditions))
+            yesterday_showTemp = True
+            yesterday_showDewpoint = True
+            logger.debug("yesterday_showTemp: %s ; yesterday_showDewpoint: %s" %
+                         (yesterday_showTemp, yesterday_showDewpoint))
+            yesterday_showWindDirection = True
+            logger.debug("yesterday_showWindDirection: %s" % yesterday_showWindDirection)
+
             yesterday_time = data['date']['pretty']
+            logger.debug("yesterday_time: %s" % yesterday_time)
+
             yesterday_tempF = str(data['tempi'])
             yesterday_tempC = str(data['tempm'])
+            logger.debug("yesterday_tempF: %s ; yesterday_tempC: %s" %
+                         (yesterday_tempF, yesterday_tempC))
+            if yesterday_tempF == "-9999" or yesterday_tempF == "" or yesterday_tempC == "-9999" or yesterday_tempC == "":
+                logger.info("yesterday_tempF is '-9999' or yesterday_tempF is '' or yesterday_tempC is '-9999' or yesterday_tempC is ''.")
+                yesterday_showTemp = False
+                logger.debug("yesterday_showTemp: %s" % yesterday_showTemp)
+
             yesterday_dewpointF = str(data['dewpti'])
-            logger.debug("yesterday_time: %s ; yesterday_tempF: %s"
-                         % (yesterday_time, yesterday_tempF))
-            logger.debug("yesterday_tempC: %s ; yesterday_dewpointF: %s"
-                         % (yesterday_tempC, yesterday_dewpointF))
             yesterday_dewpointC = str(data['dewptm'])
+            logger.debug("yesterday_dewpointF: %s ; yesterday_dewpointC: %s" %
+                         (yesterday_dewpointF, yesterday_dewpointC))
+
+            if yesterday_dewpointF == "-9999" or yesterday_dewpointF == "" or yesterday_dewpointC == "-9999" or yesterday_dewpointC == "":
+                logger.info("yesterday_dewpointF is '-9999' or yesterday_dewpointF is '' or yesterday_dewpointC is '-9999' or yesterday_dewpointC is ''.")
+                yesterday_showDewpoint = False
+                logger.debug("yesterday_showDewpoint: %s" % yesterday_showDewpoint)
+
             yesterday_windspeedKPH = str(data['wspdm'])
             yesterday_windspeedMPH = str(data['wspdi'])
+            logger.debug("yesterday_windspeedKPH: %s ; yesterday_windspeedMPH: %s" %
+                         (yesterday_windspeedKPH, yesterday_windspeedMPH))
+            yesterday_windgustKPH = str(data['wgustm'])
+            yesterday_windgustMPH = str(data['wgusti'])
+            logger.debug("yesterday_windgustKPH: %s ; yesterday_windgustMPH: %s" %
+                         (yesterday_windgustKPH, yesterday_windgustMPH))
+            if yesterday_windspeedMPH == "-999.9" or yesterday_windspeedKPH == "-999.9" or yesterday_windspeedMPH == "" or yesterday_windspeedKPH == "":
+                logger.info("yesterday_windspeedMPH is '-999.9' or yesterday_windspeedKPH is '' or yesterday_windspeedMPH is '' or yesterday_windspeedKPH is ''.")
+                yesterday_showWindSpeed = False
+                logger.debug("yesterday_showWindSpeed: %s" % yesterday_showWindSpeed)
+
+            if yesterday_windgustMPH == "-999.0" or yesterday_windgustMPH == "-9999.0" or yesterday_windgustMPH == "" or yesterday_windgustKPH == "":
+                logger.info("yesterday_windgustMPH is '-999.0' or yesterday_windgustMPH is '-9999.0' or yesterday_windgustMPH is '' or yesterday_windgustKPH is ''.")
+                yesterday_showWindGust = False
+                logger.debug("yesterday_showWindGust: %s" % yesterday_showWindGust)
+
             try:
-                yesterday_gustcheck = float(data['wgustm'])
-            except ValueError:
+                yesterday_windDegrees = str(data['wdird'])
+            except KeyError:
                 printException_loggerwarn()
-                yesterday_gustcheck = -9999
-            logger.debug("yesterday_dewpointC: %s ; yesterday_windspeedKPH: %s"
-                         % (yesterday_dewpointC, yesterday_windspeedKPH))
-            logger.debug("yesterday_windspeedMPH: %s ; yesterday_gustcheck: %s"
-                         % (yesterday_windspeedMPH, yesterday_gustcheck))
-            if yesterday_gustcheck == -9999:
-                yesterday_windgustdata = False
-                logger.warn("Wind gust data is not present! yesterday_windgustdata: %s"
-                            % yesterday_windgustdata)
-            else:
-                yesterday_windgustdata = True
-                yesterday_windgustKPH = str(data['wgustm'])
-                yesterday_windgustMPH = str(data['wgusti'])
-                logger.info("Wind gust data is present.")
-                logger.debug("yesterday_windgustKPH: %s ; yesterday_windgustMPH: %s"
-                             % (yesterday_windgustKPH, yesterday_windgustMPH))
-            yesterday_windDegrees = str(data['wdird'])
-            yesterday_windDirection = data['wdire']
-            yesterday_visibilityKM = str(data['vism'])
-            yesterday_visibilityMI = str(data['visi'])
-            logger.debug("yesterday_windDegrees: %s ; yesterday_windDirection: %s"
-                         % (yesterday_windDegrees, yesterday_windDirection))
-            logger.debug("yesterday_visibilityKM: %s ; yesterday_visibilityMI: %s"
-                         % (yesterday_visibilityKM, yesterday_visibilityMI))
-            yesterday_pressureMB = str(data['pressurem'])
-            yesterday_pressureInHg = str(data['pressurei'])
-            yesterday_windchillcheck = float(data['windchillm'])
-            logger.debug("yesterday_pressureMB: %s ; yesterday_pressureInHg: %s"
-                         % (yesterday_pressureMB, yesterday_pressureInHg))
-            logger.debug("yesterday_windchillcheck: %s" % yesterday_windchillcheck)
-            if yesterday_windchillcheck == -999:
-                yesterday_windchilldata = False
-                logger.warn("Wind chill data is not present! yesterday_windchilldata: %s"
-                            % yesterday_windchilldata)
-            else:
-                yesterday_windchilldata = True
-                yesterday_windchillC = str(data['windchillm'])
-                yesterday_windchillF = str(data['windchilli'])
-                logger.info("Wind chill data is present.")
-                logger.debug("yesterday_windchillC: %s ; yesterday_windchillF: %s"
-                             % (yesterday_windchillC, yesterday_windchillF))
-            yesterday_heatindexcheck = float(data['heatindexm'])
-            logger.debug("yesterday_heatindexcheck: %s" % yesterday_heatindexcheck)
-            if yesterday_heatindexcheck == -9999:
-                yesterday_heatindexdata = False
-                logger.warn("Heat index data is not present! yesterday_heatindexdata: %s"
-                            % yesterday_heatindexdata)
-            else:
-                yesterday_heatindexdata = True
-                yesterday_heatindexC = str(data['heatindexm'])
-                yesterday_heatindexF = str(data['heatindexi'])
-                logger.info("Heat index data is present.")
-                logger.debug("yesterday_heatindexC: %s ; yesterday_heatindexF: %s"
-                             % (yesterday_heatindexC, yesterday_heatindexF))
+                yesterday_showWindDirection = False
+                logger.debug("yesterday_showWindDirection: %s" % yesterday_showWindDirection)
+
+            try:
+                yesterday_windDirection = data['wdire']
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showWindDirection = False
+                logger.debug("yesterday_showWindDirection: %s" % yesterday_showWindDirection)
+
+            # If we haven't gotten a KeyError yet, check for bad wind direction data.
+            if yesterday_showWindDirection is True:
+                # Encase this inside of a true statement if we haven't hit a keyerror yet (yesterday_showWindDir is true).
+                # This prevents variable errors to occur if there isn't any data.
+                logger.info("yesterday_showWindDirection is True.")
+                if yesterday_windDegrees == "" or yesterday_windDirection == "" or yesterday_windDegrees == "-9999":
+                    logger.info("yesterday_windDegrees is '' or yesterday_windDirection is '' or yesterday_windDegrees is '-9999'.")
+                    yesterday_showWindDirection = False
+                    logger.debug("yesterday_showWindDirection: %s" % yesterday_showWindDirection)
+
+            try:
+                yesterday_visibilityKM = str(data['vism'])
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showVisibility = False
+                logger.debug("yesterday_showVisibility: %s" % yesterday_showVisibility)
+
+            try:
+                yesterday_visibilityMI = str(data['visi'])
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showVisibility = False
+                logger.debug("yesterday_showVisibility: %s" % yesterday_showVisibility)
+
+            # Turn off showing yesterday's weather if visibility is -9999.0 mi or "" (no data)
+            if yesterday_showVisibility is True:
+                if yesterday_visibilityMI == "-9999.0" or yesterday_visibilityMI == "":
+                    logger.info("yesterday_visibilityMI is '-9999.0' or yesterday_visibilityMI is ''.")
+                    yesterday_showVisibility = False
+                    logger.debug("yesterday_showVisibility: %s" % yesterday_showVisibility)
+
+            try:
+                yesterday_pressureMB = str(data['pressurem'])
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showPressure = False
+                logger.debug("yesterday_showPressure: %s" % yesterday_showPressure)
+
+            try:
+                yesterday_pressureInHg = str(data['pressurei'])
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showPressure = False
+                logger.debug("yesterday_showPressure: %s" % yesterday_showPressure)
+
+            try:
+                yesterday_windchillcheck = float(data['windchillm'])
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showWindChill = False
+                logger.debug("yesterday_showWindChill: %s" % yesterday_showWindChill)
+
+            if yesterday_showWindChill is True:
+                logger.info("yesterday_showWindChill is True.")
+                if yesterday_windchillcheck == -999:
+                    logger.info("yesterday_windchillcheck is '-999'.")
+                    yesterday_showWindChill = False
+                    logger.debug("yesterday_showWindChill: %s" % yesterday_showWindChill)
+                else:
+                    yesterday_showWindChill = False
+                    yesterday_windchillC = str(data['windchillm'])
+                    yesterday_windchillF = str(data['windchilli'])
+                    logger.debug("yesterday_showWindChill: %s" % yesterday_showWindChill)
+                    logger.debug("yesterday_windchillC: %s ; yesterday_windchillF: %s"
+                                 % (yesterday_windchillC, yesterday_windchillF))
+
+            try:
+                yesterday_heatindexcheck = float(data['heatindexm'])
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showHeatIndex = False
+                logger.debug("yesterday_showHeatIndex: %s" % yesterday_showHeatIndex)
+
+            if yesterday_showHeatIndex is True:
+                logger.info("yesterday_showHeatIndex is True.")
+                if yesterday_heatindexcheck == -9999:
+                    logger.info("yesterday_heatindexcheck is '-9999'.")
+                    yesterday_showHeatIndex = False
+                    logger.debug("yesterday_showHeatIndex: %s" % yesterday_showHeatIndex)
+                else:
+                    yesterday_heatindexdata = True
+                    yesterday_heatindexC = str(data['heatindexm'])
+                    yesterday_heatindexF = str(data['heatindexi'])
+                    logger.debug("yesterday_showHeatIndex: %s" % yesterday_showHeatIndex)
+                    logger.debug("yesterday_heatindexC: %s ; yesterday_heatindexF: %s"
+                                 % (yesterday_heatindexC, yesterday_heatindexF))
             try:
                 yesterday_precipMM = float(data['precipm'])
                 yesterday_precipIN = float(data['precipi'])
+                yesterday_precipMM = str(yesterday_precipMM)
+                yesterday_precipIN = str(yesterday_precipIN)
+                logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s" %
+                             (yesterday_precipMM, yesterday_precipIN))
             except ValueError:
                 printException_loggerwarn()
-                yesterday_precipMM = -9999
-                yesterday_precipIN = -9999
-            logger.debug("yesterday_precipMM: %s ; yesterday_precipIN: %s"
-                         % (yesterday_precipMM, yesterday_precipIN))
-            if yesterday_precipMM == -9999:
-                yesterday_precipMM = "0.0"
-                logger.warn("yesterday_precipMM was -9999. It's now: %s"
-                            % yesterday_precipMM)
-            else:
-                yesterday_precipMM = str(yesterday_precipMM)
-                logger.info("yesterday_precipMM converted to str. It's now: %s"
-                            % yesterday_precipMM)
+                yesterday_showPrecip = False
+                logger.debug("yesterday_showPrecip: %s" % yesterday_showPrecip)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showPrecip = False
+                logger.debug("yesterday_showPrecip: %s" % yesterday_showPrecip)
 
-            if yesterday_precipIN == -9999:
-                yesterday_precipIN = "0.0"
-                logger.warn("yesterday_precipIN was -9999. It's now: %s"
-                            % yesterday_precipIN)
-            else:
-                yesterday_precipIN = str(yesterday_precipIN)
-                logger.info("yesterday_precipIN converted to str. It's now: %s"
-                            % yesterday_precipIN)
+            if yesterday_showPrecip is True:
+                logger.info("yesterday_showPrecip is True.")
+                if yesterday_precipIN == "-9999.0":
+                    logger.info("yesterday_precipIN is '-9999.0'.")
+                    yesterday_showPrecip = False
+                    logger.debug("yesterday_showPrecip: %s" % yesterday_showPrecip)
 
-            yesterday_condition = str(data['conds'])
-            logger.debug("yesterday_condition: %s" % yesterday_condition)
+
+            try:
+                yesterday_condition = str(data['conds'])
+                logger.debug("yesterday_condition: %s" % yesterday_condition)
+            except KeyError:
+                printException_loggerwarn()
+                yesterday_showConditions = False
+                logger.debug("yesterday_showConditions: %s" % yesterday_showConditions)
+
+            # Check for weather condition "" or "Unknown" - No data
+
+            if yesterday_showConditions is True:
+                logger.info("yesterday_showConditions is True.")
+                if yesterday_condition == "" or yesterday_condition == "Unknown":
+                    logger.info("yesterday_condition is '' or yesterday_condition is 'Unknown'.")
+                    yesterday_showConditions = False
+                    logger.debug("yesterday_showConditions: %s" % yesterday_showConditions)
+
             logger.info("Now printing weather data...")
             print("")
-            print(Fore.YELLOW + yesterday_time + ":")
-            print(Fore.YELLOW + "Conditions: " + Fore.CYAN + yesterday_condition)
-            print(Fore.YELLOW + "Temperature: " + Fore.CYAN + yesterday_tempF
-                  + " °F (" + yesterday_tempC + " °C)")
-            print(Fore.YELLOW + "Dew point: " + Fore.CYAN + yesterday_dewpointF
-                  + " °F (" + yesterday_dewpointC + " °C)")
-            print(Fore.YELLOW + "Wind speed: " + Fore.CYAN + yesterday_windspeedMPH
-                  + " mph (" + yesterday_windspeedKPH + " kph)")
-            if yesterday_windgustdata == True:
-                print(Fore.YELLOW + "Wind gusts: " + Fore.CYAN + yesterday_windgustMPH
+            print(Fore.YELLOW + Style.BRIGHT + yesterday_time + ":")
+            if yesterday_showConditions is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Conditions: " + Fore.CYAN + Style.BRIGHT + yesterday_condition)
+            if yesterday_showTemp is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Temperature: " + Fore.CYAN + Style.BRIGHT + yesterday_tempF
+                      + "°F (" + yesterday_tempC + "°C)")
+            if yesterday_showDewpoint is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Dew point: " + Fore.CYAN + Style.BRIGHT + yesterday_dewpointF
+                      + "°F (" + yesterday_dewpointC + "°C)")
+            if yesterday_showWindSpeed is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Wind speed: " + Fore.CYAN + Style.BRIGHT + yesterday_windspeedMPH
+                      + " mph (" + yesterday_windspeedKPH + " kph)")
+
+            if yesterday_showWindDirection is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Wind direction: " + Fore.CYAN + Style.BRIGHT + yesterday_windDirection
+                      + " (" + yesterday_windDegrees + "°)")
+
+            if yesterday_showWindGust is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Wind gusts: " + Fore.CYAN + Style.BRIGHT + yesterday_windgustMPH
                       + " mph (" + yesterday_windgustKPH + " kph)")
-            if yesterday_windchilldata == True:
-                print(Fore.YELLOW + "Wind chill: " + Fore.CYAN + yesterday_windchillF
-                      + " °F (" + yesterday_windchillC + " °C)")
-            if yesterday_heatindexdata == True:
-                print(Fore.YELLOW + "Heat index: " + Fore.CYAN + yesterday_heatindexF
-                      + " °F (" + yesterday_heatindexC + " °C)")
-            print(Fore.YELLOW + "Precipitation: " + Fore.CYAN + yesterday_precipIN
-                  + " in (" + yesterday_precipMM + " mm)")
+
+            if yesterday_showWindChill is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Wind chill: " + Fore.CYAN + Style.BRIGHT + yesterday_windchillF
+                      + "°F (" + yesterday_windchillC + "°C)")
+
+            if yesterday_showHeatIndex is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Heat index: " + Fore.CYAN + Style.BRIGHT + yesterday_heatindexF
+                      + "°F (" + yesterday_heatindexC + "°C)")
+
+            if yesterday_showPrecip is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Precipitation: " + Fore.CYAN + Style.BRIGHT + yesterday_precipIN
+                      + " in (" + yesterday_precipMM + " mm)")
+
+            if yesterday_showVisibility is True:
+                print(Fore.YELLOW + Style.BRIGHT + "Visibility: " + Fore.CYAN + Style.BRIGHT + yesterday_visibilityMI
+                      + " mi (" + yesterday_visibilityKM + " km)")
 
             yesterday_loops = yesterday_loops + 1
             yesterday_totalloops = yesterday_totalloops + 1
@@ -4680,9 +7603,8 @@ while True:
                              % (yesterday_totalloops, yesterdayhourlyLoops))
 
             if user_showCompletedIterations == True:
-                print(Fore.YELLOW + "Completed iterations: " + Fore.CYAN + "%s/%s"
+                print(Fore.YELLOW + Style.BRIGHT + "Completed iterations: " + Fore.CYAN + Style.BRIGHT + "%s/%s"
                       % (yesterday_totalloops, yesterdayhourlyLoops))
-                print(Fore.RESET)
 
             if user_enterToContinue == True:
                 if yesterday_totalloops == yesterdayhourlyLoops:
@@ -4692,9 +7614,9 @@ while True:
                     logger.info("Asking user to continue.")
                     try:
                         print("")
-                        print(Fore.RED + "Press enter to view the next", user_loopIterations
-                              , "iterations of yesterday weather information.")
-                        print("Otherwise, press Control + C to get back to the main menu.")
+                        print(Fore.RED + Style.BRIGHT + "Press enter to view the next " + str(user_loopIterations) +
+                              " iterations of yesterday weather information.")
+                        print(Fore.RED + Style.BRIGHT + "Otherwise, press Control + C to get back to the main menu.")
                         input()
                         yesterday_loops = 0
                         logger.info("Printing more weather data. yesterday_loops is now: %s"
@@ -4722,7 +7644,104 @@ while True:
         refresh_tidedataflagged = True
         logger.debug("refresh_sundataflagged: %s ; refresh_tidedataflagged: %s" %
                      (refresh_sundataflagged, refresh_tidedataflagged))
+        refresh_hurricanedataflagged = True
+        refresh_yesterdaydataflagged = True
+        logger.debug("refresh_hurricanedataflagged: %s ; refresh_yesterdaydataflagged: %s" %
+                     (refresh_hurricanedataflagged, refresh_yesterdaydataflagged))
+
+    elif moreoptions == "extratools:1":
+        if extratools_enabled is False:
+            print(Fore.RED + Style.BRIGHT + "Whoops! Extra tools isn't enabled at this time.",
+                  "If you'd like, I can enable the extra tools feature for you. Would you like the extratools feature at this time?",
+                  "Yes or No.", sep="\n")
+            extratools_enableinput = input("Input here: ").lower()
+            logger.debug("extratools_enableinput: %s" % extratools_enableinput)
+            if extratools_enableinput == "yes":
+                config['UI']['extratools_enabled'] = 'True'
+                logger.info("UI/extratools_enabled is now 'True'.")
+                try:
+                    with open('storage//config.ini', 'w') as configfile:
+                        config.write(configfile)
+                    print(Fore.YELLOW + Style.BRIGHT + "Extra tools is now enabled, and will be operational when you next boot up PyWeather.")
+                    continue
+                except:
+                    print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to save new configuration options.",
+                          Fore.RED + Style.BRIGHT + "Please enable favorite locations in the config file. In the UI section, change",
+                          Fore.RED + Style.BRIGHT + "extratools_enabled to 'True'.")
+                    continue
+            elif extratools_enableinput == "no":
+                print(Fore.YELLOW + Style.BRIGHT + "Not enabling extra tools. Returning to the main menu.",
+                      "You can come back to this menu to reenable extra tools, or go into your config file and",
+                      "enable UI/extratools_enabled (set it to True).", sep="\n")
+            else:
+                print(Fore.YELLOW + Style.BRIGHT + "Your input wasn't understood, and as such favorite locations will not be enabled.",
+                      "You can come back to this menu to reenable extra tools, or go into your config file and",
+                      "enable UI/extratools_enabled (set it to True).")
+
+        print(Fore.YELLOW + Style.BRIGHT + "Listing all cache times:")
+        if cache_enabled is True:
+            print(Fore.YELLOW + Style.BRIGHT + "PyWeather cache is ON (data will be automatically refreshed)")
+        elif cache_enabled is False:
+            print(Fore.YELLOW + Style.BRIGHT + "PyWeather cache is OFF (data will not be automatically refreshed)")
+        print(Fore.YELLOW + Style.BRIGHT + "Current conditions: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
+              (round(time.time() - cachetime_current, 2), round((time.time() - cachetime_current) / 60, 2), cache_currenttime, cache_currenttime / 60))
+        # The variables in order: The raw cache time in seconds (rounded down to 2 decimal places, the raw cache time divided by 60, rounded to 2 (current cache time in mins)
+        # After that, display the configured refresh cache limit, and divide the variable by 60 to get it in minutes.
+        print(Fore.YELLOW + Style.BRIGHT + "Forecast data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
+              (round(time.time() - cachetime_forecast, 2), round((time.time() - cachetime_forecast) / 60, 2), cache_forecasttime, cache_forecasttime / 60))
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "Astronomy (sundata) data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_sundata, 2), round((time.time() - cachetime_sundata) / 60, 2), cache_sundatatime, cache_sundatatime / 60))
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "Astronomy (sundata) data: Data not cached / limit %s seconds (%s minutes)" %
+                  (cache_sundatatime, cache_sundatatime / 60))
+
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "10-day hourly data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_hourly10, 2), round((time.time() - cachetime_hourly10) / 60, 2), cache_tendayhourly, cache_tendayhourly / 60))
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "10-day hourly data: Data not cached / limit %s seconds (%s minutes)" %
+                  (cache_tendayhourly, cache_tendayhourly / 60))
+
+        print(Fore.YELLOW + Style.BRIGHT + "1.5 day hourly data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
+              (round(time.time() - cachetime_hourly36, 2), round((time.time() - cachetime_hourly36) / 60, 2), cache_threedayhourly, cache_threedayhourly / 60))
+
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "Almanac data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_almanac, 2), round((time.time() - cachetime_almanac) / 60, 2), cache_almanactime, cache_almanactime / 60))
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "Almanac data: Data not cached / limit %s seconds (%s minutes)" %
+                  (cache_almanactime, cache_almanactime / 60))
+
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "Alerts data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_alerts, 2), round((time.time() - cachetime_alerts) / 60, 2), cache_alertstime, cache_alertstime / 60))
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "Alerts data: Data not cached / limit %s seconds (%s minutes)" %
+                  (cache_alertstime, cache_alertstime / 60))
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "Tide data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_tide, 2), round((time.time() - cachetime_tide) / 60, 2), cache_tidetime, cache_tidetime / 60))
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "Tide data: Data not cached / limit %s secnods (%s minutes)" %
+                  (cache_tidetime, cache_tidetime / 60))
+
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "Hurricane data: %s seconds (%s minutes) / limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_hurricane, 2), round((time.time() - cachetime_hurricane) / 60, 2), cache_hurricanetime, cache_hurricanetime / 60))
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "Hurricane data: Data not cached / limit %s seconds (%s minutes)" %
+                  (cache_hurricanetime, cache_hurricanetime / 60))
+
+        try:
+            print(Fore.YELLOW + Style.BRIGHT + "Yesterday data: %s seconds (%s minutes), limit %s seconds (%s minutes)" %
+                  (round(time.time() - cachetime_yesterday, 2), round((time.time() - cachetime_yesterday) / 60, 2), cache_yesterdaytime, cache_yesterdaytime / 60))
+        except NameError:
+            print(Fore.YELLOW + Style.BRIGHT + "Yesterday data: Data not cached / limit %s seconds (%s minutes)" %
+                  (cache_yesterdaytime, cache_yesterdaytime / 60))
+
+
     else:
         logger.warn("Input could not be understood!")
-        print(Fore.RED + "Not a valid option.")
+        print(Fore.RED + Style.BRIGHT + "Not a valid option.")
         print("")

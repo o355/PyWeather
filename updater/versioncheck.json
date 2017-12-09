@@ -1,12 +1,12 @@
 {
 	"updater": {
 		"apiversion": "1.4",
-		"latestbuild": "62",
-		"latestversion": "0.6.2 beta",
-		"latestversiontag": "0.6.2-beta",
-		"latesturl": "https://github.com/o355/pyweather/releases/download/0.6.2-beta/pyweather-0.6.2beta.zip",
-		"latestfilename": "pyweather-0.6.2beta.zip",
-		"releasedate": "9/24/2017",
-		"nextversionreleasedate": "November 2017"
+		"latestbuild": "63",
+		"latestversion": "0.6.3 beta",
+		"latestversiontag": "0.6.3-beta",
+		"latesturl": "https://github.com/o355/pyweather/releases/download/0.6.3-beta/pyweather-0.6.3beta.zip",
+		"latestfilename": "pyweather-0.6.3beta.zip",
+		"releasedate": "December 3, 2017",
+		"nextversionreleasedate": "Late February 2018"
 	}
 }
