@@ -49,7 +49,16 @@ Please listen to local authorities, and your country's weather service (NWS in t
 
 However, during times of non-severe weather, PyWeather is a fun way to check the weather.
 
-###Beta notice
+## Notices
+Very fun notices for very fun information!
+
+### Hiatus notice
+If you haven't released, I've gone on hiatus for about a week. At this point, I'm ready to resume PyWeather development and carry on. An update newsletter will be coming out on December 13 and December 16
+
+### Public access for newsletters will begin December 16
+There will be a one-week delay for newsletters at this time, so make sure you subscribe to the newsletter for the latest info. I may change this in the future, but subscribe anyhow.
+
+### Beta notice
 If you haven't noticed, PyWeather is in beta. Basic features should work completely fine, but more advanced and newer features may not work 100% of the time.
 
 ## What's PyWeather?
