@@ -1,5 +1,4 @@
 '''
-
 _______
 |      \  \           /         @@@;
 |       \  \         /        `#....@
@@ -494,6 +493,44 @@ except:
     favoritelocation_5 = "None"
 
 try:
+    favoritelocation_1data = config.get('FAVORITE LOCATIONS', 'favloc1_data')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FAVORITE LOCATIONS/favloc1_data failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    favoritelocation_1data = "None"
+
+try:
+    favoritelocation_2data = config.get('FAVORITE LOCATIONS', 'favloc2_data')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FAVORITE LOCATIONS/favloc2_data failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    favoritelocation_2data = "None"
+
+try:
+    favoritelocation_3data = config.get('FAVORITE LOCATIONS', 'favloc3_data')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FAVORITE LOCATIONS/favloc3_data failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    favoritelocation_3data = "None"
+
+try:
+    favoritelocation_4data = config.get('FAVORITE LOCATIONS', 'favloc4_data')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FAVORITE LOCATIONS/favloc4_data failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    favoritelocation_4data = "None"
+
+try:
+    favoritelocation_5data = config.get('FAVORITE LOCATIONS', 'favloc5_data')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occurred. FAVORITE LOCATIONS/favloc5_data failed to load. Defaulting to 'None'.", sep="\n")
+
+try:
     geocoder_customkeyEnabled = config.getboolean('GEOCODER API', 'customkey_enabled')
 except:
     print("When attempting to load your configuration file, an error",
@@ -620,6 +657,11 @@ logger.debug("geocoder_customkeyEnabled: %s ; geocoder_customkey: %s" %
              (geocoder_customkeyEnabled, geocoder_customkey))
 logger.debug("extratools_enabled: %s ; airports_enabled: %s" %
              (extratools_enabled, airports_enabled))
+logger.debug("favoritelocation_1data: %s ; favoritelocation_2data: %s" %
+             (favoritelocation_1data, favoritelocation_2data))
+logger.debug("favoritelocation_3data: %s ; favoritelocation_4data: %s" %
+             (favoritelocation_3data, favoritelocation_4data))
+logger.debug("favoritelocation_5data: %s" % favoritelocation_5data)
 
 
 logger.info("Setting gif x and y resolution for radar...")
@@ -1143,6 +1185,42 @@ if favoritelocation_5d.find("pws:") == 0:
     favoritelocation_5d = "PWS " + favoritelocation_5d.upper()
     logger.debug("favoritelocation_5d: %s" % favoritelocation_5d)
 
+# If we find arpt: or airport: in a favorite location, set the display variable to the extra data.
+# The extra data variable contains the airport name to show to the user.
+
+if favoritelocation_1d.find("arpt:") == 0 or favoritelocation_1d.find("airport:") == 0:
+    # Set the display variable to extra data, only if the extra data isn't None.
+    # If the extra data variable is None, show the raw query.
+    if favoritelocation_1data != "None":
+        favoritelocation_1d = favoritelocation_1data
+        logger.debug("favoritelocation_1d: %s" % favoritelocation_1d)
+
+if favoritelocation_2d.find("arpt:") == 0 or favoritelocation_2d.find("airport:") == 0:
+    # Set the display variable to extra data, only if the extra data isn't None.
+    # If the extra data variable is None, show the raw query.
+    if favoritelocation_2data != "None":
+        favoritelocation_2d = favoritelocation_2data
+        logger.debug("favoritelocation_2d: %s" % favoritelocation_2d)
+
+if favoritelocation_3d.find("arpt:") == 0 or favoritelocation_3d.find("airport:") == 0:
+    # Set the display variable to extra data, only if the extra data isn't None.
+    # If the extra data variable is None, show the raw query.
+    if favoritelocation_3data != "None":
+        favoritelocation_3d = favoritelocation_3data
+        logger.debug("favoritelocation_3d: %s" % favoritelocation_3d)
+
+if favoritelocation_4d.find("arpt:") == 0 or favoritelocation_4d.find("airport:") == 0:
+    # Set the display variable to extra data, only if the extra data isn't None.
+    # If the extra data variable is None, show the raw query.
+    if favoritelocation_4data != "None":
+        favoritelocation_4d = favoritelocation_4data
+        logger.debug("favoritelocation_4d: %s" % favoritelocation_4d)
+
+if favoritelocation_5d.find("arpt:") == 0 or favoritelocation_5d.find("airport:") == 0:
+    # Set the display variable to extra data, only if the extra data isn't None.
+    # If the extra data variable is None, show the raw query.
+    if favoritelocation_5data != "None":
+        favoritelocation_5d = favoritelocation_5data
 
 
 # I understand this goes against Wunderground's ToS for logo usage.
@@ -6432,6 +6510,13 @@ while True:
                 favoritelocation_4d = favoritelocation_4
                 favoritelocation_5 = config.get('FAVORITE LOCATIONS', 'favloc5')
                 favoritelocation_5d = favoritelocation_5
+
+                favoritelocation_1data = config.get('FAVORITE LOCATIONS', 'favloc1')
+                favoritelocation_2data = config.get('FAVORITE LOCATIONS', 'favloc2')
+                favoritelocation_3data = config.get('FAVORITE LOCATIONS', 'favloc3')
+                favoritelocation_4data = config.get('FAVORITE LOCATIONS', 'favloc4')
+                favoritelocation_5data = config.get('FAVORITE LOCATIONS', 'favloc5')
+
             except:
                 spinner.fail(text="Failed to load your favorite locations!")
                 print("")
@@ -6451,6 +6536,12 @@ while True:
                          (favoritelocation_4, favoritelocation_4d))
             logger.debug("favoritelocation_5: %s ; favoritelocation_5d: %s" %
                          (favoritelocation_5, favoritelocation_5d))
+
+            logger.debug("favoritelocation_1data: %s ; favoritelocation_2data: %s" %
+                         (favoritelocation_1data, favoritelocation_2data))
+            logger.debug("favoritelocation_3data: %s ; favoritelocation_4data: %s" %
+                         (favoritelocation_3data, favoritelocation_4data))
+            logger.debug("favoritelocation_5data: %s" % favoritelocation_5data)
 
             if "pws:" in favoritelocation_1d:
                 # Delete pws: from the display string
@@ -6481,6 +6572,43 @@ while True:
                 favoritelocation_5d = favoritelocation_5d[4:]
                 favoritelocation_5d = "PWS " + favoritelocation_5d.upper()
                 logger.debug("favoritelocation_5d: %s" % favoritelocation_5d)
+
+            if favoritelocation_1d.find("arpt:") == 0 or favoritelocation_1d.find("airport:") == 0:
+                # Do that same ol' thing at boot. See if the data text is not None, and show
+                # the display location as that additional data if so.
+                if favoritelocation_1data != "None":
+                    favoritelocation_1d = favoritelocation_1data
+                    logger.debug("favoritelocation_1d: %s" % favoritelocation_1d)
+
+            if favoritelocation_2d.find("arpt:") == 0 or favoritelocation_2d.find("airport:") == 0:
+                # Do that same ol' thing at boot. See if the data text is not None, and show
+                # the display location as that additional data if so.
+                if favoritelocation_2data != "None":
+                    favoritelocation_2d = favoritelocation_2data
+                    logger.debug("favoritelocation_2d: %s" % favoritelocation_2d)
+
+            if favoritelocation_3d.find("arpt:") == 0 or favoritelocation_3d.find("airport:") == 0:
+                # Do that same ol' thing at boot. See if the data text is not None, and show
+                # the display location as that additional data if so.
+                if favoritelocation_3data != "None":
+                    favoritelocation_3d = favoritelocation_3data
+                    logger.debug("favoritelocation_3d: %s" % favoritelocation_3d)
+
+            if favoritelocation_4d.find("arpt:") == 0 or favoritelocation_4d.find("airport:") == 0:
+                # Do that same ol' thing at boot. See if the data text is not None, and show
+                # the display location as that additional data if so.
+                if favoritelocation_4data != "None":
+                    favoritelocation_4d = favoritelocation_4data
+                    logger.debug("favoritelocation_4d: %s" % favoritelocation_4d)
+
+            if favoritelocation_5d.find("arpt:") == 0 or favoritelocation_5d.find("airport:") == 0:
+                # Do that same ol' thing at boot. See if the data text is not None, and show
+                # the display location as that additional data if so.
+                if favoritelocation_5data != "None":
+                    favoritelocation_5d = favoritelocation_5data
+                    logger.debug("favoritelocation_1d: %s" % favoritelocation_5d)
+
+
 
             spinner.stop()
             print("")
@@ -6524,8 +6652,15 @@ while True:
                 logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favoritelocation_3)
                 config['FAVORITE LOCATIONS']['favloc5'] = favoritelocation_4
                 logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favoritelocation_4)
-                # Use locinput instead of location, as the raw PWS query is in locinput.
-                config['FAVORITE LOCATIONS']['favloc1'] = locinput
+                # Use location if the location isn't a PWS, use locinput for PWS. Use extra data for airport queries.
+                if pws_query is False and airport_query is False:
+                    config['FAVORITE LOCATIONS']['favloc1'] = location
+                elif pws_query is True:
+                    config['FAVORITE LOCATIONS']['favloc1'] = locinput
+                elif airport_query is True:
+                    config['FAVORITE LOCATIONS']['favloc1'] = locinput
+                    config['FAVORITE LOCATIONS']['favloc1_data'] = location
+
                 logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % locinput)
 
                 try:

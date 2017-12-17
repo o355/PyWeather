@@ -19,6 +19,7 @@
 * Improves the UI in the setup file to not have overflowing lines of text. - Should be done on 2/12/18
 * Adds an attribution to Meteoalarm for EU-based alerts - Should be done on 2/15/18
 * Adds better exiting at multiple input prompts throughout PyWeather - Should be done on 2/17/18
+* Adding even faster access to different query types (fl:x for favorite locations, cl for current location, pl:x for previous location, ap: for airport, ps: for PWS)
 
 ## version 0.6.3 beta - Released on 12/3/2017:
 **NEW FEATURES/REMOVALS:**

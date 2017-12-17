@@ -11,7 +11,7 @@ I hope that you can enjoy PyWeather as much as I enjoy making PyWeather, so, let
 To run PyWeather, you'll need:
 * A computer (Windows, OS X, most Linux distros)
 * An internet connection (you have one if you're on here!)
-* Python 3 (Python 3.5 and above is recommended) & PIP for Python 3
+* Python 3 & PIP for Python 3 (download at https://python.org/downloads). For most Linux distros you can also download with the command line, given Python 3 isn't already included.
 * ~5-10 MB of disk space
 
 ## Download/Setup
