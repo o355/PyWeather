@@ -6739,6 +6739,80 @@ while True:
                     logger.debug("PWS query detected.")
                     print("", Fore.YELLOW + Style.BRIGHT + "Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
                           Fore.YELLOW + Style.BRIGHT + "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
+                    print("", Fore.YELLOW + Style.BRIGHT + "Would you like to validate the PWS you're trying to add as a favorite location?",
+                          Fore.YELLOW + Style.BRIGHT + "Even if validation fails, you can still add the PWS you're trying to add. Yes or No.", sep="\n")
+                    favloc_validatepws = input("Input here: ").lower()
+                    if favloc_validatepws == "yes":
+                        print(Fore.YELLOW + Style.BRIGHT + "Now validating the PWS that you inputted. This should only take a moment.")
+                        pwsvalidate_url = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + favloc_manualinputLower + ".json"
+                        logger.debug("pwsvalidate_url: %s" % pwsvalidate_url)
+                        spinner.start(text="Validating PWS input...")
+
+                        try:
+                            pwsvalidateJSON = requests.get(pwsvalidate_url)
+                            logger.debug("pwsvalidateJSON acquired with: %s" % pwsvalidateJSON)
+                            pwsvalidate_json = json.loads(pwsvalidateJSON.text)
+                            if jsonVerbosity is True:
+                                logger.debug("pwsvalidate_json: %s" % pwsvalidate_json)
+                            else:
+                                logger.debug("pwsvalidate_json has been loaded.")
+                            pwsvalidate_data = True
+                            logger.debug("pwsvalidate_data: %s" % pwsvalidate_data)
+                        except:
+                            spinner.fail("Failed to validate PWS!")
+                            pwsvalidate_data = False
+                            logger.debug("pwsvalidate_data: %s" % pwsvalidate_data)
+                            print("")
+                            print(Fore.YELLOW + Style.BRIGHT + "Sorry, we couldn't query Wunderground to validate the PWS",
+                                  Fore.YELLOW + Style.BRIGHT + "that you inputted. Would you still like to add this PWS as a favorite",
+                                  Fore.YELLOW + Style.BRIGHT + "location anyways? Yes or No.", sep="\n")
+                            pwsvalidate_invalidinput = input("Input here: ").lower()
+                            logger.debug("pwsvalidate_invalidinput: %s" % pwsvalidate_invalidinput)
+                            if pwsvalidate_invalidinput == "yes":
+                                print(Fore.YELLOW + Style.BRIGHT + "Still adding the PWS as a favorite location.")
+                            elif pwsvalidate_invalidinput == "no":
+                                print(Fore.YELLOW + Style.BRIGHT + "Not adding the PWS as a favorite location, and returning to the main menu.")
+                                continue
+                            else:
+                                print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input, but the PWS will be added",
+                                      Fore.YELLOW + Style.BRIGHT + "as a favorite location anyways.", sep="\n")
+
+                        # If we have data, move into this block of code which truly validates if we have good data.
+                        # If we had invalid data, don't run this block, and skip to the config committing after the if code.
+
+                        if pwsvalidate_data is True:
+                            logger.info("pwsvalidate_data is True.")
+
+                            # Use location to see if we have a real PWS or a bad one.
+                            try:
+                                pws_invalid = pwsinfo_json['location']['lat']
+                                spinner.succeed(text="Favorite location is valid!")
+                                print("")
+                                print(Fore.YELLOW + Style.BRIGHT + "The PWS that you entered is valid! Proceeding with",
+                                      Fore.YELLOW + Style.BRIGHT + "adding it to the configuration file.", sep="\n")
+                            except:
+                                spinner.fail(text="Failed to validate favorite location.")
+                                print("")
+                                print(Fore.YELLOW + Style.BRIGHT + "The PWS that you entered is invalid. Would you still",
+                                      Fore.YELLOW + Style.BRIGHT + "like to add the PWS as a favorite location? Yes or No.", sep="\n")
+                                pwsvalidate_invalidinput = input("Input here: ").lower()
+                                logger.debug("pwsvalidate_invalidinput: %s" % pwsvalidate_invalidinput)
+                                if pwsvalidate_invalidinput == "yes":
+                                    print(Fore.YELLOW + Style.BRIGHT + "Proceeding with adding the PWS as a favorite location.")
+                                elif pwsvalidate_invalidinput == "no":
+                                    print(Fore.YELLOW + Style.BRIGHT + "Not adding the PWS as a favorite location, and returning to the main menu.")
+                                    continue
+                                else:
+                                    print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input, but the PWS will be added",
+                                          Fore.YELLOW + Style.BRIGHT + "as a favorite location anyways.", sep="\n")
+
+                    elif favloc_validatepws == "no":
+                        print(Fore.YELLOW + Style.BRIGHT + "Not validating your PWS input, and proceeding with adding it as a favorite location.")
+                    else:
+                        print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input. As a result, I'm not validating your PWS input",
+                              Fore.YELLOW + Style.BRIGHT + "and proceeding with adding it as a favorite location.", sep="\n")
+
+
                     print("", Fore.YELLOW + Style.BRIGHT + "")
                     config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_1
                     logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favoritelocation_1)
@@ -6748,9 +6822,21 @@ while True:
                     logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favoritelocation_3)
                     config['FAVORITE LOCATIONS']['favloc5'] = favoritelocation_4
                     logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favoritelocation_4)
+
+                    # Bump the extra data config options
+                    config['FAVORITE LOCATIONS']['favloc2_data'] = favoritelocaton_1data
+                    logger.debug("FAVORITE LOCATIONS/favloc2_data is now: %s" % favoritelocation_1data)
+                    config['FAVORITE LOCATIONS']['favloc3_data'] = favoritelocation_2data
+                    logger.debug("FAVORITE LOCATIONS/favloc3_data is now: %s" % favoritelocation_2data)
+                    config['FAVORITE LOCATIONS']['favloc4_data'] = favoritelocation_3data
+                    logger.debug("FAVORITE LOCATIONS/favloc4_data is now: %s" % favoritelocation_3data)
+                    config['FAVORITE LOCATIONS']['favloc5_data'] = favoritelocation_4data
+                    logger.debug("FAVORITE LOCATIONS/favloc5_data is now: %s" % favoritelocation_4data)
                     # Use lowercase for a PWS
                     config['FAVORITE LOCATIONS']['favloc1'] = favloc_manualinputLower
                     logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_manualinputLower)
+                    config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
+                    logger.debug("FAVORITE LOCATIONS/favloc1_data is now: 'None'")
                     try:
                         with open('storage//config.ini', 'w') as configfile:
                             config.write(configfile)
