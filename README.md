@@ -67,7 +67,7 @@ PyWeather is a Python script that fetches the weather using Wunderground's API. 
 As such, PyWeather was born. After 40,000 lines of code getting removed and added by 3 people, getting called a hacker a few times, and having a few teachers yell at me, this is what happened.
 
 ## Images and Demo
-Just kidding, they're not here. I'll get around to capturing screencaps of 0.6.3 beta and running an asciinema demo soon.
+Asciinema demo: https://asciinema.org/a/XhvxO62rtXiruhs4Ra0LsBRT5
 
 ## What features does PyWeather have?
 PyWeather has lots of them, and the list is ever expanding. Here's the present feature list:
