@@ -119,7 +119,7 @@ PyWeather has lots of advantages over using websites on your desktop, or even we
 
 **Other advantages:**
 * PyWeather is free open source software, uses completely open-source libraries, and PyWeather is licensed under GNU's GPL v3 license! Richard Stallman would approve.
-* PyWeather's bandwidth requirements are extremely low, about 20-30 kbps for slow loading, and 100 kbps for fast loading. In addition, it uses a fraction of the data a website/app would use.
+* PyWeather can handly beat using websites and other services when on a slow internet connection. In PyWeather's default configuration, it only took 6 seconds for PyWeather to boot up on a simulated 28 kbps internet connection. In the real world, PyWeather was able to load in about 20-30 seconds on a fringe 1x connection.
 * You'll look cool being that one person using a terminal to check your weather like it's the 80s. 
 * PyWeather **doesn't track you!** I don't even know how many people are using PyWeather on a daily basis. I don't have code that "phones home", and I don't have code that relays back **any usage data**. However, do note that Wunderground does likely know your IP and basic system information about you from requesting their API, and the same goes for Google's geocoder that PyWeather uses. In the end, the amount of data you're giving to Wunderground and Google's geocoder by using PyWeather is much less than what you give to advertisers and trackers when visiting other weather sites.
 
