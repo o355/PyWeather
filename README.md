@@ -1,4 +1,4 @@
-[Subscribe to the PyWeather Weekly Update, for all the latest in PyWeather news on a weekly basis!](https://owenthe.ninja/sign-pyweathers-weekly-newsletter/)
+[Subscribe to the PyWeather Weekly Update, for all the latest in PyWeather news on a somewhat weekly basis!](https://owenthe.ninja/sign-pyweathers-weekly-newsletter/)
 
 ## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
@@ -114,10 +114,12 @@ PyWeather has lots of advantages over using websites on your desktop, or even we
 **On a phone:**
 * PyWeather when paired with Termux, or an SSH client uses A LOT less battery (my GS7 reported Wunderground's app using 4% of battery power/hour!)
 * PyWeather can easily save mobile data with default settings versus other weather apps, since ads aren't being loaded. If you more carefully tune PyWeather's settings, you can save even more data.
-* PyWeather may be slower than opening apps, (Termux users, if you pay $1.99 for the widgets, it begins to compete with weather apps, and will get better with favorite locations coming soon) but PyWeather fetches data that most apps don't include (like the almanac, yesterday's weather, etc).
+* PyWeather can be faster or slower than other weather apps. The favorite locations feature certainly improves initial loading speed, and can certainly be faster than AccuWeather or The Weather Channel, and even Wunderground's app.
+* PyWeather can work in fringe coverage zones. PyWeather managed to load (albeit slowly) with just 1 bar of 1X service on Verizon.
 
 **Other advantages:**
 * PyWeather is free open source software, uses completely open-source libraries, and PyWeather is licensed under GNU's GPL v3 license! Richard Stallman would approve.
+* PyWeather's bandwidth requirements are extremely low, about 20-30 kbps for slow loading, and 100 kbps for fast loading. In addition, it uses a fraction of the data a website/app would use.
 * You'll look cool being that one person using a terminal to check your weather like it's the 80s. 
 * PyWeather **doesn't track you!** I don't even know how many people are using PyWeather on a daily basis. I don't have code that "phones home", and I don't have code that relays back **any usage data**. However, do note that Wunderground does likely know your IP and basic system information about you from requesting their API, and the same goes for Google's geocoder that PyWeather uses. In the end, the amount of data you're giving to Wunderground and Google's geocoder by using PyWeather is much less than what you give to advertisers and trackers when visiting other weather sites.
 
