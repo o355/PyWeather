@@ -529,6 +529,7 @@ try:
 except:
     print("When attempting to load your configuration file, an error",
           "occurred. FAVORITE LOCATIONS/favloc5_data failed to load. Defaulting to 'None'.", sep="\n")
+    favoritelocation_5data = "None"
 
 try:
     geocoder_customkeyEnabled = config.getboolean('GEOCODER API', 'customkey_enabled')
@@ -6680,7 +6681,7 @@ while True:
                 logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favoritelocation_3)
                 config['FAVORITE LOCATIONS']['favloc5'] = favoritelocation_4
                 logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favoritelocation_4)
-                config['FAVORITE LOCATIONS']['favloc2_data'] = favoritelocaton_1data
+                config['FAVORITE LOCATIONS']['favloc2_data'] = favoritelocation_1data
                 logger.debug("FAVORITE LOCATIONS/favloc2_data is now: %s" % favoritelocation_1data)
                 config['FAVORITE LOCATIONS']['favloc3_data'] = favoritelocation_2data
                 logger.debug("FAVORITE LOCATIONS/favloc3_data is now: %s" % favoritelocation_2data)
@@ -6690,7 +6691,7 @@ while True:
                 logger.debug("FAVORITE LOCATIONS/favloc5_data is now: %s" % favoritelocation_4data)
                 # Use location if the location isn't a PWS, use locinput for PWS. Use extra data for airport queries.
                 if pws_query is False and airport_query is False:
-                    config['FAVORITE LOCATIONS']['favloc1'] = location
+                    config['FAVORITE LOCATIONS']['favloc1'] = str(location)
                     config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
                     logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % location)
                     logger.debug("FAVORITE LOCATIONS/favloc1_data is now: 'None'")
