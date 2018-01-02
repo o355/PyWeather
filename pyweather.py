@@ -6882,8 +6882,8 @@ while True:
                             except:
                                 spinner.fail(text="Failed to validate favorite location.")
                                 # Set the airport name to none, as that's the data that will get added.
-                                airport_name = "None"
-                                logger.debug("airport_name: %s" % airport_name)
+                                airportvalidate_data = False
+                                logger.debug("airportvalidate_data: %s" % airportvalidate_data)
                                 print("")
                                 print(Fore.YELLOW + Style.BRIGHT + "The airport that you entered is invalid, or doesn't have proper",
                                       Fore.YELLOW + Style.BRIGHT + "extra data. Would you still like to add the airport as a favorite location? Yes or No.", sep="\n")
@@ -6996,9 +6996,53 @@ while True:
                 config['FAVORITE LOCATIONS']['favloc5'] = favoritelocation_4
                 logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favoritelocation_4)
                 # Use the non-lowercased variable as the favorite location here.
-                # I guess it's important? I don't know.
-                config['FAVORITE LOCATIONS']['favloc1'] = favloc_manualinput
-                logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_manualinput)
+
+                # Shift down the data variables.
+                config['FAVORITE LOCATIONS']['favloc2_data'] = favoritelocation_1data
+                logger.debug("FAVORITE LOCATIONS/favloc2_data is now: %s" % favoritelocation_1data)
+                config['FAVORITE LOCATIONS']['favloc3_data'] = favoritelocation_2data
+                logger.debug("FAVORITE LOCATIONS/favloc3_data is now: %s" % favoritelocation_2data)
+                config['FAVORITE LOCATIONS']['favloc4_data'] = favoritelocation_3data
+                logger.debug("FAVORITE LOCATIONS/favloc4_data is now: %s" % favoritelocation_3data)
+                config['FAVORITE LOCATIONS']['favloc5_data'] = favoritelocation_4data
+                logger.debug("FAVORITE LOCATIONS/favloc5_data is now: %s" % favoritelocation_4data)
+
+                # Depending on the query type we either add the favloc input in lowercase form, or the way it was in the input.
+                if favloc_add_querytype == "Default":
+                    config['FAVORITE LOCATIONS']['favloc1'] = favloc_manualinput
+                    logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_manualinput)
+                elif favloc_add_querytype == "PWS":
+                    config['FAVORITE LOCATIONS']['favloc1'] = favloc_manualinputLower
+                    logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_manualinputLower)
+                elif favloc_add_querytype == "Airport":
+                    config['FAVORITE LOCATIONS']['favloc1'] = favloc_manualinputLower
+                    logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_manualinputLower)
+                else:
+                    # In the event that somehow the query type isn't set, just put in the lower manual input for safety.
+                    logger.warn("Query type wasn't set! Defaulting to adding the lowercase input var.")
+                    config['FAVORITE LOCATIONS']['favloc1'] = favloc_manualinputLower
+                    logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_manualinputLower)
+
+                # Do the same thing as we did above, adding the data variable depending on query type.
+                if favloc_add_querytype == "Default":
+                    config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
+                    logger.debug("FAVORITE LOCATIONS/favloc1_data is now 'None'.")
+                elif favloc_add_querytype == "PWS":
+                    config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
+                    logger.debug("FAVORITE LOCATIONS/favloc1_data is now 'None'.")
+                elif favloc_add_querytype == "Airport":
+                    # We can have two scenarios where we have data or not.
+                    if airportvalidate_data is True:
+                        logger.info("airportvalidate_data is True.")
+                        config['FAVORITE LOCATIONS']['favloc1_data'] = airport_name
+                        logger.debug("FAVORITE LOCATIONS/favloc1_data is now: %s" % airport_name)
+                    elif airportvalidate_data is False:
+                        logger.info("airportvalidate_data is False.")
+                        config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
+                        logger.debug("FAVORITE LOCATIONS/favloc1_data is now 'None'.")
+                    else:
+                        logger.warn("airportvalidate_data isn't True or False! Defaulting to no extra data.")
+
                 try:
                     with open('storage//config.ini', 'w') as configfile:
                         config.write(configfile)
