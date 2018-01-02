@@ -1508,7 +1508,7 @@ if (airports_enabled is True and locinput.find("airport:") == 0
     elif locinput.find("arpt:") == 0:
         airport_locinput = locinput.strip("arpt:").upper()
     logger.debug("airport_locinput: %s" % airport_locinput)
-    airportinfourl = pwsinfourl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
+    airportinfourl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
     try:
         airportJSON = requests.get(airportinfourl)
         logger.debug("airport information JSON (airportJSON) acquired with end result: %s" % airportJSON)
@@ -6737,10 +6737,10 @@ while True:
 
                 if favloc_manualinputLower.find("pws:") == 0:
                     logger.debug("PWS query detected.")
-                    print("", Fore.YELLOW + Style.BRIGHT + "Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
-                          Fore.YELLOW + Style.BRIGHT + "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
-                    print("", Fore.YELLOW + Style.BRIGHT + "Would you like to validate the PWS you're trying to add as a favorite location?",
-                          Fore.YELLOW + Style.BRIGHT + "Even if validation fails, you can still add the PWS you're trying to add. Yes or No.", sep="\n")
+                    print("", Fore.YELLOW + Style.BRIGHT + "Please note: For PWS queries to work as a favorite location, you'll need to have PWS queries",
+                          Fore.YELLOW + Style.BRIGHT + "enabled in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
+                    print("", Fore.YELLOW + Style.BRIGHT + "Would you like to validate the PWS that you're trying to add as a favorite location?",
+                          Fore.YELLOW + Style.BRIGHT + "Even if validation fails, you can still add the PWS that you're trying to add. Yes or No.", sep="\n")
                     favloc_validatepws = input("Input here: ").lower()
                     if favloc_validatepws == "yes":
                         print(Fore.YELLOW + Style.BRIGHT + "Now validating the PWS that you inputted. This should only take a moment.")
@@ -6846,6 +6846,66 @@ while True:
                         print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
                               Fore.RED + Style.BRIGHT + "Please note that no changes were made to your config file.", sep="\n")
                         continue
+
+                if favloc_manualinputLower.find("airport:") == 0 or favloc_manualinputLower.find("arpt:") == 0:
+                    logger.debug("Airport query detected.")
+                    print(Fore.YELLOW + Style.BRIGHT + "Please note: For airport queries to work as a favorite location, you'll need to have",
+                          Fore.YELLOW + Style.BRIGHT + "airport queries enabled in the config file. (FIRSTINPUT/allow_airportqueries should be True.", sep="\n")
+                    print("")
+                    print(Fore.YELLOW + Style.BRIGHT + "Would you like to validate the airport that you're trying to add as a favorite location?",
+                          Fore.YELLOW + Style.BRIGHT + "It's recommended you validate, as we can get display name information as how to properly format",
+                          Fore.YELLOW + Style.BRIGHT + "the favorite location across PyWeather. If validation fails, you can still add the airport",
+                          Fore.YELLOW + Style.BRIGHT + "that you're trying to add. Yes or No.", sep="\n")
+                    airportvalidate_input = input("Input here: ").lower()
+                    if airportvalidate_input == "yes":
+                        print(Fore.YELLOW + Style.BRIGHT + "Now validating the airport that you inputted. This should only take a moment.")
+                        spinner.start(text="Validating favorite location...")
+                        airportvalidate_url = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
+                        logger.debug("airportvalidate_url: %s" % airportvalidate_url)
+                        try:
+                            airportvalidateJSON = requests.get(airportvalidate_url)
+                            logger.debug("airportvalidateJSON acquired with end result: %s" % airportvalidateJSON)
+                            airportvalidate_json = json.loads(airportvalidateJSON.text)
+                            if jsonVerbosity is True:
+                                logger.debug("airportvalidate_json: %s" % airportvalidate_json)
+                            else:
+                                logger.debug("airportvalidate_json has been loaded.")
+                            airportvalidate_data = True
+                            logger.debug("airportvalidate_data: %s" % airportvalidate_data)
+                        except:
+                            airportvalidate_data = False
+                            logger.debug("airportvalidate_data: %s" % airportvalidate_data)
+                            spinner.fail(text="Failed to validate favorite location!")
+                            print("")
+                            print(Fore.YELLOW + Style.BRIGHT + "Sorry, we couldn't query Wunderground to validate the airport",
+                                  Fore.YELLOW + Style.BRIGHT + "that you inputted. Would you still like to add this airport as a favorite",
+                                  Fore.YELLOW + Style.BRIGHT + "location anyways? Yes or No.", sep="\n")
+                            airportvalidate_invalidinput = input("Input here: ").lower()
+                            if airportvalidate_invalidinput == "yes":
+                                print(Fore.YELLOW + Style.BRIGHT + "Still adding the airport as a favorite location.")
+                            elif airportvalidate_invalidinput == "no":
+                                print(Fore.YELLOW + Style.BRIGHT + "Not adding the airport as a favorite location.")
+                                continue
+                            else:
+                                print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input, but still adding the airport as",
+                                      Fore.YELLOW + Style.BRIGHT + "as a favorite location.", sep="\n")
+
+                        if airportvalidate_data is True:
+                            logger.info("airportvalidate_data is True.")
+
+                            try:
+                                airport_name = airportvalidate_json['location']['city']
+                                logger.debug("airport_name: %s" % airport_name)
+                                spinner.succeed(text="Airport location is valid!")
+                                print("")
+                                print(Fore.YELLOW + Style.BRIGHT + "The airport you entered is valid, and we have good extra data.",
+                                      Fore.YELLOW + Style.BRIGHT + "Proceeding with adding it to your favorite locations.", sep="\n")
+                            except:
+                                spinner.fail(text="Failed to validate favorite location.")
+                                print("")
+                                print(Fore.YELLOW + Style.BRIGHT + "The airport that you entered is invalid, or doesn't have proper",
+                                      Fore.YELLOW + Style.BRIGHT + "extra data. Would you still like to add the airport as a favorite location? Yes or No.")
+
 
 
                 if favloc_manualinputLower.find("favoritelocation:") == 0 or favloc_manualinputLower.find("favloc:") == 0:
