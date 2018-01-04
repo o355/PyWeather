@@ -941,13 +941,14 @@ logger.debug("about_buildnumber: %s ; about_version: %s" %
              (about_buildnumber, about_version))
 logger.debug("about_releasedate: %s ; about_maindevelopers: %s" %
              (about_releasedate, about_maindevelopers))
-about_awesomecontributors = "ModoUnreal, TheLetterAndrew" # Oh look I'm on TV, HI MOM!!!!
+about_awesomecontributors = "ModoUnreal, TheLetterAndrew" # Oh look I'm on TV, HI MOM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # The winner of the explaination point contest for 0.6.3 beta:
+# Oh boy guess I won!
 #
-#             o355
+#           ModoUnreal
 #          ___________
-#          |   1st    | ModoUnreal
-#  No one  |          |___________
+#          |   1st    |   o355
+#  Reddit  |          |___________
 # ---------               2nd     |
 # |  3rd                          |
 # |_______________________________|
@@ -6481,6 +6482,23 @@ while True:
                                     break
                         else:
                             continue
+
+
+# ModoUnreal working on history stuff.
+    elif moreoptions == "34":
+        pass
+
+# The plan right now is to take the latest data as such:
+# mars_data = requests.get("https://marsweather.ingenology.com/v1/latest/")
+# r_json = r.json() (r_json will contain the data necessary.)
+# Huh! What do you know?! Historical data can also be done!
+
+
+
+
+
+
+
     elif moreoptions == "13":
         if favoritelocation_enabled is False:
             print("", Fore.RED + Style.BRIGHT + "To manage favorite locations, you'll need to enable the favorite locations feature.",
