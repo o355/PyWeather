@@ -76,6 +76,10 @@ def configprovision():
     except configparser.DuplicateSectionError:
         print("Failed to add the favorite locations section.")
     try:
+        config.add_section("PREVIOUS LOCATIONS")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the previous locations section")
+    try:
         config.add_section("HURRICANE")
     except configparser.DuplicateSectionError:
         print("Failed to add the hurricane section.")
@@ -207,6 +211,12 @@ def configprovision():
     config['FAVORITE LOCATIONS']['favloc3'] = 'None'
     config['FAVORITE LOCATIONS']['favloc4'] = 'None'
     config['FAVORITE LOCATIONS']['favloc5'] = 'None'
+    config['PREVIOUS LOCATIONS']['enabled'] = 'True'
+    config['PREVIOUS LOCATIONS']['prevloc1'] = 'None'
+    config['PREVIOUS LOCATIONS']['prevloc2'] = 'None'
+    config['PREVIOUS LOCATIONS']['prevloc3'] = 'None'
+    config['PREVIOUS LOCATIONS']['prevloc4'] = 'None'
+    config['PREVIOUS LOCATIONS']['prevloc5'] = 'None'
     try:
         with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)
@@ -1771,6 +1781,25 @@ else:
     config['FAVORITE LOCATIONS']['enabled'] = 'True'
     logger.debug("FAVORITE LOCATIONS/enabled is now 'True'.")
     print("Changes saved!")
+
+print("", "(37/43)", "PyWeather can now store your previously searched locations.",
+        "You have the ability to configure your previous locations in a menu option",
+        "in PyWeather. By default this feature is enabled.",
+        "Yes or No.", sep="\n")
+enable_previouslocations = input("Input here: ").lower()
+logger.debug("enable_previouslocations: %s" % enable_previouslocations)
+if enable_previouslocations == "yes":
+    config['PREVIOUS LOCATIONS']['enabled'] = 'True'
+    logger.debug("PREVIOUS LOCATIONS/enabled is now 'True'.")
+    print("Changes saved!")
+elif enable_previouslocations == "no":
+    config['PREVIOUS LOCATIONS']['enabled'] = 'False'
+    logger.debug("PREVIOUS LOCATIONS/enabled is now 'False'.")
+    print("Changes saved.")
+else:
+    print("Could not understand your input. Defaulting to 'True'.")
+    config['PREVIOUS LOCATIONS']['enabled'] = 'True'
+    logger.debug("PREVIOUS LOCATIONS/enabled is now 'True'.")
 
 print("", "(37/42)", "PyWeather by default uses Google's geocoder, which can occasionally have rate limiting issues.",
       "To get around this, you can manually use your own API key that you sign up for with Google. This is completely",
