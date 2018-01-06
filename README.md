@@ -1,5 +1,10 @@
 [Subscribe to the PyWeather Weekly Update, for all the latest in PyWeather news on a somewhat weekly basis!](https://owenthe.ninja/sign-pyweathers-weekly-newsletter/)
 
+## Quick notice about PyWeather before the readme begins
+Lately I've been absolutely slacking off and have become less passionate about this project. For the next few releases, I'm going to focus on refining PyWeather and maybe adding a feature here and there, but at this point additional features are basically bloat. Validating favorite locations is scrapped. Mars Weather is scrapped. 0.6.4 beta will focus on really refining PyWeather.
+
+Please also note that midterms is basically right around the corner and is a 3 week adventure of being on a partial hiatus. Hopefully things will be back in high gear in February.
+
 ## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
 
