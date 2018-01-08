@@ -4,16 +4,12 @@
 ## version 0.6.4 beta - Should be released in early 2018:
 * Adds the ability to see the weather for airports - 90% done
     * Everything else - Done!
-    * (somehow) adding: if a favloc is an airport but the data key is empty fill that data key!
+    * (somehow) adding: if a favloc is an airport but the data key is empty fill that data key! - 0% done
     * Adding new config options - 0% done
-* Adds further refinement to favorite locations
-    * Adding extra data vars for option 1 (add current loc) - Done, needs testing
-    * Adding location validation checks for new & edited favorite locations - 10% done
-    * Adding extra data var compatibility for deleting favlocs
-    * New config options
+* Adding compatibility to favlocs for airport data - 80% done
+* Adding the ability to delete all favorite locations - Should be done...?
 * Adds the ability to see and call the weather for previously looked up locations - Should be done on 12/20
 * Adds the ability to see historical data for PWSes - Should be done on 12/28
-* Adds the ability to see the weather on Mars! - Scrapped...for now (it's a low priority feature, if there is extra time then I'll code it in)
 * Adds the ability to change your radar image size on the fly - Should be done on 1/13/18
 * Adds the brand new Universal PyWeather Updater, making it a ton easier to update to new versions of PyWeather - Should be done on 1/28/18
 * Improves the UI of the configuration updater. New configuration options are put on 2 lines of text. - Should be done on 2/1/18

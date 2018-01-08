@@ -5,7 +5,7 @@ _______
 |        |  \       /       ,;@.....;,;
 |        |   \     /       @..@........@`           PyWeather
 |        |    \   /        .............@           version 0.6.3 beta
-|        /     \ /         .............@           (c) 2017 - o355
+|        /     \ /         .............@           (c) 2017-2018 - o355
 |_______/       |          @...........#`
 |               |           .+@@++++@#;
 |               |             @ ;  ,
@@ -6724,8 +6724,8 @@ while True:
                       Fore.YELLOW + Style.BRIGHT + "For an airport, you'd enter airport:<IATA or ICAO code>, where <IATA or ICAO>",
                       Fore.YELLOW + Style.BRIGHT + "is the IATA or ICAO code of the airport you're adding.",
                       Fore.YELLOW + Style.BRIGHT + "Queries for favoritelocation:, currentlocation, and previouslocation: are not supported.",
-                      Fore.YELLOW + Style.BRIGHT + "Please note that your input can be validated at your option, but if validation fails",
-                      Fore.YELLOW + Style.BRIGHT + "you can still add the location anyways. To exit, enter Control + C.", sep="\n")
+                      Fore.YELLOW + Style.BRIGHT + "Please note that if you want to want to add an airport as a favorite location, we will",
+                      Fore.YELLOW + Style.BRIGHT + "need to grab extra data for proper formatting.", sep="\n")
                 try:
                     favloc_manualinput = input("Input here: ")
                 except KeyboardInterrupt:
@@ -6742,102 +6742,25 @@ while True:
                              (favloc_manualinput, favloc_manualinputLower))
 
                 if favloc_manualinputLower.find("pws:") == 0:
-                    logger.debug("PWS query detected.")
+                    print(Fore.YELLOW + Style.BRIGHT + "Please note: For PWS queries to work as a favorite location, you'll need to have",
+                          Fore.YELLOW + Style.BRIGHT + "PWS queries enabled in the config file. (FIRSTINPUT/allow_pwsqueries should be True).", sep="\n")
                     favloc_add_querytype = "PWS"
                     logger.debug("favloc_add_querytype: %s" % favloc_add_querytype)
-                    print("", Fore.YELLOW + Style.BRIGHT + "Please note: For PWS queries to work as a favorite location, you'll need to have PWS queries",
-                          Fore.YELLOW + Style.BRIGHT + "enabled in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
-                    print("", Fore.YELLOW + Style.BRIGHT + "Would you like to validate the PWS that you're trying to add as a favorite location?",
-                          Fore.YELLOW + Style.BRIGHT + "Even if validation fails, you can still add the PWS that you're trying to add. Yes or No.", sep="\n")
-                    favloc_validatepws = input("Input here: ").lower()
-                    logger.debug("favloc_validatepws: %s" % favloc_validatepws)
-                    if favloc_validatepws == "yes":
-                        print(Fore.YELLOW + Style.BRIGHT + "Now validating the PWS that you inputted. This should only take a moment.")
-                        pwsvalidate_url = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + favloc_manualinputLower + ".json"
-                        logger.debug("pwsvalidate_url: %s" % pwsvalidate_url)
-                        spinner.start(text="Validating PWS input...")
-
-                        try:
-                            pwsvalidateJSON = requests.get(pwsvalidate_url)
-                            logger.debug("pwsvalidateJSON acquired with: %s" % pwsvalidateJSON)
-                            pwsvalidate_json = json.loads(pwsvalidateJSON.text)
-                            if jsonVerbosity is True:
-                                logger.debug("pwsvalidate_json: %s" % pwsvalidate_json)
-                            else:
-                                logger.debug("pwsvalidate_json has been loaded.")
-                            pwsvalidate_data = True
-                            logger.debug("pwsvalidate_data: %s" % pwsvalidate_data)
-                        except:
-                            spinner.fail("Failed to validate PWS!")
-                            pwsvalidate_data = False
-                            logger.debug("pwsvalidate_data: %s" % pwsvalidate_data)
-                            print("")
-                            print(Fore.YELLOW + Style.BRIGHT + "Sorry, we couldn't query Wunderground to validate the PWS",
-                                  Fore.YELLOW + Style.BRIGHT + "that you inputted. Would you still like to add this PWS as a favorite",
-                                  Fore.YELLOW + Style.BRIGHT + "location anyways? Yes or No.", sep="\n")
-                            pwsvalidate_invalidinput = input("Input here: ").lower()
-                            logger.debug("pwsvalidate_invalidinput: %s" % pwsvalidate_invalidinput)
-                            if pwsvalidate_invalidinput == "yes":
-                                print(Fore.YELLOW + Style.BRIGHT + "Still adding the PWS as a favorite location.")
-                            elif pwsvalidate_invalidinput == "no":
-                                print(Fore.YELLOW + Style.BRIGHT + "Not adding the PWS as a favorite location, and returning to the main menu.")
-                                continue
-                            else:
-                                print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input, but the PWS will be added",
-                                      Fore.YELLOW + Style.BRIGHT + "as a favorite location anyways.", sep="\n")
-
-                        # If we have data, move into this block of code which truly validates if we have good data.
-                        # If we had invalid data, don't run this block, and skip to the config committing after the if code.
-
-                        if pwsvalidate_data is True:
-                            logger.info("pwsvalidate_data is True.")
-
-                            # Use location to see if we have a real PWS or a bad one.
-                            try:
-                                pws_invalid = pwsinfo_json['location']['lat']
-                                spinner.succeed(text="Favorite location is valid!")
-                                print("")
-                                print(Fore.YELLOW + Style.BRIGHT + "The PWS that you entered is valid! Proceeding with",
-                                      Fore.YELLOW + Style.BRIGHT + "adding it to the configuration file.", sep="\n")
-                            except:
-                                spinner.fail(text="Failed to validate favorite location.")
-                                print("")
-                                print(Fore.YELLOW + Style.BRIGHT + "The PWS that you entered is invalid. Would you still",
-                                      Fore.YELLOW + Style.BRIGHT + "like to add the PWS as a favorite location? Yes or No.", sep="\n")
-                                pwsvalidate_invalidinput = input("Input here: ").lower()
-                                logger.debug("pwsvalidate_invalidinput: %s" % pwsvalidate_invalidinput)
-                                if pwsvalidate_invalidinput == "yes":
-                                    print(Fore.YELLOW + Style.BRIGHT + "Proceeding with adding the PWS as a favorite location.")
-                                elif pwsvalidate_invalidinput == "no":
-                                    print(Fore.YELLOW + Style.BRIGHT + "Not adding the PWS as a favorite location, and returning to the main menu.")
-                                    continue
-                                else:
-                                    print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input, but the PWS will be added",
-                                          Fore.YELLOW + Style.BRIGHT + "as a favorite location anyways.", sep="\n")
-
-                    elif favloc_validatepws == "no":
-                        print(Fore.YELLOW + Style.BRIGHT + "Not validating your PWS input, and proceeding with adding it as a favorite location.")
-                    else:
-                        print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input. As a result, I'm not validating your PWS input",
-                              Fore.YELLOW + Style.BRIGHT + "and proceeding with adding it as a favorite location.", sep="\n")
-
-
-                    print("")
 
                 elif favloc_manualinputLower.find("airport:") == 0 or favloc_manualinputLower.find("arpt:") == 0:
                     logger.debug("Airport query detected.")
                     favloc_add_querytype = "Airport"
                     logger.debug("favloc_add_querytype: %s" % favloc_add_querytype)
                     print(Fore.YELLOW + Style.BRIGHT + "Please note: For airport queries to work as a favorite location, you'll need to have",
-                          Fore.YELLOW + Style.BRIGHT + "airport queries enabled in the config file. (FIRSTINPUT/allow_airportqueries should be True.", sep="\n")
+                          Fore.YELLOW + Style.BRIGHT + "airport queries enabled in the config file. (FIRSTINPUT/allow_airportqueries should be True).", sep="\n")
                     print("")
-                    print(Fore.YELLOW + Style.BRIGHT + "Would you like to validate the airport that you're trying to add as a favorite location?",
-                          Fore.YELLOW + Style.BRIGHT + "It's recommended you validate, as we can get display name information as how to properly format",
-                          Fore.YELLOW + Style.BRIGHT + "the favorite location across PyWeather. If validation fails, you can still add the airport",
-                          Fore.YELLOW + Style.BRIGHT + "that you're trying to add. Yes or No.", sep="\n")
+                    print(Fore.YELLOW + Style.BRIGHT + "For proper formatting of an airport as a favorite location, we need to grab extra data",
+                          Fore.YELLOW + Style.BRIGHT + "about it's actual name. This process can be skipped entirely, but will result in improper",
+                          Fore.YELLOW + Style.BRIGHT + "formatting of the favorite location. Would you like to get extra data about the airport?",
+                          Fore.YELLOW + Style.BRIGHT + "Yes or No.", sep="\n")
                     airportvalidate_input = input("Input here: ").lower()
                     if airportvalidate_input == "yes":
-                        print(Fore.YELLOW + Style.BRIGHT + "Now validating the airport that you inputted. This should only take a moment.")
+                        print(Fore.YELLOW + Style.BRIGHT + "Now getting extra data about the airport that you inputted. This should only take a moment.")
                         spinner.start(text="Validating favorite location...")
                         airportvalidate_url = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
                         logger.debug("airportvalidate_url: %s" % airportvalidate_url)
@@ -6856,8 +6779,8 @@ while True:
                             logger.debug("airportvalidate_data: %s" % airportvalidate_data)
                             spinner.fail(text="Failed to validate favorite location!")
                             print("")
-                            print(Fore.YELLOW + Style.BRIGHT + "Sorry, we couldn't query Wunderground to validate the airport",
-                                  Fore.YELLOW + Style.BRIGHT + "that you inputted. Would you still like to add this airport as a favorite",
+                            print(Fore.YELLOW + Style.BRIGHT + "Sorry, we couldn't query Wunderground to get extra data about the airport.",
+                                  Fore.YELLOW + Style.BRIGHT + "you inputted. Would you still like to add this airport as a favorite",
                                   Fore.YELLOW + Style.BRIGHT + "location anyways? Yes or No.", sep="\n")
                             airportvalidate_invalidinput = input("Input here: ").lower()
                             if airportvalidate_invalidinput == "yes":
@@ -6873,7 +6796,7 @@ while True:
                             logger.info("airportvalidate_data is True.")
 
                             try:
-                                airport_name = airportvalidate_json['location']['city']
+                                airport_name = airportvalidate_json['location']['city'] + " Airport"
                                 logger.debug("airport_name: %s" % airport_name)
                                 spinner.succeed(text="Airport location is valid!")
                                 print("")
@@ -6897,82 +6820,9 @@ while True:
                                     print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input, but the airport will be added",
                                           Fore.YELLOW + Style.BRIGHT + "as a favorite location anyways.", sep="\n")
                     elif airportvalidate_input == "no":
-                        print(Fore.YELLOW + Style.BRIGHT + "Not validating your PWS input, and proceeding with adding it as a favorite location.")
+                        print(Fore.YELLOW + Style.BRIGHT + "Not validating the airport you inputted, and proceeding with adding it as a favorite location.")
                     else:
-                        print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input ")
-                else:
-                    logger.debug("Query type is likely just a standard query.")
-                    # Since this is a standard query, we query Google to give a lat/lon (twice as sometimes it fails)
-                    print(Fore.YELLOW + Style.BRIGHT + "Would you like to validate the location that you're trying to add as a favorite location?",
-                          Fore.YELLOW + Style.BRIGHT + "Even if validation fails, you can still add the location that you're trying to add. Yes or No.", sep="\n")
-                    favloc_validatenormal_input = input("Input here: ").lower()
-                    logger.debug("favloc_validatenormal_input: %s" % favloc_validatenormal_input)
-                    if favloc_validatenormal_input == "yes":
-                        spinner.start(text="Validating favorite location...")
-                        # Set the variable for if we have a geocoder error
-                        favloc_validateerror = False
-                        logger.debug("favloc_validateerror: %s" % favloc_validateerror)
-                        # Use the standard geocoder in the mode that works with the OS.
-                        try:
-                            validatelocation = geolocator.geocode(favloc_manualinput, language="en", timeout=20)
-                        except geopy.exc.GeocoderQuotaExceeded:
-                            # Retry a geocode, sometimes Google has issues
-                            try:
-                                validatelocation = geolocator.geocode(favloc_manualinput, language="en", timeout=20)
-                            except geopy.exc.GeocoderQuotaExceeded:
-                                spinner.fail(text="Failed to validate favorite location, a quota error occurred!")
-                                favloc_validateerror = True
-                                logger.debug("favloc_validateerror: %s" % favloc_validateerror)
-                                # Instead of having a lot of yes/no dialogs, set one error variable to True.
-                                # Once this mess is over we can open up the dialogue.
-                            except:
-                                spinner.fail(text="Failed to validate favorite location!")
-                                favloc_validateerror = True
-                                logger.debug("favloc_validateerror: %s" % favloc_validateerror)
-                        except geopy.exc.GeocoderServiceError:
-                            spinner.fail(text="Failed to validate favorite location, a service error occurred!")
-                            favloc_validateerror = True
-                            logger.debug("favloc_validateerror: %s" % favloc_validateerror)
-                        except:
-                            spinner.fail(text="Failed to locate input!")
-                            favloc_validateerror = True
-                            logger.debug("favloc_validateerror: %s" % favloc_validateerror)
-
-                        # If we still have good data, run additional parsing for lat/lon.
-                        if favloc_validateerror is False:
-                            logger.debug("favloc_validateerror is False.")
-                            try:
-                                favloc_validatelat = str(validatelocation.latitude)
-                                favloc_validatelon = str(validatelocation.longitude)
-                                spinner.succeed(text="Favorite location is valid!")
-                                print("")
-                                print(Fore.YELLOW + Style.BRIGHT + "The favorite location you entered is valid. Proceeding with",
-                                      Fore.YELLOW + Style.BRIGHT + "adding it as a favorite location.", sep="\n")
-                            except AttributeError:
-                                spinner.fail(text="Favorite location is invalid, we had bad data!")
-                                favloc_validateerror = True
-                                logger.debug("favloc_validateerror: %s" % favloc_validateerror)
-
-                        # Have a separate if block since we can still run into an error up above.
-                        if favloc_validateerror is True:
-                            logger.debug("favloc_validateerror: %s" % favloc_validateerror)
-                            print(Fore.YELLOW + Style.BRIGHT + "The favorite location that you entered was either invalid, or an error",
-                                  Fore.YELLOW + Style.BRIGHT + "occurred with the geocoder when attempting validation.",
-                                  Fore.YELLOW + Style.BRIGHT + "Would you still like to add the location you inputted as a favorite location",
-                                  Fore.YELLOW + Style.BRIGHT + "anyways? Yes or No.", sep="\n")
-                            favloc_validateerror_input = input("Input here: ").lower()
-                            logger.debug("favloc_validateerror_input: %s" % favloc_validateerror_input)
-                            if favloc_validateerror_input == "yes":
-                                print(Fore.YELLOW + Style.BRIGHT + "Proceeding with adding your input as a favorite location.")
-                            elif favloc_validateerror_input == "no":
-                                print(Fore.YELLOW + Style.BRIGHT + "Not adding your input as a favorite location.")
-                                continue
-                            else:
-                                print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input, but the favorite location you wanted to add",
-                                      Fore.YELLOW + Style.BRIGHT + "will be added as a favorite location anyways.", sep="\n")
-
-
-
+                        print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input. Defaulting to adding the airport you inputted.")
 
                 if favloc_manualinputLower.find("favoritelocation:") == 0 or favloc_manualinputLower.find("favloc:") == 0:
                     logger.debug("Invalid query detected - favorite location")
@@ -6986,6 +6836,8 @@ while True:
                           Fore.RED + Style.BRIGHT + "current location feature is enabled (FIRSTINPUT/geoipservice_enabled should be True).",
                           Fore.RED + Style.BRIGHT + "Returning to main menu.", sep="\n")
                     continue
+
+                # Bump down the favloc data variables. It doesn't matter what query type we're working with.
 
                 config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_1
                 logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favoritelocation_1)
@@ -7041,7 +6893,13 @@ while True:
                         config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
                         logger.debug("FAVORITE LOCATIONS/favloc1_data is now 'None'.")
                     else:
-                        logger.warn("airportvalidate_data isn't True or False! Defaulting to no extra data.")
+                        logger.warning("airportvalidate_data isn't True or False! Defaulting to no extra data.")
+                        config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
+                        logger.debug("FAVORITE LOCATIONS/favloc1_data is now 'None'.")
+                else:
+                    logger.warning("Query type wasn't set! Defaulting to adding no extra data.")
+                    config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
+                    logger.debug("FAVORITE LOCATIONS/favloc1_data is now 'None'.")
 
                 try:
                     with open('storage//config.ini', 'w') as configfile:
@@ -7108,8 +6966,10 @@ while True:
                 # User input for the change goes here.
                 print(Fore.YELLOW + Style.BRIGHT + "What would you like to change favorite location " + Fore.CYAN + Style.BRIGHT + str(favloc_editdisplay) + Fore.YELLOW + Style.BRIGHT + " to?",
                       Fore.YELLOW + Style.BRIGHT + "For a PWS, you'd enter pws:<PWS ID>, where <PWS ID> is the ID of the PWS.",
+                      Fore.YELLOW + Style.BRIGHT + "For an airport, you'd enter airport:<IATA or ICAO code>, where <IATA or ICAO>",
                       Fore.YELLOW + Style.BRIGHT + "Queries for favoritelocation:, currentlocation, and previouslocation: are not supported.",
-                      Fore.YELLOW + Style.BRIGHT + "Please note that your input WILL NOT be validated. To exit, enter 'exit' in the input.", sep="\n")
+                      Fore.YELLOW + Style.BRIGHT + "Please note that if you want to want to add an airport as a favorite location, we will",
+                      Fore.YELLOW + Style.BRIGHT + "need to grab extra data for proper formatting.", sep="\n")
                 favloc_editinput = input("Input here: ")
                 favloc_editinputLower = favloc_editinput.lower()
                 logger.debug("favloc_editinput: %s ; favloc_editinputLower: %s" %
@@ -7119,35 +6979,164 @@ while True:
                 if favloc_editinputLower == "exit":
                     print("", Fore.YELLOW + Style.BRIGHT + "Exiting to the main menu.", sep="\n")
 
-                if favloc_editinputLower.find("pws:") == 0:
-                    logger.debug("PWS query has been detected.")
-                    print("", Fore.YELLOW + Style.BRIGHT +"Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
-                          Fore.YELLOW + Style.BRIGHT + "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
+                if favloc_manualinputLower.find("airport:") == 0 or favloc_manualinputLower.find("arpt:") == 0:
+                    logger.debug("Airport query detected.")
+                    print(Fore.YELLOW + Style.BRIGHT + "Please note: For airport queries to work as a favorite location, you'll need to have",
+                          Fore.YELLOW + Style.BRIGHT + "airport queries enabled in the config file. (FIRSTINPUT/allow_airportqueries should be True).", sep="\n")
+                    print("")
+                    print(Fore.YELLOW + Style.BRIGHT + "For proper formatting of an airport as a favorite location, we need to grab extra data",
+                          Fore.YELLOW + Style.BRIGHT + "about it's actual name. This process can be skipped entirely, but will result in improper",
+                          Fore.YELLOW + Style.BRIGHT + "formatting of the favorite location. Would you like to get extra data about the airport?",
+                          Fore.YELLOW + Style.BRIGHT + "Yes or No.", sep="\n")
+                    airportvalidate_input = input("Input here: ").lower()
+                    if airportvalidate_input == "yes":
+                        print(Fore.YELLOW + Style.BRIGHT + "Now getting extra data about the airport that you inputted. This should only take a moment.")
+                        spinner.start(text="Validating favorite location...")
+                        airportvalidate_url = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
+                        logger.debug("airportvalidate_url: %s" % airportvalidate_url)
+                        try:
+                            airportvalidateJSON = requests.get(airportvalidate_url)
+                            logger.debug("airportvalidateJSON acquired with end result: %s" % airportvalidateJSON)
+                            airportvalidate_json = json.loads(airportvalidateJSON.text)
+                            if jsonVerbosity is True:
+                                logger.debug("airportvalidate_json: %s" % airportvalidate_json)
+                            else:
+                                logger.debug("airportvalidate_json has been loaded.")
+                            airportvalidate_data = True
+                            logger.debug("airportvalidate_data: %s" % airportvalidate_data)
+                        except:
+                            airportvalidate_data = False
+                            logger.debug("airportvalidate_data: %s" % airportvalidate_data)
+                            spinner.fail(text="Failed to validate favorite location!")
+                            print("")
+                            print(Fore.YELLOW + Style.BRIGHT + "Sorry, we couldn't query Wunderground to get extra data about the airport.",
+                                  Fore.YELLOW + Style.BRIGHT + "you inputted. Would you still like to add this airport as a favorite",
+                                  Fore.YELLOW + Style.BRIGHT + "location anyways? Yes or No.", sep="\n")
+                            airportvalidate_invalidinput = input("Input here: ").lower()
+                            if airportvalidate_invalidinput == "yes":
+                                print(Fore.YELLOW + Style.BRIGHT + "Still adding the airport as a favorite location.")
+                            elif airportvalidate_invalidinput == "no":
+                                print(Fore.YELLOW + Style.BRIGHT + "Not adding the airport as a favorite location.")
+                                continue
+                            else:
+                                print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input, but still adding the airport as",
+                                      Fore.YELLOW + Style.BRIGHT + "as a favorite location.", sep="\n")
+
+                        if airportvalidate_data is True:
+                            logger.info("airportvalidate_data is True.")
+
+                            try:
+                                airport_name = airportvalidate_json['location']['city'] + " Airport"
+                                logger.debug("airport_name: %s" % airport_name)
+                                spinner.succeed(text="Airport location is valid!")
+                                print("")
+                                print(Fore.YELLOW + Style.BRIGHT + "The airport you entered is valid, and we have good extra data.",
+                                      Fore.YELLOW + Style.BRIGHT + "Proceeding with adding it to your favorite locations.", sep="\n")
+                            except:
+                                spinner.fail(text="Failed to validate favorite location.")
+                                # Set the airport name to none, as that's the data that will get added.
+                                airportvalidate_data = False
+                                logger.debug("airportvalidate_data: %s" % airportvalidate_data)
+                                print("")
+                                print(Fore.YELLOW + Style.BRIGHT + "The airport that you entered is invalid, or doesn't have proper",
+                                      Fore.YELLOW + Style.BRIGHT + "extra data. Would you still like to add the airport as a favorite location? Yes or No.", sep="\n")
+                                airportvalidate_invalidinput = input("Input here: ").lower()
+                                if airportvalidate_invalidinput == "yes":
+                                    print(Fore.YELLOW + Style.BRIGHT + "Proceeding with adding the airport as a favorite location.")
+                                elif airportvalidate_invalidinput == "no":
+                                    print(Fore.YELLOW + Style.BRIGHT + "Not adding the airport as a favorite location, and returning to the main menu.")
+                                    continue
+                                else:
+                                    print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input, but the airport will be added",
+                                          Fore.YELLOW + Style.BRIGHT + "as a favorite location anyways.", sep="\n")
+                    elif airportvalidate_input == "no":
+                        print(Fore.YELLOW + Style.BRIGHT + "Not validating the airport you inputted, and proceeding with adding it as a favorite location.")
+                        continue
+                    else:
+                        print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input. Defaulting to adding the airport you inputted.")
+
+                    # At this point we add the favorite location. Lower input as with PWSes & the extra data var set to the airport name.
+
                     if favloc_editinputnum == 1:
                         config['FAVORITE LOCATIONS']['favloc1'] = favloc_editinputLower
                         logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_editinputLower)
+                        config['FAVORITE LOCATIONS']['favloc1_data'] = airport_name
+                        logger.debug("FAVORITE LOCATIONS/favloc1_data is now: %s" % airport_name)
                     elif favloc_editinputnum == 2:
                         config['FAVORITE LOCATIONS']['favloc2'] = favloc_editinputLower
                         logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favloc_editinputLower)
+                        config['FAVORITE LOCATIONS']['favloc2_data'] = airport_name
+                        logger.debug("FAVORITE LOCATIONS/favloc2_data is now: %s" % airport_name)
                     elif favloc_editinputnum == 3:
                         config['FAVORITE LOCATIONS']['favloc3'] = favloc_editinputLower
                         logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favloc_editinputLower)
+                        config['FAVORITE LOCATIONS']['favloc3_data'] = airport_name
+                        logger.debug("FAVORITE LOCATIONS/favloc3_data is now: %s" % airport_name)
                     elif favloc_editinputnum == 4:
                         config['FAVORITE LOCATIONS']['favloc4'] = favloc_editinputLower
                         logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favloc_editinputLower)
+                        config['FAVORITE LOCATIONS']['favloc4_data'] = airport_name
+                        logger.debug("FAVORITE LOCATIONS/favloc4_data is now: %s" % airport_name)
                     elif favloc_editinputnum == 5:
                         config['FAVORITE LOCATIONS']['favloc5'] = favloc_editinputLower
                         logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favloc_editinputLower)
+                        config['FAVORITE LOCATIONS']['favloc5_data'] = airport_name
+                        logger.debug("FAVORITE LOCATIONS/favloc5_data is now: %s" % airport_name)
 
                     try:
                         with open('storage//config.ini', 'w') as configfile:
                             config.write(configfile)
-                        print(Fore.YELLOW + Style.BRIGHT +"Changes saved!")
+                        print(Fore.YELLOW + Style.BRIGHT + "Changes saved!")
                         continue
                     except:
                         print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
                               Fore.RED + Style.BRIGHT + "Please note that no changes were made to your config file.", sep="\n")
                         continue
+
+
+                if favloc_editinputLower.find("pws:") == 0:
+                    logger.debug("PWS query has been detected.")
+                    print("", Fore.YELLOW + Style.BRIGHT + "Please note: For PWS queries to work as a favorite location, you'll need to enable PWS queries",
+                          Fore.YELLOW + Style.BRIGHT + "in the config file. (FIRSTINPUT/allow_pwsqueries should be True.)", sep="\n")
+
+                    # PWS query means no extra data. Use the lower input as it doesn't matter.
+
+                    if favloc_editinputnum == 1:
+                        config['FAVORITE LOCATIONS']['favloc1'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_editinputLower)
+                        config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
+                        logger.debug("FAVORITE LOCATIONS/favloc1_data is now: 'None'")
+                    elif favloc_editinputnum == 2:
+                        config['FAVORITE LOCATIONS']['favloc2'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favloc_editinputLower)
+                        config['FAVORITE LOCATIONS']['favloc2_data'] = "None"
+                        logger.debug("FAVORITE LOCATIONS/favloc2_data is now: 'None'")
+                    elif favloc_editinputnum == 3:
+                        config['FAVORITE LOCATIONS']['favloc3'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favloc_editinputLower)
+                        config['FAVORITE LOCATIONS']['favloc3_data'] = "None"
+                        logger.debug("FAVORITE LOCATIONS/favloc3_data is now: 'None'")
+                    elif favloc_editinputnum == 4:
+                        config['FAVORITE LOCATIONS']['favloc4'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favloc_editinputLower)
+                        config['FAVORITE LOCATIONS']['favloc4_data'] = "None"
+                        logger.debug("FAVORITE LOCATIONS/favloc4_data is now: 'None'")
+                    elif favloc_editinputnum == 5:
+                        config['FAVORITE LOCATIONS']['favloc5'] = favloc_editinputLower
+                        logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favloc_editinputLower)
+                        config['FAVORITE LOCATIONS']['favloc5_data'] = "None"
+                        logger.debug("FAVORITE LOCATIONS/favloc5_data is now 'None'")
+
+                    try:
+                        with open('storage//config.ini', 'w') as configfile:
+                            config.write(configfile)
+                        print(Fore.YELLOW + Style.BRIGHT + "Changes saved!")
+                        continue
+                    except:
+                        print(Fore.RED + Style.BRIGHT + "An issue occurred when trying to write new options to your config file.",
+                              Fore.RED + Style.BRIGHT + "Please note that no changes were made to your config file.", sep="\n")
+                        continue
+
                 if favloc_editinputLower.find("favoritelocation:") == 0 or favloc_editinputLower.find(
                         "favloc:") == 0:
                     logger.debug("Invalid query detected - favorite location")
@@ -7163,24 +7152,34 @@ while True:
                           Fore.RED + Style.BRIGHT + "Returning to main menu.", sep="\n")
                     continue
 
-                # Commit to the config, if anything isn't catched. A favorite location is committed to based on what
+                # Commit to the config given that the location inputted is not special. A favorite location is committed to based on what
                 # number a user entered.
 
                 if favloc_editinputnum == 1:
-                    config['FAVORITE LOCATIONS']['favloc1'] = favloc_editinput
-                    logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_editinput)
+                    config['FAVORITE LOCATIONS']['favloc1'] = favloc_editinputLower
+                    logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favloc_editinputLower)
+                    config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
+                    logger.debug("FAVORITE LOCATIONS/favloc1_data is now: 'None'")
                 elif favloc_editinputnum == 2:
-                    config['FAVORITE LOCATIONS']['favloc2'] = favloc_editinput
-                    logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favloc_editinput)
+                    config['FAVORITE LOCATIONS']['favloc2'] = favloc_editinputLower
+                    logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favloc_editinputLower)
+                    config['FAVORITE LOCATIONS']['favloc2_data'] = "None"
+                    logger.debug("FAVORITE LOCATIONS/favloc2_data is now: 'None'")
                 elif favloc_editinputnum == 3:
-                    config['FAVORITE LOCATIONS']['favloc3'] = favloc_editinput
-                    logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favloc_editinput)
+                    config['FAVORITE LOCATIONS']['favloc3'] = favloc_editinputLower
+                    logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favloc_editinputLower)
+                    config['FAVORITE LOCATIONS']['favloc3_data'] = "None"
+                    logger.debug("FAVORITE LOCATIONS/favloc3_data is now: 'None'")
                 elif favloc_editinputnum == 4:
-                    config['FAVORITE LOCATIONS']['favloc4'] = favloc_editinput
-                    logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favloc_editinput)
+                    config['FAVORITE LOCATIONS']['favloc4'] = favloc_editinputLower
+                    logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favloc_editinputLower)
+                    config['FAVORITE LOCATIONS']['favloc4_data'] = "None"
+                    logger.debug("FAVORITE LOCATIONS/favloc4_data is now: 'None'")
                 elif favloc_editinputnum == 5:
-                    config['FAVORITE LOCATIONS']['favloc5'] = favloc_editinput
-                    logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favloc_editinput)
+                    config['FAVORITE LOCATIONS']['favloc5'] = favloc_editinputLower
+                    logger.debug("FAVORITE LOCATIONS/favloc5 is now: %s" % favloc_editinputLower)
+                    config['FAVORITE LOCATIONS']['favloc5_data'] = "None"
+                    logger.debug("FAVORITE LOCATIONS/favloc5_data is now 'None'")
 
                 try:
                     with open('storage//config.ini', 'w') as configfile:
@@ -7206,8 +7205,9 @@ while True:
                           Fore.RED + Style.BRIGHT + "main menu.", sep="\n")
                     continue
 
-                # Validate the input number is between 1 and 5
-                if 1 < favloc_removeinputnum < 5:
+                # Validate the input number is between 1 and 5. I understand this expression can be under 20 characters but
+                # I trust this more.
+                if favloc_removeinputnum < 1 or favloc_removeinputnum > 5:
                     print("", Fore.RED + Style.BRIGHT + "Whoops! You entered a favorite location to remove that was not between 1-5.",
                           Fore.RED + Style.BRIGHT + "Returning to the main menu.", sep="\n")
                     continue
@@ -7267,18 +7267,28 @@ while True:
                 if favloc_removeinputnum <= 1:
                     config['FAVORITE LOCATIONS']['favloc1'] = favoritelocation_2
                     logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % favoritelocation_2)
+                    config['FAVORITE LOCATIONS']['favloc1_data'] = favoritelocation_2data
+                    logger.debug("FAVORITE LOCATIONS/favloc1_data is now: %s" % favoritelocation_2data)
                 if favloc_removeinputnum <= 2:
                     config['FAVORITE LOCATIONS']['favloc2'] = favoritelocation_3
                     logger.debug("FAVORITE LOCATIONS/favloc2 is now: %s" % favoritelocation_3)
+                    config['FAVORITE LOCATIONS']['favloc2_data'] = favoritelocation_3data
+                    logger.debug("FAVORITE LOCATIONS/favloc2_data is now: %s" % favoritelocation_3data)
                 if favloc_removeinputnum <= 3:
                     config['FAVORITE LOCATIONS']['favloc3'] = favoritelocation_4
                     logger.debug("FAVORITE LOCATIONS/favloc3 is now: %s" % favoritelocation_4)
+                    config['FAVORITE LOCATIONS']['favloc3_data'] = favoritelocation_4data
+                    logger.debug("FAVORITE LOCATIONS/favloc3_data is now: %s" % favoritelocation_4data)
                 if favloc_removeinputnum <= 4:
                     config['FAVORITE LOCATIONS']['favloc4'] = favoritelocation_5
                     logger.debug("FAVORITE LOCATIONS/favloc4 is now: %s" % favoritelocation_5)
+                    config['FAVORITE LOCATIONS']['favloc4_data'] = favoritelocation_5data
+                    logger.debug("FAVORITE LOCATIONS/favloc4_data is now: %s" % favoritelocation_5data)
                 if favloc_removeinputnum <= 5:
                     config['FAVORITE LOCATIONS']['favloc5'] = "None"
                     logger.debug('FAVORITE LOCATIONS/favloc5 is now: "None"')
+                    config['FAVORITE LOCATIONS']['favloc5_data'] = "None"
+                    logger.debug("FAVORITE LOCATIONS/favloc5_data is now: 'None'")
 
                 try:
                     with open('storage//config.ini', 'w') as configfile:
@@ -7292,6 +7302,11 @@ while True:
 
             elif favconfig_menuinput == "5":
                 break
+            elif favconfig_menuinput == "6":
+                break
+            else:
+                print(Fore.YELLOW + Style.BRIGHT + "Your input could not be understood.")
+                continue
 
 #<--- Hurricane is above | About is below --->
     elif moreoptions == "15":

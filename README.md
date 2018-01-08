@@ -102,9 +102,8 @@ PyWeather has lots of them, and the list is ever expanding. Here's the present f
 * PyWeather can tell you which city a tropical storm is closest to, at a range of up to 300km.
 
 In addition, these features will soon be coming to PyWeather:
-* PyWeather will soon be able to show you the 5 previous locations you entered. - Coming in 0.6.3 beta
+* PyWeather will soon be able to show you the 5 previous locations you entered. - Coming in 0.6.4 beta
 * PyWeather will soon have a universal updater that's not reliant on Git. This should increase the reliability of the updater, and will let Windows users be able to have an automatic updater. - Coming in 0.6.4 beta
-* PyWeather will soon be able to view the weather ON MARS! - Coming in 0.6.4 beta
 * PyWeather will soon be able to show weather for airports worldwide. - Coming in 0.6.4 beta.
 
 ## Why actually use PyWeather over Wunderground, or other apps?
@@ -121,6 +120,7 @@ PyWeather has lots of advantages over using websites on your desktop, or even we
 * PyWeather can easily save mobile data with default settings versus other weather apps, since ads aren't being loaded. If you more carefully tune PyWeather's settings, you can save even more data.
 * PyWeather can be faster or slower than other weather apps. The favorite locations feature certainly improves initial loading speed, and can certainly be faster than AccuWeather or The Weather Channel, and even Wunderground's app.
 * PyWeather can work in fringe coverage zones. PyWeather managed to load (albeit slowly) with just 1 bar of 1X service on Verizon.
+* PyWeather uses monumentally less data than using native weather apps or visiting mobile websites, and has huge benefits on low-data mobile plans.
 
 **Other advantages:**
 * PyWeather is free open source software, uses completely open-source libraries, and PyWeather is licensed under GNU's GPL v3 license! Richard Stallman would approve.
