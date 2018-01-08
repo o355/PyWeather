@@ -532,6 +532,55 @@ except:
     favoritelocation_5data = "None"
 
 try:
+    previouslocation_enabled = config.getboolean('PREVIOUS LOCATIONS', 'enabled')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occured. PREVIOUS LOCATIONS/enabled failed to load. Defaulting to True.", sep="\n")
+    configerrorcount += 1
+    previouslocation_enabled = True
+
+try:
+    previouslocation_1 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc1')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occured. PREVIOUS LOCATIONS/prevloc1 failed to load. Defaulting to None.", sep="\n")
+    configerrorcount += 1
+    previouslocation_1 = None
+
+try:
+    previouslocation_2 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc2')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occured. PREVIOUS LOCATIONS/prevloc2 failed to load. Defaulting to None.", sep="\n")
+    configerrorcount += 1
+    previouslocation_2 = None
+
+try:
+    previouslocation_3 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc3')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occured. PREVIOUS LOCATIONS/prevloc3 failed to load. Defaulting to None.", sep="\n")
+    configerrorcount += 1
+    previouslocation_3 = None
+
+try:
+    previouslocation_4 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc4')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occured. PREVIOUS LOCATIONS/prevloc4 failed to load. Defaulting to None.", sep="\n")
+    configerrorcount += 1
+    previouslocation_4 = None
+
+try:
+    previouslocation_5 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc5')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occured. PREVIOUS LOCATIONS/prevloc5 failed to load. Defaulting to None.", sep="\n")
+    configerrorcount += 1
+    previouslocation_5 = None
+
+
+try:
     geocoder_customkeyEnabled = config.getboolean('GEOCODER API', 'customkey_enabled')
 except:
     print("When attempting to load your configuration file, an error",
@@ -1286,6 +1335,18 @@ locinput = str(locinput)
 
 print("Checking the weather, it'll take a few seconds!")
 print("")
+
+# ModoUnreal will work on previous locations here
+
+
+
+
+
+
+
+
+
+
 
 # Define query types to false at the start. If a certain query type is found, it'll be marked as True later in the script.
 pws_query = False
@@ -2607,9 +2668,10 @@ while True:
     print(Fore.YELLOW + Style.BRIGHT + "- Launch PyWeather's experimental radar - Enter " + Fore.CYAN + Style.BRIGHT + "11")
     print(Fore.YELLOW + Style.BRIGHT + "- Flag all data types to be refreshed - Enter " + Fore.CYAN + Style.BRIGHT + "12")
     print(Fore.YELLOW + Style.BRIGHT + "- Manage your favorite locations - Enter " + Fore.CYAN + Style.BRIGHT + "13")
-    print(Fore.YELLOW + Style.BRIGHT + "- Check for PyWeather updates - Enter " + Fore.CYAN + Style.BRIGHT + "14")
-    print(Fore.YELLOW + Style.BRIGHT + "- View the about page for PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "15")
-    print(Fore.YELLOW + Style.BRIGHT + "- Close PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "16")
+    print(Fore.YELLOW + Style.BRIGHT + "- Manage your previous locations - Enter " + Fore.CYAN + Style.BRIGHT + "14")
+    print(Fore.YELLOW + Style.BRIGHT + "- Check for PyWeather updates - Enter " + Fore.CYAN + Style.BRIGHT + "15")
+    print(Fore.YELLOW + Style.BRIGHT + "- View the about page for PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "16")
+    print(Fore.YELLOW + Style.BRIGHT + "- Close PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "17")
     if extratools_enabled is True:
         print(Fore.YELLOW + Style.BRIGHT + "- View cache timings - Enter " + Fore.CYAN + Style.BRIGHT + "extratools:1")
     moreoptions = input("Enter here: ").lower()
@@ -4328,11 +4390,11 @@ while True:
         frontend.go()
 #<--- Radar is above | Exit PyWeather is below --->
 
-    elif moreoptions == "16":
+    elif moreoptions == "17": # Changed
         sys.exit()
 
 #<--- Exit PyWeather is above | Updater is below --->
-    elif moreoptions == "14":
+    elif moreoptions == "15":  # Changed
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
                     (buildnumber, buildversion))
@@ -6484,21 +6546,6 @@ while True:
                             continue
 
 
-# ModoUnreal working on history stuff.
-    elif moreoptions == "34":
-        pass
-
-# The plan right now is to take the latest data as such:
-# mars_data = requests.get("https://marsweather.ingenology.com/v1/latest/")
-# r_json = r.json() (r_json will contain the data necessary.)
-# Huh! What do you know?! Historical data can also be done!
-
-
-
-
-
-
-
     elif moreoptions == "13":
         if favoritelocation_enabled is False:
             print("", Fore.RED + Style.BRIGHT + "To manage favorite locations, you'll need to enable the favorite locations feature.",
@@ -7311,8 +7358,20 @@ while True:
             elif favconfig_menuinput == "5":
                 break
 
+
+# ModoUnreal working on previous location stuff here....
+
+
+
+
+
+
+
+
+
+
 #<--- Hurricane is above | About is below --->
-    elif moreoptions == "15":
+    elif moreoptions == "16": # Changed
         print("", Fore.YELLOW + Style.BRIGHT + "-=-=- " + Fore.CYAN + Style.BRIGHT + "PyWeather" + Fore.YELLOW + Style.BRIGHT + " -=-=-",
               Fore.CYAN + Style.BRIGHT + "version " + about_version,
               Fore.YELLOW + Style.BRIGHT + "Build Number: " + Fore.CYAN + Style.BRIGHT + about_buildnumber,
