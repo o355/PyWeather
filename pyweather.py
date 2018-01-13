@@ -545,7 +545,7 @@ except:
     print("When attempting to load your configuration file, an error",
           "occured. PREVIOUS LOCATIONS/prevloc1 failed to load. Defaulting to None.", sep="\n")
     configerrorcount += 1
-    previouslocation_1 = None
+    previouslocation_1 = "None"
 
 try:
     previouslocation_2 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc2')
@@ -553,7 +553,7 @@ except:
     print("When attempting to load your configuration file, an error",
           "occured. PREVIOUS LOCATIONS/prevloc2 failed to load. Defaulting to None.", sep="\n")
     configerrorcount += 1
-    previouslocation_2 = None
+    previouslocation_2 = "None"
 
 try:
     previouslocation_3 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc3')
@@ -561,7 +561,7 @@ except:
     print("When attempting to load your configuration file, an error",
           "occured. PREVIOUS LOCATIONS/prevloc3 failed to load. Defaulting to None.", sep="\n")
     configerrorcount += 1
-    previouslocation_3 = None
+    previouslocation_3 = "None"
 
 try:
     previouslocation_4 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc4')
@@ -569,7 +569,7 @@ except:
     print("When attempting to load your configuration file, an error",
           "occured. PREVIOUS LOCATIONS/prevloc4 failed to load. Defaulting to None.", sep="\n")
     configerrorcount += 1
-    previouslocation_4 = None
+    previouslocation_4 = "None"
 
 try:
     previouslocation_5 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc5')
@@ -577,8 +577,7 @@ except:
     print("When attempting to load your configuration file, an error",
           "occured. PREVIOUS LOCATIONS/prevloc5 failed to load. Defaulting to None.", sep="\n")
     configerrorcount += 1
-    previouslocation_5 = None
-
+    previouslocation_5 = "None"
 
 try:
     geocoder_customkeyEnabled = config.getboolean('GEOCODER API', 'customkey_enabled')
@@ -697,12 +696,23 @@ logger.debug("showTideOnSummary: %s ; geopyScheme: %s" %
 logger.debug("prefetchHurricane_atboot: %s ; cache_hurricanetime: %s" %
              (prefetchHurricane_atboot, cache_hurricanetime))
 logger.debug("cache_yesterdaytime: %s" % (cache_yesterdaytime))
+
 logger.debug("favoritelocation_enabled: %s ; favoritelocation_1: %s" %
              (favoritelocation_enabled, favoritelocation_1))
 logger.debug("favoritelocation_2: %s ; favoritelocation_3: %s" %
              (favoritelocation_2, favoritelocation_3))
 logger.debug("favoritelocation_4: %s ; favoritelocation_5: %s" %
              (favoritelocation_4, favoritelocation_5))
+
+logger.debug("previouslocation_enabled: %s ; previouslocation_1 %s" %
+             (previouslocation_enabled, previouslocation_1))
+
+logger.debug("previouslocation_2: %s ; previouslocation_3 %s" %
+             (previouslocation_2, previouslocation_3))
+
+logger.debug("previouslocation_4: %s ; previouslocation_5 %s" %
+             (previouslocation_4, previouslocation_5))
+
 logger.debug("geocoder_customkeyEnabled: %s ; geocoder_customkey: %s" %
              (geocoder_customkeyEnabled, geocoder_customkey))
 logger.debug("extratools_enabled: %s ; airports_enabled: %s" %
@@ -1287,6 +1297,81 @@ if favoritelocation_5d.find("arpt:") == 0 or favoritelocation_5d.find("airport:"
 
     logger.debug("favoritelocation_5d: %s" % favoritelocation_5d)
 
+
+# Define previous location display variables
+previouslocation_1d = previouslocation_1
+previouslocation_2d = previouslocation_2
+previouslocation_3d = previouslocation_3
+previouslocation_4d = previouslocation_4
+previouslocation_5d = previouslocation_5
+
+logger.debug("previouslocation_1d: %s ; previouslocation_2d: %s" %
+             (previouslocation_1d, previouslocation_2d))
+
+logger.debug("previouslocation_3d: %s ; previouslocation_4d: %s" %
+             (previouslocation_3d, previouslocation_4d))
+logger.debug("previouslocation_5d: %s" % previouslocation_5d)
+
+
+# Parse any previous locations that contain PWS in their, and set display variables.
+
+if previouslocation_1d.find("pws:") == 0:
+    # The following code will delete pws: from the display string
+    previouslocation_1d = previouslocation_1d[4:]
+    previouslocation_1d = "PWS" + previouslocation_1d.upper()
+    logger.debug("previouslocation_1d: %s" % previouslocation_1d)
+
+
+if previouslocation_2d.find("pws:") == 0:
+    # The following code will delete pws: from the display string
+    previouslocation_2d = previouslocation_2d[4:]
+    previouslocation_2d = "PWS" + previouslocation_2d.upper()
+    logger.debug("previouslocation_2d: %s" % previouslocation_2d)
+
+if previouslocation_3d.find("pws:") == 0:
+    # The following code will delete pws: from the display string
+    previouslocation_3d = previouslocation_3d[4:]
+    previouslocation_3d = "PWS" + previouslocation_3d.upper()
+    logger.debug("previouslocation_3d: %s" % previouslocation_3d)
+
+if previouslocation_4d.find("pws:") == 0:
+    # The following code will delete pws: from the display string
+    previouslocation_4d = previouslocation_4d[4:]
+    previouslocation_4d = "PWS" + previouslocation_4d.upper()
+    logger.debug("previouslocation_4d: %s" % previouslocation_4d)
+
+if previouslocation_5d.find("pws:") == 0:
+    # The following code will delete pws: from the display string
+    previouslocation_5d = previouslocation_5d[4:]
+    previouslocation_5d = "PWS" + previouslocation_5d.upper()
+    logger.debug("previouslocation_5d: %s" % previouslocation_5d)
+
+# Adds airport location to display variable and strips out the "airport bit"
+
+if previouslocation_1d.find("arpt:") == 0 or previouslocation_1d.find("airport") == 0:
+    previouslocation_1d = previouslocation_1.strip("airport:") + "Airport"
+    logger.debug("previouslocation_1d: %s" % previouslocation_1d)
+
+
+if previouslocation_2d.find("arpt:") == 0 or previouslocation_2d.find("airport") == 0:
+    previouslocation_2d = previouslocation_2.strip("airport:") + "Airport"
+    logger.debug("previouslocation_2d: %s" % previouslocation_2d)
+
+
+if previouslocation_3d.find("arpt:") == 0 or previouslocation_3d.find("airport") == 0:
+    previouslocation_3d = previouslocation_3.strip("airport:") + "Airport"
+    logger.debug("previouslocation_3d: %s" % previouslocation_3d)
+
+
+if previouslocation_4d.find("arpt:") == 0 or previouslocation_4d.find("airport") == 0:
+    previouslocation_4d = previouslocation_4.strip("airport:") + "Airport"
+    logger.debug("previouslocation_4d: %s" % previouslocation_4d)
+
+
+if previouslocation_5d.find("arpt:") == 0 or previouslocation_5d.find("airport") == 0:
+    previouslocation_5d = previouslocation_5.strip("airport:") + "Airport"
+    logger.debug("previouslocation_5d: %s" % previouslocation_5d)
+
 # I understand this goes against Wunderground's ToS for logo usage.
 # Can't do much in a terminal.
 
@@ -1335,18 +1420,6 @@ locinput = str(locinput)
 
 print("Checking the weather, it'll take a few seconds!")
 print("")
-
-# ModoUnreal will work on previous locations here
-
-
-
-
-
-
-
-
-
-
 
 # Define query types to false at the start. If a certain query type is found, it'll be marked as True later in the script.
 pws_query = False
