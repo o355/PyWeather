@@ -7449,14 +7449,148 @@ while True:
 
 # ModoUnreal working on previous location stuff here....
 
+    elif moreoptions == "14":
+        if previouslocation_enabled is False:
+            print("", Fore.RED + Style.BRIGHT + "To manage previous locations, you'll need to enable the previous locations feature.",
+                  Fore.RED + Style.BRIGHT + "Would you like me to enable previous locations for you?" sep="\n")
+            enablepreviouslocations = input("Input here: ").lower()
+            logger.debug("enablepreviouslocations: %s" % enablepreviouslocations)
+            if enablepreviouslocations == "yes":
+                config['PREVIOUS LOCATIONS']['enabled'] = 'True'
+                logger.info("PREVIOUS LOCATIONS/enabled is now 'True'.")
+                try:
+                    with open('storage//config.ini', 'w') as configfile:
+                        config.write(configfile)
+                    print(Fore.YELLOW + Style.BRIGHT + "Previous locations is now enabled, and will be operational when you next boot up PyWeather.")
+                    continue
+                except:
+                    print(Fore.RED + Style.BRIGHT + "An issue occured when trying to save new configuration options.",
+                          Fore.RED + Style.BRIGHT + "Please enable previous locations in the config file. In the PREVIOUS LOCATIONS",
+                          Fore.RED + Style.BRIGHT + "section, change enabled to True.")
+                continue
+            elif enablepreviouslocations == "no":
+                print(Fore.YELLOW + Style.BRIGHT + "Not enabling previous locations. Returning to the main menu.",
+                      "You can come back to this menu to reenable previous locations, or go into your config file and",
+                      "enable PREVIOUS LOCATIONS/enabled (set it tp True).", sep="\n")
+                continue
+            else:
+                print(Fore.YELLOW + Style.BRIGHT + "Your input wasn't understood, and as such previous locations will not be enabled.",
+                      "You can come back to this menu to reenable previous locations, or go into your config file and",
+                      "enable PREVIOUS LOCATIONS/enabled (set it to True).")
+
+        while True:
+            # Get up-to-date configuration information about previous locations.
+            spinner.start(text="Loading your previous locations...")
+	    try:
+	        previouslocation_1 = config.get('PREVIOUS LOCATIONS', 'prevloc1')
+                previouslocation_1d = previouslocation_1
+		previouslocation_2 = config.get('PREVIOUS LOCATIONS', 'prevloc2')
+                previouslocation_2d = previouslocation_2
+		previouslocation_3 = config.get('PREVIOUS LOCATIONS', 'prevloc3')
+                previouslocation_3d = previouslocation_3
+		previouslocation_4 = config.get('PREVIOUS LOCATIONS', 'prevloc4')
+		previouslocation_4d = previouslocation_4
+		previouslocation_5 = config.get('PREVIOUS LOCATIONS', 'prevloc5')
+		previouslocation_5d = previouslocation_5
+
+		previouslocation_1data = config.get('PREVIOUS LOCATIONS', 'prevloc1')
+		previouslocation_2data = config.get('PREVIOUS LOCATIONS', 'prevloc2')
+		previouslocation_3data = config.get('PREVIOUS LOCATIONS', 'prevloc3')
+		previouslocation_4data = config.get('PREVIOUS LOCATIONS', 'prevloc4')
+		previouslocation_5data = config.get('PREVIOUS LOCATIONS', 'prevloc5')
+
+            except:
+                spinner.fail(text="Failed to load your previous locations!")
+                print("")
+                print(Fore.RED + Style.BRIGHT + "An error with your configuration file occured when",
+                Fore.RED + Style.BRIGHT + "we tried to refresh current location information. For safety,",
+                Fore.RED + Style.BRIGHT + "the previous location configurator will be exited out of.")
+                printException()
+                break
+            logger.debug("previouslocation_1: %s ; previouslocation_1d: %s" %
+                        (previouslocation_1, previouslocation_1d))
+            logger.debug("previouslocation_2: %s ; previouslocation_2d: %s" %
+                        (previouslocation_2, previouslocation_2d))
+            logger.debug("previouslocation_3: %s ; previouslocation_3d: %s" %
+                        (previouslocation_3, previouslocation_3d))
+            logger.debug("previouslocation_4: %s ; previouslocation_4d: %s" %
+                        (previouslocation_4, previouslocation_4d))
+            logger.debug("previouslocation_5: %s ; previouslocation_5d: %s" %
+                        (previouslocation_5, previouslocation_5d))
 
 
+            logger.debug("previouslocation_1data: %s ; previouslocation_2data: %s" %
+                        (previouslocation_1data, previouslocation_2data))
+
+            logger.debug("previouslocation_3data: %s ; previouslocation_4data: %s" %
+                        (previouslocation_3data, previouslocation_4data))
+            logger.debug("previouslocation_5data: %s" % previouslocation_5data)
+
+            if "pws:" in previouslocation_1d:
+                # Delete pws from the display string
+                previouslocation_1d = previouslocation_1d[4:]
+		previouslocation_1d = "PWS " + previouslocation_1d.upper()
+		logger.debug("previouslocation_1d: %s" % previouslocation_1d)
 
 
+            if "pws:" in previouslocation_2d:
+                # Delete pws from the display string
+                previouslocation_2d = previouslocation_2d[4:]
+		previouslocation_2d = "PWS " + previouslocation_2d.upper()
+		logger.debug("previouslocation_2d: %s" % previouslocation_2d)
+
+            if "pws:" in previouslocation_3d:
+                # Delete pws from the display string
+                previouslocation_3d = previouslocation_3d[4:]
+		previouslocation_3d = "PWS " + previouslocation_3d.upper()
+		logger.debug("previouslocation_3d: %s" % previouslocation_3d)
+
+            if "pws:" in previouslocation_4d:
+                # Delete pws from the display string
+                previouslocation_4d = previouslocation_4d[4:]
+		previouslocation_4d = "PWS " + previouslocation_4d.upper()
+		logger.debug("previouslocation_4d: %s" % previouslocation_4d)
+
+            if "pws:" in previouslocation_5d:
+                # Delete pws from the display string
+                previouslocation_5d = previouslocation_5d[4:]
+		previouslocation_5d = "PWS " + previouslocation_5d.upper()
+		logger.debug("previouslocation_5d: %s" % previouslocation_5d)
+
+            spinner.stop()
+            print("")
+            print(Fore.YELLOW + Style.BRIGHT + "Your previously searched locations:")
+            print(Fore.YELLOW + Style.BRIGHT + "Previous Location 1 - " + Fore.CYAN + Style.BRIGHT + previouslocation_1d)
+            print(Fore.YELLOW + Style.BRIGHT + "Previous Location 2 - " + Fore.CYAN + Style.BRIGHT + previouslocation_2d)
+            print(Fore.YELLOW + Style.BRIGHT + "Previous Location 3 - " + Fore.CYAN + Style.BRIGHT + previouslocation_3d)
+            print(Fore.YELLOW + Style.BRIGHT + "Previous Location 4 - " + Fore.CYAN + Style.BRIGHT + previouslocation_4d)
+            print(Fore.YELLOW + Style.BRIGHT + "Previous Location 5 - " + Fore.CYAN + Style.BRIGHT + previouslocation_5d)
+            print("")
+            print(Fore.YELLOW + Style.BRIGHT + "What would you like to do with your previous locations?")
+            print(Fore.YELLOW + Style.BRIGHT + "- Remove a previous location - Enter " + Fore.CYAN + Style.BRIGHT + "1")
+            print(Fore.YELLOW + Style.BRIGHT + "- Return to PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "2")
+	    prevconfig_menuinput = input("Input here: ").lower()
+	    logger.debug("prevconfig_menuinput: %s" % prevconfig_menuinput)
+	    if prevconfig_menuinput == "1":
+                print(Fore.YELLOW + Style.BRIGHT + "Which location would you like to remove? Enter a number 1-5 representing",
+                      Fore.YELLOW + Style.BRIGHT + "the previous locations 1-5.", sep="\n	          	")
+		prevloc_removeinputnum = input("Input here: ").lower()
+		logger.debug("prevloc_removeinputnum: %s" % prevloc_removeinputnum)
+
+		try:
+                    prevloc_removeinputnum = int(prevloc_removeinputnum)
+                except ValueError:
+                    print("", Fore.RED + Style.BRIGHT + "Whoops! Your input didn't seem to be a number. Returning to the",
+			  Fore.RED + Style.BRIGHT + "main menu.", sep="\n")
+		    continue
+	        
+	        if prevloc_removeinputnum < 1 or prevloc_removeinputnum > 5:
+			print("", Fore.RED + Style.BRIGHT + "Whoops! You entered a previous location to remove that was not between 1-5.",
+                              Fore.RED + Style.BRIGHT + "Returning to the main menu.", sep="\n")
+			continue
 
 
-
-
+# ModoUnreal work on stuff here...
 
 #<--- Hurricane is above | About is below --->
     elif moreoptions == "16": # Changed
