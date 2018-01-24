@@ -1,9 +1,11 @@
 [Subscribe to the PyWeather Weekly Update, for all the latest in PyWeather news on a somewhat weekly basis!](https://owenthe.ninja/sign-pyweathers-weekly-newsletter/)
 
-## Quick notice about PyWeather before the readme begins
-Lately I've been absolutely slacking off and have become less passionate about this project. For the next few releases, I'm going to focus on refining PyWeather and maybe adding a feature here and there, but at this point additional features are basically bloat. Validating favorite locations is scrapped. Mars Weather is scrapped. 0.6.4 beta will focus on really refining PyWeather.
+## What's up with PyWeather being so inactive lately?
+One answer: midterms
 
-Please also note that midterms is basically right around the corner and is a 3 week adventure of being on a partial hiatus. Hopefully things will be back in high gear in February.
+These awful things choke up about two weeks of time, and coding is not a #1 priority. Weekends are now dedicated to gaming (mainly KSP now) because of midterms, after-school time to studying & working on other projects, and my usual coding times are now temporarily dedicated to studying, or doing homework.
+
+I feel really bad about my inactivity, but midterms are stressful and a pain to work with. PyWeather development will resume on January 26th. I'll be reevaluating when 0.6.4 beta will be released, likely in March-April 2018.
 
 ## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
@@ -54,14 +56,10 @@ Please listen to local authorities, and your country's weather service (NWS in t
 
 However, during times of non-severe weather, PyWeather is a fun way to check the weather.
 
-## Notices
-Very fun notices for very fun information!
-
-### Newsletter notice
-I do realize that I've been falling extremely behind on the newsletter. Expect one soon?
-
-### Beta notice
+## Beta notice
 If you haven't noticed, PyWeather is in beta. Basic features should work completely fine, but more advanced and newer features may not work 100% of the time.
+
+If you do come across a bug, you should consider reporting the issue here. It'll help make PyWeather better when I know about the bug you're talking about.
 
 ## What's PyWeather?
 PyWeather is a Python script that fetches the weather using Wunderground's API. I made PyWeather as a solution to a few things:
