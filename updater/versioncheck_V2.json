@@ -1,0 +1,34 @@
+{
+  "info": {
+    "apiversion": "2.0",
+    "apidocumentation": "https://github.com/o355/PyWeather/wiki/Updater-API-documentation-(v2)"
+  },
+  
+  "branch": {
+    "stable": {
+      "latestbuild": "63",
+      "latestversion": "0.6.3 beta",
+      "latestversiontag": "0.6.3-beta",
+      "latesturl": "https://github.com/o355/pyweather/releases/download/0.6.3-beta/pyweather-0.6.3beta.zip",
+      "latestfilename": "pyweather-0.6.3beta.zip",
+      "extractdirectory": "pyweather-0.6.3beta",
+      "releasedate": "December 3, 2017",
+      "size": "137 KB",
+      "releasenotesurl": "https://github.com/o355/PyWeather/blob/master/updater/releasenotes.txt"
+    },
+    
+    "rc": {
+      "rcrelease": "False",
+      "stablerelease": "True",
+      "latestbuild": "63",
+      "latestversion": "0.6.3 beta",
+      "latestversiontag": "0.6.3-beta",
+      "latesturl": "https://github.com/o355/pyweather/releases/download/0.6.3-beta/pyweather-0.6.3beta.zip",
+      "latestfilename": "pyweather-0.6.3beta.zip",
+      "extractdirectory": "pyweather-0.6.3beta",
+      "releasedate": "December 3, 2017",
+      "size": "137 KB",
+      "releasenotesurl": "https://github.com/o355/PyWeather/blob/master/updater/releasenotes.txt"
+    }
+  }     
+}
