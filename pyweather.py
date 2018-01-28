@@ -1566,6 +1566,8 @@ if (airports_enabled is True and locinput.find("airport:") == 0
     useGeocoder = False
     logger.debug("airport_urls: %s ; useGeocoder: %s" %
                  (airport_urls, useGeocoder))
+    airport_query = True
+    logger.debug("airport_query: %s" % airport_query)
 
 # Start the geocoder. If we don't have a connection, exit nicely.
 # After we get location data, store it in latstr and lonstr, and store
@@ -2418,6 +2420,7 @@ elif airport_available is True:
     location2 = airport_code
 else:
     location2 = str(location)
+logger.debug("location: %s" % location)
 logger.debug("location2: %s" % location2)
 
 print(Fore.YELLOW + Style.BRIGHT + "Here's the weather for: " + Fore.CYAN + Style.BRIGHT + str(location))
@@ -6525,11 +6528,11 @@ while True:
                 favoritelocation_5 = config.get('FAVORITE LOCATIONS', 'favloc5')
                 favoritelocation_5d = favoritelocation_5
 
-                favoritelocation_1data = config.get('FAVORITE LOCATIONS', 'favloc1')
-                favoritelocation_2data = config.get('FAVORITE LOCATIONS', 'favloc2')
-                favoritelocation_3data = config.get('FAVORITE LOCATIONS', 'favloc3')
-                favoritelocation_4data = config.get('FAVORITE LOCATIONS', 'favloc4')
-                favoritelocation_5data = config.get('FAVORITE LOCATIONS', 'favloc5')
+                favoritelocation_1data = config.get('FAVORITE LOCATIONS', 'favloc1_data')
+                favoritelocation_2data = config.get('FAVORITE LOCATIONS', 'favloc2_data')
+                favoritelocation_3data = config.get('FAVORITE LOCATIONS', 'favloc3_data')
+                favoritelocation_4data = config.get('FAVORITE LOCATIONS', 'favloc4_data')
+                favoritelocation_5data = config.get('FAVORITE LOCATIONS', 'favloc5_data')
 
             except:
                 spinner.fail(text="Failed to load your favorite locations!")
@@ -6649,7 +6652,7 @@ while True:
             print(Fore.YELLOW + Style.BRIGHT + "Favorite Location 5 - " + Fore.CYAN + Style.BRIGHT + favoritelocation_5d)
             print("")
             print(Fore.YELLOW + Style.BRIGHT + "What would you like to do with your favorite locations?")
-            print(Fore.YELLOW + Style.BRIGHT + "- Add this location (" + Fore.CYAN + Style.BRIGHT + location2 + Fore.YELLOW
+            print(Fore.YELLOW + Style.BRIGHT + "- Add this location (" + Fore.CYAN + Style.BRIGHT + location + Fore.YELLOW
                   + Style.BRIGHT + ") as a favorite location - Enter " + Fore.CYAN + "1")
             print(Fore.YELLOW + Style.BRIGHT + "- Add a location as a favorite location - Enter " + Fore.CYAN + Style.BRIGHT + "2")
             print(Fore.YELLOW + Style.BRIGHT + "- Edit a favorite location - Enter " + Fore.CYAN + Style.BRIGHT + "3")
@@ -6659,7 +6662,7 @@ while True:
             logger.debug("favconfig_menuinput: %s" % favconfig_menuinput)
             if favconfig_menuinput == "1":
                 # Code for adding current location as a favorite location
-                print(Fore.YELLOW + Style.BRIGHT + "Would you like to add " + Fore.CYAN + Style.BRIGHT + str(location) + Fore.YELLOW
+                print(Fore.YELLOW + Style.BRIGHT + "Would you like to add " + Fore.CYAN + Style.BRIGHT + location + Fore.YELLOW
                       + Style.BRIGHT + " as a favorite location? Yes or No.", sep="\n")
                 favconfig_confirmadd = input("Input here: ").lower()
                 logger.debug("favconfig_confirmadd: %s" % favconfig_confirmadd)
@@ -6691,16 +6694,19 @@ while True:
                 logger.debug("FAVORITE LOCATIONS/favloc5_data is now: %s" % favoritelocation_4data)
                 # Use location if the location isn't a PWS, use locinput for PWS. Use extra data for airport queries.
                 if pws_query is False and airport_query is False:
+                    logger.info("pws_query is False and airport_query is False")
                     config['FAVORITE LOCATIONS']['favloc1'] = str(location)
                     config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
                     logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % location)
                     logger.debug("FAVORITE LOCATIONS/favloc1_data is now: 'None'")
                 elif pws_query is True:
+                    logger.debug("pws_query is True")
                     config['FAVORITE LOCATIONS']['favloc1'] = locinput
                     config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
                     logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % locinput)
                     logger.debug("FAVORITE LOCATIONS/favloc1_data is now: 'None'")
                 elif airport_query is True:
+                    logger.debug("airport_query is True")
                     config['FAVORITE LOCATIONS']['favloc1'] = locinput
                     config['FAVORITE LOCATIONS']['favloc1_data'] = location
                     logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % locinput)
@@ -6762,6 +6768,8 @@ while True:
                     if airportvalidate_input == "yes":
                         print(Fore.YELLOW + Style.BRIGHT + "Now getting extra data about the airport that you inputted. This should only take a moment.")
                         spinner.start(text="Validating favorite location...")
+                        airport_locinput = favloc_manualinput.strip("airport")
+                        logger.debug("airport_locinput: %s" % airport_locinput)
                         airportvalidate_url = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
                         logger.debug("airportvalidate_url: %s" % airportvalidate_url)
                         try:
@@ -7301,7 +7309,17 @@ while True:
                     continue
 
             elif favconfig_menuinput == "5":
-                break
+                print(Fore.YELLOW + "Are you sure you want to delete all of your favorite locations?",
+                      Fore.YELLOW + "This action cannot be undone. Yes or No.", sep="\n")
+                favloc_deleteall_input = input("Input here: ").lower()
+                logger.debug("favloc_deleteall_input: %s" % favloc_deleteall_input)
+
+                if favloc_deleteall_input == "yes":
+                    print(Fore.YELLOW + "Deleting all of your favorite locations.")
+                    config['FAVORITE LOCATIONS']['favloc1'] = "None"
+                    config['FAVORITE LOCATIONS']['favloc2'] = "None"
+                    config['FAVORITE LOCATIONS']['favloc3'] = "None"
+                    config['FAVORITE LOCATIONS']['favloc4'] = "None"
             elif favconfig_menuinput == "6":
                 break
             else:
