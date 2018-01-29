@@ -211,12 +211,23 @@ def configprovision():
     config['FAVORITE LOCATIONS']['favloc3'] = 'None'
     config['FAVORITE LOCATIONS']['favloc4'] = 'None'
     config['FAVORITE LOCATIONS']['favloc5'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc1_data'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc2_data'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc3_data'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc4_data'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc5_data'] = 'None'
     config['PREVIOUS LOCATIONS']['enabled'] = 'True'
     config['PREVIOUS LOCATIONS']['prevloc1'] = 'None'
     config['PREVIOUS LOCATIONS']['prevloc2'] = 'None'
     config['PREVIOUS LOCATIONS']['prevloc3'] = 'None'
     config['PREVIOUS LOCATIONS']['prevloc4'] = 'None'
     config['PREVIOUS LOCATIONS']['prevloc5'] = 'None'
+    config['PREVIOUS LOCATIONS']['prevloc1_data'] = 'None'
+    config['PREVIOUS LOCATIONS']['prevloc2_data'] = 'None'
+    config['PREVIOUS LOCATIONS']['prevloc3_data'] = 'None'
+    config['PREVIOUS LOCATIONS']['prevloc4_data'] = 'None'
+    config['PREVIOUS LOCATIONS']['prevloc5_data'] = 'None'
+
     try:
         with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)

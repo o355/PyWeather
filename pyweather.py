@@ -532,7 +532,7 @@ except:
     favoritelocation_5data = "None"
 
 try:
-    previouslocation_enabled = config.getboolean('PREVIOUS LOCATIONS', 'enabled')
+    previouslocation_enabled = config.get('PREVIOUS LOCATIONS', 'enabled')
 except:
     print("When attempting to load your configuration file, an error",
           "occured. PREVIOUS LOCATIONS/enabled failed to load. Defaulting to True.", sep="\n")
@@ -540,7 +540,7 @@ except:
     previouslocation_enabled = True
 
 try:
-    previouslocation_1 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc1')
+    previouslocation_1 = config.get('PREVIOUS LOCATIONS', 'prevloc1')
 except:
     print("When attempting to load your configuration file, an error",
           "occured. PREVIOUS LOCATIONS/prevloc1 failed to load. Defaulting to None.", sep="\n")
@@ -548,7 +548,7 @@ except:
     previouslocation_1 = "None"
 
 try:
-    previouslocation_2 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc2')
+    previouslocation_2 = config.get('PREVIOUS LOCATIONS', 'prevloc2')
 except:
     print("When attempting to load your configuration file, an error",
           "occured. PREVIOUS LOCATIONS/prevloc2 failed to load. Defaulting to None.", sep="\n")
@@ -556,7 +556,7 @@ except:
     previouslocation_2 = "None"
 
 try:
-    previouslocation_3 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc3')
+    previouslocation_3 = config.get('PREVIOUS LOCATIONS', 'prevloc3')
 except:
     print("When attempting to load your configuration file, an error",
           "occured. PREVIOUS LOCATIONS/prevloc3 failed to load. Defaulting to None.", sep="\n")
@@ -564,7 +564,7 @@ except:
     previouslocation_3 = "None"
 
 try:
-    previouslocation_4 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc4')
+    previouslocation_4 = config.get('PREVIOUS LOCATIONS', 'prevloc4')
 except:
     print("When attempting to load your configuration file, an error",
           "occured. PREVIOUS LOCATIONS/prevloc4 failed to load. Defaulting to None.", sep="\n")
@@ -572,12 +572,52 @@ except:
     previouslocation_4 = "None"
 
 try:
-    previouslocation_5 = config.getboolean('PREVIOUS LOCATIONS', 'prevloc5')
+    previouslocation_5 = config.get('PREVIOUS LOCATIONS', 'prevloc5')
 except:
     print("When attempting to load your configuration file, an error",
           "occured. PREVIOUS LOCATIONS/prevloc5 failed to load. Defaulting to None.", sep="\n")
     configerrorcount += 1
     previouslocation_5 = "None"
+
+try:
+    previouslocation_1data = config.get('PREVIOUS LOCATIONS', 'prevloc1_data')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occured. PREVIOUS LOCATIONS/prevloc1_data failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    previouslocation_1data = "None"
+
+try:
+    previouslocation_2data = config.get('PREVIOUS LOCATIONS', 'prevloc2_data')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occured. PREVIOUS LOCATIONS/prevloc2_data failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    previouslocation_2data = "None"
+
+try:
+    previouslocation_3data = config.get('PREVIOUS LOCATIONS', 'prevloc3_data')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occured. PREVIOUS LOCATIONS/prevloc3_data failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    previouslocation_3data = "None"
+
+try:
+    previouslocation_4data = config.get('PREVIOUS LOCATIONS', 'prevloc4_data')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occured. PREVIOUS LOCATIONS/prevloc4_data failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    previouslocation_4data = "None"
+
+try:
+    previouslocation_5data = config.get('PREVIOUS LOCATIONS', 'prevloc5_data')
+except:
+    print("When attempting to load your configuration file, an error",
+          "occured. PREVIOUS LOCATIONS/prevloc5_data failed to load. Defaulting to 'None'.", sep="\n")
+    configerrorcount += 1
+    previouslocation_5data = "None"
 
 try:
     geocoder_customkeyEnabled = config.getboolean('GEOCODER API', 'customkey_enabled')
