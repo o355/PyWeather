@@ -653,6 +653,11 @@ else:
 spinner = Halo(text='Loading PyWeather...', spinner='line')
 spinner.start()
 
+
+from platform import python_version
+
+headers = {'User-Agent': 'PyWeather 0.6.4 beta (Python %s)' % python_version()}
+
 # List config options for those who have verbosity enabled. - Section 9
 logger.info("PyWeather 0.6.3 beta now starting.")
 logger.info("Configuration options are as follows: ")
@@ -1707,6 +1712,8 @@ if (airports_enabled is True and locinput.find("airport:") == 0
     useGeocoder = False
     logger.debug("airport_urls: %s ; useGeocoder: %s" %
                  (airport_urls, useGeocoder))
+    airport_query = True
+    logger.debug("airport_query: %s" % airport_query)
 
 # Start the geocoder. If we don't have a connection, exit nicely.
 # After we get location data, store it in latstr and lonstr, and store
@@ -2559,6 +2566,7 @@ elif airport_available is True:
     location2 = airport_code
 else:
     location2 = str(location)
+logger.debug("location: %s" % location)
 logger.debug("location2: %s" % location2)
 
 print(Fore.YELLOW + Style.BRIGHT + "Here's the weather for: " + Fore.CYAN + Style.BRIGHT + str(location))
@@ -6669,11 +6677,11 @@ while True:
                 favoritelocation_5 = config.get('FAVORITE LOCATIONS', 'favloc5')
                 favoritelocation_5d = favoritelocation_5
 
-                favoritelocation_1data = config.get('FAVORITE LOCATIONS', 'favloc1')
-                favoritelocation_2data = config.get('FAVORITE LOCATIONS', 'favloc2')
-                favoritelocation_3data = config.get('FAVORITE LOCATIONS', 'favloc3')
-                favoritelocation_4data = config.get('FAVORITE LOCATIONS', 'favloc4')
-                favoritelocation_5data = config.get('FAVORITE LOCATIONS', 'favloc5')
+                favoritelocation_1data = config.get('FAVORITE LOCATIONS', 'favloc1_data')
+                favoritelocation_2data = config.get('FAVORITE LOCATIONS', 'favloc2_data')
+                favoritelocation_3data = config.get('FAVORITE LOCATIONS', 'favloc3_data')
+                favoritelocation_4data = config.get('FAVORITE LOCATIONS', 'favloc4_data')
+                favoritelocation_5data = config.get('FAVORITE LOCATIONS', 'favloc5_data')
 
             except:
                 spinner.fail(text="Failed to load your favorite locations!")
@@ -6793,7 +6801,7 @@ while True:
             print(Fore.YELLOW + Style.BRIGHT + "Favorite Location 5 - " + Fore.CYAN + Style.BRIGHT + favoritelocation_5d)
             print("")
             print(Fore.YELLOW + Style.BRIGHT + "What would you like to do with your favorite locations?")
-            print(Fore.YELLOW + Style.BRIGHT + "- Add this location (" + Fore.CYAN + Style.BRIGHT + location2 + Fore.YELLOW
+            print(Fore.YELLOW + Style.BRIGHT + "- Add this location (" + Fore.CYAN + Style.BRIGHT + str(location) + Fore.YELLOW
                   + Style.BRIGHT + ") as a favorite location - Enter " + Fore.CYAN + "1")
             print(Fore.YELLOW + Style.BRIGHT + "- Add a location as a favorite location - Enter " + Fore.CYAN + Style.BRIGHT + "2")
             print(Fore.YELLOW + Style.BRIGHT + "- Edit a favorite location - Enter " + Fore.CYAN + Style.BRIGHT + "3")
@@ -6803,7 +6811,7 @@ while True:
             logger.debug("favconfig_menuinput: %s" % favconfig_menuinput)
             if favconfig_menuinput == "1":
                 # Code for adding current location as a favorite location
-                print(Fore.YELLOW + Style.BRIGHT + "Would you like to add " + Fore.CYAN + Style.BRIGHT + str(location) + Fore.YELLOW
+                print(Fore.YELLOW + Style.BRIGHT + "Would you like to add " + Fore.CYAN + Style.BRIGHT + location + Fore.YELLOW
                       + Style.BRIGHT + " as a favorite location? Yes or No.", sep="\n")
                 favconfig_confirmadd = input("Input here: ").lower()
                 logger.debug("favconfig_confirmadd: %s" % favconfig_confirmadd)
@@ -6835,17 +6843,20 @@ while True:
                 logger.debug("FAVORITE LOCATIONS/favloc5_data is now: %s" % favoritelocation_4data)
                 # Use location if the location isn't a PWS, use locinput for PWS. Use extra data for airport queries.
                 if pws_query is False and airport_query is False:
+                    logger.info("pws_query is False and airport_query is False")
                     config['FAVORITE LOCATIONS']['favloc1'] = str(location)
                     config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
                     logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % location)
                     logger.debug("FAVORITE LOCATIONS/favloc1_data is now: 'None'")
                 elif pws_query is True:
+                    logger.debug("pws_query is True")
                     config['FAVORITE LOCATIONS']['favloc1'] = locinput
                     config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
                     logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % locinput)
                     logger.debug("FAVORITE LOCATIONS/favloc1_data is now: 'None'")
                 elif airport_query is True:
-                    config['FAVORITE LOCATIONS']['favloc1'] = locinput
+                    logger.debug("airport_query is True")
+                    config['FAVORITE LOCATIONS']['favloc1'] = locinput.lower()
                     config['FAVORITE LOCATIONS']['favloc1_data'] = location
                     logger.debug("FAVORITE LOCATIONS/favloc1 is now: %s" % locinput)
                     logger.debug("FAVORITE LOCATIONS/favloc1_data is now: %s" % location)
@@ -6906,6 +6917,8 @@ while True:
                     if airportvalidate_input == "yes":
                         print(Fore.YELLOW + Style.BRIGHT + "Now getting extra data about the airport that you inputted. This should only take a moment.")
                         spinner.start(text="Validating favorite location...")
+                        airport_locinput = favloc_manualinput.strip("airport:")
+                        logger.debug("airport_locinput: %s" % airport_locinput)
                         airportvalidate_url = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
                         logger.debug("airportvalidate_url: %s" % airportvalidate_url)
                         try:
@@ -7070,7 +7083,7 @@ while True:
                     continue
 
                 # Validate the number is between 1-5
-                if 1 < favloc_editinputnum < 5:
+                if favloc_editinputnum < 1 or favloc_editinputnum > 5:
                     print(Fore.RED + Style.BRIGHT + "Whoops! You entered a favorite location to input that was not between 1-5.",
                           Fore.RED + Style.BRIGHT + "Returning to the main menu...", sep="\n")
                     continue
@@ -7088,7 +7101,7 @@ while True:
                     favloc_editdisplay = favoritelocation_5d
                 logger.debug("favloc_editdisplay: %s" % favloc_editdisplay)
 
-                print(Fore.YELLOW + Style.BRIGHT + "Just to confirm, you're editing favorite location " + Fore.CYAN + Style.BRIGHT + str(favloc_editdisplay)
+                print(Fore.YELLOW + Style.BRIGHT + "Just to confirm, you're editing favorite location " + Fore.CYAN + Style.BRIGHT + str(favloc_editinputnum)
                       + Fore.YELLOW + Style.BRIGHT + ".",
                       Fore.YELLOW + Style.BRIGHT + "This favorite location is currently: " + Fore.CYAN + Style.BRIGHT + favloc_editdisplay +
                       Fore.YELLOW + Style.BRIGHT + ".",
@@ -7123,7 +7136,7 @@ while True:
                 if favloc_editinputLower == "exit":
                     print("", Fore.YELLOW + Style.BRIGHT + "Exiting to the main menu.", sep="\n")
 
-                if favloc_manualinputLower.find("airport:") == 0 or favloc_manualinputLower.find("arpt:") == 0:
+                if favloc_editinputLower.find("airport:") == 0 or favloc_editinputLower.find("arpt:") == 0:
                     logger.debug("Airport query detected.")
                     print(Fore.YELLOW + Style.BRIGHT + "Please note: For airport queries to work as a favorite location, you'll need to have",
                           Fore.YELLOW + Style.BRIGHT + "airport queries enabled in the config file. (FIRSTINPUT/allow_airportqueries should be True).", sep="\n")
@@ -7136,7 +7149,8 @@ while True:
                     if airportvalidate_input == "yes":
                         print(Fore.YELLOW + Style.BRIGHT + "Now getting extra data about the airport that you inputted. This should only take a moment.")
                         spinner.start(text="Validating favorite location...")
-                        airportvalidate_url = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
+                        favloc_editinput = favloc_editinput.strip("airport:")
+                        airportvalidate_url = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + favloc_editinput.lower() + ".json"
                         logger.debug("airportvalidate_url: %s" % airportvalidate_url)
                         try:
                             airportvalidateJSON = requests.get(airportvalidate_url)
@@ -7445,8 +7459,6 @@ while True:
                     continue
 
             elif favconfig_menuinput == "5":
-                break
-            elif favconfig_menuinput == "6":
                 break
             else:
                 print(Fore.YELLOW + Style.BRIGHT + "Your input could not be understood.")
