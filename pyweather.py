@@ -1389,7 +1389,8 @@ locinput = input("Input here: ")
 locinput = str(locinput)
 
 # Define previous location display variables
-if previouslocation_enabled == True:
+if previouslocation_enabled == "True":
+    print("This piece of code is running")
     previouslocation_1d = locinput
     previouslocation_2d = previouslocation_1
     previouslocation_3d = previouslocation_2
@@ -1469,6 +1470,18 @@ if previouslocation_enabled == True:
     config['PREVIOUS LOCATIONS']['prevloc4'] = previouslocation_4d
     config['PREVIOUS LOCATIONS']['prevloc5'] = previouslocation_5d
 
+    try:
+        with open('storage//config.ini', 'w') as configfile:
+            config.write(configfile)
+        print(Fore.YELLOW + Style.BRIGHT + "Changes saved!")
+
+    except:
+        print(Fore.RED + Style.BRIGHT + "An issue occured when trying to write previous history to your config file.",
+              "Please note that not changes were made to your config file.", sep="\n")
+
+    test_thing = config.get('PREVIOUS LOCATIONS', 'prevloc1')
+    print(previouslocation_1d)
+    print(test_thing)
 print("Checking the weather, it'll take a few seconds!")
 print("")
 
@@ -7551,11 +7564,11 @@ while True:
                 previouslocation_5 = config.get('PREVIOUS LOCATIONS', 'prevloc5')
                 previouslocation_5d = previouslocation_5
 
-                previouslocation_1data = config.get('PREVIOUS LOCATIONS', 'prevloc1')
-                previouslocation_2data = config.get('PREVIOUS LOCATIONS', 'prevloc2')
-                previouslocation_3data = config.get('PREVIOUS LOCATIONS', 'prevloc3')
-                previouslocation_4data = config.get('PREVIOUS LOCATIONS', 'prevloc4')
-                previouslocation_5data = config.get('PREVIOUS LOCATIONS', 'prevloc5')
+                previouslocation_1data = config.get('PREVIOUS LOCATIONS', 'prevloc1_data')
+                previouslocation_2data = config.get('PREVIOUS LOCATIONS', 'prevloc2_data')
+                previouslocation_3data = config.get('PREVIOUS LOCATIONS', 'prevloc3_data')
+                previouslocation_4data = config.get('PREVIOUS LOCATIONS', 'prevloc4_data')
+                previouslocation_5data = config.get('PREVIOUS LOCATIONS', 'prevloc5_data')
 
             except:
                 spinner.fail(text="Failed to load your previous locations!")
