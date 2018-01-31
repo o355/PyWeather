@@ -4340,9 +4340,97 @@ while True:
 
 #<--- Exit PyWeather is above | Updater is below --->
     elif moreoptions == "14":
-        logger.info("Selected update.")
-        logger.debug("buildnumber: %s ; buildversion: %s" %
-                    (buildnumber, buildversion))
+        
+        while True:
+            # At the start of every loop we need to fetch the updater branch to allow on-the-fly changes
+            # spinner.start(text="Loading the PyWeather updater & branch config...")
+            # Troubleshooting the spinner (eventually)
+            try:
+                updater_branch = config.get('UPDATER', 'branch')
+            except:
+                spinner.fail(text="Failed to load the updater! (a configuration error occurred)")
+                print("")
+                print(Fore.RED + Style.BRIGHT + "An error with your configuration file occurred when attempting to",
+                      Fore.RED + Style.BRIGHT + "load updater branch settings. Please make sure that your config file",
+                      Fore.RED + Style.BRIGHT + "is accessible, and that UPDATER/branch exists. Closing the updater.",
+                      sep="\n")
+                break
+
+            print("")
+            print(Fore.YELLOW + Style.BRIGHT + "Welcome to the PyWeather Updater. What would you like to do?",
+                  Fore.YELLOW + Style.BRIGHT + "- Check for updates & update PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "1",
+                  Fore.YELLOW + Style.BRIGHT + "- Change your update branch - Enter " + Fore.CYAN + Style.BRIGHT + "2",
+                  Fore.YELLOW + Style.BRIGHT + "- Return to PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "3",
+                  sep="\n")
+            updater_mainmenu_input = input("Input here: ").lower()
+            logger.debug("updater_mainmenu_input: %s" % updater_mainmenu_input)
+            if updater_mainmenu_input == "1":
+                print(Fore.YELLOW + Style.BRIGHT + "Would you like to check for PyWeather updates? Yes or No.")
+                updater_confirmupdatecheck = input("Input here: ").lower()
+                logger.debug("updater_confirmupdatecheck: %s" % updater_confirmupdatecheck)
+                updater_continuetoupdatecheck = False
+                logger.debug("updater_continuetoupdatecheck: %s" % updater_continuetoupdatecheck)
+                if updater_confirmupdatecheck == "yes":
+                    logger.debug("Continue with updating PyWeather...")
+                elif updater_confirmupdatecheck == "no":
+                    print(
+                        Fore.YELLOW + Style.BRIGHT + "Not checking for PyWeather updates, and returning to the main menu.")
+                    continue
+                else:
+                    print(
+                        "Could not understand your input. Not checking for PyWeather updates, and returning to the main menu.")
+                    continue
+
+                # Start the updater check process here - Also avoiding an indentation nightmare is a good thing to do
+                spinner.start(text="Checking for updates...")
+                try:
+                    updaterJSON = requests.get(
+                        "https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck_V2.json")
+                    logger.debug("updaterJSON fetched with end result: %s" % updaterJSON)
+                except:
+                    spinner.fail(text="Failed to check for updates! (error occurred while fetching updater JSON)")
+                    print("")
+                    logger.warning("Couldn't check for updates! Is there an internet connection?")
+                    print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the update data file, PyWeather",
+                          Fore.YELLOW + Style.BRIGHT + "ran into an error. If you're on a network with a filter,",
+                          Fore.YELLOW + Style.BRIGHT + "make sure that 'raw.githubusercontent.com' is unblocked. Otherwise,",
+                          Fore.YELLOW + Style.BRIGHT + "make sure that you have an internet connecction.", sep="\n")
+                    printException()
+                    continue
+
+                # Parse the updater JSON and get the release notes file - Dependent on branch!
+                updaterJSON = json.loads(updaterJSON.text)
+                if jsonVerbosity is True:
+                    logger.debug("updaterJSON: %s" % updaterJSON)
+                else:
+                    logger.debug("updaterJSON loaded.")
+
+                updater_releasenotesURL = updaterJSON['branch'][updater_branch]['releasenotesurl']
+                logger.debug("updater_releasenotesURL: %s" % updater_releasenotesURL)
+
+                # Fetch the updater notes URL, dependent on the URL as defined above
+                try:
+                    updater_releasenotes = requests.get(updater_releasenotesURL)
+                    logger.debug("updater_releasenotes fetched with end result: %s" % updater_releasenotes)
+                except:
+                    spinner.fail(text="Failed to check for updates! (error occurred while fetching release notes)")
+                    print("")
+                    logger.warning("Couldn't check for updates! Is there an internet connection?")
+                    print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the release notes file, PyWeather",
+                          Fore.YELLOW + Style.BRIGHT + "ran into an error. If you're on a network with a filter,",
+                          Fore.YELLOW + Style.BRIGHT + "make sure that 'raw.githubusercontent.com' is unblocked. Otherwise,",
+                          Fore.YELLOW + Style.BRIGHT + "make sure that you have an internet connecction.", sep="\n")
+                    printException()
+                    continue
+
+                # Start parsing updater information - Also dependent on the branch
+
+                updater_buildNumber = float(updaterJSON['branch'][updater_branch]['latestbuild'])
+                updater_latestVersion = updaterJSON['branch'][updater_branch]['latestversion']
+                updater_latestTag = updaterJSON['branch'][updater_branch]['latestversiontag']
+                updater_latestFileName = updaterJSON['branch'][updater_branch]['latestversion']
+
+
         spinner.start(text="Checking for updates...")
         try:
             versioncheck = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
