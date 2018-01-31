@@ -4340,7 +4340,7 @@ while True:
 
 #<--- Exit PyWeather is above | Updater is below --->
     elif moreoptions == "14":
-        
+
         while True:
             # At the start of every loop we need to fetch the updater branch to allow on-the-fly changes
             # spinner.start(text="Loading the PyWeather updater & branch config...")
@@ -4352,7 +4352,7 @@ while True:
                 print("")
                 print(Fore.RED + Style.BRIGHT + "An error with your configuration file occurred when attempting to",
                       Fore.RED + Style.BRIGHT + "load updater branch settings. Please make sure that your config file",
-                      Fore.RED + Style.BRIGHT + "is accessible, and that UPDATER/branch exists. Closing the updater.",
+                      Fore.RED + Style.BRIGHT + "is accessible, and cthat UPDATER/branch exists. Closing the updater.",
                       sep="\n")
                 break
 
