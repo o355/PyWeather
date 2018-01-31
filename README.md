@@ -1,11 +1,9 @@
 [Subscribe to the PyWeather Weekly Update, for all the latest in PyWeather news on a somewhat weekly basis!](https://owenthe.ninja/sign-pyweathers-weekly-newsletter/)
 
-## What's up with PyWeather being so inactive lately?
-One answer: midterms
+## More PyWeather update news
+I'm back to coding! Feels great to be at home.
 
-These awful things choke up about two weeks of time, and coding is not a #1 priority. Weekends are now dedicated to gaming (mainly KSP now) because of midterms, after-school time to studying & working on other projects, and my usual coding times are now temporarily dedicated to studying, or doing homework.
-
-I feel really bad about my inactivity, but midterms are stressful and a pain to work with. PyWeather development will resume on January 26th. I'll be reevaluating when 0.6.4 beta will be released, likely in March-April 2018.
+So far, I'm back at full steam presently working on the Universal PyWeather Updater, along with all the other fun bug fixes and feature tweaks for 0.6.4 beta. At this time, I can't give an accurate ETA as to when PyWeather 0.6.4 beta will be released, but maybe expect some release candidates soon. 
 
 ## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
