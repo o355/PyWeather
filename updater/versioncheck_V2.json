@@ -1,6 +1,6 @@
 {
   "info": {
-    "apiversion": "2.0",
+    "apiversion": "2.0.1",
     "apidocumentation": "https://github.com/o355/PyWeather/wiki/Updater-API-documentation-(v2)"
   },
   
@@ -14,7 +14,10 @@
       "extractdirectory": "pyweather-0.6.3beta",
       "releasedate": "December 3, 2017",
       "size": "137 KB",
-      "releasenotesurl": "https://github.com/o355/PyWeather/blob/master/updater/releasenotes.txt"
+      "releasenotesurl": "https://github.com/o355/PyWeather/blob/master/updater/releasenotes.txt",
+      "md5sum": "db0187ca47b45e3ce3927be8ce744b6e",
+      "sha1sum": "40bf6fa394bcab18acd99fd6e253427ddb2686ef",
+      "sha256sum": "82a327c3938651b2a1575b101251731aa58f611f577cf7ca3367e9bff65a0eb3"
     },
     
     "rc": {
@@ -28,7 +31,10 @@
       "extractdirectory": "pyweather-0.6.3beta",
       "releasedate": "December 3, 2017",
       "size": "137 KB",
-      "releasenotesurl": "https://github.com/o355/PyWeather/blob/master/updater/releasenotes.txt"
+      "releasenotesurl": "https://github.com/o355/PyWeather/blob/master/updater/releasenotes.txt",
+      "md5sum": "db0187ca47b45e3ce3927be8ce744b6e",
+      "sha1sum": "40bf6fa394bcab18acd99fd6e253427ddb2686ef",
+      "sha256sum": "82a327c3938651b2a1575b101251731aa58f611f577cf7ca3367e9bff65a0eb3"
     }
   }     
 }
