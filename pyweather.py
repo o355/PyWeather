@@ -4360,7 +4360,8 @@ while True:
             print(Fore.YELLOW + Style.BRIGHT + "Welcome to the PyWeather Updater. What would you like to do?",
                   Fore.YELLOW + Style.BRIGHT + "- Check for updates & update PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "1",
                   Fore.YELLOW + Style.BRIGHT + "- Change your update branch - Enter " + Fore.CYAN + Style.BRIGHT + "2",
-                  Fore.YELLOW + Style.BRIGHT + "- Return to PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "3",
+                  Fore.YELLOW + Style.BRIGHT + "- Info on the new updater - Enter " + Fore.CYAN + Style.BRIGHT + "3",
+                  Fore.YELLOW + Style.BRIGHT + "- Return to PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "4",
                   sep="\n")
             updater_mainmenu_input = input("Input here: ").lower()
             logger.debug("updater_mainmenu_input: %s" % updater_mainmenu_input)
@@ -4426,7 +4427,7 @@ while True:
                              (updater_latestReleaseTag, updater_latestReleaseDate))
                 logger.debug("updater_nextversionReleaseDate: %s" % updater_nextversionReleaseDate)
                 spinner.stop()
-                if buildnumber >= version_buildNumber:
+                if buildnumber >= updater_buildNumber:
                     logger.info("PyWeather is up to date. Local build (%s) >= latest build (%s)." %
                                 (buildnumber, version_buildNumber))
                     print("")
@@ -4437,6 +4438,50 @@ while True:
                         print(Fore.GREEN + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT + updater_latestReleaseTag)
                     if showNewVersionReleaseDate is True:
                         print(Fore.GREEN + Style.BRIGHT + "A new version of PyWeather should come out in: " + Fore.CYAN + Style.BRIGHT + updater_nextversionReleaseDate)
+                    if showUpdaterReleaseNotes_uptodate is True:
+                        print(Fore.GREEN + Style.BRIGHT + "Would you like to see the release notes for this release?",
+                              Fore.GREEN + Style.BRIGHT + "If so, enter 'yes' at the input below. Otherwise, press enter to continue.", sep="\n")
+                        updater_showReleaseNotesInput = input("Input here: ").lower()
+                        logger.debug("updater_showReleaseNotesInput: %s" % updater_showReleaseNotesInput)
+                        if updater_showReleaseNotesInput == "yes":
+                            print(Fore.GREEN + Style.BRIGHT + "Here's the release notes for this release:")
+                            # To make reading the release notes easier on the eyes, display it without color.
+                            print(releasenotes.text)
+
+                    print("")
+                    print(Fore.GREEN + Style.BRIGHT + "Press enter to return to the PyWeather Updater main menu.")
+                    input()
+
+                elif buildnumber < version_buildNumber:
+                    logger.info("PyWeather is not up to date. Local build (%s) < latest build (%s)" %
+                                (buildnumber, updater_buildNumber))
+                    print("")
+                    print(Fore.RED + Style.BRIGHT + "Your copy of PyWeather isn't up to date! :(")
+                    print(Fore.RED + Style.BRIGHT + "You have PyWeather version: " + Fore.CYAN + Style.BRIGHT + buildversion)
+                    print(Fore.RED + Style.BRIGHT + "The latest PyWeather version is: " + Fore.CYAN + Style.BRIGHT + updater_latestVersion)
+                    print(Fore.RED + Style.BRIGHT + "And it was released on: " + Fore.CYAN + Style.BRIGHT + updater_latestVersion)
+                    if user_showUpdaterReleaseTag is True:
+                        print(Fore.RED + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT + version_latestReleaseTag)
+                    if showUpdaterReleaseNotes is True:
+                        print(Fore.RED + Style.BRIGHT + "Would you like to see the release notes for this release?",
+                              Fore.RED + Style.BRIGHT + "If so, enter 'yes' at the input below. Otherwise, press enter to continue.",
+                              sep="\n")
+                        updater_showReleaseNotesInput = input("Input here: ").lower()
+                        logger.debug("updater_showReleaseNotesInput: %s" % updater_showReleaseNotesInput)
+                        if updater_showReleaseNotesInput == "yes":
+                            print(Fore.RED + Style.BRIGHT + "Here's the release notes for this release:")
+                            # To make reading the release notes easier on the eyes, display it without color.
+                            print(releasenotes.text)
+
+                    print(Fore.YELLOW + Style.BRIGHT + "Would you like to update PyWeather automatically to the latest version?",
+                          Fore.YELLOW + Style.BRIGHT + "Yes or No.", sep="\n")
+                    updater_confirmupdate_input = input("Input here: ").lower()
+
+
+                else:
+                    print("bad thing happened")
+
+                # Do the actual updating here, making sure we don't have an indentation nightmare.
 
 
         spinner.start(text="Checking for updates...")
