@@ -4365,21 +4365,7 @@ while True:
             updater_mainmenu_input = input("Input here: ").lower()
             logger.debug("updater_mainmenu_input: %s" % updater_mainmenu_input)
             if updater_mainmenu_input == "1":
-                print(Fore.YELLOW + Style.BRIGHT + "Would you like to check for PyWeather updates? Yes or No.")
-                updater_confirmupdatecheck = input("Input here: ").lower()
-                logger.debug("updater_confirmupdatecheck: %s" % updater_confirmupdatecheck)
-                updater_continuetoupdatecheck = False
-                logger.debug("updater_continuetoupdatecheck: %s" % updater_continuetoupdatecheck)
-                if updater_confirmupdatecheck == "yes":
-                    logger.debug("Continue with updating PyWeather...")
-                elif updater_confirmupdatecheck == "no":
-                    print(
-                        Fore.YELLOW + Style.BRIGHT + "Not checking for PyWeather updates, and returning to the main menu.")
-                    continue
-                else:
-                    print(
-                        "Could not understand your input. Not checking for PyWeather updates, and returning to the main menu.")
-                    continue
+                print(Fore.YELLOW + Style.BRIGHT + "Now checking for PyWeather updates.")
 
                 # Start the updater check process here - Also avoiding an indentation nightmare is a good thing to do
                 spinner.start(text="Checking for updates...")
@@ -4429,6 +4415,28 @@ while True:
                 updater_latestVersion = updaterJSON['branch'][updater_branch]['latestversion']
                 updater_latestTag = updaterJSON['branch'][updater_branch]['latestversiontag']
                 updater_latestFileName = updaterJSON['branch'][updater_branch]['latestversion']
+                updater_latestReleaseTag = updaterJSON['branch'][updater_branch]['latestversiontag']
+                updater_latestReleaseDate = updaterJSON['branch'][updater_branch]['releasedate']
+                updater_nextversionReleaseDate = updaterJSON['branch'][updater_branch]['nextversionreleasedate']
+                logger.debug("updater_buildNumber: %s ; updater_latestVersion: %s" %
+                             (updater_buildNumber, updater_latestVersion))
+                logger.debug("updater_latestTag: %s ; updater_latestFileName: %s" %
+                             (updater_latestTag, updater_latestFileName))
+                logger.debug("updater_latestReleaseTag: %s ; updater_latestReleaseDate: %s" %
+                             (updater_latestReleaseTag, updater_latestReleaseDate))
+                logger.debug("updater_nextversionReleaseDate: %s" % updater_nextversionReleaseDate)
+                spinner.stop()
+                if buildnumber >= version_buildNumber:
+                    logger.info("PyWeather is up to date. Local build (%s) >= latest build (%s)." %
+                                (buildnumber, version_buildNumber))
+                    print("")
+                    print(Fore.GREEN + Style.BRIGHT + "Your copy of PyWeather is up to date! :)")
+                    print(Fore.GREEN + Style.BRIGHT + "You have PyWeather version: " + Fore.CYAN + Style.BRIGHT + buildversion)
+                    print(Fore.GREEN + Style.BRIGHT + "The latest PyWeather version is: " + Fore.CYAN + Style.BRIGHT + updater_latestVersion)
+                    if user_showUpdaterReleaseTag is True:
+                        print(Fore.GREEN + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT + updater_latestReleaseTag)
+                    if showNewVersionReleaseDate is True:
+                        print(Fore.GREEN + Style.BRIGHT + "A new version of PyWeather should come out in: " + Fore.CYAN + Style.BRIGHT + updater_nextversionReleaseDate)
 
 
         spinner.start(text="Checking for updates...")
