@@ -41,11 +41,18 @@ _______
 
 # See if we're running Python 2. If so, exit out of the script.
 
-# Begin the import process. - Section 1
+# Import essential libraries
 import configparser
-import subprocess
 import traceback
 import sys
+import json
+import time
+import codecs
+import os
+from random import randint
+import zipfile
+
+# Import requests for URL downloading
 try:
     import requests
 except ImportError:
@@ -54,9 +61,15 @@ except ImportError:
           "Press enter to exit.", sep="\n")
     input()
     sys.exit()
-import json
-import time
-import shutil
+
+try:
+    import click
+except ImportError:
+    print("When attempting to import the library click, we ran into an import error.",
+          "Please make sure that click is installed. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+
 try:
     from colorama import init, Fore, Style
     import colorama
@@ -66,9 +79,7 @@ except ImportError:
           "Press enter to exit.", sep="\n")
     input()
     sys.exit()
-import codecs
-import os
-from random import randint
+
 try:
     import geopy
     from geopy import GoogleV3
@@ -4418,6 +4429,11 @@ while True:
                 updater_latestFileName = updaterJSON['branch'][updater_branch]['latestversion']
                 updater_latestReleaseTag = updaterJSON['branch'][updater_branch]['latestversiontag']
                 updater_latestReleaseDate = updaterJSON['branch'][updater_branch]['releasedate']
+                updater_latestURL = updaterJSON['branch'][updater_branch]['latesturl']
+                updater_latestExtractDirectory = updaterJSON['branch'][updater_branch]['extractdirectory']
+                updater_latestMD5sum = updaterJSON['branch'][updater_branch]['md5sum']
+                updater_latestSHA1sum = updaterJSON['branch'][updater_branch]['sha1sum']
+                updater_latestSHA256sum = updaterJSON['branch'][updater_branch]['sha256sum']
                 updater_nextversionReleaseDate = updaterJSON['branch'][updater_branch]['nextversionreleasedate']
                 logger.debug("updater_buildNumber: %s ; updater_latestVersion: %s" %
                              (updater_buildNumber, updater_latestVersion))
@@ -4425,7 +4441,12 @@ while True:
                              (updater_latestTag, updater_latestFileName))
                 logger.debug("updater_latestReleaseTag: %s ; updater_latestReleaseDate: %s" %
                              (updater_latestReleaseTag, updater_latestReleaseDate))
-                logger.debug("updater_nextversionReleaseDate: %s" % updater_nextversionReleaseDate)
+                logger.debug("updater_latestURL: %s ; updater_latestExtractDirectory: %s" %
+                             (updater_latestURL, updater_latestExtractDirectory))
+                logger.debug("updater_latestMD5sum: %s ; updater_latestSHA1sum: %s" %
+                             (updater_latestMD5sum, updater_latestSHA1sum))
+                logger.debug("updater_latestSHA256sum: %s" % updater_latestSHA256sum)
+
                 spinner.stop()
                 if buildnumber >= updater_buildNumber:
                     logger.info("PyWeather is up to date. Local build (%s) >= latest build (%s)." %
@@ -4474,8 +4495,127 @@ while True:
                             print(releasenotes.text)
 
                     print(Fore.YELLOW + Style.BRIGHT + "Would you like to update PyWeather automatically to the latest version?",
-                          Fore.YELLOW + Style.BRIGHT + "Yes or No.", sep="\n")
+                          Fore.YELLOW + Style.BRIGHT + "If you prefer using the old .zip download method, enter 'oldyes' at the input.",
+                          Fore.YELLOW + Style.BRIGHT + "Yes, Oldyes or No.", sep="\n")
                     updater_confirmupdate_input = input("Input here: ").lower()
+                    logger.debug("updater_confirmupdate_input: %s" % updater_confirmupdate_input)
+                    # Define what updater method we're going to use as we still allow .zip downloads.
+                    updater_updatemethod = "new"
+                    if updater_confirmupdate_input == "yes":
+                        print(Fore.YELLOW + Style.BRIGHT + "Now automatically updating PyWeather.")
+                        updater_updatemethod = "new"
+                        logger.debug("updater_updatemethod: %s" % updater_updatemethod)
+                    elif updater_confirmupdate_input == "oldyes":
+                        print(Fore.YELLOW + Style.BRIGHT + "Now updating PyWeather using the old .zip download method.")
+                        updater_updatemethod = "old"
+                        logger.debug("updater_updatemethod: %s" % updater_updatemethod)
+                    elif updater_confirmupdate_input == "no":
+                        print(Fore.YELLOW + Style.BRIGHT + "Not updating PyWeather, and returning to the updater main menu.")
+                        continue
+                    else:
+                        print(Fore.YELLOW + Style.BRIGHT + "Couldn't understand your input. As a result,",
+                              Fore.YELLOW + Style.BRIGHT + "not updating PyWeather, and returning to the updater main menu.", sep="\n")
+                        continue
+
+
+                # The actual updater
+                if updater_updatemethod == "new":
+                    # Set a timeout of 20 seconds for when we download.
+                    print(Fore.YELLOW + Style.BRIGHT + "Now updating PyWeather, this should only take a moment.")
+                    try:
+                        updatepackage = requests.get(updater_latestURL, stream=True, timeout=20)
+                    except requests.exceptions.ConnectionError:
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "When attempting to start the download of the update, an error",
+                              Fore.RED + Style.BRIGHT + "occurred. Make sure that you have an internet connection, and that",
+                              Fore.RED + Style.BRIGHT + "github.com is unblocked on your network. Press enter to return to the updater",
+                              Fore.RED + Style.BRIGHT + "main menu.", sep="\n")
+                        printException()
+                        input()
+                        continue
+
+                    # Get the total length of the file for the progress bar
+                    updater_package_totalLength = int(file.headers.get('content-length'))
+                    updater_package_totalLength = int(updater_package_totalLength / 1024)
+                    logger.debug("updater_package_totalLength: %s" % updater_package_totalLength)
+
+                    # Here's the actual updater loop
+                    with click.progressbar(length=updater_package_totalLength, label='Downloading') as bar:
+                        with open(updater_latestFileName, 'wb'):
+                            try:
+                                for chunk in updatepackage.iter_content(chunk_size=1024):
+                                    bar.update(1)
+                                    if chunk:
+                                        # I am truly sorry for how indented this is.
+                                        f.write(chunk)
+                                        f.flush()
+                            except requests.exceptions.ConnectionError:
+                                print("")
+                                print(Fore.RED + Style.BRIGHT + "When downloading update data, an error occurred.",
+                                      Fore.RED + Style.BRIGHT + "Please make sure you have an internet connection, and that",
+                                      Fore.RED + Style.BRIGHT + "github.com is unblocked on your network. Press enter to return",
+                                      Fore.RED + Style.BRIGHT + "to the updater main menu.", sep="\n")
+                                printException()
+                                input()
+                                continue
+
+                    # Now we verify. No progress bar here, unfortunately.
+
+                    # Define 3 hash types, md5, sha1, and sha256.
+                    hash_md5 = hashlib.md5()
+                    hash_sha1 = hashlib.sha1()
+                    hash_sha256 = hashlib.sha256()
+
+                    print("Verifying update data...")
+
+                    # Do the MD5 hash
+                    with open(updater_latestFileName, "rb") as f:
+                        # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
+                        for chunk in iter(lambda: f.read(4096), b""):
+                            hash_md5.update(chunk)
+                        # Get the MD5 hash
+                        updater_package_md5hash = hash_md5.hexdigest()
+                        logger.debug("updater_md5hash: %s" % updater_md5hash)
+
+                    # Verify the MD5 hash/sum/whatever you call it
+                    if updater_latestMD5sum != updater_package_md5hash:
+                        logger.warning("MD5 VERIFICATION FAILED! Checksum mismatch.")
+                        logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
+                                     (updater_latestMD5sum, updater_package_md5hash))
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "Failed to verify the download data, a hash mismatch occurred.",
+                              Fore.RED + Style.BRIGHT + "Please try again at another time, or use a different connection.",
+                              Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        input()
+                        continue
+                    else:
+                        logger.debug("MD5 sum verified.")
+                        logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
+                                     (updater_latestMD5sum, updater_package_md5hash))
+
+                        # Do the SHA1 hash
+                        with open(updater_latestFileName, "rb") as f:
+                            # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
+                            for chunk in iter(lambda: f.read(4096), b""):
+                                hash_sha1.update(chunk)
+                            # Get the SHA1 hash
+                            updater_package_sha1hash = hash_sha1.hexdigest()
+                            logger.debug("updater_md5hash: %s" % updater_md5hash)
+
+                        # Verify the MD5 hash/sum/whatever you call it
+                        if updater_latestMD5sum != updater_package_md5hash:
+                            logger.warning("MD5 VERIFICATION FAILED! Checksum mismatch.")
+                            logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
+                                         (updater_latestMD5sum, updater_package_md5hash))
+                            print("")
+                            print(
+                                Fore.RED + Style.BRIGHT + "Failed to verify the download data, a hash mismatch occurred.",
+                                Fore.RED + Style.BRIGHT + "Please try again at another time, or use a different connection.",
+                                Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                            input()
+                            continue
+
+
 
 
                 else:
