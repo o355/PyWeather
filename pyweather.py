@@ -4582,6 +4582,9 @@ while True:
                         logger.warning("MD5 VERIFICATION FAILED! Checksum mismatch.")
                         logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
                                      (updater_latestMD5sum, updater_package_md5hash))
+                        # While I would provide an option to continue even after a hash mismatch, I've devided not to.
+                        # Hash mismatches can corrupt PyWeather, so I've modeled apt and how it won't update repos or install
+                        # if a hash mismatch occurs.
                         print("")
                         print(Fore.RED + Style.BRIGHT + "Failed to verify the download data, a hash mismatch occurred.",
                               Fore.RED + Style.BRIGHT + "Please try again at another time, or use a different connection.",
@@ -4593,27 +4596,61 @@ while True:
                         logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
                                      (updater_latestMD5sum, updater_package_md5hash))
 
-                        # Do the SHA1 hash
-                        with open(updater_latestFileName, "rb") as f:
-                            # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
-                            for chunk in iter(lambda: f.read(4096), b""):
-                                hash_sha1.update(chunk)
-                            # Get the SHA1 hash
-                            updater_package_sha1hash = hash_sha1.hexdigest()
-                            logger.debug("updater_md5hash: %s" % updater_md5hash)
 
-                        # Verify the MD5 hash/sum/whatever you call it
-                        if updater_latestMD5sum != updater_package_md5hash:
-                            logger.warning("MD5 VERIFICATION FAILED! Checksum mismatch.")
-                            logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
-                                         (updater_latestMD5sum, updater_package_md5hash))
-                            print("")
-                            print(
-                                Fore.RED + Style.BRIGHT + "Failed to verify the download data, a hash mismatch occurred.",
-                                Fore.RED + Style.BRIGHT + "Please try again at another time, or use a different connection.",
-                                Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
-                            input()
-                            continue
+                    # Do the SHA1 hash
+                    with open(updater_latestFileName, "rb") as f:
+                        # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
+                        for chunk in iter(lambda: f.read(4096), b""):
+                            hash_sha1.update(chunk)
+                        # Get the SHA1 hash
+                        updater_package_sha1hash = hash_sha1.hexdigest()
+                        logger.debug("updater_sha1hash: %s" % updater_sha1hash)
+
+                    # Verify the SHA1 hash/sum/whatever you call it
+                    if updater_latestSHA1sum != updater_package_sha1hash:
+                        logger.warning("SHA1 VERIFICATION FAILED! Checksum mismatch.")
+                        logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
+                                     (updater_latestSHA1sum, updater_package_sha1hash))
+                        print("")
+                        print(
+                            Fore.RED + Style.BRIGHT + "Failed to verify the download data, a hash mismatch occurred.",
+                            Fore.RED + Style.BRIGHT + "Please try again at another time, or use a different connection.",
+                            Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        input()
+                        continue
+                    else:
+                        logger.debug("SHA1 sum verified.")
+                        logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
+                                     (updater_latestSHA1sum, updater_package_sha1hash))
+
+                    # Do the SHA256 hash
+                    with open(updater_latestFileName, "rb") as f:
+                        # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
+                        for chunk in iter(lambda: f.read(4096), b""):
+                            hash_sha256.update(chunk)
+                        # Get the SHA256 hash
+                        updater_package_sha256hash = hash_sha256.hexdigest()
+                        logger.debug("updater_sha256hash: %s" % updater_sha256hash)
+
+                    # Verify the SHA256 hash/sum/whatever you call it
+                    if updater_latestSHA256sum != updater_package_sha256hash:
+                        logger.warning("SHA256 VERIFICATION FAILED! Checksum mismatch.")
+                        logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
+                                     (updater_latestSHA256sum, updater_package_sha256hash))
+                        print("")
+                        print(
+                            Fore.RED + Style.BRIGHT + "Failed to verify the download data, a hash mismatch occurred.",
+                            Fore.RED + Style.BRIGHT + "Please try again at another time, or use a different connection.",
+                            Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        input()
+                        continue
+                    else:
+                        logger.debug("SHA256 sum verified.")
+                        logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
+                                     (updater_latestSHA256sum, updater_package_sha256hash))
+
+                    print("Update data verified. Extracting...")
+
 
 
 
