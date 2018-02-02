@@ -7644,8 +7644,8 @@ while True:
 
             logger.debug("prevconfig_menuinput: %s" % prevconfig_menuinput)
             if prevconfig_menuinput == "1":
-                print(Fore.YELLOW + Style.BRIGHT + "Which location would you like to remove? Enter a number 1-5 representing",
-                      Fore.YELLOW + Style.BRIGHT + "the previous locations 1-5.", sep="\n	          	")
+                print(Fore.YELLOW + Style.BRIGHT + "Which previous location would you like to remove? Enter a number 1-5 representing",
+                      Fore.YELLOW + Style.BRIGHT + "the previous locations 1-5.", sep="\n") # I really need to replace fix my vim editor, it's fucking lost it...
                 prevloc_removeinputnum = input("Input here: ").lower()
                 logger.debug("prevloc_removeinputnum: %s" % prevloc_removeinputnum)
             
@@ -7678,7 +7678,7 @@ while True:
                     print("", Fore.RED + Style.BRIGHT + "Whoops! The previous location you're trying to remove isn't set to anything.",
                           Fore.RED + Style.BRIGHT + "Returning to the main menu.", sep="\n")
                     continue
-            
+# Checkpoint
                 if prevloc_removeinputnum == 1:
                     prevloc_removedisplay = previouslocation_1d
                 elif prevloc_removeinputnum == 2:
