@@ -1401,7 +1401,6 @@ locinput = str(locinput)
 
 # Define previous location display variables
 if previouslocation_enabled == "True":
-    print("This piece of code is running")
     previouslocation_1d = locinput
     previouslocation_2d = previouslocation_1
     previouslocation_3d = previouslocation_2
@@ -1490,9 +1489,6 @@ if previouslocation_enabled == "True":
         print(Fore.RED + Style.BRIGHT + "An issue occured when trying to write previous history to your config file.",
               "Please note that not changes were made to your config file.", sep="\n")
 
-    test_thing = config.get('PREVIOUS LOCATIONS', 'prevloc1')
-    print(previouslocation_1d)
-    print(test_thing)
 print("Checking the weather, it'll take a few seconds!")
 print("")
 
