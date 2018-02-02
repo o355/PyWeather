@@ -41,11 +41,18 @@ _______
 
 # See if we're running Python 2. If so, exit out of the script.
 
-# Begin the import process. - Section 1
+# Import essential libraries
 import configparser
-import subprocess
 import traceback
 import sys
+import json
+import time
+import codecs
+import os
+from random import randint
+import zipfile
+
+# Import requests for URL downloading
 try:
     import requests
 except ImportError:
@@ -54,9 +61,15 @@ except ImportError:
           "Press enter to exit.", sep="\n")
     input()
     sys.exit()
-import json
-import time
-import shutil
+
+try:
+    import click
+except ImportError:
+    print("When attempting to import the library click, we ran into an import error.",
+          "Please make sure that click is installed. Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+
 try:
     from colorama import init, Fore, Style
     import colorama
@@ -66,9 +79,7 @@ except ImportError:
           "Press enter to exit.", sep="\n")
     input()
     sys.exit()
-import codecs
-import os
-from random import randint
+
 try:
     import geopy
     from geopy import GoogleV3
@@ -4533,11 +4544,317 @@ while True:
     elif moreoptions == "17": # Changed
         sys.exit()
 
-#<--- Exit PyWeather is above | Updater is below --->
+    elif moreoptions == "14":
+
+        while True:
+            # At the start of every loop we need to fetch the updater branch to allow on-the-fly changes
+            # spinner.start(text="Loading the PyWeather updater & branch config...")
+            # Troubleshooting the spinner (eventually)
+            try:
+                updater_branch = config.get('UPDATER', 'branch')
+            except:
+                spinner.fail(text="Failed to load the updater! (a configuration error occurred)")
+                print("")
+                print(Fore.RED + Style.BRIGHT + "An error with your configuration file occurred when attempting to",
+                      Fore.RED + Style.BRIGHT + "load updater branch settings. Please make sure that your config file",
+                      Fore.RED + Style.BRIGHT + "is accessible, and cthat UPDATER/branch exists. Closing the updater.",
+                      sep="\n")
+                break
+
+            print("")
+            print(Fore.YELLOW + Style.BRIGHT + "Welcome to the PyWeather Updater. What would you like to do?",
+                  Fore.YELLOW + Style.BRIGHT + "- Check for updates & update PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "1",
+                  Fore.YELLOW + Style.BRIGHT + "- Change your update branch - Enter " + Fore.CYAN + Style.BRIGHT + "2",
+                  Fore.YELLOW + Style.BRIGHT + "- Info on the new updater - Enter " + Fore.CYAN + Style.BRIGHT + "3",
+                  Fore.YELLOW + Style.BRIGHT + "- Return to PyWeather - Enter " + Fore.CYAN + Style.BRIGHT + "4",
+                  sep="\n")
+            updater_mainmenu_input = input("Input here: ").lower()
+            logger.debug("updater_mainmenu_input: %s" % updater_mainmenu_input)
+            if updater_mainmenu_input == "1":
+                print(Fore.YELLOW + Style.BRIGHT + "Now checking for PyWeather updates.")
+
+                # Start the updater check process here - Also avoiding an indentation nightmare is a good thing to do
+                spinner.start(text="Checking for updates...")
+                try:
+                    updaterJSON = requests.get(
+                        "https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck_V2.json")
+                    logger.debug("updaterJSON fetched with end result: %s" % updaterJSON)
+                except:
+                    spinner.fail(text="Failed to check for updates! (error occurred while fetching updater JSON)")
+                    print("")
+                    logger.warning("Couldn't check for updates! Is there an internet connection?")
+                    print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the update data file, PyWeather",
+                          Fore.YELLOW + Style.BRIGHT + "ran into an error. If you're on a network with a filter,",
+                          Fore.YELLOW + Style.BRIGHT + "make sure that 'raw.githubusercontent.com' is unblocked. Otherwise,",
+                          Fore.YELLOW + Style.BRIGHT + "make sure that you have an internet connecction.", sep="\n")
+                    printException()
+                    continue
+
+                # Parse the updater JSON and get the release notes file - Dependent on branch!
+                updaterJSON = json.loads(updaterJSON.text)
+                if jsonVerbosity is True:
+                    logger.debug("updaterJSON: %s" % updaterJSON)
+                else:
+                    logger.debug("updaterJSON loaded.")
+
+                updater_releasenotesURL = updaterJSON['branch'][updater_branch]['releasenotesurl']
+                logger.debug("updater_releasenotesURL: %s" % updater_releasenotesURL)
+
+                # Fetch the updater notes URL, dependent on the URL as defined above
+                try:
+                    updater_releasenotes = requests.get(updater_releasenotesURL)
+                    logger.debug("updater_releasenotes fetched with end result: %s" % updater_releasenotes)
+                except:
+                    spinner.fail(text="Failed to check for updates! (error occurred while fetching release notes)")
+                    print("")
+                    logger.warning("Couldn't check for updates! Is there an internet connection?")
+                    print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the release notes file, PyWeather",
+                          Fore.YELLOW + Style.BRIGHT + "ran into an error. If you're on a network with a filter,",
+                          Fore.YELLOW + Style.BRIGHT + "make sure that 'raw.githubusercontent.com' is unblocked. Otherwise,",
+                          Fore.YELLOW + Style.BRIGHT + "make sure that you have an internet connecction.", sep="\n")
+                    printException()
+                    continue
+
+                # Start parsing updater information - Also dependent on the branch
+
+                updater_buildNumber = float(updaterJSON['branch'][updater_branch]['latestbuild'])
+                updater_latestVersion = updaterJSON['branch'][updater_branch]['latestversion']
+                updater_latestTag = updaterJSON['branch'][updater_branch]['latestversiontag']
+                updater_latestFileName = updaterJSON['branch'][updater_branch]['latestversion']
+                updater_latestReleaseTag = updaterJSON['branch'][updater_branch]['latestversiontag']
+                updater_latestReleaseDate = updaterJSON['branch'][updater_branch]['releasedate']
+                updater_latestURL = updaterJSON['branch'][updater_branch]['latesturl']
+                updater_latestExtractDirectory = updaterJSON['branch'][updater_branch]['extractdirectory']
+                updater_latestMD5sum = updaterJSON['branch'][updater_branch]['md5sum']
+                updater_latestSHA1sum = updaterJSON['branch'][updater_branch]['sha1sum']
+                updater_latestSHA256sum = updaterJSON['branch'][updater_branch]['sha256sum']
+                updater_nextversionReleaseDate = updaterJSON['branch'][updater_branch]['nextversionreleasedate']
+                logger.debug("updater_buildNumber: %s ; updater_latestVersion: %s" %
+                             (updater_buildNumber, updater_latestVersion))
+                logger.debug("updater_latestTag: %s ; updater_latestFileName: %s" %
+                             (updater_latestTag, updater_latestFileName))
+                logger.debug("updater_latestReleaseTag: %s ; updater_latestReleaseDate: %s" %
+                             (updater_latestReleaseTag, updater_latestReleaseDate))
+                logger.debug("updater_latestURL: %s ; updater_latestExtractDirectory: %s" %
+                             (updater_latestURL, updater_latestExtractDirectory))
+                logger.debug("updater_latestMD5sum: %s ; updater_latestSHA1sum: %s" %
+                             (updater_latestMD5sum, updater_latestSHA1sum))
+                logger.debug("updater_latestSHA256sum: %s" % updater_latestSHA256sum)
+
+                spinner.stop()
+                if buildnumber >= updater_buildNumber:
+                    logger.info("PyWeather is up to date. Local build (%s) >= latest build (%s)." %
+                                (buildnumber, version_buildNumber))
+                    print("")
+                    print(Fore.GREEN + Style.BRIGHT + "Your copy of PyWeather is up to date! :)")
+                    print(Fore.GREEN + Style.BRIGHT + "You have PyWeather version: " + Fore.CYAN + Style.BRIGHT + buildversion)
+                    print(Fore.GREEN + Style.BRIGHT + "The latest PyWeather version is: " + Fore.CYAN + Style.BRIGHT + updater_latestVersion)
+                    if user_showUpdaterReleaseTag is True:
+                        print(Fore.GREEN + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT + updater_latestReleaseTag)
+                    if showNewVersionReleaseDate is True:
+                        print(Fore.GREEN + Style.BRIGHT + "A new version of PyWeather should come out in: " + Fore.CYAN + Style.BRIGHT + updater_nextversionReleaseDate)
+                    if showUpdaterReleaseNotes_uptodate is True:
+                        print(Fore.GREEN + Style.BRIGHT + "Would you like to see the release notes for this release?",
+                              Fore.GREEN + Style.BRIGHT + "If so, enter 'yes' at the input below. Otherwise, press enter to continue.", sep="\n")
+                        updater_showReleaseNotesInput = input("Input here: ").lower()
+                        logger.debug("updater_showReleaseNotesInput: %s" % updater_showReleaseNotesInput)
+                        if updater_showReleaseNotesInput == "yes":
+                            print(Fore.GREEN + Style.BRIGHT + "Here's the release notes for this release:")
+                            # To make reading the release notes easier on the eyes, display it without color.
+                            print(releasenotes.text)
+
+                    print("")
+                    print(Fore.GREEN + Style.BRIGHT + "Press enter to return to the PyWeather Updater main menu.")
+                    input()
+
+                elif buildnumber < version_buildNumber:
+                    logger.info("PyWeather is not up to date. Local build (%s) < latest build (%s)" %
+                                (buildnumber, updater_buildNumber))
+                    print("")
+                    print(Fore.RED + Style.BRIGHT + "Your copy of PyWeather isn't up to date! :(")
+                    print(Fore.RED + Style.BRIGHT + "You have PyWeather version: " + Fore.CYAN + Style.BRIGHT + buildversion)
+                    print(Fore.RED + Style.BRIGHT + "The latest PyWeather version is: " + Fore.CYAN + Style.BRIGHT + updater_latestVersion)
+                    print(Fore.RED + Style.BRIGHT + "And it was released on: " + Fore.CYAN + Style.BRIGHT + updater_latestVersion)
+                    if user_showUpdaterReleaseTag is True:
+                        print(Fore.RED + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT + version_latestReleaseTag)
+                    if showUpdaterReleaseNotes is True:
+                        print(Fore.RED + Style.BRIGHT + "Would you like to see the release notes for this release?",
+                              Fore.RED + Style.BRIGHT + "If so, enter 'yes' at the input below. Otherwise, press enter to continue.",
+                              sep="\n")
+                        updater_showReleaseNotesInput = input("Input here: ").lower()
+                        logger.debug("updater_showReleaseNotesInput: %s" % updater_showReleaseNotesInput)
+                        if updater_showReleaseNotesInput == "yes":
+                            print(Fore.RED + Style.BRIGHT + "Here's the release notes for this release:")
+                            # To make reading the release notes easier on the eyes, display it without color.
+                            print(releasenotes.text)
+
+                    print(Fore.YELLOW + Style.BRIGHT + "Would you like to update PyWeather automatically to the latest version?",
+                          Fore.YELLOW + Style.BRIGHT + "If you prefer using the old .zip download method, enter 'oldyes' at the input.",
+                          Fore.YELLOW + Style.BRIGHT + "Yes, Oldyes or No.", sep="\n")
+                    updater_confirmupdate_input = input("Input here: ").lower()
+                    logger.debug("updater_confirmupdate_input: %s" % updater_confirmupdate_input)
+                    # Define what updater method we're going to use as we still allow .zip downloads.
+                    updater_updatemethod = "new"
+                    if updater_confirmupdate_input == "yes":
+                        print(Fore.YELLOW + Style.BRIGHT + "Now automatically updating PyWeather.")
+                        updater_updatemethod = "new"
+                        logger.debug("updater_updatemethod: %s" % updater_updatemethod)
+                    elif updater_confirmupdate_input == "oldyes":
+                        print(Fore.YELLOW + Style.BRIGHT + "Now updating PyWeather using the old .zip download method.")
+                        updater_updatemethod = "old"
+                        logger.debug("updater_updatemethod: %s" % updater_updatemethod)
+                    elif updater_confirmupdate_input == "no":
+                        print(Fore.YELLOW + Style.BRIGHT + "Not updating PyWeather, and returning to the updater main menu.")
+                        continue
+                    else:
+                        print(Fore.YELLOW + Style.BRIGHT + "Couldn't understand your input. As a result,",
+                              Fore.YELLOW + Style.BRIGHT + "not updating PyWeather, and returning to the updater main menu.", sep="\n")
+                        continue
+
+
+                # The actual updater
+                if updater_updatemethod == "new":
+                    # Set a timeout of 20 seconds for when we download.
+                    print(Fore.YELLOW + Style.BRIGHT + "Now updating PyWeather, this should only take a moment.")
+                    try:
+                        updatepackage = requests.get(updater_latestURL, stream=True, timeout=20)
+                    except requests.exceptions.ConnectionError:
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "When attempting to start the download of the update, an error",
+                              Fore.RED + Style.BRIGHT + "occurred. Make sure that you have an internet connection, and that",
+                              Fore.RED + Style.BRIGHT + "github.com is unblocked on your network. Press enter to return to the updater",
+                              Fore.RED + Style.BRIGHT + "main menu.", sep="\n")
+                        printException()
+                        input()
+                        continue
+
+                    # Get the total length of the file for the progress bar
+                    updater_package_totalLength = int(file.headers.get('content-length'))
+                    updater_package_totalLength = int(updater_package_totalLength / 1024)
+                    logger.debug("updater_package_totalLength: %s" % updater_package_totalLength)
+
+                    # Here's the actual updater loop
+                    with click.progressbar(length=updater_package_totalLength, label='Downloading') as bar:
+                        with open(updater_latestFileName, 'wb'):
+                            try:
+                                for chunk in updatepackage.iter_content(chunk_size=1024):
+                                    bar.update(1)
+                                    if chunk:
+                                        # I am truly sorry for how indented this is.
+                                        f.write(chunk)
+                                        f.flush()
+                            except requests.exceptions.ConnectionError:
+                                print("")
+                                print(Fore.RED + Style.BRIGHT + "When downloading update data, an error occurred.",
+                                      Fore.RED + Style.BRIGHT + "Please make sure you have an internet connection, and that",
+                                      Fore.RED + Style.BRIGHT + "github.com is unblocked on your network. Press enter to return",
+                                      Fore.RED + Style.BRIGHT + "to the updater main menu.", sep="\n")
+                                printException()
+                                input()
+                                continue
+
+                    # Now we verify. No progress bar here, unfortunately.
+
+                    # Define 3 hash types, md5, sha1, and sha256.
+                    hash_md5 = hashlib.md5()
+                    hash_sha1 = hashlib.sha1()
+                    hash_sha256 = hashlib.sha256()
+
+                    print("Verifying update data...")
+
+                    # Do the MD5 hash
+                    with open(updater_latestFileName, "rb") as f:
+                        # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
+                        for chunk in iter(lambda: f.read(4096), b""):
+                            hash_md5.update(chunk)
+                        # Get the MD5 hash
+                        updater_package_md5hash = hash_md5.hexdigest()
+                        logger.debug("updater_md5hash: %s" % updater_md5hash)
+
+                    # Verify the MD5 hash/sum/whatever you call it
+                    if updater_latestMD5sum != updater_package_md5hash:
+                        logger.warning("MD5 VERIFICATION FAILED! Checksum mismatch.")
+                        logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
+                                     (updater_latestMD5sum, updater_package_md5hash))
+                        # While I would provide an option to continue even after a hash mismatch, I've devided not to.
+                        # Hash mismatches can corrupt PyWeather, so I've modeled apt and how it won't update repos or install
+                        # if a hash mismatch occurs.
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "Failed to verify the download data, a hash mismatch occurred.",
+                              Fore.RED + Style.BRIGHT + "Please try again at another time, or use a different connection.",
+                              Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        input()
+                        continue
+                    else:
+                        logger.debug("MD5 sum verified.")
+                        logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
+                                     (updater_latestMD5sum, updater_package_md5hash))
+
+
+                    # Do the SHA1 hash
+                    with open(updater_latestFileName, "rb") as f:
+                        # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
+                        for chunk in iter(lambda: f.read(4096), b""):
+                            hash_sha1.update(chunk)
+                        # Get the SHA1 hash
+                        updater_package_sha1hash = hash_sha1.hexdigest()
+                        logger.debug("updater_sha1hash: %s" % updater_sha1hash)
+
+                    # Verify the SHA1 hash/sum/whatever you call it
+                    if updater_latestSHA1sum != updater_package_sha1hash:
+                        logger.warning("SHA1 VERIFICATION FAILED! Checksum mismatch.")
+                        logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
+                                     (updater_latestSHA1sum, updater_package_sha1hash))
+                        print("")
+                        print(
+                            Fore.RED + Style.BRIGHT + "Failed to verify the download data, a hash mismatch occurred.",
+                            Fore.RED + Style.BRIGHT + "Please try again at another time, or use a different connection.",
+                            Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        input()
+                        continue
+                    else:
+                        logger.debug("SHA1 sum verified.")
+                        logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
+                                     (updater_latestSHA1sum, updater_package_sha1hash))
+
+                    # Do the SHA256 hash
+                    with open(updater_latestFileName, "rb") as f:
+                        # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
+                        for chunk in iter(lambda: f.read(4096), b""):
+                            hash_sha256.update(chunk)
+                        # Get the SHA256 hash
+                        updater_package_sha256hash = hash_sha256.hexdigest()
+                        logger.debug("updater_sha256hash: %s" % updater_sha256hash)
+
+                    # Verify the SHA256 hash/sum/whatever you call it
+                    if updater_latestSHA256sum != updater_package_sha256hash:
+                        logger.warning("SHA256 VERIFICATION FAILED! Checksum mismatch.")
+                        logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
+                                     (updater_latestSHA256sum, updater_package_sha256hash))
+                        print("")
+                        print(
+                            Fore.RED + Style.BRIGHT + "Failed to verify the download data, a hash mismatch occurred.",
+                            Fore.RED + Style.BRIGHT + "Please try again at another time, or use a different connection.",
+                            Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        input()
+                        continue
+                    else:
+                        logger.debug("SHA256 sum verified.")
+                        logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
+                                     (updater_latestSHA256sum, updater_package_sha256hash))
+
+                    print("Update data verified. Extracting...")
+                else:
+                    print("bad thing happened")
+
+                # Do the actual updating here, making sure we don't have an indentation nightmare.
+
+#<--- Exit PyWeather is above | Updater is below ---> This probably is wrong now.... Whoops (modounreal broke shit)
     elif moreoptions == "15":  # Changed
         logger.info("Selected update.")
         logger.debug("buildnumber: %s ; buildversion: %s" %
                     (buildnumber, buildversion))
+
         spinner.start(text="Checking for updates...")
         try:
             versioncheck = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
