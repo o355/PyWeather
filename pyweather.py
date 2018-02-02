@@ -1452,27 +1452,27 @@ if previouslocation_enabled == "True":
     # Adds airport location to display variable and strips out the "airport bit"
     
     if previouslocation_1d.find("arpt:") == 0 or previouslocation_1d.find("airport") == 0:
-        previouslocation_1d = previouslocation_1.strip("airport:") + "Airport"
+        previouslocation_1d = previouslocation_1d.strip("airport:") + "Airport"
         logger.debug("previouslocation_1d: %s" % previouslocation_1d)
     
     
     if previouslocation_2d.find("arpt:") == 0 or previouslocation_2d.find("airport") == 0:
-        previouslocation_2d = previouslocation_2.strip("airport:") + "Airport"
+        previouslocation_2d = previouslocation_2d.strip("airport:") + "Airport"
         logger.debug("previouslocation_2d: %s" % previouslocation_2d)
     
     
     if previouslocation_3d.find("arpt:") == 0 or previouslocation_3d.find("airport") == 0:
-        previouslocation_3d = previouslocation_3.strip("airport:") + "Airport"
+        previouslocation_3d = previouslocation_3d.strip("airport:") + "Airport"
         logger.debug("previouslocation_3d: %s" % previouslocation_3d)
     
     
     if previouslocation_4d.find("arpt:") == 0 or previouslocation_4d.find("airport") == 0:
-        previouslocation_4d = previouslocation_4.strip("airport:") + "Airport"
+        previouslocation_4d = previouslocation_4d.strip("airport:") + "Airport"
         logger.debug("previouslocation_4d: %s" % previouslocation_4d)
     
     
     if previouslocation_5d.find("arpt:") == 0 or previouslocation_5d.find("airport") == 0:
-        previouslocation_5d = previouslocation_5.strip("airport:") + "Airport"
+        previouslocation_5d = previouslocation_5d.strip("airport:") + "Airport"
         logger.debug("previouslocation_5d: %s" % previouslocation_5d)
     
     config['PREVIOUS LOCATIONS']['prevloc1'] = previouslocation_1d
