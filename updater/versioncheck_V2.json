@@ -1,6 +1,6 @@
 {
   "info": {
-    "apiversion": "2.0.2",
+    "apiversion": "2.1",
     "apidocumentation": "https://github.com/o355/PyWeather/wiki/Updater-API-documentation-(v2)"
   },
   
@@ -10,7 +10,9 @@
       "latestversion": "0.6.3 beta",
       "latestversiontag": "0.6.3-beta",
       "latesturl": "https://github.com/o355/pyweather/releases/download/0.6.3-beta/pyweather-0.6.3beta.zip",
+      "latestdirlessurl": "https://github.com/o355/pyweather/releases/download/0.6.3-beta/pyweather-0.6.3beta.zip",
       "latestfilename": "pyweather-0.6.3beta.zip",
+      "latestdirlessfilename": "pyweather-0.6.3beta.zip",
       "extractdirectory": "pyweather-0.6.3beta",
       "releasedate": "December 3, 2017",
       "nextversionreleasedate": "April 2018",
@@ -18,7 +20,10 @@
       "releasenotesurl": "https://github.com/o355/PyWeather/blob/master/updater/releasenotes_stable.txt",
       "md5sum": "db0187ca47b45e3ce3927be8ce744b6e",
       "sha1sum": "40bf6fa394bcab18acd99fd6e253427ddb2686ef",
-      "sha256sum": "82a327c3938651b2a1575b101251731aa58f611f577cf7ca3367e9bff65a0eb3"
+      "sha256sum": "82a327c3938651b2a1575b101251731aa58f611f577cf7ca3367e9bff65a0eb3",
+      "md5sum-dirless": "db0187ca47b45e3ce3927be8ce744b6e",
+      "sha1sum-dirless": "40bf6fa394bcab18acd99fd6e253427ddb2686ef",
+      "sha256sum-dirless": "82a327c3938651b2a1575b101251731aa58f611f577cf7ca3367e9bff65a0eb3"
     },
     
     "rc": {
@@ -27,8 +32,10 @@
       "latestbuild": "63.01",
       "latestversion": "0.6.4 beta RC0",
       "latestversiontag": "0.6.4-beta-RC0",
-      "latesturl": "https://github.com/o355/pyweather/releases/download/0.6.4-beta-RC0/pyweather-0.6.4-beta-RC0.zip",
+      "latesturl": "https://github.com/o355/pyweather/releases/download/0.6.4-beta-RC0/pyweather-0.6.4beta-RC0.zip",
+      "latestdirlessurl": "https://github.com/o355/pyweather/releases/download/0.6.4-beta-RC0/pyweather-0.6.4beta-RC0-dirless.zip"
       "latestfilename": "pyweather-0.6.4beta-RC0.zip",
+      "latestdirlessfilename": "pyweather-0.6.4beta-RC0-dirless.zip",
       "extractdirectory": "pyweather-0.6.4beta-RC0",
       "releasedate": "January 31, 2018",
       "nextversionreleasedate": "March 2018",
@@ -36,7 +43,10 @@
       "releasenotesurl": "https://github.com/o355/PyWeather/blob/master/updater/releasenotes_rc.txt",
       "md5sum": "bb92eab562d5e26ec6e086a6190f0184",
       "sha1sum": "88bd7e6bd0f02655cd2c6cece2e58a0a32c4919f",
-      "sha256sum": "855e7106cc050a9c0265a557e583b5dbe1aadc7d9e0a8d29fbc87acc83558970"
+      "sha256sum": "855e7106cc050a9c0265a557e583b5dbe1aadc7d9e0a8d29fbc87acc83558970",
+      "md5sum-dirless": "fb61fcaf02668f83c8d06e4d597be072",
+      "sha1sum-dirless": "06d70af6444a5eeda04c026fc5c32b3046f85fee",
+      "sha256sum-dirless": "fd3058c0ae1523922879e90686cb4fe6f8897d4b6568eede1c1e55322d2b11ab"
     }
   }     
 }
