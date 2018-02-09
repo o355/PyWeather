@@ -4461,15 +4461,15 @@ while True:
 
                 if updater_branch == "rc":
                     # Grab additional data about release state for RC branch users
-                    updater_RCreleaseflag = str(updater['branch'][updater_branch]['rcrelease'])
-                    updater_stablereleaseflag = str(updater['branch'][updater_branch]['stablerelease'])
+                    updater_RCreleaseflag = str(updaterJSON['branch'][updater_branch]['rcrelease'])
+                    updater_stablereleaseflag = str(updaterJSON['branch'][updater_branch]['stablerelease'])
                     logger.debug("updater_RCreleaseflag: %s ; updater_stablereleaseflag: %s" %
                                  (updater_RCreleaseflag, updater_stablereleaseflag))
 
                 spinner.stop()
                 if buildnumber >= updater_buildNumber:
                     logger.info("PyWeather is up to date. Local build (%s) >= latest build (%s)." %
-                                (buildnumber, version_buildNumber))
+                                (buildnumber, updater_buildNumber))
                     print("")
                     print(Fore.GREEN + Style.BRIGHT + "Your copy of PyWeather is up to date! :)")
                     print(Fore.GREEN + Style.BRIGHT + "You have PyWeather version: " + Fore.CYAN + Style.BRIGHT + buildversion)
@@ -4491,8 +4491,9 @@ while True:
                     print("")
                     print(Fore.GREEN + Style.BRIGHT + "Press enter to return to the PyWeather Updater main menu.")
                     input()
+                    continue
 
-                elif buildnumber < version_buildNumber:
+                elif buildnumber < updater_buildNumber:
                     logger.info("PyWeather is not up to date. Local build (%s) < latest build (%s)" %
                                 (buildnumber, updater_buildNumber))
                     print("")
@@ -4508,10 +4509,12 @@ while True:
                         elif updater_RCreleaseflag == "True":
                             print(Fore.RED + Style.BRIGHT + "The latest version of PyWeather is a"
                                   + Fore.CYAN + Style.BRIGHT + " Stable" + Fore.RED + Style.BRIGHT + " release.")
-                    print(Fore.RED + Style.BRIGHT + "And it was released on: " + Fore.CYAN + Style.BRIGHT + updater_latestVersion)
+                    print(Fore.RED + Style.BRIGHT + "And it was released on: " + Fore.CYAN + Style.BRIGHT + updater_latestReleaseDate)
                     if user_showUpdaterReleaseTag is True:
-                        print(Fore.RED + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT + version_latestReleaseTag)
+                        print(Fore.RED + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT + updater_latestReleaseTag)
                     if showUpdaterReleaseNotes is True:
+                        # Having a prompt to view the release notes is better given how long they can get.
+                        print("")
                         print(Fore.RED + Style.BRIGHT + "Would you like to see the release notes for this release?",
                               Fore.RED + Style.BRIGHT + "If so, enter 'yes' at the input below. Otherwise, press enter to continue.",
                               sep="\n")
