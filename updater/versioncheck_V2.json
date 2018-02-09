@@ -17,6 +17,7 @@
       "releasedate": "December 3, 2017",
       "nextversionreleasedate": "April 2018",
       "size": "137 KB",
+      "dirlesssize": "137 KB"
       "releasenotesurl": "https://github.com/o355/PyWeather/blob/master/updater/releasenotes_stable.txt",
       "md5sum": "db0187ca47b45e3ce3927be8ce744b6e",
       "sha1sum": "40bf6fa394bcab18acd99fd6e253427ddb2686ef",
@@ -39,7 +40,8 @@
       "extractdirectory": "pyweather-0.6.4beta-RC0",
       "releasedate": "January 31, 2018",
       "nextversionreleasedate": "March 2018",
-      "size": "148 KB",
+      "size": "144 KB",
+      "dirlesssize": "139 KB",
       "releasenotesurl": "https://github.com/o355/PyWeather/blob/master/updater/releasenotes_rc.txt",
       "md5sum": "bb92eab562d5e26ec6e086a6190f0184",
       "sha1sum": "88bd7e6bd0f02655cd2c6cece2e58a0a32c4919f",

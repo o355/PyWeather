@@ -1,9 +1,5 @@
 [Subscribe to the PyWeather Weekly Update, for all the latest in PyWeather news on a somewhat weekly basis!](https://owenthe.ninja/sign-pyweathers-weekly-newsletter/)
 
-## More PyWeather update news
-I'm back to coding! Feels great to be at home.
-
-So far, I'm back at full steam presently working on the Universal PyWeather Updater, along with all the other fun bug fixes and feature tweaks for 0.6.4 beta. At this time, I can't give an accurate ETA as to when PyWeather 0.6.4 beta will be released, but maybe expect some release candidates soon. 
 
 ## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
@@ -11,6 +7,13 @@ Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for
 PyWeather is the culmination of thousands of hours of work poured into a silly little project that got more advanced over time.
 
 I hope that you can enjoy PyWeather as much as I enjoy making PyWeather, so, let's get started!
+
+## PyWeather Update - 2/7/18 (because mailing lists are dumb)
+Here's a short PyWeather update as of 2/7.
+
+* The Universal PyWeather Updater is slowly but steadily making progress. I expect it to start working in late February.
+* PyWeather 0.6.4 beta will be released in late May 2018, with QA starting in late April 2018.
+* After the Universal PyWeather Updater is complete I'll evaluate what I have to do for 0.6.4 beta.
 
 ## Requirements
 To run PyWeather, you'll need:

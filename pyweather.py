@@ -4429,11 +4429,17 @@ while True:
                 updater_latestFileName = updaterJSON['branch'][updater_branch]['latestversion']
                 updater_latestReleaseTag = updaterJSON['branch'][updater_branch]['latestversiontag']
                 updater_latestReleaseDate = updaterJSON['branch'][updater_branch]['releasedate']
+                # Dirless is the default URL for the updater
+                updater_latestdirlessURL = updaterJSON['branch'][updater_branch]['latestdirlessurl']
+                # This is the URL for the .zip edition with a directory inside
                 updater_latestURL = updaterJSON['branch'][updater_branch]['latesturl']
                 updater_latestExtractDirectory = updaterJSON['branch'][updater_branch]['extractdirectory']
                 updater_latestMD5sum = updaterJSON['branch'][updater_branch]['md5sum']
+                updater_latestMD5dirlessSum = updaterJSON['branch'][updater_branch]['md5sum-dirless']
                 updater_latestSHA1sum = updaterJSON['branch'][updater_branch]['sha1sum']
+                updater_latestSHA1dirlessSum = updaterJSON['branch'][updater_branch]['sha1sum-dirless']
                 updater_latestSHA256sum = updaterJSON['branch'][updater_branch]['sha256sum']
+                updater_latestSHA256dirlessSum = updaterJSON['branch'][updater_branch]['sha256sum-dirless']
                 updater_nextversionReleaseDate = updaterJSON['branch'][updater_branch]['nextversionreleasedate']
                 logger.debug("updater_buildNumber: %s ; updater_latestVersion: %s" %
                              (updater_buildNumber, updater_latestVersion))
@@ -4441,11 +4447,24 @@ while True:
                              (updater_latestTag, updater_latestFileName))
                 logger.debug("updater_latestReleaseTag: %s ; updater_latestReleaseDate: %s" %
                              (updater_latestReleaseTag, updater_latestReleaseDate))
-                logger.debug("updater_latestURL: %s ; updater_latestExtractDirectory: %s" %
-                             (updater_latestURL, updater_latestExtractDirectory))
-                logger.debug("updater_latestMD5sum: %s ; updater_latestSHA1sum: %s" %
-                             (updater_latestMD5sum, updater_latestSHA1sum))
-                logger.debug("updater_latestSHA256sum: %s" % updater_latestSHA256sum)
+                logger.debug("updater_latestdirlessURL: %s ; updater_latestURL: %s" %
+                             (updater_latestdirlessURL, updater_latestURL))
+                logger.debug("updater_latestExtractDirectory: %s ; updater_latestMD5sum: %s" %
+                             (updater_latestExtractDirectory, updater_latestMD5sum))
+                logger.debug("updater_latestMD5dirlessSum: %s ; updater_latestSHA1sum: %s" %
+                             (updater_latestMD5dirlessSum, updater_latestSHA1sum))
+                logger.debug("updater_latestSHA1dirlessSum: %s ; updater_latestSHA256sum: %s" %
+                             (updater_latestSHA1dirlessSum, updater_latestSHA256sum))
+                logger.debug("updater_latestSHA256dirlessSum: %s ; updater_nextversionReleaseDate: %s" %
+                             (updater_latestSHA256dirlessSum, updater_nextversionReleaseDate))
+
+
+                if updater_branch == "rc":
+                    # Grab additional data about release state for RC branch users
+                    updater_RCreleaseflag = str(updater['branch'][updater_branch]['rcrelease'])
+                    updater_stablereleaseflag = str(updater['branch'][updater_branch]['stablerelease'])
+                    logger.debug("updater_RCreleaseflag: %s ; updater_stablereleaseflag: %s" %
+                                 (updater_RCreleaseflag, updater_stablereleaseflag))
 
                 spinner.stop()
                 if buildnumber >= updater_buildNumber:
@@ -4480,6 +4499,15 @@ while True:
                     print(Fore.RED + Style.BRIGHT + "Your copy of PyWeather isn't up to date! :(")
                     print(Fore.RED + Style.BRIGHT + "You have PyWeather version: " + Fore.CYAN + Style.BRIGHT + buildversion)
                     print(Fore.RED + Style.BRIGHT + "The latest PyWeather version is: " + Fore.CYAN + Style.BRIGHT + updater_latestVersion)
+                    if updater_branch == "rc":
+                        # If the updater branch is set to RC, display if this is a stable or RC release
+                        if updater_RCreleaseflag == "True":
+                            print(Fore.RED + Style.BRIGHT + "The latest version of PyWeather is a"
+                                  + Fore.CYAN + Style.BRIGHT + " Release Candidate"
+                                    + Fore.RED + Style.BRIGHT + " release.")
+                        elif updater_RCreleaseflag == "True":
+                            print(Fore.RED + Style.BRIGHT + "The latest version of PyWeather is a"
+                                  + Fore.CYAN + Style.BRIGHT + " Stable" + Fore.RED + Style.BRIGHT + " release.")
                     print(Fore.RED + Style.BRIGHT + "And it was released on: " + Fore.CYAN + Style.BRIGHT + updater_latestVersion)
                     if user_showUpdaterReleaseTag is True:
                         print(Fore.RED + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT + version_latestReleaseTag)
