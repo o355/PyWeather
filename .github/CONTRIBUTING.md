@@ -2,9 +2,7 @@
 
 **Warning: This document is undergoing renovation. Please excuse our apperance.**
 
-Hey, thanks for your interest in contributing to PyWeather. If you don't taking 2 minutes of your day to read this, you'll get the run-down on how things work.
-
-Oh, and quick side note, I'm (o355) am a GitHub novice. This is a learning experience for me, and this will adapt.
+Hey, thanks for your interest in contributing to PyWeather. If you don't mind taking a few minutes of your day to read this, you'll get the run-down on how things work.
 
 # A quick blurb about PyWeather & contributing
 PyWeather has been the result of thousands of hours of worked poured in by people who want to help PyWeather be the best it can be. I apprecipate every single person who reports an issue, makes a pull request, and in general helps PyWeather in any shape or form.
@@ -29,8 +27,11 @@ An easy, yet substantial way to contribute to PyWeather is in the form of bug re
 
 Just note, if at any time you are confused about if you should report an issue or not, just report the issue. I'd much rather have you report the issue and for me to fix a potential bug, versus not knowing about it.
 
-## Doing the to-do list
-It's really important to run down this list to save your time, and my time from unnecessary reports. This to-do list also includes steps to help your report be the best it can be.
+## Doing the to-do list in the issue template
+It's really important to run down this list to save your time, and my time from unnecessary reports. This to-do list also includes steps to help your report be the best it can be. In summary:
+* Don't report known issues (check the Wiki page)
+* Make sure your copy of PyWeather is up-to-date
+* Make sure PyWeather is set up correctly
 
 ## Reporting indev code
 Reporting indev code is ok, under certain circumstances. As mentioned in the issue template, you'll not want to report config errors. At every PyWeather QA, this is automatically tested about 30x on 6 platforms. However, if PyWeather is close to release, and you find a config bug, you'll want to report a config error.
@@ -68,22 +69,67 @@ If you also enable verbosity, please don't report non-critical errors. Most of t
 
 However, for random tracebacks, report these! As soon as your PyWeather randomly quits, report the traceback. This is easy if you launch PyWeather in a terminal, but tricky if you double-click PyWeather. 
 
-If you end up double-clicking to launch PyWeather, you'll want to immediately run PyWeather in a terminal (OS X - Launch `Terminal`, `cd pyweather` (or whereever PyWeather is, starts in home folder), `python3 pyweather.py`; Windows - File manager, go into PyWeather's folder, File, Open in Command Prompt (Windows 10 1703 and newer PowerShell), `python pyweather.py`; Linux - You know what to do), do exactly what you did, and get the traceback, and report the issue.
+If you end up double-clicking to launch PyWeather, you'll want to immediately run PyWeather in a terminal and attempt to get the traceback. Here's how you can do it on certain platforms:
+* OS X - Launch `Terminal`. Type in `~/pyweatherdirectory/`, where `pyweatherdirectory` is. Then type in `python3 pyweather.py`.
+* Windows - Launch explorer and go into the folder in which PyWeather is stored. Click file in the top left, Open in Command Prompt (If you have Windows 10 1703 or newer it's PowerShell), and then type in `python pyweather.py`
+* Linux - You know what to do
+
+Do exactly what you did to produce the traceback and put it in your issue. You'll want to make sure you save this traceback as you'll need it later.
 
 ## System Information
 In a report, you'll want what OS you're on, and the Python version you have.
 
 To get the version you have, remember what version is installed on your box, or enter `python3` (sometimes `python` for python 3) into a terminal, and put down the Python version you have. Examples:
 
-`Python 3` - Doesn't help. PyWeather runs on Python 3.
-`Python 3.6` - Good, but having a specific version is better.
-`Python 3.6.3` - Great! That's what I need.
+* `Python 3` - Doesn't help. PyWeather runs on Python 3.
+* `Python 3.6` - Good, but having a specific version is better.
+* `Python 3.6.3` - Great! That's what I need.
 
-Please note: If you're running Python 3.6, and just 3.6 (not 3.6.x), please report your Python version as `3.6.0`.
+Please note: If you're running a Python version that ends in `.0`, please report your Python version as `3.x.0`.
+
+For system information, make sure you give me what you're computer is running on. Examples:
+
+* `my computer` - It really doesn't help
+* `Windows` or `OS X` - Basic information, but it can be better.
+* `Windows 10` or `Ubuntu 16.04` - Good. This type of info can be enough in 99% of cases
+* `Ubuntu 16.04.4 LTS with kernel (version)` or `Windows 10 1709` - Plenty of system information!
+
+Also listing your hardware information (device type & CPU are the most helpful) can help with device-specific bugs.
+
+## A description
+Having a description is quite useful for an issue. A good description generally checks off these boxes:
+* Describes the issue with a good amount of detail
+* Describes the steps (in a detailed way) to produce the bug
+* A full traceback
+* Describes the location where it happened, what time it happened, etc.
+
+### Your privacy when reporting issues
+As a general rule of thumb, when reporting location-based bugs you should **never** put an exact address in the issue. Always attempt to generalize the location.
+
+Generalization generally means taking this information: `123 5th Avenue, New York, NY`, and shortening it down to `New York, NY`.
+
+If the issue you're reporting only occurs at a specific address, please send the report over reddit mail. For confidentiality, after 48 hours from first seeing an issue of this type, I'll delete the message from my reddit inbox. I'll send back a screenshot of my reddit inbox without the message once those 48 hours are up.
+
+To iterate on what I said about an optimal description above, here's an example issue report. In this example, I'm having an issue with PyWeather crashing on boot when entering in a location.
+
+```
+When I launch PyWeather and enter in the location "New York, NY", PyWeather crashes after a few seconds. This only occurs at 12:00am, but it occurs every night. To reproduce this step, at 12:00am every night, enter in "New York, NY", and PyWeather crashes.
+
+This is the traceback that occurs when this happens:
+Traceback (most recent call last):
+  File "<pyweather.py">, line 2000, in <module>
+KeyError: whatever the error message for a non-existant key is
+
+I have a Windows 10 machine running Python 3.6.3. As stated above this issue only happens at 12:00am every night when entering in "New York, NY"
+```
+
+The description above has detail for what happens, detail for reproducing the bug, a traceback, and system information, along with detailed information about when and where it happens.
+
+I generally only care about the traceback, but the extra detail can sometimes help with some tricky bugs. 
+
 
 # Enhancements
-
-# Enhancement suggestions
+At this time, PyWeather is not accepting any enhancement requests so that we can refine the already existing features. However, if you really feel as if your enhancement idea is useful, make an issue or PM me on reddit.
 
 # Pull requests
 **PR = Pull request**
@@ -160,18 +206,20 @@ You can set up Git in a command line by using this guide: https://help.github.co
 ## Forking PyWeather
 Forking PyWeather is easy, press the big fork button. It's forked, hurray!
 
+(more down here)
 
-## QA
-At this time, contributing to PyWeather QA is not figured out.
 
-## Wiki
+# QA
+Helping out with PyWeather QA is easy. Once I write how to do it in a few months, of course.
 
-## Translating
-At this time, translating PyWeather and the logistics of such has not been figured out.
+# Wiki
 
-You are welcome to fork PyWeather and create a translated version of PyWeather for your language.
+# Translating
+At this time, PyWeather is an English-only project. I considered the logistics of attempting to translate PyWeather, but it would end up being extremely hard, and to do it effectively it would require basically a refactor.
 
-## Contributing Rewards/Acknowledgements
+You are welcome to fork PyWeather and create a translated version of PyWeather for your language, and I'll happily advertise it in the readme as long as you keep it updated.
+
+# Contributing Rewards/Acknowledgements
 In return for contributing to PyWeather, I'll acknowledge how much of a cool person you are through acknowledgements and contributing levels. The levels are as follows:
 
 * Contributor: You've reported at least 1 issue that required code changes, and/or made 1 pull request.
