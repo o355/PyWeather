@@ -30,7 +30,12 @@ _______
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 # This line of code was typed in during the solar eclipse, in Eclipse.
+
+# (the august 2017 eclipse). Commit ID: b4c9b74731fa5ca32cd7c52eb6240f594d742750
+
+
 #
 # ==============
 # This is beta code. It's not pretty, and I'm not following PEP 8
@@ -4426,7 +4431,8 @@ while True:
                 updater_buildNumber = float(updaterJSON['branch'][updater_branch]['latestbuild'])
                 updater_latestVersion = updaterJSON['branch'][updater_branch]['latestversion']
                 updater_latestTag = updaterJSON['branch'][updater_branch]['latestversiontag']
-                updater_latestFileName = updaterJSON['branch'][updater_branch]['latestversion']
+                updater_latestFileName = updaterJSON['branch'][updater_branch]['latestfilename']
+                updater_latestDirlessFileName = updaterJSON['branch'][updater_branch]['latestdirlessfilename']
                 updater_latestReleaseTag = updaterJSON['branch'][updater_branch]['latestversiontag']
                 updater_latestReleaseDate = updaterJSON['branch'][updater_branch]['releasedate']
                 # Dirless is the default URL for the updater
@@ -4441,6 +4447,8 @@ while True:
                 updater_latestSHA256sum = updaterJSON['branch'][updater_branch]['sha256sum']
                 updater_latestSHA256dirlessSum = updaterJSON['branch'][updater_branch]['sha256sum-dirless']
                 updater_nextversionReleaseDate = updaterJSON['branch'][updater_branch]['nextversionreleasedate']
+                updater_latestFileSize = updaterJSON['branch'][updater_branch]['size']
+                updater_latestDirlessFileSize = updaterJSON['branch'][updater_branch]['dirlesssize']
                 logger.debug("updater_buildNumber: %s ; updater_latestVersion: %s" %
                              (updater_buildNumber, updater_latestVersion))
                 logger.debug("updater_latestTag: %s ; updater_latestFileName: %s" %
@@ -4457,6 +4465,9 @@ while True:
                              (updater_latestSHA1dirlessSum, updater_latestSHA256sum))
                 logger.debug("updater_latestSHA256dirlessSum: %s ; updater_nextversionReleaseDate: %s" %
                              (updater_latestSHA256dirlessSum, updater_nextversionReleaseDate))
+                logger.debug("updater_latestFileSize: %s ; updater_latestDirlessFileSize: %s" %
+                             (updater_latestFileSize, updater_latestDirlessFileSize))
+                logger.debug("updater_latestdirlessFileName: %s" % updater_latestDirlessFileName)
 
 
                 if updater_branch == "rc":
@@ -4468,17 +4479,21 @@ while True:
 
                 spinner.stop()
                 if buildnumber >= updater_buildNumber:
+                    # If we're up to date, enter this dialogue.
                     logger.info("PyWeather is up to date. Local build (%s) >= latest build (%s)." %
                                 (buildnumber, updater_buildNumber))
                     print("")
                     print(Fore.GREEN + Style.BRIGHT + "Your copy of PyWeather is up to date! :)")
                     print(Fore.GREEN + Style.BRIGHT + "You have PyWeather version: " + Fore.CYAN + Style.BRIGHT + buildversion)
                     print(Fore.GREEN + Style.BRIGHT + "The latest PyWeather version is: " + Fore.CYAN + Style.BRIGHT + updater_latestVersion)
+                    # User-defined options to show data.
                     if user_showUpdaterReleaseTag is True:
                         print(Fore.GREEN + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT + updater_latestReleaseTag)
                     if showNewVersionReleaseDate is True:
                         print(Fore.GREEN + Style.BRIGHT + "A new version of PyWeather should come out in: " + Fore.CYAN + Style.BRIGHT + updater_nextversionReleaseDate)
                     if showUpdaterReleaseNotes_uptodate is True:
+                        # Release notes get long, so ask to print the release notes if up to date.
+                        print("")
                         print(Fore.GREEN + Style.BRIGHT + "Would you like to see the release notes for this release?",
                               Fore.GREEN + Style.BRIGHT + "If so, enter 'yes' at the input below. Otherwise, press enter to continue.", sep="\n")
                         updater_showReleaseNotesInput = input("Input here: ").lower()
@@ -4504,14 +4519,16 @@ while True:
                         # If the updater branch is set to RC, display if this is a stable or RC release
                         if updater_RCreleaseflag == "True":
                             print(Fore.RED + Style.BRIGHT + "The latest version of PyWeather is a"
-                                  + Fore.CYAN + Style.BRIGHT + " Release Candidate"
+                                  + Fore.CYAN + Style.BRIGHT + " RC"
                                     + Fore.RED + Style.BRIGHT + " release.")
                         elif updater_RCreleaseflag == "True":
                             print(Fore.RED + Style.BRIGHT + "The latest version of PyWeather is a"
                                   + Fore.CYAN + Style.BRIGHT + " Stable" + Fore.RED + Style.BRIGHT + " release.")
+                    # More user-defined things to show
                     print(Fore.RED + Style.BRIGHT + "And it was released on: " + Fore.CYAN + Style.BRIGHT + updater_latestReleaseDate)
                     if user_showUpdaterReleaseTag is True:
                         print(Fore.RED + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT + updater_latestReleaseTag)
+                    print(Fore.RED + Style.BRIGHT + "Update size: " + Fore.CYAN + Style.BRIGHT)
                     if showUpdaterReleaseNotes is True:
                         # Having a prompt to view the release notes is better given how long they can get.
                         print("")
@@ -4530,7 +4547,7 @@ while True:
                           Fore.YELLOW + Style.BRIGHT + "Yes, Oldyes or No.", sep="\n")
                     updater_confirmupdate_input = input("Input here: ").lower()
                     logger.debug("updater_confirmupdate_input: %s" % updater_confirmupdate_input)
-                    # Define what updater method we're going to use as we still allow .zip downloads.
+                    # Define what updater method we're going to use as we still allow .zip downloads. Convert the inputs to a method.
                     updater_updatemethod = "new"
                     if updater_confirmupdate_input == "yes":
                         print(Fore.YELLOW + Style.BRIGHT + "Now automatically updating PyWeather.")
@@ -4548,13 +4565,19 @@ while True:
                               Fore.YELLOW + Style.BRIGHT + "not updating PyWeather, and returning to the updater main menu.", sep="\n")
                         continue
 
+                #
+                #   ||
+                #   ||      PyWeather Universal Updater
+                #   \/      version 0.0.0 indev - for PyWeather 0.6.4 beta
+                #           (c) 2018, o355 under the GNU GPL v3.0 license
+                #  -----
+                #
 
-                # The actual updater
                 if updater_updatemethod == "new":
                     # Set a timeout of 20 seconds for when we download.
                     print(Fore.YELLOW + Style.BRIGHT + "Now updating PyWeather, this should only take a moment.")
                     try:
-                        updatepackage = requests.get(updater_latestURL, stream=True, timeout=20)
+                        updatepackage = requests.get(updater_latestdirlessURL, stream=True, timeout=20)
                     except requests.exceptions.ConnectionError:
                         print("")
                         print(Fore.RED + Style.BRIGHT + "When attempting to start the download of the update, an error",
@@ -4600,16 +4623,24 @@ while True:
                     print("Verifying update data...")
 
                     # Do the MD5 hash
-                    with open(updater_latestFileName, "rb") as f:
-                        # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
-                        for chunk in iter(lambda: f.read(4096), b""):
-                            hash_md5.update(chunk)
-                        # Get the MD5 hash
-                        updater_package_md5hash = hash_md5.hexdigest()
-                        logger.debug("updater_md5hash: %s" % updater_md5hash)
+                    try:
+                        with open(updater_latestDirlessFileName, "rb") as f:
+                            # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
+                            for chunk in iter(lambda: f.read(4096), b""):
+                                hash_md5.update(chunk)
+                            # Get the MD5 hash
+                            updater_package_md5hash = hash_md5.hexdigest()
+                            logger.debug("updater_md5hash: %s" % updater_md5hash)
+                    except:
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "Failed to load file to do a checksum verification.",
+                              Fore.RED + Style.BRIGHT + "Cannot continue as the file may be corrupt/non-existant.",
+                              Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        input()
+                        continue
 
                     # Verify the MD5 hash/sum/whatever you call it
-                    if updater_latestMD5sum != updater_package_md5hash:
+                    if updater_latestMD5dirlessSum != updater_package_md5hash:
                         logger.warning("MD5 VERIFICATION FAILED! Checksum mismatch.")
                         logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
                                      (updater_latestMD5sum, updater_package_md5hash))
@@ -4629,16 +4660,24 @@ while True:
 
 
                     # Do the SHA1 hash
-                    with open(updater_latestFileName, "rb") as f:
-                        # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
-                        for chunk in iter(lambda: f.read(4096), b""):
-                            hash_sha1.update(chunk)
-                        # Get the SHA1 hash
-                        updater_package_sha1hash = hash_sha1.hexdigest()
-                        logger.debug("updater_sha1hash: %s" % updater_sha1hash)
+                    try:
+                        with open(updater_latestDirlessFileName, "rb") as f:
+                            # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
+                            for chunk in iter(lambda: f.read(4096), b""):
+                                hash_sha1.update(chunk)
+                            # Get the SHA1 hash
+                            updater_package_sha1hash = hash_sha1.hexdigest()
+                            logger.debug("updater_sha1hash: %s" % updater_sha1hash)
+                    except:
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "Failed to load file to do a checksum verification.",
+                              Fore.RED + Style.BRIGHT + "Cannot continue as the file may be corrupt/non-existant.",
+                              Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        input()
+                        continue
 
                     # Verify the SHA1 hash/sum/whatever you call it
-                    if updater_latestSHA1sum != updater_package_sha1hash:
+                    if updater_latestSHA1dirlessSum != updater_package_sha1hash:
                         logger.warning("SHA1 VERIFICATION FAILED! Checksum mismatch.")
                         logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
                                      (updater_latestSHA1sum, updater_package_sha1hash))
@@ -4655,16 +4694,24 @@ while True:
                                      (updater_latestSHA1sum, updater_package_sha1hash))
 
                     # Do the SHA256 hash
-                    with open(updater_latestFileName, "rb") as f:
-                        # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
-                        for chunk in iter(lambda: f.read(4096), b""):
-                            hash_sha256.update(chunk)
-                        # Get the SHA256 hash
-                        updater_package_sha256hash = hash_sha256.hexdigest()
-                        logger.debug("updater_sha256hash: %s" % updater_sha256hash)
+                    try:
+                        with open(updater_latestDirlessFileName, "rb") as f:
+                            # I did not Ctrl+C & Ctrl+V this off of Stack Overflow, trust me
+                            for chunk in iter(lambda: f.read(4096), b""):
+                                hash_sha256.update(chunk)
+                            # Get the SHA256 hash
+                            updater_package_sha256hash = hash_sha256.hexdigest()
+                            logger.debug("updater_sha256hash: %s" % updater_sha256hash)
+                    except:
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "Failed to load file to do a checksum verification.",
+                              Fore.RED + Style.BRIGHT + "Cannot continue as the file may be corrupt/non-existant.",
+                              Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        input()
+                        continue
 
                     # Verify the SHA256 hash/sum/whatever you call it
-                    if updater_latestSHA256sum != updater_package_sha256hash:
+                    if updater_latestSHA256dirlessSum != updater_package_sha256hash:
                         logger.warning("SHA256 VERIFICATION FAILED! Checksum mismatch.")
                         logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
                                      (updater_latestSHA256sum, updater_package_sha256hash))
@@ -4681,6 +4728,33 @@ while True:
                                      (updater_latestSHA256sum, updater_package_sha256hash))
 
                     print("Update data verified. Extracting...")
+                    try:
+                        zf = zipfile.ZipFile(updater_latestDirlessFileName)
+                    except zipfile.BadZipFile:
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "Failed to load the updater .zip file, a bad zip file error occurred.",
+                              Fore.RED + Style.BRIGHT + "The updater package could be corrupt or has bad permissions.",
+                              Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        input()
+                        continue
+                    except:
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "An error occurred when loading the .zip file. The updater",
+                              Fore.RED + Style.BRIGHT + "could be corrupt, have bad permissions, or could have been deleted.",
+                              Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        input()
+                        continue
+
+                    try:
+                        for file in zf.namelist():
+                            zf.extract(file, "")
+                    except:
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "An error ocurred when extracting the contents of the updater .zip",
+                              Fore.RED + Style.BRIGHT + "file. The updater could be corrupt, have bad permissions, or could",
+                              Fore.RED + Style.BRIGHT + "have been deleted. Press enter to return to the updater main menu.", sep="\n")
+                        input()
+                        continue
 
 
 
