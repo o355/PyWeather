@@ -143,7 +143,7 @@ def installhalo():
     if haloinstall == "yes":
         print("Now installing halo using pip's built-in installer.")
         pip.main(['install', 'halo'])
-        print("Now checking for if pip was properly installed...")
+        print("Now checking for if halo was properly installed...")
         try:
             import halo
             print("Halo is now installed!")

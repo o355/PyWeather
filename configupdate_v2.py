@@ -162,7 +162,40 @@ def newlibinstaller(library):
         elif installclick_input == "no":
             print("To use the latest version of PyWeather, you'll need to install click in a command line.",
                   "The command to do this is `pip3 install click`, and it should work on most platforms.", "", sep="\n")
+            return
         else:
             print("Your input could not be understood. As a precaution the automatic install will not be carried out.",
                   "To use the latest version of PyWeather, you'll need to install click in a command line.",
                   "The command to do this is `pip3 install click`, and it should work on most platforms.", "", sep="\n")
+            return
+
+    # Now begin installing libraries
+    print("Now installing %s using pip's built-in installer." % installlibrary)
+    pip.main(['install', '%s' % installlibrary])
+    print("Now checking if %s was properly installed..." % installlibrary)
+
+    # Separate checks for separate libraries
+    if installlibrary == "halo":
+        try:
+            import halo
+            print("Halo has been successfully installed!")
+            return
+        except ImportError:
+            print("When attempting an automatic install, Halo failed to install properly.",
+                  "To use the latest version of PyWeather, you'll need to manually use a command line",
+                  "and manually install halo. The command to do this is `pip3 install halo` on most",
+                  "platforms. If an error occurred use a search engine to try and fix the error.", sep="\n")
+            # Instead of using "use Google" or "use Bing", make things vague so the user isn't potentially offended
+            # by their search engine selection
+            return
+    elif installlibrary == "click":
+        try:
+            import click
+            print("Click has been successfully installed!")
+            return
+        except ImportError:
+            print("When attempting an automatic install, Click failed to install properly.",
+                  "To use the latest version of PyWeather, you'll need to manually use a command line",
+                  "and manually install click. The command to do this is `pip3 install click` on most",
+                  "platforms. If an error occurred use a search engine to try and fix the error.", sep="\n")
+            return
