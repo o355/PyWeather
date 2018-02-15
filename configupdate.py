@@ -127,7 +127,7 @@ def installhalo():
     # Check if halo is installed.
     try:
         import halo
-        print("For PyWeather 0.6.3 beta nad above, a new library called 'halo' is required for PyWeather to operate.",
+        print("For PyWeather 0.6.3 beta and above, a new library called 'halo' is required for PyWeather to operate.",
               "This library controls the new loaders that are present in PyWeather. However, you already installed halo",
               "and there is no need to do an automatic install of halo.", sep="\n")
         return

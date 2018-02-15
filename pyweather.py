@@ -4636,6 +4636,7 @@ while True:
                         print(Fore.RED + Style.BRIGHT + "Failed to load file to do a checksum verification.",
                               Fore.RED + Style.BRIGHT + "Cannot continue as the file may be corrupt/non-existant.",
                               Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        printException()
                         input()
                         continue
 
@@ -4673,6 +4674,7 @@ while True:
                         print(Fore.RED + Style.BRIGHT + "Failed to load file to do a checksum verification.",
                               Fore.RED + Style.BRIGHT + "Cannot continue as the file may be corrupt/non-existant.",
                               Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        printException()
                         input()
                         continue
 
@@ -4707,6 +4709,7 @@ while True:
                         print(Fore.RED + Style.BRIGHT + "Failed to load file to do a checksum verification.",
                               Fore.RED + Style.BRIGHT + "Cannot continue as the file may be corrupt/non-existant.",
                               Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        printException()
                         input()
                         continue
 
@@ -4735,6 +4738,7 @@ while True:
                         print(Fore.RED + Style.BRIGHT + "Failed to load the updater .zip file, a bad zip file error occurred.",
                               Fore.RED + Style.BRIGHT + "The updater package could be corrupt or has bad permissions.",
                               Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        printException()
                         input()
                         continue
                     except:
@@ -4742,6 +4746,7 @@ while True:
                         print(Fore.RED + Style.BRIGHT + "An error occurred when loading the .zip file. The updater",
                               Fore.RED + Style.BRIGHT + "could be corrupt, have bad permissions, or could have been deleted.",
                               Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        printException()
                         input()
                         continue
 
@@ -4753,9 +4758,22 @@ while True:
                         print(Fore.RED + Style.BRIGHT + "An error ocurred when extracting the contents of the updater .zip",
                               Fore.RED + Style.BRIGHT + "file. The updater could be corrupt, have bad permissions, or could",
                               Fore.RED + Style.BRIGHT + "have been deleted. Press enter to return to the updater main menu.", sep="\n")
+                        printException()
                         input()
                         continue
 
+                    print("Update extracted. Launching configuration updater...")
+                    try:
+                        exec(open("configupdate.py").read())
+                    except:
+                        print(Fore.RED + Style.BRIGHT + "An error occurred when attempting to launch the configupdate.py",
+                              Fore.RED + Style.BRIGHT + "script to update your configuration file. The script may not exist,",
+                              Fore.RED + Style.BRIGHT + "or it might be corrupt. Press enter to return to the updater main menu.", sep="\n")
+                        printException()
+                        input()
+                        continue
+
+                    # Down here will be cleanup for the .zip
 
 
 
