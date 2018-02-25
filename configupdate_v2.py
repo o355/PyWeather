@@ -35,6 +35,10 @@ except:
     elif versioninfo2 == "3":
         print("Updating PyWeather using version identifier: 0.6.2 beta")
         versioninfo2 = "0.6.2 beta"
+    elif versioninfo2 == "4":
+        print("Updating PyWeather using version identifier: 0.6.3 beta")
+    elif versioninfo2 == "5":
+        print("Updating PyWeather using version identifier: 0.6.4 beta-RC0")
 
 # Define config loader
 config = configparser.ConfigParser()
@@ -199,3 +203,150 @@ def newlibinstaller(library):
                   "and manually install click. The command to do this is `pip3 install click` on most",
                   "platforms. If an error occurred use a search engine to try and fix the error.", sep="\n")
             return
+
+# Define build numbers for different versions of PyWeather. Later in time I'll switch to a dictionary and for loop
+# to cover this part of the code
+
+if versioninfo2 == "0.6 beta" or versioninfo2 == "0.6.0.1 beta":
+    buildnumber = 60
+elif versioninfo2 == "0.6.1 beta":
+    buildnumber = 61
+elif versioninfo2 == "0.6.2 beta":
+    buildnumber = 62
+elif versioninfo2 == "0.6.3 beta":
+    buildnumber = 63
+elif versioninfo2 == "0.6.4 beta":
+    buildnumber = 63.01
+
+# If we're up-to-date, stop the script
+if buildnumber == 63.01:
+    print("Your copy of PyWeather is up-to-date. Therefore, there is no need to run this script.",
+          "Press enter to exit.", sep="\n")
+    input()
+    sys.exit()
+
+# The first of the main loops. Make new sections in this loop.
+
+if buildnumber <= 62:
+    try:
+        config.add_section("GEOCODER API")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the geocoder API section.")
+
+    try:
+        config.add_section("FAVORITE LOCATIONS")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the favorite locations section. Does it exist?")
+
+    try:
+        config.add_section("FIRSTINPUT")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the firstinput section. Does it exist?")
+
+    try:
+        config.add_section("HURRICANE")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the hurricane section. Does it exist?")
+
+if buildnumber <= 61:
+    try:
+        config.add_section("PREFETCH")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the prefetch section. Does it exist?")
+
+if buildnumber <= 60:
+    try:
+        config.add_section("CACHE")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the cache section. Does it exist?")
+
+    try:
+        config.add_section("RADAR GUI")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the radar GUI section. Does it exist?")
+
+    try:
+        config.add_section("GEOCODER")
+    except configparser.DuplicateSectionError:
+        print("Failed to add the geocoder section. Does it exist?")
+
+# Second loop. Add new configuration options.
+
+
+if buildnumber <= 63:
+    config['FAVORITE LOCATIONS']['favloc1_data'] = "None"
+    config['FAVORITE LOCATIONS']['favloc2_data'] = "None"
+    config['FAVORITE LOCATIONS']['favloc3_data'] = "None"
+    config['FAVORITE LOCATIONS']['favloc4_data'] = "None"
+    config['FAVORITE LOCATIONS']['favloc5_data'] = "None"
+    config['FIRSTINPUT']['allow_airportqueries'] = "None"
+
+if buildnumber <= 62:
+    config['FIRSTINPUT']['geoipservice_enabled'] = 'False'
+    config['FIRSTINPUT']['allow_pwsqueries'] = 'True'
+    config['HURRICANE']['enablenearestcity'] = 'False'
+    config['HURRICANE']['enablenearestcity_forecast'] = 'False'
+    config['HURRICANE']['api_username'] = 'pyweather_proj'
+    config['HURRICANE']['nearestcitysize'] = 'medium'
+    config['FAVORITE LOCATIONS']['enabled'] = 'True'
+    config['FAVORITE LOCATIONS']['favloc1'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc2'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc3'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc4'] = 'None'
+    config['FAVORITE LOCATIONS']['favloc5'] = 'None'
+    config['GEOCODER API']['customkey_enabled'] = 'False'
+    config['GEOCODER API']['customkey'] = 'None'
+    config['SUMMARY']['showyesterdayonsummary'] = 'False'
+    config['PREFETCH']['yesterdaydata_atboot'] = 'False'
+    config['CACHE']['yesterday_cachedtime'] = '720'
+    config['UI']['extratools_enabled'] = 'False'
+
+if buildnumber <= 61:
+    config['CACHE']['tide_cachedtime'] = '480'
+    config['SUMMARY']['showtideonsummary'] = 'False'
+    config['CACHE']['threedayhourly_cachedtime'] = '60'
+    config['CACHE']['tendayhourly_cachedtime'] = '60'
+    config['PREFETCH']['10dayfetch_atboot'] = 'False'
+    config['PREFETCH']['hurricanedata_atboot'] = 'False'
+    config['CACHE']['hurricane_cachedtime'] = '180'
+
+if buildnumber <= 60:
+    config['CACHE']['alerts_cachedtime'] = '5'
+    config['CACHE']['current_cachedtime'] = '10'
+    config['CACHE']['threedayhourly_cachedtime'] = '60'
+    config['CACHE']['tendayhourly_cachedtime'] = '60'
+    config['CACHE']['forecast_cachedtime'] = '60'
+    config['CACHE']['almanac_cachedtime'] = '240'
+    config['CACHE']['sundata_cachedtime'] = '480'
+    config['RADAR GUI']['radar_imagesize'] = 'normal'
+    config['RADAR GUI']['bypassconfirmation'] = 'False'
+    config['CACHE']['enabled'] = 'True'
+
+
+# Print out new config changes, removals will come after this
+
+print("New configuration options have been added in the version of PyWeather you're upgrading to.")
+
+if buildnumber <= 63:
+    print("FAVORITE LOCATIONS/favloc1_data - Defaults to None",
+          "Sets extra data for favorite location 1.", sep="\n")
+    print("FAVORITE LOCATIONS/favloc2_data - Defaults to None",
+          "Sets extra data for favorite location 2.", sep="\n")
+    print("FAVORITE LOCATIONS/favloc3_data - Defaults to None",
+          "Sets extra data for favorite location 3.", sep="\n")
+    print("FAVORITE LOCATIONS/favloc4_data - Defaults to None",
+          "Sets extra data for favorite location 4.", sep="\n")
+    print("FAVORITE LOCATIONS/favloc5_data - Defaults to None",
+          "Sets extra data for favorite location 5.", sep="\n")
+    print("FIRSTINPUT/allow_airportqueries - Defaults to True",
+          "Sets if PyWeather will allow airport queries.", sep="\n")
+if buildnumber <= 62:
+    print("FIRSTINPUT/geoipservice_enabled - Defaults to False",
+          "Sets if the service for current location queries is enabled.", sep="\n")
+    print("FIRSTINPUT/allow_pwsqueries - Defaults to True",
+          "Sets if PyWeather will allow PWS queries.", sep="\n")
+    print("HURRICANE/enablenearestcity - Defaults to False",
+          "Sets if the nearest city feature for hurricanes is enabled.", sep="\n")
+    print("HURRICANE/enablenearestcity_forecast - Defaults to False",
+          "Sets if the nearest city feature for hurricane forecasts is enabled.", sep="\n")
+    print("HURRICANE/api_username - Defaults to 'pyweather_proj'")
