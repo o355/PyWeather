@@ -2,17 +2,14 @@
 **Note: The changelog being used for tracking PyWeather progress has been retiredish. Please check the projects tab of PyWeather for progress on the next versions of PyWeather.**
 
 ## version 0.6.4 beta - Should be released in early 2018:
-* Adds the ability to see the weather for airports - 90% done
-    * Everything else - Done!
-    * (somehow) adding: if a favloc is an airport but the data key is empty fill that data key! - 0% done
-    * Adding new config options - 0% done
-* Adding compatibility to favlocs for airport data - 80% done
-* Adding the ability to delete all favorite locations - Should be done...?
-* Adds the ability to see and call the weather for previously looked up locations - Should be done on 12/20
-* Adds the ability to see historical data for PWSes - Should be done on 12/28
-* Adds the ability to change your radar image size on the fly - Should be done on 1/13/18
-* Adds the brand new Universal PyWeather Updater, making it a ton easier to update to new versions of PyWeather - Should be done on 1/28/18
-* Improves the UI of the configuration updater. New configuration options are put on 2 lines of text. - Should be done on 2/1/18
+**NEW FETAURES/REMOVALS:**
+* Adds the ability to see the weather for airports - Done!
+* Adding compatibility to favlocs for airport data - Done!
+* Adds the ability to see and call the weather for previously looked up locations - TBD
+* Adds the ability to see historical data for PWSes - 0% done
+* Adds the ability to change your radar image size on the fly - 0% done
+* Adds the brand new Universal PyWeather Updater, making it a ton easier to update to new versions of PyWeather, and for allowing users to be on different updater branches - ~75% done
+* A complete refactor of configupdate.py, with better printing and new code for futureproofing. - Needs testing
 * Lowers the default iterations for data down to 4 to prevent scrolling. - Should be done on 2/3/18
 * Adds the ability for configsetup to run an automatic geocoder scheme - Should be done on 2/5/18
 * Improves the disabling of having a custom geocoder API key, even though the scheme is set to HTTP (custom geocoder keys only work with HTTPS). - Should be done on 2/9/18
@@ -20,6 +17,10 @@
 * Adds an attribution to Meteoalarm for EU-based alerts - Should be done on 2/15/18
 * Adds better exiting at multiple input prompts throughout PyWeather - Should be done on 2/17/18
 * Adding even faster access to different query types (fl:x for favorite locations, cl for current location, pl:x for previous location, ap: for airport, ps: for PWS) - Coming...soon?
+
+**BUG FIXES:**
+* Fixed a bug where forecast data and almanac data cache times were absolutely through the roof
+
 
 ## version 0.6.3 beta - Released on 12/3/2017:
 **NEW FEATURES/REMOVALS:**
