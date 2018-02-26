@@ -10,35 +10,10 @@ try:
     versioninfo = open("updater//versioninfo.txt")
     versioninfo2 = versioninfo.read()
     versioninfo.close()
+    manualversioncheck = True
 except:
+    manualversioncheck = True
     # Manual versioninfo check if the file couldn't be found
-    print("Your versioncheck file couldn't be found. Below, please enter a number",
-          "which corresponds to the version of PyWeather you're updating from.",
-          "[0] 0.5.2.1 beta and earlier",
-          "[1] 0.6 beta or 0.6.0.1 beta",
-          "[2] 0.6.1 beta or 0.6.1 beta-https",
-          "[3] 0.6.2 beta",
-          "[4] 0.6.3 beta",
-          "[4.01] 0.6.4 beta RC0", sep="\n")
-    versionselect = input("Input here: ").lower()
-    if versionselect == "0":
-        print("You'll need to completely reinstall PyWeather due to the way the new config system works.",
-              "Instructions are available on PyWeather's GitHub wiki.", sep="\n")
-        input()
-        sys.exit()
-    elif versionselect == "1":
-        print("Updating PyWeather using version identifier: 0.6 beta")
-        versioninfo2 = "0.6 beta"
-    elif versionselect == "2":
-        print("Updating PyWeather using version identifier: 0.6.1 beta")
-        versioninfo2 = "0.6.1 beta"
-    elif versioninfo2 == "3":
-        print("Updating PyWeather using version identifier: 0.6.2 beta")
-        versioninfo2 = "0.6.2 beta"
-    elif versioninfo2 == "4":
-        print("Updating PyWeather using version identifier: 0.6.3 beta")
-    elif versioninfo2 == "5":
-        print("Updating PyWeather using version identifier: 0.6.4 beta-RC0")
 
 # Define config loader
 config = configparser.ConfigParser()
@@ -217,6 +192,45 @@ elif versioninfo2 == "0.6.3 beta":
     buildnumber = 63
 elif versioninfo2 == "0.6.4 beta":
     buildnumber = 63.01
+else:
+    # If we have the versioninfo file but no matching data, launch the manual version check.
+    manualversioncheck = True
+
+if manualversioncheck is True:
+    print("Your versioncheck file couldn't be found. Below, please enter a number",
+          "which corresponds to the version of PyWeather you're updating from.",
+          "[0] 0.5.2.1 beta and earlier",
+          "[1] 0.6 beta or 0.6.0.1 beta",
+          "[2] 0.6.1 beta or 0.6.1 beta-https",
+          "[3] 0.6.2 beta",
+          "[4] 0.6.3 beta",
+          "[4.01] 0.6.4 beta RC0", sep="\n")
+    versionselect = input("Input here: ").lower()
+    if versionselect == "0":
+        print("You'll need to completely reinstall PyWeather due to the way the new config system works.",
+              "Instructions are available on PyWeather's GitHub wiki.", sep="\n")
+        input()
+        sys.exit()
+    elif versionselect == "1":
+        print("Updating PyWeather using version identifier: 0.6 beta")
+        versioninfo2 = "0.6 beta"
+        buildnumber = 60
+    elif versionselect == "2":
+        print("Updating PyWeather using version identifier: 0.6.1 beta")
+        versioninfo2 = "0.6.1 beta"
+        buildnumber = 61
+    elif versioninfo2 == "3":
+        print("Updating PyWeather using version identifier: 0.6.2 beta")
+        versioninfo2 = "0.6.2 beta"
+        buildnumber = 62
+    elif versioninfo2 == "4":
+        print("Updating PyWeather using version identifier: 0.6.3 beta")
+        versioninfo2 = "0.6.3 beta"
+        buildnumber = 63
+    elif versioninfo2 == "5":
+        print("Updating PyWeather using version identifier: 0.6.4 beta RC0")
+        versioninfo2 = "0.6.4 beta RC0"
+        buildnumber = 63.01
 
 # If we're up-to-date, stop the script
 if buildnumber == 63.01:
@@ -349,4 +363,136 @@ if buildnumber <= 62:
           "Sets if the nearest city feature for hurricanes is enabled.", sep="\n")
     print("HURRICANE/enablenearestcity_forecast - Defaults to False",
           "Sets if the nearest city feature for hurricane forecasts is enabled.", sep="\n")
-    print("HURRICANE/api_username - Defaults to 'pyweather_proj'")
+    print("HURRICANE/api_username - Defaults to 'pyweather_proj'",
+          "Sets the API username for the hurricane nearest city feature.", sep="\n")
+    print("HURRICANE/nearestcitysize - Defaults to 'medium'",
+          "Sets the threshold for a city to appear as a nearest city.", sep="\n")
+    print("FAVORITE LOCATIONS/favloc1 - Defaults to None",
+          "Sets the first favorite location.", sep="\n")
+    print("FAVORITE LOCATIONS/favloc2 - Defaults to None",
+          "Sets the second favorite location.", sep="\n")
+    print("FAVORITE LOCATIONS/favloc3 - Defaults to None",
+          "Sets the third favorite location.", sep="\n")
+    print("FAVORITE LOCATIONS/favloc4 - Defaults to None",
+          "Sets the fourth favorite location.", sep="\n")
+    print("FAVORITE LOCATIONS/favloc5 - Defaults to None",
+          "Sets the fifth favorite location.", sep="\n")
+    print("GEOCODER API/customkey_enabled - Defaults to False",
+          "Sets if a custom API key for the geocoder is enabled.", sep="\n")
+    print("GEOCODER API/customkey - Defaults to None",
+          "Sets the custom API key for the geocoder, if enabled.", sep="\n")
+    print("SUMMARY/showyesterdayonsummary - Defaults to False",
+          "Sets if yesterday's weather data is on the summary screen.", sep="\n")
+    print("PREFETCH/yesterdaydata_atboot - Defaults to False",
+          "Sets if yesterday's weather data should be prefetched at boot.", sep="\n")
+    print("CACHE/yesterday_cachedtime - Defaults to '720'",
+          "Sets the cache time for yesterday's weather data", sep="\n")
+    print("UI/extratools_enabled - Defaults to False",
+          "Sets if the extra tools functionality is enabled.", sep="\n")
+if buildnumber <= 61:
+    print("CACHE/tide_cachedtime - Defaults to '480'",
+          "Sets the cache time for tide data.", sep="\n")
+    print("SUMMARY/showtideonsummary - Defaults to False",
+          "Sets if tide data should be shown on the summary screen.", sep="\n")
+    print("CACHE/threedayhourly_cachedtime - Defaults to '60'",
+          "Sets the cache time for 1.5 day hourly data.", sep="\n")
+    print("CACHE/tendayhourly_cachedtime - Defaults to '60'",
+          "Sets the cache time for 10 day hourly data.", sep="\n")
+    print("CACHE/hurricane_cachedtime - Defaults to '180'",
+          "Sets the cache time for hurricane data.", sep="\n")
+    print("GEOCODER/scheme - Defaults to https",
+          "Sets the geocoder scheme (https or http).", sep="\n")
+    print("PREFETCH/10dayfetch_atboot - Defaults to False",
+          "Sets if 10-day hourly data is fetched at boot", sep="\n")
+    print("PREFETCH/hurricanedata_atboot - Defaults to False",
+          "Sets if hurricane data is prefetched at boot.", sep="\n")
+if buildnumber <= 60:
+    print("CACHE/alerts_cachedtime - Defaults to '5'",
+          "Sets the cache time for alert data", sep="\n")
+    print("CACHE/current_cachedtime - Defaults to '10'",
+          "Sets the cache time for current weather data", sep="\n")
+    print("CACHE/threedayhourly_cachedtime - Defaults to '60'",
+          "Sets the cache time for 1.5 day hourly data", sep="\n")
+    print("CACHE/tendayhourly_cachedtime - Defaults to '60'",
+          "Sets the cache time for 10 day hourly data", sep="\n")
+    print("CACHE/forecast_cachedtime - defaults to '60'",
+          "Sets the cache time for forecast data.", sep="\n")
+    print("CACHE/almanac_cachedtime - Defaults to '240'",
+          "Sets the cache time for almanac data.", sep="\n")
+    print("CACHE/sundata_cachedtime - Defaults to '480'",
+          "Sets the cache time for sunrise data.", sep="\n")
+    print("CACHE/enabled - Defaults to True",
+          "Sets if the cache system is enabled.", sep="\n")
+    print("RADAR GUI/radar_imagesize - Defaults to 'normal'",
+          "Sets the image size for radar images in the radar GUI.", sep="\n")
+    print("RADAR GUI/bypassconfirmation - Defaults to False",
+          "Sets if the radar experimental warning can be bypassed.", sep="\n")
+
+# Print out removed sections & config options
+
+print("Some configuration options and sections are no longer used in PyWeather.",
+      "While you don't have to delete these options & sections, it's best to delete",
+      "them for future compatibility reasons.", sep="\n")
+
+if buildnumber <= 62:
+    print("UPDATER/allowGitForUpdating - Removed",
+          "Used to set if the Git updater was enabled", sep="\n")
+if buildnumber <= 61:
+    print("CACHE/hourly_cachedtime - Removed",
+          "Used to set the global hourly cache time", sep="\n")
+    print("HOURLY/10dayhourly_atboot - Removed",
+          "Used to set if 10-day hourly data was prefetched at boot.", sep="\n")
+    print("HOURLY section - No longer in use.")
+    print("CHANGELOG section - No longer in use.")
+
+# Run functions for geopy detection, etc.
+
+print("")
+
+if buildnumber <= 63:
+    newlibinstaller(library="click")
+if buildnumber <= 62:
+    newlibinstaller(library="halo")
+    print("")
+    newlibinstaller(library="click")
+    print("")
+    geopycheck()
+    print("")
+
+# Finally, update the version info file & commit to the config file.
+try:
+    with open('storage//config.ini', 'w') as configfile:
+            config.write(configfile)
+    print("Configuration options committed successfully!")
+except:
+    print("Couldn't update your config file! A full error will be printed below.")
+    traceback.print_exc()
+    print("Please report this bug to GitHub (github.com/o355/pyweather), along with",
+          "the full error. Along with that, please manually add the configuration entries",
+          "as listed above, with their default values in your configuration file.",
+          "Alternatively, delete your config file, and run configsetup.py",
+          "Press enter to exit.")
+    input()
+    try:
+        open("updater//versioninfo.txt", 'w').close()
+        with open("updater//versioninfo.txt", 'a') as out:
+            out.write("0.6.4 beta RC0")
+            out.close()
+    except:
+        print("Could not write out an updated versioninfo text file. Please",
+              "modify 'updater/versioninfo.txt' to display '0.6.4 beta RC0'.", sep="\n")
+    sys.exit()
+try:
+    open("updater//versioninfo.txt", 'w').close()
+    with open("updater//versioninfo.txt", 'a') as out:
+        out.write("0.6.4 beta RC0")
+        out.close()
+except:
+    print("Could not write out an updated versioninfo text file. Please",
+          "modify 'updater/versioninfo.txt' to display '0.6.4 beta RC0'.", sep="\n")
+
+print("")
+print("Ta-da! PyWeather is all up-to-date. Enjoy the new features and bug fixes!",
+      "Press enter to exit.", sep="\n")
+input()
+sys.exit()
