@@ -4633,6 +4633,7 @@ while True:
                             logger.debug("updater_md5hash: %s" % updater_md5hash)
                     except:
                         print("")
+                        # If there is a hash mismatch, exit to the main menu. This is following what apt does with a hash mismatch (refuses to update)
                         print(Fore.RED + Style.BRIGHT + "Failed to load file to do a checksum verification.",
                               Fore.RED + Style.BRIGHT + "Cannot continue as the file may be corrupt/non-existant.",
                               Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
@@ -4773,7 +4774,29 @@ while True:
                         input()
                         continue
 
-                    # Down here will be cleanup for the .zip
+                    # Delete the updater .zip file
+                    print("If you would like to, the now unnecessary updater file can be automatically deleted for you.",
+                          "Would you like to have the updater file %s deleted for you? Yes or No." % updater_latestDirlessFileName, sep="\n")
+                    updater_deleteupdaterfile = input("Input here: ").lower()
+                    logger.debug("updater_deleteupdaterfile: %s" % updater_deleteupdaterfile)
+                    if updater_deleteupdaterfile == "yes":
+                        print("Now deleting the updater file.")
+                        try:
+                            os.remove(updater_latestDirlessFileName)
+                        except:
+                            print("Failed to delete the updater file. The file could no longer exist, have bad permissions,",
+                                  "or be corrupt.", sep="\n")
+                    elif updater_deleteupdaterfile == "no":
+                        print("Not deleting the updater file.")
+                    else:
+                        print("Your input could not be understood. The updater file will not be deleted automatically.")
+
+                    # We're now done, exit PyWeather
+                    print("PyWeather is now up-to-date. To complete the updater process, PyWeather needs to be shut down.",
+                          "Please press enter to shut down PyWeather.", sep="\n")
+                    input()
+                    sys.exit()
+
 
 
 
@@ -4781,9 +4804,10 @@ while True:
                 else:
                     print("bad thing happened")
 
-                # Do the actual updating here, making sure we don't have an indentation nightmare.
 
 
+
+        # This is the old updater from here to the option 7 elif. It's only here for reference, and will get deleted later.
         spinner.start(text="Checking for updates...")
         try:
             versioncheck = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
