@@ -19,7 +19,18 @@
 * Adding even faster access to different query types (fl:x for favorite locations, cl for current location, pl:x for previous location, ap: for airport, ps: for PWS) - Coming...soon?
 
 **BUG FIXES:**
-* Fixed a bug where forecast data and almanac data cache times were absolutely through the roof
+* Fixed a semi-critical bug where forecast data and almanac data cache times didn't get multiplied by 60 when the config was loaded
+* Fixing a semi-critical bug where if PyWeather is launched from out of folder, a critical error occurs
+* Fixing a bug where even with appJar installed, Linux platforms need the python3-tk package to run the GUI (adding better catching for the exception)
+* Fixing a bug where when PyWeather is quitted on Linux after opening the radar GUI, a TypeError occurs
+* Fixing a bug where if current weather fails to refresh, PyWeather decides to display the weather data.
+* Fixing a bug where sometimes current conditions cannot get parsed, and as such PyWeather crashes.
+* Fixing a bug where the current dew point can be shown as -9999F (-9999C) and this invalid data doesn't get caught.
+* Fixing a bug where the current humidity can be shown as N/A& and this invalid data doesn't get caught.
+* Fixing a "bug" where PyWeather sometimes can't hit Google's geocoder, but after a relaunch it can (try 3x to get a location)
+* Fixing a bug where PyWeather does not detect duplicate hurricane data due to Wunderground's API being not so nice
+* Fixing a bug where if extra tools is disabled and the user goes into the input to enable it and enters no, extra tools will appear anyways.
+* 
 
 
 ## version 0.6.3 beta - Released on 12/3/2017:
