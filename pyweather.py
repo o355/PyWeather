@@ -4356,13 +4356,61 @@ while True:
 
 #<--- Exit PyWeather is above | Updater is below --->
     elif moreoptions == "14":
+        # Define the variable for if we had a corrupted updater package
+        # for auto-deletion
+        updater_corruptpackage = False
+        logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
 
         while True:
+            # If in a previous iteration we had a corrupted file, attempt to delete it here. The variables for the file name are already defined.
+
+            if updater_corruptpackage is True:
+                print("")
+                print(Fore.YELLOW + Style.BRIGHT + "The PyWeather Updater had to exit due to a corrupt updater package or a hash mismatch.",
+                      Fore.YELLOW + Style.BRIGHT + "If you'd like, I can try to delete the updater package, so when you update again more issues",
+                      Fore.YELLOW + Style.BRIGHT + "don't occur. Input yes or no to allow or deny the attempted deletion of the updater package.", sep="\n")
+                updater_deleteCorruptPackage = input("Input here: ").lower()
+                logger.debug("updater_deleteCorruptPackage: %s" % updater_deleteCorruptPackage)
+                if updater_deleteCorruptPackage == "yes":
+                    print("Attempting to delete the updater package.")
+                    # Define the filename variable depending on the updater method
+                    if updater_updatemethod == "new":
+                        updater_corruptfilename = updater_latestDirlessFileName
+                    elif updater_updatemethod == "old":
+                        updater_corruptfilename = updater_latestFileName
+
+                    logger.debug("updater_corruptfilename: %s" % updater_corruptfilename)
+
+                    try:
+                        os.remove(updater_corruptfilename)
+                    except os.error():
+                        print(Fore.YELLOW + Style.BRIGHT + "When attempting to delete the updater package, an error occurred. This could be due to bad permissions,",
+                              Fore.YELLOW + Style.BRIGHT + "a very corrupt file, or that the file has already been deleted or renamed.",
+                              Fore.YELLOW + Style.BRIGHT + "Press enter to return to the PyWeather Updater.", sep="\n")
+                        printException()
+                        input()
+                    except NameError:
+                        print(Fore.YELLOW + Style.BRIGHT + "When attempting to delete the updater package, an error occurred regarding missing variable data for the updater",
+                              Fore.YELLOW + Style.BRIGHT + "package name. Please attempt to delete the updater package yourself.",
+                              Fore.YELLOW + Style.BRIGHT + "Press enter to return to the PyWeather Updater.", sep="\n")
+                        printException()
+                        input()
+                    except:
+                        print(Fore.YELLOW + Style.BRIGHT + "An unknown error occurred when attempting to delete the updater package. Please try deleting the updater",
+                              Fore.YELLOW + Style.BRIGHT + "package yourself. Press enter to return to the PyWeather Updater.", sep="\n")
+                        printException()
+                        input()
+                elif updater_deleteCorruptPackage == "no":
+                    print(Fore.YELLOW + Style.BRIGHT + "Not deleting the updater package at this time. However, this may cause issues with updating PyWeather.")
+                else:
+                    print(Fore.YELLOW + Style.BRIGHT + "Your input could not be understood. Not deleting the updater package at this time. It's recommended you delete the",
+                          Fore.YELLOW + Style.BRIGHT + "file manually, as not doing such may cause issues with updating PyWeather.")
+
             # At the start of every loop we need to fetch the updater branch to allow on-the-fly changes
-            # spinner.start(text="Loading the PyWeather updater & branch config...")
-            # Troubleshooting the spinner (eventually)
+            spinner.start(text="Loading the PyWeather Updater...")
             try:
                 updater_branch = config.get('UPDATER', 'branch')
+                spinner.stop()
             except:
                 spinner.fail(text="Failed to load the updater! (a configuration error occurred)")
                 print("")
@@ -4543,7 +4591,7 @@ while True:
                             print(releasenotes.text)
 
                     print(Fore.YELLOW + Style.BRIGHT + "Would you like to update PyWeather automatically to the latest version?",
-                          Fore.YELLOW + Style.BRIGHT + "If you prefer using the old .zip download method, enter 'oldyes' at the input.",
+                          Fore.YELLOW + Style.BRIGHT + "If you prefer to use the old .zip download method, enter 'oldyes' at the input.",
                           Fore.YELLOW + Style.BRIGHT + "Yes, Oldyes or No.", sep="\n")
                     updater_confirmupdate_input = input("Input here: ").lower()
                     logger.debug("updater_confirmupdate_input: %s" % updater_confirmupdate_input)
@@ -4633,19 +4681,21 @@ while True:
                             logger.debug("updater_md5hash: %s" % updater_md5hash)
                     except:
                         print("")
-                        # If there is a hash mismatch, exit to the main menu. This is following what apt does with a hash mismatch (refuses to update)
+                        # If there is a failed file load, exit to the main menu.
                         print(Fore.RED + Style.BRIGHT + "Failed to load file to do a checksum verification.",
                               Fore.RED + Style.BRIGHT + "Cannot continue as the file may be corrupt/non-existant.",
                               Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
                         printException()
                         input()
+                        updater_corruptpackage = True
+                        logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
                         continue
 
                     # Verify the MD5 hash/sum/whatever you call it
                     if updater_latestMD5dirlessSum != updater_package_md5hash:
                         logger.warning("MD5 VERIFICATION FAILED! Checksum mismatch.")
                         logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
-                                     (updater_latestMD5sum, updater_package_md5hash))
+                                     (updater_latestMD5dirlesssum, updater_package_md5hash))
                         # While I would provide an option to continue even after a hash mismatch, I've devided not to.
                         # Hash mismatches can corrupt PyWeather, so I've modeled apt and how it won't update repos or install
                         # if a hash mismatch occurs.
@@ -4654,11 +4704,13 @@ while True:
                               Fore.RED + Style.BRIGHT + "Please try again at another time, or use a different connection.",
                               Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
                         input()
+                        updater_corruptpackage = True
+                        logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
                         continue
                     else:
                         logger.debug("MD5 sum verified.")
                         logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
-                                     (updater_latestMD5sum, updater_package_md5hash))
+                                     (updater_latestMD5dirlesssum, updater_package_md5hash))
 
 
                     # Do the SHA1 hash
@@ -4677,24 +4729,28 @@ while True:
                               Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
                         printException()
                         input()
+                        updater_corruptpackage = True
+                        logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
                         continue
 
                     # Verify the SHA1 hash/sum/whatever you call it
                     if updater_latestSHA1dirlessSum != updater_package_sha1hash:
                         logger.warning("SHA1 VERIFICATION FAILED! Checksum mismatch.")
                         logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
-                                     (updater_latestSHA1sum, updater_package_sha1hash))
+                                     (updater_latestSHA1dirlesssum, updater_package_sha1hash))
                         print("")
                         print(
                             Fore.RED + Style.BRIGHT + "Failed to verify the download data, a hash mismatch occurred.",
                             Fore.RED + Style.BRIGHT + "Please try again at another time, or use a different connection.",
                             Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
                         input()
+                        updater_corruptpackage = True
+                        logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
                         continue
                     else:
                         logger.debug("SHA1 sum verified.")
                         logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
-                                     (updater_latestSHA1sum, updater_package_sha1hash))
+                                     (updater_latestSHA1dirlesssum, updater_package_sha1hash))
 
                     # Do the SHA256 hash
                     try:
@@ -4712,24 +4768,27 @@ while True:
                               Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
                         printException()
                         input()
+                        updater_corruptpackage = True
+                        logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
                         continue
 
                     # Verify the SHA256 hash/sum/whatever you call it
                     if updater_latestSHA256dirlessSum != updater_package_sha256hash:
                         logger.warning("SHA256 VERIFICATION FAILED! Checksum mismatch.")
                         logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
-                                     (updater_latestSHA256sum, updater_package_sha256hash))
+                                     (updater_latestSHA256dirlesssum, updater_package_sha256hash))
                         print("")
-                        print(
-                            Fore.RED + Style.BRIGHT + "Failed to verify the download data, a hash mismatch occurred.",
+                        print(Fore.RED + Style.BRIGHT + "Failed to verify the download data, a hash mismatch occurred.",
                             Fore.RED + Style.BRIGHT + "Please try again at another time, or use a different connection.",
                             Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
                         input()
+                        updater_corruptpackage = True
+                        logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
                         continue
                     else:
                         logger.debug("SHA256 sum verified.")
                         logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
-                                     (updater_latestSHA256sum, updater_package_sha256hash))
+                                     (updater_latestSHA256dirlesssum, updater_package_sha256hash))
 
                     print("Update data verified. Extracting...")
                     try:
@@ -4741,6 +4800,8 @@ while True:
                               Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
                         printException()
                         input()
+                        updater_corruptpackage = True
+                        logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
                         continue
                     except:
                         print("")
@@ -4749,6 +4810,8 @@ while True:
                               Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
                         printException()
                         input()
+                        updater_corruptpackage = True
+                        logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
                         continue
 
                     try:
@@ -4761,6 +4824,8 @@ while True:
                               Fore.RED + Style.BRIGHT + "have been deleted. Press enter to return to the updater main menu.", sep="\n")
                         printException()
                         input()
+                        updater_corruptpackage = True
+                        logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
                         continue
 
                     print("Update extracted. Launching configuration updater...")
@@ -4772,34 +4837,157 @@ while True:
                               Fore.RED + Style.BRIGHT + "or it might be corrupt. Press enter to return to the updater main menu.", sep="\n")
                         printException()
                         input()
+                        # No corrupt updater package, here we only deal with the config updating script.
                         continue
 
                     # Delete the updater .zip file
-                    print("If you would like to, the now unnecessary updater file can be automatically deleted for you.",
-                          "Would you like to have the updater file %s deleted for you? Yes or No." % updater_latestDirlessFileName, sep="\n")
+                    print(Fore.YELLOW + Style.BRIGHT + "If you would like to, the now unnecessary updater file can be automatically deleted for you.",
+                          Fore.YELLOW + Style.BRIGHT + "Would you like to have the updater file %s deleted for you? Yes or No." % updater_latestDirlessFileName, sep="\n")
                     updater_deleteupdaterfile = input("Input here: ").lower()
                     logger.debug("updater_deleteupdaterfile: %s" % updater_deleteupdaterfile)
                     if updater_deleteupdaterfile == "yes":
-                        print("Now deleting the updater file.")
+                        print(Fore.YELLOW + Style.BRIGHT + "Now deleting the updater file.")
                         try:
                             os.remove(updater_latestDirlessFileName)
                         except:
-                            print("Failed to delete the updater file. The file could no longer exist, have bad permissions,",
-                                  "or be corrupt.", sep="\n")
+                            print(Fore.YELLOW + Style.BRIGHT + "Failed to delete the updater file. The file could no longer exist, have bad permissions,",
+                                  Fore.YELLOW + Style.BRIGHT + "or be corrupt.", sep="\n")
                     elif updater_deleteupdaterfile == "no":
-                        print("Not deleting the updater file.")
+                        print(Fore.YELLOW + Style.BRIGHT + "Not deleting the updater file.")
                     else:
-                        print("Your input could not be understood. The updater file will not be deleted automatically.")
+                        print(Fore.YELLOW + Style.BRIGHT + "Your input could not be understood. The updater file will not be deleted automatically.")
 
                     # We're now done, exit PyWeather
-                    print("PyWeather is now up-to-date. To complete the updater process, PyWeather needs to be shut down.",
-                          "Please press enter to shut down PyWeather.", sep="\n")
+                    print(Fore.YELLOW + Style.BRIGHT + "PyWeather is now up-to-date. To complete the updater process, PyWeather needs to be shut down.",
+                          Fore.YELLOW + Style.BRIGHT + "Please press enter to shut down PyWeather.", sep="\n")
                     input()
                     sys.exit()
 
+                elif updater_updatemethod == "old":
+                    # The old updater, but improved with hash matching and the new progress bar.
+                    print(Fore.YELLOW + Style.BRIGHT + "Downloading the latest version of PyWeather. This should only take a moment.")
+                    try:
+                        updatepackage = requests.get(updater_latestURL, stream=True, timeout=20)
+                    except requests.exceptions.ConnectionError:
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "When attempting to start the download of the update, an error",
+                              Fore.RED + Style.BRIGHT + "occurred. Make sure that you have an internet connection, and that",
+                              Fore.RED + Style.BRIGHT + "github.com is unblocked on your network. Press enter to return to the updater",
+                              Fore.RED + Style.BRIGHT + "main menu.", sep="\n")
+                        printException()
+                        input()
+                        continue
 
+                    # Get the total length of the file for the progress bar
+                    updater_package_totalLength = int(file.headers.get('content-length'))
+                    updater_package_totalLength = int(updater_package_totalLength / 1024)
+                    logger.debug("updater_package_totalLength: %s" % updater_package_totalLength)
 
+                    with click.progressbar(length=updater_package_totalLength, label='Downloading') as bar:
+                        with open(updater_latestFileName, 'wb'):
+                            try:
+                                for chunk in updatepackage.iter_content(chunk_size=1024):
+                                    bar.update(1)
+                                    if chunk:
+                                        # I am truly sorry for how indented this is.
+                                        f.write(chunk)
+                                        f.flush()
+                            except requests.exceptions.ConnectionError:
+                                print("")
+                                print(Fore.RED + Style.BRIGHT + "When downloading update data, an error occurred.",
+                                      Fore.RED + Style.BRIGHT + "Please make sure you have an internet connection, and that",
+                                      Fore.RED + Style.BRIGHT + "github.com is unblocked on your network. Press enter to return",
+                                      Fore.RED + Style.BRIGHT + "to the updater main menu.", sep="\n")
+                                printException()
+                                input()
+                                continue
 
+                    # Now we verify with md5, sha1, and sha256. For the old download method if a hash mismatch occurs
+                    # the user can skip (and optionally view the checksums), as it's their responsibility if a corruption
+                    # occurs.
+
+                    # Define the 3 hash types
+                    hash_md5 = hashlib.md5()
+                    hash_sha1 = hashlib.sha1()
+                    hash_sha256 = hashlib.sha256()
+
+                    print("Verifying update data...")
+
+                    # MD5 hash verification
+
+                    try:
+                        with open(updater_latestFileName, "rb") as f:
+                            for chunk in iter(lambda: f.read(4096), b""):
+                                hash_md5.update(chunk)
+                            # Get the MD5 hash
+                            updater_package_md5hash = hash_md5.hexdigest()
+                            logger.debug("updater_md5hash: %s" % updater_md5hash)
+                    except:
+                        print("")
+                        # If there is a failed file load, exit to the main menu regardless.
+                        print(Fore.RED + Style.BRIGHT + "Failed to load .zip to do a checksum verification.",
+                              Fore.RED + Style.BRIGHT + "Cannot continue as the .zip may be corrupt/non-existant.",
+                              Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        printException()
+                        input()
+                        updater_corruptpackage = True
+                        logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
+                        continue
+
+                    if updater_latestMD5sum != updater_package_md5hash:
+                        logger.warning("MD5 VERIFICATION FAILED! Checksum mismatch.")
+                        logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
+                                     (updater_latestMD5sum, updater_package_md5hash))
+                        # Ask the user if they'd like to continue updating. To view the checksums the user has
+                        # to include "view sums" in their input. Instead of exact input checking we do a find.
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "When attempting to verify the updater package, a hash mismatch occurred.",
+                              Fore.RED + Style.BRIGHT + "Despite this, would you like to continue to download the latest .zip file?",
+                              Fore.RED + Style.BRIGHT + "Yes or No. To view checksums, put 'view sums' to your input.")
+                        updater_zipMD5verify_input = input("Input here: ").lower()
+                        logger.debug("updater_zipMD5verify_input: %s" % updater_zipMD5verify_input)
+                        # See if we have a user selection before we enter into 'view sums'.
+                        if updater_zipMD5verify_input.find("yes") == 0 or updater_zipMD5verify_input.find("no") == 0:
+                            updater_zipMD5verify_selection = True
+                        else:
+                            updater_zipMD5verify_selection = False
+
+                        logger.debug("updater_zipMD5verify_selection: %s" % updater_zipMD5verify_selection)
+
+                        if updater_zipMD5verify_input.find("view sums") == 0:
+                            print("")
+                            print(Fore.YELLOW + Style.BRIGHT + "Here's the checksums for MD5 verification.")
+                            print(Fore.YELLOW + Style.BRIGHT + "Original checksum: " + updater_latestMD5sum)
+                            print(Fore.YELLOW + Style.BRIGHT + "Local checksum: " + updater_package_md5hash)
+                            print("")
+
+                            if updater_zipMD5verify_selection is False:
+                                # If the user didn't have a selection and only entered view sums
+                                print(Fore.YELLOW + Style.BRIGHT + "Would you like to continue downloading the latest .zip file?",
+                                      Fore.YELLOW + Style.BRIGHT + "Yes or No.", sep="\n")
+                                updater_zipMD5verify_input("Input here: ").lower()
+                                logger.debug("updater_zipMD5verify_input: %s" % updater_zipMD5verify_input)
+
+                        # In a separate if block, run the input checking.
+
+                        if updater_zipMD5verify_input.find("yes") == 0:
+                            print(Fore.YELLOW + Style.BRIGHT + "Continuing with the .zip download.")
+                        elif updater_zipMD5verify_input.find("yes") == 0:
+                            print(Fore.YELLOW + Style.BRIGHT + "Stopping the .zip download, and returning to the PyWeather Updater main menu.",
+                                  Fore.YELLOW + Style.BRIGHT + "Please consider deleting the corrupt .zip file, as not doing so may cause",
+                                  Fore.YELLOW + Style.BRIGHT + "additional issues to occur.", sep="\n")
+                            continue
+                        else:
+                            print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input. Stopping the .zip download, and returning to the",
+                                  Fore.YELLOW + Style.BRIGHT + "PyWeather Updater main menu. Please consider deleting the corrupt .zip file, as not doing",
+                                  Fore.YELLOW + Style.BRIGHT + "so may cause additional issues to occur.", sep="\n")
+                            continue
+
+                        
+                    else:
+                        logger.debug("MD5 sum verified.")
+                        logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
+                                     (updater_latestMD5sum, updater_package_md5hash))
 
                 else:
                     print("bad thing happened")
