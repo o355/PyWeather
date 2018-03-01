@@ -4678,7 +4678,7 @@ while True:
                                 hash_md5.update(chunk)
                             # Get the MD5 hash
                             updater_package_md5hash = hash_md5.hexdigest()
-                            logger.debug("updater_md5hash: %s" % updater_md5hash)
+                            logger.debug("updater_package_md5hash: %s" % updater_package_md5hash)
                     except:
                         print("")
                         # If there is a failed file load, exit to the main menu.
@@ -4721,7 +4721,7 @@ while True:
                                 hash_sha1.update(chunk)
                             # Get the SHA1 hash
                             updater_package_sha1hash = hash_sha1.hexdigest()
-                            logger.debug("updater_sha1hash: %s" % updater_sha1hash)
+                            logger.debug("updater_package_sha1hash: %s" % updater_package_sha1hash)
                     except:
                         print("")
                         print(Fore.RED + Style.BRIGHT + "Failed to load file to do a checksum verification.",
@@ -4760,7 +4760,7 @@ while True:
                                 hash_sha256.update(chunk)
                             # Get the SHA256 hash
                             updater_package_sha256hash = hash_sha256.hexdigest()
-                            logger.debug("updater_sha256hash: %s" % updater_sha256hash)
+                            logger.debug("updater_sha256hash: %s" % updater_package_sha256hash)
                     except:
                         print("")
                         print(Fore.RED + Style.BRIGHT + "Failed to load file to do a checksum verification.",
@@ -4921,7 +4921,7 @@ while True:
                                 hash_md5.update(chunk)
                             # Get the MD5 hash
                             updater_package_md5hash = hash_md5.hexdigest()
-                            logger.debug("updater_md5hash: %s" % updater_md5hash)
+                            logger.debug("updater_package_md5hash: %s" % updater_package_md5hash)
                     except:
                         print("")
                         # If there is a failed file load, exit to the main menu regardless.
@@ -4934,6 +4934,7 @@ while True:
                         logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
                         continue
 
+                        # I completely understand how absurdly long this input dialogue is. Oh well.
                     if updater_latestMD5sum != updater_package_md5hash:
                         logger.warning("MD5 VERIFICATION FAILED! Checksum mismatch.")
                         logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
@@ -4983,197 +4984,178 @@ while True:
                                   Fore.YELLOW + Style.BRIGHT + "so may cause additional issues to occur.", sep="\n")
                             continue
 
-                        
+
                     else:
                         logger.debug("MD5 sum verified.")
                         logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
                                      (updater_latestMD5sum, updater_package_md5hash))
 
-                else:
-                    print("bad thing happened")
+                    # Get SHA1 sum
 
+                    try:
+                        with open(updater_latestFileName, "rb") as f:
+                            for chunk in iter(lambda: f.read(4096), b""):
+                                hash_sha1.update(chunk)
+                            # Get the SHA1 hash
+                            updater_package_sha1hash = hash_sha1.hexdigest()
+                            logger.debug("updater_package_sha1hash: %s" % updater_package_sha1hash)
+                    except:
+                        print("")
+                        # If there is a failed file load, exit to the main menu regardless.
+                        print(Fore.RED + Style.BRIGHT + "Failed to load .zip to do a checksum verification.",
+                              Fore.RED + Style.BRIGHT + "Cannot continue as the .zip may be corrupt/non-existant.",
+                              Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        printException()
+                        input()
+                        updater_corruptpackage = True
+                        logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
+                        continue
 
+                    # Verify SHA1 sum
 
+                    if updater_latestSHA1sum != updater_package_SHA1hash:
+                        logger.warning("SHA1 VERIFICATION FAILED! Checksum mismatch.")
+                        logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
+                                     (updater_latestSHA1sum, updater_package_sha1hash))
+                        # Ask the user if they'd like to continue updating. To view the checksums the user has
+                        # to include "view sums" in their input. Instead of exact input checking we do a find.
+                        print("")
+                        print(Fore.RED + Style.BRIGHT + "When attempting to verify the updater package, a hash mismatch occurred.",
+                              Fore.RED + Style.BRIGHT + "Despite this, would you like to continue to download the latest .zip file?",
+                              Fore.RED + Style.BRIGHT + "Yes or No. To view checksums, put 'view sums' to your input.")
+                        updater_zipSHA1verify_input = input("Input here: ").lower()
+                        logger.debug("updater_zipSHA1verify_input: %s" % updater_zipSHA1verify_input)
+                        # See if we have a user selection before we enter into 'view sums'.
+                        if updater_zipSHA1verify_input.find("yes") == 0 or updater_zipSHA1verify_input.find("no") == 0:
+                            updater_zipSHA1verify_selection = True
+                        else:
+                            updater_zipSHA1verify_selection = False
 
-        # This is the old updater from here to the option 7 elif. It's only here for reference, and will get deleted later.
-        spinner.start(text="Checking for updates...")
-        try:
-            versioncheck = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck.json")
-            releasenotes = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/releasenotes.txt")
-            logger.debug("versioncheck: %s" % versioncheck)
-        except:
-            spinner.fail(text="Failed to check for updates!")
-            print("")
-            logger.warning("Couldn't check for updates! Is there an internet connection?")
-            print(Fore.YELLOW + Style.BRIGHT + "When attempting to fetch the update data file, PyWeather",
-                  Fore.YELLOW + Style.BRIGHT + "ran into an error. If you're on a network with a filter,",
-                  Fore.YELLOW + Style.BRIGHT + "make sure that 'raw.githubusercontent.com' is unblocked. Otherwise,",
-                  Fore.YELLOW + Style.BRIGHT + "make sure that you have an internet connecction.", sep="\n")
-            printException()
-            continue
-        versionJSON = json.loads(versioncheck.text)
-        if jsonVerbosity == True:
-            logger.debug("versionJSON: %s" % versionJSON)
-        else:
-            logger.debug("versionJSON loaded.")
-        version_buildNumber = float(versionJSON['updater']['latestbuild'])
-        version_latestVersion = versionJSON['updater']['latestversion']
-        version_latestURL = versionJSON['updater']['latesturl']
-        version_latestFileName = versionJSON['updater']['latestfilename']
-        version_latestReleaseTag = versionJSON['updater']['latestversiontag']
-        version_newversionreleasedate = versionJSON['updater']['nextversionreleasedate']
-        version_latestReleaseDate = versionJSON['updater']['releasedate']
-        logger.debug("version_buildNumber: %s ; version_latestVersion: %s" %
-                     (version_buildNumber, version_latestVersion))
-        logger.debug("version_latestURL: %s ; version_latestFileName: %s" %
-                     (version_latestURL, version_latestFileName))
-        logger.debug("version_latestReleaseTag: %s" %
-                     (version_latestReleaseTag))
-        logger.debug("version_newversionreleasedate: %s ; version_latestReleaseDate: %s" %
-                     (version_newversionreleasedate, version_latestReleaseDate))
-        spinner.stop()
-        if buildnumber >= version_buildNumber:
-            logger.info("PyWeather is up to date.")
-            logger.info("local build (%s) >= latest build (%s)"
-                        % (buildnumber, version_buildNumber))
-            print("")
-            print(Fore.GREEN + Style.BRIGHT + "Your PyWeather is up to date! :)")
-            print(Fore.GREEN + Style.BRIGHT + "You have version: " + Fore.CYAN + Style.BRIGHT + buildversion)
-            print(Fore.GREEN + Style.BRIGHT +"The latest version is: " + Fore.CYAN + Style.BRIGHT
-                  + version_latestVersion)
-            if user_showUpdaterReleaseTag == True:
-                print(Fore.GREEN + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT
-                      + version_latestReleaseTag)
-            if showNewVersionReleaseDate == True:
-                print(Fore.GREEN + Style.BRIGHT + "Psst, a new version of PyWeather should get released on: "
-                      + Fore.CYAN + Style.BRIGHT + version_newversionreleasedate)
-            if showUpdaterReleaseNotes_uptodate == True:
-                print(Fore.GREEN + Style.BRIGHT + "Here's the release notes for this release:",
-                      Fore.CYAN + Style.BRIGHT + releasenotes.text, sep="\n")
-        elif buildnumber < version_buildNumber:
-            print("")
-            logger.warn("PyWeather is NOT up to date.")
-            logger.warn("local build (%s) < latest build (%s)"
-                        % (buildnumber, version_buildNumber))
-            print(Fore.RED + Style.BRIGHT + "Your PyWeather is not up to date! :(")
-            print(Fore.RED + Style.BRIGHT + "You have version: " + Fore.CYAN + Style.BRIGHT + buildversion)
-            print(Fore.RED + Style.BRIGHT + "The latest version is: " + Fore.CYAN + Style.BRIGHT + version_latestVersion)
-            print(Fore.RED + Style.BRIGHT + "And it was released on: " + Fore.CYAN + Style.BRIGHT + version_latestReleaseDate)
-            if user_showUpdaterReleaseTag == True:
-                print(Fore.RED + Style.BRIGHT + "The latest release tag is: " + Fore.CYAN + Style.BRIGHT + version_latestReleaseTag)
-            if showUpdaterReleaseNotes == True:
-                print(Fore.RED + Style.BRIGHT + "Here's the release notes for the latest release:",
-                      Fore.CYAN + Style.BRIGHT + releasenotes.text, sep="\n")
-            print("")
-            print(Fore.RED + Style.BRIGHT + "Would you like to download the latest version?")
-            downloadLatest = input("Yes or No: ").lower()
-            logger.debug("downloadLatest: %s" % downloadLatest)
-            if downloadLatest == "yes":
-                # Remove the Git updater - It is no longer needed.
-                #if allowGitForUpdating == True:
-                #    print(Fore.YELLOW + Style.BRIGHT + "Would you like to use Git to update PyWeather?",
-                #          Fore.YELLOW + Style.BRIGHT + "Yes or No.")
-                #    confirmUpdateWithGit = input("Input here: ").lower()
-                #    if confirmUpdateWithGit == "yes":
-                #        print(Fore.YELLOW + Style.BRIGHT + "Now updating with Git.")
-                #        try:
-                #            subprocess.call(["git fetch"], shell=True)
-                #            subprocess.call(["git stash"], shell=True)
-                #            subprocess.call(["git checkout %s" % version_latestReleaseTag],
-                #                            shell=True)
-                #            print(Fore.YELLOW + Style.BRIGHT + "Now updating your config file.")
-                #            exec(open("configupdate.py").read())
-                #            print(Fore.YELLOW + Style.BRIGHT + "PyWeather has been successfully updated. To finish updating,",
-                #                  Fore.YELLOW + Style.BRIGHT + "please press enter to exit PyWeather.", sep="\n")
-                #            input()
-                #            sys.exit()
-                #        except:
-                #            print("When attempting to update using git, either",
-                #                  "when doing `git fetch`, `git checkout`, or to",
-                #                  "execute the configupdate script, an error occurred."
-                #                  "We can try updating using the .zip method.",
-                #                  "Would you like to update PyWeather using the .zip method?",
-                #                  "Yes or No.", sep="\n")
-                #            printException()
-                #            confirmZipDownload = input("Input here: ").lower()
-                #            if confirmZipDownload == "yes":
-                #                print("Downloading using the .zip method.")
-                #            elif confirmZipDownload == "no":
-                #               print("Not downloading latest updates using the",
-                #                     ".zip method.", sep="\n")
-                #                continue
-                #            else:
-                #                print("Couldn't understand your input. Defaulting",
-                #                      "to downloading using a .zip.", sep="\n")
-                #    # The unnecessary amounts of confirms was to boost the line count to 2,000.
-                #    elif confirmUpdateWithGit == "no":
-                #        print("Not updating with Git. Would you like to update",
-                #              "PyWeather using the .zip download option?",
-                #              "Yes or No.", sep="\n")
-                #        confirmZipDownload = input("Input here: ").lower()
-                #        if confirmZipDownload == "yes":
-                #            print("Downloading the latest update with a .zip.")
-                #        elif confirmZipDownload == "no":
-                #            print("Not downloading the latest PyWeather updates.")
-                #            continue
-                #        else:
-                #            print("Couldn't understand your input. Defaulting to",
-                #                  "downloading the latest version with a .zip.", sep="\n")
-                #    else:
-                #        print("Couldn't understand your input. Defaulting to",
-                #              "downloading the latest version with a .zip.", sep="\n")
-                print("")
-                logger.debug("Downloading latest version...")
-                # This will eventually get replaced with a real progress bar with size indicating and all that cool stuff.
-                spinner.start(text="Downloading the latest version of PyWeather...")
-                try:
-                    updatezip = requests.get(version_latestURL)
-                    with open(version_latestFileName, 'wb') as fw:
-                        for chunk in updatezip.iter_content(chunk_size=128):
-                            fw.write(chunk)
-                        fw.close()
-                except:
-                    spinner.fail("Failed to download the latest version of PyWeather!")
-                    print("")
-                    logger.warning("Couldn't download the latest version!")
-                    logger.warning("Is the internet online?")
-                    print(Fore.RED + Style.BRIGHT + "When attempting to download the latest .zip file",
-                          Fore.RED + Style.BRIGHT + "for PyWeather, an error occurred. If you're on a",
-                          Fore.RED + Style.BRIGHT + "network with a filter, make sure that",
-                          Fore.RED + Style.BRIGHT + "'raw.githubusercontent.com' is unblocked.",
-                          Fore.RED + Style.BRIGHT + "Otherwise, make sure you have an internet connection.",
-                          sep="\n")
-                    logger.error("Here's the full traceback (for bug reports):")
-                    printException()
+                        logger.debug("updater_zipSHA1verify_selection: %s" % updater_zipSHA1verify_selection)
+
+                        if updater_zipSHA1verify_input.find("view sums") == 0:
+                            print("")
+                            print(Fore.YELLOW + Style.BRIGHT + "Here's the checksums for SHA1 verification.")
+                            print(Fore.YELLOW + Style.BRIGHT + "Original checksum: " + updater_latestSHA1sum)
+                            print(Fore.YELLOW + Style.BRIGHT + "Local checksum: " + updater_package_sha1hash)
+                            print("")
+
+                            if updater_zipSHA1verify_selection is False:
+                                # If the user didn't have a selection and only entered view sums
+                                print(Fore.YELLOW + Style.BRIGHT + "Would you like to continue downloading the latest .zip file?",
+                                      Fore.YELLOW + Style.BRIGHT + "Yes or No.", sep="\n")
+                                updater_zipSHA1verify_input("Input here: ").lower()
+                                logger.debug("updater_zipSHA1verify_input: %s" % updater_zipSHA1verify_input)
+
+                        # In a separate if block, run the input checking.
+
+                        if updater_zipSHA1verify_input.find("yes") == 0:
+                            print(Fore.YELLOW + Style.BRIGHT + "Continuing with the .zip download.")
+                        elif updater_zipSHA1verify_input.find("yes") == 0:
+                            print(Fore.YELLOW + Style.BRIGHT + "Stopping the .zip download, and returning to the PyWeather Updater main menu.",
+                                  Fore.YELLOW + Style.BRIGHT + "Please consider deleting the corrupt .zip file, as not doing so may cause",
+                                  Fore.YELLOW + Style.BRIGHT + "additional issues to occur.", sep="\n")
+                            continue
+                        else:
+                            print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input. Stopping the .zip download, and returning to the",
+                                  Fore.YELLOW + Style.BRIGHT + "PyWeather Updater main menu. Please consider deleting the corrupt .zip file, as not doing",
+                                  Fore.YELLOW + Style.BRIGHT + "so may cause additional issues to occur.", sep="\n")
+                            continue
+                    else:
+                        logger.debug("SHA1 sum verified.")
+                        logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
+                                     (updater_latestSHA1sum, updater_package_sha1hash))
+
+                    # Get SHA256 sum
+
+                    try:
+                        with open(updater_latestFileName, "rb") as f:
+                            for chunk in iter(lambda: f.read(4096), b""):
+                                hash_sha256.update(chunk)
+                            # Get the SHA256 hash
+                            updater_package_sha256hash = hash_sha256.hexdigest()
+                            logger.debug("updater_package_sha256hash: %s" % updater_package_sha256hash)
+                    except:
+                        print("")
+                        # If there is a failed file load, exit to the main menu regardless.
+                        print(Fore.RED + Style.BRIGHT + "Failed to load .zip to do a checksum verification.",
+                              Fore.RED + Style.BRIGHT + "Cannot continue as the .zip may be corrupt/non-existant.",
+                              Fore.RED + Style.BRIGHT + "Press enter to return to the updater main menu.", sep="\n")
+                        printException()
+                        input()
+                        updater_corruptpackage = True
+                        logger.debug("updater_corruptpackage: %s" % updater_corruptpackage)
+                        continue
+
+                    # Verify SHA256 sum
+
+                    if updater_latestSHA256sum != updater_package_SHA256hash:
+                        logger.warning("SHA256 VERIFICATION FAILED! Checksum mismatch.")
+                        logger.debug("Expected sum (%s) was not sum of the download data (%s)" %
+                                     (updater_latestSHA256sum, updater_package_sha256hash))
+                        # Ask the user if they'd like to continue updating. To view the checksums the user has
+                        # to include "view sums" in their input. Instead of exact input checking we do a find.
+                        print("")
+                        print(
+                            Fore.RED + Style.BRIGHT + "When attempting to verify the updater package, a hash mismatch occurred.",
+                            Fore.RED + Style.BRIGHT + "Despite this, would you like to continue to download the latest .zip file?",
+                            Fore.RED + Style.BRIGHT + "Yes or No. To view checksums, put 'view sums' to your input.")
+                        updater_zipSHA256verify_input = input("Input here: ").lower()
+                        logger.debug("updater_zipSHA1verify_input: %s" % updater_zipSHA256verify_input)
+                        # See if we have a user selection before we enter into 'view sums'.
+                        if updater_zipSHA256verify_input.find("yes") == 0 or updater_zipSHA256verify_input.find("no") == 0:
+                            updater_zipSHA256verify_selection = True
+                        else:
+                            updater_zipSHA256verify_selection = False
+
+                        logger.debug("updater_zipSHA256verify_selection: %s" % updater_zipSHA256verify_selection)
+
+                        if updater_zipSHA256verify_input.find("view sums") == 0:
+                            print("")
+                            print(Fore.YELLOW + Style.BRIGHT + "Here's the checksums for SHA256 verification.")
+                            print(Fore.YELLOW + Style.BRIGHT + "Original checksum: " + updater_latestSHA256sum)
+                            print(Fore.YELLOW + Style.BRIGHT + "Local checksum: " + updater_package_sha256hash)
+                            print("")
+
+                            if updater_zipSHA256verify_selection is False:
+                                # If the user didn't have a selection and only entered view sums
+                                print(Fore.YELLOW + Style.BRIGHT + "Would you like to continue downloading the latest .zip file?",
+                                      Fore.YELLOW + Style.BRIGHT + "Yes or No.", sep="\n")
+                                updater_zipSHA256verify_input("Input here: ").lower()
+                                logger.debug("updater_zipSHA256verify_input: %s" % updater_zipSHA256verify_input)
+
+                        # In a separate if block, run the input checking.
+
+                        if updater_zipSHA256verify_input.find("yes") == 0:
+                            print(Fore.YELLOW + Style.BRIGHT + "Continuing with the .zip download.")
+                        elif updater_zipSHA256verify_input.find("yes") == 0:
+                            print(
+                                Fore.YELLOW + Style.BRIGHT + "Stopping the .zip download, and returning to the PyWeather Updater main menu.",
+                                Fore.YELLOW + Style.BRIGHT + "Please consider deleting the corrupt .zip file, as not doing so may cause",
+                                Fore.YELLOW + Style.BRIGHT + "additional issues to occur.", sep="\n")
+                            continue
+                        else:
+                            print(
+                                Fore.YELLOW + Style.BRIGHT + "Could not understand your input. Stopping the .zip download, and returning to the",
+                                Fore.YELLOW + Style.BRIGHT + "PyWeather Updater main menu. Please consider deleting the corrupt .zip file, as not doing",
+                                Fore.YELLOW + Style.BRIGHT + "so may cause additional issues to occur.", sep="\n")
+                            continue
+                    else:
+                        logger.debug("SHA256 sum verified.")
+                        logger.debug("Expected sum (%s) was the sum of the download data (%s)" %
+                                     (updater_latestSHA256sum, updater_package_sha256hash))
+
+                    print(Fore.YELLOW + Style.BRIGHT + "The latest version of PyWeather has been downloaded to the base directory of PyWeather,",
+                          Fore.YELLOW + Style.BRIGHT + "and has been saved as: " + Fore.CYAN + Style.BRIGHT + updater_latestFileName +
+                          Fore.YELLOW + Style.BRIGHT + ".", Fore.YELLOW + Style.BRIGHT + "Returning to the updater main menu.", sep="\n")
                     continue
-                logger.debug("Latest version was saved, filename: %s"
-                            % version_latestFileName)
-                spinner.stop()
-                print(Fore.YELLOW + Style.BRIGHT + "The latest version of PyWeather was downloaded " +
-                      "to the base directory of PyWeather, and saved as " +
-                      Fore.CYAN + Style.BRIGHT + version_latestFileName + Fore.YELLOW + ".")
-                continue
-            elif downloadLatest == "no":
-                logger.debug("Not downloading the latest version.")
-                print(Fore.YELLOW + Style.BRIGHT + "Not downloading the latest version of PyWeather.")
-                print(Fore.YELLOW + Style.BRIGHT + "For reference, you can download the latest version of PyWeather at:")
-                print(Fore.CYAN + Style.BRIGHT + version_latestURL)
-                continue
-            else:
-                logger.warn("Input could not be understood!")
-                print(Fore.RED + Style.BRIGHT + "Your input couldn't be understood.")
-                continue
-        else:
-            spinner.fail("Failed to check for updates!")
-            print("")
-            logger.warning("PW updater failed. Variables corrupt, maybe?")
-            print(Fore.YELLOW + Style.BRIGHT + "When attempting to compare version variables, PyWeather ran",
-                  Fore.YELLOW + Style.BRIGHT + "into an error. This error is extremely rare. Make sure you're",
-                  Fore.YELLOW + Style.BRIGHT + "not trying to travel through a wormhole with Cooper, and report",
-                  Fore.YELLOW + Style.BRIGHT + "the error on GitHub, while it's around. Make sure to turn on verbosity and report",
-                  Fore.YELLOW + Style.BRIGHT + "variable data after selecting the updater option.", sep='\n')
-            input()
-            continue
+
+
+                else:
+                    print(Fore.RED + Style.BRIGHT + "A critical error has occured, an updater method has not been defined internally.",
+                          Fore.RED + Style.BRIGHT + "Please try to update PyWeather again. If the issue persists please report this issue",
+                          Fore.RED + Style.BRIGHT + "on GitHub (github.com/o355/pyweather). Returning to the updater main menu.")
+
 # <--- Updater is above | Almanac is below --->
     elif moreoptions == "7":
         logger.info("Selected option: almanac")
