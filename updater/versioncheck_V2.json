@@ -1,11 +1,12 @@
 {
   "info": {
-    "apiversion": "2.1.1",
+    "apiversion": "2.1.2",
     "apidocumentation": "https://github.com/o355/PyWeather/wiki/Updater-API-documentation-(v2)"
   },
   
   "branch": {
     "stable": {
+      "depreciated": "False",
       "latestbuild": "63",
       "latestversion": "0.6.3 beta",
       "latestversiontag": "0.6.3-beta",
@@ -28,6 +29,7 @@
     },
     
     "rc": {
+      "depreciated": "False",
       "rcrelease": "True",
       "stablerelease": "False",
       "latestbuild": "63.01",

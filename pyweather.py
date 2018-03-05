@@ -4474,6 +4474,18 @@ while True:
                     printException()
                     continue
 
+                # Before parsing updater information, check to see if the user's branch is depreciated. If so, exit the updater
+                # and ask the user to change their branch.
+
+                updater_depreciated = updaterJSON['branch'][updater_branch]['depreciated']
+                # Make sure that the stable branch can never be depreciated.
+                if updater_depreciated == "True" and updater_branch != "stable":
+                    print(Fore.RED + Style.BRIGHT + "The updater branch you're on is unfortunately depreciated. As such, we cannot continue",
+                          Fore.RED + Style.BRIGHT + "to check for updates. Please change your branch by selecting option 2 at the updater main menu.",
+                          Fore.RED + Style.BRIGHT + "Press enter to return to the PyWeather Updater main menu.", sep="\n")
+                    input()
+                    continue
+
                 # Start parsing updater information - Also dependent on the branch
 
                 updater_buildNumber = float(updaterJSON['branch'][updater_branch]['latestbuild'])
@@ -5155,6 +5167,12 @@ while True:
                     print(Fore.RED + Style.BRIGHT + "A critical error has occured, an updater method has not been defined internally.",
                           Fore.RED + Style.BRIGHT + "Please try to update PyWeather again. If the issue persists please report this issue",
                           Fore.RED + Style.BRIGHT + "on GitHub (github.com/o355/pyweather). Returning to the updater main menu.")
+
+            # Updater branch updating is here.
+            elif updater_mainmenu_input == "2":
+                # Hit the updater API and see if the user's branch is out of date. This is done by each branch having a
+                # depreciated tag.
+                print(Fore.YELLOW + Style.BRIGHT + "The branch that you're currently on is: " + Fore.CYAN + Style.BRIGHT)
 
 # <--- Updater is above | Almanac is below --->
     elif moreoptions == "7":
