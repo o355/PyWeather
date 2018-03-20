@@ -4416,7 +4416,7 @@ while True:
                 print("")
                 print(Fore.RED + Style.BRIGHT + "An error with your configuration file occurred when attempting to",
                       Fore.RED + Style.BRIGHT + "load updater branch settings. Please make sure that your config file",
-                      Fore.RED + Style.BRIGHT + "is accessible, and cthat UPDATER/branch exists. Closing the updater.",
+                      Fore.RED + Style.BRIGHT + "is accessible, and that UPDATER/branch exists. Closing the updater.",
                       sep="\n")
                 break
 
@@ -5170,9 +5170,77 @@ while True:
 
             # Updater branch updating is here.
             elif updater_mainmenu_input == "2":
-                # Hit the updater API and see if the user's branch is out of date. This is done by each branch having a
-                # depreciated tag.
-                print(Fore.YELLOW + Style.BRIGHT + "The branch that you're currently on is: " + Fore.CYAN + Style.BRIGHT)
+                # Hit the updater API and see if the user's branch is out of date.
+                spinner.start(text="Checking branch information...")
+                try:
+                    updater_branchJSON = requests.get("https://raw.githubusercontent.com/o355/pyweather/master/updater/versioncheck_V2.json")
+                    logger.debug("updater_branchJSON fetched with end result: %s" % updater_branchJSON)
+                    spinner.stop()
+                except:
+                    spinner.fail(text="Failed to check for branch information! (error occurred while fetching updater JSON)")
+                    print("")
+                    logger.warning("Couldn't check for branch info! Is there an internet connection?")
+                    print(Fore.YELLOW + Style.BRIGHT + "When attempting to query the updater API, PyWeather ran",
+                          Fore.YELLOW + Style.BRIGHT + "into an error. If you're on a network with a filter, make sure",
+                          Fore.YELLOW + Style.BRIGHT + "that 'raw.githubusercontent.com' is unblocked. Otherwise, make sure that",
+                          Fore.YELLOW + Style.BRIGHT + "you have an internet connection.", sep="\n")
+                    printException()
+                    continue
+
+                # Load the JSON
+                updater_branchJSON = json.loads(updater_branchJSON.text)
+                if jsonVerbosity is True:
+                    logger.debug("updater_branchJSON: %s" % updater_branchJSON)
+                else:
+                    logger.debug("updater_branchJSON loaded successfully.")
+
+                updater_availbranches = updater_branchJSON['info']['availbranches']
+
+                # Define vars & arrays beforehand
+                supportedBranches = []
+                depreciatedBranches = []
+                userBranch_depreciated = False
+                logger.debug("supportedBranches: %s ; depreciatedBranches: %s" %
+                             (supportedBranches, depreciatedBranches))
+                logger.debug("userBranch_depreciated: %s" % userBranch_depreciated)
+
+                # Loop through the available branches, make arrays as to supported branches and depreciated branches.
+                # Also check if the user's branch is depreciated
+
+                for branch in updater_availbranches:
+                    branchDepreciatedFlag = ['branch'][branch]['depreciated']
+                    logger.debug("branchDepreciatedFlag: %s" % branchDepreciatedFlag)
+
+                    if branchDepreciatedFlag == "True":
+                        depreciatedBranches.append(branch)
+                    elif branchDepreciatedFlag == "False":
+                        supportedBranches.append(branch)
+
+
+                    if updater_branch == branch and branchDepreciatedFlag is True:
+                        userBranch_depreciated = True
+                        logger.debug("userBranch_depreciated: %s" % userBranch_depreciated)
+
+                print(Fore.YELLOW + Style.BRIGHT + "The branch that you're currently on is: " + Fore.CYAN + Style.BRIGHT + updater_branch)
+                if userBranch_depreciated is True:
+                    print(Fore.RED + Style.BRIGHT + "** Warning ** : The branch you're currently on is depreciated. Please select a new branch",
+                          Fore.RED + Style.BRIGHT + "to get the latest Pyweather updates.", sep="\n")
+
+                print("")
+                print(Fore.YELLOW + Style.BRIGHT + "Would you like to pick a new branch for the updater? Yes or No.")
+                updater_confirmBranchChange = input("Input here: ").lower()
+                logger.debug("updater_confirmBranchChange: %s" % updater_confirmBranchChange)
+                if updater_confirmBranchChange == "yes":
+                    logger.debug("beginning branch update process.")
+                elif updater_confirmBranchChange == "no":
+                    print(Fore.YELLOW + Style.BRIGHT + "Cancelling the branch updating process, and returning to the main menu.")
+                    continue
+                else:
+                    print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input. Cancelling the branch updating process,",
+                          Fore.YELLOW + Style.BRIGHT + "and returning to the main menu.", sep="\n")
+                    continue
+
+                
 
 # <--- Updater is above | Almanac is below --->
     elif moreoptions == "7":
