@@ -8,12 +8,16 @@ PyWeather is the culmination of thousands of hours of work poured into a silly l
 
 I hope that you can enjoy PyWeather as much as I enjoy making PyWeather, so, let's get started!
 
-## PyWeather Update - March 2018
-I've begun to work on my new project, Better Netdata Notifs. As a result, these changes will occur to PyWeather development:
-* I'll now be working on PyWeather for 2-3 days a week. The same will apply to BNN.
-* PyWeather 0.6.4 beta will now be released as PyWeather 1.0.
-* Any other issues to fix (like termux rounding) will be fixed in PyWeather 1.0.1-2.
-* PyWeather releases will end at 1.1 for the most part. A big QA will be undertaken to iron out a lot of PyWeather bugs.
+## PyWeather Update - Late March 2018:
+I've been slacking off lately, but development of PyWeather should resume soon. Here's another updated timeline:
+* Making the PyWeather Universal Updater (yeah, I renamed it) should be done by July 2018. The updater is taking a lot longer than expected, and to meet my standards on keeping things backwards compatible it's taking a lot longer to code. The updater will also be tested separately from the rest of the upcoming features.
+* PyWeather 0.6.4 beta will be launched as PyWeather 1.0.0.
+* Remaining features scheduled for 0.6.4 beta development should be complete by August 2018.
+* PyWeather 1.0.0 will be launched sometime in late August 2018 or early September 2018 at the latest.
+* PyWeather 1.0.1 will be launched sometime around early 2019, with the Termux fix and many bug fixes as well.
+* Beginning with PyWeather 1.0.0, I'll start to distribute PyWeather in the form of a pre-packaged .exe for Windows, and a snap for Linux.
+
+Sorry for the lack of development lately, I'll be sure to get my act together soon.
 
 ## Requirements
 To run PyWeather, you'll need:
