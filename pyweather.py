@@ -5240,7 +5240,7 @@ while True:
                           Fore.YELLOW + Style.BRIGHT + "and returning to the main menu.", sep="\n")
                     continue
 
-                
+
 
 # <--- Updater is above | Almanac is below --->
     elif moreoptions == "7":

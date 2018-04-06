@@ -1,3 +1,5 @@
+**Notice: PyWeather is not certified to work with Python 3.7, and is being tested at this time.**
+
 ## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
 
