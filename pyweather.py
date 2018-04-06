@@ -3766,8 +3766,21 @@ while True:
             from appJar import gui
             frontend = gui()
         except ImportError:
+            radar_importErrorException = traceback.format_exc()
+            print("")
             spinner.fail(text="Failed to load radar GUI, an import error occurred!")
             print("")
+            # If the user doesn't have python3-tk installed, check for please install the python3-tk package or No module named '_tkinter'
+            # as the traceback
+            radar_tracebackCheckErrors = ["please install the python3-tk package", "No module named '_tkinter'"]
+
+
+            if any(error in radar_importErrorException for error in radar_tracebackCheckErrors):
+                print(Fore.RED + Style.BRIGHT + "It appears that even though you have a GUI, you'll need to install the python3-tk",
+                      Fore.RED + Style.BRIGHT + "package via. your preferred package manager for the radar GUI to work.", sep="\n")
+                printException_loggerwarn()
+                continue
+
             print(Fore.RED + Style.BRIGHT + "Cannot launch a GUI on this platform, as an import error occurred. If you don't have",
                   Fore.RED + Style.BRIGHT + "a GUI on Linux, this is expected. Otherwise, investigate into why",
                   Fore.RED + Style.BRIGHT + "tkinter won't launch.", sep="\n" + Fore.RESET)
@@ -5239,6 +5252,44 @@ while True:
                     print(Fore.YELLOW + Style.BRIGHT + "Could not understand your input. Cancelling the branch updating process,",
                           Fore.YELLOW + Style.BRIGHT + "and returning to the main menu.", sep="\n")
                     continue
+
+                # List out not depreciated branches
+                print(Fore.YELLOW + Style.BRIGHT + "From the list below, please input a branch you'd like to use.",
+                      Fore.YELLOW + Style.BRIGHT + "You can also define a branch to use that isn't on the list.", sep="\n")
+                # Just show the supported branches in raw variable style
+                print(Fore.YELLOW + supportedBranches)
+                print("")
+                print(Fore.YELLOW + Style.BRIGHT + "Please enter the branch you'd like to switch to below.")
+                updater_userBranchInput = input("Input here: ").lower()
+                logger.debug("updater_userBranchInput: %s" % updater_userBranchInput)
+
+                # Define a config write function
+                def updater_configwrite():
+                    try:
+                        with open('storage//config.ini', 'w') as configfile:
+                            config.write(configfile)
+                        print(Fore.YELLOW + Style.BRIGHT + "Changes saved. Returning to the updater main menu.")
+                        return
+                    except:
+                        print(Fore.RED + Style.BRIGHT + "Failed to write to the config file. This could be caused by bad",
+                              Fore.RED + Style.BRIGHT + "permissions, or the file missing. Returning to the updater main menu.",
+                              Fore.RED + Style.BRIGHT + "If this continues, try running configupdate.py.")
+                        return
+
+                # If the user is on a supported branch
+                for branch in supportedBranches:
+                    if updater_userBranchInput == branch:
+                        print(Fore.YELLOW + Style.BRIGHT + "Successfully switched to the %s branch.", branch)
+                        config['UPDATER']['branch'] = branch
+                        updater_configwrite()
+                        continue
+
+                # Warn the user if they're on a depreciated branch
+                for branch in depreciatedBranches:
+                    if updater_userBranchInput == branch:
+                        print(Fore.RED + Style.BRIGHT + "The branch you selected to use is depreciated. Would you still",
+                              Fore.RED + Style.BRIGHT + "like to use this branch anyways? Yes or No.", sep="\n")
+                        updater_yourbranchisdepreciatedInput = input("Input here: ").lower()
 
 
 
