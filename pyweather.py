@@ -104,15 +104,15 @@ except ImportError:
 
 
 # Try loading the versioninfo.txt file. If it isn't around, create the file with
-# the present version info. - Section 2
-
+# the present version info.
 try:
     versioninfo = open('updater//versioninfo.txt').close()
 except:
-    open('updater//versioninfo.txt', 'w').close()
-    with open("updater//versioninfo.txt", 'a') as out:
-        out.write("0.6.3 beta")
-        out.close()
+    print("An error occurred while attempting to read the version information file.",
+          "This error is likely being caused by launching PyWeather outside of the pyweather folder.",
+          "Please try launching PyWeather when inside the PyWeather folder, and make sure that updater/versioninfo.txt",
+          "is accessible. You can recreate the version info file by running setup.py or configsetup.py.", sep="\n")
+    sys.exit()
 
 
 # Define configparser under config, and read the config. - Section 3
@@ -1957,7 +1957,17 @@ logger.info("End API fetch...")
 logger.info("Start JSON load...")
 spinner.stop()
 spinner.start(text="Parsing weather information...")
-current_json = json.loads(summaryJSON.text)
+try:
+    current_json = json.loads(summaryJSON.text)
+except json.decoder.JSONDecodeError:
+    spinner.fail(text="Failed to parse weather information!")
+    print("When attempting to parse weather information, a decode error occurred.",
+          "This is likely due to the location you inputted having no data.",
+          "Try looking up the weather for the location you inputted at a later date.", sep="\n")
+    printException()
+    print("Press enter to exit.")
+    input()
+    sys.exit()
 if jsonVerbosity is True:
     logger.debug("current_json loaded with: %s" % current_json)
 forecast10_json = json.loads(forecast10JSON.text)
@@ -2008,7 +2018,20 @@ logger.info("Some amount of JSONs loaded...")
 
 # Parse the current weather!
 
-summary_overall = current_json['current_observation']['weather']
+# If parsed jsons were good but there's still no data, catch a json parse error
+try:
+    summary_overall = current_json['current_observation']['weather']
+except:
+    # This except is generic for now, until I can get an exact exception to catch
+    spinner.fail(text="Failed to parse weather data!")
+    print("When attempting to parse weather data, an error occurred.",
+          "This is likely due to the location you inputted having no weather data.",
+          "Try looking up the weather for the location you inputted at a later time.", sep="\n")
+    printException()
+    print("Press enter to exit.")
+    input()
+    sys.exit()
+
 summary_lastupdated = current_json['current_observation']['observation_time']
     
 # While made for the US, metric units will also be tagged along.

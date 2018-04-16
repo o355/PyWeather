@@ -482,7 +482,7 @@ except:
             out.close()
     except:
         print("Could not write out an updated versioninfo text file. Please",
-              "modify 'updater/versioninfo.txt' to display '0.6.2 beta'.", sep="\n")
+              "modify 'updater/versioninfo.txt' to display '0.6.3 beta'.", sep="\n")
     sys.exit()
 try:
     open("updater//versioninfo.txt", 'w').close()
@@ -491,7 +491,7 @@ try:
         out.close()
 except:
     print("Could not write out an updated versioninfo text file. Please",
-          "modify 'updater/versioninfo.txt' to display '0.6.2 beta'.", sep="\n")
+          "modify 'updater/versioninfo.txt' to display '0.6.3 beta'.", sep="\n")
 
 print("")
 print("Ta-da! PyWeather is all up-to-date. Enjoy the new features and bug fixes!",
