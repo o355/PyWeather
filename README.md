@@ -5,17 +5,21 @@ PyWeather is the culmination of thousands of hours of work poured into a silly l
 
 I hope that you can enjoy PyWeather as much as I enjoy making PyWeather, so, let's get started!
 
-## PyWeather Update - Early April 2018:
-At this time, I've decided to halt development of the universal updater, and work on some other necessary fixes and additions to PyWeather.
+## PyWeather Update - Mid April 2018:
+Lots of changes from the last update. Here's what you need to know:
+* I deleted the updater. It was getting way too ambitious and straying from the original goal.
+* I'm fixing a lot of issues & enhancements that have been backlogged. Things should wrap up in June 2018.
+* The updater will be rewritten last, and doing such should take around 4-8 weeks.
+* PyWeather 1.0.0 will enter into QA in August 2018, and release in late September 2018.
+* PyWeather will not go "multi-distro" (Windows edition, Mac edition, Snap edition) until PyWeather 1.0.2.
+* PyWeather 1.0.1 will be released in early 2019, and will include code to deal with updating multiple types of PyWeather, the Termux fix, and other features.
+* PyWeather 1.0.2 will be released in mid 2019, and will include code to configure the config file from a GUI, previous locations, radar location selecting on-the-fly, and other features. Creating a config the config file tool in purely a CLI is extremely hard, and would take a lot of time. It may come, one day.
 
-The universal updater is taking a long time, but the end is in sight.
-
-Sorry for the lack of development lately, I'll be sure to get my act together soon.
 
 ## Requirements
 To run PyWeather, you'll need:
-* A computer (Windows, OS X, most Linux distros)
-* An internet connection (you have one if you're on here!)
+* A computer (Windows, OS X, and most Linux distros)
+* An internet connection
 * Python 3 & PIP for Python 3 (download at https://python.org/downloads). For most Linux distros you can also download with the command line, given Python 3 isn't already included.
 * ~5-10 MB of disk space
 
