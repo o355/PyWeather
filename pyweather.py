@@ -2051,8 +2051,8 @@ logger.debug("summary_humidity: %s" % summary_humidity)
 currentcond_showHumidity = True
 logger.debug("currentcond_showHumidity: %s" % currentcond_showHumidity)
 
-if summary_humidity == "-999%":
-    logger.info("summary_humidity is '-999%'.")
+if summary_humidity == "-999%" or summary_humidity == "N/A%":
+    logger.info("summary_humidity is '-999%' or 'N/A%'.")
     currentcond_showHumidity = False
     logger.debug("currentcond_showHumidity: %s" % currentcond_showHumidity)
 
@@ -2091,6 +2091,14 @@ logger.debug("summary_feelslikef: %s ; summary_feelslikec: %s"
              % (summary_feelslikef, summary_feelslikec))
 logger.debug("summary_dewPointF: %s ; summary_dewPointC: %s"
              % (summary_dewPointF, summary_dewPointC))
+
+# Check for invalid dew point data
+currentcond_showDewPoint = True
+logger.debug("currentcond_showDewPoint: %s" % currentcond_showDewPoint)
+if summary_dewPointF == "-9999" or summary_dewPointC == "-9999":
+    logger.info("summary_dewPointF is '-9999' or summary_dewPointC is '-9999'. Disabling dew point data.")
+    currentcond_showDewPoint = False
+    logger.debug("currentcond_showDewPoint: %s" % currentcond_showDewPoint)
     
 sundata_prefetched = False
 almanac_prefetched = False
@@ -2518,8 +2526,9 @@ print(Fore.YELLOW + Style.BRIGHT + "Current conditions: " + Fore.CYAN + Style.BR
 print(Fore.YELLOW + Style.BRIGHT + "Current temperature: " + Fore.CYAN + Style.BRIGHT + summary_tempf + "°F (" + summary_tempc + "°C)")
 print(Fore.YELLOW + Style.BRIGHT + "And it feels like: " + Fore.CYAN + Style.BRIGHT + summary_feelslikef
       + "°F (" + summary_feelslikec + "°C)")
-print(Fore.YELLOW + Style.BRIGHT + "Current dew point: " + Fore.CYAN + Style.BRIGHT + summary_dewPointF
-      + "°F (" + summary_dewPointC + "°C)")
+if currentcond_showDewPoint is True:
+    print(Fore.YELLOW + Style.BRIGHT + "Current dew point: " + Fore.CYAN + Style.BRIGHT + summary_dewPointF
+          + "°F (" + summary_dewPointC + "°C)")
 if winddata == True:
     if summary_winddir == "Variable":
         print(Fore.YELLOW + Style.BRIGHT + "Current wind: " + Fore.CYAN + Style.BRIGHT + summary_windmphstr + " mph (" + summary_windkphstr + " kph), blowing in variable directions.")
@@ -2686,6 +2695,7 @@ while True:
                 input()
                 refresh_currentflagged = True
                 logger.debug("refresh_currentflagged: %s" % refresh_currentflagged)
+                continue
             current_json = json.loads(summaryJSON.text)
             if jsonVerbosity == True:
                 logger.debug("current_json loaded with: %s" % current_json)
@@ -2743,6 +2753,15 @@ while True:
                      % (summary_feelslikef, summary_feelslikec))
         logger.debug("summary_dewPointF: %s ; summary_dewPointC: %s"
                      % (summary_dewPointF, summary_dewPointC))
+
+        # Check for invalid dew point data
+        currentcond_showDewPoint = True
+        logger.debug("currentcond_showDewPoint: %s" % currentcond_showDewPoint)
+        if summary_dewPointF == "-9999" or summary_dewPointC == "-9999":
+            logger.info("summary_dewPointF is '-9999' or summary_dewPointC is '-9999'. Disabling dew point data.")
+            currentcond_showDewPoint = False
+            logger.debug("currentcond_showDewPoint: %s" % currentcond_showDewPoint)
+
         current_pressureInHg = str(current_json['current_observation']['pressure_in'])
         current_pressureMb = str(current_json['current_observation']['pressure_mb'])
         logger.debug("current_pressureInHg: %s ; current_pressureMb: %s"
@@ -2821,9 +2840,10 @@ while True:
         print(Fore.YELLOW + Style.BRIGHT + "Current temperature: " + Fore.CYAN + Style.BRIGHT + summary_tempf + "°F (" + summary_tempc + "°C)")
         print(Fore.YELLOW + Style.BRIGHT + "And it feels like: " + Fore.CYAN + Style.BRIGHT + current_feelsLikeF
               + "°F (" + current_feelsLikeC + "°C)")
-        print(Fore.YELLOW + Style.BRIGHT + "Current dew point: " + Fore.CYAN + Style.BRIGHT + summary_dewPointF
-              + "°F (" + summary_dewPointC + "°C)")
-        if winddata == True:
+        if currentcond_showDewPoint is True:
+            print(Fore.YELLOW + Style.BRIGHT + "Current dew point: " + Fore.CYAN + Style.BRIGHT + summary_dewPointF
+                  + "°F (" + summary_dewPointC + "°C)")
+        if winddata is True:
             if summary_winddir == "Variable":
                 print(Fore.YELLOW + Style.BRIGHT + "Current wind: " + Fore.CYAN + Style.BRIGHT + summary_windmphstr +
                     " mph (" + summary_windkphstr + " kph), blowing in variable directions.")
@@ -3769,7 +3789,8 @@ while True:
                 print("", "The radar is now launching.",
                       "If you want to bypass this confirmation message when",
                       "launching the radar feature, in config.ini, set bypassconfirmation",
-                      "under the RADAR GUI section to True.", sep="\n")
+                      "under the RADAR GUI section to True.", "", sep="\n")
+
             elif radar_confirmedusage == "no":
                 print("Not launching the radar.")
                 continue
@@ -3789,9 +3810,8 @@ while True:
             from appJar import gui
             frontend = gui()
         except ImportError:
-            radar_importErrorException = traceback.format_exc()
-            print("")
             spinner.fail(text="Failed to load radar GUI, an import error occurred!")
+            radar_importErrorException = traceback.format_exc()
             print("")
             # If the user doesn't have python3-tk installed, check for please install the python3-tk package or No module named '_tkinter'
             # as the traceback
@@ -4841,10 +4861,14 @@ while True:
                   Fore.YELLOW + Style.BRIGHT + "You'll be able to look at historical data for PWS queries in PyWeather 0.6.4 beta.", sep="\n")
             continue
         print(Fore.YELLOW + Style.BRIGHT + "To show historical data for this location, please enter a date to show the data.")
-        print(Fore.YELLOW + Style.BRIGHT + "The date must be in the format YYYYMMDD.")
-        print(Fore.YELLOW + Style.BRIGHT + "E.g: If I wanted to see the weather for February 15, 2013, you'd enter 20130215.")
-        print(Fore.YELLOW + Style.BRIGHT + "Input the desired date below.")
-        historical_input = input("Input here: ").lower()
+        print(Fore.YELLOW + Style.BRIGHT + "The date must be in the format YYYYMMDD (For January 1, 2018 enter 20180101, etc.)")
+        print(Fore.YELLOW + Style.BRIGHT + "To return to the main menu, press Control + C.")
+        try:
+            historical_input = input("Input here: ").lower()
+        except KeyboardInterrupt:
+            logger.info("Keyboard interrupt thrown, returning to main menu.")
+            print("")
+            continue
         logger.debug("historical_input: %s" % historical_input)
         spinner.start(text="Loading historical weather data...")
         historical_loops = 0
@@ -7786,6 +7810,7 @@ while True:
             input()
         except KeyboardInterrupt:
             logger.debug("Continuing to the main menu...")
+            print("")
             continue
 
         # Start the pre-loop to see how many times we're looping.

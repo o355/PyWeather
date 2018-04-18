@@ -30,7 +30,7 @@ _______
 import sys
 import configparser
 import traceback
-import os
+import time
 
 config = configparser.ConfigParser()
 config.read("storage//config.ini")
@@ -201,6 +201,53 @@ if cd_confirmation == "yes":
     config['FAVORITE LOCATIONS']['favloc5'] = 'None'
     config['GEOCODER API']['customkey_enabled'] = 'False'
     config['GEOCODER API']['customkey'] = 'None'
+
+    # Begin to determine geocoder scheme
+    print("Attempting to detect a geocoder scheme for your system, this should only take a few moments.")
+
+    try:
+        import geopy
+        geopy_installed = True
+    except ImportError:
+        print("Failed to import geopy. It's recommended that you install geopy for PyWeather to work.",
+              "Skipping geocoder scheme detection and defaulting to 'http' as the scheme.", sep="\n")
+        geopy_installed = False
+
+    if geopy_installed is True:
+        # HTTPS validation
+        from geopy import GoogleV3
+
+        geocoder = GoogleV3(scheme='https')
+        # I've found that one "warm up request", and then waiting ~15 seconds somehow helps determine if a platform is HTTP/HTTPS compatible.
+        try:
+            geocoder.geocode("123 5th Avenue, New York, NY")
+        except:
+            didthewarmupgeocodefail = "you bet"
+
+        print("A warmup geocode has just been completed which helps with determining which scheme will work",
+              "on your OS. Waiting 10 seconds before making another geocode requests (to prevent rate limiting).", sep="\n")
+        time.sleep(10)
+
+        try:
+            geocoder.geocode("123 5th Avenue, New York, NY")
+            print("The geocoder can operate with HTTPS enabled on your OS.")
+            config['GEOCODER']['scheme'] = 'https'
+            print("Changes saved.")
+        except geopy.exc.GeocoderServiceError:
+            print("Geopy probably can't run without HTTPS (or your internet went down). Trying HTTP as the scheme.")
+            geocoder = GoogleV3(scheme='http')
+            print("Waiting 10 seconds to avoid rate limiting after the previous geocode.")
+            time.sleep(10)
+            try:
+                geocoder.geocode("123 5th Avenue, New York, NY")
+                print("The geocoder can operate, but without HTTPS enabled on your OS. Saving these changes.")
+                config['GEOCODER']['scheme'] = 'http'
+                print("Changes saved.")
+            except geopy.exc.GeocoderServiceError:
+                print("You probably don't have an internet connection, as HTTPS and HTTP validation both failed.",
+                      "Defaulting to HTTP as the geopy scheme.", sep="\n")
+                config['GEOCODER']['scheme'] = 'http'
+                print("Changes saved.")
 
     try:
         with open('storage//config.ini', 'w') as configfile:
