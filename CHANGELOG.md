@@ -1,36 +1,34 @@
 # PyWeather changelog
 **Note: The changelog being used for tracking PyWeather progress has been retiredish. Please check the projects tab of PyWeather for progress on the next versions of PyWeather.**
 
-## version 0.6.4 beta - Should be released in early 2018:
+## version 1.0.0 - Should be released in late 2018:
 **NEW FETAURES/REMOVALS:**
 * Adds the ability to see the weather for airports - Done!
 * Adding compatibility to favlocs for airport data - Done!
-* Adds the ability to see and call the weather for previously looked up locations - TBD
 * Adds the ability to see historical data for PWSes - 0% done
 * Adds the ability to change your radar image size on the fly - 0% done
-* Adds the brand new Universal PyWeather Updater, making it a ton easier to update to new versions of PyWeather, and for allowing users to be on different updater branches - ~75% done
-* A complete refactor of configupdate.py, with better printing and new code for futureproofing. - Needs testing
-* Lowers the default iterations for data down to 4 to prevent scrolling. - Should be done on 2/3/18
-* Adds the ability for configsetup to run an automatic geocoder scheme - Should be done on 2/5/18
-* Improves the disabling of having a custom geocoder API key, even though the scheme is set to HTTP (custom geocoder keys only work with HTTPS). - Should be done on 2/9/18
-* Improves the UI in the setup file to not have overflowing lines of text. - Should be done on 2/12/18
-* Adds an attribution to Meteoalarm for EU-based alerts - Should be done on 2/15/18
-* Adds better exiting at multiple input prompts throughout PyWeather - Should be done on 2/17/18
-* Adding even faster access to different query types (fl:x for favorite locations, cl for current location, pl:x for previous location, ap: for airport, ps: for PWS) - Coming...soon?
+* Adds the brand new Universal PyWeather Updater, making it a ton easier to update to new versions of PyWeather, and for allowing users to be on different updater branches - Rewriting
+* A complete refactor of configupdate.py, with better printing and new code for futureproofing. - Done!
+* Lowers the default iterations for data down to 4 to prevent scrolling. - 0% done
+* Adds the ability for configsetup to run an automatic geocoder scheme - Done!
+* Improves the disabling of having a custom geocoder API key, even though the scheme is set to HTTP (custom geocoder keys only work with HTTPS). - 0% done
+* Improves the UI in the setup file to not have overflowing lines of text. - 0% done
+* Adds an attribution to Meteoalarm for EU-based alerts - 0% done
+* Adding even faster access to different query types (fl:x for favorite locations, cl for current location, pl:x for previous location, ap: for airport, ps: for PWS) - 0% done
+* PyWeather will now use secure API endpoints by default - 0% done
+
 
 **BUG FIXES:**
 * Fixed a semi-critical bug where forecast data and almanac data cache times didn't get multiplied by 60 when the config was loaded
-* Fixing a semi-critical bug where if PyWeather is launched from out of folder, a critical error occurs
-* Fixing a bug where even with appJar installed, Linux platforms need the python3-tk package to run the GUI (adding better catching for the exception)
-* Fixing a bug where when PyWeather is quitted on Linux after opening the radar GUI, a TypeError occurs
-* Fixing a bug where if current weather fails to refresh, PyWeather decides to display the weather data.
-* Fixing a bug where sometimes current conditions cannot get parsed, and as such PyWeather crashes.
-* Fixing a bug where the current dew point can be shown as -9999F (-9999C) and this invalid data doesn't get caught.
-* Fixing a bug where the current humidity can be shown as N/A& and this invalid data doesn't get caught.
+* Fixed a semi-critical bug where if PyWeather is launched from out of folder, a critical error occurs
+* Fixed a bug where even with appJar installed, Linux platforms need the python3-tk package to run the GUI (adding better catching for the exception)
+* Fixed a bug where if current weather fails to refresh, PyWeather decides to display the weather data.
+* Fixed a bug where sometimes current conditions cannot get parsed, and as such PyWeather crashes.
+* Fixed a bug where the current dew point can be shown as -9999F (-9999C) and this invalid data doesn't get caught.
+* Fixed a bug where the current humidity can be shown as N/A& and this invalid data doesn't get caught.
 * Fixing a "bug" where PyWeather sometimes can't hit Google's geocoder, but after a relaunch it can (try 3x to get a location)
 * Fixing a bug where PyWeather does not detect duplicate hurricane data due to Wunderground's API being not so nice
 * Fixing a bug where if extra tools is disabled and the user goes into the input to enable it and enters no, extra tools will appear anyways.
-* 
 
 
 ## version 0.6.3 beta - Released on 12/3/2017:
