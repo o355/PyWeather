@@ -39,7 +39,7 @@ config.read("storage//config.ini")
 # If the config isn't set up, and by default, verbosity is off
 # why should I code it in?
 
-print("Would you like me to set up (or reset) PyWeather's config?",
+print("Would you like to set up (or reset) PyWeather's config?",
       "Yes or No.", sep="\n")
 cd_confirmation = input("Input here: ").lower()
 if cd_confirmation == "yes":
@@ -269,9 +269,7 @@ if cd_confirmation == "yes":
     except:
         print("Couldn't write the versioninfo file. This may cause issues with PyWeather down the road.")
 
-    print("All done! Try relaunching the script that asked you to",
-          "provision your config file.",
-          "Press enter to exit.", sep="\n")
+    print("All done! Press enter to exit.")
     input()
     sys.exit()
 elif cd_confirmation == "no":
