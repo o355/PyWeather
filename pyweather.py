@@ -3864,7 +3864,82 @@ while True:
                      (r80url, r100url))      
         
 
-                
+        def frontend_menuhandling(btnName):
+            if btnName == "Exit":
+                frontend.stop()
+            if btnName == "Empty Cache":
+                global r10cached
+                global r20cached
+                global r40cached
+                global r60cached
+                global r80cached
+                global r100cached
+                radar_confirmation = frontend.yesNoBox("Empty the cache?",
+                                                       "Would you like to empty the cache? If you do" +
+                                                       ", you'll need to reselect a zoom level.")
+                if radar_confirmation == False:
+                    logger.debug("not emptying cache.")
+                elif radar_confirmation == True:
+                    logger.debug("emptying cache.")
+                    r10cached = False
+                    r20cached = False
+                    logger.debug("r10cached: %s ; r20cached: %s" %
+                                 (r10cached, r20cached))
+                    r40cached = False
+                    r60cached = False
+                    logger.debug("r40cached: %s ; r60cached: %s" %
+                                 (r40cached, r60cached))
+                    r80cached = False
+                    r100cached = False
+                    # We have to try each removal, or we may hit errors.
+                    radar_clearImages()
+                    frontend.clearImageCache()
+                if user_radarImageSize == "extrasmall":
+                    frontend.reloadImage("Viewer", "storage//320x240placeholder.gif")
+                elif user_radarImageSize == "small":
+                    frontend.reloadImage("Viewer", "storage//480x360placeholder.gif")
+                elif user_radarImageSize == "normal":
+                    frontend.reloadImage("Viewer", "storage//640x480placeholder.gif")
+                elif user_radarImageSize == "large":
+                    frontend.reloadImage("Viewer", "storage//960x720placeholder.gif")
+                elif user_radarImageSize == "extralarge":
+                    frontend.reloadImage("Viewer", "storage//1280x960placeholder.gif")
+                frontend.setStatusbar("Zoom: Not selected", 0)
+                radar_zoomlevel = "None"
+                logger.debug("radar_zoomlevel: %s" % radar_zoomlevel)
+
+            # From here on out it's handling radar size switching.
+            global frontend_currentRadarSize
+
+            frontend_newRadarSize = frontend.getMenuRadioButton("Window Size", "radarsizes")
+
+            # If the new size is the same as the current size, do nothing.
+            if frontend_newRadarSize == frontend_currentRadarSize:
+                return
+            else:
+                frontend_currentRadarSize = frontend_newRadarSize
+
+            # Because I don't know Python well, go the long but simple way
+            # with figuring out the raw radar size
+            if frontend_newRadarSize == "extrasmall (320x240)":
+                frontendRS_rawRadarSize = "extrasmall"
+            elif frontend_newRadarSize == "small (480x360)":
+                frontendRS_rawRadarSize = "small"
+            elif frontend_newRadarSize == "normal (640x480)":
+                frontendRS_rawRadarSize = "normal"
+            elif frontend_newRadarSize == "large (960x640)":
+                frontendRS_rawRadarSize = "large"
+            elif frontend_newRadarSize == "extralarge (1280x960)":
+                frontendRS_rawRadarSize = "extralarge"
+
+
+            print(frontendRS_rawRadarSize)
+
+            # Write to the config file
+
+            # Using a previously defined array, figure out what radar size we're working with.
+            # For here on out, variables are defined as frontendRS (frontend radar switch)
+
         def frontend_zoomswitch(btnName):
             # Globalize cache variables
             global r10cached; global r20cached; global r40cached
@@ -4380,7 +4455,29 @@ while True:
         frontend.clearImageCache()       
         frontend.setTitle("PyWeather Radar Viewer")
         frontend.setResizable(canResize=False)
-        frontend.startLabelFrame("Viewer", column=0, row=0, colspan=3)
+        # For extra options, use a menu with dropdowns.
+        frontend.createMenu("File")
+        frontend.addMenuItem("File", "Empty Cache", func=frontend_menuhandling)
+        frontend.addMenuSeparator("File")
+        frontend.addMenuItem("File", "Exit", func=frontend_menuhandling)
+        frontend.createMenu("Config")
+        frontend.addSubMenu("Config", "Window Size")
+        # Define terms for radar window sizes
+        frontend_radarSizes = ["extrasmall (320x240)", "small (480x360)", "normal (640x480)", "large (960x640)", "extralarge (1280x960)",]
+        for term in frontend_radarSizes:
+            frontend.addMenuRadioButton("Window Size", "radarsizes", term, frontend_menuhandling)
+
+        # Set the radio buttion by default to the resolution the user has.
+        frontend_defaultRadioSizes = ["extrasmall", "small", "normal", "large", "extralarge",]
+        for term in frontend_defaultRadioSizes:
+            if term == user_radarImageSize:
+                # If we have a match, look through the radar sizes array to find what we need to set the radio button to
+                for size in frontend_radarSizes:
+                    if term in size:
+                        frontend.setMenuRadioButton("Window Size", "radarsizes", size)
+                        frontend_currentRadarSize = size
+
+        frontend.startLabelFrame("Viewer", column=0, row=1, colspan=3)
         # Placeholders are needed to start the viewer.
         if user_radarImageSize == "extrasmall":
             frontend.addImage("Viewer", "storage//320x240placeholder.gif")
@@ -4398,7 +4495,7 @@ while True:
         frontend.addLabel("midlabel", "Zoom Control", column=0, row=4, colspan=3)
         frontend.addButtons(["10 km", "20 km", "40 km"], frontend_zoomswitch, column=0, row=5, colspan=3)
         frontend.addButtons(["60 km", "80 km", "100 km"], frontend_zoomswitch, row=6, column=0, colspan=3)
-        frontend.addButtons(["Refresh", "Empty Cache", "Return to PyWeather"], frontend_extrabuttons, row=7, column=0, colspan=3)
+        frontend.addButtons(["Refresh", "Return to PyWeather"], frontend_extrabuttons, row=7, column=0, colspan=3)
         frontend.setInPadding([10, 10])
         frontend.addStatusbar(fields=2)
         frontend.setStatusbar("Zoom: Not selected", 0)
