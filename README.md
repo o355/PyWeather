@@ -1,3 +1,16 @@
+## Critical Bug Warning
+Ever since the PIP 10 release, there have been major issues with PyWeather Setup.
+
+Most notably, the command used for installing libraries is now gone. If you are using PIP 10 and have no libraries installed before running the setup file, setup will entirely fail.
+
+If you don't have a GUI, but even have all the libraries installed, PyWeather will fail to setup entirely.
+
+PyWeather 0.6.3.1 beta will be releasing by May 4, 2018, 12:00pm EDT. This bug fix will remove all code to install libraries, and will only check for installed libraries, and exit if dependencies are not satisfied. A failure when checking for appJar will not result in an exit.
+
+PyWeather 1.0.0 will have a permanent fix for this issue once research is done. PyWeather 0.6.3.2 beta may be released which contains fixes for the pip installer.
+
+Don't worry, PyWeather 1.0.0 and on will use schematic versioning, so no more 0.x.x.x releases.
+
 ## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
 
