@@ -706,6 +706,10 @@ elif user_radarImageSize == "extralarge":
 else:
     radar_gifx = "640"
     radar_gify = "480"
+    user_radarImageSize = "normal"
+
+# Set the user radar image size to frontend_currentRadarSize for radar resolution switching
+frontend_currentRadarSize = user_radarImageSize
 
 logger.info("Defining custom functions...")
 
@@ -3800,6 +3804,24 @@ while True:
                 continue
 
         spinner.start(text="Loading radar GUI...")
+        # Rerun window resolution code to be compatible with on-the-fly changes with the radar switcher.
+
+        if frontend_currentRadarSize == "extrasmall":
+            radar_gifx = "320"
+            radar_gify = "240"
+        elif frontend_currentRadarSize == "small":
+            radar_gifx = "480"
+            radar_gify = "360"
+        elif frontend_currentRadarSize == "normal":
+            radar_gifx = "640"
+            radar_gify = "480"
+        elif frontend_currentRadarSize == "large":
+            radar_gifx = "960"
+            radar_gify = "720"
+        elif frontend_currentRadarSize == "extralarge":
+            radar_gifx = "1280"
+            radar_gify = "960"
+
         try:
             os.mkdir("temp")
         except:
@@ -3910,30 +3932,117 @@ while True:
 
             # From here on out it's handling radar size switching.
             global frontend_currentRadarSize
+            global frontend_detailedCurrentRadarSize
 
-            frontend_newRadarSize = frontend.getMenuRadioButton("Window Size", "radarsizes")
+            frontend_detailedNewRadarSize = frontend.getMenuRadioButton("Window Size", "radarsizes")
 
             # If the new size is the same as the current size, do nothing.
-            if frontend_newRadarSize == frontend_currentRadarSize:
+            if frontend_detailedNewRadarSize == frontend_detailedCurrentRadarSize:
                 return
             else:
-                frontend_currentRadarSize = frontend_newRadarSize
+                frontend_oldRadarSize = frontend_currentRadarSize
+                frontend_detailedoldRadarSize = frontend_detailedCurrentRadarSize
+                frontend_detailedCurrentRadarSize = frontend_detailedNewRadarSize
 
             # Because I don't know Python well, go the long but simple way
             # with figuring out the raw radar size
-            if frontend_newRadarSize == "extrasmall (320x240)":
+            if frontend_detailedNewRadarSize == "extrasmall (320x240)":
                 frontendRS_rawRadarSize = "extrasmall"
-            elif frontend_newRadarSize == "small (480x360)":
+            elif frontend_detailedNewRadarSize == "small (480x360)":
                 frontendRS_rawRadarSize = "small"
-            elif frontend_newRadarSize == "normal (640x480)":
+            elif frontend_detailedNewRadarSize == "normal (640x480)":
                 frontendRS_rawRadarSize = "normal"
-            elif frontend_newRadarSize == "large (960x640)":
+            elif frontend_detailedNewRadarSize == "large (960x640)":
                 frontendRS_rawRadarSize = "large"
-            elif frontend_newRadarSize == "extralarge (1280x960)":
+            elif frontend_detailedNewRadarSize == "extralarge (1280x960)":
                 frontendRS_rawRadarSize = "extralarge"
 
+            frontend_newRadarSize = frontendRS_rawRadarSize
 
-            print(frontendRS_rawRadarSize)
+            logger.debug("frontendRS_rawRadarSize: %s ; frontend_newRadarSize" % (frontendRS_rawRadarSize, frontend_newRadarSize))
+
+
+            # Empty the cache. Do to the way the radar switch is coded, we don't call the function.
+            global r10cached
+            global r20cached
+            global r40cached
+            global r60cached
+            global r80cached
+            global r100cached
+
+            # Set cached variables to false
+            r10cached = False
+            r20cached = False
+            r40cached = False
+            r60cached = False
+            r80cached = False
+            r100cached = False
+
+            logger.debug("r10cached: %s ; r20cached: %s" %
+                         (r10cached, r20cached))
+            logger.debug("r40cached: %s ; r60cached: %s" %
+                         (r40cached, r60cached))
+            logger.debug("r80cached: %s ; r100cached: %s" %
+                         (r80cached, r100cached))
+
+
+            # Call the radar clear image function
+            radar_clearImages()
+
+            # Try and write to the config file for a permanent change.
+            config['RADAR GUI']['radar_imagesize'] = frontendRS_rawRadarSize
+
+            try:
+                with open('storage//config.ini', 'w') as configfile:
+                    config.write(configfile)
+                logger.info("Radar size change saved.")
+            except:
+                # If we can't write to the config file, show a popup asking the user
+                # if they'd like to continue with the new resolution being temporarily selected.
+                frontendRS_continuewithnochange = frontend.yesNoBox("Config file write error", "When attempting to save resolution changes to the config file, an error occurred." +
+                                                                                                "Would you like to use the radar in the resolution you selected for this session of PyWeather?")
+                if frontendRS_continuewithnochange is False:
+                    # If the user cancels change, make the frontend current radar size what the user previously had
+                    frontend_currentRadarSize = frontend_oldRadarSize
+                    return
+                else:
+                    logger.debug("temp radar size entered, continuing with radar size change.")
+
+            # Translate the new radar size into x & y resolutions, and define new URLs
+            if frontendRS_rawRadarSize == "extrasmall":
+                radar_gifx = "320"
+                radar_gify = "240"
+            elif frontendRS_rawRadarSize == "small":
+                radar_gifx = "480"
+                radar_gify = "360"
+            elif frontendRS_rawRadarSize == "normal":
+                radar_gifx = "640"
+                radar_gify = "480"
+            elif frontendRS_rawRadarSize == "large":
+                radar_gifx = "960"
+                radar_gify = "720"
+            elif frontendRS_rawRadarSize == "extralarge":
+                radar_gifx = "1280"
+                radar_gify = "960"
+
+            r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
+            r20url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
+            logger.debug("r10url: %s ; r20url: %s" %
+                         (r10url, r20url))
+            r40url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=40&radunits=km'
+            r60url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=60&radunits=km'
+            logger.debug("r40url: %s ; r60url: %s" %
+                         (r40url, r60url))
+            r80url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=80&radunits=km'
+            r100url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=100&radunits=km'
+            logger.debug("r80url: %s ; r100url: %s" %
+                         (r80url, r100url))
+
+
+            # Set the selected radio button to the new radar size
+            
+
+
 
             # Write to the config file
 
@@ -4463,19 +4572,19 @@ while True:
         frontend.createMenu("Config")
         frontend.addSubMenu("Config", "Window Size")
         # Define terms for radar window sizes
-        frontend_radarSizes = ["extrasmall (320x240)", "small (480x360)", "normal (640x480)", "large (960x640)", "extralarge (1280x960)",]
+        frontend_detailedRadarSizes = ["extrasmall (320x240)", "small (480x360)", "normal (640x480)", "large (960x640)", "extralarge (1280x960)",]
         for term in frontend_radarSizes:
             frontend.addMenuRadioButton("Window Size", "radarsizes", term, frontend_menuhandling)
 
         # Set the radio buttion by default to the resolution the user has.
-        frontend_defaultRadioSizes = ["extrasmall", "small", "normal", "large", "extralarge",]
-        for term in frontend_defaultRadioSizes:
-            if term == user_radarImageSize:
+        frontend_radarSizes = ["extrasmall", "small", "normal", "large", "extralarge",]
+        for term in frontend_radarSizes:
+            if term == frontend_currentRadarSize:
                 # If we have a match, look through the radar sizes array to find what we need to set the radio button to
                 for size in frontend_radarSizes:
                     if term in size:
                         frontend.setMenuRadioButton("Window Size", "radarsizes", size)
-                        frontend_currentRadarSize = size
+                        frontend_detailedCurrentRadarSize = size
 
         frontend.startLabelFrame("Viewer", column=0, row=1, colspan=3)
         # Placeholders are needed to start the viewer.
@@ -7347,53 +7456,8 @@ while True:
               Fore.CYAN + Style.BRIGHT + about_apisinuse + Fore.RESET, sep="\n")
 #<--- About is above, jokes are below --->
     elif moreoptions == "tell me a joke":
-        logger.debug("moreoptions: %s" % moreoptions)
-        # Jokes from searching "weather jokes" on DuckDuckGo (the first option)
-        # They're jokes for kids.
-        jokenum = randint(0,12)
-        logger.debug("jokenum: %s" % jokenum)
-        print("")
-        if jokenum == 0:
-            print(Fore.YELLOW + Style.BRIGHT + "How do hurricanes see?",
-                  Fore.YELLOW + Style.BRIGHT + "With one eye!", sep="\n")
-        elif jokenum == 1:
-            print(Fore.YELLOW + Style.BRIGHT + "What does a cloud wear under his raincoat?",
-                  Fore.YELLOW + Style.BRIGHT + "Thunderwear!", sep="\n")
-        elif jokenum == 2:
-            print(Fore.YELLOW + Style.BRIGHT + "What type of lightning likes to play sports?",
-                  Fore.YELLOW + Style.BRIGHT + "Ball lightning!", sep="\n")
-        elif jokenum == 3:
-            print(Fore.YELLOW + Style.BRIGHT + "What type of cloud is so lazy, because it will never get up?",
-                  Fore.YELLOW + Style.BRIGHT + "Fog!", sep="\n")
-        elif jokenum == 4:
-            print(Fore.YELLOW + Style.BRIGHT + "What did the lightning bolt say to the other lightning bolt?",
-                  Fore.YELLOW + Style.BRIGHT + "You're shocking!", sep="\n")
-        elif jokenum == 5:
-            print(Fore.YELLOW + Style.BRIGHT + "Whatever happened to the cow that was lifted into the tornado?",
-                  Fore.YELLOW + Style.BRIGHT + "Udder disaster!", sep="\n")
-        elif jokenum == 6:
-            print(Fore.YELLOW + Style.BRIGHT + "What did the one tornado say to the other?",
-                  Fore.YELLOW + Style.BRIGHT + "Let's twist again like we did last summer.", sep="\n")
-        elif jokenum == 7:
-            print(Fore.YELLOW + Style.BRIGHT + "What did the thermometer say to the other thermometer?",
-                  Fore.YELLOW + Style.BRIGHT + "You make my temperature rise.", sep="\n")
-        elif jokenum == 8:
-            print(Fore.YELLOW + Style.BRIGHT + "What's the difference between a horse and the weather?",
-                  Fore.YELLOW + Style.BRIGHT + "One is reined up and the other rains down.", sep="\n")
-        elif jokenum == 9:
-            print(Fore.YELLOW + Style.BRIGHT + "What did the one raindrop say to the other raindrop?",
-                  Fore.YELLOW + Style.BRIGHT + "My plop is bigger than your plop.", sep="\n")
-        elif jokenum == 10:
-            print(Fore.YELLOW + Style.BRIGHT + "Why did the woman go outdoors with her purse open?",
-                  Fore.YELLOW + Style.BRIGHT + "Because she expected some change in the weather.", sep="\n")
-        elif jokenum == 11:
-            print(Fore.YELLOW + Style.BRIGHT + "What's the different between weather and climate?",
-                  Fore.YELLOW + Style.BRIGHT + "You can't weather a tree, but you can climate.", sep="\n")
-        elif jokenum == 12:
-            print(Fore.YELLOW + Style.BRIGHT + "What did the hurricane say to the other hurricane?",
-                  Fore.YELLOW + Style.BRIGHT + "I have my eye on you.", sep="\n")
-# <--- Jokes are above | Programmer dad jokes is below --->
-    elif moreoptions == "tell me a dad joke":
+        # The cheesy weather jokes were bad.
+        # Programmer dad jokes are better.
         logger.debug("moreoptions: %s" % moreoptions)
         dadjokenum = randint(0, 12)
         logger.debug("dadjokenum: %s" % dadjokenum)
