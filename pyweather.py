@@ -3887,6 +3887,23 @@ while True:
         
 
         def frontend_menuhandling(btnName):
+            global r10cached
+            global r20cached
+            global r40cached
+            global r60cached
+            global r80cached
+            global r100cached
+            global r10url
+            global r20url
+            global r40url
+            global r60url
+            global r80url
+            global r100url
+            global latstr
+            global lonstr
+            global radar_gifx
+            global radar_gify
+            global user_radarImageSize
             if btnName == "Exit":
                 frontend.stop()
             if btnName == "Empty Cache":
@@ -3959,16 +3976,11 @@ while True:
 
             frontend_newRadarSize = frontendRS_rawRadarSize
 
-            logger.debug("frontendRS_rawRadarSize: %s ; frontend_newRadarSize" % (frontendRS_rawRadarSize, frontend_newRadarSize))
+            logger.debug("frontendRS_rawRadarSize: %s ; frontend_newRadarSize: %s" % (frontendRS_rawRadarSize, frontend_newRadarSize))
 
 
             # Empty the cache. Do to the way the radar switch is coded, we don't call the function.
-            global r10cached
-            global r20cached
-            global r40cached
-            global r60cached
-            global r80cached
-            global r100cached
+
 
             # Set cached variables to false
             r10cached = False
@@ -3977,6 +3989,7 @@ while True:
             r60cached = False
             r80cached = False
             r100cached = False
+
 
             logger.debug("r10cached: %s ; r20cached: %s" %
                          (r10cached, r20cached))
@@ -4025,6 +4038,7 @@ while True:
                 radar_gifx = "1280"
                 radar_gify = "960"
 
+
             r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
             r20url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
             logger.debug("r10url: %s ; r20url: %s" %
@@ -4040,14 +4054,46 @@ while True:
 
 
             # Set the selected radio button to the new radar size
-            
+
+            if frontendRS_rawRadarSize == "extrasmall":
+                frontend.setMenuRadioButton("Window Size", "radarsizes", "extrasmall (320x240)")
+            elif frontendRS_rawRadarSize == "small":
+                frontend.setMenuRadioButton("Window Size", "radarsizes", "small (480x360)")
+            elif frontendRS_rawRadarSize == "normal":
+                frontend.setMenuRadioButton("Window Size", "radarsizes", "normal (640x480)")
+            elif frontendRS_rawRadarSize == "large":
+                frontend.setMenuRadioButton("Window Size", "radarsizes", "large (960x640)")
+            elif frontendRS_rawRadarSize == "extralarge":
+                frontend.setMenuRadioButton("Window Size", "radarsizes", "extralarge (1280x960)")
 
 
+            print(frontendRS_rawRadarSize)
+            # Lastly, load up a placeholder image, and set the viewer resolution size
+            if frontendRS_rawRadarSize == "extrasmall":
+                frontend.setImage("Viewer", "storage//320x240placeholder.gif")
+                frontend.setImageSize("Viewer", width=320, height=240)
+                # Manually set resolution for radar GUI
+            elif frontendRS_rawRadarSize == "small":
+                frontend.setImage("Viewer", "storage//480x360placeholder.gif")
+                frontend.setImageSize("Viewer", width=480, height=360)
+            elif frontendRS_rawRadarSize == "normal":
+                frontend.setImage("Viewer", "storage//640x480placeholder.gif")
+                frontend.setImageSize("Viewer", width=640, height=480)
+            elif frontendRS_rawRadarSize == "large":
+                frontend.setImage("Viewer", "storage//960x720placeholder.gif")
+                frontend.setImageSize("Viewer", width=960, height=720)
+            elif frontendRS_rawRadarSize == "extralarge":
+                frontend.setImage("Viewer", "storage//1280x960placeholder.gif")
+                frontend.setImageSize("Viewer", width=1280, height=960)
 
-            # Write to the config file
 
-            # Using a previously defined array, figure out what radar size we're working with.
-            # For here on out, variables are defined as frontendRS (frontend radar switch)
+            # Do some final variable magic
+            frontend_currentRadarSize = frontendRS_rawRadarSize
+            user_radarImageSize = frontendRS_rawRadarSize
+
+            # We're all done, return back to the radar GUI
+            return
+
 
         def frontend_zoomswitch(btnName):
             # Globalize cache variables
@@ -4563,8 +4609,8 @@ while True:
                 frontend.stopAnimation("Viewer")
         frontend.clearImageCache()       
         frontend.setTitle("PyWeather Radar Viewer")
-        frontend.setResizable(canResize=False)
         # For extra options, use a menu with dropdowns.
+        frontend.setResizable(canResize=True)
         frontend.createMenu("File")
         frontend.addMenuItem("File", "Empty Cache", func=frontend_menuhandling)
         frontend.addMenuSeparator("File")
@@ -4572,21 +4618,23 @@ while True:
         frontend.createMenu("Config")
         frontend.addSubMenu("Config", "Window Size")
         # Define terms for radar window sizes
-        frontend_detailedRadarSizes = ["extrasmall (320x240)", "small (480x360)", "normal (640x480)", "large (960x640)", "extralarge (1280x960)",]
-        for term in frontend_radarSizes:
+        frontend_detailedRadarSizes = ["extralarge (1280x960)", "large (960x640)", "normal (640x480)", "extrasmall (320x240)", "small (480x360)"]
+        # The sequential array is for the radio buttons, the non-seq array is to avoid duplicates when using "in"
+        frontend_seqDetailedRadarSizes = ["extrasmall (320x240)", "small (480x360)", "normal (640x480)", "large (960x640)", "extralarge (1280x960)"]
+        for term in frontend_seqDetailedRadarSizes:
             frontend.addMenuRadioButton("Window Size", "radarsizes", term, frontend_menuhandling)
-
-        # Set the radio buttion by default to the resolution the user has.
-        frontend_radarSizes = ["extrasmall", "small", "normal", "large", "extralarge",]
+        print(frontend_currentRadarSize)
+        # Set the radio buttion by default to the resolution the user has. The order is not organized because of potential duplicates when using "in"
+        frontend_radarSizes = ["extralarge", "large", "normal", "extrasmall", "small"]
         for term in frontend_radarSizes:
             if term == frontend_currentRadarSize:
                 # If we have a match, look through the radar sizes array to find what we need to set the radio button to
-                for size in frontend_radarSizes:
+                for size in frontend_detailedRadarSizes:
                     if term in size:
                         frontend.setMenuRadioButton("Window Size", "radarsizes", size)
                         frontend_detailedCurrentRadarSize = size
 
-        frontend.startLabelFrame("Viewer", column=0, row=1, colspan=3)
+        frontend.startLabelFrame("Viewer", column=0, row=1)
         # Placeholders are needed to start the viewer.
         if user_radarImageSize == "extrasmall":
             frontend.addImage("Viewer", "storage//320x240placeholder.gif")
