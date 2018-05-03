@@ -5,11 +5,7 @@ Most notably, the command used for installing libraries is now gone. If you are 
 
 If you don't have a GUI, but even have all the libraries installed, PyWeather will fail to setup entirely.
 
-PyWeather 0.6.3.1 beta will be releasing by May 4, 2018, 12:00pm EDT. This bug fix will remove all code to install libraries, and will only check for installed libraries, and exit if dependencies are not satisfied. A failure when checking for appJar will not result in an exit.
-
-PyWeather 1.0.0 will have a permanent fix for this issue once research is done. PyWeather 0.6.3.2 beta may be released which contains fixes for the pip installer.
-
-Don't worry, PyWeather 1.0.0 and on will use schematic versioning, so no more 0.x.x.x releases.
+In the next few days, I'll be posting a .zip based on 0.6.3 beta with the hotfix applied.
 
 ## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
@@ -18,16 +14,13 @@ PyWeather is the culmination of thousands of hours of work poured into a silly l
 
 I hope that you can enjoy PyWeather as much as I enjoy making PyWeather, so, let's get started!
 
-## PyWeather Update - Mid April 2018:
-Lots of changes from the last update. Here's what you need to know:
-* I deleted the updater. It was getting way too ambitious and straying from the original goal.
-* I'm fixing a lot of issues & enhancements that have been backlogged. Things should wrap up in June 2018.
-* The updater will be rewritten last, and doing such should take around 4-8 weeks.
-* PyWeather 1.0.0 will enter into QA in August 2018, and release in late September 2018.
-* PyWeather will not go "multi-distro" (Windows edition, Mac edition, Snap edition) until PyWeather 1.0.2.
-* PyWeather 1.0.1 will be released in early 2019, and will include code to deal with updating multiple types of PyWeather, the Termux fix, and other features.
-* PyWeather 1.0.2 will be released in mid 2019, and will include code to configure the config file from a GUI, previous locations, radar location selecting on-the-fly, and other features. Creating a config the config file tool in purely a CLI is extremely hard, and would take a lot of time. It may come, one day.
-
+## PyWeather Update - Early May 2018:
+PyWeather 1.0.0 is coming along, albeit slowly. Here are a few updates:
+* On-the-fly radar size switching is done!
+* I have started working on more minor issues & features, like issues #58, #60, #62, #63, #64, #65, #66, #71, and #74. All of these issues should be fixed by late June 2018.
+* More major fixes, like issues #48, #67, and #72 will be completed by late July 2018.
+* If you haven't already noticed, the updater is now gone. But, don't fear, I'll be recoding it and it should be done by late August 2018, but I might work on the updater occasionally before summer.
+* QA will start in early September 2018, PyWeather 1.0.0 is out by September 30, 2018.
 
 ## Requirements
 To run PyWeather, you'll need:
