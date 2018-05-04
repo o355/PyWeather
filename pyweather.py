@@ -2982,6 +2982,8 @@ while True:
                 alerts_expiretime = data['expires']
                 logger.debug("alerts_issuedtime: %s ; alerts_expiretime: %s"
                              % (alerts_issuedtime, alerts_expiretime))
+                alerts_euattribution = data['attribution']
+                logger.debug("alerts_euattribution: %s" % alerts_euattribution)
                 spinner.stop()
                 print(Fore.YELLOW + Style.BRIGHT + "-----")
                 print(Fore.RED + Style.BRIGHT + "Alert %s/%s:" %
@@ -2992,6 +2994,7 @@ while True:
                 print(Fore.RED + Style.BRIGHT + "Alert expires at: " + Fore.CYAN + Style.BRIGHT + alerts_expiretime)
                 print(Fore.RED + Style.BRIGHT + "Alert Description: " + Fore.CYAN + Style.BRIGHT + alerts_description
                       + Fore.RESET)
+                print(Fore.RED + Style.BRIGHT + "Alert Attribution: " + Fore.CYAN + Style.BRIGHT + alerts_euattribution)
                 alerts_tempiterations = alerts_tempiterations + 1
                 if alerts_completediterations == alerts_totaliterations:
                     logger.debug("Completed iterations == total iterations. Breaking...")
