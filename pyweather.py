@@ -5790,7 +5790,7 @@ while True:
 
             tide_json = json.loads(tideJSON.text)
             if jsonVerbosity == True:
-                logger.debug("tide_json: %s" % astronomy_json)
+                logger.debug("tide_json: %s" % tide_json)
             else:
                 logger.debug("tide json loaded.")
         spinner.start(text="Loading tide data...")
