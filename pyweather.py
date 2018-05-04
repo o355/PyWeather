@@ -8355,10 +8355,12 @@ while True:
                 print(Fore.YELLOW + Style.BRIGHT + "Not enabling extra tools. Returning to the main menu.",
                       "You can come back to this menu to reenable extra tools, or go into your config file and",
                       "enable UI/extratools_enabled (set it to True).", sep="\n")
+                continue
             else:
                 print(Fore.YELLOW + Style.BRIGHT + "Your input wasn't understood, and as such favorite locations will not be enabled.",
                       "You can come back to this menu to reenable extra tools, or go into your config file and",
                       "enable UI/extratools_enabled (set it to True).")
+                continue
 
         print(Fore.YELLOW + Style.BRIGHT + "Listing all cache times:")
         if cache_enabled is True:
