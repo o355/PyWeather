@@ -1322,7 +1322,8 @@ logger.debug("pws_query: %s ; airport_query: %s" %
 # and easier to work with than if "ham" in eggs. Multiple conditions are needed to support the short
 # shortcuts? Basically favloc: instead of favoritelocation:.
 if (geoip_enabled is False and locinput.find("currentlocation") == 0 or
-    geoip_enabled is False and locinput.find("curloc") == 0):
+    geoip_enabled is False and locinput.find("curloc") == 0 or
+    geoip_enabled is False and locinput.find("cl") == 0):
     spinner.fail(text="PyWeather query failed!")
     print("")
     print("Whoops! You entered the query to access your current location, but",
@@ -1331,7 +1332,8 @@ if (geoip_enabled is False and locinput.find("currentlocation") == 0 or
     input()
     sys.exit()
 elif (geoip_available is False and locinput.find("currentlocation") == 0 or
-      geoip_available is False and locinput.find("curloc") == 0):
+      geoip_available is False and locinput.find("curloc") == 0 or
+      geoip_available is False and locinput.find("cl") == 0):
     spinner.fail(text="PyWeather query failed!")
     print("")
     print("Whoops! You entered the query to access your current location, there isn't any current location",
@@ -1340,7 +1342,8 @@ elif (geoip_available is False and locinput.find("currentlocation") == 0 or
     sys.exit()
 # Here we're just looking to see if favloc isn't enabled, and display an error message if it's off.
 elif (favoritelocation_enabled is False and locinput.find("favoritelocation:") == 0 or
-      favoritelocation_enabled is False and locinput.find("favloc:") == 0):
+      favoritelocation_enabled is False and locinput.find("favloc:") == 0 or
+      favoritelocation_enabled is False and locinput.find("fl:") == 0):
     spinner.fail(text="PyWeather query failed!")
     print("")
     print("Whoops! You entered the query to access a favorite location, but the favorite locations",
@@ -1351,7 +1354,8 @@ elif (favoritelocation_enabled is False and locinput.find("favoritelocation:") =
     sys.exit()
 # If favorite locations is on, but there aren't any favorite locations, then throw an error.
 elif (favoritelocation_available is False and locinput.find("favoritelocation:") == 0 or
-        favoritelocation_available is False and locinput.find("favloc:") == 0):
+        favoritelocation_available is False and locinput.find("favloc:") == 0 or
+        favoritelocation_available is False and locinput.find("fl:") == 0):
     spinner.fail(text="PyWeather query failed!")
     print("")
     print("Whoops! You entered the query to access a favorite location, but you don't have any favorite",
@@ -1360,15 +1364,16 @@ elif (favoritelocation_available is False and locinput.find("favoritelocation:")
     sys.exit()
 
 if (favoritelocation_available is True and locinput.find("favoritelocation:") == 0 or
-        favoritelocation_available is True and locinput.find("favloc:") == 0):
+    favoritelocation_available is True and locinput.find("favloc:") == 0 or
+    favoritelocation_available is True and locinput.find("fl:") == 0):
     haveFavoriteLocation = False
     logger.debug("haveFavoriteLocation: %s" % haveFavoriteLocation)
-    if locinput == "favoritelocation:1" or locinput == "favloc:1" and favoritelocation_1 != "None":
+    if locinput == "favoritelocation:1" or locinput == "favloc:1" or locinput == "fl:1" and favoritelocation_1 != "None":
         locinput = favoritelocation_1
         haveFavoriteLocation = True
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
                      (locinput, haveFavoriteLocation))
-    elif locinput == "favoritelocation:1" or locinput == "favloc:1" and favoritelocation_1 == "None":
+    elif locinput == "favoritelocation:1" or locinput == "favloc:1" or locinput == "fl:1" and favoritelocation_1 == "None":
         spinner.fail(text="PyWeather query failed!")
         print("")
         print("Whoops! You entered the query to access your first favorite location, but",
@@ -1376,12 +1381,12 @@ if (favoritelocation_available is True and locinput.find("favoritelocation:") ==
         input()
         sys.exit()
 
-    if locinput == "favoritelocation:2" or locinput == "favloc:2" and favoritelocation_2 != "None" and haveFavoriteLocation is False:
+    if locinput == "favoritelocation:2" or locinput == "favloc:2" or locinput == "fl:2" and favoritelocation_2 != "None" and haveFavoriteLocation is False:
         locinput = favoritelocation_2
         haveFavoriteLocation = True
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
                      (locinput, haveFavoriteLocation))
-    elif locinput == "favoritelocation:2" and favoritelocation_2 == "None":
+    elif locinput == "favoritelocation:2" or locinput == "favloc:2" or locinput == "fl:2" and favoritelocation_2 == "None":
         spinner.fail(text="PyWeather query failed!")
         print("")
         print("Whoops! You entered the query to access your second favorite location, but",
@@ -1389,12 +1394,12 @@ if (favoritelocation_available is True and locinput.find("favoritelocation:") ==
         input()
         sys.exit()
 
-    if locinput == "favoritelocation:3" or locinput == "favloc:3" and favoritelocation_3 != "None" and haveFavoriteLocation is False:
+    if locinput == "favoritelocation:3" or locinput == "favloc:3" or locinput == "fl:3" and favoritelocation_3 != "None" and haveFavoriteLocation is False:
         locinput = favoritelocation_3
         haveFavoriteLocation = True
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
                      (locinput, haveFavoriteLocation))
-    elif locinput == "favoritelocation:3" and favoritelocation_3 == "None":
+    elif locinput == "favoritelocation:3" or locinput == "favloc:3" or locinput == "fl:3" and favoritelocation_3 == "None":
         spinner.fail(text="PyWeather query failed!")
         print("")
         print("Whoops! You entered the query to access your third favorite location, but",
@@ -1402,12 +1407,12 @@ if (favoritelocation_available is True and locinput.find("favoritelocation:") ==
         input()
         sys.exit()
 
-    if locinput == "favoritelocation:4" or locinput == "favloc:4" and favoritelocation_4 != "None" and haveFavoriteLocation is False:
+    if locinput == "favoritelocation:4" or locinput == "favloc:4" or locinput == "fl:4" and favoritelocation_4 != "None" and haveFavoriteLocation is False:
         locinput = favoritelocation_4
         haveFavoriteLocation = True
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
                      (locinput, haveFavoriteLocation))
-    elif locinput == "favoritelocation:4" and favoritelocation_4 == "None":
+    elif locinput == "favoritelocation:4" or locinput == "favloc:4" or locinput == "fl:4" and favoritelocation_4 == "None":
         spinner.fail(text="PyWeather query failed!")
         print("")
         print("Whoops! You entered the query to access your fourth favorite location, but",
@@ -1415,12 +1420,12 @@ if (favoritelocation_available is True and locinput.find("favoritelocation:") ==
         input()
         sys.exit()
 
-    if locinput == "favoritelocation:5" or locinput == "favloc:5" and favoritelocation_5 != "None" and haveFavoriteLocation is False:
+    if locinput == "favoritelocation:5" or locinput == "favloc:5" or locinput == "fl:5" and favoritelocation_5 != "None" and haveFavoriteLocation is False:
         locinput = favoritelocation_5
         haveFavoriteLocation = True
         logger.debug("locinput: %s ; haveFavoriteLocation: %s" %
                      (locinput, haveFavoriteLocation))
-    elif locinput == "favoritelocation:5" and favoritelocation_5 == "None":
+    elif locinput == "favoritelocation:5" or locinput == "favloc:5" or locinput == "fl:5" and favoritelocation_5 == "None":
         spinner.fail(text="PyWeather query failed!")
         print("")
         print("Whoops! You entered the query to access your fifth favorite location, but",
@@ -1439,7 +1444,8 @@ if (favoritelocation_available is True and locinput.find("favoritelocation:") ==
     useGeocoder = True
     logger.debug("useGeocoder: %s" % useGeocoder)
 
-if pws_enabled is False and locinput.find("pws:") == 0:
+if (pws_enabled is False and locinput.find("pws:") == 0 or
+    pws_enabled is False and locinput.find("ps:") == 0):
     spinner.fail(text="PyWeather query failed!")
     print("")
     print("Whoops! You entered the query to access a PWS, but PWS queries are currently",
@@ -1449,7 +1455,8 @@ if pws_enabled is False and locinput.find("pws:") == 0:
 
 # Check for an airport query and if airports aren't enabled.
 if (airports_enabled is False and locinput.find("airport:") == 0 or
-    airports_enabled is False and locinput.find("arpt:") == 0):
+    airports_enabled is False and locinput.find("arpt:") == 0 or
+    airports_enabled is False and locinput.find("ap:") == 0):
     spinner.fail(text="PyWeather query failed!")
     print("")
     print("Whoops! You entered the query to access an airport, but airport queries are currently",
@@ -1458,7 +1465,8 @@ if (airports_enabled is False and locinput.find("airport:") == 0 or
     sys.exit()
 
 if (geoip_available is True and locinput.find("currentlocation") == 0 or
-    geoip_available is True and locinput.find("curloc") == 0):
+    geoip_available is True and locinput.find("curloc") == 0 or
+    geoip_available is True and locinput.find("cl") == 0):
     locinput = currentlocation
     useGeocoder = False
     location = currentlocation
@@ -1466,7 +1474,8 @@ if (geoip_available is True and locinput.find("currentlocation") == 0 or
                  (locinput, useGeocoder))
     logger.debug("location: %s" % currentlocation)
 
-if pws_enabled is True and locinput.find("pws:") == 0:
+if (pws_enabled is True and locinput.find("pws:") == 0 or
+    pws_enabled is True and locinput.find("ps:") == 0):
     # Just for safety, query Wunderground's geolocator to get the lat/lon of the PWS.
     # This also helps to validate the PWS.
     # Use a .lower() on the PWS query for safety. It works when in lower-case.
@@ -1525,14 +1534,17 @@ if pws_enabled is True and locinput.find("pws:") == 0:
     useGeocoder = False
     logger.debug("pws_urls: %s ; useGeocoder: %s" % (pws_urls, useGeocoder))
 
-if (airports_enabled is True and locinput.find("airport:") == 0
-    or airports_enabled is True and locinput.find("arpt:") == 0):
+if (airports_enabled is True and locinput.find("airport:") == 0 or
+    airports_enabled is True and locinput.find("arpt:") == 0 or
+    airports_enabled is True and locinput.find("ap:") == 0):
     # In the location input trim off "airport:" or "arpt:", as we can't call the API with that being included
     spinner.start(text="Validating airport query...")
     if locinput.find("airport:") == 0:
         airport_locinput = locinput.strip("airport:").upper()
     elif locinput.find("arpt:") == 0:
         airport_locinput = locinput.strip("arpt:").upper()
+    elif locinput.find("ap:") == 0:
+        airport_locinput = locinput.strip("ap:").upper()
     logger.debug("airport_locinput: %s" % airport_locinput)
     airportinfourl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
     try:
@@ -1668,27 +1680,16 @@ spinner.stop()
 spinner.start(text='Declaring API variables...')
 
 # Declare the API URLs with the API key, and latitude/longitude strings from earlier.
-if pws_urls is False:
-    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
-    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
-    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
-    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
-    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
-    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
-    alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + latstr + ',' + lonstr + '.json'
-    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
-    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
-    hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
-elif airport_urls is True:
-    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + airport_locinput + '.json'
-    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + airport_locinput + '.json'
-    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + airport_locinput + '.json'
-    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + airport_locinput + '.json'
-    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + airport_locinput + '.json'
-    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + airport_locinput + '.json'
-    alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + airport_locinput + '.json'
-    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + airport_locinput + '.json'
-    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + airport_locinput + '.json'
+if airport_urls is True:
+    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + airport_code + '.json'
+    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + airport_code + '.json'
+    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + airport_code + '.json'
+    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + airport_code + '.json'
+    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + airport_code + '.json'
+    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + airport_code + '.json'
+    alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + airport_code + '.json'
+    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + airport_code + '.json'
+    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + airport_code + '.json'
     hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
 elif pws_urls is True:
     currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + locinput.lower() + '.json'
@@ -1700,6 +1701,17 @@ elif pws_urls is True:
     alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + locinput.lower() + '.json'
     yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + locinput.lower() + '.json'
     tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + locinput.lower() + '.json'
+    hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
+elif pws_urls is False:
+    currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
+    f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
+    hourlyurl = 'http://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
+    tendayurl = 'http://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
+    astronomyurl = 'http://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
+    almanacurl = 'http://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
+    alertsurl = 'http://api.wunderground.com/api/' + apikey + '/alerts/q/' + latstr + ',' + lonstr + '.json'
+    yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
+    tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
     hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
 
 
@@ -6833,8 +6845,8 @@ while True:
             logger.debug("favconfig_menuinput: %s" % favconfig_menuinput)
             if favconfig_menuinput == "1":
                 # Code for adding current location as a favorite location
-                print(Fore.YELLOW + Style.BRIGHT + "Would you like to add " + Fore.CYAN + Style.BRIGHT + location + Fore.YELLOW
-                      + Style.BRIGHT + " as a favorite location? Yes or No.", sep="\n")
+                print(Fore.YELLOW + Style.BRIGHT + "Would you like to add " + Fore.CYAN + Style.BRIGHT + "%s" % location +
+                      Fore.YELLOW + Style.BRIGHT + " as a favorite location? Yes or No.")
                 favconfig_confirmadd = input("Input here: ").lower()
                 logger.debug("favconfig_confirmadd: %s" % favconfig_confirmadd)
                 if favconfig_confirmadd != "yes":
