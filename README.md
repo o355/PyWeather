@@ -1,11 +1,11 @@
-## Critical Bug Warning
-Ever since the PIP 10 release, there have been major issues with PyWeather Setup.
+## Hiatus(ish) Notice
+It's that time of year again (testing season), and that means test reviews, studying, and other things to interrupt PyWeather development. 
 
-Most notably, the command used for installing libraries is now gone. If you are using PIP 10 and have no libraries installed before running the setup file, setup will entirely fail.
+As such, I'll be on hiatus until June 22, 2018. Every Friday night, I'll be coding for 4-5 hours to make up for lost coding time during the week. I may be able to code for a little bit during the week, however.
 
-If you don't have a GUI, but even have all the libraries installed, PyWeather will fail to setup entirely.
+I hope to keep up with the schedule of fixing minor and major PyWeather issues as previously scheduled.
 
-In the next few days, I'll be posting a .zip based on 0.6.3 beta with the hotfix applied.
+The pip 10 bug is planned to be eventually fixed, with the bug fix coming.
 
 ## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
