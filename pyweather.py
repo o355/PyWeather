@@ -1009,7 +1009,8 @@ if validateAPIKey == True and backupKeyLoaded == True:
     spinner.start(text="Validating API key...")
     logger.info("Beginning API key validation.")
     testurl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/NY/New_York.json'
-    logger.debug("testurl: %s" % testurl)
+    testurl_https = 'https://api.wunderground.com/api/' + apikey + '/conditions/q/NY/New_York.json'
+    logger.debug("testurl: %s ; testurl_https: %s" % (testurl, testurl_https))
     try:
         testJSON = requests.get(testurl)
         logger.debug("Acquired test JSON, end result: %s" % testJSON)
@@ -1040,7 +1041,8 @@ if validateAPIKey == True and backupKeyLoaded == True:
             spinner.start(text="Validating backup API key...")
             logger.info("Beginning backup API key validation.")
             testurl = 'http://api.wunderground.com/api/' + apikey2 + '/conditions/q/NY/New_York.json'
-            logger.debug("testurl: %s" % testurl)
+            testurl_https = 'https://api.wunderground.com/api/' + apikey2 + '/conditions/q/NY/New_York.json'
+            logger.debug("testurl: %s ; testurl_https: %s" % (testurl, testurl_https))
             # What if the user's internet connection was alive during the 1st
             # validation, but not the 2nd? That's why this is here.
             try:
@@ -1484,7 +1486,8 @@ if (pws_enabled is True and locinput.find("pws:") == 0 or
     # This also helps to validate the PWS.
     # Use a .lower() on the PWS query for safety. It works when in lower-case.
     pwsinfourl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + locinput.lower() + ".json"
-    logger.debug("pwsinfourl: %s" % pwsinfourl)
+    pwsinfourl_https = 'https://api.wunderground.com/api/' + apikey + '/geolookup/q/' + locinput.lower() + ".json"
+    logger.debug("pwsinfourl: %s ; pwsinfourl_https: %s" % (pwsinfourl, pwsinfourl_https))
     spinner.start(text="Validating PWS query...")
     try:
         pwsinfoJSON = requests.get(pwsinfourl)
@@ -1553,6 +1556,8 @@ if (airports_enabled is True and locinput.find("airport:") == 0 or
         airport_locinput = locinput.strip("ap:").upper()
     logger.debug("airport_locinput: %s" % airport_locinput)
     airportinfourl = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
+    airportinfourl_https = 'https://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
+    logger.debug("airportinfourl: %s ; airportinfourl_https: %s" % (airportinfourl, airportinfourl_https))
     try:
         airportJSON = requests.get(airportinfourl)
         logger.debug("airport information JSON (airportJSON) acquired with end result: %s" % airportJSON)
@@ -1685,7 +1690,8 @@ logger.info("Start API var declare...")
 spinner.stop()
 spinner.start(text='Declaring API variables...')
 
-# Declare the API URLs with the API key, and latitude/longitude strings from earlier.
+# Declare the API URLs with the API key, and latitude/longitude strings from earlier. Default URLs will be http://, and the _https suffix added
+# for URLs with HTTPS enabled.
 if airport_urls is True:
     currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + airport_code + '.json'
     f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + airport_code + '.json'
@@ -1697,6 +1703,16 @@ if airport_urls is True:
     yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + airport_code + '.json'
     tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + airport_code + '.json'
     hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
+    currenturl_https = 'https://api.wunderground.com/api/' + apikey + '/conditions/q/' + airport_code + '.json'
+    f10dayurl_https = 'https://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + airport_code + '.json'
+    hourlyurl_https = 'https://api.wunderground.com/api/' + apikey + '/hourly/q/' + airport_code + '.json'
+    tendayurl_https = 'https://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + airport_code + '.json'
+    astronomyurl_https = 'https://api.wunderground.com/api/' + apikey + '/astronomy/q/' + airport_code + '.json'
+    almanacurl_https = 'https://api.wunderground.com/api/' + apikey + '/almanac/q/' + airport_code + '.json'
+    alertsurl_https = 'https://api.wunderground.com/api/' + apikey + '/alerts/q/' + airport_code + '.json'
+    yesterdayurl_https = 'https://api.wunderground.com/api/' + apikey + '/yesterday/q/' + airport_code + '.json'
+    tideurl_https = 'https://api.wunderground.com/api/' + apikey + '/tide/q/' + airport_code + '.json'
+    hurricaneurl_https = 'https://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
 elif pws_urls is True:
     currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + locinput.lower() + '.json'
     f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + locinput.lower() + '.json'
@@ -1708,6 +1724,16 @@ elif pws_urls is True:
     yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + locinput.lower() + '.json'
     tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + locinput.lower() + '.json'
     hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
+    currenturl_https = 'https://api.wunderground.com/api/' + apikey + '/conditions/q/' + locinput.lower() + '.json'
+    f10dayurl_https = 'https://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + locinput.lower() + '.json'
+    hourlyurl_https = 'https://api.wunderground.com/api/' + apikey + '/hourly/q/' + locinput.lower() + '.json'
+    tendayurl_https = 'https://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + locinput.lower() + '.json'
+    astronomyurl_https = 'https://api.wunderground.com/api/' + apikey + '/astronomy/q/' + locinput.lower() + '.json'
+    almanacurl_https = 'https://api.wunderground.com/api/' + apikey + '/almanac/q/' + locinput.lower() + '.json'
+    alertsurl_https = 'https://api.wunderground.com/api/' + apikey + '/alerts/q/' + locinput.lower() + '.json'
+    yesterdayurl_https = 'https://api.wunderground.com/api/' + apikey + '/yesterday/q/' + locinput.lower() + '.json'
+    tideurl_https = 'https://api.wunderground.com/api/' + apikey + '/tide/q/' + locinput.lower() + '.json'
+    hurricaneurl_https = 'https://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
 elif pws_urls is False:
     currenturl = 'http://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
     f10dayurl = 'http://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
@@ -1719,21 +1745,29 @@ elif pws_urls is False:
     yesterdayurl = 'http://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
     tideurl = 'http://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
     hurricaneurl = 'http://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
+    currenturl_https = 'https://api.wunderground.com/api/' + apikey + '/conditions/q/' + latstr + ',' + lonstr + '.json'
+    f10dayurl_https = 'https://api.wunderground.com/api/' + apikey + '/forecast10day/q/' + latstr + ',' + lonstr + '.json'
+    hourlyurl_https = 'https://api.wunderground.com/api/' + apikey + '/hourly/q/' + latstr + ',' + lonstr + '.json'
+    tendayurl_https = 'https://api.wunderground.com/api/' + apikey + '/hourly10day/q/' + latstr + ',' + lonstr + '.json'
+    astronomyurl_https = 'https://api.wunderground.com/api/' + apikey + '/astronomy/q/' + latstr + ',' + lonstr + '.json'
+    almanacurl_https = 'https://api.wunderground.com/api/' + apikey + '/almanac/q/' + latstr + ',' + lonstr + '.json'
+    alertsurl_https = 'https://api.wunderground.com/api/' + apikey + '/alerts/q/' + latstr + ',' + lonstr + '.json'
+    yesterdayurl_https = 'https://api.wunderground.com/api/' + apikey + '/yesterday/q/' + latstr + ',' + lonstr + '.json'
+    tideurl_https = 'https://api.wunderground.com/api/' + apikey + '/tide/q/' + latstr + ',' + lonstr + '.json'
+    hurricaneurl_https = 'https://api.wunderground.com/api/' + apikey + '/currenthurricane/view.json'
 
 
-logger.debug("currenturl: %s" % currenturl)
-logger.debug("f10dayurl: %s" % f10dayurl)
-logger.debug("hourlyurl: %s" % hourlyurl)
-logger.debug("tendayurl: %s" % tendayurl)
-logger.debug("astronomyurl: %s" % astronomyurl)
-logger.debug("almanacurl: %s" % almanacurl)
-logger.debug("yesterdayurl: %s" % yesterdayurl)
-logger.debug("tideurl: %s" % tideurl)
-logger.debug("hurricaneurl: %s" % hurricaneurl)
-logger.debug("yesterdayurl: %s" % yesterdayurl)
-logger.info("End API var declare...")
+logger.debug("currenturl: %s ; currenturl_https: %s" % (currenturl, currenturl_https))
+logger.debug("f10dayurl: %s ; f10dayurl_https: %s" % (f10dayurl, f10dayurl_https))
+logger.debug("hourlyurl: %s ; hourlyurl_https: %s" % (hourlyurl, hourlyurl_https))
+logger.debug("tendayurl: %s ; tendayurl_https: %s" % (tendayurl, tendayurl_https))
+logger.debug("astronomyurl: %s ; astronomyurl_https: %s" % (astronomyurl, astronomyurl_https))
+logger.debug("almanacurl: %s ; almanacurl_https: %s" % (almanacurl, almanacurl_https))
+logger.debug("yesterdayurl: %s ; yesterdayurl_https: %s" % (yesterdayurl, yesterdayurl_https))
+logger.debug("tideurl: %s ; tideurl_https: %s" % (tideurl, tideurl_https))
+logger.debug("hurricaneurl: %s ; hurricaneurl_https: %s" % (hurricaneurl, hurricaneurl_https))
 
-logger.info("Start API fetch...")
+logger.info("End API URL declare, Start API fetch...")
 
 # If a user requested their API key to be validated, and the backup key
 # can be loaded (as was checked earlier), we do it here.
@@ -3894,18 +3928,24 @@ while True:
                      (r60cached, r80cached, r100cached))
         radar_zoomlevel = "None"
         r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
+        r10url_https = 'https://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
         r20url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
-        logger.debug("r10url: %s ; r20url: %s" %
-                     (r10url, r20url))
+        r20url_https = 'https://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
         r40url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=40&radunits=km'
+        r40url_https = 'https://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=40&radunits=km'
         r60url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=60&radunits=km'
-        logger.debug("r40url: %s ; r60url: %s" %
-                     (r40url, r60url))
+        r60url_https = 'https://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=60&radunits=km'
         r80url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=80&radunits=km'
-        r100url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=100&radunits=km' 
-        logger.debug("r80url: %s ; r100url: %s" %
-                     (r80url, r100url))      
-        
+        r80url_https = 'https://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=80&radunits=km'
+        r100url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=100&radunits=km'
+        r100url_https = 'https://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=100&radunits=km'
+
+        logger.debug("r10url: %s ; r10url_https: %s" % (r10url, r10url_https))
+        logger.debug("r20url: %s ; r20url_https: %s" % (r20url, r20url_https))
+        logger.debug("r40url: %s ; r40url_https: %s" % (r40url, r40url_https))
+        logger.debug("r60url: %s ; r60url_https: %s" % (r60url, r60url_https))
+        logger.debug("r80url: %s ; r80url_https: %s" % (r80url, r80url_https))
+        logger.debug("r100url: %s ; r100url_https: %s" % (r100url, r100url_https))
 
         def frontend_menuhandling(btnName):
             global r10cached
@@ -4062,16 +4102,10 @@ while True:
 
             r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
             r20url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
-            logger.debug("r10url: %s ; r20url: %s" %
-                         (r10url, r20url))
             r40url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=40&radunits=km'
             r60url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=60&radunits=km'
-            logger.debug("r40url: %s ; r60url: %s" %
-                         (r40url, r60url))
             r80url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=80&radunits=km'
             r100url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=100&radunits=km'
-            logger.debug("r80url: %s ; r100url: %s" %
-                         (r80url, r100url))
 
 
             # Set the selected radio button to the new radar size
@@ -5807,7 +5841,7 @@ while True:
                          (tidedata_prefetched, refresh_tidedataflagged))
 
             tide_json = json.loads(tideJSON.text)
-            if jsonVerbosity == True:
+            if jsonVerbosity is True:
                 logger.debug("tide_json: %s" % tide_json)
             else:
                 logger.debug("tide json loaded.")
@@ -5883,7 +5917,7 @@ while True:
                 hurricaneJSON = requests.get(hurricaneurl)
                 cachetime_hurricane = time.time()
                 hurricane_json = json.loads(hurricaneJSON.text)
-                if jsonVerbosity == "True":
+                if jsonVerbosity is True:
                     logger.debug("hurricane_json: %s" % hurricane_json)
                 else:
                     logger.debug("hurricane_json loaded successfully.")
@@ -6841,8 +6875,14 @@ while True:
             print(Fore.YELLOW + Style.BRIGHT + "Favorite Location 5 - " + Fore.CYAN + Style.BRIGHT + favoritelocation_5d)
             print("")
             print(Fore.YELLOW + Style.BRIGHT + "What would you like to do with your favorite locations?")
-            print(Fore.YELLOW + Style.BRIGHT + "- Add this location (" + Fore.CYAN + Style.BRIGHT + str(location) + Fore.YELLOW
-                  + Style.BRIGHT + ") as a favorite location - Enter " + Fore.CYAN + "1")
+            # Print a different menu option based on if the location is a PWS query or not.
+            if pws_query is True:
+                print(Fore.YELLOW + Style.BRIGHT + "- Add this location (" + Fore.CYAN + Style.BRIGHT + str(location) + Fore.YELLOW
+                      + Style.BRIGHT + " as a favorite location - Enter " + Fore.CYAN + "1")
+            else:
+                print(Fore.YELLOW + Style.BRIGHT + "- Add this location (" + Fore.CYAN + Style.BRIGHT + str(
+                    location) + Fore.YELLOW
+                      + Style.BRIGHT + ") as a favorite location - Enter " + Fore.CYAN + "1")
             print(Fore.YELLOW + Style.BRIGHT + "- Add a location as a favorite location - Enter " + Fore.CYAN + Style.BRIGHT + "2")
             print(Fore.YELLOW + Style.BRIGHT + "- Edit a favorite location - Enter " + Fore.CYAN + Style.BRIGHT + "3")
             print(Fore.YELLOW + Style.BRIGHT + "- Remove a favorite location - Enter " + Fore.CYAN + Style.BRIGHT + "4")
