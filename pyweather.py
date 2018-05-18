@@ -1778,13 +1778,32 @@ spinner.stop()
 spinner.start(text="Fetching current weather information...")
 
 try:
-    summaryJSON = requests.get(currenturl)
+    summaryJSON = requests.get(currenturl_https)
     cachetime_current = time.time()
     logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
+except requests.exceptions.SSLError:
+    logger.info("Failed to make HTTPS request, making HTTP request instead...")
+    # I get it, this isn't the most Pythonic thing ever. But it works.
+    try:
+        summaryJSON = requests.get(currenturl)
+        cachetime_current = time.time()
+        logger.debug("Acquired summary JSON, end result: %s" % summaryJSON)
+    except:
+        spinner.fail("Failed to fetch current weather information!")
+        print("")
+        logger.warning("No connection to the API! Is the connection offline?")
+        print("When PyWeather attempted to fetch current weather information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
 except:
     spinner.fail("Failed to fetch current weather information!")
     print("")
-    logger.warning("No connection to the API!! Is the connection offline?")
+    logger.warning("No connection to the API! Is the connection offline?")
     print("When PyWeather attempted to fetch current weather information,",
           "PyWeather ran into an error. If you're on a network with a filter, make sure",
           "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
@@ -1801,9 +1820,27 @@ if yesterdaydata_onsummary is True or prefetch_yesterdaydata is True:
     yesterdaydata_prefetched = True
     logger.debug("yesterdaydata_prefetched: %s" % yesterdaydata_prefetched)
     try:
-        yesterdayJSON = requests.get(yesterdayurl)
+        yesterdayJSON = requests.get(yesterdayurl_https)
         cachetime_yesterday = time.time()
         logger.debug("Acquired yesterday JSON, end result: %s" % yesterdayJSON)
+    except requests.exceptions.SSLError:
+        logger.info("Failed to make HTTPS request, making HTTP request instead...")
+        try:
+            yesterdayJSON = requests.get(yesterdayurl)
+            cachetime_yesterday = time.time()
+            logger.debug("Acquired yesterday JSON, end result: %s" % yesterdayJSON)
+        except:
+            spinner.fail("Failed to fetch yesterday weather information!")
+            print("")
+            logger.warning("No connection to the API!! Is the connection offline?")
+            print("When PyWeather attempted to fetch yesterday's weather information,",
+                  "PyWeather ran into an error. If you're on a network with a filter, make sure",
+                  "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+                  "connection.", sep="\n")
+            printException()
+            print("Press enter to continue.")
+            input()
+            sys.exit()
     except:
         spinner.fail("Failed to fetch yesterday weather information!")
         print("")
@@ -1823,9 +1860,27 @@ else:
 spinner.stop()
 spinner.start(text="Fetching forecast information...")
 try:
-    forecast10JSON = requests.get(f10dayurl)
+    forecast10JSON = requests.get(f10dayurl_https)
     cachetime_forecast = time.time()
     logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
+except requests.exceptions.SSLError:
+    logger.info("Failed to make HTTPS request, making HTTP request instead...")
+    try:
+        forecast10JSON = requests.get(f10dayurl)
+        cachetime_forecast = time.time()
+        logger.debug("Acquired forecast 10day JSON, end result: %s" % forecast10JSON)
+    except:
+        spinner.fail(text="Failed to fetch forecast information!")
+        print("")
+        logger.warning("No connection to the API!! Is the connection offline?")
+        print("When PyWeather attempted to fetch forecast information,",
+              "PyWeather ran into an error. If you're on a network with a filter, make sure",
+              "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+              "connection.", sep="\n")
+        printException()
+        print("Press enter to continue.")
+        input()
+        sys.exit()
 except:
     spinner.fail(text="Failed to fetch forecast information!")
     print("")
@@ -1845,8 +1900,26 @@ if sundata_summary == True:
     spinner.start(text="Fetching astronomy information...")
     try:
         cachetime_sundata = time.time()
-        sundataJSON = requests.get(astronomyurl)
+        sundataJSON = requests.get(astronomyurl_https)
         logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
+    except requests.exceptions.SSLError:
+        logger.info("Failed to make HTTPS request, making HTTP request instead...")
+        try:
+            cachetime_sundata = time.time()
+            sundataJSON = requests.get(astronomyurl)
+            logger.debug("Acquired astronomy JSON, end result: %s" % sundataJSON)
+        except:
+            spinner.fail(text="Failed to fetch astronomy information!")
+            print("")
+            logger.warning("No connection to the API!! Is the connection offline?")
+            print("When PyWeather attempted to fetch astronomy information,",
+                  "PyWeather ran into an error. If you're on a network with a filter, make sure",
+                  "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+                  "connection.", sep="\n")
+            printException()
+            print("Press enter to continue.")
+            input()
+            sys.exit()
     except:
         spinner.fail(text="Failed to fetch astronomy information!")
         print("")
@@ -1864,7 +1937,7 @@ if prefetch10Day_atStart == True:
     spinner.stop()
     spinner.start(text="Fetching 10 day/1.5 day hourly information...")
     try:
-        hourly10JSON = requests.get(tendayurl)
+        hourly10JSON = requests.get(tendayurl_https)
         # Special situation: We separate the 3-day/10-day hourly caches, but
         # they use the same cache timer. 
         cachetime_hourly10 = time.time()
@@ -1872,9 +1945,33 @@ if prefetch10Day_atStart == True:
         tenday_prefetched = True
         logger.debug("tenday_prefetched: %s" % tenday_prefetched)
         logger.debug("Acquired 10 day hourly JSON, end result: %s" % hourly10JSON)
-        hourly36JSON = requests.get(hourlyurl)
+        hourly36JSON = requests.get(hourlyurl_https)
         cachetime_hourly36 = time.time()
         logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
+    except requests.exceptions.SSLError:
+        logger.info("Failed to make HTTPS request, making HTTP request instead...")
+        try:
+            hourly10JSON = requests.get(tendayurl)
+            cachetime_hourly10 = time.time()
+            logger.info("Acquiring the 10 day hourly JSON, as specified.")
+            tenday_prefetched = True
+            logger.debug("tenday_prefetched: %s" % tenday_prefetched)
+            logger.debug("Acquired 10 day hourly JSON, end result: %s" % hourly10JSON)
+            hourly36JSON = requests.get(hourlyurl)
+            cachetime_hourly36 = time.time()
+            logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
+        except:
+            spinner.fail(text="Failed to fetch 10 day/1.5 day hourly information!")
+            print("")
+            logger.warning("No connection to the API!! Is the connection offline?")
+            print("When PyWeather attempted to fetch 10 day/1.5 day hourly information,",
+                  "PyWeather ran into an error. If you're on a network with a filter, make sure",
+                  "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+                  "connection.", sep="\n")
+            printException()
+            print("Press enter to continue.")
+            input()
+            sys.exit()
     except:
         spinner.fail(text="Failed to fetch 10 day/1.5 day hourly information!")
         print("")
@@ -1892,11 +1989,31 @@ else:
     spinner.stop()
     spinner.start(text="Fetching 1.5 day hourly information...")
     try:
-        hourly36JSON = requests.get(hourlyurl)
+        hourly36JSON = requests.get(hourlyurl_https)
         cachetime_hourly36 = time.time()
         tenday_prefetched = False
         logger.debug("tenday_prefetched: %s" % tenday_prefetched)
         logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
+    except requests.exceptions.SSLError:
+        logger.info("Failed to make HTTPS request, making HTTP request instead...")
+        try:
+            hourly36JSON = requests.get(hourlyurl)
+            cachetime_hourly36 = time.time()
+            tenday_prefetched = False
+            logger.debug("tenday_prefetched: %s" % tenday_prefetched)
+            logger.debug("Acquired 36 hour hourly JSON, end result: %s" % hourly36JSON)
+        except:
+            spinner.fail(text="Failed to fetch 1.5 day hourly information!")
+            print("")
+            logger.warning("No connection to the API!! Is the connection offline?")
+            print("When PyWeather attempted to 1.5 day hourly information,",
+                  "PyWeather ran into an error. If you're on a network with a filter, make sure",
+                  "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+                  "connection.", sep="\n")
+            printException()
+            print("Press enter to continue.")
+            input()
+            sys.exit()
     except:
         spinner.fail(text="Failed to fetch 1.5 day hourly information!")
         print("")
