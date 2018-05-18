@@ -1004,7 +1004,7 @@ logger.debug("airport_urls: %s ; useGeocoder: %s" %
              (airport_urls, useGeocoder))
 
 # Validate the API key before boot. It's now up here due to the new features at boot.
-if validateAPIKey == True and backupKeyLoaded == True:
+if validateAPIKey == True:
     spinner.stop()
     spinner.start(text="Validating API key...")
     logger.info("Beginning API key validation.")
@@ -4106,7 +4106,19 @@ while True:
             r60url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=60&radunits=km'
             r80url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=80&radunits=km'
             r100url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=100&radunits=km'
+            r10url_https = 'https://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
+            r20url_https = 'https://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
+            r40url_https = 'https://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=40&radunits=km'
+            r60url_https = 'https://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=60&radunits=km'
+            r80url_https = 'https://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=80&radunits=km'
+            r100url_https = 'https://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=100&radunits=km'
 
+            logger.debug("r10url: %s ; r10url_https: %s" % (r10url, r10url_https))
+            logger.debug("r20url: %s ; r20url_https: %s" % (r20url, r20url_https))
+            logger.debug("r40url: %s ; r40url_https: %s" % (r40url, r40url_https))
+            logger.debug("r60url: %s ; r60url_https: %s" % (r60url, r60url_https))
+            logger.debug("r80url: %s ; r80url_https: %s" % (r80url, r80url_https))
+            logger.debug("r100url: %s ; r100url_https: %s" % (r100url, r100url_https))
 
             # Set the selected radio button to the new radar size
 
@@ -5186,9 +5198,11 @@ while True:
                      % (historical_loops, historical_totalloops))
         if pws_available is False:
             historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historical_input + '/q/' + latstr + "," + lonstr + '.json'
+            historicalurl_https = 'https://api.wunderground.com/api/' + apikey + '/history_' + historical_input + '/q/' + latstr + "," + lonstr + '.json'
         elif pws_available is True:
             historicalurl = 'http://api.wunderground.com/api/' + apikey + '/history_' + historical_input + '/q/' + locinput.lower() + '.json'
-        logger.debug("historicalurl: %s" % historicalurl)
+            historicalurl_https = 'https://api.wunderground.com/api/' + apikey + '/history_' + historical_input + '/q/' + locinput.lower() + '.json'
+        logger.debug("historicalurl: %s ; historicalurl_https: %s" % (historicalurl, historicalurl_https))
         
         historical_skipfetch = False
         logger.debug("historical_skipfetch: %s" % historical_skipfetch)
@@ -5963,7 +5977,8 @@ while True:
                          (stormlon, stormlonurl))
             # Declare the URL for nearest city data
             nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + stormlaturl + '&lng=' + stormlonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
-            logger.debug("nearesturl: %s" % nearesturl)
+            nearesturl_https = 'https://secure.geonames.org/findNearbyPlaceNameJSON?lat=' + stormlaturl + '&lng=' + stormlonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
+            logger.debug("nearesturl: %s ; nearesturl_https: %s" % (nearesturl, nearesturl_https))
             # Enter in here if the nearest city option is enabled
             if hurricanenearestcity_enabled is True:
                 logger.info("hurricanenearestcity_enabled is True, loading up data...")
@@ -6236,7 +6251,8 @@ while True:
                     hurricaneforecast_lonurl = str(hurricaneforecast_lon)
                     logger.debug("hurricaneforecast_lonurl: %s" % hurricaneforecast_lonurl)
                     nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneforecast_laturl + '&lng=' + hurricaneforecast_lonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
-                    logger.debug("nearesturl: %s" % nearesturl)
+                    nearesturl_https = 'https://secure.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneforecast_laturl + '&lng=' + hurricaneforecast_lonurl + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
+                    logger.debug("nearesturl: %s ; nearesturl_https: %s" % (nearesturl, nearesturl_https))
 
                     if hurricaneforecast_lat >= 0:
                         hurricaneforecast_lat = str(hurricaneforecast_lat) + "° N"
@@ -6519,6 +6535,9 @@ while True:
                                          (hurricaneextforecasttime_detail, hurricaneextforecast_lat))
                             logger.debug("hurricaneextforecast_lon: %s" % hurricaneextforecast_lon)
                             nearesturl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneextforecast_urllat + '&lng=' + hurricaneextforecast_urllon + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
+                            nearesturl_https = 'https://secure.geonames.org/findNearbyPlaceNameJSON?lat=' + hurricaneextforecast_urllat + '&lng=' + hurricaneextforecast_urllon + '&username=' + geonames_apiusername + '&radius=300&maxRows=1' + hurricane_citiesamp
+                            logger.debug("nearesturl: %s ; nearesturl_https: %s" % (nearesturl, nearesturl_https))
+
 
                             if hurricaneextforecast_lat >= 0:
                                 hurricaneextforecast_lat = str(hurricaneextforecast_lat) + "° N"
@@ -7000,7 +7019,8 @@ while True:
                         airport_locinput = favloc_manualinput.strip("airport:")
                         logger.debug("airport_locinput: %s" % airport_locinput)
                         airportvalidate_url = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
-                        logger.debug("airportvalidate_url: %s" % airportvalidate_url)
+                        airportvalidate_url_https = 'https://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
+                        logger.debug("airportvalidate_url: %s ; airportvalidate_url_https: %s" % (airportvalidate_url, airportvalidate_url_https))
                         try:
                             airportvalidateJSON = requests.get(airportvalidate_url)
                             logger.debug("airportvalidateJSON acquired with end result: %s" % airportvalidateJSON)
@@ -7231,7 +7251,8 @@ while True:
                         spinner.start(text="Validating favorite location...")
                         favloc_editinput = favloc_editinput.strip("airport:")
                         airportvalidate_url = 'http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + favloc_editinput.lower() + ".json"
-                        logger.debug("airportvalidate_url: %s" % airportvalidate_url)
+                        airportvalidate_url_https = 'https://api.wunderground.com/api/' + apikey + '/geolookup/q/' + favloc_editinput.lower() + ".json"
+                        logger.debug("airportvalidate_url: %s ; airportvalidate_url_https: %s" % (airportvalidate_url, airportvalidate_url_https))
                         try:
                             airportvalidateJSON = requests.get(airportvalidate_url)
                             logger.debug("airportvalidateJSON acquired with end result: %s" % airportvalidateJSON)
