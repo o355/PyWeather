@@ -2031,9 +2031,27 @@ if almanac_summary == True:
     spinner.stop()
     spinner.start(text="Fetching almanac information...")
     try:
-        almanacJSON = requests.get(almanacurl)
+        almanacJSON = requests.get(almanacurl_https)
         cachetime_almanac = time.time()
         logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
+    except requests.exceptions.SSLError:
+        logger.info("Failed to make HTTPS request, making HTTP request instead...")
+        try:
+            almanacJSON = requests.get(almanacurl)
+            cachetime_almanac = time.time()
+            logger.debug("Acquired almanac JSON, end result: %s" % almanacJSON)
+        except:
+            spinner.fail(text="Failed to fetch almanac information!")
+            print("")
+            logger.warning("No connection to the API!! Is the connection offline?")
+            print("When PyWeather attempted to fetch almanac information,",
+                  "PyWeather ran into an error. If you're on a network with a filter, make sure",
+                  "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+                  "connection.", sep="\n")
+            printException()
+            print("Press enter to continue.")
+            input()
+            sys.exit()
     except:
         spinner.fail(text="Failed to fetch almanac information!")
         print("")
@@ -2051,10 +2069,29 @@ if showAlertsOnSummary == True:
     spinner.stop()
     spinner.start(text="Fetching alerts information...")
     try:
-        alertsJSON = requests.get(alertsurl)
+        alertsJSON = requests.get(alertsurl_https)
         cachetime_alerts = time.time()
         alertsPrefetched = True
         logger.debug("Acquired alerts JSON, end result: %s" % alertsJSON)
+    except requests.exceptions.SSLError:
+        logger.info("Failed to make HTTPS request, making HTTP request instead...")
+        try:
+            alertsJSON = requests.get(alertsurl)
+            cachetime_alerts = time.time()
+            alertsPrefetched = True
+            logger.debug("Acquired alerts JSON, end result: %s" % alertsJSON)
+        except:
+            spinner.fail(text="Failed to fetch alerts information!")
+            print("")
+            logger.warning("No connection to the API!! Is the connection offline?")
+            print("When PyWeather attempted to fetch alerts information,",
+                  "PyWeather ran into an error. If you're on a network with a filter, make sure",
+                  "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+                  "connection.", sep="\n")
+            printException()
+            print("Press enter to continue.")
+            input()
+            sys.exit()
     except:
         spinner.fail(text="Failed to fetch alerts information!")
         print("")
@@ -2076,10 +2113,28 @@ if showTideOnSummary == True:
     spinner.stop()
     spinner.start(text="Fetching tide information...")
     try:
-        tideJSON = requests.get(tideurl)
+        tideJSON = requests.get(tideurl_https)
         cachetime_tide = time.time()
         tidePrefetched = True
         logger.debug("Acquired tide JSON, end result: %s" % tideJSON)
+    except requests.exceptions.SSLError:
+        try:
+            tideJSON = requests.get(tideurl)
+            cachetime_tide = time.time()
+            tidePrefetched = True
+            logger.debug("Acquired tide JSON, end result: %s" % tideJSON)
+        except:
+            spinner.fail(text="Failed to fetch tide information!")
+            print("")
+            logger.warning("No connection to the API!! Is the connection offline?")
+            print("When PyWeather attempted to fetch tide information,",
+                  "PyWeather ran into an error. If you're on a network with a filter, make sure",
+                  "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+                  "connection.", sep="\n")
+            printException()
+            print("Press enter to continue.")
+            input()
+            sys.exit()
     except:
         spinner.fail(text="Failed to fetch tide information!")
         print("")
@@ -2102,10 +2157,28 @@ if prefetchHurricane_atboot == True:
     spinner.stop()
     spinner.start(text="Fetching hurricane information...")
     try:
-        hurricaneJSON = requests.get(hurricaneurl)
+        hurricaneJSON = requests.get(hurricaneurl_https)
         cachetime_hurricane = time.time()
         hurricanePrefetched = True
         logger.debug("Acquired hurricane JSON, end result: %s" % hurricaneJSON)
+    except requests.exceptions.SSLError:
+        try:
+            hurricaneJSON = requests.get(hurricaneurl)
+            cachetime_hurricane = time.time()
+            hurricanePrefetched = True
+            logger.debug("Acquired hurricane JSON, end result: %s" % hurricaneJSON)
+        except:
+            spinner.fail(text="Failed to fetch hurricane information!")
+            print("")
+            logger.warning("No connection to the API!! Is the connection offline?")
+            print("When PyWeather attempted to fetch hurricane information,",
+                  "PyWeather ran into an error. If you're on a network with a filter, make sure",
+                  "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+                  "connection.", sep="\n")
+            printException()
+            print("Press enter to continue.")
+            input()
+            sys.exit()
     except:
         spinner.fail(text="Failed to fetch hurricane information!")
         print("")
