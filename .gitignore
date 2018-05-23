@@ -96,6 +96,9 @@ ENV/
 
 # <-- PyWeather extra gitignore stuff -->
 
+# KDE Dolphin files
+*.directory
+
 # Eclipse files
 *.project
 *.pydevproject
