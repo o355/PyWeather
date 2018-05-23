@@ -1015,6 +1015,7 @@ if validateAPIKey == True:
         testJSON = requests.get(testurl_https)
         logger.debug("Acquired test JSON, end result: %s" % testJSON)
     except requests.exceptions.SSLError:
+        logger.info("Failed to make HTTPS request, making HTTP request instead...")
         try:
             testJSON = requests.get(testurl_https)
             logger.debug("Acquired test JSON, end result: %s" % testJSON)
@@ -1067,6 +1068,7 @@ if validateAPIKey == True:
                 testJSON = requests.get(testurl_https)
                 logger.debug("Acquired test JSON, end result: %s" % testJSON)
             except requests.exceptions.SSLError:
+                logger.info("Failed to make HTTPS request, making HTTP request instead...")
                 try:
                     testJSON = requests.get(testurl)
                     logger.debug("Acquired test JSON, end result: %s" % testJSON)
@@ -1532,6 +1534,7 @@ if (pws_enabled is True and locinput.find("pws:") == 0 or
         else:
             logger.debug("pwsinfo_json has been loaded.")
     except requests.exceptions.SSLError:
+        logger.info("Failed to make HTTPS request, making HTTP request instead...")
         try:
             pwsinfoJSON = requests.get(pwsinfourl)
             logger.debug("pwsinfoJSON acquired with: %s" % pwsinfoJSON)
@@ -1619,6 +1622,7 @@ if (airports_enabled is True and locinput.find("airport:") == 0 or
         else:
             logger.debug("airportinfo_json has been loaded.")
     except requests.exceptions.SSLError:
+        logger.info("Failed to make HTTPS request, making HTTP request instead...")
         try:
             airportJSON = requests.get(airportinfourl_https)
             logger.debug("airport information JSON (airportJSON) acquired with end result: %s" % airportJSON)
@@ -2188,6 +2192,7 @@ if showTideOnSummary == True:
         tidePrefetched = True
         logger.debug("Acquired tide JSON, end result: %s" % tideJSON)
     except requests.exceptions.SSLError:
+        logger.info("Failed to make HTTPS request, making HTTP request instead...")
         try:
             tideJSON = requests.get(tideurl)
             cachetime_tide = time.time()
@@ -2232,6 +2237,7 @@ if prefetchHurricane_atboot == True:
         hurricanePrefetched = True
         logger.debug("Acquired hurricane JSON, end result: %s" % hurricaneJSON)
     except requests.exceptions.SSLError:
+        logger.info("Failed to make HTTPS request, making HTTP request instead...")
         try:
             hurricaneJSON = requests.get(hurricaneurl)
             cachetime_hurricane = time.time()
@@ -3002,6 +3008,7 @@ while True:
                 logger.debug("refresh_currentflagged: %s ; current cache time: %s" % 
                              (refresh_currentflagged, time.time() - cachetime_current))
             except requests.exceptions.SSLError:
+                logger.info("Failed to make HTTPS request, making HTTP request instead...")
                 try:
                     summaryJSON = requests.get(currenturl)
                     logger.debug("summaryJSON acquired, end result: %s" % summaryJSON)
@@ -3239,6 +3246,7 @@ while True:
                 refresh_alertsflagged = False
                 logger.debug("alertsPrefetched: %s" % alertsPrefetched)
             except requests.exceptions.SSLError:
+                logger.info("Failed to make HTTPS request, making HTTP request instead...")
                 try:
                     alertsJSON = requests.get(alertsurl)
                     logger.debug("alertsJSON acquired, end result %s." % alertsJSON)
@@ -3442,6 +3450,7 @@ while True:
                 logger.debug("hourly36JSON acquired, end result: %s" % hourly36JSON)
                 cachetime_hourly36 = time.time()
             except requests.exceptions.SSLError:
+                logger.info("Failed to make HTTPS request, making HTTP request instead...")
                 try:
                     hourly36JSON = requests.get(hourlyurl)
                     logger.debug("hourly36JSON acquired, end result: %s" % hourly36JSON)
@@ -3621,6 +3630,7 @@ while True:
                 logger.debug("Retrieved hourly 10 JSON with end result: %s" % tendayJSON)
                 cachetime_hourly10 = time.time()
             except requests.exceptions.SSLError:
+                logger.info("Failed to make HTTPS request, making HTTP request instead...")
                 try:
                     tendayJSON = requests.get(tendayurl)
                     logger.debug("Retrieved hourly 10 JSON with end result: %s" % tendayJSON)
@@ -3807,6 +3817,7 @@ while True:
                 cachetime_forecast = time.time()
                 logger.debug("forecast10JSON acquired, end result: %s" % forecast10JSON)
             except requests.exceptions.SSLError:
+                logger.info("Failed to make HTTPS request, making HTTP request instead...")
                 try:
                     forecast10JSON = requests.get(f10dayurl)
                     cachetime_forecast = time.time()
@@ -4544,6 +4555,7 @@ while True:
                     try:
                         tempurl = requests.get(r10url_https, stream=True)
                     except requests.exceptions.SSLError:
+                        logger.info("Failed to make HTTPS request, making HTTP request instead...")
                         try:
                             tempurl = requests.get(r10url, stream=True)
                         except:
@@ -4605,6 +4617,7 @@ while True:
                     try:
                         tempurl = requests.get(r20url_https, stream=True)
                     except requests.exceptions.SSLError:
+                        logger.info("Failed to make HTTPS request, making HTTP request instead...")
                         try:
                             tempurl = requests.get(r20url, stream=True)
                         except:
@@ -4665,6 +4678,7 @@ while True:
                     try:
                         tempurl = requests.get(r40url_https, stream=True)
                     except requests.exceptions.SSLError:
+                        logger.info("Failed to make HTTPS request, making HTTP request instead...")
                         try:
                             tempurl = requests.get(r40url, stream=True)
                         except:
@@ -4725,6 +4739,7 @@ while True:
                     try:
                         tempurl = requests.get(r60url_https, stream=True)
                     except requests.exceptions.SSLError:
+                        logger.info("Failed to make HTTPS request, making HTTP request instead...")
                         try:
                             tempurl = requests.get(r60url, stream=True)
                         except:
@@ -4784,6 +4799,7 @@ while True:
                     try:
                         tempurl = requests.get(r80url_https, stream=True)
                     except requests.exceptions.SSLError:
+                        logger.info("Failed to make HTTPS request, making HTTP request instead...")
                         try:
                             tempurl = requests.get(r80url, stream=True)
                         except:
@@ -4844,6 +4860,7 @@ while True:
                     try:
                         tempurl = requests.get(r100url_https, stream=True)
                     except requests.exceptions.SSLError:
+                        logger.info("Failed to make HTTPS request, making HTTP request instead...")
                         try:
                             tempurl = requests.get(r100url, stream=True)
                         except:
@@ -4907,6 +4924,7 @@ while True:
                     try:
                         tempurl = requests.get(r10url_https, stream=True)
                     except requests.exceptions.SSLError:
+                        logger.info("Failed to make HTTPS request, making HTTP request instead...")
                         try:
                             tempurl = requests.get(r10url, stream=True)
                         except:
@@ -4943,6 +4961,7 @@ while True:
                     try:
                         tempurl = requests.get(r20url_https, stream=True)
                     except requests.exceptions.SSLError:
+                        logger.info("Failed to make HTTPS request, making HTTP request instead...")
                         try:
                             tempurl = requests.get(r20url, stream=True)
                         except:
@@ -4980,6 +4999,7 @@ while True:
                     try:
                         tempurl = requests.get(r40url_https, stream=True)
                     except requests.exceptions.SSLError:
+                        logger.info("Failed to make HTTPS request, making HTTP request instead...")
                         try:
                             tempurl = requests.get(r40url, stream=True)
                         except:
@@ -5017,6 +5037,7 @@ while True:
                     try:
                         tempurl = requests.get(r60url_https, stream=True)
                     except requests.exceptions.SSLError:
+                        logger.info("Failed to make HTTPS request, making HTTP request instead...")
                         try:
                             tempurl = requests.get(r60url, stream=True)
                         except:
@@ -5054,6 +5075,7 @@ while True:
                     try:
                         tempurl = requests.get(r80url_https, stream=True)
                     except requests.exceptions.SSLError:
+                        logger.info("Failed to make HTTPS request, making HTTP request instead...")
                         try:
                             tempurl = requests.get(r80url, stream=True)
                         except:
@@ -5091,6 +5113,7 @@ while True:
                     try:
                         tempurl = requests.get(r100url_https, stream=True)
                     except requests.exceptions.SSLError:
+                        logger.info("Failed to make HTTPS request, making HTTP request instead...")
                         try:
                             tempurl = requests.get(r100url, stream=True)
                         except:
@@ -5263,6 +5286,7 @@ while True:
                 logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
                 cachetime_almanac = time.time()
             except requests.exceptions.SSLError:
+                logger.info("Failed to make HTTPS request, making HTTP request instead...")
                 try:
                     almanacJSON = requests.get(almanacurl)
                     logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
@@ -5436,6 +5460,7 @@ while True:
                 logger.debug("Retrieved sundata JSON with response: %s" % sundataJSON)
                 cachetime_sundata = time.time()
             except requests.exceptions.SSLError:
+                logger.info("Failed to make HTTPS request, making HTTP request instead...")
                 try:
                     sundataJSON = requests.get(astronomyurl)
                     logger.debug("Retrieved sundata JSON with response: %s" % sundataJSON)
@@ -5760,6 +5785,7 @@ while True:
                 historicalJSON = requests.get(historicalurl_https)
                 logger.debug("historicalJSON acquired, end response: %s" % historicalJSON)
             except requests.exceptions.SSLError:
+                logger.info("Failed to make HTTPS request, making HTTP request instead...")
                 try:
                     historicalJSON = requests.get(historicalurl_https)
                     logger.debug("historicalJSON acquired, end response: %s" % historicalJSON)
@@ -6384,6 +6410,7 @@ while True:
                 logger.debug("Retrieved tide JSON with response: %s" % tideJSON)
                 cachetime_tide = time.time()
             except requests.exceptions.SSLError:
+                logger.info("Failed to make HTTPS request, making HTTP request instead...")
                 try:
                     tideJSON = requests.get(tideurl)
                     logger.debug("Retrieved tide JSON with response: %s" % tideJSON)
@@ -6500,6 +6527,7 @@ while True:
                 hurricanePrefetched = True
                 refresh_hurricanedataflagged = False
             except requests.exceptions.SSLError:
+                logger.info("Failed to make HTTPS request, making HTTP request instead...")
                 try:
                     hurricaneJSON = requests.get(hurricaneurl)
                     cachetime_hurricane = time.time()
@@ -6577,6 +6605,7 @@ while True:
                     nearest_data = True
                     logger.debug("nearest_data: %s" % nearest_data)
                 except requests.exceptions.SSLError:
+                    logger.info("Failed to make HTTPS request, making HTTP request instead...")
                     try:
                         nearestJSON = requests.get(nearesturl)
                         logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
@@ -6915,6 +6944,7 @@ while True:
                             nearest_data = True
                             logger.debug("nearest_data: %s" % nearest_data)
                         except requests.exceptions.SSLError:
+                            logger.info("Failed to make HTTPS request, making HTTP request instead...")
                             try:
                                 nearestJSON = requests.get(nearesturl)
                                 logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
@@ -7214,6 +7244,7 @@ while True:
                                     nearest_data = True
                                     logger.debug("nearest_data: %s" % nearest_data)
                                 except requests.exceptions.SSLError:
+                                    logger.info("Failed to make HTTPS request, making HTTP request instead...")
                                     try:
                                         nearestJSON = requests.get(nearesturl)
                                         logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
@@ -7660,6 +7691,7 @@ while True:
                             airportvalidate_data = True
                             logger.debug("airportvalidate_data: %s" % airportvalidate_data)
                         except requests.exceptions.SSLError:
+                            logger.info("Failed to make HTTPS request, making HTTP request instead...")
                             try:
                                 airportvalidateJSON = requests.get(airportvalidate_url)
                                 logger.debug("airportvalidateJSON acquired with end result: %s" % airportvalidateJSON)
@@ -7923,6 +7955,7 @@ while True:
                             airportvalidate_data = True
                             logger.debug("airportvalidate_data: %s" % airportvalidate_data)
                         except requests.exceptions.SSLError:
+                            logger.info("Failed to make HTTPS request, making HTTP request instead...")
                             try:
                                 airportvalidateJSON = requests.get(airportvalidate_url)
                                 logger.debug("airportvalidateJSON acquired with end result: %s" % airportvalidateJSON)
@@ -8339,6 +8372,7 @@ while True:
                              (yesterdaydata_prefetched, refresh_yesterdaydataflagged))
                 spinner.stop()
             except requests.exceptions.SSLError:
+                logger.info("Failed to make HTTPS request, making HTTP request instead...")
                 try:
                     yesterdayJSON = requests.get(yesterdayurl)
                     yesterdaydata_prefetched = True
