@@ -4905,7 +4905,17 @@ while True:
                 elif radar_zoomlevel == "10 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
                     try:
-                        tempurl = requests.get(r10url, stream=True)
+                        tempurl = requests.get(r10url_https, stream=True)
+                    except requests.exceptions.SSLError:
+                        try:
+                            tempurl = requests.get(r10url, stream=True)
+                        except:
+                            frontend.setStatusbar("Status: Idle", 1)
+                            frontend.errorBox("Could not acquire radar data!",
+                                              "PyWeather couldn't acquire radar data. Please make sure" +
+                                              " you have an internet connection, and that you can access Wunderground's API.")
+                            printException()
+                            return
                     except:
                         frontend.setStatusbar("Status: Idle", 1)
                         frontend.errorBox("Could not acquire radar data!", 
@@ -4913,6 +4923,7 @@ while True:
                                           " you have an internet connection, and that you can access Wunderground's API.")
                         printException()
                         return
+
                     logger.debug("10 km loop acquired, end result: %s" % tempurl)
                     try:
                         os.remove("temp//r10.gif")
@@ -4930,7 +4941,17 @@ while True:
                 elif radar_zoomlevel == "20 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
                     try:
-                        tempurl = requests.get(r20url, stream=True)
+                        tempurl = requests.get(r20url_https, stream=True)
+                    except requests.exceptions.SSLError:
+                        try:
+                            tempurl = requests.get(r20url, stream=True)
+                        except:
+                            frontend.setStatusbar("Status: Idle", 1)
+                            frontend.errorBox("Could not acquire radar data!",
+                                              "PyWeather couldn't acquire radar data. Please make sure" +
+                                              " you have an internet connection, and that you can access Wunderground's API.")
+                            printException()
+                            return
                     except:
                         frontend.setStatusbar("Status: Idle", 1)
                         frontend.errorBox("Could not acquire radar data!", 
@@ -4957,7 +4978,17 @@ while True:
                 elif radar_zoomlevel == "40 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
                     try:
-                        tempurl = requests.get(r40url, stream=True)
+                        tempurl = requests.get(r40url_https, stream=True)
+                    except requests.exceptions.SSLError:
+                        try:
+                            tempurl = requests.get(r40url, stream=True)
+                        except:
+                            frontend.setStatusbar("Status: Idle", 1)
+                            frontend.errorBox("Could not acquire radar data!",
+                                              "PyWeather couldn't acquire radar data. Please make sure" +
+                                              " you have an internet connection, and that you can access Wunderground's API.")
+                            printException()
+                            return
                     except:
                         frontend.setStatusbar("Status: Idle", 1)
                         frontend.errorBox("Could not acquire radar data!", 
@@ -4984,7 +5015,17 @@ while True:
                 elif radar_zoomlevel == "60 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
                     try:
-                        tempurl = requests.get(r60url, stream=True)
+                        tempurl = requests.get(r60url_https, stream=True)
+                    except requests.exceptions.SSLError:
+                        try:
+                            tempurl = requests.get(r60url, stream=True)
+                        except:
+                            frontend.setStatusbar("Status: Idle", 1)
+                            frontend.errorBox("Could not acquire radar data!",
+                                              "PyWeather couldn't acquire radar data. Please make sure" +
+                                              " you have an internet connection, and that you can access Wunderground's API.")
+                            printException()
+                            return
                     except:
                         frontend.setStatusbar("Status: Idle", 1)
                         frontend.errorBox("Could not acquire radar data!", 
@@ -5011,7 +5052,17 @@ while True:
                 elif radar_zoomlevel == "80 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
                     try:
-                        tempurl = requests.get(r80url, stream=True)
+                        tempurl = requests.get(r80url_https, stream=True)
+                    except requests.exceptions.SSLError:
+                        try:
+                            tempurl = requests.get(r80url, stream=True)
+                        except:
+                            frontend.setStatusbar("Status: Idle", 1)
+                            frontend.errorBox("Could not acquire radar data!",
+                                              "PyWeather couldn't acquire radar data. Please make sure" +
+                                              " you have an internet connection, and that you can access Wunderground's API.")
+                            printException()
+                            return
                     except:
                         frontend.setStatusbar("Status: Idle", 1)
                         frontend.errorBox("Could not acquire radar data!", 
@@ -5038,7 +5089,17 @@ while True:
                 elif radar_zoomlevel == "100 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
                     try:
-                        tempurl = requests.get(r100url, stream=True)
+                        tempurl = requests.get(r100url_https, stream=True)
+                    except requests.exceptions.SSLError:
+                        try:
+                            tempurl = requests.get(r100url, stream=True)
+                        except:
+                            frontend.setStatusbar("Status: Idle", 1)
+                            frontend.errorBox("Could not acquire radar data!",
+                                              "PyWeather couldn't acquire radar data. Please make sure" +
+                                              " you have an internet connection, and that you can access Wunderground's API.")
+                            printException()
+                            return
                     except:
                         frontend.setStatusbar("Status: Idle", 1)
                         frontend.errorBox("Could not acquire radar data!", 
@@ -5198,13 +5259,31 @@ while True:
             or refresh_almanacflagged == True):
             spinner.start(text="Refreshing almanac data...")
             try:
-                almanacJSON = requests.get(almanacurl)
+                almanacJSON = requests.get(almanacurl_https)
                 logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
                 cachetime_almanac = time.time()
+            except requests.exceptions.SSLError:
+                try:
+                    almanacJSON = requests.get(almanacurl)
+                    logger.debug("almanacJSON fetched with end result: %s" % almanacJSON)
+                    cachetime_almanac = time.time()
+                except:
+                    spinner.fail(text="Failed to load almanac data!")
+                    print("")
+                    logger.warning("Couldn't contact Wunderground's API! Is the internet offline?")
+                    print(
+                        Fore.RED + Style.BRIGHT + "When fetching the almanac data from Wunderground, PyWeather ran into",
+                        Fore.RED + Style.BRIGHT + "an error. If you're on a network with a filter, make sure that",
+                        Fore.RED + Style.BRIGHT + "'api.wunderground.com' is unblocked. Otherwise, make sure you have",
+                        Fore.RED + Style.BRIGHT + "an internet connection, and that Wunderground's HAL9000 is online.")
+                    printException()
+                    print(Fore.RED + Style.BRIGHT + "Press enter to continue.")
+                    input()
+                    continue
             except:
                 spinner.fail(text="Failed to load almanac data!")
                 print("")
-                logger.warn("Couldn't contact Wunderground's API! Is the internet offline?")
+                logger.warning("Couldn't contact Wunderground's API! Is the internet offline?")
                 print(Fore.RED + Style.BRIGHT + "When fetching the almanac data from Wunderground, PyWeather ran into",
                       Fore.RED + Style.BRIGHT + "an error. If you're on a network with a filter, make sure that",
                       Fore.RED + Style.BRIGHT + "'api.wunderground.com' is unblocked. Otherwise, make sure you have",
@@ -5353,10 +5432,25 @@ while True:
                 refresh_sundataflagged == True):
             spinner.start(text="Refreshing astronomy data...")
             try:
-                sundataJSON = requests.get(astronomyurl)
+                sundataJSON = requests.get(astronomyurl_https)
                 logger.debug("Retrieved sundata JSON with response: %s" % sundataJSON)
                 cachetime_sundata = time.time()
-                
+            except requests.exceptions.SSLError:
+                try:
+                    sundataJSON = requests.get(astronomyurl)
+                    logger.debug("Retrieved sundata JSON with response: %s" % sundataJSON)
+                    cachetime_sundata = time.time()
+                except:
+                    spinner.fail(text="Failed to load astronomy data!")
+                    print("")
+                    print(Fore.RED + Style.BRIGHT + "When attempting to fetch the 'sundata' from Wunderground,",
+                          Fore.RED + Style.BRIGHT + "PyWeather ran into an error. If you're on a network with",
+                          Fore.RED + Style.BRIGHT + "a filter, make sure 'api.wunderground.com' is unblocked.",
+                          Fore.RED + Style.BRIGHT + "Otherwise, make sure you have an internet connection.", sep="\n")
+                    printException()
+                    print(Fore.RED + Style.BRIGHT + "Press enter to continue.")
+                    input()
+                    continue
             except:
                 spinner.fail(text="Failed to load astronomy data!")
                 print("")
@@ -5663,8 +5757,24 @@ while True:
         # No cached data, fetch the file.
         if historical_skipfetch == False:
             try:
-                historicalJSON = requests.get(historicalurl)
+                historicalJSON = requests.get(historicalurl_https)
                 logger.debug("historicalJSON acquired, end response: %s" % historicalJSON)
+            except requests.exceptions.SSLError:
+                try:
+                    historicalJSON = requests.get(historicalurl_https)
+                    logger.debug("historicalJSON acquired, end response: %s" % historicalJSON)
+                except:
+                    spinner.fail(text="Failed to load historical weather data!")
+                    print("")
+                    print(Fore.RED + Style.BRIGHT + "When attempting to fetch historical data, PyWeather ran into",
+                          Fore.RED + Style.BRIGHT + "an error. If you're on a network with a filter make sure that",
+                          Fore.RED + Style.BRIGHT + "'api.wunderground.com' is unblocked. Otherwise, make sure that",
+                          Fore.RED + Style.BRIGHT + "you have an internet connection, and that your DeLorean works.",
+                          sep="\n")
+                    printException()
+                    print(Fore.RED + Style.BRIGHT + "Press enter to continue.")
+                    input()
+                    continue
             except:
                 spinner.fail(text="Failed to load historical weather data!")
                 print("")
@@ -6270,10 +6380,25 @@ while True:
                     refresh_tidedataflagged == True):
             spinner.start(text="Refreshing tide data...")
             try:
-                tideJSON = requests.get(tideurl)
+                tideJSON = requests.get(tideurl_https)
                 logger.debug("Retrieved tide JSON with response: %s" % tideJSON)
                 cachetime_tide = time.time()
-
+            except requests.exceptions.SSLError:
+                try:
+                    tideJSON = requests.get(tideurl)
+                    logger.debug("Retrieved tide JSON with response: %s" % tideJSON)
+                    cachetime_tide = time.time()
+                except:
+                    spinner.fail(text="Failed to refresh tide data!")
+                    print("")
+                    print(Fore.RED + Style.BRIGHT + "When attempting to fetch tide data from Wunderground,",
+                          Fore.RED + Style.BRIGHT + "PyWeather ran into an error. If you're on a network with",
+                          Fore.RED + Style.BRIGHT + "a filter, make sure 'api.wunderground.com' is unblocked.",
+                          Fore.RED + Style.BRIGHT + "Otherwise, make sure you have an internet connection.", sep="\n")
+                    printException()
+                    print(Fore.RED + Style.BRIGHT + "Press enter to continue.")
+                    input()
+                    continue
             except:
                 spinner.fail(text="Failed to refresh tide data!")
                 print("")
@@ -6365,7 +6490,7 @@ while True:
         if (hurricanePrefetched == False or refresh_hurricanedataflagged == True or time.time() - cachetime_hurricane >= cache_hurricanetime):
             spinner.start(text="Refreshing hurricane data...")
             try:
-                hurricaneJSON = requests.get(hurricaneurl)
+                hurricaneJSON = requests.get(hurricaneurl_https)
                 cachetime_hurricane = time.time()
                 hurricane_json = json.loads(hurricaneJSON.text)
                 if jsonVerbosity is True:
@@ -6374,6 +6499,27 @@ while True:
                     logger.debug("hurricane_json loaded successfully.")
                 hurricanePrefetched = True
                 refresh_hurricanedataflagged = False
+            except requests.exceptions.SSLError:
+                try:
+                    hurricaneJSON = requests.get(hurricaneurl)
+                    cachetime_hurricane = time.time()
+                    hurricane_json = json.loads(hurricaneJSON.text)
+                    if jsonVerbosity is True:
+                        logger.debug("hurricane_json: %s" % hurricane_json)
+                    else:
+                        logger.debug("hurricane_json loaded successfully.")
+                    hurricanePrefetched = True
+                    refresh_hurricanedataflagged = False
+                except:
+                    spinner.fail(text="Failed to refresh hurricane data!")
+                    print("")
+                    print(
+                        Fore.RED + Style.BRIGHT + "When attempting to fetch hurricane data, PyWeather ran into an error.",
+                        Fore.RED + Style.BRIGHT + "you have an internet connection, and that api.wunderground.com is unblocked",
+                        Fore.RED + Style.BRIGHT + "on your network. Press enter to continue.", sep="\n")
+                    printException()
+                    input()
+                    continue
             except:
                 spinner.fail(text="Failed to refresh hurricane data!")
                 print("")
@@ -6421,7 +6567,7 @@ while True:
                 logger.info("hurricanenearestcity_enabled is True, loading up data...")
                 try:
                     # Get the JSON file. If all goes well, set the nearest_data variable to true.
-                    nearestJSON = requests.get(nearesturl)
+                    nearestJSON = requests.get(nearesturl_https)
                     logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
                     nearest_json = json.loads(nearestJSON.text)
                     if jsonVerbosity == True:
@@ -6430,6 +6576,21 @@ while True:
                         logger.debug("nearest_json loaded.")
                     nearest_data = True
                     logger.debug("nearest_data: %s" % nearest_data)
+                except requests.exceptions.SSLError:
+                    try:
+                        nearestJSON = requests.get(nearesturl)
+                        logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
+                        nearest_json = json.loads(nearestJSON.text)
+                        if jsonVerbosity == True:
+                            logger.debug("nearest_json: %s" % nearest_json)
+                        else:
+                            logger.debug("nearest_json loaded.")
+                        nearest_data = True
+                        logger.debug("nearest_data: %s" % nearest_data)
+                    except:
+                        printException_loggerwarn()
+                        nearest_data = False
+                        logger.debug("nearest_data: %s" % nearest_data)
                 except:
                     # Have an issue, we have no data. Set the variable to false.
                     printException_loggerwarn()
@@ -6744,7 +6905,7 @@ while True:
                     if hurricanenearestcity_fenabled is True:
                         logger.info("hurricanenearestcity_fenabled is True, loading up data...")
                         try:
-                            nearestJSON = requests.get(nearesturl)
+                            nearestJSON = requests.get(nearesturl_https)
                             logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
                             nearest_json = json.loads(nearestJSON.text)
                             if jsonVerbosity == True:
@@ -6753,6 +6914,21 @@ while True:
                                 logger.debug("nearest_json loaded.")
                             nearest_data = True
                             logger.debug("nearest_data: %s" % nearest_data)
+                        except requests.exceptions.SSLError:
+                            try:
+                                nearestJSON = requests.get(nearesturl)
+                                logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
+                                nearest_json = json.loads(nearestJSON.text)
+                                if jsonVerbosity == True:
+                                    logger.debug("nearest_json: %s" % nearest_json)
+                                else:
+                                    logger.debug("nearest_json loaded.")
+                                nearest_data = True
+                                logger.debug("nearest_data: %s" % nearest_data)
+                            except:
+                                printException_loggerwarn()
+                                nearest_data = False
+                                logger.debug("nearest_data: %s" % nearest_data)
                         except:
                             printException_loggerwarn()
                             nearest_data = False
@@ -7028,7 +7204,7 @@ while True:
                             if hurricanenearestcity_fenabled is True:
                                 logger.info("hurricanenearestcity_fenabled is True, loading up data...")
                                 try:
-                                    nearestJSON = requests.get(nearesturl)
+                                    nearestJSON = requests.get(nearesturl_https)
                                     logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
                                     nearest_json = json.loads(nearestJSON.text)
                                     if jsonVerbosity == True:
@@ -7037,6 +7213,21 @@ while True:
                                         logger.debug("nearest_json loaded.")
                                     nearest_data = True
                                     logger.debug("nearest_data: %s" % nearest_data)
+                                except requests.exceptions.SSLError:
+                                    try:
+                                        nearestJSON = requests.get(nearesturl)
+                                        logger.debug("nearestJSON fetched, result: %s" % nearestJSON)
+                                        nearest_json = json.loads(nearestJSON.text)
+                                        if jsonVerbosity == True:
+                                            logger.debug("nearest_json: %s" % nearest_json)
+                                        else:
+                                            logger.debug("nearest_json loaded.")
+                                        nearest_data = True
+                                        logger.debug("nearest_data: %s" % nearest_data)
+                                    except:
+                                        printException_loggerwarn()
+                                        nearest_data = False
+                                        logger.debug("nearest_data: %s" % nearest_data)
                                 except:
                                     printException_loggerwarn()
                                     nearest_data = False
@@ -7459,7 +7650,7 @@ while True:
                         airportvalidate_url_https = 'https://api.wunderground.com/api/' + apikey + '/geolookup/q/' + airport_locinput.lower() + ".json"
                         logger.debug("airportvalidate_url: %s ; airportvalidate_url_https: %s" % (airportvalidate_url, airportvalidate_url_https))
                         try:
-                            airportvalidateJSON = requests.get(airportvalidate_url)
+                            airportvalidateJSON = requests.get(airportvalidate_url_https)
                             logger.debug("airportvalidateJSON acquired with end result: %s" % airportvalidateJSON)
                             airportvalidate_json = json.loads(airportvalidateJSON.text)
                             if jsonVerbosity is True:
@@ -7468,6 +7659,37 @@ while True:
                                 logger.debug("airportvalidate_json has been loaded.")
                             airportvalidate_data = True
                             logger.debug("airportvalidate_data: %s" % airportvalidate_data)
+                        except requests.exceptions.SSLError:
+                            try:
+                                airportvalidateJSON = requests.get(airportvalidate_url)
+                                logger.debug("airportvalidateJSON acquired with end result: %s" % airportvalidateJSON)
+                                airportvalidate_json = json.loads(airportvalidateJSON.text)
+                                if jsonVerbosity is True:
+                                    logger.debug("airportvalidate_json: %s" % airportvalidate_json)
+                                else:
+                                    logger.debug("airportvalidate_json has been loaded.")
+                                airportvalidate_data = True
+                                logger.debug("airportvalidate_data: %s" % airportvalidate_data)
+                            except:
+                                airportvalidate_data = False
+                                logger.debug("airportvalidate_data: %s" % airportvalidate_data)
+                                spinner.fail(text="Failed to validate favorite location!")
+                                print("")
+                                print(
+                                    Fore.YELLOW + Style.BRIGHT + "Sorry, we couldn't query Wunderground to get extra data about the airport.",
+                                    Fore.YELLOW + Style.BRIGHT + "you inputted. Would you still like to add this airport as a favorite",
+                                    Fore.YELLOW + Style.BRIGHT + "location anyways? Yes or No.", sep="\n")
+                                airportvalidate_invalidinput = input("Input here: ").lower()
+                                if airportvalidate_invalidinput == "yes":
+                                    print(
+                                        Fore.YELLOW + Style.BRIGHT + "Still adding the airport as a favorite location.")
+                                elif airportvalidate_invalidinput == "no":
+                                    print(Fore.YELLOW + Style.BRIGHT + "Not adding the airport as a favorite location.")
+                                    continue
+                                else:
+                                    print(
+                                        Fore.YELLOW + Style.BRIGHT + "Could not understand your input, but still adding the airport as",
+                                        Fore.YELLOW + Style.BRIGHT + "as a favorite location.", sep="\n")
                         except:
                             airportvalidate_data = False
                             logger.debug("airportvalidate_data: %s" % airportvalidate_data)
@@ -7691,7 +7913,7 @@ while True:
                         airportvalidate_url_https = 'https://api.wunderground.com/api/' + apikey + '/geolookup/q/' + favloc_editinput.lower() + ".json"
                         logger.debug("airportvalidate_url: %s ; airportvalidate_url_https: %s" % (airportvalidate_url, airportvalidate_url_https))
                         try:
-                            airportvalidateJSON = requests.get(airportvalidate_url)
+                            airportvalidateJSON = requests.get(airportvalidate_url_https)
                             logger.debug("airportvalidateJSON acquired with end result: %s" % airportvalidateJSON)
                             airportvalidate_json = json.loads(airportvalidateJSON.text)
                             if jsonVerbosity is True:
@@ -7700,6 +7922,37 @@ while True:
                                 logger.debug("airportvalidate_json has been loaded.")
                             airportvalidate_data = True
                             logger.debug("airportvalidate_data: %s" % airportvalidate_data)
+                        except requests.exceptions.SSLError:
+                            try:
+                                airportvalidateJSON = requests.get(airportvalidate_url)
+                                logger.debug("airportvalidateJSON acquired with end result: %s" % airportvalidateJSON)
+                                airportvalidate_json = json.loads(airportvalidateJSON.text)
+                                if jsonVerbosity is True:
+                                    logger.debug("airportvalidate_json: %s" % airportvalidate_json)
+                                else:
+                                    logger.debug("airportvalidate_json has been loaded.")
+                                airportvalidate_data = True
+                                logger.debug("airportvalidate_data: %s" % airportvalidate_data)
+                            except:
+                                airportvalidate_data = False
+                                logger.debug("airportvalidate_data: %s" % airportvalidate_data)
+                                spinner.fail(text="Failed to validate favorite location!")
+                                print("")
+                                print(
+                                    Fore.YELLOW + Style.BRIGHT + "Sorry, we couldn't query Wunderground to get extra data about the airport.",
+                                    Fore.YELLOW + Style.BRIGHT + "you inputted. Would you still like to add this airport as a favorite",
+                                    Fore.YELLOW + Style.BRIGHT + "location anyways? Yes or No.", sep="\n")
+                                airportvalidate_invalidinput = input("Input here: ").lower()
+                                if airportvalidate_invalidinput == "yes":
+                                    print(
+                                        Fore.YELLOW + Style.BRIGHT + "Still adding the airport as a favorite location.")
+                                elif airportvalidate_invalidinput == "no":
+                                    print(Fore.YELLOW + Style.BRIGHT + "Not adding the airport as a favorite location.")
+                                    continue
+                                else:
+                                    print(
+                                        Fore.YELLOW + Style.BRIGHT + "Could not understand your input, but still adding the airport as",
+                                        Fore.YELLOW + Style.BRIGHT + "as a favorite location.", sep="\n")
                         except:
                             airportvalidate_data = False
                             logger.debug("airportvalidate_data: %s" % airportvalidate_data)
@@ -8078,13 +8331,34 @@ while True:
         if (yesterdaydata_prefetched is False or refresh_yesterdaydataflagged is True or time.time() - cachetime_yesterday >= cache_yesterdaytime):
             spinner.start(text="Refreshing yesterday's weather data...")
             try:
-                yesterdayJSON = requests.get(yesterdayurl)
+                yesterdayJSON = requests.get(yesterdayurl_https)
                 yesterdaydata_prefetched = True
                 cachetime_yesterday = time.time()
                 refresh_yesterdaydataflagged = False
                 logger.debug("yesterdaydata_prefetched: %s ; refresh_yesterdaydataflagged: %s" %
                              (yesterdaydata_prefetched, refresh_yesterdaydataflagged))
                 spinner.stop()
+            except requests.exceptions.SSLError:
+                try:
+                    yesterdayJSON = requests.get(yesterdayurl)
+                    yesterdaydata_prefetched = True
+                    cachetime_yesterday = time.time()
+                    refresh_yesterdaydataflagged = False
+                    logger.debug("yesterdaydata_prefetched: %s ; refresh_yesterdaydataflagged: %s" %
+                                 (yesterdaydata_prefetched, refresh_yesterdaydataflagged))
+                    spinner.stop()
+                except:
+                    spinner.fail("Failed to refresh yesterday's weather data!")
+                    print("")
+                    print("When attempting to fetch yesterday's data, PyWeather ran into",
+                          "an error. If you're on a network with a filter make sure that",
+                          "'api.wunderground.com' is unblocked. Otherwise, make sure that",
+                          "you have an internet connection, and that your Sega Megadrive works.",
+                          sep="\n")
+                    printException()
+                    print("Press enter to continue.")
+                    input()
+                    continue
             except:
                 spinner.fail("Failed to refresh yesterday's weather data!")
                 print("")
