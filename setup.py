@@ -1020,15 +1020,31 @@ print("", "Before we configure PyWeather, I'll now validate your API key.", sep=
 
 while True:
     apitest_URL = 'http://api.wunderground.com/api/' + apikey_input + '/conditions/q/NY/New_York.json'
+    apitest_URL_https = 'https://api.wunderground.com/api/' + apikey_input + '/conditions/q/NY/New_York.json'
     testreader = codecs.getreader("utf-8")
-    logger.debug("apitest_URL: %s ; testreader: %s" %
-                (apitest_URL, testreader))
+    logger.debug("apitest_URL: %s ; apitest_URL_https: %s" % (apitest_URL, apitest_URL_https))
+    logger.debug("testreader: %s" % testreader)
 
     try:
-        testJSON = requests.get(apitest_URL)
+        testJSON = requests.get(apitest_URL_https)
         logger.debug("testJSON: %s" % testJSON)
+    except requests.exceptions.SSLError:
+        logger.info("Failed to make HTTPS request, making HTTP request instead...")
+        try:
+            testJSON = requests.get(apitest_URL)
+            logger.debug("testJSON: %s" % testJSON)
+        except:
+            logger.warning("Couldn't connect to Wunderground's API! No internet?")
+            print("When PyWeather Setup attempted to fetch the .json to validate your API key,",
+                  "it ran into an error. If you're on a network with a filter, make sure that",
+                  "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
+                  "connection.", sep="\n")
+            printException()
+            print("Press enter to exit.")
+            input()
+            sys.exit()
     except:
-        logger.warn("Couldn't connect to Wunderground's API! No internet?")
+        logger.warning("Couldn't connect to Wunderground's API! No internet?")
         print("When PyWeather Setup attempted to fetch the .json to validate your API key,",
             "it ran into an error. If you're on a network with a filter, make sure that",
             "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
