@@ -1761,9 +1761,9 @@ else:
         logger.debug("Warm up geocode failed.")
 
     print("I've just completed a warm-up geocode. However, sometimes a rate limit will",
-          "occur after this geocode. I've paused the setup process for 10 seconds. This",
+          "occur after this geocode. I've paused the setup process for 5 seconds. This",
           "should help with figuring out what scheme works on your OS.", sep="\n")
-    time.sleep(10)
+    time.sleep(5)
 
     try:
         geocoder.geocode("123 5th Avenue, New York, NY")
@@ -1772,22 +1772,31 @@ else:
         logger.debug("GEOCODER/scheme is now 'https'")
         print("Changes saved.")
     except geopy.exc.GeocoderServiceError:
-        print("Geopy probably can't run without HTTPS (or your internet went down). Trying HTTP as the scheme...")
-        geocoder = GoogleV3(scheme='http')
-        print("Waiting 10 seconds to avoid rate limiting after the previous geocode...")
-        time.sleep(10)
+        # If we get a service error, just try the query again (with a slight artificial delay as to prevent quota issues)
+        time.sleep(0.1)
         try:
             geocoder.geocode("123 5th Avenue, New York, NY")
-            print("The geocoder can operate, but without HTTPS enabled on your OS. Saving these changes...")
-            config['GEOCODER']['scheme'] = 'http'
-            logger.debug("GEOCODER/scheme is now 'http'")
+            print("The geocoder can operate with HTTPS enabled on your OS. Saving these changes...")
+            config['GEOCODER']['scheme'] = 'https'
+            logger.debug("GEOCODER/scheme is now 'https'")
             print("Changes saved.")
         except geopy.exc.GeocoderServiceError:
-            print("You probably don't have an internet connection, as HTTPS and HTTP validation both failed.",
-                  "Defaulting to HTTP as the geopy scheme...", sep="\n")
-            config['GEOCODER']['scheme'] = 'http'
-            logger.debug("GEOCODER/scheme is now 'http'")
-            print("Changes saved.")
+            print("Geopy probably can't run without HTTPS (or your internet went down). Trying HTTP as the scheme...")
+            geocoder = GoogleV3(scheme='http')
+            print("Waiting 5 seconds to avoid rate limiting after the previous geocode...")
+            time.sleep(5)
+            try:
+                geocoder.geocode("123 5th Avenue, New York, NY")
+                print("The geocoder can operate, but without HTTPS enabled on your OS. Saving these changes...")
+                config['GEOCODER']['scheme'] = 'http'
+                logger.debug("GEOCODER/scheme is now 'http'")
+                print("Changes saved.")
+            except geopy.exc.GeocoderServiceError:
+                print("You probably don't have an internet connection, as HTTPS and HTTP validation both failed.",
+                      "Defaulting to HTTP as the geopy scheme...", sep="\n")
+                config['GEOCODER']['scheme'] = 'http'
+                logger.debug("GEOCODER/scheme is now 'http'")
+                print("Changes saved.")
 
 # if showing yesterday is disabled show prefetch yesterday
 # if show yest. on sum. is enabled enable prefetch too basically the same code

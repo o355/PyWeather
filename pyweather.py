@@ -1706,6 +1706,8 @@ if useGeocoder is True:
         # :/
     except (geopy.exc.GeocoderQuotaExceeded, geopy.exc.GeocoderServiceError):
         # Try again if we hit any of these two errors.
+        # Add a very slight artificial delay to the second query, as not to hit any quota issues
+        time.sleep(0.1)
         try:
             location = geolocator.geocode(locinput, language="en", timeout=30)
             # If the retry fails, we separate the error messages.
