@@ -489,6 +489,19 @@ except:
     logger.debug("haloInstalled: %s ; neededLibraries: %s" %
                  (haloInstalled, neededLibraries))
 
+try:
+    import click
+    clickInstalled = True
+    logger.debug("click is installed.")
+    logger.debug("clickInstalled: %s" % clickInstalled)
+except:
+    clickInstalled = False
+    neededLibraries += 1
+    logger.debug("click is NOT installed.")
+    printException_loggerwarn()
+    logger.debug("clickInstalled: %s ; neededLibraries: %s" %
+                 (haloInstalled, neededLibraries))
+
 
 print("All done!")
 if neededLibraries == 0:
@@ -507,6 +520,8 @@ else:
         print("- Requests")
     if haloInstalled is False:
         print("- Halo")
+    if clickInstalled is False:
+        print("- Click")
     print("If you want me to, I can automatically install these libraries.",
     "Would you like me to do such? Yes or No.", sep="\n")
     neededLibrariesConfirm = input("Input here: ").lower()
@@ -522,152 +537,51 @@ else:
         print("Now installing necessary libraries...")
         if coloramaInstalled is False:
             print("Installing Colorama...")
-            pip.main(['install', 'colorama'])
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'colorama'])
         if geopyInstalled is False:
             print("Installing geopy...")
-            pip.main(['install', 'geopy'])
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'geopy'])
         if appjarInstalled is False:
             print("Installing appJar...")
-            pip.main(['install', 'appJar'])
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'appjar'])
         if requestsInstalled is False:
             print("Installing requests...")
-            pip.main(['install', 'requests'])
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'requests'])
         if haloInstalled is False:
             print("Installing halo...")
-            pip.main(['install', 'halo'])
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'halo'])
+        if clickInstalled is False:
+            print("Installing click...")
+            subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'click'])
 
         logger.info("Running the double check on libraries...")
         print("Sweet! All libraries should be installed.",
               "Just to confirm, I'm double checking if needed libraries are installed.", sep="\n")
+
         try:
             import colorama
             logger.info("Colorama installed successfully.")
         except ImportError:
             logger.warn("colorama was not installed successfully.")
-            print("Hmm...Colorama didn't install properly.")
             printException()
-            print("As a last resort, we can use sudo -H to install packages.",
-            "Do you want to use the shell option to install colorama?",
-            "WARNING: Using the last-resort method may screw up PIP, and",
-            "may require you to reinstall PIP on your machine."
-            "Yes or No.", sep="\n")
-            colorama_lastresort = input("Input here: ").lower()
-            logger.debug("colorama_lastresort: %s" % colorama_lastresort)
-            if colorama_lastresort == "yes":
-                try:
-                    print("Now executing `sudo -H pip3 install colorama`.",
-                          "Please enter the password for sudo when the prompt",
-                          "comes up. Press Control + C to cancel.",
-                          "Starting in 5 seconds...", sep="\n")
-                    time.sleep(5)
-                    try:
-                        subprocess.call(["sudo -H pip3 install colorama"], shell=True)
-                        try:
-                            print("Attempting to reimport colorama.")
-                            import colorama
-                            print("Colorama is FINALLY installed!")
-                        except:
-                            print("Colorama still wasn't successfully installed.",
-                                  "Cannot continue without Colorama.",
-                                  "Try doing a manual install of Colorama with PIP.", sep="\n")
-                            printException()
-                            print("Press enter to exit.")
-                            input()
-                            sys.exit()
-                    except:
-                        print("When running the command, an error occurred",
-                              "Try doing a manual install of Colorama with PIP.", sep="\n")
-                        printException()
-                        print("Press enter to exit.")
-                        input()
-                        sys.exit()
-                except KeyboardInterrupt:
-                    print("Command execution aborted.",
-                          "Cannot continue without Colorama.",
-                          "Try and do a manual install of Colorama with PIP",
-                          "in a command line.", sep="\n")
-                    printException()
-                    print("Press enter to exit.")
-                    input()
-                    sys.exit()
-            elif colorama_lastresort == "no":
-                print("Not installing Colorama with a shell command.",
-                      "Cannot continue without Colorama.",
-                      "Press enter to exit.", sep="\n")
-                input()
-                sys.exit()
-            else:
-                print("Did not understand your input. Defaulting to not installing",
-                      "via the shell. Cannot continue without Colorama.",
-                      "Try installing Colorama with PIP.",
-                      "Press enter to exit.")
-                input()
-                sys.exit()
+            print("Colorama did not install properly. Please try attempting to",
+                  "install Colorama in a command prompt by using the command",
+                  "`pip3 install colorama`. Press enter to exit.")
+            input()
+            sys.exit()
 
         try:
             import geopy
             logger.info("geopy installed successfully.")
         except ImportError:
             logger.warn("geopy was not installed successfully.")
-            print("Hmm...geopy didn't install properly.")
             printException()
-            print("As a last resort, we can use sudo -H to install packages.",
-            "Do you want to use the shell option to install geopy?",
-            "WARNING: Using the last-resort method may screw up PIP, and",
-            "may require you to reinstall PIP on your machine."
-            "Yes or No.", sep="\n")
-            geopy_lastresort = input("Input here: ").lower()
-            logger.debug("geopy_lastresort: %s" % geopy_lastresort)
-            if geopy_lastresort == "yes":
-                try:
-                    print("Now executing `sudo -H pip3 install geopy`.",
-                          "Please enter the password for sudo when the prompt",
-                          "comes up. Press Control + C to cancel.",
-                          "Starting in 5 seconds...", sep="\n")
-                    time.sleep(5)
-                    try:
-                        subprocess.call(["sudo -H pip3 install geopy"], shell=True)
-                        try:
-                            print("Attempting to reimport geopy.")
-                            import geopy
-                            print("Geopy is FINALLY installed!")
-                        except:
-                            print("Geopy still wasn't successfully installed.",
-                                  "Cannot continue without geopy.",
-                                  "Try doing a manual install of geopy with PIP.", sep="\n")
-                            printException()
-                            print("Press enter to exit.")
-                            input()
-                            sys.exit()
-                    except:
-                        print("When running the command, an error occurred",
-                              "Try doing a manual install of geopy with PIP.", sep="\n")
-                        printException()
-                        print("Press enter to exit.")
-                        input()
-                        sys.exit()
-                except KeyboardInterrupt:
-                    print("Command execution aborted.",
-                          "Cannot continue without geopy.",
-                          "Try and do a manual install of geopy with PIP",
-                          "in a command line.", sep="\n")
-                    printException()
-                    print("Press enter to exit.")
-                    input()
-                    sys.exit()
-            elif geopy_lastresort == "no":
-                print("Not installing geopy with a shell command.",
-                      "Cannot continue without geopy.",
-                      "Press enter to exit.", sep="\n")
-                input()
-                sys.exit()
-            else:
-                print("Did not understand your input. Defaulting to not installing",
-                      "via the shell. Cannot continue without geopy.",
-                      "Try installing geopy with PIP.",
-                      "Press enter to exit.")
-                input()
-                sys.exit()
+            print("Geopy did not install properly. Please try attempting to",
+                  "install Geopy in a command prompt by using the command",
+                  "`pip3 install geopy`. Press enter to exit.")
+            input()
+            sys.exit()
+
         # Why is appJar not here? When appJar is straight up imported in a non-GUI environment, it'll throw an error
         # even when it's installed. I don't check for an install because of this reason.
 
@@ -677,131 +591,36 @@ else:
             logger.info("requests installed successfully.")
         except ImportError:
             logger.warning("Requests was not installed successfully.")
-            print("Hmm...requests didn't install properly.")
             printException()
-            print("As a last resort, we can use sudo -H to install packages.",
-            "Do you want to use the shell option to install requests?",
-            "WARNING: Using the last-resort method may screw up PIP, and",
-            "may require you to reinstall PIP on your machine."
-            "Yes or No.", sep="\n")
-            requests_lastresort = input("Input here: ").lower()
-            logger.debug("requests_lastresort: %s" % requests_lastresort)
-            if requests_lastresort == "yes":
-                try:
-                    print("Now executing `sudo -H pip3 install requests`.",
-                          "Please enter the password for sudo when the prompt",
-                          "comes up. Press Control + C to cancel.",
-                          "Starting in 5 seconds...", sep="\n")
-                    time.sleep(5)
-                    try:
-                        subprocess.call(["sudo -H pip3 install requests"], shell=True)
-                        try:
-                            # Fun fact: This is inside THREE try/except things.
-                            print("Attempting to reimport requests.")
-                            import requests
-                            print("requests is FINALLY installed!")
-                        except:
-                            print("requests still wasn't successfully installed.",
-                                  "Cannot continue without requests.",
-                                  "Try doing a manual install of requests with PIP.", sep="\n")
-                            printException()
-                            print("Press enter to exit.")
-                            input()
-                            sys.exit()
-                    except:
-                        print("When running the command, an error occurred",
-                              "Try doing a manual install of requests with PIP.", sep="\n")
-                        printException()
-                        print("Press enter to exit.")
-                        input()
-                        sys.exit()
-                except KeyboardInterrupt:
-                    print("Command execution aborted.",
-                          "Cannot continue without appJar.",
-                          "Try and do a manual install of requests with PIP",
-                          "in a command line.", sep="\n")
-                    printException()
-                    print("Press enter to exit.")
-                    input()
-                    sys.exit()
-            elif requests_lastresort == "no":
-                print("Not installing appJar with a shell command.",
-                      "Cannot continue without requests.",
-                      "Press enter to exit.", sep="\n")
-                input()
-                sys.exit()
-            else:
-                print("Did not understand your input. Defaulting to not installing",
-                      "via the shell. Cannot continue without requests.",
-                      "Try installing requests with PIP.",
-                      "Press enter to exit.")
-                input()
-                sys.exit()
+            print("Requests did not install properly. Please try attempting to",
+                  "install Requests in a command prompt by using the command",
+                  "`pip3 install requests`. Press enter to exit.")
+            input()
+            sys.exit()
 
         try:
             import halo
             logger.info("Halo installed successfully.")
         except ImportError:
             logger.warn("halo was not installed successfully.")
-            print("Hmm...Halo didn't install properly.")
             printException()
-            print("As a last resort, we can use sudo -H to install packages.",
-            "Do you want to use the shell option to install halo?",
-            "WARNING: Using the last-resort method may screw up PIP, and",
-            "may require you to reinstall PIP on your machine."
-            "Yes or No.", sep="\n")
-            halo_lastresort = input("Input here: ").lower()
-            logger.debug("halo_lastresort: %s" % halo_lastresort)
-            if halo_lastresort == "yes":
-                try:
-                    print("Now executing `sudo -H pip3 install halo`.",
-                          "Please enter the password for sudo when the prompt",
-                          "comes up. Press Control + C to cancel.",
-                          "Starting in 5 seconds...", sep="\n")
-                    time.sleep(5)
-                    try:
-                        subprocess.call(["sudo -H pip3 install halo"], shell=True)
-                        try:
-                            print("Attempting to reimport halo.")
-                            import colorama
-                            print("Halo is now installed!")
-                        except:
-                            print("Halo still wasn't successfully installed.",
-                                  "Cannot continue without Halo.",
-                                  "Try doing a manual install of Halo with PIP.", sep="\n")
-                            printException()
-                            print("Press enter to exit.")
-                            input()
-                            sys.exit()
-                    except:
-                        print("When running the command, an error occurred",
-                              "Try doing a manual install of Halo with PIP.", sep="\n")
-                        printException()
-                        print("Press enter to exit.")
-                        input()
-                        sys.exit()
-                except KeyboardInterrupt:
-                    print("Command execution aborted.",
-                          "Cannot continue without Halo.",
-                          "Try and do a manual install of Halo with PIP",
-                          "in a command line.", sep="\n")
-                    printException()
-                    print("Press enter to exit.")
-                    input()
-                    sys.exit()
-            elif halo_lastresort == "no":
-                print("Not installing Halo with a shell command.",
-                      "Cannot continue without Halo.",
-                      "Press enter to exit.", sep="\n")
-                input()
-                sys.exit()
-            else:
-                print("Did not understand your input. Defaulting to not installing",
-                      "via the shell. Cannot continue without Halo.",
-                      "Try installing Halo with PIP.",
-                      "Press enter to exit.")
-                input()
-                sys.exit()
+            print("Halo did not install properly. Please try attempting to",
+                  "install Halo in a command prompt by using the command",
+                  "`pip3 install halo`. Press enter to exit.")
+            input()
+            sys.exit()
+
+        try:
+            import click
+            logger.info("Click installed successfully.")
+        except ImportError:
+            logger.warning("Click was not installed successfully.")
+            printException()
+            print("Click did not install properly. Please try attempting to",
+                  "install Geopy in a command prompt by using the command",
+                  "`pip3 install click`. Press enter to exit.")
+            input()
+            sys.exit()
 
         print("","All libraries are installed!", sep="\n")
     else:
@@ -824,12 +643,12 @@ if confirm_updatepip == "yes":
     totalpackages = 5
     updatecount = 1
 
-    pip_requiredlibraries = ['requests', 'halo', 'appjar', 'colorama', 'geopy']
+    pip_requiredlibraries = ['requests', 'halo', 'appjar', 'colorama', 'geopy', "click"]
 
     for pkgname in pip_requiredlibraries:
         print("Now updating package: %s (Update %s/%s)" %
               (pkgname, updatecount, totalpackages))
-        pip.main(['install', '--upgrade', '%s' % pkgname])
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--upgrade', '%s' % pkgname])
         updatecount = updatecount + 1
 elif confirm_updatepip == "no":
     print("Not updating PIP packages. You may run into issues with non-updated",

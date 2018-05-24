@@ -7,6 +7,7 @@ import sys
 import configparser
 import traceback
 import pip
+import subprocess
 
 try:
     versioninfo = open("updater//versioninfo.txt")
@@ -123,7 +124,7 @@ def newlibinstaller(library):
               "Would you like to perform an automatic install of halo? Yes or No.", sep='\n')
         installhalo_input = input("Input here: ").lower()
         if installhalo_input == "yes":
-            installlibrary = "halo"
+            installhalo = True
         elif installhalo_input == "no":
             print("To use the latest version of PyWeather, you'll need to install halo in a command line.",
                   "The command to do this is `pip3 install halo`, and it should work on most platforms.", "", sep="\n")
@@ -133,13 +134,13 @@ def newlibinstaller(library):
                   "To use the latest version of PyWeather, you'll need to install halo in a command line.",
                   "The command to do this is `pip3 install halo`, and it should work on most platforms.", "", sep="\n")
             return
-    elif clickinstalled is False:
+    if clickinstalled is False:
         print("For PyWeather 0.6.4 beta and above, a new library called 'click' is required for PyWeather to operate.",
               "This library presently controls the progress bar for the new updater. Unfortunately, click is not installed.",
               "Would you like to perform an automatic install of halo? Yes or No.", sep="\n")
         installclick_input = input("Input here: ").lower()
         if installclick_input == "yes":
-            installlibrary = "click"
+            installclick = True
         elif installclick_input == "no":
             print("To use the latest version of PyWeather, you'll need to install click in a command line.",
                   "The command to do this is `pip3 install click`, and it should work on most platforms.", "", sep="\n")
@@ -151,35 +152,43 @@ def newlibinstaller(library):
             return
 
     # Now begin installing libraries
-    print("Now installing %s using pip's built-in installer." % installlibrary)
-    pip.main(['install', '%s' % installlibrary])
-    print("Now checking if %s was properly installed..." % installlibrary)
+
+    if installhalo is True:
+        print("Now installing halo using pip's built-in installer.")
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'halo'])
+    if installclick is True:
+        print("Now installing click using pip's built-in installer.")
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'click'])
+    print("Now checking if libraries are properly installed.")
 
     # Separate checks for separate libraries
-    if installlibrary == "halo":
+    if installhalo is True:
         try:
             import halo
+            print("")
             print("Halo has been successfully installed!")
             return
         except ImportError:
+            print("")
             print("When attempting an automatic install, Halo failed to install properly.",
                   "To use the latest version of PyWeather, you'll need to manually use a command line",
                   "and manually install halo. The command to do this is `pip3 install halo` on most",
                   "platforms. If an error occurred use a search engine to try and fix the error.", sep="\n")
             # Instead of using "use Google" or "use Bing", make things vague so the user isn't potentially offended
             # by their search engine selection
-            return
-    elif installlibrary == "click":
+
+    if installclick is True:
         try:
             import click
+            print("")
             print("Click has been successfully installed!")
             return
         except ImportError:
+            print("")
             print("When attempting an automatic install, Click failed to install properly.",
                   "To use the latest version of PyWeather, you'll need to manually use a command line",
                   "and manually install click. The command to do this is `pip3 install click` on most",
                   "platforms. If an error occurred use a search engine to try and fix the error.", sep="\n")
-            return
 
 # Define build numbers for different versions of PyWeather. Later in time I'll switch to a dictionary and for loop
 # to cover this part of the code
