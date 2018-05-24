@@ -1700,32 +1700,49 @@ if useGeocoder is True:
     spinner.start(text='Locating input...')
     logger.info("Start geolocator...")
     try:
-        location = geolocator.geocode(locinput, language="en", timeout=20)
+        location = geolocator.geocode(locinput, language="en", timeout=30)
         # Since the loading bars interfere with true verbosity logging, we turn
         # them off if verbosity is enabled (it isn't needed)
         # :/
-    except geopy.exc.GeocoderQuotaExceeded:
-        spinner.fail(text='Failed to locate input!')
-        print("")
-        logger.warning("Geocoder quota has been exceeded!")
-        print("When attempting to access Google's geocoder, a quota error was hit. Please",
-              "wait 1-2 minutes, then try using PyWeather again.", sep="\n")
-        printException()
-        print("Press enter to continue.")
-        input()
-        sys.exit()
-    except geopy.exc.GeocoderServiceError:
-        spinner.fail(text='Failed to locate input!')
-        print("")
-        logger.warning("Service error from geopy. SSL issue most likely?")
-        print("When attempting to access Google's geocoder, a service error occurred.",
-              "99% of the time, this is due to the geocoder operating in HTTPS mode,",
-              "but not being able to properly operate on your OS in such mode. To fix this",
-              "issue, in the configuration file, change the GEOCODER/scheme option to 'http'.", sep="\n")
-        printException()
-        print("Press enter to continue.")
-        input()
-        sys.exit()
+    except (geopy.exc.GeocoderQuotaExceeded, geopy.exc.GeocoderServiceError):
+        # Try again if we hit any of these two errors.
+        try:
+            location = geolocator.geocode(locinput, language="en", timeout=30)
+            # If the retry fails, we separate the error messages.
+        except geopy.exc.GeocoderQuotaExceeded:
+            spinner.fail(text='Failed to locate input!')
+            print("")
+            logger.warning("Geocoder quota has been exceeded!")
+            print("When attempting to access Google's geocoder, a quota error was hit. Please",
+                  "wait 1-2 minutes, then try using PyWeather again.", sep="\n")
+            printException()
+            print("Press enter to continue.")
+            input()
+            sys.exit()
+        except geopy.exc.GeocoderServiceError:
+            spinner.fail(text='Failed to locate input!')
+            print("")
+            logger.warning("Service error from geopy. SSL issue most likely?")
+            print("When attempting to access Google's geocoder, a service error occurred.",
+                  "This could be caused by a lack of an internet connection, or that your",
+                  "OS doesn't support a geocoder scheme of HTTPS (if it's set to HTTPS).",
+                  "Try setting the GEOCODER/scheme option in the config file to 'http.'", sep="\n")
+            printException()
+            print("Press enter to continue.")
+            input()
+            sys.exit()
+        except:
+            spinner.fail(text='Failed to locate input!')
+            print("")
+            logger.warning("No connection to Google's geocoder!")
+            print("When attempting to access Google's geocoder, PyWeather ran into an error.",
+                  "A few things could of happened. If you're on a filter, make sure Google's",
+                  "geocoder is unblocked. Otherwise, Make sure your internet connection is online.",
+                  sep="\n")
+            printException()
+            print("Press enter to continue.")
+            input()
+            sys.exit()
     except:
         spinner.fail(text='Failed to locate input!')
         print("")
