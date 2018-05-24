@@ -1,11 +1,15 @@
-## Hiatus(ish) Notice
-It's that time of year again (testing season), and that means test reviews, studying, and other things to interrupt PyWeather development. 
+## Critical bug warnings
+There are two critical bugs as affecting PyWeather 0.6.3 beta. These bugs are being fixed in version 1.0.0.
 
-As such, I'll be on hiatus until June 22, 2018. Every Friday night, I'll be coding for 4-5 hours to make up for lost coding time during the week. I may be able to code for a little bit during the week, however.
+There is a bug where the cache times for 1.5 day hourly and almanac data aren't properly parsed. Cache times in the config file are set in minutes, and then multiplied by 60 when loaded into PyWeather for the minutes to seconds conversion.
 
-I hope to keep up with the schedule of fixing minor and major PyWeather issues as previously scheduled.
+Unfortunately, I forgot to code in the multiplication for 1.5 day hourly and almanac data, so it refreshes after 1 and 4 minutes respectively. To fix this, in the config file set the three-day hourly cache value (it's confusing, I get it) to 3600. Set the almanac value to 14400. Checks will be included in the config updater for 1.0.0 to roll back these changes (otherwise cache times would be 2.5 days and 10 days)
 
-The pip 10 bug is planned to be eventually fixed, with the bug fix coming.
+Another issue is with doing pip installs during the setup script. pip 10 broke the usage of pip.main, and as a result setup crashes any time you try to install a library.
+
+If you preinstall libraries on a desktop (and on Linux assuming the python3-tk package is installed) this isn't an issue. However, if you don't have a GUI, you'll have to use configsetup.py and manually create storage/apikey.txt and put your API key in that file.
+
+These bugs will be fixed in version 1.0.0.
 
 ## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
@@ -14,11 +18,11 @@ PyWeather is the culmination of thousands of hours of work poured into a silly l
 
 I hope that you can enjoy PyWeather as much as I enjoy making PyWeather, so, let's get started!
 
-## PyWeather Update - Early May 2018:
-PyWeather 1.0.0 is coming along, albeit slowly. Here are a few updates:
-* On-the-fly radar size switching is done!
-* I have started working on more minor issues & features, like issues #58, #60, #62, #63, #64, #65, #66, #71, and #74. All of these issues should be fixed by late June 2018.
-* More major fixes, like issues #48, #67, and #72 will be completed by late July 2018.
+## PyWeather Update - Late May 2018:
+PyWeather 1.0.0 is coming along and on schedule.
+* HTTPS support is done, and the pip 10 fix is nearing completion.
+* I have started working on more minor issues & features, and all of these issues should be fixed by late June 2018.
+* More major fixes should be fixed by late July 2018.
 * If you haven't already noticed, the updater is now gone. But, don't fear, I'll be recoding it and it should be done by late August 2018, but I might work on the updater occasionally before summer.
 * QA will start in early September 2018, PyWeather 1.0.0 is out by September 30, 2018.
 
