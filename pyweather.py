@@ -868,6 +868,11 @@ except FileNotFoundError:
         print("Press enter to continue.")
         input()
         sys.exit()
+        
+# API keys shoudn't have spaces. Fixes #78.
+# Just in case, let's also remove newlines.
+
+apikey = apikey.replace(" ","").replace("\n","")
 
 # Validate the user's API key for the full API key validation - Section 16
 if validateAPIKey == True:
