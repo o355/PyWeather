@@ -990,7 +990,7 @@ logger.debug("about_contributors: %s ; about_releasetype: %s" %
 logger.debug("about_librariesinuse: %s ; about_awesomecontributors: %s" % 
             (about_librariesinuse, about_awesomecontributors))
 logger.debug("about_apisinuse: %s" % about_apisinuse)
-geoip_url = "https://freegeoip.net/json/"
+geoip_url = "https://ipapi.co/json/"
 logger.debug("geoip_url: %s" % geoip_url)
 
 # Set up the initial variables that dictate availability, using PWS URLs,
