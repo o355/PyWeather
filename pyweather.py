@@ -993,7 +993,6 @@ logger.debug("about_librariesinuse: %s ; about_awesomecontributors: %s" %
 logger.debug("about_apisinuse: %s" % about_apisinuse)
 geoip_url = "https://ipapi.co/json/"
 headers = {'User-Agent': 'pyweather/1.0.0 (Python %s; Requests %s)' % (python_version(), requests.__version__)}
-print(headers)
 logger.debug("geoip_url: %s" % geoip_url)
 
 # Set up the initial variables that dictate availability, using PWS URLs,
@@ -1157,7 +1156,7 @@ if geoip_enabled == True:
     spinner.start(text="Fetching current location...")
     logger.info("geoip is enabled, attempting to fetch current location...")
     try:
-        geoipJSON = requests.get(geoip_url)
+        geoipJSON = requests.get(geoip_url, headers=headers)
         logger.debug("Acquired GeoIP JSON, end result: %s" % geoipJSON)
         geoip_json = json.loads(geoipJSON.text)
         if jsonVerbosity is True:
@@ -4363,6 +4362,12 @@ while True:
             global r60url
             global r80url
             global r100url
+            global r10url_https
+            global r20url_https
+            global r40url_https
+            global r60url_https
+            global r80url_https
+            global r100url_https
             global latstr
             global lonstr
             global radar_gifx
@@ -4485,6 +4490,7 @@ while True:
                 else:
                     logger.debug("temp radar size entered, continuing with radar size change.")
 
+
             # Translate the new radar size into x & y resolutions, and define new URLs
             if frontendRS_rawRadarSize == "extrasmall":
                 radar_gifx = "320"
@@ -4501,7 +4507,6 @@ while True:
             elif frontendRS_rawRadarSize == "extralarge":
                 radar_gifx = "1280"
                 radar_gify = "960"
-
 
             r10url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=10&radunits=km'
             r20url = 'http://api.wunderground.com/api/' + apikey + '/animatedradar/image.gif?centerlat=' + latstr + '&centerlon=' + lonstr + '&width=' + radar_gifx + '&height=' + radar_gify + '&newmaps=1&rainsnow=0&delay=25&num=10&timelabel=1&timelabel.y=10&radius=20&radunits=km'
@@ -4536,8 +4541,6 @@ while True:
             elif frontendRS_rawRadarSize == "extralarge":
                 frontend.setMenuRadioButton("Window Size", "radarsizes", "extralarge (1280x960)")
 
-
-            print(frontendRS_rawRadarSize)
             # Lastly, load up a placeholder image, and set the viewer resolution size
             if frontendRS_rawRadarSize == "extrasmall":
                 frontend.setImage("Viewer", "storage//320x240placeholder.gif")
@@ -4609,7 +4612,14 @@ while True:
                             fw.write(chunk)
                         fw.close()
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r10.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r10.gif")
+                    except Exception:
+                        frontend.errorBox("Could not acquire radar data!",
+                                          "Could not load the radar imagery file. Please try again in a minute or two." +
+                                          "If this continues to fail make sure that PyWeather has write permissions in the temp folder.")
+                        frontend.setStatusbar("Status: Idle", 1)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                     r10cached = True
                     radar_zoomlevel = "10 km"
@@ -4626,7 +4636,7 @@ while True:
                         frontend.setStatusbar("Zoom: " + radar_zoomlevel, 0)
                         frontend.setStatusbar("Status: Idle", 1)
                         frontend.errorBox("Could not acquire radar data!", 
-                                          "PyWeather could not acquire cached radar data. Please reselect a" +
+                                          "PyWeather could not read cached radar data. Please reselect the" +
                                           " 10 km zoom level again.")
                         printException()
                         r10cached = False
@@ -4671,7 +4681,14 @@ while True:
                             fw.write(chunk)
                         fw.close()
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r20.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r20.gif")
+                    except Exception:
+                        frontend.errorBox("Could not acquire radar data!",
+                                          "Could not load the radar imagery file. Please try again in a minute or two." +
+                                          "If this continues to fail make sure that PyWeather has write permissions in the temp folder.")
+                        frontend.setStatusbar("Status: Idle", 1)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                     r20cached = True
                     radar_zoomlevel = "20 km"
@@ -4687,7 +4704,7 @@ while True:
                         frontend.setStatusbar("Zoom: " + radar_zoomlevel, 0)
                         frontend.setStatusbar("Status: Idle", 1)
                         frontend.errorBox("Could not acquire radar data!", 
-                                          "PyWeather could not acquire cached radar data. Please reselect a" +
+                                          "PyWeather could not read cached radar data. Please reselect the" +
                                           " 20 km zoom level again.")
                         printException()
                         r20cached = False
@@ -4732,7 +4749,14 @@ while True:
                             fw.write(chunk)
                         fw.close()
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r40.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r40.gif")
+                    except Exception:
+                        frontend.errorBox("Could not acquire radar data!",
+                                          "Could not load the radar imagery file. Please try again in a minute or two." +
+                                          "If this continues to fail make sure that PyWeather has write permissions in the temp folder.")
+                        frontend.setStatusbar("Status: Idle", 1)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                     r40cached = True
                     radar_zoomlevel = "40 km"
@@ -4748,7 +4772,7 @@ while True:
                         frontend.setStatusbar("Zoom: " + radar_zoomlevel, 0)
                         frontend.setStatusbar("Status: Idle", 1)
                         frontend.errorBox("Could not acquire radar data!", 
-                                          "PyWeather could not acquire cached radar data. Please reselect a" +
+                                          "PyWeather could not read cached radar data. Please reselect the" +
                                           " 40 km zoom level again.")
                         printException()
                         r40cached = False
@@ -4793,7 +4817,14 @@ while True:
                             fw.write(chunk)
                         fw.close()
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r60.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r60.gif")
+                    except:
+                        frontend.errorBox("Could not acquire radar data!",
+                                          "Could not load the radar imagery file. Please try again in a minute or two." +
+                                          "If this continues to fail make sure that PyWeather has write permissions in the temp folder.")
+                        frontend.setStatusbar("Status: Idle", 1)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                     r60cached = True
                     radar_zoomlevel = "60 km"
@@ -4809,7 +4840,7 @@ while True:
                         frontend.setStatusbar("Zoom: " + radar_zoomlevel, 0)
                         frontend.setStatusbar("Status: Idle", 1)
                         frontend.errorBox("Could not acquire radar data!", 
-                                          "PyWeather could not acquire cached radar data. Please reselect a" +
+                                          "PyWeather could not read cached radar data. Please reselect the" +
                                           " 60 km zoom level again.")
                         printException()
                         r60cached = False
@@ -4853,7 +4884,14 @@ while True:
                             fw.write(chunk)
                         fw.close()
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r80.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r80.gif")
+                    except Exception:
+                        frontend.errorBox("Could not acquire radar data!",
+                                          "Could not load the radar imagery file. Please try again in a minute or two." +
+                                          "If this continues to fail make sure that PyWeather has write permissions in the temp folder.")
+                        frontend.setStatusbar("Status: Idle", 1)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                     r80cached = True
                     radar_zoomlevel = "80 km"
@@ -4869,7 +4907,7 @@ while True:
                         frontend.setStatusbar("Zoom: " + radar_zoomlevel, 0)
                         frontend.setStatusbar("Status: Idle", 1)
                         frontend.errorBox("Could not acquire radar data!", 
-                                          "PyWeather could not acquire cached radar data. Please reselect a" +
+                                          "PyWeather could not read cached radar data. Please reselect the" +
                                           " 80 km zoom level again.")
                         printException()
                         r80cached = False
@@ -4914,7 +4952,14 @@ while True:
                             fw.write(chunk)
                         fw.close()
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r100.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r100.gif")
+                    except Exception:
+                        frontend.errorBox("Could not acquire radar data!",
+                                          "Could not load the radar imagery file. Please try again in a minute or two." +
+                                          "If this continues to fail make sure that PyWeather has write permissions in the temp folder.")
+                        frontend.setStatusbar("Status: Idle", 1)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                     r100cached = True
                     radar_zoomlevel = "100 km"
@@ -4930,7 +4975,7 @@ while True:
                         frontend.setStatusbar("Zoom: " + radar_zoomlevel, 0)
                         frontend.setStatusbar("Status: Idle", 1)
                         frontend.errorBox("Could not acquire radar data!", 
-                                          "PyWeather could not acquire cached radar data. Please reselect a" +
+                                          "PyWeather could not read cached radar data. Please reselect the" +
                                           " 100 km zoom level again.")
                         printException()
                         r100cached = False
@@ -4981,7 +5026,15 @@ while True:
                             fw.write(chunk)
                         fw.close()
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r10.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r10.gif")
+                    except Exception:
+                        frontend.errorBox("Could not acquire radar data!",
+                                          "Could not load the radar imagery file. Please try again in a minute or two." +
+                                          "If this continues to fail make sure that PyWeather has write permissions in the temp folder.")
+                        frontend.setStatusbar("Status: Idle", 1)
+                        return
+
                     frontend.setStatusbar("Status: Idle", 1)
                 elif radar_zoomlevel == "20 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
@@ -5019,7 +5072,15 @@ while True:
                             fw.write(chunk)
                         fw.close()
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r20.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r20.gif")
+                    except Exception:
+                        frontend.errorBox("Could not acquire radar data!",
+                                          "Could not load the radar imagery file. Please try again in a minute or two." +
+                                          "If this continues to fail make sure that PyWeather has write permissions in the temp folder.")
+                        frontend.setStatusbar("Status: Idle", 1)
+                        return
+
                     frontend.setStatusbar("Status: Idle", 1)
                 elif radar_zoomlevel == "40 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
@@ -5057,7 +5118,14 @@ while True:
                             fw.write(chunk)
                         fw.close()
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r40.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r40.gif")
+                    except Exception:
+                        frontend.errorBox("Could not acquire radar data!",
+                                          "Could not load the radar imagery file. Please try again in a minute or two." +
+                                          "If this continues to fail make sure that PyWeather has write permissions in the temp folder.")
+                        frontend.setStatusbar("Status: Idle", 1)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                 elif radar_zoomlevel == "60 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
@@ -5095,7 +5163,14 @@ while True:
                             fw.write(chunk)
                         fw.close()
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r60.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r60.gif")
+                    except Exception:
+                        frontend.errorBox("Could not acquire radar data!",
+                                          "Could not load the radar imagery file. Please try again in a minute or two." +
+                                          "If this continues to fail make sure that PyWeather has write permissions in the temp folder.")
+                        frontend.setStatusbar("Status: Idle", 1)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                 elif radar_zoomlevel == "80 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
@@ -5133,7 +5208,14 @@ while True:
                             fw.write(chunk)
                         fw.close()
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r80.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r80.gif")
+                    except Exception:
+                        frontend.errorBox("Could not acquire radar data!",
+                                          "Could not load the radar imagery file. Please try again in a minute or two." +
+                                          "If this continues to fail make sure that PyWeather has write permissions in the temp folder.")
+                        frontend.setStatusbar("Status: Idle", 1)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
                 elif radar_zoomlevel == "100 km":
                     frontend.setStatusbar("Status: Fetching image...", 1)
@@ -5171,7 +5253,14 @@ while True:
                             fw.write(chunk)
                         fw.close()
                     frontend.setStatusbar("Status: Loading image...", 1)
-                    frontend.reloadImage("Viewer", "temp//r100.gif")
+                    try:
+                        frontend.reloadImage("Viewer", "temp//r100.gif")
+                    except Exception:
+                        frontend.errorBox("Could not acquire radar data!",
+                                          "Could not load the radar imagery file. Please try again in a minute or two." +
+                                          "If this continues to fail make sure that PyWeather has write permissions in the temp folder.")
+                        frontend.setStatusbar("Status: Idle", 1)
+                        return
                     frontend.setStatusbar("Status: Idle", 1)
             elif btnName == "Empty Cache":
                 global r10cached
@@ -5238,7 +5327,6 @@ while True:
         frontend_seqDetailedRadarSizes = ["extrasmall (320x240)", "small (480x360)", "normal (640x480)", "large (960x640)", "extralarge (1280x960)"]
         for term in frontend_seqDetailedRadarSizes:
             frontend.addMenuRadioButton("Window Size", "radarsizes", term, frontend_menuhandling)
-        print(frontend_currentRadarSize)
         # Set the radio buttion by default to the resolution the user has. The order is not organized because of potential duplicates when using "in"
         frontend_radarSizes = ["extralarge", "large", "normal", "extrasmall", "small"]
         for term in frontend_radarSizes:
@@ -6590,6 +6678,9 @@ while True:
         currentstormiterations = 0
         logger.debug("activestorms: %s ; currentstormiterations: %s" %
                      (activestorms, currentstormiterations))
+
+        # Add the array for hurricane names we've iterated through.
+        hurricane_iteratedstorms = []
         for data in hurricane_json['currenthurricane']:
             activestorms += 1
         logger.debug("activestorms: %s" % activestorms)
@@ -6603,6 +6694,10 @@ while True:
         # <--- Current data --->
         for data in hurricane_json['currenthurricane']:
             stormname = data['stormInfo']['stormName_Nice']
+            # Do some array processing. If the storm name isn't found in the array, add it and continue with iteration.
+            # However, if the storm name has shown up, increase all iteration variables by 1 and iterate to the next storm.
+            # If we detect that this is the last storm that we're iterating on, throw a duplicate message and an enter to exit prompt.
+
             logger.debug("stormname: %s" % stormname)
             stormlat = float(data['Current']['lat'])
             # Make a *url variable to store the raw lat/lon in str() format.
