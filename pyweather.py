@@ -30,10 +30,15 @@ _______
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Below are special lines of code that were typed in during special times.
+# Please leave them alone.
+
 
 # This line of code was typed in during the solar eclipse, in Eclipse.
 
 # (the august 2017 eclipse). Commit ID: b4c9b74731fa5ca32cd7c52eb6240f594d742750
+
+# This line of code was typed in for the 1,000th commit (May 28, 2018)
 
 
 #
@@ -56,6 +61,7 @@ import codecs
 import os
 from random import randint
 import zipfile
+from platform import python_version
 
 # Import requests for URL downloading
 try:
@@ -621,11 +627,6 @@ else:
 spinner = Halo(text='Loading PyWeather...', spinner='line')
 spinner.start()
 
-
-from platform import python_version
-
-headers = {'User-Agent': 'PyWeather 0.6.4 beta (Python %s)' % python_version()}
-
 # List config options for those who have verbosity enabled. - Section 9
 logger.info("PyWeather 0.6.3 beta now starting.")
 logger.info("Configuration options are as follows: ")
@@ -991,6 +992,8 @@ logger.debug("about_librariesinuse: %s ; about_awesomecontributors: %s" %
             (about_librariesinuse, about_awesomecontributors))
 logger.debug("about_apisinuse: %s" % about_apisinuse)
 geoip_url = "https://ipapi.co/json/"
+headers = {'User-Agent': 'pyweather/1.0.0 (Python %s; Requests %s)' % (python_version(), requests.__version__)}
+print(headers)
 logger.debug("geoip_url: %s" % geoip_url)
 
 # Set up the initial variables that dictate availability, using PWS URLs,
@@ -1155,7 +1158,7 @@ if geoip_enabled == True:
     logger.info("geoip is enabled, attempting to fetch current location...")
     try:
         geoipJSON = requests.get(geoip_url)
-        logger.debug("GeoIP JSON requsted with: %s" % geoipJSON)
+        logger.debug("Acquired GeoIP JSON, end result: %s" % geoipJSON)
         geoip_json = json.loads(geoipJSON.text)
         if jsonVerbosity is True:
             logger.debug("geoip_json: %s" % geoip_json)

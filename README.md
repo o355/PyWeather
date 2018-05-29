@@ -1,16 +1,3 @@
-## Critical bug warnings
-There are two critical bugs as affecting PyWeather 0.6.3 beta. These bugs are being fixed in version 1.0.0.
-
-There is a bug where the cache times for 1.5 day hourly and almanac data aren't properly parsed. Cache times in the config file are set in minutes, and then multiplied by 60 when loaded into PyWeather for the minutes to seconds conversion.
-
-Unfortunately, I forgot to code in the multiplication for 1.5 day hourly and almanac data, so it refreshes after 1 and 4 minutes respectively. To fix this, in the config file set the three-day hourly cache value (it's confusing, I get it) to 3600. Set the almanac value to 14400. Checks will be included in the config updater for 1.0.0 to roll back these changes (otherwise cache times would be 2.5 days and 10 days)
-
-Another issue is with doing pip installs during the setup script. pip 10 broke the usage of pip.main, and as a result setup crashes any time you try to install a library.
-
-If you preinstall libraries on a desktop (and on Linux assuming the python3-tk package is installed) this isn't an issue. However, if you don't have a GUI, you'll have to use configsetup.py and manually create storage/apikey.txt and put your API key in that file.
-
-These bugs will be fixed in version 1.0.0.
-
 ## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
 
@@ -19,12 +6,44 @@ PyWeather is the culmination of thousands of hours of work poured into a silly l
 I hope that you can enjoy PyWeather as much as I enjoy making PyWeather, so, let's get started!
 
 ## PyWeather Update - Late May 2018:
+First off, we've hit 1,000 commits! Woo hoo!
+
 PyWeather 1.0.0 is coming along and on schedule.
 * HTTPS support is done, and the pip 10 fix is nearing completion.
 * I have started working on more minor issues & features, and all of these issues should be fixed by late June 2018.
 * More major fixes should be fixed by late July 2018.
 * If you haven't already noticed, the updater is now gone. But, don't fear, I'll be recoding it and it should be done by late August 2018, but I might work on the updater occasionally before summer.
 * QA will start in early September 2018, PyWeather 1.0.0 is out by September 30, 2018.
+
+## Warnings & Notices
+Because we needed a section for this.
+
+### Critical Bug - Cache time issues
+PyWeather 0.6.3 beta has a critical bug where the 1.5-day hourly and almanac cache times aren't properly parsed. Cache times are multiplied by 60 when parsed from the config file for internal use in seconds.
+
+Unfortunately, I did not code in the multiplication for 1.5-day hourly and almanac cache times, so the value in the config file for 'threedayhourly' and 'almanac' cache times are basically in the seconds unit.
+
+To fix this issue, set your 'threedayhourly' cache time to 3600, and 'almanac' cache time to 14400. I will soon add code in the config update script to revert these temporary changes when updating to PyWeather 1.0.0 (unless you like day-long cache times)
+
+### Critical Bug - Library install issues
+pip 10 stripped any use of `pip.main` usage in a Python script, and this was being used to install libraries during the setup process. This issue has been fixed as of May 24, 2018.
+
+On a Mac OS X/Windows desktop this is easily avoidable - Just preinstall all libraries. On Linux with a GUI to avoid appJar throwing an error and being marked for install you'd have to install `python3-tk` beforehand.
+
+The issue comes on terminal-only setups. When we check for appJar, we check for an ImportError, which is thrown if you don't have the library **OR** if you don't have a GUI. The library is marked for setup and the setup script crashes.
+
+This issue has been fixed across all scripts.
+
+### Notice - Geo IP API being depreciated July 1, 2018
+The Geo IP API that we're using, freegeoip.net, is being depreciated on July 1, 2018, and will be replaced by ipstack.com. I have determined that ipstack cannot be used (the key system is something akin to Wunderground), and ip-api.org will be used instead.
+
+However, PyWeather v1.0.0 will NOT be out by July 1 with code for supporting the new Geo IP API. As a result, after July 1, if you have the current location feature enabled, turn it off to avoid issues.
+
+On the bright side, all Geo IP code is in a try/except block, so even if the domain goes down it shouldn't cause a total PyWeather crash.
+
+If you can't live without your current location feature, I'll be coding support for the new Geo IP API before July 1, and you can use the indev version of PyWeather.
+
+Unfortunately, ip-api.org does not use HTTPS, and ipstack's free plan doesn't have HTTPS support. I may decide to implement support for ipstack down the road, however.
 
 ## Requirements
 To run PyWeather, you'll need:
