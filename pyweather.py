@@ -870,9 +870,9 @@ except FileNotFoundError:
         sys.exit()
         
 # API keys shoudn't have spaces. Fixes #78.
-# Just in case, let's also remove newlines.
+# Just in case, let's also remove tabs and newlines.
 
-apikey = apikey.replace(" ","").replace("\n","")
+apikey = apikey.replace(" ","").replace("\n","").replace("\t","")
 
 # Validate the user's API key for the full API key validation - Section 16
 if validateAPIKey == True:
