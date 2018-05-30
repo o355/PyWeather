@@ -6685,6 +6685,8 @@ while True:
             activestorms += 1
         logger.debug("activestorms: %s" % activestorms)
 
+        hurricane_iteratedstorms_iterationcount = 0
+
         if activestorms == 0:
             spinner.fail(text="There are no active tropical storms at this time.")
             continue
@@ -6697,6 +6699,29 @@ while True:
             # Do some array processing. If the storm name isn't found in the array, add it and continue with iteration.
             # However, if the storm name has shown up, increase all iteration variables by 1 and iterate to the next storm.
             # If we detect that this is the last storm that we're iterating on, throw a duplicate message and an enter to exit prompt.
+
+            hurricane_ISLoop_iterations = 0
+            for term in hurricane_iteratedstorms:
+                if term == stormname:
+                    currentstormiterations += 1
+                    # If the currentstormiterations now equals total active storms, tell the user and quit.
+                    if currentstormiterations == activestorms:
+                        print(Fore.RED + "Duplicate storm information was detected. There is no more hurricane data to display.",
+                              Fore.RED + "Press enter to exit to the main menu.")
+                        input()
+                        break
+                    else:
+                        continue
+                else:
+                    hurricane_iteratedstorms.append(stormname)
+                    logger.debug("hurricane_iteratedstorms: %s" % hurricane_iteratedstorms)
+                    continue
+
+            # If we have 0 storm iterations, the for loop above will not iterate, so add the storm name manually.
+            if currentstormiterations == 0:
+                hurricane_iteratedstorms.append(stormname)
+
+
 
             logger.debug("stormname: %s" % stormname)
             stormlat = float(data['Current']['lat'])
