@@ -989,10 +989,8 @@ else:
     logger.debug("Could not recognize input. Defaulting to DISABLED.")
 
 print("", "(5/42)","When an error occurs, would you like PyWeather to show the full error?",
-      "When enabled, you'll have easier access to the full error for reporting",
-      "the bug on GitHub.",
-      "By default, this is disabled, as errors look less pretty when enabled.",
-      "Yes or no.", sep="\n")
+      "When enabled, you'll have easier access to full tracebacks for bug reporting.",
+      "By default, this is disabled. Yes or no.", sep="\n")
 displayTracebacks = input("Input here: ").lower()
 logger.debug("displayTracebacks: %s" % displayTracebacks)
 if displayTracebacks == "yes":
@@ -1021,12 +1019,9 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(6/42)", "When booting PyWeather up initially, would you like PyWeather to",
-      "fetch the 10-day hourly forecast, instead of the 3-day forecast?",
-      "This is disabled by default. When enabled, initial loading times are",
-      "increased. However, when you view the 10-day hourly forecast, you won't",
-      "have to wait for it to load, and use another API call.",
-      "Yes or No.", sep="\n")
+print("", "(6/42)", "When booting up PyWeather, would you like the 10-day",
+      "hourly forecast to be fetched instead of the 36-hour hourly forecast?",
+      "Enabling increases load times. By default, this is disabled. Yes or No.", sep="\n")
 tenday_onboot = input("Input here: ").lower()
 if tenday_onboot == "yes":
     config['PREFETCH']['10dayfetch_atboot'] = 'True'
@@ -1043,11 +1038,8 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(7/42)", "When viewing detailed hourly, 10-day hourly, and historical hourly,",
-      "detailed information, how many iterations should PyWeather go through",
-      "before asking you to continue?",
-      "By default, this is 6. An input above 10",
-      "is not recommended.", sep="\n")
+print("", "(7/42)", "When viewing most detailed weather information, how many iterations",
+      "of data should be printed before a continue prompt appears? By default, this is 6.", sep="\n")
 detailedloops = input("Input here: ")
 try:
     detailedloops = int(detailedloops)
@@ -1062,11 +1054,8 @@ except:
     print("Changes saved.")
     logger.debug("Detailed info loops now 6.")
 
-print("", "(8/42)", "When viewing detailed 10-day forecast information, how many",
-      "iterations should PyWeather go through, before asking you to",
-      "continue?",
-      "By default, this is 5. An input above 10 will not prompt",
-      "the enter to continue prompt", sep="\n")
+print("", "(8/42)", "When viewing detailed 10-day forecast information, how many iterations",
+      "of data should be printed before a continue prompt appears? By default, this is 5.", sep="\n")
 detailedForecastLoops = input("Input here: ")
 try:
     detailedForecastLoops = int(detailedForecastLoops)
@@ -1091,10 +1080,10 @@ if enablecache == "no":
     print("Changes saved.")
 else:
     config['CACHE']['enabled'] = 'True'
-    print("You entered yes, or your input wasn't understood (yes is the default.)",
-          "In the next few inputs, enter the time in minutes that PyWeather should keep",
-          "certain types of data, before a data refresh is automatically requested.",
-          "If you want to leave cache values to their defaults, press enter at any prompt.", sep="\n")
+
+    print("", "In the next few options, enter the time that PyWeather should keep data types before",
+          "a refresh is automatically requested. You can press enter at any prompt to set the cache",
+          "values to their default.", sep="\n")
 
     print("", "(10/42)", "Please enter the cache time for alerts data in minutes (default = 5)", sep="\n")
     alertscachetime = input("Input here: ").lower()
@@ -1235,12 +1224,8 @@ else:
         config['CACHE']['yesterday_cachedtime'] = '720'
         logger.debug("Yesterday data cache time now 720 minutes.")
 
-
-
-print("", "(20/42)", "When viewing detailed EU alerts information, how many",
-      "iterations should PyWeather go through, before asking you to",
-      "continue?",
-      "By default, this is 2.", sep="\n")
+print("", "(20/42)", "When viewing detailed EU alert information, how many iterations of",
+      "data should printed before a continue prompt appears? By default, this is 2.", sep="\n")
 EUalertsloops = input("Input here: ")
 try:
     EUalertsloops = int(EUalertsloops)
@@ -1255,10 +1240,8 @@ except:
     print("Changes saved.")
     logger.debug("Detailed EU alert iterations now 2.")
 
-print("", "(21/42)", "When viewing detailed US alerts information, how many",
-      "iterations should PyWeather go through, before asking you to",
-      "continue?",
-      "By default, this is 1.", sep="\n")
+print("", "(21/42", "When viewing detailed US alert information, how many iterations of",
+      "data should be printed before a continue prompt appears? By default, this is 1.", sep="\n")
 USalertsloops = input("Input here: ")
 try:
     USalertsloops = int(USalertsloops)
@@ -1273,10 +1256,8 @@ except:
     print("Changes saved.")
     logger.debug("Detailed US alert iterations now 1.")
 
-print("", "(22/42)","When PyWeather is going through detailed information, it can show",
-      "how many iterations are completed.",
-      "By default, this is disabled.",
-      "Yes or No.", sep="\n")
+print("", "(22/42)", "When PyWeather is going through detailed data, a completed",
+      "iterations count can be shown. By default, this is disabled. Yes or No.", sep="\n")
 showIterations = input("Input here: ").lower()
 if showIterations == "yes":
     config['UI']['show_completediterations'] = 'True'
@@ -1293,10 +1274,8 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(23/42)", "When PyWeather is going through detailed information, would",
-      "you like the 'Enter to Continue' prompts to pop up?",
-      "By default, this is enabled.",
-      "Yes or No.", sep="\n")
+print("", "(23/42)", "When PyWeather is going through detailed data, would you like the",
+      "'Enter to Continue' prompts to appear? By default, this is disabled. Yes or No.", sep="\n")
 showEnterToContinue = input("Input here: ").lower()
 if showEnterToContinue == "yes":
     config['UI']['show_entertocontinue'] = 'True'
@@ -1313,10 +1292,9 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to ENABLED.")
 
-print("", "(24/42)", "In the PyWeather Updater, the updater can show the release tag",
-      "associated with the latest release. Helpful for those using Git to",
-      "update PyWeather. By default, this is disabled.",
-      "Yes or No.", sep="\n")
+print("", "(24/42)", "In the PyWeather Updater, would you like the Git tag associated with the",
+      "latest release can be shown? It's helpful to those using Git to update PyWeather.",
+      "By default, this is disabled. Yes or No.", sep="\n")
 showReleaseTag = input("Input here: ").lower()
 if showReleaseTag == "yes":
     config['UPDATER']['show_updaterreleasetag'] = 'True'
@@ -1333,13 +1311,9 @@ else:
     print("Changes saved.")
     logger.debug("Could not understand input. Defaulting to DISABLED.")
 
-print("", "(25/42)", "When PyWeather boots, it can validate your API key. If PyWeather",
-      "finds your primary API key is invalid, it'll attempt to validate your",
-      "backup key, and load that if it's validated successfully.",
-      "By default, this is enabled, as it's well worth the 1 API call to make",
-      "sure your key is valid. However, if you said 'Yes' to almanac/sun data",
-      "on the summary screen, you might not want to enable this.",
-      "Yes or No.", sep="\n")
+print("", "(25/42)", "When PyWeather boots, your API key can be validated, and your",
+      "backup key can be loaded if validated successfully. Would you like to enable this?",
+      "When enabled, 1 extra API call is used. By default, this is disabled. Yes or No.", sep="\n")
 validateKeyOnBoot = input("Input here: ").lower()
 if validateKeyOnBoot == "yes":
     config['PYWEATHER BOOT']['validateAPIKey'] = 'True'
