@@ -759,10 +759,10 @@ print("In the table to the left of the page, copy the text that's under Key ID."
 "Press any key when you are done and ready.", sep="\n")
 input()
 print("Please input your API key below.")
-apikey_input = input("Input here: ")
+apikey_input = str(input("Input here: ")).replace(" ","").replace("\n","").replace("\t","")
 logger.debug("apikey_input: %s" % apikey_input)
-print("", "Just to confirm, the API key you gave me was: " + apikey_input
-      + ".", sep="\n")
+print("", "Just to confirm, the API key you gave me was: '" + apikey_input
+      + "'", sep="\n")
 print("Please double check your input, and confirm in the dialogue below.")
 apikey_confirm = input("Is the API key right? Yes or no: ").lower()
 logger.debug("apikey_confirm: %s" % apikey_confirm)
@@ -770,10 +770,10 @@ if apikey_confirm == "no":
     while True:
         logger.debug("User now re-entering key...")
         print("","Please input your API key below.", sep="\n")
-        apikey_input = input("Input here: ")
+        apikey_input = str(input("Input here: ")).replace(" ","").replace("\n","").replace("\t","")
         logger.debug("apikey_input: %s" % apikey_input)
-        print("Just to confirm, the API key you gave me was: " + apikey_input
-              + ".")
+        print("Just to confirm, the API key you gave me was: '" + apikey_input
+              + "'")
         apikey_confirm = input("Is the API key right? Yes or no: ").lower()
         if apikey_confirm == "yes":
             break
@@ -892,7 +892,7 @@ while True:
         revalidateAPIkey = input("Input here: ").lower()
         if revalidateAPIkey == "yes":
             print("Enter in your API key below.")
-            apikey_input = input("Input here: ")
+            apikey_input = str(input("Input here: ")).replace(" ","").replace("\n","").replace("\t","")
             logger.debug("apikey_input: %s")
             print("Revalidating your API key...")
             continue
