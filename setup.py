@@ -762,8 +762,8 @@ input()
 print("Please input your API key below.")
 apikey_input = str(input("Input here: ")).replace(" ","").replace("\n","").replace("\t","")
 logger.debug("apikey_input: %s" % apikey_input)
-print("", "Just to confirm, the API key you gave me was: '" + apikey_input
-      + "'", sep="\n")
+print("", "Just to confirm, the API key you gave me was: " + apikey_input
+      + ".", sep="\n")
 print("Please double check your input, and confirm in the dialogue below.")
 apikey_confirm = input("Is the API key right? Yes or no: ").lower()
 logger.debug("apikey_confirm: %s" % apikey_confirm)
@@ -773,8 +773,8 @@ if apikey_confirm == "no":
         print("","Please input your API key below.", sep="\n")
         apikey_input = str(input("Input here: ")).replace(" ","").replace("\n","").replace("\t","")
         logger.debug("apikey_input: %s" % apikey_input)
-        print("Just to confirm, the API key you gave me was: '" + apikey_input
-              + "'")
+        print("Just to confirm, the API key you gave me was: " + apikey_input
+              + ".")
         apikey_confirm = input("Is the API key right? Yes or no: ").lower()
         if apikey_confirm == "yes":
             break
