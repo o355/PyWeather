@@ -699,61 +699,25 @@ spinner.start()
 # List config options for those who have verbosity enabled. - Section 9
 logger.info("PyWeather 0.6.3 beta now starting.")
 logger.info("Configuration options are as follows: ")
-logger.debug("sundata_summary: %s ; almanac_summary: %s" %
-             (sundata_summary, almanac_summary))
-logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
-logger.debug("checkforUpdates: %s ; verbosity: %s" %
-             (checkforUpdates, verbosity))
-logger.debug("jsonVerbosity: %s ; tracebacksEnabled: %s" %
-             (jsonVerbosity, tracebacksEnabled))
-logger.debug("prefetch10Day_atStart: %s ; user_loopIterations: %s" 
-             % (prefetch10Day_atStart, user_loopIterations))
-logger.debug("user_enterToContinue: %s ; user_showCompletedIterations: %s"
-             % (user_enterToContinue, user_showCompletedIterations))
-logger.debug("user_forecastLoopIterations: %s ; user_showUpdaterReleaseTag: %s"
-             % (user_forecastLoopIterations, user_showUpdaterReleaseTag))
-logger.debug("user_backupKeyDirectory: %s ; validateAPIKey: %s"
-             % (user_backupKeyDirectory, validateAPIKey))
-logger.debug("showAlertsOnSummary: %s" % showAlertsOnSummary)
-logger.debug("showUpdaterReleaseNotes_uptodate: %s ; showNewVersionReleaseDate: %s"
-             % (showUpdaterReleaseNotes_uptodate, showNewVersionReleaseDate))
-logger.debug("showUpdaterReleaseNotes: %s ; cache_enabled: %s" %
-             (showUpdaterReleaseNotes, cache_enabled))
-logger.debug("cache_alertstime: %s ; cache_currenttime: %s" %
-             (cache_alertstime, cache_currenttime))
-logger.debug("cache_forecasttime: %s" %
-             (cache_forecasttime))
-logger.debug("cache_almanactime: %s ; cache_threedayhourly: %s" %
-             (cache_almanactime, cache_threedayhourly))
-logger.debug("cache_tendayhourly: %s ; cache_sundatatime: %s" %
-             (cache_tendayhourly, cache_sundatatime))
+logger.debug("sundata_summary: %s ; almanac_summary: %s" % (sundata_summary, almanac_summary))
+logger.debug("checkforUpdates: %s ; verbosity: %s" % (checkforUpdates, verbosity))
+logger.debug("jsonVerbosity: %s ; tracebacksEnabled: %s" % (jsonVerbosity, tracebacksEnabled))
+logger.debug("prefetch10Day_atStart: %s ; user_enterToContinue: %s" % (prefetch10Day_atStart, user_enterToContinue))
+logger.debug("user_showCompletedIterations: %s ; user_showUpdaterReleaseTag: %s" % (user_showCompletedIterations, user_showUpdaterReleaseTag))
+logger.debug("user_backupKeyDirectory: %s ; validateAPIKey: %s" % (user_backupKeyDirectory, validateAPIKey))
+logger.debug("showAlertsOnSummary: %s ; showyesterdayonsummary: %s" % (showAlertsOnSummary, showyesterdayonsummary))
+logger.debug("showUpdaterReleaseNotes: %s ; showUpdaterReleaseNotes_uptodate: %s" % (showUpdaterReleaseNotes, showUpdaterReleaseNotes_uptodate))
+logger.debug("showNewVersionReleaseDate: %s ; cache_enabled: %s" % (showNewVersionReleaseDate, cache_enabled))
+logger.debug("cache_alertstime: %s ; cache_currenttime: %s" % (cache_alertstime, cache_currenttime))
+logger.debug("cache_forecasttime: %s ; cache_almanactime: %s" % (cache_forecasttime, cache_almanactime))
+logger.debug("cache_threedayhourly: %s ; cache_tendayhourly: %s" % (cache_threedayhourly, cache_tendayhourly))
+logger.debug("cache_sundatatime: %s" % cache_sundatatime)
+
 # Coded during 70% totality of the 2017 eclipse, max for my location then
 logger.debug("cache_tidetime: %s" % cache_tidetime)
 # Please don't touch this line kthxbye
-logger.debug("user_alertsUSiterations: %s ; user_alertsEUiterations: %s" %
-             (user_alertsUSiterations, user_alertsEUiterations))
-logger.debug("user_radarImagesize: %s ; radar_bypassconfirmation: %s" %
-             (user_radarImageSize, radar_bypassconfirmation))
-logger.debug("showTideOnSummary: %s ; geopyScheme: %s" %
-             (showTideOnSummary, geopyScheme))
-logger.debug("prefetchHurricane_atboot: %s ; cache_hurricanetime: %s" %
-             (prefetchHurricane_atboot, cache_hurricanetime))
-logger.debug("cache_yesterdaytime: %s" % (cache_yesterdaytime))
-logger.debug("favoritelocation_enabled: %s ; favoritelocation_1: %s" %
-             (favoritelocation_enabled, favoritelocation_1))
-logger.debug("favoritelocation_2: %s ; favoritelocation_3: %s" %
-             (favoritelocation_2, favoritelocation_3))
-logger.debug("favoritelocation_4: %s ; favoritelocation_5: %s" %
-             (favoritelocation_4, favoritelocation_5))
-logger.debug("geocoder_customkeyEnabled: %s ; geocoder_customkey: %s" %
-             (geocoder_customkeyEnabled, geocoder_customkey))
-logger.debug("extratools_enabled: %s ; airports_enabled: %s" %
-             (extratools_enabled, airports_enabled))
-logger.debug("favoritelocation_1data: %s ; favoritelocation_2data: %s" %
-             (favoritelocation_1data, favoritelocation_2data))
-logger.debug("favoritelocation_3data: %s ; favoritelocation_4data: %s" %
-             (favoritelocation_3data, favoritelocation_4data))
-logger.debug("favoritelocation_5data: %s" % favoritelocation_5data)
+
+
 
 
 logger.info("Setting gif x and y resolution for radar...")
