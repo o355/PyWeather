@@ -211,7 +211,7 @@ def configprovision():
         with open('storage//config.ini', 'w') as configfile:
             config.write(configfile)
     except:
-        print("Hmmf...an odd error occurred. A full traceback will be",
+        print("Hmm...an odd error occurred. A full traceback will be",
               "printed below. Please report this issue on GitHub",
               "(github.com/o355/pyweather), as that would be greatly appreciated",
               "for trying to fix the bug that you just encountered!", sep="\n")
@@ -257,8 +257,8 @@ except:
         print("Not provisioning your config. You may encounter unexpected errors",
               "and issues when using PyWeather, however.", sep="\n")
     else:
-        print("Couldn't understand your input. By default, I'm going to provision",
-              "your config. Beginning now...", sep="\n")
+        print("Couldn't understand your input. By default, your configuration will",
+              "be provisioned.", sep="\n")
         configprovision()
         print("Config file provisioned successfully! Moving on with PyWeather setup...")
 
@@ -307,7 +307,7 @@ logger.debug("tracebacksEnabled: %s" %
              tracebacksEnabled)
 
 print("Hi! Welcome to PyWeather 0.6.3 beta! Glad that you're here.",
-      "I'm here to help set up PyWeather, and let you configure it to your liking.",
+      "This setup script will set up PyWeather, and let you configure it to your liking.",
       "Let's begin!", sep="\n")
 
 
@@ -323,55 +323,59 @@ buildversion = "0.6.3 beta"
 logger.debug("buildnumber: %s ; buildversion: %s" %
              (buildnumber, buildversion))
 
-print("","Before we get started, I want to confirm some permissions from you.",
-      "Is it okay if I use 1-5 MB of data (downloading libraries), save a small",
-      "text file called apikey.txt (under 2 KB), and automatically install Python",
-      "libraries?",
+print("","Before we get started, let's want to confirm some permissions from you.",
+      "Is it okay if 1-5 MB of data (downloading libraries) is used, very small",
+      "text files (apikey.txt & backkey.txt) are created, and Python libraries are",
+      "automatically installed?",
       "Please input yes or no below:", sep="\n")
 confirmPermissions = input("Input here: ").lower()
 logger.debug("confirmPermissions: %s" % confirmPermissions)
 if confirmPermissions == "no":
     logger.debug("User denied permissions. Closing...")
-    print("Okay! Closing now.",
+    print("Cannot continue without your consent. Closing PyWeather Setup.",
           "Press enter to exit.", sep="\n")
     input()
     sys.exit()
 elif confirmPermissions != "yes":
     logger.debug("Couldn't understand. Closing...")
-    print("I couldn't understand what you said.",
-          "As a precaution, I won't proceed any further.",
-          "Press enter to exit.", sep="\n")
+    print("Your input was not understood. Closing PyWeather Setup as a precaution.",
+          "You can always relaunch this script at any time. Press enter to exit.", sep="\n")
     input()
     sys.exit()
 
 print("","Cool! Let's start.",
-      "I'm going to start by checking for necessary libraries (to run PyWeather).",
-      "This can take a moment, so please hold tight while I check!", sep="\n")
+      "Now checking for necessary libraries (to run PyWeather).",
+      "This can take a moment, so please wait for just a moment.", sep="\n")
 
 try:
     import pip
 except ImportError:
     logger.warn("pip is NOT installed! Asking user for automated install...")
     printException_loggerwarn()
-    print("","Shucks! PIP couldn't be imported, and I need PIP to install",
-          "libraries for you. Would you like me to install PIP for you?",
+    print("", "Shucks! pip couldn't be imported, and pip is needed to install",
+          "libraries for you. Would you like pip to be installed for you?",
           "Yes or No.", sep="\n")
     pipConfirm = input("Input here: ").lower()
     logger.debug("pipConfirm: %s" % pipConfirm)
     if pipConfirm == "no":
-        logger.info("User denied PIP install, closing...")
-        print("","Okay! I'm closing setup, as I need PIP to continue.",
-        "Press enter to continue.", sep="\n")
+        logger.info("User denied pip install, closing...")
+        print("", "pip is needed to continue with PyWeather Setup. As such, PyWeather",
+              "Setup will now be closed. Press enter to exit.", sep="\n")
         input()
         sys.exit()
     elif pipConfirm == "yes":
         logger.info("User allowed PIP install. Starting...")
-        print("","Okay!",
-        "I'll download PIP's installer, and run it.",
-        "Doing such uses about 2-4 MB of data, and will quit PW setup.",
-        "When the setup script finishes, you'll need to run the setup script again."
-        "I'll start in a few seconds.", sep="\n")
-        time.sleep(3)
+        print("Now downloading the pip install script in 5 seconds.",
+              "This should use 2-4 MB of data, and will quit PyWeather Setup",
+              "when complete. After PyWeather Setup quits, please relaunch PW Setup.",
+              "If you'd like to cancel the download, press Ctrl + C in the next 5 seconds.", sep="\n")
+        try:
+            time.sleep(5)
+        except KeyboardInterrupt:
+            print("You cancelled the pip install. pip is required to continue with",
+                  "PyWeather Setup, and will now be closed. Press enter to exit.", sep="\n")
+            input()
+            sys.exit()
         print("Downloading the installer...")
         # We use the built-in urllib library, as some Python installs don't include requests.
         try:
@@ -381,22 +385,28 @@ except ImportError:
                              % (update_response, update_out_file))
                 shutil.copyfileobj(update_response, update_out_file)
         except:
-            print("Couldn't download the PIP installer, either due to no internet connection, or the library that fetches",
-                  "files has failed. As an alternative, you can download the installer yourself.",
-                  "Please download this file: 'https://bootstrap.pypa.io/get-pip.py', and place it in PyWeather's base directory.",
-                  "Afterwards, press enter to execute the installer. Press Control + C to exit.", sep="\n")
+            print("Couldn't download the pip installer, either due to no internet or a library failure.",
+                  "As an alternative, you can download the installer yourself. Please download:",
+                  "'https://bootstrap.pypa.io/get-pip.py', and put it in PyWeather's base directory.",
+                  "When you're done, press enter to install pip, or press Ctrl + C to quit setup.", sep="\n")
             printException()
-            input()
+            try:
+                input()
+            except:
+                print("You cancelled the pip install. pip is required to continue with",
+                      "PyWeather Setup, and will now be closed. Press enter to exit.", sep="\n")
+                input()
+                sys.exit()
 
         print("Running the installer...")
         logger.debug("Executing get-pip.py. If this script exits, please restart the setup script.")
         exec(open("get-pip.py").read())
 
     else:
-        logger.warn("Couldn't understand the input. Closing...")
-        print("","I didn't understand what you said.",
-        "As a precaution, I'm closing setup, as I need PIP to continue.",
-        "Press enter to exit.", sep="\n")
+        logger.warning("Couldn't understand the input. Closing...")
+        print("", "Your input was not understood. As a precation, PyWeather Setup",
+              "will be closed, as pip is required to continue with setup.",
+              "Press enter to exit.", sep="\n")
         input()
         sys.exit()
 except PermissionError:
@@ -408,12 +418,11 @@ except PermissionError:
     input()
     sys.exit()
 
-print("Deleting the PIP installer file (if it exists)")
+print("Cleaning up pip installer files (if pip was installed)")
 try:
     os.remove("get-pip.py")
 except:
     printException_loggerwarn()
-    print("The file get-pip.py didn't exist, or we had wrong permissions.")
 
 neededLibraries = 0
 
@@ -451,7 +460,9 @@ try:
     logger.debug("appjarInstalled: %s" % appjarInstalled)
 except ImportError as e:
     if e == "No module named '_tkinter', please install the python3-tk package":
-        print("appJar cannot run on this platform. Skipping installation...")
+        print("It appears as if you've already installed appJar, the library for the radar GUI.",
+              "However, you'll also need to install `python3-tk` using your preferred package",
+              "manager.", sep="\n")
         appjarInstalled = True
         logger.debug("appjarInstalled: %s" % appjarInstalled)
     else:
@@ -509,7 +520,7 @@ if neededLibraries == 0:
     print("All necessary libraries have been installed!")
 else:
     logger.debug("Libraries need to be installed.")
-    print("Shucks. Not all necessary libraries are installed. Here's what needs to be installed:")
+    print("Not all necessary libraries are installed. Here's what needs to be installed:")
     if coloramaInstalled is False:
         print("- Colorama")
     if geopyInstalled is False:
@@ -522,15 +533,14 @@ else:
         print("- Halo")
     if clickInstalled is False:
         print("- Click")
-    print("If you want me to, I can automatically install these libraries.",
-    "Would you like me to do such? Yes or No.", sep="\n")
+    print("Would you like these libraries to be automatically installed for you?",
+          "Yes or No.", sep="\n")
     neededLibrariesConfirm = input("Input here: ").lower()
     logger.debug("neededLibrariesConfirm: %s" % neededLibrariesConfirm)
     if neededLibrariesConfirm == "no":
         logger.warning("Not installing necessary libraries. Now exiting...")
-        print("Okay. I needed to install necessary libraries to continue.",
-        "Now quitting...",
-        "Press enter to exit.", sep="\n")
+        print("To continue with PyWeather Setup, necessary libraries need to be installed.",
+              "Press enter to exit.")
         input()
         sys.exit()
     elif neededLibrariesConfirm == "yes":
@@ -556,7 +566,7 @@ else:
 
         logger.info("Running the double check on libraries...")
         print("Sweet! All libraries should be installed.",
-              "Just to confirm, I'm double checking if needed libraries are installed.", sep="\n")
+              "Now checking if all libraries are installed properly.", sep="\n")
 
         try:
             import colorama
@@ -582,8 +592,8 @@ else:
             input()
             sys.exit()
 
-        # Why is appJar not here? When appJar is straight up imported in a non-GUI environment, it'll throw an error
-        # even when it's installed. I don't check for an install because of this reason.
+        # appJar is skipped here as to avoid issues on non-GUI platforms.
+        # Full support for appJar checking may eventually come.
 
 
         try:
@@ -625,14 +635,14 @@ else:
         print("","All libraries are installed!", sep="\n")
     else:
         logger.warn("Input was not understood. Closing...")
-        print("Your input wasn't understood for if you wanted to automatically import libraries.",
-              "As a precaution PyWeather Setup needs to now close. Press enter to exit.", sep="\n")
+        print("Your input wasn't understood. As a precaution, PyWeather Setup will now close.",
+              "Necessary libraries are required to continue with setup. Press enter to exit.", sep="\n")
         input()
         sys.exit()
 
 # Previously this updated all your pip packages. I then did this on my NAS (on FreeNAS 11).
 # It broke my NAS! Woo hoo!
-print("", "Would you like PyWeather to automatically update it's required packages?",
+print("", "Would you like to automatically update PyWeather's required libraries?",
       "Doing this is generally recommended, and will have benefits down the line when",
       "some libraries fix known issues that occur in PyWeather. Yes or No.", sep="\n")
 confirm_updatepip = input("Input here: ").lower()
@@ -658,8 +668,8 @@ else:
           "issues with non-updated packages in future versions of PyWeather.")
 
 # Verbosity is not needed here.
-print("I'm now going to guide you through obtaining an API key.",
-"Please carefully read my detailed instructions, so you don't mess anything up.", sep="\n")
+print("Let's guide you through obtaining an API key.",
+      "Please carefully read my detailed instructions, so you don't mess anything up.", sep="\n")
 
 print("","If you know how to acquire a Wunderground API key, or are resetting PyWeather,",
       "hit enter 14 times to get to the API key entry.", sep="\n")
@@ -761,7 +771,7 @@ input()
 print("Please input your API key below.")
 apikey_input = str(input("Input here: ")).replace(" ","").replace("\n","").replace("\t","")
 logger.debug("apikey_input: %s" % apikey_input)
-print("", "Just to confirm, the API key you gave me was: " + apikey_input
+print("", "Just to confirm, the API key you inputted was: " + apikey_input
       + ".", sep="\n")
 print("Please double check your input, and confirm in the dialogue below.")
 apikey_confirm = input("Is the API key right? Yes or no: ").lower()
@@ -772,7 +782,7 @@ if apikey_confirm == "no":
         print("","Please input your API key below.", sep="\n")
         apikey_input = str(input("Input here: ")).replace(" ","").replace("\n","").replace("\t","")
         logger.debug("apikey_input: %s" % apikey_input)
-        print("Just to confirm, the API key you gave me was: " + apikey_input
+        print("Just to confirm, the API key you inputted was: " + apikey_input
               + ".")
         apikey_confirm = input("Is the API key right? Yes or no: ").lower()
         if apikey_confirm == "yes":
@@ -792,15 +802,14 @@ with open("storage//apikey.txt", 'a') as out:
     out.close()
     logger.debug("Performed ops: overwrite apikey.txt, out.write(apikey_input), out.close()")
 
-print("", "I can also back up your API key, in case you do something wrong.",
-      sep="\n")
+print("", "Your API key can be backed up, in case something goes wrong.")
 # A future release should bring customization as to the storage location.
 print("Would you like me to save a backup? Yes or no.")
 backup_APIkey = input("Input here: ").lower()
 if backup_APIkey == "yes":
-    print("","Where would you want me to backup the key to?",
-        "This is a directory. If I wanted my key at directory/backkey.txt,",
-          "You would enter 'directory'. The default directory is 'backup'.", sep="\n")
+    print("Which directory in the PyWeather folder would you like your",
+          "backup key to be stored in? The default directory is backup.",
+          "You can also press enter to use the backup directory by default.", sep="\n")
     # Doing a .lower() here to prevent case insensitiveness.
     backup_APIkeydirectory = input("Input here: ").lower()
     folder_argument = backup_APIkeydirectory + "//backkey.txt"
@@ -832,7 +841,7 @@ if backup_APIkey == "yes":
                 ", and close backkey.txt.")
 
 
-print("", "Before we configure PyWeather, I'll now validate your API key.", sep="\n")
+print("", "Before we configure PyWeather, your API key will be validated.", sep="\n")
 
 # Do an infinite loop of validation of the API key, so the user can reenter the API key
 # if it was wrong.
@@ -855,7 +864,7 @@ while True:
         except:
             logger.warning("Couldn't connect to Wunderground's API! No internet?")
             print("When PyWeather Setup attempted to fetch the .json to validate your API key,",
-                  "it ran into an error. If you're on a network with a filter, make sure that",
+                  "an error occurred. If you're on a network with a filter, make sure that",
                   "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
                   "connection.", sep="\n")
             printException()
@@ -865,7 +874,7 @@ while True:
     except:
         logger.warning("Couldn't connect to Wunderground's API! No internet?")
         print("When PyWeather Setup attempted to fetch the .json to validate your API key,",
-            "it ran into an error. If you're on a network with a filter, make sure that",
+            "an error occurred. If you're on a network with a filter, make sure that",
             "'api.wunderground.com' is unblocked. Otherwise, make sure you have an internet",
             "connection.", sep="\n")
         printException()
@@ -885,7 +894,7 @@ while True:
     except:
         logger.warn("Error! Is the API key invalid?")
         print("When attempting to validate the API key that you entered/confirmed,",
-              "PyWeather ran into an error. Would you like to reenter your API key to revalidate it?",
+              "PyWeather Setup ran into an error. Would you like to reenter your API key to revalidate it?",
               "Please note, that this error might be caused by WU's API being down, or another cause.",
               "However, 90% of the time, this is due to a bad API key.",
               "Yes or No.", sep='\n')
