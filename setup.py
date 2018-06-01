@@ -665,98 +665,98 @@ print("","If you know how to acquire a Wunderground API key, or are resetting Py
       "hit enter 14 times to get to the API key entry.", sep="\n")
 
 print("Let's begin.",
-"Start by opening a web browser, and going to https://www.wunderground.com/weather/api/.",
-"Press any key when you are done.", sep="\n")
+      "Start by opening a web browser, and going to https://www.wunderground.com/weather/api/.",
+      "Press any key when you are done.", sep="\n")
 input()
 print("Next, click the 'Explore my options' button.",
-"Press any key when you are done.", sep="\n")
+      "Press any key when you are done.", sep="\n")
 input()
 print("Next, click the small button next to 'ANVIL PLAN'.",
-"After that, confirm that the total underneath the 'Purchase Key' button says",
-"'$0 USD per month'.",
-"If the total underneath the 'Purchase Key' button doesn't",
-"say '$0 USD per month, please ensure that the small button next to 'Developer'",
-"on the table in the middle of the screen is selected, and the total",
-"says '$0 USD per month'",
-"Press any key when you are done.", sep="\n")
+      "After that, confirm that the total underneath the 'Purchase Key' button says",
+      "'$0 USD per month'.",
+      "If the total underneath the 'Purchase Key' button doesn't",
+      "say '$0 USD per month, please ensure that the small button next to 'Developer'",
+      "on the table in the middle of the screen is selected, and the total",
+      "says '$0 USD per month'",
+      "Press any key when you are done.", sep="\n")
 input()
 print("Next, click the 'Purchase Key' button.",
-"Press any key when you are done.", sep="\n")
+      "Press any key when you are done.", sep="\n")
 input()
 print("Next, input your email, and a password to sign up for a Weather",
-"Underground account.",
-"Be sure to select the checkbox next to 'I agree to the Terms of Service'",
-"It's best if you leave the checkbox next to 'I would like to receive WU",
-"updates via email' unchecked.",
-"Press any key when you are done and ready.", sep="\n")
+      "Underground account.",
+      "Be sure to select the checkbox next to 'I agree to the Terms of Service'",
+      "It's best if you leave the checkbox next to 'I would like to receive WU",
+      "updates via email' unchecked.",
+      "Press any key when you are done and ready.", sep="\n")
 input()
 print("Next, press the 'Sign up for free' button.",
-"When the welcome window pops up, be sure to click the X button at the top right of the popup.",
-"When clicking the X, you should be redirected to wunderground.com.",
-"Press any key when you are done and ready.", sep="\n")
+      "When the welcome window pops up, be sure to click the X button at the top right of the popup.",
+      "When clicking the X, you should be redirected to wunderground.com.",
+      "Press any key when you are done and ready.", sep="\n")
 input()
 print("Next, click 'My Profile' at the top right corner of the homepage.",
-"In the dropdown, click 'My Email & Text Alerts'",
-"Press any key when you are done and ready.", sep="\n")
+      "In the dropdown, click 'My Email & Text Alerts'",
+      "Press any key when you are done and ready.", sep="\n")
 input()
 print("Next, next to your email listed on the page, click the 'Edit / Verify' button.",
-"After you click the button, click the 'Verify Email' button.",
-"Press any key when you are done and ready.", sep="\n")
+      "After you click the button, click the 'Verify Email' button.",
+      "Press any key when you are done and ready.", sep="\n")
 input()
 print("Next, check your email in which you signed up with.",
-"If you got a letter from Weather Underground, titled 'Daily Forecast",
-"Email Verification', open that letter, and click the link.",
-"If you didn't get the letter, wait a few minutes, and be sure to check your spam folder.",
-"Hint: If you followed this guide exactly, WU will not be sending you daily forecasts to your email.",
-"Press any key when you are done and ready.", sep="\n")
+      "If you got a letter from Weather Underground, titled 'Daily Forecast",
+      "Email Verification', open that letter, and click the link.",
+      "If you didn't get the letter, wait a few minutes, and be sure to check your spam folder.",
+      "Hint: If you followed this guide exactly, WU will not be sending you daily forecasts to your email.",
+      "Press any key when you are done and ready.", sep="\n")
 input()
 print("Your email should be verified.",
-"Next, in your web browser, head back to https://www.wunderground.com/weather/api/.",
-"Then, click the 'Explore my Options' button, again.",
-"Press any key when you are done and ready.", sep="\n")
+      "Next, in your web browser, head back to https://www.wunderground.com/weather/api/.",
+      "Then, click the 'Explore my Options' button, again.",
+      "Press any key when you are done and ready.", sep="\n")
 input()
 print("Next, at the top of the page, make sure the button next to 'ANVIL PLAN'",
-"is selected.",
-"After that, confirm that the total underneath the 'Purchase Key' button says",
-"'$0 USD per month'",
-"If the total doesn't say that, in the pricing table, make sure the button",
-"next to 'Developer' is selected.",
-"Press any key when you are done and ready.", sep="\n")
+      "is selected.",
+      "After that, confirm that the total underneath the 'Purchase Key' button says",
+      "'$0 USD per month'",
+      "If the total doesn't say that, in the pricing table, make sure the button",
+      "next to 'Developer' is selected.",
+      "Press any key when you are done and ready.", sep="\n")
 input()
 print("Next, click the 'Purchase Key' button, on top of your total (which",
-"should be $0 USD per month)",
-"Next, fill out the form, considering these tips:",
-"For the contact name/email, it's recommended you use your real name",
-"(first name last initial is fine).",
-"It's also recommended that you use your real email.",
-"For the project name, put in something generic, like 'to use a script that",
-"uses WU's API', or 'WU API test'. It's up to you.",
-"For the project website, put in something generic, like 'google.com', or",
-"some other site you feel like having as the project site.",
-"For the question 'Where will the API be used', answer Other.",
-"For the question 'Will the API be used for commercial use?', answer No.",
-"For the question 'Will the API be used for manufacturing mobile chip",
-"processing?', answer No.",
-"Answer yes if you somehow are manufacturing mobile chip processing. I doubt",
-"you are, however.",
-"For the country that you are based in, put your location.",
-"Before we move on, fill out these forms, and press any key when you are done "
-"and ready.", sep="\n")
+      "should be $0 USD per month)",
+      "Next, fill out the form, considering these tips:",
+      "For the contact name/email, it's recommended you use your real name",
+      "(first name last initial is fine).",
+      "It's also recommended that you use your real email.",
+      "For the project name, put in something generic, like 'to use a script that",
+      "uses WU's API', or 'WU API test'. It's up to you.",
+      "For the project website, put in something generic, like 'google.com', or",
+      "some other site you feel like having as the project site.",
+      "For the question 'Where will the API be used', answer Other.",
+      "For the question 'Will the API be used for commercial use?', answer No.",
+      "For the question 'Will the API be used for manufacturing mobile chip",
+      "processing?', answer No.",
+      "Answer yes if you somehow are manufacturing mobile chip processing. I doubt",
+      "you are, however.",
+      "For the country that you are based in, put your location.",
+      "Before we move on, fill out these forms, and press any key when you are done "
+      "and ready.", sep="\n")
 input()
 print("Next, for the brief description, put something like 'using an API key",
-"to use a script using Wunderground'.",
-"After that, check both boxes at the bottom of the page. Read the ToS if you",
-"feel like it.",
-"Finally, click 'Purchase Key'.",
-"You should land on a page that says 'Edit API Key'.",
-"Press any key when you are done and ready.", sep="\n")
+      "to use a script using Wunderground'.",
+      "After that, check both boxes at the bottom of the page. Read the ToS if you",
+      "feel like it.",
+      "Finally, click 'Purchase Key'.",
+      "You should land on a page that says 'Edit API Key'.",
+      "Press any key when you are done and ready.", sep="\n")
 input()
 print("In the table to the left of the page, copy the text that's under Key ID.",
-"(Ctrl+C, right click)",
-"I'm now going to ask you to input the API key into the text entry below.",
-"The API key will be saved to storage/apikey.txt, so PyWeather can easily",
-"pull it up.",
-"Press any key when you are done and ready.", sep="\n")
+      "(Ctrl+C, right click)",
+      "Please input your API key into the text entry below.",
+      "The API key will be saved to storage/apikey.txt, so PyWeather can easily",
+      "pull it up.",
+      "Press any key when you are done and ready.", sep="\n")
 input()
 print("Please input your API key below.")
 apikey_input = str(input("Input here: ")).replace(" ","").replace("\n","").replace("\t","")
@@ -1081,9 +1081,9 @@ if enablecache == "no":
 else:
     config['CACHE']['enabled'] = 'True'
 
-    print("", "In the next few options, enter the time that PyWeather should keep data types before",
-          "a refresh is automatically requested. You can press enter at any prompt to set the cache",
-          "values to their default.", sep="\n")
+    print("", "In the next few options, enter the time that PyWeather should keep data types",
+          "before a refresh is automatically requested. You can press enter at any prompt",
+          "to set the cache values to their default.", sep="\n")
 
     print("", "(10/42)", "Please enter the cache time for alerts data in minutes (default = 5)", sep="\n")
     alertscachetime = input("Input here: ").lower()
@@ -1329,16 +1329,16 @@ else:
     config['PYWEATHER BOOT']['validateAPIKey'] = 'False'
     logger.debug("Could not understand input. Defaulting to ENABLED.")
 
-print("", "(26/42)", "PyWeather now has a radar feature, which opens up a GUI on supported",
-      "platforms. Depending on your screen resolution, you'll have to set how large",
-      "the radar picture is when rendered. In the prompt below, enter one of five sizes.",
-      "extrasmall - 320x240 window",
-      "small - 480x320 window",
-      "normal - 640x480 window",
-      "large - 960x720 window",
-      "extralarge - 1280x960 window",
-      "By default, the resolution is normal. Adapt your choice to the screen resolution",
-      "of the machine you're using.", sep="\n")
+print("", "(26/42)", "PyWeather has a radar GUI that runs on supported platforms.",
+      "Depending on your screen resolution, you'll have to set how large the radar",
+      "image being rendered is. You can always change the resolution in the GUI at",
+      "a later date. Please enter one of the five image sizes in the prompt below.",
+      "extrasmall - 320x240",
+      "small - 480x320",
+      "normal - 640x480",
+      "large - 960x720",
+      "extralarge - 1280x960",
+      "By default, the resolution is normal.", sep="\n")
 radar_resolutions = ["extrasmall", "small", "normal", "large", "extralarge"]
 logger.debug("radar_resolutions: %s" % radar_resolutions)
 radar_resolutioninput = input("Input here: ").lower()
@@ -1354,10 +1354,10 @@ for x in range(0, 5):
         config['RADAR GUI']['radar_imagesize'] = 'normal'
         print("Changes saved.")
 
-print("", "(27/42)", "PyWeather's radar feature is unfortunately experimental as of PyWeather 0.6.3 beta.",
-      "By default, a confirmation message will always appear when attempting to launch the radar.",
-      "However, this can be turned off, if you plan to use the experimental radar on a regular basis.",
-      "By default, bypassing the confirmation message is disabled. Yes or No.", sep="\n")
+print("", "(27/42)", "PyWeather's radar feature is experimental at this time. As",
+      "such, a confirmation message telling you that the radar is experimental, and",
+      "that you want to open the radar. Would you like this confirmation message turned",
+      "off? By default, this is disabled. Yes or No.", sep="\n")
 radar_bypassconfinput = input("Input here: ").lower()
 logger.debug("radar_bypassconfinput: %s" % radar_bypassconfinput)
 if radar_bypassconfinput == "yes":
@@ -1373,8 +1373,6 @@ else:
     config['RADAR GUI']['bypassconfirmation'] = 'False'
     logger.debug("RADAR GUI/bypassconfirmation is now FALSE")
     print("Changes saved.")
-
-
 
 print("", "(28/42)", "On the summary screen, would you like tide data to be shown?",
       "This uses an extra API call when enabled. By default, this is disabled.",
@@ -1395,11 +1393,9 @@ else:
     logger.debug("SUMMARY/showtideonsummary is now FALSE")
     print("Changes saved.")
 
-print("", "(29/42)", "When PyWeather boots, would you like hurricane data to be fetched?",
-      "Initial loading times will increase when this is on, but hurricane data will load faster.",
-      "This can use an extra API call, especially when you fetch hurricane data but don't check it",
-      "in PyWeather. By default, this is disabled.",
-      "Yes or No.", sep="\n")
+print("", "(29/42)", "When PyWeather boots, would you like hurricane data to be",
+      "fetched? When enabled, load times increase and an extra API call is used.",
+      "By default, this is disabled. Yes or No.")
 hurricaneprefetch = input("Input here: ").lower()
 logger.debug("hurricaneprefetch: %s" % hurricaneprefetch)
 if hurricaneprefetch == "yes":
@@ -1416,10 +1412,9 @@ else:
     logger.debug("PREFETCH/hurricanedata_atboot is now FALSE.")
     print("Changes saved.")
 
-print("", "(30/42)", "PyWeather has a new feature where you can now easily call your current location at boot.",
-      "The current location feature allows you to enter 'currentlocation' at boot, and view the weather for your",
-      "approximate location. However, GeoIP lookups might be inaccurate, especially for mobile users. The GeoIP service",
-      "uses freegeoip.net. Would you like to enable this service? By default, this is disabled. Yes or No.", sep="\n")
+print("", "(30/42)", "PyWeather has the ability to call up your approximate location",
+      "at boot with a Geo IP service (ipapi.co), which is accurate to about 100 km.",
+      "Would you like this to be enabled? Yes or No. By default, this is disabled.", sep="\n")
 allowgeoipservice = input("Input here: ").lower()
 logger.debug("allowgeoipservice: %s" % allowgeoipservice)
 if allowgeoipservice == "yes":
@@ -1435,10 +1430,9 @@ else:
     logger.debug("FIRSTINPUT/geoipservice_enabled is now FALSE.")
     print("Changes saved.")
 
-print("", "(31/42)", "PyWeather has a new feature where you can query indivdiual Wunderground PWS stations.",
-      "You can query any PWS globally by entering pws:<pws ID> when enabled, and where <pws ID> is the ID of the",
-      "PWS you want to query. However, this can be turned off if you don't want to have extra lines of text at boot,",
-      "or don't want the ability to query PWSes. By default, this is enabled. Yes or No.", sep="\n")
+print("", "(31/42)", "PyWeather has the ability to query Wunderground PWS stations,",
+      "by using the prefix 'pws:' in your location query. Would you like this to be",
+      "enabled? Yes or No. By default, this is enabled.", sep="\n")
 allowpwsqueries = input("Input here: ").lower()
 logger.debug("allowpwsqueries: %s" % allowpwsqueries)
 if allowpwsqueries == "yes":
@@ -1455,11 +1449,10 @@ else:
     logger.debug("FIRSTINPUT/allow_pwsqueries is now TRUE.")
     print("Changes saved.")
 
-print("", "(32/42)", "PyWeather has a new feature where in hurricane data, you can see the nearest city that a hurricane is to.",
-      "However, this feature uses a separate API (geonames.org), can only work when the hurricane is within 300km of a city,",
-      "and will drastically increase loading times. You may also run into issues with the default API key hitting rate limits.",
-      "Despite all of this, would you like to enable the nearest city features for non-forecast hurricane data?",
-      "Yes or No. By default, this is disabled.", sep="\n")
+print("", "(32/42)", "PyWeather can show the nearest city a hurricane is to when viewing",
+      "detailed hurricane data. This uses geonames.org, will make loading slower, and",
+      "only works when a hurricane is within 300 km of a city. Would you like to enable",
+      "this for non-forecast data? Yes or No. By default, this is disabled.", sep="\n")
 allownearestcities = input("Input here: ").lower()
 logger.debug("allownearestcities: %s" % allownearestcities)
 if allownearestcities == "yes":
@@ -1485,9 +1478,9 @@ else:
 # <--- Additional options for nearest city feature --->
 
 if additional_ncoptions is True:
-    print("", "(33/42)", "By default, the nearest city feature is only enabled on the current data screen of hurricane data.",
-          "You can enable the nearest city feature to be enabled on forecast data. However, loading hurricane data becomes much",
-          "slower. By default, this is disabled. Yes or No.", sep="\n")
+    print("", "(33/42)", "By default, nearest city data is only shown for current data.",
+          "Would you like to enable showing nearest city data for forecast data? When",
+          "enabled, loading times are slower. Yes or No. By default, this is disabled.", sep="\n")
     enable_ncforecast = input("Input here: ").lower()
     if enable_ncforecast == "yes":
         config['HURRICANE']['enablenearestcity_forecast'] = 'True'
@@ -1503,10 +1496,10 @@ if additional_ncoptions is True:
         logger.debug("HURRICANE/enablenearestcity_forecast is now FALSE.")
         print("Changes saved.")
 
-    print("", "(34/42)", "By default, PyWeather uses it's own API username for the nearest city features, which should be able to",
-          "handle PyWeather's user demands just fine. However, if you'd like to use your own account for the API, you may.",
-          "You can sign up at geonames.org, and follow all the steps. The confirmation letter may take some time to hit your inbox.",
-          "Would you like to define your own API username? Yes or No. By default, this is no.", sep="\n")
+    print("", "(34/42)", "By default, a PyWeather API username is used for nearest",
+          "city data. However, you may sign up for your own account, and use your",
+          "own API username at geonames.org. Would you like to enter your own",
+          "API username? Yes or No. By default, this is disabled.", sep="n")
     definegeonamesusername = input("Input here: ").lower()
     logger.debug("definegeonamesusername: %s" % definegeonamesusername)
     if definegeonamesusername == "yes":
@@ -1519,6 +1512,7 @@ if additional_ncoptions is True:
                   "Is this the username that you'd like to use? Yes or No.",
                   "Please note that your username will not be validated.", sep="\n")
             geonamesconfirmation = input("Input here: ").lower()
+            # This line is here because it just is.
             confirmurl = 'http://api.geonames.org/findNearbyPlaceNameJSON?lat=19.3&lng=102.2&username= ' + geonamesusername + '&radius=300&maxRows=1&cities=cities5000'
             logger.debug("geonamesconfirmation: %s ; confirmurl: %s" %
                          (geonamesconfirmation, confirmurl))
@@ -1540,11 +1534,12 @@ if additional_ncoptions is True:
         print("Input not understood.",
               "Defaulting to the default username for the geonames API.", sep="\n")
 
-    print("", "(35/42)", "For the nearest city feature, you can define how large a city has to be to show up as a nearest city.",
-          "You have three options for this. 'small' will set the threshold to cities with a 1,000 population and greater, but this",
-          "tends to include cities with very few or no people. 'medium' will set the threshold to cities with a 5,000 population",
-          "and greater, and 'large' for cities that have a population of 10,000 or greater. Please enter either 'small', 'medium'",
-          "or 'large' below. Default is 'medium'.", sep="\n")
+    print("", "(35/42)", "For the nearest city feature, you can define city size thresholds",
+          "for a nearest city to show up. You can select from 3 thresholds below.",
+          "small - Cities with a 1,000 population or greater.",
+          "medium - Cities with a 5,000 population or greater.",
+          "large - Cities with a 10,000 population or greater.",
+          "Enter a city size below. The default size is medium.", sep="\n")
     nearestcitysize = input("Input here: ").lower()
     logger.debug("nearestcitysize: %s" % nearestcitysize)
     if nearestcitysize == "small":
@@ -1561,10 +1556,9 @@ if additional_ncoptions is True:
         logger.debug("HURRICANE/nearestcitysize is now 'medium'.")
         print("Changes saved.")
 
-print("", "(36/42)", "PyWeather will now let you enable a favorite locations feature, which allows",
-      "you to quickly call up to 5 locations in PyWeather. You have the ability to configure your",
-      "favorite locations in a menu option in PyWeather. By default, this feature is enabled.",
-      "Yes or No.", sep="\n")
+print("", "(36/42)", "PyWeather can store and configure 5 favorite locations for you",
+      "with the favorite locations feature. Would you like to enable this? Yes or No.",
+      "By default, this feature is enabled.", sep="\n")
 enable_favoritelocations = input("Input here: ").lower()
 logger.debug("enable_favoritelocations: %s" % enable_favoritelocations)
 if enable_favoritelocations == "yes":
@@ -1581,18 +1575,17 @@ else:
     logger.debug("FAVORITE LOCATIONS/enabled is now 'True'.")
     print("Changes saved!")
 
-print("", "(37/42)", "PyWeather by default uses Google's geocoder, which can occasionally have rate limiting issues.",
-      "To get around this, you can manually use your own API key that you sign up for with Google. This is completely",
-      "optional, and you can continue past this step and not impede PyWeather's functionality. However, would you like",
-      "to enable the use of a custom API key for the geocoder? Yes or No.", sep="\n")
+print("", "(37/42)", "PyWeather's Google-based geocoder occasionally has quota issues.",
+      "You can alleviate some of these issues by using a custom API key. Using your",
+      "own API key does not impact PyWeather's functionality. Would you like to enable",
+      "a custom API key? Yes or No. By default, this is disabled.", sep="\n")
 enablecustomgeocoderkey = input("Input here: ").lower()
 logger.debug("enablecustomgeocoderkey: %s" % enablecustomgeocoderkey)
 if enablecustomgeocoderkey == "yes":
-    print("", "(38/42)", "To sign up for a Google Maps API key, please visit this link: ",
+    print("", "(38/42)", "To sign up for an API key, please visit this website:",
           "https://developers.google.com/maps/documentation/javascript/get-api-key",
-          "Press the button 'Get Key', and wait a minute. Copy and paste the key into the input",
-          "below. Your API key will NOT be validated. Enter 'exit' to exit this process, and to disable",
-          "a custom API key.", sep="\n")
+          "Press the 'Get Key' button, and wait. Copy and paste your API key into",
+          "the input below. Your key will not be validated.")
     customgeocoderkey = input("Input here: ")
     logger.debug("customgeocoderkey: %s" % customgeocoderkey)
     while True:
@@ -1629,11 +1622,9 @@ else:
     logger.debug("GEOCODER API/customkey_enabled is now FALSE.")
     print("Changes saved.")
 
-print("", "(39/42)", "On the summary screen, you can now view a summary of the weather that occurred yesterday.",
-      "Enabling this will also enable the option to prefetch yesterday's weather at boot in the config file.",
-      "Please note that enabling this uses 1 extra API call at boot, and will increase PyWeather's loading time.",
-      "Would you like to turn on showing yesterday's weather on the summary screen? Yes or No. By default, this is",
-      "disabled.", sep="\n")
+print("", "(39/42)", "Would you like yesterday's weather information to be shown",
+      "on the summary screen? When enabled, this uses 1 extra API call, and slows",
+      "boot times. Yes or No. By default, this is disabled.", sep="\n")
 showyesterdayonsummary = input("Input here: ").lower()
 logger.debug("showyesterdayonsummary: %s" % showyesterdayonsummary)
 if showyesterdayonsummary == "yes":
@@ -1659,10 +1650,9 @@ else:
     print("Changes saved.")
 
 if showyesterdayonsummary is False:
-    print("", "(40/42)", "When PyWeather boots up, you can have the option to have yesterday's weather data",
-          "prefetched during bootup. Enabling this will use 1 extra API call at boot, and will increase PyWeather's",
-          "loading time. Would you like to enable prefetching yesterday's weather data on boot? Yes or No.",
-          "By default, this is disabled.", sep="\n")
+    print("", "(40/42)", "Would you like yesterday's weather data to be prefetched at",
+          "boot? Enabling this won't show yesterday's weather data on the summary screen,",
+          "uses 1 extra API call, and slows boot time. Yes or No. By default, this is disabled.", sep="\n")
     prefetchyesterdayatboot = input("Input here: ").lower()
     logger.debug("prefetchyesterdayatboot: %s" % prefetchyesterdayatboot)
     if prefetchyesterdayatboot == "yes":
@@ -1679,10 +1669,9 @@ if showyesterdayonsummary is False:
         logger.info("PREFETCH/yesterdaydata_atboot is now 'False'.")
         print("Changes saved.")
 
-print("", "(41/42)", "In 0.6.3 beta and newer, you have the option to enable extra tools for PyWeather.",
-      "Extra tools are diagnostic tools, and so far you can see cache timings in PyWeather, and more extra tools",
-      "will be added as time goes on. Would you like to enable the ability to use extra tools? Yes or No. By default",
-      "this is disabled.", sep="\n")
+print("", "(41/42)", "Would you like PyWeather extra tools to be enabled? Extra tools",
+      "are diagnostic tools to monitor cache times, with additional data types coming",
+      "soon. Yes or No. By default, this is disabled.", sep="\n")
 enableextratools = input("Input here: ").lower()
 logger.debug("enableextratools: %s" % enableextratools)
 if enableextratools == "yes":
@@ -1699,10 +1688,10 @@ else:
     logger.info("UI/extratools_enabled is now 'False'.")
     print("Changes saved.")
 
-print("", "(42/42)", "PyWeather's geocoder usually uses https, but issues have been discovered",
-      "on some platforms, where the geocoder cannot operate in the https mode. If you press enter",
-      "PyWeather will automatically detect which scheme to use. If you are an advanced user, and want",
-      "to configure the scheme yourself, enter advancedconfig at the prompt below.", sep="\n")
+print("", "(42/42)", "For PyWeather's geocoder to properly function, we usually run",
+      "an automatic process that detects the geocoder scheme to use. You can press enter",
+      "at the input to run the detector automatically, or type 'advancedconfig' if you",
+      "want to do it yourself.", sep="\n")
 configuregeopyscheme = input("Input here: ").lower()
 logger.debug("configuregeopyscheme: %s" % configuregeopyscheme)
 if configuregeopyscheme == "advancedconfig":
