@@ -151,216 +151,224 @@ configerrorcount = 0
 try:
     sundata_summary = config.getboolean('SUMMARY', 'sundata_summary')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. SUMMARY/sundata_summary failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "SUMMARY/sundata_summary failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     sundata_summary = False
+
 try:
     almanac_summary = config.getboolean('SUMMARY', 'almanac_summary')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. SUMMARY/almanac_summary failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "SUMMARY/almanac_summary failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     almanac_summary = False
 
 try:
     checkforUpdates = config.getboolean('UPDATER', 'autocheckforupdates')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. UPDATER/autocheckforupdates failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "UPDATER/autocheckforupdates failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     checkforUpdates = False
+
 try:
     verbosity = config.getboolean('VERBOSITY', 'verbosity')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. VERBOSITY/verbosity failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "VERBOSITY/verbosity failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     verbosity = False
+
 try:
     jsonVerbosity = config.getboolean('VERBOSITY', 'json_verbosity')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. VERBOSITY/json_verbosity failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "VERBOSITY/json_verbosity failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     jsonVerbosity = False
+
 try:
     tracebacksEnabled = config.getboolean('TRACEBACK', 'tracebacks')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. TRACEBACK/tracebacks failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "TRACEBACK/tracebacks failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     tracebacksEnabled = False
+
 try:
     prefetch10Day_atStart = config.getboolean('PREFETCH', '10dayfetch_atboot')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. PREFETCH/10dayfetch_atboot failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "PREFETCH/10dayfetch_atboot failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     prefetch10Day_atStart = False
-try:
-    user_loopIterations = config.getint('UI', 'detailedInfoLoops')
-except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. UI/detailedInfoLoops failed to load. Defaulting to 6.", sep="\n")
-    configerrorcount += 1
-    user_loopIterations = 6
+
 try:
     user_enterToContinue = config.getboolean('UI', 'show_enterToContinue')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. UI/show_enterToContinue failed to load. Defaulting to True.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "UI/show_enterToContinue failed to load. Defaulting to True.", sep="\n")
     configerrorcount += 1
     user_enterToContinue = True
+
 try:
     user_showCompletedIterations = config.getboolean('UI', 'show_completedIterations')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. UI/show_completedIterations failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "UI/show_completedIterations failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     user_showCompletedIterations = False
-try:
-    user_forecastLoopIterations = config.getint('UI', 'forecast_detailedInfoLoops')
-except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. UI/forecast_detailedInfoLoops failed to load. Defaulting to 5.", sep="\n")
-    configerrorcount += 1
-    user_forecastLoopIterations = 5
+
 try:
     user_showUpdaterReleaseTag = config.getboolean('UPDATER', 'show_updaterReleaseTag')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. UPDATER/show_updaterReleaseTag failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "UPDATER/show_updaterReleaseTag failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     user_showUpdaterReleaseTag = False
+
 try:
     user_backupKeyDirectory = config.get('KEYBACKUP', 'savedirectory')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. KEYBACKUP/savedirectory failed to load. Defaulting to 'backup//'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "KEYBACKUP/savedirectory failed to load. Defaulting to 'backup//'.", sep="\n")
     configerrorcount += 1
     user_backupKeyDirectory = 'backup//'
+
 try:
     validateAPIKey = config.getboolean('PYWEATHER BOOT', 'validateAPIKey')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. PYWEATHER BOOT/validateAPIKey failed to load. Defaulting to True.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "PYWEATHER BOOT/validateAPIKey failed to load. Defaulting to True.", sep="\n")
     configerrorcount += 1
     validateAPIKey = True
 
 try:
     showAlertsOnSummary = config.getboolean('SUMMARY', 'showAlertsOnSummary')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. SUMMARY/showAlertsOnSummary failed to load. Defaulting to True.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "SUMMARY/showAlertsOnSummary failed to load. Defaulting to True.", sep="\n")
     configerrorcount += 1
     showAlertsOnSummary = True
+
 try:
     showyesterdayonsummary = config.getboolean('SUMMARY', 'showyesterdayonsummary')
 except:
-    print("Whnn attempting to load your configuration file, an error",
-            "occurred. SUMMARY/showyesterdayonsummary failed to load. Defaulting to False", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "SUMMARY/showyesterdayonsummary failed to load. Defaulting to False", sep="\n")
     showyesterdayonsummary = False
+
 try:
     showUpdaterReleaseNotes = config.getboolean('UPDATER', 'showReleaseNotes')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. UPDATER/showReleaseNotes failed to load. Defaulting to True.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "UPDATER/showReleaseNotes failed to load. Defaulting to True.", sep="\n")
     configerrorcount += 1
     showUpdaterReleaseNotes = True
+
 try:
     showUpdaterReleaseNotes_uptodate = config.getboolean('UPDATER', 'showReleaseNotes_uptodate')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. UPDATER/showReleaseNotes_uptodate failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "UPDATER/showReleaseNotes_uptodate failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     showUpdaterReleaseNotes_uptodate = False
+
 try:
     showNewVersionReleaseDate = config.getboolean('UPDATER', 'showNewVersionReleaseDate')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. UPDATER/showNewVersionReleaseDate failed to load. Defaulting to True.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "UPDATER/showNewVersionReleaseDate failed to load. Defaulting to True.", sep="\n")
     configerrorcount += 1
     showNewVersionReleaseDate = True
+
 try:
     cache_enabled = config.getboolean('CACHE', 'enabled')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. CACHE/enabled failed to load. Defaulting to True.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "CACHE/enabled failed to load. Defaulting to True.", sep="\n")
     configerrorcount += 1
     cache_enabled = True
+
 try:
     cache_alertstime = config.getfloat('CACHE', 'alerts_cachedtime')
     cache_alertstime = cache_alertstime * 60
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. CACHE/alerts_cachedtime failed to load. Defaulting to 300.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "CACHE/alerts_cachedtime failed to load. Defaulting to 300.", sep="\n")
     configerrorcount += 1
     cache_alertstime = 300
+
 try:
     cache_currenttime = config.getfloat('CACHE', 'current_cachedtime')
     cache_currenttime = cache_currenttime * 60
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. CACHE/current_cachedtime failed to load. Defaulting to 600.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "CACHE/current_cachedtime failed to load. Defaulting to 600.", sep="\n")
     configerrorcount += 1
     cache_currenttime = 600
+
 try:
     cache_forecasttime = config.getfloat('CACHE', 'forecast_cachedtime')
     cache_forecasttime = cache_forecasttime * 60
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. CACHE/forecast_cachedtime failed to load. Defaulting to 3600.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "CACHE/forecast_cachedtime failed to load. Defaulting to 3600.", sep="\n")
     configerrorcount += 1
     cache_forecasttime = 3600
+
 try:
     cache_almanactime = config.getfloat('CACHE', 'almanac_cachedtime')
     cache_almanactime = cache_almanactime * 60
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. CACHE/almanac_cachedtime failed to load. Defaulting to 14400.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "CACHE/almanac_cachedtime failed to load. Defaulting to 14400.", sep="\n")
     configerrorcount += 1
-    cache_almanactime = 1440
+    cache_almanactime = 14400
+
 try:
     cache_threedayhourly = config.getfloat('CACHE', 'threedayhourly_cachedtime')
     cache_threedayhourly = cache_threedayhourly * 60
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. CACHE/threedayhourly_cachedtime failed to load. Defaulting to 3600.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "CACHE/threedayhourly_cachedtime failed to load. Defaulting to 3600.", sep="\n")
     configerrorcount += 1
     cache_threedayhourly = 3600
+
 try:
     cache_tendayhourly = config.getfloat('CACHE', 'tendayhourly_cachedtime')
     cache_tendayhourly = cache_tendayhourly * 60
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. CACHE/tendayhourly_cachedtime failed to load. Defaulting to 3600.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "CACHE/tendayhourly_cachedtime failed to load. Defaulting to 3600.", sep="\n")
     configerrorcount += 1
     cache_tendayhourly = 3600
+
 try:
     cache_sundatatime = config.getfloat('CACHE', 'sundata_cachedtime')
     cache_sundatatime = cache_sundatatime * 60
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. CACHE/sundata_cachedtime failed to load. Defaulting to 28800.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "CACHE/sundata_cachedtime failed to load. Defaulting to 28800.", sep="\n")
     configerrorcount += 1
     cache_sundatatime = 28800
+
 try:
     cache_tidetime = config.getfloat('CACHE', 'tide_cachedtime')
     cache_tidetime = cache_tidetime * 60
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. CACHE/tide_cachedtime failed to load. Defaulting to 28800.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "CACHE/tide_cachedtime failed to load. Defaulting to 28800.", sep="\n")
     configerrorcount += 1
     cache_tidetime = 28800
+
 try:
     cache_hurricanetime = config.getfloat('CACHE', 'hurricane_cachedtime')
     cache_hurricanetime = cache_hurricanetime * 60
-
-
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. CACHE/hurricane_cachedtime failed to load. Defaulting to 10800.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "CACHE/hurricane_cachedtime failed to load. Defaulting to 10800.", sep="\n")
     configerrorcount += 1
     cache_hurricanetime = 10800
 
@@ -368,238 +376,299 @@ try:
     cache_yesterdaytime = config.getfloat('CACHE', 'yesterday_cachedtime')
     cache_yesterdaytime = cache_yesterdaytime * 60
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. CACHE/yesterday_cachedtime failed to load. Defaulting to 10800.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "CACHE/yesterday_cachedtime failed to load. Defaulting to 10800.", sep="\n")
     configerrorcount += 1
     cache_yesterdaytime = 10800
 
 try:
-    user_alertsUSiterations = config.getint('UI', 'alerts_usiterations')
-except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. UI/alerts_usiterations failed to load. Defaulting to 2.", sep="\n")
-    configerrorcount += 1
-    user_alertsEUiterations = 2
-try:
-    user_alertsEUiterations = config.getint('UI', 'alerts_euiterations')
-except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. UI/alerts_euiterations failed to load. Defaulting to 1.", sep="\n")
-    configerrorcount += 1
-    user_alertsUSiterations = 1
-try:
     user_radarImageSize = config.get('RADAR GUI', 'radar_imagesize')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. RADAR GUI/radar_imagesize failed to load. Defaulting to 'normal'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "RADAR GUI/radar_imagesize failed to load. Defaulting to 'normal'.", sep="\n")
     configerrorcount += 1
     user_radarImageSize = "normal"
+
 try:
     radar_bypassconfirmation = config.getboolean('RADAR GUI', 'bypassconfirmation')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. RADAR GUI/bypassconfirmation failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "RADAR GUI/bypassconfirmation failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     radar_bypassconfirmation = False
+
 try:
     showTideOnSummary = config.getboolean('SUMMARY', 'showtideonsummary')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. SUMMARY/showtideonsummary failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "SUMMARY/showtideonsummary failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     showTideOnSummary = False
+
 try:
     geopyScheme = config.get('GEOCODER', 'scheme')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. GEOCODER/scheme failed to load. Defaulting to 'https'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "GEOCODER/scheme failed to load. Defaulting to 'https'.", sep="\n")
     configerrorcount += 1
     geopyScheme = 'https'
+
 try:
     prefetchHurricane_atboot = config.getboolean('PREFETCH', 'hurricanedata_atboot')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. PREFETCH/hurricanedata_atboot failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "PREFETCH/hurricanedata_atboot failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     prefetchHurricane_atboot = False
+
 try:
     geoip_enabled = config.getboolean('FIRSTINPUT', 'geoipservice_enabled')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FIRSTINPUT/geoipservice_enabled failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FIRSTINPUT/geoipservice_enabled failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     geoip_enabled = False
 
 try:
     pws_enabled = config.getboolean('FIRSTINPUT', 'allow_pwsqueries')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FIRSTINPUT/allow_pwsqueries failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FIRSTINPUT/allow_pwsqueries failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     pws_enabled = False
 
 try:
     hurricanenearestcity_enabled = config.getboolean('HURRICANE', 'enablenearestcity')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. HURRICANE/enablenearestcity failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "HURRICANE/enablenearestcity failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     hurricanenearestcity_enabled = False
 
 try:
     hurricanenearestcity_fenabled = config.getboolean('HURRICANE', 'enablenearestcity_forecast')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. HURRICANE/enablenearestcity_forecast failed to load. Defaulting to False", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "HURRICANE/enablenearestcity_forecast failed to load. Defaulting to False", sep="\n")
     configerrorcount += 1
     hurricanenearestcity_fenabled = False
+
 try:
     geonames_apiusername = config.get('HURRICANE', 'api_username')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. HURRICANE/api_username failed to load. Defaulting to 'pyweather_proj'", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "HURRICANE/api_username failed to load. Defaulting to 'pyweather_proj'", sep="\n")
     configerrorcount += 1
     geonames_apiusername = "pyweather_proj"
+
 try:
     hurricane_nearestsize = config.get('HURRICANE', 'nearestcitysize')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. HURRICANE/nearestcitysize failed to load. Defaulting to 'medium'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "HURRICANE/nearestcitysize failed to load. Defaulting to 'medium'.", sep="\n")
     configerrorcount += 1
     hurricane_nearestsize = 'medium'
+
 try:
     favoritelocation_enabled = config.getboolean('FAVORITE LOCATIONS', 'enabled')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FAVORITE LOCATIONS/enabled failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FAVORITE LOCATIONS/enabled failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     favoritelocation_enabled = False
+
 try:
     favoritelocation_1 = config.get('FAVORITE LOCATIONS', 'favloc1')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FAVORITE LOCATIONS/favloc1 failed to load. Defaulting to 'None'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FAVORITE LOCATIONS/favloc1 failed to load. Defaulting to 'None'.", sep="\n")
     configerrorcount += 1
     favoritelocation_1 = "None"
 
 try:
     favoritelocation_2 = config.get('FAVORITE LOCATIONS', 'favloc2')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FAVORITE LOCATIONS/favloc2 failed to load. Defaulting to 'None'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FAVORITE LOCATIONS/favloc2 failed to load. Defaulting to 'None'.", sep="\n")
     configerrorcount += 1
     favoritelocation_2 = "None"
 
 try:
     favoritelocation_3 = config.get('FAVORITE LOCATIONS', 'favloc3')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FAVORITE LOCATIONS/favloc3 failed to load. Defaulting to 'None'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FAVORITE LOCATIONS/favloc3 failed to load. Defaulting to 'None'.", sep="\n")
     configerrorcount += 1
     favoritelocation_3 = "None"
 
 try:
     favoritelocation_4 = config.get('FAVORITE LOCATIONS', 'favloc4')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FAVORITE LOCATIONS/favloc4 failed to load. Defaulting to 'None'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FAVORITE LOCATIONS/favloc4 failed to load. Defaulting to 'None'.", sep="\n")
     configerrorcount += 1
     favoritelocation_4 = "None"
 
 try:
     favoritelocation_5 = config.get('FAVORITE LOCATIONS', 'favloc5')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FAVORITE LOCATIONS/favloc5 failed to load. Defaulting to 'None'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FAVORITE LOCATIONS/favloc5 failed to load. Defaulting to 'None'.", sep="\n")
     configerrorcount += 1
     favoritelocation_5 = "None"
 
 try:
     favoritelocation_1data = config.get('FAVORITE LOCATIONS', 'favloc1_data')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FAVORITE LOCATIONS/favloc1_data failed to load. Defaulting to 'None'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FAVORITE LOCATIONS/favloc1_data failed to load. Defaulting to 'None'.", sep="\n")
     configerrorcount += 1
     favoritelocation_1data = "None"
 
 try:
     favoritelocation_2data = config.get('FAVORITE LOCATIONS', 'favloc2_data')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FAVORITE LOCATIONS/favloc2_data failed to load. Defaulting to 'None'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FAVORITE LOCATIONS/favloc2_data failed to load. Defaulting to 'None'.", sep="\n")
     configerrorcount += 1
     favoritelocation_2data = "None"
 
 try:
     favoritelocation_3data = config.get('FAVORITE LOCATIONS', 'favloc3_data')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FAVORITE LOCATIONS/favloc3_data failed to load. Defaulting to 'None'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FAVORITE LOCATIONS/favloc3_data failed to load. Defaulting to 'None'.", sep="\n")
     configerrorcount += 1
     favoritelocation_3data = "None"
 
 try:
     favoritelocation_4data = config.get('FAVORITE LOCATIONS', 'favloc4_data')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FAVORITE LOCATIONS/favloc4_data failed to load. Defaulting to 'None'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FAVORITE LOCATIONS/favloc4_data failed to load. Defaulting to 'None'.", sep="\n")
     configerrorcount += 1
     favoritelocation_4data = "None"
 
 try:
     favoritelocation_5data = config.get('FAVORITE LOCATIONS', 'favloc5_data')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FAVORITE LOCATIONS/favloc5_data failed to load. Defaulting to 'None'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FAVORITE LOCATIONS/favloc5_data failed to load. Defaulting to 'None'.", sep="\n")
     favoritelocation_5data = "None"
 
 try:
     geocoder_customkeyEnabled = config.getboolean('GEOCODER API', 'customkey_enabled')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. GEOCODER API/customkey_enabled failed to load. Defaulting to False.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "GEOCODER API/customkey_enabled failed to load. Defaulting to False.", sep="\n")
     configerrorcount += 1
     geocoder_customkeyEnabled = False
 
 try:
     geocoder_customkey = config.get('GEOCODER API', 'customkey')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. GEOCODER API/customkey failed to load. Defaulting to 'None'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "GEOCODER API/customkey failed to load. Defaulting to 'None'.", sep="\n")
     configerrorcount += 1
     geocoder_customkey = "None"
 
 try:
     extratools_enabled = config.getboolean('UI', 'extratools_enabled')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. UI/extratools_enabled failed to load. Defaulting to 'False'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "UI/extratools_enabled failed to load. Defaulting to 'False'.", sep="\n")
     configerrorcount += 1
     extratools_enabled = False
 
 try:
     prefetch_yesterdaydata = config.getboolean('PREFETCH', 'yesterdaydata_atboot')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. PREFETCH/yesterdaydata_atboot failed to load. Defaulting to 'False'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "PREFETCH/yesterdaydata_atboot failed to load. Defaulting to 'False'.", sep="\n")
     configerrorcount += 1
     prefetch_yesterdaydata = False
 
 try:
     yesterdaydata_onsummary = config.getboolean('SUMMARY', 'showyesterdayonsummary')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. SUMMARY/showyesterdayonsummary failed to load. Defaulting to 'False'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "SUMMARY/showyesterdayonsummary failed to load. Defaulting to 'False'.", sep="\n")
     configerrorcount += 1
     yesterdaydata_onsummary = False
 
 try:
     airports_enabled = config.getboolean('FIRSTINPUT', 'allow_airportqueries')
 except:
-    print("When attempting to load your configuration file, an error",
-          "occurred. FIRSTINPUT/allow_airportqueries failed to load. Defaulting to 'True'.", sep="\n")
+    print("When attempting to load your configuration file, an error occurred.",
+          "FIRSTINPUT/allow_airportqueries failed to load. Defaulting to 'True'.", sep="\n")
     configerrorcount += 1
     airports_enabled = True
+
+# New UI iteration variables reading thing yay
+try:
+    hourlyinfo_iterations = config.getint('UI', 'hourlyinfo_iterations')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "UI/hourlyinfo_iterations failed to load. Defaulting to '2'.", sep="\n")
+    configerrorcount += 1
+    hourlyinfo_iterations = 2
+
+try:
+    forecastinfo_iterations = config.getint('UI', 'forecastinfo_iterations')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "UI/forecastinfo_iterations failed to load. Defaulting to '3'.", sep="\n")
+    configerrorcount += 1
+    forecastinfo_iterations = 3
+
+try:
+    hurricaneinfo_iterations = config.getint('UI', 'hurricaneinfo_iterations')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "UI/hurricaneinfo_iterations failed to load. Defaulting to '2'.", sep="\n")
+    configerrorcount += 1
+    hurricaneinfo_iterations = 2
+
+try:
+    tideinfo_iterations = config.getint('UI', 'tideinfo_iterations')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "UI/tideinfo_iterations failed to load. Defaulting to '6'.", sep="\n")
+    configerrorcount += 1
+    tideinfo_iterations = 6
+
+try:
+    historicalhourly_iterations = config.getint('UI', 'historicalhourly_iterations')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "UI/historicalhourly_iterations failed to load. Defaulting to '2'.", sep="\n")
+    configerrorcount += 1
+    historicalhourly_iterations = 2
+
+try:
+    yesterdayhourly_iterations = config.getint('UI', 'yesterdayhourly_iterations')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "UI/yesterdayhourly_iterations failed to load. Defaulting to '3'.", sep="\n")
+    configerrorcount += 1
+    yesterdayhourly_iterations = 3
+
+try:
+    alertsus_iterations = config.getint('UI', 'alertsus_iterations')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "UI/alertsus_iterations failed to load. Defailting to '1'.", sep="\n")
+    configerrorcount += 1
+    alertsus_iterations = 1
+
+try:
+    alertseu_iterations = config.getint('UI', 'alertseu_iterations')
+except:
+    print("When attempting to load your configuration file, an error occurred.",
+          "UI/alertseu_iterations failed to load. Defaulting to '2'.", sep="\n")
+    configerrorcount += 1
+    alertseu_iterations = 2
+
 
 if configerrorcount >= 1:
     print("", "When trying to load your configuration file, error(s) occurred.",
