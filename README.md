@@ -5,15 +5,14 @@ PyWeather is the culmination of thousands of hours of work poured into a silly l
 
 I hope that you can enjoy PyWeather as much as I enjoy making PyWeather, so, let's get started!
 
-## PyWeather Update - Late May 2018:
-First off, we've hit 1,000 commits! Woo hoo!
+## PyWeather Update - June 2018
+Work continues to get version 1.0.0 out before the end of this summer.
 
-PyWeather 1.0.0 is coming along and on schedule.
-* HTTPS support is done, and the pip 10 fix is nearing completion.
-* I have started working on more minor issues & features, and all of these issues should be fixed by late June 2018.
-* More major fixes should be fixed by late July 2018.
-* If you haven't already noticed, the updater is now gone. But, don't fear, I'll be recoding it and it should be done by late August 2018, but I might work on the updater occasionally before summer.
-* QA will start in early September 2018, PyWeather 1.0.0 is out by September 30, 2018.
+Work is wrapping up with fixing smaller issues, and hopefully all these smaller bugs will be fixed by around June 20. It is ambitious, and if you want to chip in feel free to fix an issue that I haven't started working on and make a pull request.
+
+Adding support for historical data for PWS will start on June 20 and end at some point in early July. Work on the updated will start in early July and end in late July.
+
+QA will start in early August, and an estimated release date for PyWeather 1.0.0 is September 1, 2018.
 
 ## Warnings & Notices
 Because we needed a section for this.
