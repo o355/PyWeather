@@ -1,7 +1,7 @@
 ## GitLab Migration Notice
-Microsoft has bought GitHub. PyWeather will be migrated to GitLab as soon as possible.
+PyWeather is being migrated (imported) to GitLab at this time. Please avoid contributing until the import has completed.
 
-Please avoid committing on this repo until the import has completed.
+When the import is done you'll be able to access PyWeather at https://gitlab.com/o355/pyweather.
 
 ## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
