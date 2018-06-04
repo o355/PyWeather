@@ -1,3 +1,8 @@
+## Microsoft acquisition of GitHub notice
+It is rumored that Microsoft is going to acquire GitHub soon. If this is the case, PyWeather will be immediately migrated to GitLab. 
+
+As a FOSS enthusiast, I do not want to support a site owned by the people who made Windows 10, the worst OS to date when it comes to spying and anti-user features. Microsoft is extremely anti-FOSS, and anti-user, and I hope GitHub sufferers if Microsoft buys GitHub.
+
 ## Welcome to PyWeather (0.6.3 beta)!
 Welcome to PyWeather, the fun way to check the weather in a terminal. Thanks for being here!
 
