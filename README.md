@@ -1,5 +1,5 @@
 ## Microsoft acquisition of GitHub notice
-It is rumored that Microsoft is going to acquire GitHub soon. If this is the case, PyWeather will be immediately migrated to GitLab. 
+It is confirmed that Microsoft is going to acquire GitHub soon. PyWeather will be immediately migrated to GitLab along with the rest of my repos when the announcement is made official.
 
 As a FOSS enthusiast, I do not want to support a site owned by the people who made Windows 10, the worst OS to date when it comes to spying and anti-user features. Microsoft is extremely anti-FOSS, and anti-user, and I hope GitHub sufferers if Microsoft buys GitHub.
 
