@@ -1,5 +1,7 @@
 ## GitLab Migration Notice
-PyWeather is being migrated (imported) to GitLab at this time. Please avoid contributing until the import has completed.
+PyWeather is being migrated (imported) to GitLab at this time. GitLab imports are pretty slow as they're getting hammered with imports but hopefully things should get fixed soon.
+
+Please avoid contributing to this repo until the migration has completed.
 
 When the import is done you'll be able to access PyWeather at https://gitlab.com/o355/pyweather.
 
