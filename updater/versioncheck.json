@@ -1,12 +1,14 @@
 {
 	"updater": {
-		"apiversion": "1.4",
-		"latestbuild": "63",
-		"latestversion": "0.6.3 beta",
-		"latestversiontag": "0.6.3-beta",
-		"latesturl": "https://github.com/o355/pyweather/releases/download/0.6.3-beta/pyweather-0.6.3beta.zip",
-		"latestfilename": "pyweather-0.6.3beta.zip",
-		"releasedate": "December 3, 2017",
-		"nextversionreleasedate": "Late February 2018"
+		"apiversion": "v1.6.0",
+		"documentation": "https://gitlab.com/o355/PyWeather/wikis/Updater-API-Documentation-(v1)",
+		"latestbuild": "100",
+		"latestversion": "1.0.0",
+		"latestversiontag": "v1.0.0",
+		"latesturl": "https://gitlab.com/o355/PyWeather/uploads/911afb9a5d48b9bff85aa5bdddd18321/pyweather-v1.0.0.zip",
+		"latestfilename": "pyweather-v1.0.0.zip",
+		"releasedate": "October 15, 2018",
+		"nextversionreleasedate": "Late October 2018"
 	}
 }
+
