@@ -1,47 +1,66 @@
-**THE GIT UPDATER IS STILL BROKEN, AND IS REMOVED IN 0.6.3 BETA. A NEW UPDATER WILL BE COMING IN THE NEXT VERSION.**
+**PyWeather v1.0.0 requires a new library, click. The configupdate script should automatically install this, but you
+can (or might need to) install it yourself. The configupdate script will still update your config, even if click can't be installed.**
 
-**PyWeather 0.6.3 beta requires a new library, halo. The configupdate script should automatically install this, but you
-can (or might need to) install it yourself. The configupdate script will still update your config, even if halo can't be installed.**
+**PyWeather v1.0.0 requires a new library, certifi. The configupdate script should automatically install this, but you
+can (or might need to) install it yourself. The configupdate script will still update your config, even if certifi can't be installed.**
 
-**NEW FEATURES/REMOVALS:**
-* Adds a nearby location feature to hurricane data (300km out)
-* Will push the API key validation code up further thanks to new features.
-* Adding a much nicer progress indicator.
-* Adds the ability to prefetch yesterday's weather at boot, and a caching system. (thanks to @ModoUnreal for partially coding this in!)
-* Adds the ability to view your current location through a GeoIP service
-* Adds the ability to view data through a PWS at boot.
-* Adds the ability to have up to 5 favorite locations.
-* Adds the ability to manually define a Google Maps API key
-* Much better error catching for the config file (thanks to @TheLetterAndrew for coding this in!)
-* Adds the ability to view the chance of precipitation on the forecast page.
-* Adding the ability to show cache timings.
-* The ability to see pressure and visibility data has been added to historical hourly & yesterday hourly information.
-* Minor UI changes.
+**NEW FETAURES/REMOVALS:**
+* Adds the ability to see the weather for airports
+* Adding compatibility to favorite locations for airport data
+* Adds the ability to change your radar image size on the fly
+* The radar GUI has been improved.
+* Refactor of the updater - It can now download & extract updates on it's own, a true updater. No more Git issues.
+* A complete refactor of configupdate.py, with better printing and new code for futureproofing.
+* Default iterations for data is lowered, and now each data type iterations can be lowered
+* Improves the UI in the setup file to not have overflowing lines of text.
+* Adds an attribution to Meteoalarm for EU-based alerts
+* Adding even faster access to different query types (fl:x for favorite locations, cl for current location,ex ap: for airport, ps: for PWS)
+* PyWeather will now use secure API endpoints by default.
+* The next release portion of the updater can be turned off from the API if there is no prediction.
+* PyWeather now relies on the new PyWeather Updater API v2, which is now hosted on GitHub.
+* Fixed various issues with exiting historical & yesterday summary weather data.
+* Adds the ability to view historical data for PWSes
+* The configupdate script can now automatically delete old variables for you!
+* PyWeather is now using a different geo IP API after the discontinuation of the older API. (thanks to Benjamin Urquhart for coding this in!)
+* PyWeather's main geocoder has switched from Google to ArcGIS after recent pricing changes. Users with paid API keys for Google's geocoder can still use it.
+* Adds the ability to skip the custom geocoder key verification at boot.
+* The loading spinners for historical data have been improved for further clarity.
+* Error handling in the radar GUI has been improved.
 
 **BUG FIXES:**
-* Fixed multiple major bugs regarding invalid historical summary data & historical hourly data
-* Fixed multiple major bugs regarding invalid yesterday summary data & yesterday hourly data
-* Fixed a bug where if you didn't have API key validation on, PyWeather validated your API key, and vice versa.
-* Fixed potential bugs where PyWeather wouldn't properly display precip information for forecast data - The algorithm was reworked.
-* Fixed a bug where if you manually flagged all data types to refresh, hurricane data wouldn't be refreshed.
-* Fixed a minor bug where if the summary section couldn't be added in the setup file, the print statement indicated that the cache section wasn't added.
-* Fixed a bug where PyWeather didn't catch bad visibility, UV index, and humidity data for current weather
-* Fixed a bug where the visibility in km on the yesterday's summary screen read as "kph".
-* Fixed a minor bug where on yesterday's weather hourly data, the degree symbol was placed too far right by 1 character.
-* Fixed a potential bug where missing data on yesterday's weather would cause a crash.
-* Fixed a potential bug where if almanac data is prefetched, it wouldn't display when viewing it in detail, and PyWeather would crash.
-* Fixed a minor bug where on the historical weather summary, total precipitation data in mm had a "mb" label.
-* Fixed a minor bug where historical hourly data wouldn't break when the current iterations equaled the total iterations.
-* Fixed a minor bug where PyWeather wouldn't catch bad humidity data for current conditions.
-* Fixed a bug where configsetup script set the default geocoder scheme to https, which caused issues on platforms that don't support the geocoder running in the HTTPS scheme.
+* Fixed a semi-critical bug where forecast data and almanac data cache times didn't get multiplied by 60 when the config was loaded
+* Fixed a semi-critical bug where if PyWeather is launched from out of folder, a critical error occurs
+* Fixed a bug where even with appJar installed, Linux platforms need the python3-tk package to run the GUI (adding better catching for the exception)
+* Fixed a bug where if current weather fails to refresh, PyWeather decides to display the weather data.
+* Fixed a bug where sometimes current conditions cannot get parsed, and as such PyWeather crashes.
+* Fixed a bug where the current dew point can be shown as -9999F (-9999C) and this invalid data did not get caught.
+* Fixed a bug where the current humidity can be shown as N/A% and this invalid data doesn't get caught.
+* Fixed a bug where if extra tools is disabled and the user goes into the input to enable it and enters no, extra tools will appear anyways.
+* Fixed a bug where if you had check for updates on boot enabled, and an update was available, the spinner would not stop to display text.
+* Fixed a bug where if you had the logger on, PyWeather would crash when entering tide data.
+* Fixed a bug where if a 0-byte image was returned as a radar image, the GUI would return an error.
+* Fixed a bug where if you selected an invalid date for historical hourly, the loading spinner would not stop spinning.
+* Fixed a bug where in yesterday's weather the wind gust can be shown as -999 mph (-1607.4 kph), and this invalid data did not get caught.
+* Fixed a bug where some PWSes spit out temperatures with many decimal places for current data, new checks have been added to round this data.
+* Fixed a bug where some PWSes spit out temperatures with many decimal places for yesterday's weather data new checks have been added to round this data.
+* Fixed a bug where if a tide station name was defined but there was no data, PyWeather would still show data. Checks have been added to prevent this.
+* Fixed a bug where current weather data would be invalid, and PyWeather would not catch it.
+* Fixed a bug where if you were running a newer version of Python, various logger.warn is depreciated messages would show up.
+* Fixed a bug where if you had invalid minimum humidity data in historical weather summary, PyWeather would crash. Checks have been added.
+* Fixed a bug where PyWeather would crash upon a bad .json parse from a WU backend error.
+* Fixed a bug where Geopy would not be properly detected as being installed after installing it from the setup script.
+* Fixed various bugs regarding invalid data for historical weather & yesterday's weather.
+* Fixed various bugs with setup script formatting and spacing.
+* Fixed a bug where sometimes there would be no percent sign with humidity data for current conditions.
+* Fixed a bug where if a user wanted to empty the cache, and selected No, the radar image would go blank, and the Zoom Level would say "Not selected".
+* Fixed a bug where in the almanac, the text displaying `(the nearest airport to you)` would not be set to a bright style, and look slightly off.
+* Fixed a bug where when validating some PWSes, Wunderground would return no data, and PyWeather would crash. The error is now being caught.
+* Fixed various bugs regarding invalid reading of API keys (thanks to Benjamin Urquhart for the fix!)
+* Fixed a bug where if favloc5_data failed to load on bootup from the config file, a default variable was not set for it. (thanks to ModoUnreal for the fix!)
 
 **OTHER CHANGES:**
-* The Git Updater has been completely removed, as it's been unreliable. A universal updater will be introduced later in time.
-* The configupdate file will now properly catch a bad section error (not a plain except)
-
-**KNOWN ISSUES:**
-* Tide data may not be fully available for some cities. I'm working on a fix for 0.6.4 beta.
-* Attempting to exit out of historical weather is bugged. I'm also working on a fix for 0.6.4 beta.
-* Hurricanes in hurricane data will show up twice. I've already contacted Wunderground about the issue, but they haven't responded back. A fix is coming in 0.6.4 beta.
-* A custom geocoder key won't work without an https-enabled scheme. There is a temporary fix in 0.6.3 beta, but a more comprehensive fix will be coming in 0.6.4 beta.
-* The configsetup script will default to an http scheme regardless of if your OS is https compatible or not. A more comprehensive fix will be coming in 0.6.4 beta.
+* PyWeather now comes bundled with an API key as you can no longer generate WU API keys.
+* PyWeather now has added depreciation notices which can be controlled with the API for the updater & bootup. These are used when the WU API will be depreciated, and as a master toggle when I stop working on PyWeather in the updater.
+* The updater checks at bootup of the main script and on the setup script are updated for v2 of the updater API.
+* If there is no expected release time for PyWeather's next release, PyWeather can hide the field when the API says the field is "Not available".
+* Reworked the mechanisms for showing either "Rain for the hour" or "Snow for the hour" in hourly/10-day hourly.
