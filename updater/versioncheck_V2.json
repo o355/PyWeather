@@ -1,57 +1,32 @@
 {
   "info": {
-    "apiversion": "2.1.3",
-    "apidocumentation": "https://github.com/o355/PyWeather/wiki/Updater-API-documentation-(v2)",
-    "availbranches": "['stable', 'rc']"
+    "apiversion": "2.4.0",
+    "apidocumentation": "https://gitlab.com/o355/PyWeather/wikis/Updater-API-documentation-(v2)",
+    "availbranches": "['stable']"
   },
   
   "branch": {
     "stable": {
-      "depreciated": "False",
-      "latestbuild": "63",
-      "latestversion": "0.6.3 beta",
-      "latestversiontag": "0.6.3-beta",
-      "latesturl": "https://github.com/o355/pyweather/releases/download/0.6.3-beta/pyweather-0.6.3beta.zip",
-      "latestdirlessurl": "https://github.com/o355/pyweather/releases/download/0.6.3-beta/pyweather-0.6.3beta.zip",
-      "latestfilename": "pyweather-0.6.3beta.zip",
-      "latestdirlessfilename": "pyweather-0.6.3beta.zip",
-      "extractdirectory": "pyweather-0.6.3beta",
-      "releasedate": "December 3, 2017",
-      "nextversionreleasedate": "April 2018",
-      "size": "137 KB",
-      "dirlesssize": "137 KB",
-      "releasenotesurl": "https://github.com/o355/PyWeather/blob/master/updater/releasenotes_stable.txt",
-      "md5sum": "db0187ca47b45e3ce3927be8ce744b6e",
-      "sha1sum": "40bf6fa394bcab18acd99fd6e253427ddb2686ef",
-      "sha256sum": "82a327c3938651b2a1575b101251731aa58f611f577cf7ca3367e9bff65a0eb3",
-      "md5sum-dirless": "db0187ca47b45e3ce3927be8ce744b6e",
-      "sha1sum-dirless": "40bf6fa394bcab18acd99fd6e253427ddb2686ef",
-      "sha256sum-dirless": "82a327c3938651b2a1575b101251731aa58f611f577cf7ca3367e9bff65a0eb3"
-    },
-    
-    "rc": {
-      "depreciated": "False",
-      "rcrelease": "True",
-      "stablerelease": "False",
-      "latestbuild": "63.01",
-      "latestversion": "0.6.4 beta RC0",
-      "latestversiontag": "0.6.4-beta-RC0",
-      "latesturl": "https://github.com/o355/pyweather/releases/download/0.6.4-beta-RC0/pyweather-0.6.4beta-RC0.zip",
-      "latestdirlessurl": "https://github.com/o355/pyweather/releases/download/0.6.4-beta-RC0/pyweather-0.6.4beta-RC0-dirless.zip",
-      "latestfilename": "pyweather-0.6.4beta-RC0.zip",
-      "latestdirlessfilename": "pyweather-0.6.4beta-RC0-dirless.zip",
-      "extractdirectory": "pyweather-0.6.4beta-RC0",
-      "releasedate": "January 31, 2018",
-      "nextversionreleasedate": "March 2018",
-      "size": "144 KB",
-      "dirlesssize": "139 KB",
-      "releasenotesurl": "https://github.com/o355/PyWeather/blob/master/updater/releasenotes_rc.txt",
-      "md5sum": "bb92eab562d5e26ec6e086a6190f0184",
-      "sha1sum": "88bd7e6bd0f02655cd2c6cece2e58a0a32c4919f",
-      "sha256sum": "855e7106cc050a9c0265a557e583b5dbe1aadc7d9e0a8d29fbc87acc83558970",
-      "md5sum-dirless": "fb61fcaf02668f83c8d06e4d597be072",
-      "sha1sum-dirless": "06d70af6444a5eeda04c026fc5c32b3046f85fee",
-      "sha256sum-dirless": "fd3058c0ae1523922879e90686cb4fe6f8897d4b6568eede1c1e55322d2b11ab"
+      "updater_depNoticeShow": "False",
+      "updater_depNoticeMessage": "",
+      "bootup_depNoticeShow": "False",
+      "bootup_depVersions": "",
+      "bootup_depNoticeMessage": "",
+      "latestbuild": "100",
+      "latestversion": "1.0.0",
+      "latestversiontag": "v1.0.0",
+      "latesturl": "https://gitlab.com/o355/PyWeather/uploads/911afb9a5d48b9bff85aa5bdddd18321/pyweather-v1.0.0.zip",
+      "latestdirlessurl": "https://gitlab.com/o355/PyWeather/uploads/a7056e800706dce36493ef4653c7dceb/pyweather-v1.0.0-dirless.zip",
+      "latestfilename": "pyweather-v1.0.0.zip",
+      "latestdirlessfilename": "pyweather-v1.0.0-dirless.zip",
+      "releasedate": "October 15, 2018",
+      "nextversionreleasedate": "Late October 2018",
+      "size": "153 KB",
+      "releasenotesurl": "https://gitlab.com/o355/PyWeather/raw/master/updater/releasenotes.txt",
+      "sha1sum": "90147ef23567d96e35074496c3c28123ea593f7c",
+      "sha256sum": "f77134dfb39b66c9f55025d5b0959297ff2f1dcd231f68267182a65ae3584b3f",
+      "sha1sum-dirless": "ee55164223b75e044e9434911b76d59c78ac7ef5",
+      "sha256sum-dirless": "007c808979ecd8b052368819089007f043a68b52d0ea199df2ff6fe9ae9d5913"
     }
   }     
 }
