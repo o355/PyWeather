@@ -4,7 +4,7 @@ can (or might need to) install it yourself. The configupdate script will still u
 **PyWeather v1.0.0 requires a new library, certifi. The configupdate script should automatically install this, but you
 can (or might need to) install it yourself. The configupdate script will still update your config, even if certifi can't be installed.**
 
-**NEW FETAURES/REMOVALS:**
+**NEW FEATURES/REMOVALS:**
 * Adds the ability to see the weather for airports
 * Adding compatibility to favorite locations for airport data
 * Adds the ability to change your radar image size on the fly
