@@ -2,13 +2,12 @@
 	"updater": {
 		"apiversion": "v1.6.0",
 		"documentation": "https://gitlab.com/o355/PyWeather/wikis/Updater-API-Documentation-(v1)",
-		"latestbuild": "101",
-		"latestversion": "1.0.1",
-		"latestversiontag": "v1.0.1",
-		"latesturl": "https://gitlab.com/o355/PyWeather/uploads/964f245fadf7cda51f27662ffae25668/pyweather-v1.0.1.zip",
-		"latestfilename": "pyweather-v1.0.1.zip",
-		"releasedate": "November 16, 2018",
+		"latestbuild": "102",
+		"latestversion": "1.0.2",
+		"latestversiontag": "v1.0.2",
+		"latesturl": "https://gitlab.com/o355/PyWeather/uploads/a7cdbec1e9dc818a93400886dc7bb0c7/pyweather-v1.0.2.zip",
+		"latestfilename": "pyweather-v1.0.2.zip",
+		"releasedate": "December 11, 2018",
 		"nextversionreleasedate": "Not available"
 	}
 }
-
