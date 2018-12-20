@@ -1,7 +1,6 @@
 **NEW FEATURES/REMOVALS:**
-* No new features/removals
+* Adds final thank you notes for the last version of PyWeather
 
 **BUG FIXES:**
-* Fixed a semi-critical bug where you couldn't add the location PyWeather was started with into favorite locations (option 1), unless it was a What3Words query.
-* Fixed a bug where the updater would report that the configupdate.py script failed to run, when in reality it did everything it had to.
-* Removed debugging code from updater.py.
+* Fixed bugs in the configupdate script when updating from older versions of PyWeather
+* Fixed a bug where in favorite locations, the edit feature will make a normal favorite location all lowercase
